@@ -221,7 +221,10 @@ def compile_and_verify(BIN_FOLDER, startIn):
                         print("Exiting...")
                         exit(1)
 
-                reporter.reportSuccess(f, "%s/%s.wasm"%(wasm_bin_folder, f), "%s/%s"%(root, f))
+                if KEEP_BINARIES:
+                    reporter.reportSuccess(f, "%s/%s.wasm"%(wasm_bin_folder, f), "%s/%s"%(root, f))
+                else:
+                    reporter.reportSuccess(f, "%s/%s"%(root, f), "%s/%s"%(root, f))
 
                     # add to git history
 
