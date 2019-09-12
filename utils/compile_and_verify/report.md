@@ -7,8 +7,6 @@
 
 - [Success 6.wast](benchmark_programs/naenie_bin/6.wast.wasm) 
 
-- [Error error.wast](benchmark_programs/naenie/error.wast) b'benchmark_programs/naenie/error.wast:10:2: error: unexpected token EOF, expected ).\n\t\n ^\n' 
-
 - [Success 16.wast](benchmark_programs/naenie_bin/16.wast.wasm) 
 
 - [Success 20.wast](benchmark_programs/naenie_bin/20.wast.wasm) 

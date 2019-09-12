@@ -12,21 +12,32 @@ import shutil
 import tarfile
 from subprocess import Popen, PIPE
 
-BENCHMARK_FOLDER = "benchmark_programs"
+
+BASE_DIR = os.path.dirname(__file__)
+
+#os.chdir(BASE_DIR)
+
+print(BASE_DIR)
+
+
+if len(sys.argv) < 3:
+    print("You must provide the os binary options: (osx, linux, win32, win64)")
+    print("You must the path to the wat files folder")
+    exit(1)
+    
+BENCHMARK_FOLDER = sys.argv[2]
 EXIT_ON_FAIL = False
-KEEP_BINARIES = True
+KEEP_BINARIES = False
 
 WAST2WASM = "wat2wasm"
 WASMVALIDATE = "wasm-validate"
-REPORT_OUTPUT = "utils/compile_and_verify"
+REPORT_OUTPUT = os.path.dirname(__file__)
 ADD_TO_GIT = False
 
 def download_wabtBinaries():
 
     # OS release target (osx, linux, win32, win64)
-    if len(sys.argv) < 2:
-        print("You must provide the os binary options: (osx, linux, win32, win64)")
-        exit(1)
+    
 
     OS = sys.argv[1]
     PATTERN = ".*-%s.((tar.gz)|(zip))"%(OS,)
