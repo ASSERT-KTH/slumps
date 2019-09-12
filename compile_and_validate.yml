@@ -1,0 +1,18 @@
+name: COMPILE_AND_VALIDATE
+
+on:
+  push:
+    paths:
+      # '*' matches any character except '/'
+      - 'benchmark_programs/*'
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Run python script to compile and validate
+      run: python3 utils/compile_and_verify.py linux benchmark_programs
+    - name: Add new report files to repo and commit
+      run: git add utils/compile_and_verify && git commit -m 'Compiling and validating' && git push
