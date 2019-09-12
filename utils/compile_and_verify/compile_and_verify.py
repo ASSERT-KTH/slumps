@@ -14,7 +14,7 @@ from subprocess import Popen, PIPE
 
 BENCHMARK_FOLDER = "benchmark_programs"
 EXIT_ON_FAIL = False
-KEEP_BINARIES = False
+KEEP_BINARIES = True
 
 WAST2WASM = "wat2wasm"
 WASMVALIDATE = "wasm-validate"
@@ -24,7 +24,11 @@ ADD_TO_GIT = False
 def download_wabtBinaries():
 
     # OS release target (osx, linux, win32, win64)
-    OS = "osx"
+    if len(sys.argv) < 2:
+        print("You must provide the os binary options: (osx, linux, win32, win64)")
+        exit(1)
+
+    OS = sys.argv[1]
     PATTERN = ".*-%s.((tar.gz)|(zip))"%(OS,)
     BIN_OUT_DIR = "bin"
     PROJECT_NAME = "wabt"
@@ -165,6 +169,9 @@ class Reporter(object):
             f.write(l[1] + "\n\n")
         f.close()
 
+        ## add files to git
+
+
 reporter = Reporter()
 
 def compile_and_verify(BIN_FOLDER, startIn):
@@ -202,9 +209,8 @@ def compile_and_verify(BIN_FOLDER, startIn):
                     if EXIT_ON_FAIL:
                         print("Exiting...")
                         exit(1)
-                
-                if KEEP_BINARIES:
-                    reporter.reportSuccess(f, "%s/%s.wasm"%(wasm_bin_folder, f), "%s/%s"%(root, f))
+
+                reporter.reportSuccess(f, "%s/%s.wasm"%(wasm_bin_folder, f), "%s/%s"%(root, f))
 
                     # add to git history
 
