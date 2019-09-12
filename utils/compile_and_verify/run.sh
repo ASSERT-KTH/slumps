@@ -1,8 +1,8 @@
 #!/bin/bash
 
 # pass script os as the first argument
-python3 compile_and_verify $1
+python3 utils/compile_and_verify/compile_and_verify.py $1 &&
 
 git add .
 
-git commit -m "Atutomated compile and validate "
+git commit -m "Automated compile and validate "
