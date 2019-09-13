@@ -11,8 +11,8 @@
                 <g fill="#fff" text-anchor="middle" font-family="DejaVu Sans,Verdana,Geneva,sans-serif" font-size="11">
                     <text x="49" y="15" fill="#010101" fill-opacity=".3">valid wasm</text>
                     <text x="49" y="14">valid wasm</text>
-                    <text x="116.5" y="15" fill="#010101" fill-opacity=".3">4</text>
-                    <text x="116.5" y="14">4</text>
+                    <text x="116.5" y="15" fill="#010101" fill-opacity=".3">23</text>
+                    <text x="116.5" y="14">23</text>
                 </g>
             </svg>
         
