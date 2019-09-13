@@ -26,7 +26,7 @@ if len(sys.argv) < 3:
     exit(1)
     
 BENCHMARK_FOLDER = sys.argv[2]
-EXIT_ON_FAIL = False
+EXIT_ON_FAIL = True
 KEEP_BINARIES = False
 
 WAST2WASM = "wat2wasm"
@@ -34,7 +34,7 @@ WASMVALIDATE = "wasm-validate"
 REPORT_OUTPUT = os.path.dirname(__file__)
 ADD_TO_GIT = False
 
-def download_wabtBinaries():
+def download_wabtBinaries(repoOwner, projectName):
 
     # OS release target (osx, linux, win32, win64)
     
@@ -42,10 +42,11 @@ def download_wabtBinaries():
     OS = sys.argv[1]
     PATTERN = ".*-%s.((tar.gz)|(zip))"%(OS,)
     BIN_OUT_DIR = "bin"
-    PROJECT_NAME = "wabt"
+    
 
     # list wabt releases
-    URL = "https://api.github.com/repos/WebAssembly/wabt/releases/latest"
+    URL = "https://api.github.com/repos/{repoOwner}/{projectName}/releases/latest".format(repoOwner = repoOwner, 
+    projectName=projectName)
         
     r = requests.get(url = URL) 
 
@@ -103,7 +104,7 @@ def download_wabtBinaries():
             exit(1)
         # move tar content to our bin folder
         if not os.path.exists(BIN_OUT_DIR):
-            shutil.move("%s-%s"%(PROJECT_NAME, tag), BIN_OUT_DIR)  
+            shutil.move("%s-%s"%(projectName, tag), BIN_OUT_DIR)  
     else:
         print("Unknown content type. Exiting...")
         exit(1)
@@ -119,14 +120,14 @@ class Reporter(object):
     def __init__(self):
         self.logs = []
         self.valid_count = 0
-        self.erro_count = 0
+        self.error_count = 0
 
     def reportSuccess(self, fName, dst, path, message = ""):
-        self.logs.append([1, "- [Success %s](%s) %s"%(fName, dst, message)])
+        #self.logs.append([1, "- [Success %s](%s) %s"%(fName, dst, message)])
         self.valid_count += 1
     def reportFail(self, fName, dst, path, err, message = ""):
-        self.logs.append([0, "- [Error %s](%s) %s %s"%(fName, path, err, message)])
-        self.erro_count += 1
+        self.logs.append([0, "- [Error](%s) %s %s"%(path, err, message)])
+        self.error_count += 1
 
 
     def getBadge(self, message, value, type):
@@ -163,7 +164,7 @@ class Reporter(object):
         f.close()
 
 
-        invalid_badge = self.getBadge("errored wasm", self.erro_count , "error")
+        invalid_badge = self.getBadge("errored wasm", self.error_count , "error")
 
         f = open("%s/error_badge.svg"%(REPORT_OUTPUT,), 'w')
         f.write(invalid_badge)
@@ -174,7 +175,7 @@ class Reporter(object):
 
         f = open("%s/report.md"%(REPORT_OUTPUT,), 'w')
 
-        f.write("![valid](./valid_badge.svg) ![valid](./error_badge.svg)\n")
+        f.write("![valid](./error_badge.svg)\n")
 
         for l in self.logs:
             f.write(l[1] + "\n\n")
@@ -184,6 +185,14 @@ class Reporter(object):
 
 
 reporter = Reporter()
+
+def saveBeforeExit():
+    reporter.save()
+
+    print("Cleaning binary dir...")
+    shutil.rmtree(bin_folder)
+
+
 
 def compile_and_verify(BIN_FOLDER, startIn):
     for root, _, files in os.walk(startIn):
@@ -201,9 +210,11 @@ def compile_and_verify(BIN_FOLDER, startIn):
                 rc = p.returncode
                 if rc != 0:
                     print("Failing with %s/%s"%(root, f))
-                    reporter.reportFail(f, "%s/%s.wasm"%(wasm_bin_folder, f), "%s/%s"%(root, f), str(err))
+                    reporter.reportFail(f, "%s/%s.wasm"%(wasm_bin_folder, f), "%s/%s"%(root, f), 
+                    err.decode("utf-8") + "\n```\n" + open("%s/%s"%(root, f), 'r').read() + '\n```')
                     if EXIT_ON_FAIL:
                         print("Exiting...")
+                        saveBeforeExit()
                         exit(1)
                     continue
 
@@ -219,6 +230,7 @@ def compile_and_verify(BIN_FOLDER, startIn):
                     reporter.reportFail(f, "%s/%s.wasm"%(wasm_bin_folder, f), "%s/%s"%(root, f), str(err))
                     if EXIT_ON_FAIL:
                         print("Exiting...")
+                        saveBeforeExit()
                         exit(1)
 
                 if KEEP_BINARIES:
@@ -232,12 +244,14 @@ def compile_and_verify(BIN_FOLDER, startIn):
                 if not KEEP_BINARIES:
                     os.remove("%s/%s.wasm"%(wasm_bin_folder, f))
 
-bin_folder =  download_wabtBinaries()
 
-print("Compiling benchmark programs")
-compile_and_verify(bin_folder, BENCHMARK_FOLDER)
+if __name__ == "__main__":
+    
 
-reporter.save()
+    #WebAssembly/wabt
+    bin_folder =  download_wabtBinaries("WebAssembly", "wabt")
 
-print("Cleaning binary dir...")
-shutil.rmtree(bin_folder)
+    print("Compiling benchmark programs")
+    compile_and_verify(bin_folder, BENCHMARK_FOLDER)
+    
+    saveBeforeExit()
