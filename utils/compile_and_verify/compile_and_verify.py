@@ -212,6 +212,9 @@ def compile_and_verify(BIN_FOLDER, startIn):
                     print("Failing with %s/%s"%(root, f))
                     reporter.reportFail(f, "%s/%s.wasm"%(wasm_bin_folder, f), "%s/%s"%(root, f), 
                     err.decode("utf-8") + "\n```\n" + open("%s/%s"%(root, f), 'r').read() + '\n```')
+
+                    print(err.decode("utf-8"))
+                    
                     if EXIT_ON_FAIL:
                         print("Exiting...")
                         saveBeforeExit()
