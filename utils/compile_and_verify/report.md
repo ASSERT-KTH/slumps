@@ -3,8 +3,6 @@
 
 - [Success 11.wast](benchmark_programs/naenie/11.wast) 
 
-- [Error error2.wast](benchmark_programs/naenie/error2.wast) b'benchmark_programs/naenie/error2.wast:7:21: error: unexpected token "pa", expected an instr.\n\t(func $Euuiuaoiia (pa\n                    ^^\n' 
-
 - [Success 21.wast](benchmark_programs/naenie/21.wast) 
 
 - [Success 24.wast](benchmark_programs/naenie/24.wast) 
@@ -14,8 +12,6 @@
 - [Success 7.wast](benchmark_programs/naenie/7.wast) 
 
 - [Success 10.wast](benchmark_programs/naenie/10.wast) 
-
-- [Error errored.wast](benchmark_programs/naenie/errored.wast) b'benchmark_programs/naenie/errored.wast:9:3: error: unexpected token EOF, expected ).\n\t\t\n  ^\n' 
 
 - [Success 8.wast](benchmark_programs/naenie/8.wast) 
 
