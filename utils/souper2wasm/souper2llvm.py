@@ -12,6 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import os
 import copy
 import fileinput
 
@@ -21,7 +22,7 @@ cand = None
 needsResult = False
 intrdecl = dict()
 printedblocks = []
-labels = ["foo0"]
+labels = ["entry"]
 cnt1 = 0
 cnt2 = 0
 cnt3 = 0
@@ -127,6 +128,7 @@ def parseInst(i):
         ops = parseOps(i[3:])
     else:
         assert 0, f"unknown LHS: {i[0]}"
+    # print(reg, width, inst, ops)
     return [reg, width, inst, ops]
 
 
@@ -198,14 +200,19 @@ def translateInstToLLVM(i):
 
 def readOpt():
     res = []
+    file_path = ''
     for line in fileinput.input():
+        file_path = fileinput.filename()
         if not line.strip():
             continue
         elif line.strip()[0] == ";":
             continue
         res.append(line.split())
     assert len(res), "empty file"
-    return res
+    dir_name = os.path.dirname(file_path)
+    base_name = os.path.basename(file_path)
+    file_name, file_ext = os.path.splitext(base_name)
+    return res, dir_name, file_name
 
 
 def parseInsts(lines):
@@ -454,7 +461,7 @@ def genLHSFuncFooter():
 
 
 def main():
-    lines = readOpt()
+    lines, dir_name, file_name = readOpt()
     insts = parseInsts(lines)
     insts = propagateArgNames(insts)
     insts = groupPhis(insts)
@@ -468,8 +475,12 @@ def main():
     res.extend(genPCs())
     res.extend(genLHSFuncFooter())
 
-    with open('demo/infer.ll', 'w') as f:
+    with open(f'{dir_name}/{file_name}.ll', 'w') as f:
         f.write('\n'.join(res))
 
 
 main()
+
+# based on souper/utils/souper2llvm.in (Sep 13, 2019)
+# todo sync latest version
+# todo fix compatibility issue with llc (like negate.opt)
