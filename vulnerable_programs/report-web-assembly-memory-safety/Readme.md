@@ -10,4 +10,4 @@ Install emsdk, see <https://emscripten.org/docs/getting_started/downloads.html>
 Run
 ---
 
-To compile and execute an  exploit, run ```./compile.sh c/<script>```  and then ```node exploit.js```
+To compile and execute an  exploit, run ```./compile.sh c/<script>```, uncomment specific demo code inside the ```exploit.js``` code,  and then ```node exploit.js```
