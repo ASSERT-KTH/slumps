@@ -1,0 +1,4 @@
+; Function: foo
+%0:i64 = var
+%1:i1 = ult 135637824071393761:i64, %0
+infer %1
