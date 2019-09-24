@@ -16,19 +16,19 @@ jobs:
     steps:
     - uses: actions/checkout@v1
     
-    - name: Step1: *.wat(WASM text format) → *.o(WASM binary file)
+    - name: Step1 *.wat(WASM text format) → *.o(WASM binary file)
       run: echo Step1
       
-    - name: Step2: *.o(WASM binary file) → *.bc(LLVM bitcode file)
+    - name: Step2 *.o(WASM binary file) → *.bc(LLVM bitcode file)
       run: echo Step2
       
-    - name: Step3: *.bc(LLVM bitcode file) → *.opt(souper candidates)
+    - name: Step3 *.bc(LLVM bitcode file) → *.opt(souper candidates)
       run: echo "Step3 \c"; bash ./utils/souper_candidates/run.sh; echo "Okay"
       
-    - name: Step4: *.opt(souper candidates) → *.ll(LLVM IR)
+    - name: Step4 *.opt(souper candidates) → *.ll(LLVM IR)
       run: echo "Step4 \c"; python3 ./utils/souper2wasm/souper2llvm.py ./utils/souper2wasm/demo/infer.opt; echo "Okay"
       
-    - name: Step5: *.ll(LLVM IR) → *.o(WASM binary file)
+    - name: Step5 *.ll(LLVM IR) → *.o(WASM binary file)
       run: echo "Step5 \c"; llc -mtriple=wasm32-unknown-unknown -O3 -filetype=obj ./utils/souper2wasm/demo/infer.ll -o ./utils/souper2wasm/demo/infer.o; echo "Okay"
 
 #    - name: GIT
