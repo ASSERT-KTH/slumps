@@ -1,0 +1,46 @@
+name: PIPELINE
+
+on:
+  push:
+    paths:
+      # '*' matches any character except '/'
+      - 'benchmark_programs/*'
+      - 'benchmark_programs/*/*'
+      - 'benchmark_programs/*/*/*'
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v1
+    
+    - name: Step1 *.wat(WASM text format) → *.o(WASM binary file)
+      run: echo Step1
+      
+    - name: Step2 *.o(WASM binary file) → *.bc(LLVM bitcode file)
+      run: echo Step2
+      
+    - name: Step3 *.bc(LLVM bitcode file) → *.opt(souper candidates)
+      run: echo "Step3 \c"; bash ./utils/souper_candidates/run.sh; echo "Okay"
+      
+    - name: Step4 *.opt(souper candidates) → *.ll(LLVM IR)
+      run: echo "Step4 \c"; python3 ./utils/souper2wasm/souper2llvm.py ./utils/souper2wasm/demo/infer.opt; echo "Okay"
+      
+    - name: Step5 *.ll(LLVM IR) → *.o(WASM binary file)
+      run: echo "Step5 \c"; llc -mtriple=wasm32-unknown-unknown -O3 -filetype=obj ./utils/souper2wasm/demo/infer.ll -o ./utils/souper2wasm/demo/infer.o; echo "Okay"
+
+#    - name: GIT
+#      env:
+#        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#      run: git remote add origin-tok https://Jacarte:${GITHUB_TOKEN}@github.com/KTH/slumps.git && git remote remove origin
+      
+#    - name: GIT
+#      run: git config --global user.email "javierca@kth.se" && git config --global user.name "Jacarte" 
+      
+#    - name: GIT
+#      run: git checkout -b master && git add ./utils/compile_and_verify && git commit -m 'Compiling and validating' 
+      
+#    - name: GIT
+#      run: git push origin-tok master
