@@ -1,0 +1,3 @@
+[submodule "souper"]
+	path = souper
+	url = https://github.com/KTH/souper.git
