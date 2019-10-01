@@ -6,7 +6,7 @@
 `wat2wasm xxx.wat -o xxx.wasm`
 
 2. __`.wasm`__ →  __`.opt`__ (by `wasm-opt` from [`binaryen`](https://github.com/WebAssembly/binaryen))
-`wasm-opt --flatten --simplify-locals-nonesting --souperify xxx.wasm`
+`wasm-opt --flatten --souperify xxx.wasm`
 
 3. __`.opt`__ → __`.ll`__ (based on `utils/souper2llvm.in` from [`souper`](https://github.com/google/souper))
 
