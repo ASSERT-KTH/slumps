@@ -1,17 +1,17 @@
 #!/bin/sh
 
 name=$(echo $1 | sed 's/\.[^.]*$//')
-# ext=$(echo $1 | sed 's/^.*\.//')
+ext=$(echo $1 | sed 's/^.*\.//')
 
-echo "### step1 wast2wasm \c"
-# ../../wabt/bin/wat2wasm ${name}.wast -o ${name}.wasm
-echo "okay"
+if [ "${ext}" == "wast" ]; then
+  echo "### step1 wast2wasm \c"
+  ../../wabt/bin/wat2wasm ${name}.wast -o ${name}.wasm
+  echo "okay"
 
-echo "### step2 wasm2opt \c"
-# ../../binaryen/bin/wasm-opt ${name}.wasm --flatten --souperify > ${name}.opt
-echo "okay"
-
-#: <<'END'
+  echo "### step2 wasm2opt \c"
+  ../../binaryen/bin/wasm-opt ${name}.wasm --flatten --souperify > ${name}.opt
+  echo "okay"
+fi
 
 echo "### step3 opt2ll \c"
 python3 souper2llvm.py ${name}.opt
@@ -33,5 +33,3 @@ echo "okay"
 echo "### extra ll2o \c"
 llc -march=wasm32 -filetype=obj ${name}.ll
 echo "okay"
-
-#END

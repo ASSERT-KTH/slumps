@@ -117,10 +117,11 @@ def parseInst(i):
     elif i[0][0] == "%":
         assert len(i) >= 3, f"wrong instruction length {len(i)}, {i}"
         tmp = i[0].split(":")
-        assert len(tmp) == 2, f"wrong reg length {len(tmp)}, {tmp}"
+        # assert len(tmp) == 2, f"wrong reg length {len(tmp)}, {tmp}"
         assert i[1] == "=", f"expecting '=', got {i[1]}"
         reg = tmp[0]
-        width = tmp[1]
+        # FIXME (this is one quick patch)
+        width = tmp[1] if len(tmp) == 2 else "i32"
         inst = i[2]
         if "overflow" in i[2]:
             width = f"i{int(width[1:]) - 1}"
