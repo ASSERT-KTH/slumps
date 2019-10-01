@@ -2,7 +2,7 @@
 
 ### Workflow
 
-1. __`.wat`__ →  __`.wasm`__ (by `wat2wasm` from [`wabt`](https://github.com/WebAssembly/wabt))
+1. __`.wast`__ →  __`.wasm`__ (by `wat2wasm` from [`wabt`](https://github.com/WebAssembly/wabt))
 `wat2wasm xxx.wat -o xxx.wasm`
 
 2. __`.wasm`__ →  __`.opt`__ (by `wasm-opt` from [`binaryen`](https://github.com/WebAssembly/binaryen))
@@ -32,12 +32,15 @@ $ llc -march=wasm32 -filetype=obj xxx.ll
 
 ### Demo
 ```
+# sh pipeline.sh demo/1.wast
 sh pipeline.sh demo/infer.opt
 ```
 
 ### Build
 
-__Souper__
+__souper__
+
+manually install `re2c` `z3`
 
 ```
 cd souper
@@ -48,9 +51,22 @@ cmake ..
 make
 ```
 
-to build __`souper`__, install `re2c`.
+__wabt__
 
-to run __`souper`__ normally, install `z3`.
+```
+cd wabt
+git submodule update --init
+mkdir build
+cd build
+cmake ..
+cmake --build .
+```
+
+__binaryen__
+
+```
+cmake . && make
+```
 
 ### Requirements
 
