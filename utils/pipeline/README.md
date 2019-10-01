@@ -14,10 +14,8 @@
 4. __`.ll`__ → __`.bc`__ (by `llvm-as` from [`llvm`](https://llvm.org/docs/index.html))
 `llvm-as xxx.ll`
 
-5. __`.bc`__ → __`.opt`__ (based on `souper` from [`souper`](https://github.com/google/souper))
+5. __`.bc`__ → __`.opt`__ (based on `souper` from [`souper`](https://github.com/google/souper)) → __`.ll`__ (same as step3)
 [scripts](https://github.com/KTH/slumps/tree/master/utils/souper_candidates)
-
-6. __`.opt`__ → __`.ll`__ (same as step3)
 
 ----
 
@@ -32,12 +30,33 @@ __`.ll`__ → __`.o`__ (by `llc` from [`llvm`](https://llvm.org/docs/index.html)
 $ llc -march=wasm32 -filetype=obj xxx.ll
 ```
 
+### Demo
+```
+sh pipeline.sh demo/infer.opt
+```
+
+### Build
+
+__Souper__
+
+```
+cd souper
+./build_deps.sh
+mkdir build
+cd build
+cmake ..
+make
+```
+
+to build __`souper`__, install `re2c`.
+
+to run __`souper`__ normally, install `z3`.
+
 ### Requirements
 
 Python >= 3.6
 LLVM >= 8.0
 
 ### Note
-1. to build __`souper`__, install `re2c`. to run __`souper`__ normally, install `z3`.
-2. for __`.opt`__ → __`.ll`__, take care [this PR](https://github.com/google/souper/pull/504)
-3. for reference, my env is `llv=9.0.0`, `gcc=9.2.0`, `cmake=3.15.3`
+1. for __`.opt`__ → __`.ll`__, take care [this PR](https://github.com/google/souper/pull/504)
+2. for reference, my env is `llv=9.0.0`, `gcc=9.2.0`, `cmake=3.15.3`
