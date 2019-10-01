@@ -3,14 +3,17 @@
 ### Workflow
 
 1. __`.wast`__ →  __`.wasm`__ (by `wat2wasm` from [`wabt`](https://github.com/WebAssembly/wabt))
+
 `wat2wasm xxx.wat -o xxx.wasm`
 
 2. __`.wasm`__ →  __`.opt`__ (by `wasm-opt` from [`binaryen`](https://github.com/WebAssembly/binaryen))
+
 `wasm-opt --flatten --souperify xxx.wasm`
 
 3. __`.opt`__ → __`.ll`__ (based on `utils/souper2llvm.in` from [`souper`](https://github.com/google/souper))
 
 4. __`.ll`__ → __`.bc`__ (by `llvm-as` from [`llvm`](https://llvm.org/docs/index.html))
+
 `llvm-as xxx.ll`
 
 5. __`.bc`__ → __`.opt`__ (based on `souper` from [`souper`](https://github.com/google/souper)) → __`.ll`__ (same as step3)
@@ -69,6 +72,7 @@ cmake . && make
 ### Requirements
 
 Python >= 3.6
+
 LLVM >= 8.0
 
 ### Note
