@@ -1,3 +1,9 @@
 [submodule "souper"]
 	path = souper
 	url = https://github.com/KTH/souper.git
+[submodule "wabt"]
+	path = wabt
+	url = git://github.com/WebAssembly/wabt.git
+[submodule "binaryen"]
+	path = binaryen
+	url = git://github.com/WebAssembly/binaryen.git
