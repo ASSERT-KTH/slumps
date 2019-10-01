@@ -9,13 +9,11 @@
 `wasm-opt --flatten --simplify-locals-nonesting --souperify xxx.wasm`
 
 3. __`.opt`__ → __`.ll`__ (based on `utils/souper2llvm.in` from [`souper`](https://github.com/google/souper))
-[scripts](https://github.com/KTH/slumps/tree/master/utils/souper2wasm)
 
 4. __`.ll`__ → __`.bc`__ (by `llvm-as` from [`llvm`](https://llvm.org/docs/index.html))
 `llvm-as xxx.ll`
 
 5. __`.bc`__ → __`.opt`__ (based on `souper` from [`souper`](https://github.com/google/souper)) → __`.ll`__ (same as step3)
-[scripts](https://github.com/KTH/slumps/tree/master/utils/souper_candidates)
 
 ----
 
@@ -74,5 +72,5 @@ Python >= 3.6
 LLVM >= 8.0
 
 ### Note
-1. for __`.opt`__ → __`.ll`__, take care [this PR](https://github.com/google/souper/pull/504)
+1. current solution for __`.opt`__ → __`.ll`__ is not so reliable
 2. for reference, my env is `llv=9.0.0`, `gcc=9.2.0`, `cmake=3.15.3`
