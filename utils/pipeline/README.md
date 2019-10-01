@@ -32,7 +32,7 @@ $ llc -march=wasm32 -filetype=obj xxx.ll
 
 ### Demo
 ```
-# sh pipeline.sh demo/1.wast
+sh pipeline.sh demo/2.wast
 sh pipeline.sh demo/infer.opt
 ```
 
