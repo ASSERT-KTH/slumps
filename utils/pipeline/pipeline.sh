@@ -1,18 +1,33 @@
 #!/bin/sh
 
-name=$1
-# step1 wat2wasm
+name=$(echo $1 | sed 's/\.[^.]*$//')
+# ext=$(echo $1 | sed 's/^.*\.//')
 
-# step2 wasm2opt
+echo "### step1 wat2wasm \c"
+# wat2wasm ${name}.wat -o ${name}.wasm
+echo "okay"
 
-# step3 opt2ll
+echo "### step2 wasm2opt \c"
+# wasm-opt --flatten --simplify-locals-nonesting --souperify ${name}.wasm
+echo "okay"
 
-# step4 ll2bc
+echo "### step3 opt2ll \c"
+python3 souper2llvm.py ${name}.opt
+# ../../souper/build/souper2llvm ${name}.opt > ${name}.ll # it seems not so good
+echo "okay"
 
-# step5 bc2opt
+echo "### step4 ll2bc \c"
+llvm-as ${name}.ll
+echo "okay"
 
-# step6 opt2ll
+echo "### step5 bc2opt2ll \c"
+sh bc2opt2ll.sh ${name}.bc ../../souper/build/souper
+echo "okay"
 
-# extra ll2s
+echo "### extra ll2s \c"
+llc -march=wasm32 -filetype=asm ${name}.ll
+echo "okay"
 
-# extra ll2o
+echo "### extra ll2o \c"
+llc -march=wasm32 -filetype=obj ${name}.ll
+echo "okay"
