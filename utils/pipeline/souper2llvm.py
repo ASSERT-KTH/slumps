@@ -476,12 +476,11 @@ def main():
     res.extend(genPCs())
     res.extend(genLHSFuncFooter())
 
-    with open(f'{dir_name}/{file_name}.ll', 'w') as f:
-        f.write('\n'.join(res))
+    print("\n".join(res))
 
 
 main()
 
-# based on souper/utils/souper2llvm.in (Sep 13, 2019)
+# based on souper/utils/souper2llvm.in (Sept. 13, 2019)
 # todo sync latest version
-# todo fix compatibility issue with llc (like negate.opt)
+# todo fix possible issues

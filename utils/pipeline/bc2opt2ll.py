@@ -14,9 +14,9 @@ def split_candidates(file_path, prefix):
     for line in lines:
         if line is '\n':
             if len(buffer) > 0 and buffer[0].startswith('; Static profile'):
-                file_name = f'{prefix}.{num}.opt'
+                file_name = f'{prefix}.{num}'
                 file_names.append(file_name)
-                with open(file_name, 'w') as file:
+                with open(f'{file_name}.opt', 'w') as file:
                     file.writelines(buffer)
                     num += 1
             buffer = list()
@@ -29,11 +29,11 @@ def batch_opt2ll(file_names):
     for file_name in file_names:
         try:
             result = subprocess.run(
-                f'python3 souper2llvm.py {file_name}',
+                f'python3 souper2llvm.py {file_name}.opt > {file_name}.ll',
                 check=True,
                 shell=True,
                 stdout=subprocess.PIPE,
-                stderr=subprocess.PIPE
+                stderr=subprocess.PIPE,
             )
             # print(result.stdout)
             # print(result.stderr)
