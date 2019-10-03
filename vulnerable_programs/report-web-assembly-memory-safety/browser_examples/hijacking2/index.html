@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Redirection with different signature</title>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+
+    <style>
+      .explanation, .how-to{
+        font-family:'Courier New', Courier, monospace;
+      }
+      .exploit{
+        display: flex;
+        flex-direction: row;
+      }
+      .code{
+        background-color: black;
+        color:white;
+        padding: 10px
+      }
+      .trigger input{
+        margin: 10px;
+        min-height: 30px;
+      }
+
+      .app, .code{
+        flex: 1;
+      }
+
+      .value{
+        padding: 4px;
+        background-color: rgba(255,0,0,0.4)
+      }
+    </style>
+</head>
+<body>
+    <div class="exploit">
+        <div class="app">
+          <div class="trigger">
+            <input id="name" placeholder="name" />
+            <input id="age" placeholder="age" />
+            <button id="exploit-btn">TRY !</button>
+          </div>
+          <hr/>
+          <div class="how-to">
+            <p><strong>name</strong> <label class="value">2Ferrari                %07</label> </p>
+            <p><strong>age</strong> <label class="value">22</label> </p>
+          </div>
+          <hr/>
+
+          <div id="wrapper" class="console_wrapper">
+
+
+            </div>
+            <hr/>
+          
+          <div class="explanation">
+
+Unfortunately, the function signature check is not a water-proof way of mitigating against function pointer
+overwrites. For example, when the C (or other language) datatypes are converted to the corresponding
+Wasm datatypes, type confusion can occur, which can let us bypass the function signature check.
+For example, a C void pointer (void *) and an integer (int) both translate to the i32 datatype in Wasm.
+This issue is not limited to lower-level languages such as C.
+
+<br/>
+<br/>
+This can be taken even further. If you use Emscripten for compiling to Wasm, control-flow can be
+handled using a function named emscripten_set_main_loop_arg(). This function only takes two
+pointers: one pointer to the function to execute and another pointer to the arguments. Notice that even if
+the function to execute takes several arguments, there is still just one pointer, so in that case it needs to
+point to a struct or similar. When having only two pointers, the function signature check is going to match
+for all functions. We may be able to overwrite both the function pointer and the arguments without Wasm
+bailing out.
+          </div>
+          
+
+        </div>
+        <div class="code">
+          <pre>
+            <code>
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+
+#ifdef __EMSCRIPTEN__
+#include <emscripten.h>
+#endif
+
+typedef struct person_info {
+  char name[20];
+  int age;
+} person_info;
+
+typedef struct car_info {
+  unsigned char nbr_cars;
+  char brand1[10];
+} car_info;
+
+void EMSCRIPTEN_KEEPALIVE print_person_info(void *person_info_ptr) {
+  struct person_info *info = (struct person_info *) person_info_ptr;
+  printf("In print_person_info\n");
+  printf("Person name: %s, person age: %d\n",info->name,info->age);
+  emscripten_cancel_main_loop();
+}
+
+void EMSCRIPTEN_KEEPALIVE print_car_info(void *car_info_ptr) {
+  car_info *info = (car_info *) car_info_ptr;
+  printf("In print_car_info\n");
+  printf("Number of cars: %d, first brand: %s\n",info->nbr_cars,info->brand1);
+  emscripten_cancel_main_loop();
+}
+
+void EMSCRIPTEN_KEEPALIVE get_func_pointer(char *name, void **func_ptr) {
+  if (strcmp(name,"S3cr3tP@ssw0rd") == 0) {
+    *func_ptr = print_car_info;
+  } else {
+    *func_ptr = print_person_info;
+  }
+}
+
+void EMSCRIPTEN_KEEPALIVE func_ptr_overwrite2(char *name, char *age) {
+  void *func_ptr;
+  struct person_info info;
+  char buf[50];
+  get_func_pointer(name,&func_ptr);
+  sprintf(&(info.name[0]),"%s",name);
+  info.age = (char) atoi(age);
+  sprintf(buf,"The entered name is: %s",name);
+  emscripten_set_main_loop_arg(func_ptr, (void *)&info, 1, 0);
+}
+            </code>
+          </pre>
+
+        </div>
+
+    </div>
+    <script type='text/javascript'>
+  
+        var Module = {
+          preRun: [],
+          postRun: [],
+          print: (function() {
+            var element = document.getElementById('output');
+            if (element) element.value = ''; // clear browser cache
+            return function(text) {
+              if (arguments.length > 1) text = Array.prototype.slice.call(arguments).join(' ');
+              // These replacements are necessary if you render to raw HTML
+              //text = text.replace(/&/g, "&amp;");
+              //text = text.replace(/</g, "&lt;");
+              //text = text.replace(/>/g, "&gt;");
+              //text = text.replace('\n', '<br>', 'g');
+              console.log(text);
+              if (element) {
+                element.value += text + "\n";
+                element.scrollTop = element.scrollHeight; // focus on bottom
+              }
+            };
+          })(),
+          printErr: function(text) {
+            if (arguments.length > 1) text = Array.prototype.slice.call(arguments).join(' ');
+            console.error(text);
+          },
+          
+          setStatus: function(text) {
+            if (!Module.setStatus.last) Module.setStatus.last = { time: Date.now(), text: '' };
+            if (text === Module.setStatus.last.text) return;
+            var m = text.match(/([^(]+)\((\d+(\.\d+)?)\/(\d+)\)/);
+            var now = Date.now();
+            if (m && now - Module.setStatus.last.time < 30) return; // if this is a progress update, skip it if too soon
+            Module.setStatus.last.time = now;
+            Module.setStatus.last.text = text;
+            if (m) {
+              text = m[1];
+              
+            } else {
+              
+            }
+          },
+          totalDependencies: 0,
+          monitorRunDependencies: function(left) {
+            this.totalDependencies = Math.max(this.totalDependencies, left);
+            Module.setStatus(left ? 'Preparing... (' + (this.totalDependencies-left) + '/' + this.totalDependencies + ')' : 'All downloads complete.');
+          }
+        };
+        Module.setStatus('Downloading...');
+        window.onerror = function(event) {
+          // TODO: do not warn on ok events like simulating an infinite loop or exitStatus
+          Module.setStatus('Exception thrown, see JavaScript console');
+          spinnerElement.style.display = 'none';
+          Module.setStatus = function(text) {
+            if (text) Module.printErr('[post-exception status] ' + text);
+          };
+        };
+      </script>
+
+    <script src="./redirection_different_signature.js"></script>
+    
+
+    <script>
+
+      console.log = function(...args){
+        $("#wrapper").html("")
+        args.forEach(i => {
+          $("#wrapper").append(`<p>${i}</p>`)
+        })
+      }
+    
+      Module.onRuntimeInitialized = function() {
+
+        $("#exploit-btn").click(() => {
+           Module.ccall('func_ptr_overwrite2', 'None', ['string', 'string'], [$("#name").val(), $("#age").val()]); // Exploit
+        })
+        // var normal = binary.ccall('func_ptr_overwrite2', 'None', ['string', 'string'], ["Bob", "22"]); // Normal behavior
+          
+        }
+
+    </script>
+</body>
+</html>
