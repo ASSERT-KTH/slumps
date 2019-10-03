@@ -15,7 +15,10 @@ jobs:
     
     steps:
     - uses: actions/checkout@v1
-    
+
+    - name: Install libs
+      run: sudo apt-get install z3 -y
+
     - name: Step1 *.wat(WASM text format) → *.o(WASM binary file)
       run: echo Step1
       

@@ -5,21 +5,19 @@ import sys
 def split(file_path, prefix):
     with open(file_path, 'r') as file:
         lines = file.readlines()
+    lines.append('\n')
 
-    if len(lines) > 2:
-        lines = lines[2:]
-        lines.append('\n')
-
-        num = 0
-        buffer = list()
-        for line in lines:
-            if line is '\n':
+    num = 1
+    buffer = list()
+    for line in lines:
+        if line is '\n':
+            if len(buffer) > 0 and buffer[0].startswith('; Static profile'):
                 with open(f'{prefix}.{num}.opt', 'w') as file:
                     file.writelines(buffer)
                     num += 1
-                    buffer = list()
-            else:
-                buffer.append(line)
+            buffer = list()
+        else:
+            buffer.append(line)
 
 
 def main():
