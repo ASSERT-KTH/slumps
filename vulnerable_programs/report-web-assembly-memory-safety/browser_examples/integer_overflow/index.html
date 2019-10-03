@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Integer overflow</title>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+
+    <style>
+      .explanation, .how-to{
+        font-family:'Courier New', Courier, monospace;
+      }
+      .exploit{
+        display: flex;
+        flex-direction: row;
+      }
+      .code{
+        background-color: black;
+        color:white;
+        padding: 10px
+      }
+      .trigger input{
+        margin: 10px;
+        min-height: 30px;
+      }
+
+      .app, .code{
+        flex: 1;
+      }
+
+      .value{
+        padding: 4px;
+        background-color: rgba(255,0,0,0.4)
+      }
+    </style>
+</head>
+<body>
+    <div class="exploit">
+        <div class="app">
+          <div class="trigger">
+            <input id="number1" placeholder="number1" />
+            <input id="number2" placeholder="number2" />
+            <button id="exploit-btn">TRY !</button>
+          </div>
+          <hr/>
+          <div class="how-to">
+            <p><strong>number1</strong> <label class="value">256</label> </p>
+            <p><strong>number2</strong> <label class="value">270</label> </p>
+          </div>
+          <hr/>
+
+          <div id="wrapper" class="console_wrapper">
+
+
+            </div>
+            <hr/>
+          
+          <div class="explanation">
+              integer overflow vulnerability that allows a malicious user to leak memory from adjacent variables
+          </div>
+          
+
+        </div>
+        <div class="code">
+          <pre>
+            <code>
+#include <stdio.h>
+#include <string.h>
+
+#ifdef __EMSCRIPTEN__
+#include <emscripten.h>
+#endif
+
+void EMSCRIPTEN_KEEPALIVE buffer_overread(int start_pos, int end_pos) {
+  char buf[200];
+  char secret_password[256] = "S3cr3tP@ssw0rd";
+  char msg[256] = "This is a very innocent message.";
+    unsigned char e = end_pos;
+    if (e > strlen(msg)) {
+        printf("Do not try to read past the end.\n");
+    } else {
+        snprintf(buf,(end_pos - start_pos) + 1,"%s",&msg[start_pos]);
+        printf("Contents: %s\n",buf);
+    }
+}
+            </code>
+          </pre>
+
+        </div>
+
+    </div>
+    <script type='text/javascript'>
+  
+        var Module = {
+          preRun: [],
+          postRun: [],
+          print: (function() {
+            var element = document.getElementById('output');
+            if (element) element.value = ''; // clear browser cache
+            return function(text) {
+              if (arguments.length > 1) text = Array.prototype.slice.call(arguments).join(' ');
+              // These replacements are necessary if you render to raw HTML
+              //text = text.replace(/&/g, "&amp;");
+              //text = text.replace(/</g, "&lt;");
+              //text = text.replace(/>/g, "&gt;");
+              //text = text.replace('\n', '<br>', 'g');
+              console.log(text);
+              if (element) {
+                element.value += text + "\n";
+                element.scrollTop = element.scrollHeight; // focus on bottom
+              }
+            };
+          })(),
+          printErr: function(text) {
+            if (arguments.length > 1) text = Array.prototype.slice.call(arguments).join(' ');
+            console.error(text);
+          },
+          
+          setStatus: function(text) {
+            if (!Module.setStatus.last) Module.setStatus.last = { time: Date.now(), text: '' };
+            if (text === Module.setStatus.last.text) return;
+            var m = text.match(/([^(]+)\((\d+(\.\d+)?)\/(\d+)\)/);
+            var now = Date.now();
+            if (m && now - Module.setStatus.last.time < 30) return; // if this is a progress update, skip it if too soon
+            Module.setStatus.last.time = now;
+            Module.setStatus.last.text = text;
+            if (m) {
+              text = m[1];
+              
+            } else {
+              
+            }
+          },
+          totalDependencies: 0,
+          monitorRunDependencies: function(left) {
+            this.totalDependencies = Math.max(this.totalDependencies, left);
+            Module.setStatus(left ? 'Preparing... (' + (this.totalDependencies-left) + '/' + this.totalDependencies + ')' : 'All downloads complete.');
+          }
+        };
+        Module.setStatus('Downloading...');
+        window.onerror = function(event) {
+          // TODO: do not warn on ok events like simulating an infinite loop or exitStatus
+          Module.setStatus('Exception thrown, see JavaScript console');
+          spinnerElement.style.display = 'none';
+          Module.setStatus = function(text) {
+            if (text) Module.printErr('[post-exception status] ' + text);
+          };
+        };
+      </script>
+
+    <script src="./integer_overflow.js"></script>
+    
+
+    <script>
+
+      console.log = function(...args){
+        $("#wrapper").html("")
+        args.forEach(i => {
+          $("#wrapper").append(`<p>${i}</p>`)
+        })
+      }
+    
+      Module.onRuntimeInitialized = function() {
+
+        $("#exploit-btn").click(() => {
+          Module.ccall('buffer_overread', 'None', ['number','number'], [parseInt($("#number1").va()), parseInt($("#number2").va())]);
+        })
+        // var normal = binary.ccall('func_ptr_overwrite2', 'None', ['string', 'string'], ["Bob", "22"]); // Normal behavior
+          
+        }
+
+    </script>
+</body>
+</html>
