@@ -71,7 +71,9 @@ cmake . && make
 
 ### Requirements
 
-Python >= 3.6
+Python2 >= 2.7
+
+Python3 >= 3.6
 
 LLVM >= 8.0
 
