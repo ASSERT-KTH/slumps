@@ -14,7 +14,7 @@ if [ "${ext}" == "wast" ]; then
 fi
 
 echo "### step3 opt2ll \c"
-python3 souper2llvm.py ${name}.opt
+python3 souper2llvm.py ${name}.opt > ${name}.ll
 # ../../souper/build/souper2llvm ${name}.opt > ${name}.ll # it seems not so good
 echo "okay"
 
