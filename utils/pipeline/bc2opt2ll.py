@@ -29,7 +29,9 @@ def batch_opt2ll(file_names):
     for file_name in file_names:
         try:
             result = subprocess.run(
-                f'python3 souper2llvm.py {file_name}.opt > {file_name}.ll',
+                # the former uses compiled script, the latter uses raw script
+                # ../../souper/build/souper2llvm ${name}.opt > ${name}.ll
+                f'python souper2llvm.py {file_name}.opt > {file_name}.ll',
                 check=True,
                 shell=True,
                 stdout=subprocess.PIPE,
