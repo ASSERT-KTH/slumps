@@ -8,13 +8,14 @@ ext=$(echo $1 | sed 's/^.*\.//')
 if [ "${ext}" == "wast" ]; then
   echo "### step1 wast2wasm \c"
   ../../wabt/bin/wat2wasm ${name}.wast -o ${name}.wasm
+  # ../../binaryen/bin/wasm-as ${name}.wast > ${name}.wasm
   ext='wasm'
   echo "okay"
 fi
 
 if [ "${ext}" == "wasm" ]; then
   echo "### step2 wasm2opt \c"
-  ../../binaryen/bin/wasm-opt ${name}.wasm --flatten --souperify-single-use > ${name}.opt
+  ../../binaryen/bin/wasm-opt ${name}.wasm --flatten --simplify-locals-nonesting --reorder-locals --souperify > ${name}.opt
   ext='opt'
   echo "okay"
 fi
