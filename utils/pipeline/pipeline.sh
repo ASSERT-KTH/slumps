@@ -5,6 +5,15 @@ ext=$(echo $1 | sed 's/^.*\.//')
 
 # export BINARYEN_DEBUG_SOUPERIFY=0
 
+:<<EOF
+if [ "${ext}" == "wast" ]; then
+  echo "### step0 wast2ll \c"
+  ../../wasmer/target/release/wasmer run ${name}.wast --backend=llvm --disable-cache --llvm-pre-opt-ir=${name}.ll
+  ext='ll'
+  echo "okay"
+fi
+EOF
+
 if [ "${ext}" == "wast" ]; then
   echo "### step1 wast2wasm \c"
   ../../wabt/bin/wat2wasm ${name}.wast -o ${name}.wasm

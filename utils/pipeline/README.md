@@ -63,6 +63,13 @@ cmake ..
 cmake --build .
 ```
 
+__wasmer__
+
+```
+cd wasmer
+make release-llvm
+```
+
 __binaryen__
 
 ```
@@ -76,6 +83,8 @@ Python2 >= 2.7
 Python3 >= 3.6
 
 LLVM >= 8.0
+
+Rust (Nightly)
 
 ### Note
 1. current solution for __`.opt`__ → __`.ll`__ is not so reliable
