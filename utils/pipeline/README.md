@@ -39,17 +39,31 @@ sh pipeline.sh demo/infer.opt
 
 ### Build
 
-__souper__
+__dependency__
 
-manually install `re2c` `z3`
+I recommend to use homebrew/linuxbrew to install dependencies, then we just follow same steps on Windows(WSL), Linux, macOS.
+```
+brew install cmake gcc llvm re2c z3
+```
+check linuxbrew and rust(optional) official website for installation steps.
+
+__slumps__
+
+```
+git clone https://github.com/KTH/slumps.git
+cd slumps
+git submodule update --init
+```
+
+__souper__
 
 ```
 cd souper
 ./build_deps.sh
-mkdir build
-cd build
+mkdir build && cd build
 cmake ..
 make
+cd ../..
 ```
 
 __wabt__
@@ -57,23 +71,26 @@ __wabt__
 ```
 cd wabt
 git submodule update --init
-mkdir build
-cd build
+mkdir build && cd build
 cmake ..
 cmake --build .
-```
-
-__wasmer__
-
-```
-cd wasmer
-make release-llvm
+cd ../..
 ```
 
 __binaryen__
 
 ```
+cd binaryen
 cmake . && make
+cd ..
+```
+
+__wasmer__(optional)
+
+```
+cd wasmer
+make release-llvm
+cd ..
 ```
 
 ### Requirements
