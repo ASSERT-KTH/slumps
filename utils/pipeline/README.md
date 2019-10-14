@@ -41,11 +41,10 @@ sh pipeline.sh demo/infer.opt
 
 __dependency__
 
-I recommend to use homebrew/linuxbrew to install dependencies, then we just follow same steps on Windows(WSL), Linux, macOS.
+I recommend to use [homebrew](https://brew.sh/)/[linuxbrew](https://docs.brew.sh/Homebrew-on-Linux) to install dependencies, then we just follow same steps on Windows(WSL), Linux, macOS.
 ```
 brew install cmake gcc llvm re2c z3
 ```
-check linuxbrew and rust(optional) official website for installation steps.
 
 __slumps__
 
@@ -85,14 +84,6 @@ cmake . && make
 cd ..
 ```
 
-__wasmer__(optional)
-
-```
-cd wasmer
-make release-llvm
-cd ..
-```
-
 ### Requirements
 
 Python2 >= 2.7
@@ -100,8 +91,6 @@ Python2 >= 2.7
 Python3 >= 3.6
 
 LLVM >= 8.0
-
-Rust (Nightly)
 
 ### Note
 1. current solution for __`.opt`__ → __`.ll`__ is not so reliable
