@@ -33,7 +33,7 @@ EOF
 
 if [ "${ext}" == "c" ]; then
   echo "### step34 c2bc \c"
-  clang ${name}.c -Xclang -load -Xclang ../../souper/build/libsouperPass.so
+  clang -Xclang -load -Xclang ../../souper/build/libsouperPass.so -mllvm -z3-path=/usr/bin/z3 ${name}.c
   ext='bc'
   echo "okay"
 fi
