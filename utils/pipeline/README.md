@@ -41,9 +41,14 @@ sh pipeline.sh demo/infer.opt
 
 __dependency__
 
-I recommend to use [homebrew](https://brew.sh/)/[linuxbrew](https://docs.brew.sh/Homebrew-on-Linux) to install dependencies, then we just follow same steps on Windows(WSL), Linux, macOS.
+For macOS 10.14, we use [`homebrew`](https://brew.sh/) to install dependencies:
 ```
 brew install cmake gcc llvm re2c z3
+```
+
+For Ubuntu 18.04, we use `apt` to install dependencies:
+```
+apt install python git subversion cmake gcc g++ clang llvm-8 re2c z3
 ```
 
 __slumps__
@@ -93,5 +98,4 @@ Python3 >= 3.6
 LLVM >= 8.0
 
 ### Note
-1. current solution for __`.opt`__ → __`.ll`__ is not so reliable
-2. for reference, my env is `llv=9.0.0`, `gcc=9.2.0`, `cmake=3.15.3`
+current solution for __`.opt`__ → __`.ll`__ is not so reliable
