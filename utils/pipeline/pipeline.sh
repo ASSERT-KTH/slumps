@@ -14,6 +14,7 @@ if [ "${ext}" == "wast" ]; then
 fi
 EOF
 
+:<<EOF
 if [ "${ext}" == "wast" ]; then
   echo "### step1 wast2wasm \c"
   ../../wabt/bin/wat2wasm ${name}.wast -o ${name}.wasm
@@ -28,11 +29,20 @@ if [ "${ext}" == "wasm" ]; then
   ext='opt'
   echo "okay"
 fi
+EOF
 
+if [ "${ext}" == "c" ]; then
+  echo "### step34 c2bc \c"
+  clang ${name}.c -Xclang -load -Xclang ../../souper/build/libsouperPass.so
+  ext='bc'
+  echo "okay"
+fi
+
+:<<EOF
 if [ "${ext}" == "opt" ]; then
   echo "### step3 opt2ll \c"
-  python souper2llvm.py ${name}.opt > ${name}.ll
-  # ../../souper/build/souper2llvm ${name}.opt > ${name}.ll
+  # python souper2llvm.py ${name}.opt > ${name}.ll
+  ../../souper/build/souper2llvm ${name}.opt > ${name}.ll
   ext='ll'
   echo "okay"
 fi
@@ -43,6 +53,7 @@ if [ "${ext}" == "ll" ]; then
   ext='bc'
   echo "okay"
 fi
+EOF
 
 if [ "${ext}" == "bc" ]; then
   echo "### step5 bc2opt2ll \c"
