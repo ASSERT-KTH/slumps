@@ -7,3 +7,6 @@
 [submodule "binaryen"]
 	path = binaryen
 	url = git://github.com/WebAssembly/binaryen.git
+[submodule "emscripten"]
+	path = emscripten
+	url = https://github.com/emscripten-core/emscripten
