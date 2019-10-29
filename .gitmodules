@@ -6,7 +6,7 @@
 	url = git://github.com/WebAssembly/wabt.git
 [submodule "binaryen"]
 	path = binaryen
-	url = git://github.com/WebAssembly/binaryen.git
+	url = https://github.com/KTH/binaryen
 [submodule "emscripten"]
 	path = emscripten
 	url = https://github.com/emscripten-core/emscripten
