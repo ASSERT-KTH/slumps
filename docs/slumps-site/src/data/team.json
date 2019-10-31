@@ -1,6 +1,26 @@
 [
     {
-        "name": "John Doe",
-        "img": ""
+        "name": "Martin Monperrus",
+        "img": "https://avatars2.githubusercontent.com/u/803666?s=400&v=4"
+    },
+    {
+        "name": "Benoit Baudry",
+        "img": "https://avatars1.githubusercontent.com/u/2844085?s=400&v=4"
+    },
+    {
+        "name": "Javier Cabrera Arteaga",
+        "img": "https://avatars3.githubusercontent.com/u/16924379?s=400&u=b90501bd4169297252e42a22013e783ee3dbe8ed&v=4"
+    },
+    {
+        "name": "Shrinish Donde",
+        "img": "https://avatars2.githubusercontent.com/u/23298265?s=400&v=4"
+    },
+    {
+        "name": "Jian Gu ",
+        "img": "https://avatars0.githubusercontent.com/u/9079360?s=400&v=4"
+    },
+    {
+        "name": "Lucas Satabin",
+        "img": "https://avatars2.githubusercontent.com/u/2537737?s=400&v=4"
     }
 ]

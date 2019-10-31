@@ -2,6 +2,7 @@ import React from "react"
 
 import { Layout, Menu, Breadcrumb, Button, Avatar, Card, Divider, Row, Col} from 'antd';
 import { useStaticQuery, graphql } from "gatsby"
+import Section from "../../components/section";
 
 
 
@@ -26,22 +27,30 @@ const team = useStaticQuery(graphql`
   `).allTeamJson.edges.map(t => t.node)
 
 
-  return (<React.Fragment> <Divider>Our Team</Divider>
+  return (<Section name="Team" color="#fff"> 
 
         <Row type="flex" justify="center">
          
         {team.map((item, index) => {
-            return  (  <Col key={`team${index}`} span={6}><Card
+            return  (  <Col key={`team${index}`} span={2}>
+
+                <div className="teamContainer">
+                
+                    <Avatar shape="square" src={item.img} size={96} icon="user" />
+                    <h5>{item.name}</h5>
+                </div>
+
+                {/*<Card
                   
-                  style={{ width: 200, margin: '15px' }}
+                  style={{ width: 200, smargin: '15px' }}
                   cover={<img alt="example" src={item.img} />}
                 >
                       <Meta title={item.name} description={item.description} />
 
-                </Card></Col> )
+                </Card>*/}</Col> )
         })}
           
-        </Row></React.Fragment>)
+        </Row></Section>)
 
 }
 
