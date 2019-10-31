@@ -166,7 +166,8 @@ class Reporter(object):
 
 
 def saveBeforeExit(code, bin_folder, reporter):
-    reporter.save()
+    if reporter:
+        reporter.save()
 
     print("Cleaning binary dir...")
     shutil.rmtree(bin_folder)
