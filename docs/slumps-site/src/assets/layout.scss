@@ -1,0 +1,36 @@
+@import '~antd/dist/antd.css';
+
+
+// Customize antd
+
+body{
+    background: #f0f2f5;
+}
+
+.center-p{
+    text-align: center;
+}
+
+.code{
+    font-size: 7pt;
+
+    color:white;
+
+    background: black;
+    padding: 4px;
+
+}
+
+.teamContainer{
+    display: flex;
+
+    flex-direction: column;
+    align-items: center;
+
+    h5{
+        margin-top:  10px;
+
+        text-align: center;
+        
+    }
+}
