@@ -18,15 +18,13 @@ const IndexPage = () =>{
   <Layout>
    <Alert message="Under construction" banner />
    
-    <Content style={{ padding: '0 50px', marginTop: 64}}>
+    <Content style={{  marginTop: 64}}>
      
-        <div style={{ padding: 4, minHeight: 380 }}>
          <IntroSection/>
          <Benchmarks />
          <TeamSection />
-      </div>
     </Content>
-    <Footer style={{ textAlign: 'center' }}>ASSERT ©2019</Footer>
+    <Footer style={{ textAlign: 'center' }}>ASSERT ©2019 KTH Royal Instutite of Technology</Footer>
   </Layout></React.Fragment>)
 
 }
