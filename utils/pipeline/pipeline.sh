@@ -1,34 +1,16 @@
-#!/bin/sh
+#!/bin/bash
 
 name=$(echo $1 | sed 's/\.[^.]*$//')
 ext=$(echo $1 | sed 's/^.*\.//')
 
-# export BINARYEN_DEBUG_SOUPERIFY=0
-
 if [ "${ext}" == "wast" ]; then
   echo "### step wast2wasm \c"
   ../../wabt/bin/wat2wasm ${name}.wast -o ${name}.wasm
-  # ../../binaryen/bin/wasm-as ${name}.wast > ${name}.wasm
   ext='wasm'
   echo "okay"
 fi
 
-# this step could generate souperified opt files as well
-# then we can skip few unnecessary steps
-if [ "${ext}" == "wasm" ]; then
-  echo "### step wasm2opt \c"
-  ../../binaryen/bin/wasm-opt ${name}.wasm --flatten --simplify-locals-nonesting --reorder-locals --souperify > ${name}.opt
-  ext='opt'
-  echo "okay"
-fi
-
-if [ "${ext}" == "opt" ]; then
-  echo "### step opt2ll \c"
-  # python souper2llvm.py ${name}.opt > ${name}.ll
-  ../../souper/build/souper2llvm ${name}.opt > ${name}.ll
-  ext='ll'
-  echo "okay"
-fi
+# wasm2ll / wasm2c / wasm2rs
 
 if [ "${ext}" == "c" ]; then
   echo "### step c2ll \c"
@@ -52,9 +34,33 @@ if [ "${ext}" == "ll" ]; then
 fi
 
 if [ "${ext}" == "bc" ]; then
-  echo "### step bc2opt2ll \c"
-  sh bc2opt2ll.sh ${name}.bc ../../souper/build/souper
+  echo "### step bc2candopt \c"
+  ../../souper/build/souper -z3-path=/usr/bin/z3 ${name}.bc > ${name}.candopt
+  ext='candopt'
+  echo "okay"
+fi
+
+# bc2lhsopt / bc2rhsopt / candopt2lhsopt / candopt2rhsopt
+
+if [ "${ext}" == "lhsopt" ]; then
+  echo "### step lhsopt2rhsopt \c"
+  ../../souper/build/souper-check -z3-path=/usr/bin/z3 -infer-rhs -souper-infer-iN ${name}.lhsopt > ${name}.rhsopt
+  ext='rhsopt'
+  echo "okay"
+fi
+
+if [ "${ext}" == "rhsopt" ]; then
+  echo "### step rhsopt2ll \c"
+  # python souper2llvm.py ${name}.rhsopt > ${name}.ll
+  ../../souper/build/souper2llvm ${name}.rhsopt > ${name}.ll
   ext='ll'
+  echo "okay"
+fi
+
+if [ "${ext}" == "candopt" ]; then
+  echo "### step check candopt \c"
+  ../../souper/build/souper-check -z3-path=/usr/bin/z3 ${name}.candopt
+  ext='candopt'
   echo "okay"
 fi
 
