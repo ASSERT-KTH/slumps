@@ -29,6 +29,8 @@ const team = useStaticQuery(graphql`
 
   return (<Section name="Team" color="#fff"> 
 
+<a id="team"></a>
+    
         <Row type="flex" justify="center">
          
         {team.map((item, index) => {
