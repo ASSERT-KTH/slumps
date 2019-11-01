@@ -11,7 +11,14 @@ const {Content} = Layout;
 const IntroSection = () =>{
   
   return (<Content>
+
           <Divider><h1>SLUMPS</h1></Divider>
+
+          <Row style={{marginBottom: 30}} type="flex" justify="center">
+            <Col>
+               <Button type="primary" href="https://github.com/KTH/slumps">To GitHub</Button>
+            </Col>
+          </Row>
 
           <p className="center-p">Research on randomization and superoptimization for WebAssembly WASM</p>
 
@@ -46,7 +53,7 @@ const IntroSection = () =>{
           
           </Row>
 
-          <Section name="Where we are?" color='#fff'>
+          <Section name="Where are we?" color='#fff'>
             <Row type="flex" justify="center">
               <Col>
                 <Steps direction="vertical" >

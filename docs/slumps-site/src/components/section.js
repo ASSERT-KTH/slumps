@@ -11,8 +11,8 @@ const { Header, Content, Footer } = Layout;
 
 const Section = ({name, children, color}) =>{
   
-    return ( <div style={{ padding: 24, minHeight: 380, background: color }}>
-            <Divider style={{marginBottom: 30}}>{name}</Divider>
+    return ( <div style={{ padding: 24, minHeight: 380, background: color, marginBottom: 100, marginTop: 40 }}>
+            <Divider style={{marginBottom: 30}}><h2>{name}</h2></Divider>
             {children}
         </div>
   )
