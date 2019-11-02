@@ -16,7 +16,7 @@
 
 3. __`.rs`__ → __`.ll`__ (based on `rustc` from [`rustc`]())
 
-`rustc -S -emit-llvm xxx.rs -o xxx.ll`
+`rustc -S --emit=llvm-ir xxx.rs -o xxx.ll`
 
 4. __`.ll`__ → __`.bc`__ (by `llvm-as` from [`llvm`](https://llvm.org/docs/index.html))
 
@@ -26,9 +26,9 @@
 
 `souper -z3-path=/usr/bin/z3 xxx.bc > xxx.candopt`
 
-6. __`.bc`__ →  __`.lhsopt`__ (?) / __`.bc`__ →  __`.rhsopt`__ (?) / __`.candopt`__ →  __`.lhsopt`__ (?) / __`.candopt`__ →  __`.rhsopt`__ (?)
+6. __`.candopt`__ →  __`.lhsopt`__ (based on `build/souper-check` from [`souper`](https://github.com/google/souper))
 
-``
+`souper-check -z3-path=/usr/bin/z3 -print-replacement-split xxx.candopt > xxx.lhsopt`
 
 7. __`.lhsopt`__ → __`.rhsopt`__ (based on `build/souper-check` from [`souper`](https://github.com/google/souper))
 
@@ -65,7 +65,7 @@ __dependency__
 
 For Ubuntu 18.04, we use `apt` to install dependencies:
 ```
-apt install python git subversion cmake gcc g++ clang llvm-8 re2c z3
+apt install git subversion cmake gcc g++ clang llvm-8 re2c z3
 ```
 
 __slumps__
