@@ -21,7 +21,7 @@ fi
 
 if [ "${ext}" == "rs" ]; then
   echo "### step rs2ll \c"
-  rustc -S -emit-llvm ${name}.rs -o ${name}.ll
+  rustc -S --emit=llvm-ir ${name}.rs -o ${name}.ll
   ext='ll'
   echo "okay"
 fi
@@ -40,7 +40,13 @@ if [ "${ext}" == "bc" ]; then
   echo "okay"
 fi
 
-# bc2lhsopt / bc2rhsopt / candopt2lhsopt / candopt2rhsopt
+if [ "${ext}" == "candopt" ]; then
+  echo "### step candopt2lhsopt \c"
+  ../../souper/build/souper-check -z3-path=/usr/bin/z3 -print-replacement-split ${name}.candopt > ${name}.lhsopt
+  sed -i '/^result/d' ${name}.lhsopt
+  ext='lhsopt'
+  echo "okay"
+fi
 
 if [ "${ext}" == "lhsopt" ]; then
   echo "### step lhsopt2rhsopt \c"
