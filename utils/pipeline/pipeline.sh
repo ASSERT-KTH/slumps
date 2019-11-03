@@ -1,9 +1,19 @@
 #!/bin/bash
 
+# Download wabt releases
+
+
 name=$(echo $1 | sed 's/\.[^.]*$//')
 ext=$(echo $1 | sed 's/^.*\.//')
 
 if [ "${ext}" == "wast" ]; then
+  if [ ! -d "../../wabt/bin" ]; then
+    cd ../../wabt
+    git submodule update --init
+    make
+    cd ../utils/pipeline
+  fi
+
   echo "### step wast2wasm \c"
   ../../wabt/bin/wat2wasm ${name}.wast -o ${name}.wasm
   ext='wasm'
