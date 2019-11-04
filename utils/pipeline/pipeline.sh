@@ -6,22 +6,6 @@
 name=$(echo $1 | sed 's/\.[^.]*$//')
 ext=$(echo $1 | sed 's/^.*\.//')
 
-if [ "${ext}" == "wast" ]; then
-  if [ ! -d "../../wabt/bin" ]; then
-    cd ../../wabt
-    git submodule update --init
-    make
-    cd ../utils/pipeline
-  fi
-
-  echo "### step wast2wasm \c"
-  ../../wabt/bin/wat2wasm ${name}.wast -o ${name}.wasm
-  ext='wasm'
-  echo "okay"
-fi
-
-# wasm2ll / wasm2c / wasm2rs
-
 if [ "${ext}" == "c" ]; then
   echo "### step c2ll \c"
   clang -S -emit-llvm ${name}.c -o ${name}.ll
@@ -31,7 +15,7 @@ fi
 
 if [ "${ext}" == "rs" ]; then
   echo "### step rs2ll \c"
-  rustc -S --emit=llvm-ir ${name}.rs -o ${name}.ll
+  rustc  --emit=llvm-ir ${name}.rs -o ${name}.ll
   ext='ll'
   echo "okay"
 fi
@@ -45,11 +29,25 @@ fi
 
 if [ "${ext}" == "bc" ]; then
   echo "### step bc2candopt \c"
+  if [ ! -d "../../souper/build/souper" ]; then
+    cd ../../souper
+    if [ ! -d "./third_party" ]; then
+      ./build_deps.sh $buildtype $extra_cmake_flags
+    fi
+
+    mkdir build
+    cd build
+    echo "Building..."
+    cmake  ../
+    make
+    cd ../../utils/pipeline
+  fi
   ../../souper/build/souper -z3-path=/usr/bin/z3 ${name}.bc > ${name}.candopt
   ext='candopt'
   echo "okay"
 fi
 
+exit
 if [ "${ext}" == "candopt" ]; then
   echo "### step candopt2lhsopt \c"
   ../../souper/build/souper-check -z3-path=/usr/bin/z3 -print-replacement-split ${name}.candopt > ${name}.lhsopt
@@ -59,6 +57,8 @@ if [ "${ext}" == "candopt" ]; then
 fi
 
 if [ "${ext}" == "lhsopt" ]; then
+ 
+  
   echo "### step lhsopt2rhsopt \c"
   ../../souper/build/souper-check -z3-path=/usr/bin/z3 -infer-rhs -souper-infer-iN ${name}.lhsopt > ${name}.rhsopt
   ext='rhsopt'
