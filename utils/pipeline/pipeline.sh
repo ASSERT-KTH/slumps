@@ -47,7 +47,6 @@ if [ "${ext}" == "bc" ]; then
   echo "okay"
 fi
 
-exit
 if [ "${ext}" == "candopt" ]; then
   echo "### step candopt2lhsopt \c"
   ../../souper/build/souper-check -z3-path=/usr/bin/z3 -print-replacement-split ${name}.candopt > ${name}.lhsopt
