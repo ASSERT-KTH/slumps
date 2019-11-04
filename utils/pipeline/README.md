@@ -82,6 +82,8 @@ __souper__
  - subversion (svn)
  - re2c
  - make
+ - doxygen
+ - dot (optional)
 
 ```
 cd souper
