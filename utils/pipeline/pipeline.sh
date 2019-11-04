@@ -2,6 +2,19 @@
 
 # Download wabt releases
 
+if [ ! -d "../../souper/build/souper" ]; then
+  cd ../../souper
+  if [ ! -d "./third_party" ]; then
+    ./build_deps.sh $buildtype $extra_cmake_flags
+  fi
+
+  mkdir build
+  cd build
+  echo "Building..."
+  cmake  ../
+  make
+  cd ../../utils/pipeline
+fi
 
 name=$(echo $1 | sed 's/\.[^.]*$//')
 ext=$(echo $1 | sed 's/^.*\.//')
@@ -29,19 +42,7 @@ fi
 
 if [ "${ext}" == "bc" ]; then
   echo "### step bc2candopt \c"
-  if [ ! -d "../../souper/build/souper" ]; then
-    cd ../../souper
-    if [ ! -d "./third_party" ]; then
-      ./build_deps.sh $buildtype $extra_cmake_flags
-    fi
-
-    mkdir build
-    cd build
-    echo "Building..."
-    cmake  ../
-    make
-    cd ../../utils/pipeline
-  fi
+  
   ../../souper/build/souper -z3-path=/usr/bin/z3 ${name}.bc > ${name}.candopt
   ext='candopt'
   echo "okay"
