@@ -78,6 +78,11 @@ git submodule update --init
 
 __souper__
 
+**Dependencies**
+ - subversion (svn)
+ - re2c
+ - make
+
 ```
 cd souper
 ./build_deps.sh
