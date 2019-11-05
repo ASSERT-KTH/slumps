@@ -10,4 +10,4 @@ A collection of Webassembly programs used to evaluate our tools
 
 ## Study for some vulnerabilities
 
-[Slides] (https://jacarte.github.io/wasm_presentation/)
+[Slides](https://jacarte.github.io/wasm_presentation/)
