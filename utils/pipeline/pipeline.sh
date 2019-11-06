@@ -42,7 +42,7 @@ fi
 
 
 if [ "${ext}" == "bc" ]; then
-  echo "### step bc2candopt \c"
+  echo "### step bc optimization candidates \c"
   ../../souper/build/souper -z3-path='../../souper/third_party/z3/build/z3'  ${name}.bc > ${name}.candopt
   ext='candopt'
   echo "okay"
@@ -52,7 +52,7 @@ fi
 
 
 if [ "${ext}" == "candopt" ]; then
-  echo "### step candopt2lhsopt \c"
+  echo "### step optimization candidates to LHS/RHS optimization step \c"
   ../../souper/build/souper-check -z3-path='../../souper/third_party/z3/build/z3' -print-replacement-split ${name}.candopt > ${name}.opt
   
   ext='opt' # This file contains both LHS and RHS solution
@@ -60,7 +60,7 @@ if [ "${ext}" == "candopt" ]; then
 fi
 
 if [ "${ext}" == "opt" ]; then
-  echo "### step lhsopt2rhsopt \c"
+  echo "### step separating LHS and RHS from opt file \c"
 
   # This command expect LHS, remove "result" instruction from it
   cat ${name}.opt | sed '/^result/d' > ${name}.lhsopt
@@ -72,15 +72,15 @@ fi
 if [ "${ext}" == "opt" ]; then
   echo "### step lhsopt2ll \c"
   # python souper2llvm.py ${name}.rhsopt > ${name}.ll
-  ../../souper/build/souper2llvm ${name}.opt > ${name}.ll2
+  ../../souper/build/souper2llvm ${name}.rhsopt > ${name}.ll2
   ext='ll2'
   echo "okay"
 fi
 
-if [ "${ext}" == "candopt" ]; then
+if [ "${ext}" == "ll2" ]; then
   echo "### step check candopt \c"
-  ../../souper/build/souper-check -z3-path='../../souper/third_party/z3/build/z3' ${name}.candopt
-  ext='candopt'
+  llvm-as ${name}.ll2
+  ext='a'
   echo "okay"
 fi
 
