@@ -43,31 +43,36 @@ fi
 
 if [ "${ext}" == "bc" ]; then
   echo "### step bc2candopt \c"
-  ../../souper/build/souper -z3-path='../../souper/third_party/z3/build/z3' ${name}.bc > ${name}.candopt
+  ../../souper/build/souper -z3-path='../../souper/third_party/z3/build/z3'  ${name}.bc > ${name}.candopt
   ext='candopt'
   echo "okay"
 fi
 
 
+
+
 if [ "${ext}" == "candopt" ]; then
   echo "### step candopt2lhsopt \c"
-  ../../souper/build/souper-check -z3-path='../../souper/third_party/z3/build/z3' -print-replacement-split ${name}.candopt > ${name}.lhsopt
-  sed -i '/^result/d' ${name}.lhsopt
-  ext='lhsopt'
+  ../../souper/build/souper-check -z3-path='../../souper/third_party/z3/build/z3' -print-replacement-split ${name}.candopt > ${name}.opt
+  
+  ext='opt' # This file contains both LHS and RHS solution
   echo "okay"
 fi
 
-#if [ "${ext}" == "lhsopt" ]; then
-#  echo "### step lhsopt2rhsopt \c"
-#  ../../souper/build/souper-check -z3-path='../../souper/third_party/z3/build/z3' -infer-rhs -souper-infer-iN ${name}.lhsopt > ${name}.rhsopt
-#  ext='rhsopt'
-#  echo "okay"
-#fi
+if [ "${ext}" == "opt" ]; then
+  echo "### step lhsopt2rhsopt \c"
 
-if [ "${ext}" == "lhsopt" ]; then
+  # This command expect LHS, remove "result" instruction from it
+  cat ${name}.opt | sed '/^result/d' > ${name}.lhsopt
+  ../../souper/build/souper-check -z3-path='../../souper/third_party/z3/build/z3' -infer-rhs -souper-infer-iN ${name}.lhsopt > ${name}.rhsopt
+  ext='opt' # save rhs but keep working with the other one
+  echo "okay"
+fi
+
+if [ "${ext}" == "opt" ]; then
   echo "### step lhsopt2ll \c"
   # python souper2llvm.py ${name}.rhsopt > ${name}.ll
-  ../../souper/build/souper2llvm ${name}.lhsopt > ${name}.ll2
+  ../../souper/build/souper2llvm ${name}.opt > ${name}.ll2
   ext='ll2'
   echo "okay"
 fi
