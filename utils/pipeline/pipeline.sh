@@ -35,7 +35,7 @@ fi
 
 if [ "${ext}" == "ll" ]; then
   echo "### step ll2bc \c"
-  llvm-as ${name}.ll 
+  llvm-as ${name}.ll -o ${name}.bc
   ext='bc'
   echo "okay"
 fi
@@ -70,17 +70,17 @@ if [ "${ext}" == "opt" ]; then
 fi
 
 if [ "${ext}" == "opt" ]; then
-  echo "### step lhsopt2ll \c"
-  # python souper2llvm.py ${name}.rhsopt > ${name}.ll
+  echo "### step rhsopt->ll2 \c"
+  # python souper2llvm.py ${name}.rhsopt > ${name}.ll2
   ../../souper/build/souper2llvm ${name}.rhsopt > ${name}.ll2
   ext='ll2'
   echo "okay"
 fi
 
 if [ "${ext}" == "ll2" ]; then
-  echo "### step check candopt \c"
-  llvm-as ${name}.ll2
-  ext='a'
+  echo "### step ll2->bc2 \c"
+  llvm-as ${name}.ll2 -o ${name}.bc2
+  ext='bc2'
   echo "okay"
 fi
 
