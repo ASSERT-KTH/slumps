@@ -1,17 +1,25 @@
 import argparse
 import subprocess
+import os
+
+BASE_DIR = os.path.dirname(
+    os.path.dirname(
+        os.path.dirname(
+            os.path.dirname(
+                os.path.abspath(__file__)))))
 
 
 class Alias:
-    clang = "../../souper/third_party/llvm/Release/bin/clang"
-    llc = "../../souper/third_party/llvm/Release/bin/llc"
-    lli = "../../souper/third_party/llvm/Release/bin/lli"
-    llvm_as = "../../souper/third_party/llvm/Release/bin/llvm-as"
-    souper = "../../souper/build/souper"
-    souper_check = "../../souper/build/souper-check"
-    souper2llvm = "../../souper/build/souper2llvm"
+    
+    clang = "%s/souper/third_party/llvm/Release/bin/clang"%(BASE_DIR,)
+    llc = "%s/souper/third_party/llvm/Release/bin/llc"%(BASE_DIR,)
+    lli = "%s/souper/third_party/llvm/Release/bin/lli"%(BASE_DIR,)
+    llvm_as = "%s/souper/third_party/llvm/Release/bin/llvm-as"%(BASE_DIR,)
+    souper = "%s/souper/build/souper"%(BASE_DIR,)
+    souper_check = "%s/souper/build/souper-check"%(BASE_DIR,)
+    souper2llvm = "%s/souper/build/souper2llvm"%(BASE_DIR,)
     # libsouperPass_so = "../../souper/build/libsouperPass.so"
-    z3 = "../../souper/third_party/z3/build/z3"
+    z3 = "%s/souper/third_party/z3/build/z3"%(BASE_DIR,)
 
 
 class Pipeline:

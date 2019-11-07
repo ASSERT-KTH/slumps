@@ -1,0 +1,22 @@
+; LGTM
+%0:i32 = var
+%1:i1 = ne 0:i32, %0
+pc %1 1:i1
+%2:i1 = ne 1:i32, %0
+pc %2 1:i1
+%3:i33 = usub.with.overflow %0, 1:i32 (hasExternalUses)
+%4:i1 = extractvalue %3, 1:i32
+infer %4
+result 0:i1
+
+; LGTM
+%0:i32 = var
+%1:i1 = ne 0:i32, %0
+pc %1 1:i1
+%2:i1 = ne 1:i32, %0
+pc %2 1:i1
+%3:i33 = usub.with.overflow %0, 2:i32 (hasExternalUses)
+%4:i1 = extractvalue %3, 1:i32
+infer %4
+result 0:i1
+
