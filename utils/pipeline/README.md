@@ -107,5 +107,5 @@ cd ../..
 
 ### Requirements
 
+Python >= 3.6
 LLVM >= 8.0
-
