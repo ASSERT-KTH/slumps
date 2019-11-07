@@ -88,7 +88,7 @@ fi
 
 if [ "${ext}" == "ll2" ]; then
   echo "### step ll2->bc2 \c"
-  llvm-as ${name}.ll -o ${name}.bc2
+  llvm-as ${name}.ll2 -o ${name}.bc2
   # llc -filetype=obj ${name}.bc2 -o ${name}.o2 # lli ${name}.o2
   # llc -march=wasm32 -filetype=asm ${name}.ll2 -o ${name}.s2
   # llc -march=wasm32 -filetype=obj ${name}.ll2 -o ${name}.o2
