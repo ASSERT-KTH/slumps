@@ -33,7 +33,7 @@ alias z3='../../souper/third_party/z3/build/z3'
 
 if [ "${ext}" == "c" ]; then
   echo "### step c2ll \c"
-  clang -S -emit-llvm ${name}.c -o ${name}.ll
+  clang -O0 -Xclang -disable-O0-optnone -S -emit-llvm ${name}.c -o ${name}.ll 
   ext='ll'
   echo "okay"
 fi
@@ -47,13 +47,16 @@ fi
 
 if [ "${ext}" == "ll" ]; then
   echo "### step ll2bc \c"
-  llvm-as ${name}.ll -o ${name}.bc
+  opt -mem2reg ${name}.ll -S -o ${name}-mem2reg.ll
+  #llvm-dis ${name}.bc -o ${name}.ll
   # llc -filetype=obj ${name}.bc -o ${name}.o # lli ${name}.o
   # llc -march=wasm32 -filetype=asm ${name}.ll -o ${name}.s
   # llc -march=wasm32 -filetype=obj ${name}.ll -o ${name}.o
-  ext='bc'
+  ext='ll'
   echo "okay"
 fi
+
+exit
 
 if [ "${ext}" == "bc" ]; then
   echo "### step bc optimization candidates \c"

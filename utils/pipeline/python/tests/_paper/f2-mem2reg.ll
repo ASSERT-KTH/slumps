@@ -1,4 +1,4 @@
-; ModuleID = './python/tests/_paper/f2.c'
+; ModuleID = './python/tests/_paper/f2.ll'
 source_filename = "./python/tests/_paper/f2.c"
 target datalayout = "e-m:o-i64:64-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-apple-macosx10.14.0"
@@ -6,37 +6,22 @@ target triple = "x86_64-apple-macosx10.14.0"
 ; Function Attrs: noinline nounwind ssp uwtable
 define i32 @f(i32 %cond, i32 %z) #0 {
 entry:
-  %cond.addr = alloca i32, align 4
-  %z.addr = alloca i32, align 4
-  %x = alloca i32, align 4
-  %y = alloca i32, align 4
-  store i32 %cond, i32* %cond.addr, align 4
-  store i32 %z, i32* %z.addr, align 4
-  %0 = load i32, i32* %cond.addr, align 4
-  %tobool = icmp ne i32 %0, 0
+  %tobool = icmp ne i32 %cond, 0
   br i1 %tobool, label %if.then, label %if.else
 
 if.then:                                          ; preds = %entry
-  %1 = load i32, i32* %z.addr, align 4
-  %mul = mul nsw i32 3, %1
-  store i32 %mul, i32* %x, align 4
-  %2 = load i32, i32* %z.addr, align 4
-  store i32 %2, i32* %y, align 4
+  %mul = mul nsw i32 3, %z
   br label %if.end
 
 if.else:                                          ; preds = %entry
-  %3 = load i32, i32* %z.addr, align 4
-  %mul1 = mul nsw i32 2, %3
-  store i32 %mul1, i32* %x, align 4
-  %4 = load i32, i32* %z.addr, align 4
-  %mul2 = mul nsw i32 2, %4
-  store i32 %mul2, i32* %y, align 4
+  %mul1 = mul nsw i32 2, %z
+  %mul2 = mul nsw i32 2, %z
   br label %if.end
 
 if.end:                                           ; preds = %if.else, %if.then
-  %5 = load i32, i32* %x, align 4
-  %6 = load i32, i32* %y, align 4
-  %add = add nsw i32 %5, %6
+  %x.0 = phi i32 [ %mul, %if.then ], [ %mul1, %if.else ]
+  %y.0 = phi i32 [ %z, %if.then ], [ %mul2, %if.else ]
+  %add = add nsw i32 %x.0, %y.0
   ret i32 %add
 }
 
