@@ -60,6 +60,7 @@ class ExternalStage(object):
         # Specific implementation process over the std out
         res = self.processInner(std)
 
+        print("\t%s%s%s'"%(bcolors.WARNING, res, bcolors.ENDC))
         return res
 
 class CToLLStage(ExternalStage):
