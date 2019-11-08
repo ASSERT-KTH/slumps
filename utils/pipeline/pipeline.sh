@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Download wabt releases
-<<END
+
 if [ ! -d "../../souper/build/souper" ]; then
   cd ../../souper
   if [ ! -d "./third_party" ]; then
@@ -15,7 +15,7 @@ if [ ! -d "../../souper/build/souper" ]; then
   make
   cd ../../utils/pipeline
 fi
-END
+
 
 name=$(echo $1 | sed 's/\.[^.]*$//')
 ext=$(echo $1 | sed 's/^.*\.//')
@@ -29,7 +29,8 @@ alias souper='../../souper/build/souper'
 alias souper-check='../../souper/build/souper-check'
 alias souper2llvm='../../souper/build/souper2llvm'
 alias libsouperPass.so='../../souper/build/libsouperPass.so'
-alias z3='../../souper/third_party/z3/build/z3'
+
+z3='../../souper/third_party/z3/build/z3'
 
 if [ "${ext}" == "c" ]; then
   echo "### step c2ll \c"
@@ -47,27 +48,24 @@ fi
 
 if [ "${ext}" == "ll" ]; then
   echo "### step ll2bc \c"
-  opt -mem2reg ${name}.ll -S -o ${name}-mem2reg.ll
-  #llvm-dis ${name}.bc -o ${name}.ll
-  # llc -filetype=obj ${name}.bc -o ${name}.o # lli ${name}.o
-  # llc -march=wasm32 -filetype=asm ${name}.ll -o ${name}.s
-  # llc -march=wasm32 -filetype=obj ${name}.ll -o ${name}.o
-  ext='ll'
+  opt -mem2reg ${name}.ll -S -o ${name}.ll
+  echo "### ll2bc \c"  
+  llvm-as ${name}.ll -o ${name}.bc
+  ext='bc'
   echo "okay"
 fi
 
-exit
 
 if [ "${ext}" == "bc" ]; then
   echo "### step bc optimization candidates \c"
-  souper -z3-path=z3 ${name}.bc > ${name}.candopt
+  souper -z3-path=${z3} ${name}.bc > ${name}.candopt
   ext='candopt'
-  echo "okay"
+  echo "okay" 
 fi
 
 if [ "${ext}" == "candopt" ]; then
   echo "### step optimization candidates to LHS/RHS optimization step \c"
-  souper-check -z3-path=z3 -print-replacement-split ${name}.candopt > ${name}.opt
+  souper-check -z3-path=${z3} -print-replacement-split ${name}.candopt > ${name}.opt
   ext='opt' # This file contains both LHS and RHS solution
   echo "okay"
 fi
@@ -76,7 +74,7 @@ if [ "${ext}" == "opt" ]; then
   echo "### step separating LHS and RHS from opt file \c"
   # This command expect LHS, remove "result" instruction from it
   cat ${name}.opt | sed '/^result/d' > ${name}.lhsopt
-  souper-check -z3-path=z3 -infer-rhs -souper-infer-iN ${name}.lhsopt > ${name}.rhsopt
+  souper-check -z3-path=${z3} -infer-rhs -souper-infer-iN ${name}.lhsopt > ${name}.rhsopt
   ext='rhsopt' # save rhs but keep working with the other one
   echo "okay"
 fi
