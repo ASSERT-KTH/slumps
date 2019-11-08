@@ -156,13 +156,42 @@ class CandidatesToSouperParts(ExternalStage):
         return std
 
 class Pipeline(object):
-    pass
+    def process(self, file):
+        
+        ctoll = CToLLStage()
+        ll1 = ctoll.do(file)
+
+        lltoll = LLToMem2RegLL()
+        ll2 = lltoll.do(std=ll1)
+
+        # Saving the ll file
+        self.original_llvm = ll2.decode("utf-8")
+        # sanitize ?
+
+        lltobc = LLToBC()
+        bc = lltobc.do(std=ll2)
+
+        bctocand = BCToSouper()
+        cand = bctocand.do(std=bc)
+
+        #Saving candidate
+        self.candidates = cand.decode("utf-8")
+        # Report if no candidates
+
+        # map candidates to original code llvm ?
+
+        candtosols = CandidatesToSouperParts()
+        sols = candtosols.do(std=cand)
+
+        # Map solutions to original optimization candidate
+
+        # Generate LLVM IR for solution
+
+        # Generate Overall LLVM IR output
+
 
 if __name__ == "__main__":
-    ctoll = CToLLStage()
-    lltoll = LLToMem2RegLL()
-    lltobc = LLToBC()
-    bctocand = BCToSouper()
-    candtosols = CandidatesToSouperParts()
+    
+    pipeline = Pipeline()
 
-    candtosols.do(std=bctocand.do(std=lltobc.do(std=lltoll.do(std=ctoll.do(args=sys.argv[1])))))
+    pipeline.process(sys.argv[1])
