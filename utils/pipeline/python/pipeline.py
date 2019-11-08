@@ -39,7 +39,7 @@ class ExternalStage(object):
         self.path_to_executable = "unknown"
 
     def processInner(self, std):
-        raise "Ops...Not implemented"
+        return b"Ops...Not implemented"
 
     def do(self,args=[], stdin = None): # stdin byte stream
 
@@ -58,7 +58,9 @@ class ExternalStage(object):
             raise Exception("Error on stage: %s. %s"%(self.name, str(err)))
 
         # Specific implementation process over the std out
-        return self.processInner(std)
+        res = self.processInner(std)
+
+        return res
 
 class CToLLStage(ExternalStage):
 
