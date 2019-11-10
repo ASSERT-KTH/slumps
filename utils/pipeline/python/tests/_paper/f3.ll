@@ -1,5 +1,5 @@
-; ModuleID = './python/tests/_paper/f3.ll'
-source_filename = "./python/tests/_paper/f3.c"
+; ModuleID = 'python/tests/_paper/f3.ll'
+source_filename = "python/tests/_paper/f3.c"
 target datalayout = "e-m:o-i64:64-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-apple-macosx10.14.0"
 

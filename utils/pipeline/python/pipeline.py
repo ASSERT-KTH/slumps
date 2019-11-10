@@ -2,12 +2,22 @@ import argparse
 from subprocess import Popen, PIPE
 import os
 import sys
+import re
+from nodes import TextBlock, ModuleNode
+import json
+
+import collections
 
 BASE_DIR = os.path.dirname(
     os.path.dirname(
         os.path.dirname(
             os.path.dirname(
                 os.path.abspath(__file__)))))
+def flatten(x):
+    if isinstance(x, collections.Iterable):
+        return [a for i in x for a in flatten(i)]
+    else:
+        return [x]
 
 class bcolors:
     HEADER = '\033[95m'
@@ -63,7 +73,7 @@ class ExternalStage(object):
         res = self.processInner(std)
 
         DEBUG_FILE.write(("\n%s ================================================\n"%(self.name,)).encode("utf-8"))
-        DEBUG_FILE.write(res)
+        #DEBUG_FILE.write(res)
         # print("\t%s%s%s'"%(bcolors.WARNING, res, bcolors.ENDC))
 
         return res
@@ -171,7 +181,6 @@ class Pipeline(object):
 
         # Saving the ll file
         self.original_llvm = ll2.decode("utf-8")
-        # sanitize ?
 
         lltobc = LLToBC()
         bc = lltobc(std=ll2)
@@ -180,8 +189,43 @@ class Pipeline(object):
         cand = bctocand(std=bc)
 
         #Saving candidate
-        self.candidates = cand.decode("utf-8")
-        print(self.candidates.split("\n"))
+        candidates = cand.decode("utf-8").split(";[CANDIDATE]\n")[:-1] # Avoid the last separator
+        candidates = map(lambda x: x.lstrip().rstrip(), candidates) # Getting only unique candidates
+        candidates = list(candidates)
+
+        print("%s%s%s"%(bcolors.OKGREEN, "Found %s candidates"%(len(candidates),), bcolors.ENDC))
+        ORIGIN__RE = re.compile(r";\[ORIGIN\] (.*)\n")
+
+        rootNode = TextBlock(self.original_llvm)
+        
+        # Sort by appearing index in the original LLVM IR
+
+        children = [rootNode]
+        
+        for cand_text in candidates:
+            search = ORIGIN__RE.search(cand_text)
+            original_llvm_ir = search.group(1).lstrip().rstrip()
+
+            index = -1
+
+            for i, node in enumerate(children):
+                if type(node.value) == type(""):
+                    index = node.value.find(original_llvm_ir)
+
+                    if index != -1:
+                        left, middle, right = node.split(index, index + len(original_llvm_ir), TextBlock("%s; -> [CANDIDATE]"%(original_llvm_ir, )))
+                        # TODO Add Candidate Node
+                        children[i] = [left, middle, right]
+                        children = flatten(children)
+                        break
+                    
+
+        self.root = ModuleNode()
+        self.root.children = children
+
+        self.root.infixVisit(DEBUG_FILE)
+
+        # Detect origin entrypoints
 
         # Report if no candidates
 

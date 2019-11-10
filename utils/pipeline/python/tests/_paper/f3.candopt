@@ -2,6 +2,7 @@
 ; Using solver: Z3 + internal cache
 
 ; Static profile 1
+;[ORIGIN]   %add = add i32 %a, 3
 ; Function: g
 %0:i32 = var
 %1:i32 = urem %0, 4:i32
@@ -10,6 +11,7 @@ pc %1 0:i32
 cand %2 4294967295:i32 (demandedBits=00000000000000000000000000000011)
 
 ; Static profile 1
+;[ORIGIN]   %add2 = add i32 %a, 2
 ; Function: g
 %0:i32 = var
 %1:i32 = urem %0, 4:i32
@@ -18,6 +20,7 @@ pc %1 1:i32
 cand %2 4294967295:i32 (demandedBits=00000000000000000000000000000011)
 
 ; Static profile 1
+;[ORIGIN]   %add4 = add i32 %a, 1
 ; Function: g
 %0:i32 = var
 %1:i32 = urem %0, 4:i32
