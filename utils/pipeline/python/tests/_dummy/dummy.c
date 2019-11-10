@@ -1,7 +1,8 @@
 int a(int t){
 
+    int x = 10 + 10;
+
     if(t){
-        int x = 10 + 10;
 
         int y = x + x;
 
@@ -10,7 +11,7 @@ int a(int t){
         return z;
     }
 
-    int u = 10 + 15;
+    int u = 10 + x;
 
     return u;
 }

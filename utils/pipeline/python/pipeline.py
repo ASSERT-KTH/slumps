@@ -32,6 +32,8 @@ class Alias:
     # libsouperPass_so = "../../souper/build/libsouperPass.so"
     z3 = "%s/souper/third_party/z3/build/z3"%(BASE_DIR,)
 
+DEBUG_FILE = open("debug.slumps.log", 'wb')
+
 class ExternalStage(object):
     
     def __init__(self):
@@ -60,7 +62,10 @@ class ExternalStage(object):
         # Specific implementation process over the std out
         res = self.processInner(std)
 
-        print("\t%s%s%s'"%(bcolors.WARNING, res, bcolors.ENDC))
+        DEBUG_FILE.write(res)
+        DEBUG_FILE.write(b"\n================================================\n")
+        # print("\t%s%s%s'"%(bcolors.WARNING, res, bcolors.ENDC))
+
         return res
 
 class CToLLStage(ExternalStage):
@@ -176,6 +181,8 @@ class Pipeline(object):
 
         #Saving candidate
         self.candidates = cand.decode("utf-8")
+        print(self.candidates.split("\n"))
+
         # Report if no candidates
 
         # map candidates to original code llvm ?
@@ -195,3 +202,4 @@ if __name__ == "__main__":
     pipeline = Pipeline()
 
     pipeline.process(sys.argv[1])
+
