@@ -7,14 +7,14 @@ BASEDIR = os.path.dirname(__file__)
 def test_ctoll():
     ctoll = pipeline.CToLLStage()
 
-    ctoll.do("%s/_dummy/dummy.c"%(BASEDIR, )) # Send llvm IR to std
+    ctoll("%s/_dummy/dummy.c"%(BASEDIR, )) # Send llvm IR to std
 
 
 def test_lltoll():
     # Receive a LLVM IR in the std
     lltoll = pipeline.LLToMem2RegLL()
 
-    lltoll.do(std=b'''; ModuleID = './python/tests/_dummy/dummy.ll'
+    lltoll(std=b'''; ModuleID = './python/tests/_dummy/dummy.ll'
                     source_filename = "./python/tests/_dummy/dummy.c"
                     target datalayout = "e-m:o-i64:64-f80:128-n8:16:32:64-S128"
                     target triple = "x86_64-apple-macosx10.14.0"
@@ -55,7 +55,7 @@ def test_lltobc():
     # Receive a LLVM IR in the std
     lltobc = pipeline.LLToBC()
 
-    lltobc.do(std=b'''; ModuleID = './python/tests/_dummy/dummy.ll'
+    lltobc(std=b'''; ModuleID = './python/tests/_dummy/dummy.ll'
                         source_filename = "./python/tests/_dummy/dummy.c"
                         target datalayout = "e-m:o-i64:64-f80:128-n8:16:32:64-S128"
                         target triple = "x86_64-apple-macosx10.14.0"
@@ -96,7 +96,7 @@ def test_bctoSouper():
     bctoSouper = pipeline.BCToSouper()
     content = open("%s/_dummy/dummy_test.bc"%(BASEDIR,), 'rb').read()
     
-    bctoSouper.do(std=content) # Send llvm IR to std
+    bctoSouper(std=content) # Send llvm IR to std
 
 
 def test_souperCandidates():
@@ -104,7 +104,7 @@ def test_souperCandidates():
     souperToLHS = pipeline.CandidatesToSouperParts()
     
     
-    souperToLHS.do(std=b'''; Listing valid replacements.
+    souperToLHS(std=b'''; Listing valid replacements.
                             ; Using solver: Z3 + internal cache
 
                             ; Static profile 1
