@@ -35,8 +35,12 @@ class Alias:
 class ExternalStage(object):
     def __init__(self):
         self.name = "unknown"
-        self.executable = "unknown"
-        self.params = None
+        self.path_to_executable = "unknown"
+
+    def processInner(self, std):
+        return b"Ops...Not implemented"
+
+    def __call__(self,args=[], stdin = None): # stdin byte stream
 
     def __call__(self, std_in=None):
         p = Popen([self.executable] + self.params, stdin=PIPE, stdout=PIPE, stderr=PIPE)
@@ -61,18 +65,16 @@ class CToLLStage(ExternalStage):
     def __init__(self, filename):
         super().__init__()
         self.name = "C to LLVM IR"
-        self.executable = Alias.clang
-        self.params = [
-            "-O0",
-            "-Xclang",
-            "-disable-O0-optnone",
-            "-S",
-            "-emit-llvm",
-            filename + ".c",
-            "-o",
-            filename + ".ll"
-        ]
+    
+    def __call__(self, args=[], std = None): # f -> inputs
+        # in this case inputs is a string
+        new_inputs = [ "-O0", "-Xclang", "-disable-O0-optnone", args, "-S", "-emit-llvm", "-o", "-"]
 
+        return super(CToLLStage, self).__call__(new_inputs)
+
+    def processInner(self, std):
+        # return the std output LLVM IR
+        return std
 
 class LLToMem2RegLL(ExternalStage):
     def __init__(self, filename):
@@ -93,105 +95,105 @@ class LLToMem2RegLL(ExternalStage):
         # sanitize ?
         return True
 
+    def __call__(self, args=[], std = None): # f -> inputs
+        # opt -mem2reg ${name}.ll -S -o ${name}.ll
+
+        new_inputs = [ "-mem2reg", "-", "-S", "-o", "-"]
+
+        return super(LLToMem2RegLL, self).__call__(new_inputs, std)
+
+    def processInner(self, std):
+        # return the std output optimized LLVM IR
+        return std
+
+class LLToBC(ExternalStage):
 
 class Mem2RegLLToBC(ExternalStage):
     def __init__(self, filename):
         super().__init__()
         self.name = "LLVM IR to LLVM bitcode"
-        self.executable = Alias.llvm_as
-        self.params = [
-            filename + ".mem2reg.ll",
-            "-o",
-            filename + ".bc"
-        ]
+
+    def __call__(self, args = [], std = None): # f -> inputs
+        # llvm-as ${name}.ll -o ${name}.bc
+
+        new_inputs = [ "-", "-o", "-"]
+
+        return super(LLToBC, self).__call__(new_inputs, std)
+
+    def processInner(self, std):
+        # return the std output optimized LLVM IR
+        return std
 
 
 class BCToSouper(ExternalStage):
     def __init__(self, filename):
         super().__init__()
         self.name = "LLVM IR to LLVM bitcode"
-        self.executable = Alias.souper
-        self.params = [
-            "-z3-path",
-            Alias.z3,
-            filename + ".bc",
-            ">",
-            filename + ".cand.opt"
-        ]
+        
+
+    def __call__(self, args = [], std = None): # f -> inputs
+        #    souper -z3-path=${z3} ${name}.bc > ${name}.candopt
+
+        new_inputs = [ "-z3-path", Alias.z3, "-"]
+
+        return super(BCToSouper, self).__call__(new_inputs, std)
+
+    def processInner(self, std):
+        # return the std output optimized LLVM IR
+
+        # Process the candidates, raise error if none and interrupt the pipeline
+
+        return std
 
 
-class SouperToCandidates(ExternalStage):
-    def __init__(self, filename):
-        super().__init__()
+class CandidatesToSouperParts(ExternalStage):
+
+    def __init__(self):
+        self.path_to_executable = Alias.souper_check
         self.name = "Souper candidates to LHS and RHS"
-        self.executable = Alias.souper_check
-        self.params = [
-            "-z3-path",
-            Alias.z3,
-            "-print-replacement-split",
-            filename + ".cand.opt",
-            ">",
-            filename + ".opt"
-        ]
+        
 
-    def check(self):
-        # Saving candidate
-        # self.candidates = cand.decode("utf-8")
-        # Report if no candidates
-        return True
+    def __call__(self, args = [], std = None): # f -> inputs
+        #    souper-check -z3-path=${z3} -print-replacement-split ${name}.candopt > ${name}.opt
 
+        new_inputs = [ "-z3-path", Alias.z3, "-print-replacement-split", "-"]
 
-class CandidatesToLHS(ExternalStage):
-    def __init__(self, filename):
-        super().__init__()
-        self.name = "from Candidates to LHS"
-        self.executable = "cat"
-        self.params = [
-            filename + ".opt",
-            "|",
-            "sed",
-            "'/^result/d'",
-            ">",
-            filename + ".lhs.opt"
-        ]
-
-    def check(self):
-        # candtosols = CandidatesToSouperParts()
-        # sols = candtosols(std_in=cand)
-        return True
-
-
-class LHSToRHS(ExternalStage):
-    def __init__(self, filename):
-        super().__init__()
-        self.name = "from LHS to RHS"
-        self.executable = Alias.souper_check
-        self.params = [
-            "-z3-path",
-            Alias.z3,
-            "-infer-rhs",
-            "-souper-infer-iN",
-            filename + ".lhs.opt",
-            ">",
-            filename + ".rhs.opt"
-        ]
+        return super(CandidatesToSouperParts, self).__call__(new_inputs, std)
 
 
 class Pipeline(object):
-    def __call__(self, file):
-        filename = "infer"
-        CToLLStage(filename)()
-        LLToMem2RegLL(filename)()
-        Mem2RegLLToBC(filename)()
-        BCToSouper(filename)()
-        SouperToCandidates(filename)()
-        CandidatesToLHS(filename)()
-        LHSToRHS(filename)()
+    def process(self, file):
+        
+        ctoll = CToLLStage()
+        ll1 = ctoll(file)
+
+        lltoll = LLToMem2RegLL()
+        ll2 = lltoll(std=ll1)
+
+        # Saving the ll file
+        self.original_llvm = ll2.decode("utf-8")
+        # sanitize ?
+
+        lltobc = LLToBC()
+        bc = lltobc(std=ll2)
+
+        bctocand = BCToSouper()
+        cand = bctocand(std=bc)
+
+        #Saving candidate
+        self.candidates = cand.decode("utf-8")
+        # Report if no candidates
 
         # map candidates to original code llvm ?
-        # Map solutions to original optimization candidate?
-        # Generate LLVM IR for solution?
-        # Generate Overall LLVM IR output?
+
+        candtosols = CandidatesToSouperParts()
+        sols = candtosols(std=cand)
+
+        # Map solutions to original optimization candidate
+
+        # Generate LLVM IR for solution
+
+        # Generate Overall LLVM IR output
 
 
 if __name__ == "__main__":
