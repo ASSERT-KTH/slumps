@@ -1,13 +1,13 @@
+import argparse
+from subprocess import Popen, PIPE
 import os
 import sys
-from subprocess import Popen, PIPE
 
 BASE_DIR = os.path.dirname(
     os.path.dirname(
         os.path.dirname(
             os.path.dirname(
                 os.path.abspath(__file__)))))
-
 
 class bcolors:
     HEADER = '\033[95m'
@@ -19,20 +19,21 @@ class bcolors:
     BOLD = '\033[1m'
     UNDERLINE = '\033[4m'
 
-
 class Alias:
-    clang = "%s/souper/third_party/llvm/Release/bin/clang" % (BASE_DIR,)
-    opt = "%s/souper/third_party/llvm/Release/bin/opt" % (BASE_DIR,)
-    llc = "%s/souper/third_party/llvm/Release/bin/llc" % (BASE_DIR,)
-    lli = "%s/souper/third_party/llvm/Release/bin/lli" % (BASE_DIR,)
-    llvm_as = "%s/souper/third_party/llvm/Release/bin/llvm-as" % (BASE_DIR,)
-    souper = "%s/souper/build/souper" % (BASE_DIR,)
-    souper_check = "%s/souper/build/souper-check" % (BASE_DIR,)
-    souper2llvm = "%s/souper/build/souper2llvm" % (BASE_DIR,)
-    z3 = "%s/souper/third_party/z3/build/z3" % (BASE_DIR,)
-
+    
+    clang = "%s/souper/third_party/llvm/Release/bin/clang"%(BASE_DIR,)
+    opt = "%s/souper/third_party/llvm/Release/bin/opt"%(BASE_DIR,)
+    llc = "%s/souper/third_party/llvm/Release/bin/llc"%(BASE_DIR,)
+    lli = "%s/souper/third_party/llvm/Release/bin/lli"%(BASE_DIR,)
+    llvm_as = "%s/souper/third_party/llvm/Release/bin/llvm-as"%(BASE_DIR,)
+    souper = "%s/souper/build/souper"%(BASE_DIR,)
+    souper_check = "%s/souper/build/souper-check"%(BASE_DIR,)
+    souper2llvm = "%s/souper/build/souper2llvm"%(BASE_DIR,)
+    # libsouperPass_so = "../../souper/build/libsouperPass.so"
+    z3 = "%s/souper/third_party/z3/build/z3"%(BASE_DIR,)
 
 class ExternalStage(object):
+    
     def __init__(self):
         self.name = "unknown"
         self.path_to_executable = "unknown"
@@ -42,28 +43,31 @@ class ExternalStage(object):
 
     def __call__(self,args=[], stdin = None): # stdin byte stream
 
-    def __call__(self, std_in=None):
-        p = Popen([self.executable] + self.params, stdin=PIPE, stdout=PIPE, stderr=PIPE)
-        if std_in is not None:
-            p.stdin.write(std_in)
+        p = Popen([self.path_to_executable] + args, stdout=PIPE, stderr=PIPE, stdin=PIPE)
+        
 
-        print("%sStage ->%s %s %s" % (bcolors.OKGREEN, bcolors.ENDC, self.executable, self.name))
-        std_out, std_err = p.communicate()
+        if stdin is not None:
+            p.stdin.write(stdin)
 
-        if p.returncode != 0 or std_err:
-            raise Exception("Error on stage: %s. %s" % (self.name, str(std_err)))
+        print("%sStage ->%s %s %s"%(bcolors.OKGREEN, bcolors.ENDC, self.path_to_executable, self.name))
+        std,err = p.communicate()
 
-        message = self.check()
-        print("\t%s%s%s'" % (bcolors.WARNING, message, bcolors.ENDC))
+        rc = p.returncode
 
-    def check(self):
-        # not implemented
-        return True
+        if rc != 0 or err:
+            raise Exception("Error on stage: %s. %s"%(self.name, str(err)))
 
+        # Specific implementation process over the std out
+        res = self.processInner(std)
+
+        print("\t%s%s%s'"%(bcolors.WARNING, res, bcolors.ENDC))
+        return res
 
 class CToLLStage(ExternalStage):
-    def __init__(self, filename):
-        super().__init__()
+
+
+    def __init__(self):
+        self.path_to_executable = Alias.clang
         self.name = "C to LLVM IR"
     
     def __call__(self, args=[], std = None): # f -> inputs
@@ -77,23 +81,10 @@ class CToLLStage(ExternalStage):
         return std
 
 class LLToMem2RegLL(ExternalStage):
-    def __init__(self, filename):
-        super().__init__()
-        self.name = "LLVM IR to -mem2reg optimized LLVM IR"
-        self.executable = Alias.opt
-        self.params = [
-            "-mem2reg",
-            filename + ".ll",
-            "-S",
-            "-o",
-            filename + ".mem2reg.ll"
-        ]
 
-    def check(self):
-        # Saving the ll file
-        # original_llvm = ll.decode("utf-8")
-        # sanitize ?
-        return True
+    def __init__(self):
+        self.path_to_executable = Alias.opt
+        self.name = "LLVM IR to -mem2reg optimized LLVM IR"
 
     def __call__(self, args=[], std = None): # f -> inputs
         # opt -mem2reg ${name}.ll -S -o ${name}.ll
@@ -108,9 +99,8 @@ class LLToMem2RegLL(ExternalStage):
 
 class LLToBC(ExternalStage):
 
-class Mem2RegLLToBC(ExternalStage):
-    def __init__(self, filename):
-        super().__init__()
+    def __init__(self):
+        self.path_to_executable = Alias.llvm_as
         self.name = "LLVM IR to LLVM bitcode"
 
     def __call__(self, args = [], std = None): # f -> inputs
@@ -126,8 +116,9 @@ class Mem2RegLLToBC(ExternalStage):
 
 
 class BCToSouper(ExternalStage):
-    def __init__(self, filename):
-        super().__init__()
+
+    def __init__(self):
+        self.path_to_executable = Alias.souper
         self.name = "LLVM IR to LLVM bitcode"
         
 
@@ -160,6 +151,9 @@ class CandidatesToSouperParts(ExternalStage):
 
         return super(CandidatesToSouperParts, self).__call__(new_inputs, std)
 
+    def processInner(self, std):
+        # return the std output optimized LLVM IR
+        return std
 
 class Pipeline(object):
     def process(self, file):
@@ -197,5 +191,7 @@ class Pipeline(object):
 
 
 if __name__ == "__main__":
+    
     pipeline = Pipeline()
-    pipeline(sys.argv[1])
+
+    pipeline.process(sys.argv[1])
