@@ -62,8 +62,8 @@ class ExternalStage(object):
         # Specific implementation process over the std out
         res = self.processInner(std)
 
+        DEBUG_FILE.write(("\n%s ================================================\n"%(self.name,)).encode("utf-8"))
         DEBUG_FILE.write(res)
-        DEBUG_FILE.write(b"\n================================================\n")
         # print("\t%s%s%s'"%(bcolors.WARNING, res, bcolors.ENDC))
 
         return res
@@ -124,7 +124,7 @@ class BCToSouper(ExternalStage):
 
     def __init__(self):
         self.path_to_executable = Alias.souper
-        self.name = "LLVM IR to LLVM bitcode"
+        self.name = "LLVM BC to Souper IR candidates"
         
 
     def __call__(self, args = [], std = None): # f -> inputs
