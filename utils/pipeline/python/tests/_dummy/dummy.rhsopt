@@ -1,4 +1,6 @@
 ; RHS inferred successfully
+result 30:i32
+; RHS inferred successfully
 result 40:i32
 ; RHS inferred successfully
 result 80:i32

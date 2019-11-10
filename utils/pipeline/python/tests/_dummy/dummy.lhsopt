@@ -1,4 +1,8 @@
 ; LGTM
+%0:i32 = addnsw 10:i32, 20:i32
+infer %0
+
+; LGTM
 %0:i32 = addnsw 20:i32, 20:i32
 infer %0
 

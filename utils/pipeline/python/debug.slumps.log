@@ -1,12 +1,20 @@
-; ModuleID = 'python/tests/_dummy/dummy.ll'
-source_filename = "python/tests/_dummy/dummy.c"
+
+C to LLVM IR ================================================
+
+LLVM IR to -mem2reg optimized LLVM IR ================================================
+
+LLVM IR to LLVM bitcode ================================================
+
+LLVM BC to Souper IR candidates ================================================
+; ModuleID = '<stdin>'
+source_filename = "tests/_dummy/dummy.c"
 target datalayout = "e-m:o-i64:64-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-apple-macosx10.14.0"
 
 ; Function Attrs: noinline nounwind ssp uwtable
 define i32 @nonCall() #0 {
 entry:
-  %add = add nsw i32 10, 20
+  %add = add nsw i32 10, 20; -> [CANDIDATE]
   ret i32 %add
 }
 
@@ -18,9 +26,9 @@ entry:
   br i1 %tobool, label %if.then, label %if.end
 
 if.then:                                          ; preds = %entry
-  %add = add nsw i32 20, 20
-  %mul = mul nsw i32 %add, 2
-  %add1 = add nsw i32 20, %mul
+  %add = add nsw i32 20, 20; -> [CANDIDATE]
+  %mul = mul nsw i32 %add, 2; -> [CANDIDATE]
+  %add1 = add nsw i32 20, %mul; -> [CANDIDATE]
   br label %return
 
 if.end:                                           ; preds = %entry
@@ -50,3 +58,5 @@ attributes #0 = { noinline nounwind ssp uwtable "correctly-rounded-divide-sqrt-f
 !0 = !{i32 1, !"wchar_size", i32 4}
 !1 = !{i32 7, !"PIC Level", i32 2}
 !2 = !{!"clang version 8.0.0 (tags/RELEASE_800/final 375507)"}
+
+Souper candidates to LHS and RHS ================================================
