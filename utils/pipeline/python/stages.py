@@ -1,6 +1,8 @@
 from subprocess import Popen, PIPE
-from utils import bcolors, DEBUG_FILE, Alias
+from utils import bcolors, DEBUG_FILE, Alias, BASE_DIR
 from logger import LOGGER
+
+import sys, os
 
 class ExternalStage(object):
     
@@ -24,7 +26,8 @@ class ExternalStage(object):
 
         rc = p.returncode
 
-        if rc != 0 or err:
+        if rc != 0:
+            LOGGER.error(err.decode("utf-8"))
             raise Exception("Error on stage: %s. %s"%(self.name, str(err)))
 
         # Specific implementation process over the std out
@@ -45,7 +48,16 @@ class CToLLStage(ExternalStage):
     
     def __call__(self, args=[], std = None): # f -> inputs
         # in this case inputs is a string
-        new_inputs = [ "-O0", "-Xclang", "-disable-O0-optnone", args, "-S", "-emit-llvm", "-o", "-"]
+
+        # Including sources for compilation
+
+        sources = os.path.dirname(Alias.clang)
+        sources = os.path.dirname(sources)
+        sources = os.path.join(sources, "/include/c++/v1")
+
+        sys.path.append(sources)
+
+        new_inputs = [ "-I/%s"%(sources,), "-O0", "-Xclang", "-disable-O0-optnone", args, "-S", "-emit-llvm", "-o", "-"]
 
         return super(CToLLStage, self).__call__(new_inputs)
 
