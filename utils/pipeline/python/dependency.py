@@ -1,4 +1,5 @@
 from logger import LOGGER
+import re
 
 class DependencyAnalyzer(object):
     
@@ -13,56 +14,26 @@ class DependencyAnalyzer(object):
         labels = []
         # sanitize text
 
-        label = ''
-        comment = False
-        new_label = False
-        breaks = [',', ' ', '\t', '\n', '\r', ")", "}", ";"]
-        avoid = [' ', ',']
-        line = 1
+        PATTERN = re.compile('(%(\w+))|(\n(\w+):)')
 
-        for index, c in enumerate(text):
-            if c == ';': # start comment
-                comment = True
-            if c == '\n' and comment:
-                comment = False
-                line += 1
+        for i in PATTERN.finditer(text):
 
-            if c == '%': # start label
-                new_label = True
-            
-                
-            if c in breaks and new_label:
-                if label.rstrip().lstrip():
-                    if label not in nodes.keys():
-                        nodes[label] = { "appear_in": index, "dependeers": [], "line": line }
-                        labels.append(label)
-                    else:
-                        nodes[label]["dependeers"].append(index)
-            
-                label = ''
-                new_label = False
+            if i:
+                if i.group(1): # label variable reference
+                    label = "%"+i.group(2)
+                if i.group(3): # block label reference
+                    label = "%"+i.group(4)
 
-                if c == '\n':
-                    new_label = True
-                continue
-            if c == ':':
-                # bblock label
-                print(label)
-                if label.rstrip().lstrip():
-                    label = "%"+label
-                    if label not in nodes.keys():
-                        nodes[label] = { "appear_in": index, "dependeers": [], "line": line }
-                        labels.append(label)
-                    else:
-                        nodes[label]["dependeers"].append(nodes[label]["appear_in"])
-                        nodes[label]["appear_in"] = index
-                        nodes[label]["line"] = line
-            
-                label = ''
-                new_label = False
+                    if label in nodes.keys():
+                        nodes[label]["dependeers"].append(nodes[label]["position"])
+                        nodes[label]["position"] = i.span()
+                        continue
+                if label not in nodes.keys():
+                    labels.append(label)
+                    nodes[label] = dict(label=label, position=i.span(), dependeers=[])
+                else:
+                    nodes[label]["dependeers"].append(i.span())
 
-            if new_label and c not in breaks:
-                label += c
-
+        
 
         return nodes, labels
