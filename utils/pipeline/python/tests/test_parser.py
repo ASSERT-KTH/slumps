@@ -12,12 +12,12 @@ pc %1 2:i32
 infer %2 (demandedBits=00000000000000000000000000000011)
 result 4294967295:i32'''
 
-    s = SolutionNode(text)
+    s = SolutionNode(text, "fake")
 
 def test_DependencyGraphAnalyze():
     parser = DependencyAnalyzer()
     
-    parser.parse('''
+    text = '''
 define i32 @nonCall() #0 {
 entry:
   %add = add nsw i32 10, 20
@@ -56,4 +56,11 @@ entry:
   ret i32 %add
 }
 '''
-    )
+
+    r = parser.parse(text)
+
+    print(r[1])
+    add = r[0]["%add"]
+
+    for dp in add["dependeers"]:
+        assert text[dp[0]:dp[1]] == "%add"
