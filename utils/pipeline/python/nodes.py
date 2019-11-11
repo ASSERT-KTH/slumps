@@ -1,6 +1,7 @@
 from stages import SouperToLLVM
 from utils import bcolors
 from logger import LOGGER
+import re
 
 class Node(object):
 
@@ -43,10 +44,44 @@ class SolutionNode(Node):
         self.parse()
 
     def infixVisit(self, Out):
-        Out.write(self.LLVM_IR.encode("utf-8"))
+        Out.write((" -> " + self.return_instruction).encode("utf-8"))
 
     def parseLLVMFunctionBlock(self):
-        pass
+
+        # Sanitize
+        self.LLVM_IR = self.LLVM_IR.lstrip().rstrip()
+        self.LLVM_IR = self.LLVM_IR.replace("\n\n", "\n")
+
+        # Separate in by line instructions
+        instructions = self.LLVM_IR.split("\n")
+
+        # Sanitize instructions, removing unneeded instructions
+        final = []
+        retInstruction =  'None'
+        for inst in instructions:
+            inst = inst.rstrip().lstrip()
+            if inst.startswith(";"): # comment
+                continue
+            if inst.startswith("source_filename"): # module name
+                continue
+            if inst.startswith("define"): # function declaration
+                continue
+            if inst.startswith("}"): # function declaration closings
+                continue
+            if re.compile('(.)+:').search(inst): # basic block start
+                continue
+            if inst.startswith("ret"): # return instruction
+                inst = inst.replace("ret", "").rstrip().lstrip()
+                retInstruction = inst
+
+            final.append(inst)
+
+        self.instructions = final[:-1]
+        self.return_instruction = retInstruction
+
+        LOGGER.enter()
+        LOGGER.info("%s %s ret %s"%("Replacement instructions...", final[:-1], retInstruction))
+        LOGGER.exit()
 
     def parse(self):
         # Find solution instruction
@@ -62,7 +97,7 @@ class SolutionNode(Node):
         LOGGER.enter()
         LOGGER.success("Getting entry function block...")
         LOGGER.exit()
-        
+
         self.LLVM_IR = self.LLVM_IR.decode("utf-8")
 
         self.parseLLVMFunctionBlock()
