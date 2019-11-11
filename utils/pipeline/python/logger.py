@@ -32,7 +32,7 @@ class Logger(object):
         print("%s%s%s%s"%(self.getIndent(), bcolors.WARNING, message, bcolors.ENDC))
 
     def info(self, message):
-        print("%s%s"%(self.getIndent(), message,))
+        print("%s%s%s%s"%(self.getIndent(), bcolors.OKBLUE, message, bcolors.ENDC))
 
     def success(self, message):
         print("%s%s%s%s"%(self.getIndent(), bcolors.OKGREEN, message, bcolors.ENDC))
