@@ -33,15 +33,6 @@ return:                                           ; preds = %if.end, %if.then
   ret i32 %retval.0
 }
 
-; Function Attrs: noinline nounwind ssp uwtable
-define i32 @main() #0 {
-entry:
-  %call = call i32 @a(i32 10)
-  %call1 = call i32 @nonCall()
-  %add = add nsw i32 %call, %call1
-  ret i32 %add
-}
-
 attributes #0 = { noinline nounwind ssp uwtable "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "less-precise-fpmad"="false" "min-legal-vector-width"="0" "no-frame-pointer-elim"="true" "no-frame-pointer-elim-non-leaf" "no-infs-fp-math"="false" "no-jump-tables"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="false" "stack-protector-buffer-size"="8" "target-cpu"="penryn" "target-features"="+cx16,+fxsr,+mmx,+sahf,+sse,+sse2,+sse3,+sse4.1,+ssse3,+x87" "unsafe-fp-math"="false" "use-soft-float"="false" }
 
 !llvm.module.flags = !{!0, !1}

@@ -1,3 +1,7 @@
+from stages import SouperToLLVM
+from utils import bcolors
+from logger import LOGGER
+
 class Node(object):
 
     def __init__(self):
@@ -24,10 +28,11 @@ class CandidateNode(Node):
         self.entry_llvm = entry_llvm
 
     def infixVisit(self, Out):
-        Out.write(b"[CANDIDATE]")
+        Out.write(("[CANDIDATE %s"%(self.entry_llvm,)).encode('utf-8'))
 
         if self.children:
             self.children[0].infixVisit(Out) # Only one child... for now
+        Out.write(b"]")
 
 
 class SolutionNode(Node):
@@ -38,7 +43,10 @@ class SolutionNode(Node):
         self.parse()
 
     def infixVisit(self, Out):
-        Out.write(b"solution")
+        Out.write(self.LLVM_IR.encode("utf-8"))
+
+    def parseLLVMFunctionBlock(self):
+        pass
 
     def parse(self):
         # Find solution instruction
@@ -47,8 +55,19 @@ class SolutionNode(Node):
         if not instructions[-1].startswith("result"):
             raise Exception("Result instruction not found")
 
+        # Transform to LLVM IR
+
+        self.LLVM_IR = SouperToLLVM()(std=instructions[-1].encode("utf-8"))
+
+        LOGGER.enter()
+        LOGGER.success("Getting entry function block...")
+        LOGGER.exit()
         
-    
+        self.LLVM_IR = self.LLVM_IR.decode("utf-8")
+
+        self.parseLLVMFunctionBlock()
+        # Parse basic block and get ret instruction value
+
 
 class ModuleNode(Node):
     pass
