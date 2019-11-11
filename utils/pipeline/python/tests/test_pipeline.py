@@ -127,3 +127,14 @@ def test_souperCandidates():
                             %2:i32 = addnsw 20:i32, %1
                             cand %2 100:i32
                         ''') # Send llvm IR to std
+
+
+def test_souperIRToLLVM():
+    # Receive a LLVM IR in the std
+    souperToLHS = stages.SouperToLLVM()
+    
+    
+    print(souperToLHS(std=b'''
+; RHS inferred successfully
+result 4294967295:i32
+                        ''')) # Send llvm IR to std

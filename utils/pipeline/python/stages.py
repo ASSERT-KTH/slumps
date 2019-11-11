@@ -126,3 +126,21 @@ class CandidatesToSouperParts(ExternalStage):
     def processInner(self, std):
         # return the std output optimized LLVM IR
         return std
+
+
+
+class SouperToLLVM(ExternalStage):
+
+    def __init__(self):
+        self.path_to_executable = Alias.souper2llvm
+        self.name = "Souper IR result to LLVM IR"
+        
+
+
+    def __call__(self, args = [], std = None): # f -> inputs
+        #   souper2llvm ${name}.rhsopt > ${name}.ll2
+        return super(SouperToLLVM, self).__call__([], std)
+
+    def processInner(self, std):
+        # return the std output optimized LLVM IR
+        return std
