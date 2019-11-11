@@ -59,8 +59,29 @@ entry:
 
     r = parser.parse(text)
 
-    print(r[1])
     add = r[0]["%add"]
 
-    for dp in add["dependeers"]:
-        assert text[dp[0]:dp[1]] == "%add"
+    print(r[0]["%mul"])
+    print(r[0]["%add3"])
+
+    for dp in add["references"]:
+        assert text[dp[0]:dp[0] + len("%add")] == "%add"
+
+
+
+def test_DependencyGraphAnalyze2():
+    parser = DependencyAnalyzer()
+    
+    text = '''
+if.then:                                          ; preds = %entry
+  %add = add nsw i32 20, 20
+  %mul = mul nsw i32 %add, 2
+  %add1 = add nsw i32 20, %mul
+  br label %return
+
+'''
+
+    r = parser.parse(text)
+
+
+    print(r[0])
