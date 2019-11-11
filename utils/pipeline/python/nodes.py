@@ -101,7 +101,7 @@ class SolutionNode(Node):
         LOGGER.info("%s %s ret %s"%("Replacement instructions...", final[:-1], retInstruction))
         LOGGER.exit()
 
-        self.ASSIGN = '%s = %s'%(ASSIGN, retInstruction)
+        self.ASSIGN = '%s = add %s, 0'%(ASSIGN, retInstruction)
 
     def parse(self):
         # Find solution instruction
