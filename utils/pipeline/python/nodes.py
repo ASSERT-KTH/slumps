@@ -38,11 +38,8 @@ class CandidateNode(Node):
     def infixVisit(self, Out):
 
         if self.translate:
-            Out.write(("[CANDIDATE %s"%(self.entry_llvm,)).encode('utf-8'))
-
             if self.children:
                 self.children[0].infixVisit(Out) # Only one child... for now
-            Out.write(b"]")
         else:
             Out.write(self.entry_llvm.encode("utf-8"))
 
@@ -56,7 +53,7 @@ class SolutionNode(Node):
         self.parse()
 
     def infixVisit(self, Out):
-        Out.write((" -> " + self.return_instruction).encode("utf-8"))
+        Out.write(self.ASSIGN.encode("utf-8"))
 
     def parseLLVMFunctionBlock(self):
 
@@ -96,13 +93,15 @@ class SolutionNode(Node):
         LOGGER.info("Entrypoint instruction: %s"%(self.original_llvm,))
         nodes, labels = parser.parse(self.original_llvm)
         
-        LOGGER.info(labels)
-        for  label in nodes.keys():
-            LOGGER.info([label, nodes[label]])
+        ASSIGN = labels[0]
+        LOGGER.info(ASSIGN)
+        
 
         LOGGER.enter()
         LOGGER.info("%s %s ret %s"%("Replacement instructions...", final[:-1], retInstruction))
         LOGGER.exit()
+
+        self.ASSIGN = '%s = %s'%(ASSIGN, retInstruction)
 
     def parse(self):
         # Find solution instruction

@@ -99,7 +99,10 @@ class Pipeline(object):
             OUT_FILE_IR.write(("; Replacing %s -> %s"%(cand.entry_llvm, cand.children[-1].return_instruction)).encode("utf-8"))
 
             cand.toggleTranslation()
+            
             self.root.infixVisit(OUT_FILE_IR)
+
+            cand.toggleTranslation()
 
             OUT_FILE_IR.close
 

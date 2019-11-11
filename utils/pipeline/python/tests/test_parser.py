@@ -73,12 +73,14 @@ def test_DependencyGraphAnalyze2():
     parser = DependencyAnalyzer()
     
     text = '''
-if.then:                                          ; preds = %entry
+if.then:                                          
   %add = add nsw i32 20, 20
   %mul = mul nsw i32 %add, 2
   %add1 = add nsw i32 20, %mul
   br label %return
-
+return:                                           
+  ret i32 20
+}
 '''
 
     r = parser.parse(text)
