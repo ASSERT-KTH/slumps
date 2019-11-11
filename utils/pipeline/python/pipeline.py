@@ -3,7 +3,7 @@ from subprocess import Popen, PIPE
 import os
 import sys
 import re
-from nodes import TextBlock, ModuleNode
+from nodes import TextBlock, ModuleNode, CandidateNode
 import json
 
 import collections
@@ -61,7 +61,7 @@ class ExternalStage(object):
         if stdin is not None:
             p.stdin.write(stdin)
 
-        print("%sStage ->%s %s %s"%(bcolors.OKGREEN, bcolors.ENDC, self.path_to_executable, self.name))
+        print("%sStage -> %s %s"%(bcolors.OKGREEN, bcolors.ENDC, self.name))
         std,err = p.communicate()
 
         rc = p.returncode
@@ -72,8 +72,8 @@ class ExternalStage(object):
         # Specific implementation process over the std out
         res = self.processInner(std)
 
-        DEBUG_FILE.write(("\n%s ================================================\n"%(self.name,)).encode("utf-8"))
-        #DEBUG_FILE.write(res)
+        DEBUG_FILE.write(("\n%s ================================================\n\n"%(self.name,)).encode("utf-8"))
+        DEBUG_FILE.write(res)
         # print("\t%s%s%s'"%(bcolors.WARNING, res, bcolors.ENDC))
 
         return res
@@ -201,6 +201,7 @@ class Pipeline(object):
         # Sort by appearing index in the original LLVM IR
 
         children = [rootNode]
+        candidateNodes = []
         
         for cand_text in candidates:
             search = ORIGIN__RE.search(cand_text)
@@ -213,7 +214,8 @@ class Pipeline(object):
                     index = node.value.find(original_llvm_ir)
 
                     if index != -1:
-                        left, middle, right = node.split(index, index + len(original_llvm_ir), TextBlock("%s; -> [CANDIDATE]"%(original_llvm_ir, )))
+                        candidateNodes.append(CandidateNode(cand_text, original_llvm_ir))
+                        left, middle, right = node.split(index, index + len(original_llvm_ir), candidateNodes[-1])
                         # TODO Add Candidate Node
                         children[i] = [left, middle, right]
                         children = flatten(children)
@@ -232,7 +234,9 @@ class Pipeline(object):
         # map candidates to original code llvm ?
 
         candtosols = CandidatesToSouperParts()
-        sols = candtosols(std=cand)
+        sols = candtosols(std=cand).decode("utf-8")
+
+        #print(len(sols.split("\n\n")))
 
         # Map solutions to original optimization candidate
 
