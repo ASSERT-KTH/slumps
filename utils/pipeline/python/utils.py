@@ -5,6 +5,8 @@ import os
 
 DEBUG_FILE = open("debug.slumps.log", 'wb')
 
+OUT_FOLDER = "out"
+
 def getSubsetIterator(S,m):
     if m == len(S):
         yield S

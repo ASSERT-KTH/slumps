@@ -15,7 +15,6 @@ class DependencyAnalyzer(object):
         label = ''
         comment = False
         new_label = False
-        right_part = False
         breaks = [',', ' ', '\t', '\n', '\r', ")", "}", ";"]
         line = 0
 
@@ -28,8 +27,6 @@ class DependencyAnalyzer(object):
 
             if c == '%': # start label
                 new_label = True
-            if c == '\n':
-                right_part = False
                 
             if c in breaks and new_label:
                 if label.rstrip().lstrip():
@@ -58,8 +55,6 @@ class DependencyAnalyzer(object):
             
                 label = ''
                 new_label = False
-            if c == '=': # assigment
-                right_part = True
 
             if new_label and c not in breaks:
                 label += c
