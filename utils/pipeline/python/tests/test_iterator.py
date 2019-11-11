@@ -1,4 +1,4 @@
-from .. import utils
+import utils
 
 def test_subset_generator_1():
     for subset in utils.getSubsetIterator(set([1, 2, 3, 4, 5]), 1):
