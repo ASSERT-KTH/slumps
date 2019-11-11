@@ -3,6 +3,8 @@ from utils import bcolors
 from logger import LOGGER
 import re
 
+from dependency import DependencyAnalyzer
+
 class Node(object):
 
     def __init__(self):
@@ -18,7 +20,8 @@ class Node(object):
     def addChild(self, node):
         if not self.children:
             self.children = []
-        
+
+        node.parent = self
         self.children.append(node)
 
 class CandidateNode(Node):
@@ -46,8 +49,9 @@ class CandidateNode(Node):
 
 class SolutionNode(Node):
     
-    def __init__(self, text):
+    def __init__(self, text, original_llvm):
         self.value = text
+        self.original_llvm = original_llvm
 
         self.parse()
 
@@ -87,6 +91,15 @@ class SolutionNode(Node):
         self.instructions = final[:-1]
         self.return_instruction = retInstruction
 
+        parser = DependencyAnalyzer()
+
+        LOGGER.info("Entrypoint instruction: %s"%(self.original_llvm,))
+        nodes, labels = parser.parse(self.original_llvm)
+        
+        LOGGER.info(labels)
+        for  label in nodes.keys():
+            LOGGER.info([label, nodes[label]])
+
         LOGGER.enter()
         LOGGER.info("%s %s ret %s"%("Replacement instructions...", final[:-1], retInstruction))
         LOGGER.exit()
@@ -104,9 +117,15 @@ class SolutionNode(Node):
 
         LOGGER.enter()
         LOGGER.success("Getting entry function block...")
-        LOGGER.exit()
+        
 
         self.LLVM_IR = self.LLVM_IR.decode("utf-8")
+
+        LOGGER.enter()
+        LOGGER.error(self.LLVM_IR)
+
+        LOGGER.exit()
+        LOGGER.exit()
 
         self.parseLLVMFunctionBlock()
         # Parse basic block and get ret instruction value

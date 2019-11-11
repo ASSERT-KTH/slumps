@@ -84,7 +84,7 @@ class Pipeline(object):
              len(candidateNodes)))
 
         for i, solution in enumerate(solutions_candidates):
-            candidateNodes[i].addChild(SolutionNode(solution))
+            candidateNodes[i].addChild(SolutionNode(solution, candidateNodes[i].entry_llvm))
 
         # checking output directory
 
