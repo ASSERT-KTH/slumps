@@ -3,7 +3,7 @@ import os
 import sys
 import re
 from nodes import TextBlock, ModuleNode, CandidateNode, SolutionNode
-from stages import CandidatesToSouperParts, CToLLStage, LLToBC, LLToMem2RegLL, BCToSouper
+from stages import CandidatesToSouperParts, CToLLStage, LLToBC, LLToMem2RegLL, BCToSouper, LLVMCompile
 from utils import bcolors, DEBUG_FILE, flatten, OUT_FOLDER
 from logger import LOGGER
 import shutil
@@ -95,7 +95,9 @@ class Pipeline(object):
         os.mkdir(OUT_FOLDER)
 
         for i, cand in enumerate(candidateNodes):
-            OUT_FILE_IR = open("%s/%s.%s.ll"%(OUT_FOLDER, file.split("/")[-1], i), 'wb')
+            llFileName = "%s/%s.%s.ll"%(OUT_FOLDER, file.split("/")[-1], i)
+
+            OUT_FILE_IR = open(llFileName, 'wb')
             OUT_FILE_IR.write(("; Replacing %s -> %s"%(cand.entry_llvm, cand.children[-1].return_instruction)).encode("utf-8"))
 
             cand.toggleTranslation()
@@ -104,7 +106,14 @@ class Pipeline(object):
 
             cand.toggleTranslation()
 
-            OUT_FILE_IR.close
+            OUT_FILE_IR.close()
+
+            final_compl = LLVMCompile()
+            bc = final_compl(std=open(llFileName, 'rb').read())
+
+            # Write bc
+
+            open("%s.bc"%(llFileName, ), 'wb').write(bc)
 
         #print(len(sols.split("\n\n")))
 

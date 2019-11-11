@@ -157,3 +157,23 @@ class SouperToLLVM(ExternalStage):
     def processInner(self, std):
         # return the std output optimized LLVM IR
         return std
+
+
+
+
+class LLVMCompile(ExternalStage):
+
+    def __init__(self):
+        self.path_to_executable = Alias.llvm_as
+        self.name = "LLVM IR to BC"
+        
+
+
+    def __call__(self, args = [], std = None): # f -> inputs
+
+        new_inputs = [ "-", '-o', '-']
+        return super(LLVMCompile, self).__call__([], std)
+
+    def processInner(self, std):
+        # return the std output optimized LLVM IR
+        return std
