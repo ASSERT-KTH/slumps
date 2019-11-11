@@ -120,10 +120,6 @@ class SolutionNode(Node):
 
         self.LLVM_IR = self.LLVM_IR.decode("utf-8")
 
-        LOGGER.enter()
-        LOGGER.error(self.LLVM_IR)
-
-        LOGGER.exit()
         LOGGER.exit()
 
         self.parseLLVMFunctionBlock()

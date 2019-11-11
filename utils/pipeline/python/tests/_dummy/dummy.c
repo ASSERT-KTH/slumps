@@ -1,19 +1,12 @@
 
-int nonCall(){
-    int y = 10;
-
-    return y + 20;
-}
-
 int a(int t){
 
     int x = 10 + 10;
 
-    int i = nonCall();
 
     if(t){
 
-        int y = x + x;
+        int y = x + x*2;
 
         int  z = x + y*2;
 
@@ -22,6 +15,12 @@ int a(int t){
 
     int u = 10 + x;
 
-    return u + i;
+    return u + k();
 }
 
+
+int k(){
+    int c = a(20);
+    
+    return a(20) + 900;
+}
