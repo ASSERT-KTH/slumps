@@ -2,9 +2,9 @@ import argparse
 import os
 import sys
 import re
-from nodes import TextBlock, ModuleNode, CandidateNode, SolutionNode
-from stages import CandidatesToSouperParts, CToLLStage, LLToBC, LLToMem2RegLL, BCToSouper
-from utils import bcolors, DEBUG_FILE, flatten
+from .nodes import TextBlock, ModuleNode, CandidateNode, SolutionNode
+from .stages import CandidatesToSouperParts, CToLLStage, LLToBC, LLToMem2RegLL, BCToSouper
+from .utils import bcolors, DEBUG_FILE, flatten
 import json
 
 import collections

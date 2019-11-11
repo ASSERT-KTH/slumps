@@ -1,5 +1,5 @@
 from subprocess import Popen, PIPE
-from utils import bcolors, DEBUG_FILE, Alias
+from .utils import bcolors, DEBUG_FILE, Alias
 
 class ExternalStage(object):
     

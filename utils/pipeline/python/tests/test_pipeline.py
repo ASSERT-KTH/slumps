@@ -1,6 +1,8 @@
-from .. import stages
-import os
 
+import os
+os.chdir("..")
+
+from .. import stages
 
 BASEDIR = os.path.dirname(__file__)
 
