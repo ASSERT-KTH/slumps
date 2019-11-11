@@ -1,18 +1,18 @@
-from .. import pipeline
+from .. import stages
 import os
 
 
 BASEDIR = os.path.dirname(__file__)
 
 def test_ctoll():
-    ctoll = pipeline.CToLLStage()
+    ctoll = stages.CToLLStage()
 
     ctoll("%s/_dummy/dummy.c"%(BASEDIR, )) # Send llvm IR to std
 
 
 def test_lltoll():
     # Receive a LLVM IR in the std
-    lltoll = pipeline.LLToMem2RegLL()
+    lltoll = stages.LLToMem2RegLL()
 
     lltoll(std=b'''; ModuleID = './python/tests/_dummy/dummy.ll'
                     source_filename = "./python/tests/_dummy/dummy.c"
@@ -53,7 +53,7 @@ def test_lltoll():
 
 def test_lltobc():
     # Receive a LLVM IR in the std
-    lltobc = pipeline.LLToBC()
+    lltobc = stages.LLToBC()
 
     lltobc(std=b'''; ModuleID = './python/tests/_dummy/dummy.ll'
                         source_filename = "./python/tests/_dummy/dummy.c"
@@ -93,7 +93,7 @@ def test_lltobc():
 
 def test_bctoSouper():
     # Receive a LLVM IR in the std
-    bctoSouper = pipeline.BCToSouper()
+    bctoSouper = stages.BCToSouper()
     content = open("%s/_dummy/dummy_test.bc"%(BASEDIR,), 'rb').read()
     
     bctoSouper(std=content) # Send llvm IR to std
@@ -101,7 +101,7 @@ def test_bctoSouper():
 
 def test_souperCandidates():
     # Receive a LLVM IR in the std
-    souperToLHS = pipeline.CandidatesToSouperParts()
+    souperToLHS = stages.CandidatesToSouperParts()
     
     
     souperToLHS(std=b'''; Listing valid replacements.
