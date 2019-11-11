@@ -4,8 +4,9 @@ import sys
 import re
 from nodes import TextBlock, ModuleNode, CandidateNode, SolutionNode
 from stages import CandidatesToSouperParts, CToLLStage, LLToBC, LLToMem2RegLL, BCToSouper
-from utils import bcolors, DEBUG_FILE, flatten
+from utils import bcolors, DEBUG_FILE, flatten, OUT_FOLDER
 from logger import LOGGER
+import shutil
 
 import json
 
@@ -85,7 +86,22 @@ class Pipeline(object):
         for i, solution in enumerate(solutions_candidates):
             candidateNodes[i].addChild(SolutionNode(solution))
 
-        self.root.infixVisit(DEBUG_FILE)
+        # checking output directory
+
+        if os.path.exists(OUT_FOLDER):
+            LOGGER.warning("Removing out folder content...%s"%(OUT_FOLDER, ))
+            shutil.rmtree(OUT_FOLDER)
+
+        os.mkdir(OUT_FOLDER)
+
+        for i, cand in enumerate(candidateNodes):
+            OUT_FILE_IR = open("%s/%s.%s.ll"%(OUT_FOLDER, file.split("/")[-1], i), 'wb')
+            OUT_FILE_IR.write(("; Replacing %s -> %s"%(cand.entry_llvm, cand.children[-1].return_instruction)).encode("utf-8"))
+
+            cand.toggleTranslation()
+            self.root.infixVisit(OUT_FILE_IR)
+
+            OUT_FILE_IR.close
 
         #print(len(sols.split("\n\n")))
 

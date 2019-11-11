@@ -27,13 +27,21 @@ class CandidateNode(Node):
         super(CandidateNode, self).__init__()
         self.value = text
         self.entry_llvm = entry_llvm
+        self.translate = False
+
+    def toggleTranslation(self):
+        self.translate = not self.translate
 
     def infixVisit(self, Out):
-        Out.write(("[CANDIDATE %s"%(self.entry_llvm,)).encode('utf-8'))
 
-        if self.children:
-            self.children[0].infixVisit(Out) # Only one child... for now
-        Out.write(b"]")
+        if self.translate:
+            Out.write(("[CANDIDATE %s"%(self.entry_llvm,)).encode('utf-8'))
+
+            if self.children:
+                self.children[0].infixVisit(Out) # Only one child... for now
+            Out.write(b"]")
+        else:
+            Out.write(self.entry_llvm.encode("utf-8"))
 
 
 class SolutionNode(Node):
