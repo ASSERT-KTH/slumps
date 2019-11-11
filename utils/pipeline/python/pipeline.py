@@ -2,9 +2,11 @@ import argparse
 import os
 import sys
 import re
-from .nodes import TextBlock, ModuleNode, CandidateNode, SolutionNode
-from .stages import CandidatesToSouperParts, CToLLStage, LLToBC, LLToMem2RegLL, BCToSouper
-from .utils import bcolors, DEBUG_FILE, flatten
+from nodes import TextBlock, ModuleNode, CandidateNode, SolutionNode
+from stages import CandidatesToSouperParts, CToLLStage, LLToBC, LLToMem2RegLL, BCToSouper
+from utils import bcolors, DEBUG_FILE, flatten
+from logger import LOGGER
+
 import json
 
 import collections
@@ -33,7 +35,7 @@ class Pipeline(object):
         candidates = map(lambda x: x.lstrip().rstrip(), candidates) # Getting only unique candidates
         candidates = list(candidates)
 
-        print("%s%s%s"%(bcolors.OKGREEN, "Found %s candidates"%(len(candidates),), bcolors.ENDC))
+        LOGGER.success("Found %s candidates"%(len(candidates),))
         ORIGIN__RE = re.compile(r";\[ORIGIN\] (.*)\n")
 
         rootNode = TextBlock(self.original_llvm)
@@ -77,8 +79,8 @@ class Pipeline(object):
         solutions_candidates = sols.split("\n\n")[:-1] # Remove last blank space
 
         if len(solutions_candidates) != len(candidateNodes):
-            print("%s%s%s"%(bcolors.WARNING, "Candidates and solutions sets are different, %s/%s"%(len(solutions_candidates),
-             len(candidateNodes)), bcolors.ENDC))
+            LOGGER.success("Candidates and solutions sets are different, %s/%s"%(len(solutions_candidates),
+             len(candidateNodes)))
 
         for i, solution in enumerate(solutions_candidates):
             candidateNodes[i].addChild(SolutionNode(solution))

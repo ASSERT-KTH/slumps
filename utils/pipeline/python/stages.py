@@ -1,5 +1,6 @@
 from subprocess import Popen, PIPE
-from .utils import bcolors, DEBUG_FILE, Alias
+from utils import bcolors, DEBUG_FILE, Alias
+from logger import LOGGER
 
 class ExternalStage(object):
     
@@ -18,7 +19,7 @@ class ExternalStage(object):
         if stdin is not None:
             p.stdin.write(stdin)
 
-        print("%sStage -> %s %s"%(bcolors.OKGREEN, bcolors.ENDC, self.name))
+        LOGGER.success("Stage -> %s"%(self.name, ))
         std,err = p.communicate()
 
         rc = p.returncode
@@ -29,8 +30,8 @@ class ExternalStage(object):
         # Specific implementation process over the std out
         res = self.processInner(std)
 
-        DEBUG_FILE.write(("\n%s ================================================\n\n"%(self.name,)).encode("utf-8"))
-        DEBUG_FILE.write(res)
+        LOGGER.debug("============================= Stage -> %s\n\n"%(self.name, ), res)
+        
         # print("\t%s%s%s'"%(bcolors.WARNING, res, bcolors.ENDC))
 
         return res

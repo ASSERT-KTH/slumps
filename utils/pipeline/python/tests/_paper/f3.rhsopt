@@ -1,6 +1,2 @@
 ; RHS inferred successfully
 result 4294967295:i32
-; RHS inferred successfully
-result 4294967295:i32
-; RHS inferred successfully
-result 4294967295:i32
