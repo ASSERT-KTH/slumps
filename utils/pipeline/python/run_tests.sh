@@ -1,1 +1,1 @@
-py.test --capture=no
+python3 -m  pytest --capture=no tests/ 
