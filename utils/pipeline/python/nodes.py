@@ -11,7 +11,14 @@ class Node(object):
             ch.infixVisit(Out)
 
 class CandidateNode(object):
-    pass
+    
+    def __init__(self, text, entry_llvm):
+        self.value = text
+        self.entry_llvm = entry_llvm
+
+    def infixVisit(self, Out):
+        Out.write(self.entry_llvm.encode("utf-8"))
+    
 
 class ModuleNode(Node):
     pass

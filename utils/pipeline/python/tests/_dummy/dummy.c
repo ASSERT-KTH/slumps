@@ -25,7 +25,3 @@ int a(int t){
     return u + i;
 }
 
-
-int main(){
-    return a(10) + nonCall();
-}
