@@ -2,3 +2,5 @@ source.sh
 __pycache__
 
 out
+
+external_C_sources.txt
