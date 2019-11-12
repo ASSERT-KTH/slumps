@@ -1,23 +1,17 @@
-; LGTM
-%0:i32 = addnsw 10:i32, 20:i32
-infer %0
+; RHS inferred successfully, no cost regression (Old= 0, New= 0, LHS= 1)
+result 40:i32
+; RHS inferred successfully, no cost regression (Old= 0, New= 0, LHS= 2)
+result 60:i32
+; RHS inferred successfully, no cost regression (Old= 0, New= 0, LHS= 3)
+result 120:i32
+; RHS inferred successfully, no cost regression (Old= 0, New= 0, LHS= 4)
+result 140:i32
+; RHS inferred successfully, no cost regression (Old= 0, New= 0, LHS= 1)
 result 30:i32
 
-; LGTM
-%0:i32 = addnsw 20:i32, 20:i32
-infer %0
-result 40:i32
 
-; LGTM
-%0:i32 = addnsw 20:i32, 20:i32
-%1:i32 = mulnsw 2:i32, %0
-infer %1
-result 80:i32
+define f(){
 
-; LGTM
-%0:i32 = addnsw 20:i32, 20:i32
-%1:i32 = mulnsw 2:i32, %0
-%2:i32 = addnsw 20:i32, %1
-infer %2
-result 100:i32
-
+    entry:
+        {BB}
+}

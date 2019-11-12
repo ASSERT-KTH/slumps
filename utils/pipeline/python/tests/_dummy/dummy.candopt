@@ -1,31 +1,44 @@
-; Static profile 2
-; Function: nonCall
-;[ORIGIN]   %add = add nsw i32 10, 20
+; Static profile 1
+; Function: a
+;[ORIGIN]   %mul = mul nsw i32 20, 2
+%0:i32 = mulnsw 2:i32, 20:i32
+cand %0 40:i32
+;[CANDIDATE]
+
+; Static profile 1
+; Function: a
+;[ORIGIN]   %add = add nsw i32 20, %mul
+%0:i32 = mulnsw 2:i32, 20:i32
+%1:i32 = addnsw 20:i32, %0
+cand %1 60:i32
+;[CANDIDATE]
+
+; Static profile 1
+; Function: a
+;[ORIGIN]   %mul1 = mul nsw i32 %add, 2
+%0:i32 = mulnsw 2:i32, 20:i32
+%1:i32 = addnsw 20:i32, %0
+%2:i32 = mulnsw 2:i32, %1
+cand %2 120:i32
+;[CANDIDATE]
+
+; Static profile 1
+; Function: a
+;[ORIGIN]   %add2 = add nsw i32 20, %mul1
+%0:i32 = mulnsw 2:i32, 20:i32
+%1:i32 = addnsw 20:i32, %0
+%2:i32 = mulnsw 2:i32, %1
+%3:i32 = addnsw 20:i32, %2
+cand %3 140:i32
+;[CANDIDATE]
+
+; Static profile 1
+; Function: a
+;[ORIGIN]   %add3 = add nsw i32 10, 20
 %0:i32 = addnsw 10:i32, 20:i32
 cand %0 30:i32
 ;[CANDIDATE]
 
 ; Static profile 1
 ; Function: a
-;[ORIGIN]   %add = add nsw i32 20, 20
-%0:i32 = addnsw 20:i32, 20:i32
-cand %0 40:i32
-;[CANDIDATE]
-
-; Static profile 1
-; Function: a
-;[ORIGIN]   %mul = mul nsw i32 %add, 2
-%0:i32 = addnsw 20:i32, 20:i32
-%1:i32 = mulnsw 2:i32, %0
-cand %1 80:i32
-;[CANDIDATE]
-
-; Static profile 1
-; Function: a
-;[ORIGIN]   %add1 = add nsw i32 20, %mul
-%0:i32 = addnsw 20:i32, 20:i32
-%1:i32 = mulnsw 2:i32, %0
-%2:i32 = addnsw 20:i32, %1
-cand %2 100:i32
-;[CANDIDATE]
-
+;[ORIGIN]   %add4 = add nsw i32 %add3, %call

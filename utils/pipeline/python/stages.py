@@ -28,7 +28,7 @@ class ExternalStage(object):
 
         if rc != 0:
             LOGGER.error(err.decode("utf-8"))
-            raise Exception("Error on stage: %s. %s"%(self.name, str(err)))
+            raise Exception("Error on stage: %s"%(self.name,))
 
         # Specific implementation process over the std out
         res = self.processInner(std)
@@ -51,13 +51,15 @@ class CToLLStage(ExternalStage):
 
         # Including sources for compilation
 
-        sources = os.path.dirname(Alias.clang)
+        sources = os.path.dirname(os.path.abspath(Alias.clang))
         sources = os.path.dirname(sources)
-        sources = os.path.join(sources, "/include/c++/v1")
+        sources = os.path.join(sources, "include/c++/v1")
 
         sys.path.append(sources)
 
-        new_inputs = [ "-I/%s"%(sources,), "-O0", "-Xclang", "-disable-O0-optnone", args, "-S", "-emit-llvm", "-o", "-"]
+        # -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include/c++/v1 -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/10.0.0/include -I/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.14.sdk/usr/include
+
+        new_inputs = [ "-I%s"%(sources,), "-I/Users/javier/Downloads/MacOSX10.9.sdk/usr/include", "-O0", "-Xclang", "-disable-O0-optnone", args, "-S", "-emit-llvm", "-o", "-"]
 
         return super(CToLLStage, self).__call__(new_inputs)
 
