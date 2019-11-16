@@ -42,6 +42,7 @@ fi
 if [ "${ext}" == "rs" ]; then
   echo "### step rs2ll \c"
   rustc --emit=llvm-ir ${name}.rs -o ${name}.ll
+  # or https://github.com/bytecodealliance/cargo-wasi
   ext='ll'
   echo "okay"
 fi
