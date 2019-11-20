@@ -1,0 +1,18 @@
+; Listing valid replacements.
+; Using solver: Z3 + internal cache
+
+; Static profile 1
+; Function: _Z4sendPcS_m
+%0:i64 = var
+%1:i64 = add 7:i64, %0
+%2:i64 = udiv %1, 8:i64
+%3:i64 = sub %0, 18446744073709551609:i64
+%4:i64 = lshr %3, 3:i64
+cand %2 %4
+
+; Static profile 1
+; Function: _Z4sendPcS_m
+%0:i64 = var
+%1:i64 = urem %0, 8:i64
+%2:i64 = and 7:i64, %0
+cand %1 %2
