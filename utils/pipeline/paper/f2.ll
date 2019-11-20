@@ -1,34 +1,28 @@
-; ModuleID = 'f3.ll'
-source_filename = "f3.c"
+; ModuleID = 'f2.ll'
+source_filename = "f2.c"
 target datalayout = "e-m:e-i64:64-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
 ; Function Attrs: noinline nounwind uwtable
-define dso_local i32 @g(i32 %a) #0 {
+define dso_local i32 @f(i32 %cond, i32 %z) #0 {
 entry:
-  %rem = urem i32 %a, 4
-  switch i32 %rem, label %sw.epilog [
-    i32 0, label %sw.bb
-    i32 1, label %sw.bb1
-    i32 2, label %sw.bb3
-  ]
+  %tobool = icmp ne i32 %cond, 0
+  br i1 %tobool, label %if.then, label %if.else
 
-sw.bb:                                            ; preds = %entry
-  %add = add i32 %a, 3
-  br label %sw.epilog
+if.then:                                          ; preds = %entry
+  %mul = mul nsw i32 3, %z
+  br label %if.end
 
-sw.bb1:                                           ; preds = %entry
-  %add2 = add i32 %a, 2
-  br label %sw.epilog
+if.else:                                          ; preds = %entry
+  %mul1 = mul nsw i32 2, %z
+  %mul2 = mul nsw i32 2, %z
+  br label %if.end
 
-sw.bb3:                                           ; preds = %entry
-  %add4 = add i32 %a, 1
-  br label %sw.epilog
-
-sw.epilog:                                        ; preds = %sw.bb3, %sw.bb1, %sw.bb, %entry
-  %a.addr.0 = phi i32 [ %a, %entry ], [ %add4, %sw.bb3 ], [ %add2, %sw.bb1 ], [ %add, %sw.bb ]
-  %and = and i32 %a.addr.0, 3
-  ret i32 %and
+if.end:                                           ; preds = %if.else, %if.then
+  %x.0 = phi i32 [ %mul, %if.then ], [ %mul1, %if.else ]
+  %y.0 = phi i32 [ %z, %if.then ], [ %mul2, %if.else ]
+  %add = add nsw i32 %x.0, %y.0
+  ret i32 %add
 }
 
 attributes #0 = { noinline nounwind uwtable "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "less-precise-fpmad"="false" "min-legal-vector-width"="0" "no-frame-pointer-elim"="true" "no-frame-pointer-elim-non-leaf" "no-infs-fp-math"="false" "no-jump-tables"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="false" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "unsafe-fp-math"="false" "use-soft-float"="false" }

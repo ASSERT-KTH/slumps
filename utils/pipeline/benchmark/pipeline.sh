@@ -16,9 +16,9 @@ alias libsouperPass.so='../../souper/build/libsouperPass.so'
 
 z3='../../souper/third_party/z3/build/z3'
 
-if [ "${ext}" == "c" ]; then
+if [ "${ext}" == "cpp" ]; then
   echo "### step c2ll \c"
-  clang -O0 -Xclang -disable-O0-optnone -S -emit-llvm ${name}.c -o ${name}.ll 
+  clang -O0 -Xclang -disable-O0-optnone -S -emit-llvm ${name}.cpp -o ${name}.ll 
   ext='ll'
   echo "okay"
 fi
