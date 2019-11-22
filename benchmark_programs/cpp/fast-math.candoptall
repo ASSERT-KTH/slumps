@@ -1,0 +1,50 @@
+; No solver specified; listing all candidate replacements.
+
+; Function: main
+%0:i32 = var
+%1:i32 = ctpop %0
+infer %1
+
+; Function: main
+%0:i32 = var
+%1:i32 = ctpop %0
+infer %1
+
+; Function: main
+%0:i32 = var
+%1:i32 = ctpop %0 (hasExternalUses)
+%2:i32 = addnsw %1, %1
+infer %2
+
+; Function: _Z5countj
+%0:i32 = var (knownBits=0xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx) (nonNegative) (range=[0,-2147483648))
+infer %0
+
+; Function: _Z5countj
+%0:i32 = var
+infer %0
+
+; Function: _Z5countj
+%0:i32 = var
+%1:i1 = ne 0:i32, %0
+infer %1
+
+; Function: _Z5countj
+%0:i32 = var
+%1:i1 = ne 0:i32, %0
+pc %1 1:i1
+%2:i32 = sub %0, 1:i32
+infer %2
+
+; Function: _Z5countj
+%0:i32 = var
+%1:i1 = ne 0:i32, %0
+pc %1 1:i1
+%2:i32 = sub %0, 1:i32
+%3:i32 = and %0, %2
+infer %3
+
+; Function: _Z5countj
+%0:i32 = var (knownBits=0xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx) (nonNegative) (range=[0,-2147483648))
+%1:i32 = addnsw 1:i32, %0
+infer %1
