@@ -1,0 +1,37 @@
+; No solver specified; listing all candidate replacements.
+
+; Function: _Z4facti
+%0:i64 = var
+infer %0
+
+; Function: _Z4facti
+%0:i32 = var
+infer %0
+
+; Function: _Z4facti
+%0:i32 = var
+%1:i1 = slt 0:i32, %0
+infer %1
+
+; Function: _Z4facti
+%0:i32 = var
+%1:i1 = slt 0:i32, %0
+pc %1 1:i1
+%2:i64 = sext %0
+infer %2
+
+; Function: _Z4facti
+%0:i32 = var
+%1:i1 = slt 0:i32, %0
+pc %1 1:i1
+%2:i64 = var
+%3:i64 = sext %0
+%4:i64 = mulnsw %2, %3
+infer %4
+
+; Function: _Z4facti
+%0:i32 = var
+%1:i1 = slt 0:i32, %0
+pc %1 1:i1
+%2:i32 = addnsw 4294967295:i32, %0
+infer %2
