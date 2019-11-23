@@ -1,0 +1,20 @@
+; No solver specified; listing all candidate replacements.
+
+; Function: _Z7Q_rsqrtf
+%0:i64 = var
+infer %0
+
+; Function: _Z7Q_rsqrtf
+%0:i64 = var
+infer %0 (demandedBits=1111111111111111111111111111111111111111111111111111111111111110)
+
+; Function: _Z7Q_rsqrtf
+%0:i64 = var
+%1:i64 = ashr %0, 1:i64
+infer %1
+
+; Function: _Z7Q_rsqrtf
+%0:i64 = var
+%1:i64 = ashr %0, 1:i64
+%2:i64 = subnsw 1597463007:i64, %1
+infer %2

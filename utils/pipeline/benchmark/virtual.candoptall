@@ -1,0 +1,10 @@
+; No solver specified; listing all candidate replacements.
+
+; Function: _Z4ctorv
+%0:i32 = var
+infer %0
+
+; Function: _Z4dtorP1A
+%0:i64 = var
+%1:i1 = eq 0:i64, %0
+infer %1

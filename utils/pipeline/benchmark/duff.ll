@@ -1,5 +1,5 @@
-; ModuleID = 'duff.ll'
-source_filename = "duff.cpp"
+; ModuleID = '/home/jian/Desktop/duff.ll'
+source_filename = "/home/jian/Desktop/duff.cpp"
 target datalayout = "e-m:e-i64:64-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
