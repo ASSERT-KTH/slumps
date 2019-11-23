@@ -1,0 +1,92 @@
+; No solver specified; listing all candidate replacements.
+
+; Function: _Z4sendPcS_m
+%0:i64 = var
+%1:i64 = add 7:i64, %0
+infer %1
+
+; Function: _Z4sendPcS_m
+%0:i64 = var
+%1:i64 = add 7:i64, %0
+%2:i64 = udiv %1, 8:i64
+infer %2
+
+; Function: _Z4sendPcS_m
+%0:i64 = var
+%1:i64 = urem %0, 8:i64
+infer %1
+
+; Function: _Z4sendPcS_m
+%0:i64 = var
+infer %0
+
+; Function: _Z4sendPcS_m
+%0:i8 = var
+infer %0
+
+; Function: _Z4sendPcS_m
+%0:i64 = var
+infer %0
+
+; Function: _Z4sendPcS_m
+%0:i8 = var
+infer %0
+
+; Function: _Z4sendPcS_m
+%0:i64 = var
+infer %0
+
+; Function: _Z4sendPcS_m
+%0:i8 = var
+infer %0
+
+; Function: _Z4sendPcS_m
+%0:i64 = var
+infer %0
+
+; Function: _Z4sendPcS_m
+%0:i8 = var
+infer %0
+
+; Function: _Z4sendPcS_m
+%0:i64 = var
+infer %0
+
+; Function: _Z4sendPcS_m
+%0:i8 = var
+infer %0
+
+; Function: _Z4sendPcS_m
+%0:i64 = var
+infer %0
+
+; Function: _Z4sendPcS_m
+%0:i8 = var
+infer %0
+
+; Function: _Z4sendPcS_m
+%0:i64 = var
+infer %0
+
+; Function: _Z4sendPcS_m
+%0:i8 = var
+infer %0
+
+; Function: _Z4sendPcS_m
+%0:i64 = var
+infer %0
+
+; Function: _Z4sendPcS_m
+%0:i8 = var
+infer %0
+
+; Function: _Z4sendPcS_m
+%0:i64 = var
+%1:i64 = add 18446744073709551615:i64, %0
+infer %1
+
+; Function: _Z4sendPcS_m
+%0:i64 = var
+%1:i64 = add 18446744073709551615:i64, %0 (hasExternalUses)
+%2:i1 = ult 0:i64, %1
+infer %2
