@@ -3,7 +3,7 @@ import os
 import sys
 import re
 from nodes import TextBlock, ModuleNode, CandidateNode, SolutionNode
-from stages import CandidatesToSouperParts, CToLLStage, LLToBC, LLToMem2RegLL, BCToSouper, LLVMCompile
+from stages import CandidatesToSouperParts, CToLLStage, LLToBC, LLToMem2RegLL, BCToSouper, LLVMCompile, LLVMTOWasm, ObjtoWASM
 from utils import bcolors, DEBUG_FILE, flatten, OUT_FOLDER
 from logger import LOGGER
 import shutil
@@ -137,6 +137,18 @@ class Pipeline(object):
 
         open("%s.bc"%(llFileName, ), 'wb').write(bc)
         LOGGER.success("Final BC size %s bytes"%(len(bc), ))
+
+        finalObjCreator = LLVMTOWasm()
+        finalobj = finalObjCreator(std=bc)
+
+        open("%s.obj"%(llFileName, ), 'wb').write(finalobj)
+
+        toWASM = ObjtoWASM()
+        wasm = toWASM(std=None, args=[
+            "%s.obj"%(llFileName, ),
+            "%s.wasm"%(llFileName, )
+        ])
+
 
 
     def generetaAllCandidates(self,OUT_FOLDER, candidateNodes, file):
