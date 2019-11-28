@@ -7,6 +7,7 @@ from stages import CandidatesToSouperParts, CToLLStage, LLToBC, LLToMem2RegLL, B
 from utils import bcolors, DEBUG_FILE, flatten, OUT_FOLDER
 from logger import LOGGER
 import shutil
+from dependency import DependencyAnalyzer
 
 import json
 
@@ -27,6 +28,8 @@ class Pipeline(object):
 
         lltobc = LLToBC()
         bc = lltobc(std=ll2)
+
+        LOGGER.success("Initial BC size %s bytes"%(len(bc), ))
 
         bctocand = BCToSouper()
         cand = bctocand(std=bc)
@@ -94,17 +97,64 @@ class Pipeline(object):
 
         os.mkdir(OUT_FOLDER)
 
+
+        #for k in nodes.keys():
+        #    for k1 in nodes[k]["depends_on"]:
+        #        print('%s -> %s;'%(k.replace("%", "_").replace(".", "_"), k1[0].replace("%", "_").replace(".", "_")))
+
+        self.generateSuperLL(OUT_FOLDER, candidateNodes, file)
+
+        #print(len(sols.split("\n\n")))
+
+        # Map solutions to original optimization candidate
+
+        # Generate LLVM IR for solution
+
+        # Generate Overall LLVM IR output
+    def generateSuperLL(self,OUT_FOLDER, candidateNodes, file):
+        llFileName = "%s/%s.all.ll"%(OUT_FOLDER, file.split("/")[-1])
+        OUT_FILE_IR = open(llFileName, 'wb')
+            
+
+        for i, cand in enumerate(candidateNodes):
+
+            OUT_FILE_IR.write(("\n; Replacing %s -> %s\n"%(cand.entry_llvm, cand.children[-1].return_instruction)).encode("utf-8"))
+
+            cand.toggleTranslation()
+            
+        self.root.infixVisit(OUT_FILE_IR)
+
+            # cand.toggleTranslation()
+
+        #print(json.dumps(self.root))
+
+        OUT_FILE_IR.close()
+
+        final_compl = LLVMCompile()
+        bc = final_compl(std=open(llFileName, 'rb').read())
+
+        # Write bc
+
+        open("%s.bc"%(llFileName, ), 'wb').write(bc)
+        LOGGER.success("Final BC size %s bytes"%(len(bc), ))
+
+
+    def generetaAllCandidates(self,OUT_FOLDER, candidateNodes, file):
+            
+
         for i, cand in enumerate(candidateNodes):
             llFileName = "%s/%s.%s.ll"%(OUT_FOLDER, file.split("/")[-1], i)
-
             OUT_FILE_IR = open(llFileName, 'wb')
-            OUT_FILE_IR.write(("; Replacing %s -> %s"%(cand.entry_llvm, cand.children[-1].return_instruction)).encode("utf-8"))
+        
+            OUT_FILE_IR.write(("\n; Replacing %s -> %s\n"%(cand.entry_llvm, cand.children[-1].return_instruction)).encode("utf-8"))
 
             cand.toggleTranslation()
             
             self.root.infixVisit(OUT_FILE_IR)
 
             cand.toggleTranslation()
+
+        #print(json.dumps(self.root))
 
             OUT_FILE_IR.close()
 
@@ -115,13 +165,7 @@ class Pipeline(object):
 
             open("%s.bc"%(llFileName, ), 'wb').write(bc)
 
-        #print(len(sols.split("\n\n")))
-
-        # Map solutions to original optimization candidate
-
-        # Generate LLVM IR for solution
-
-        # Generate Overall LLVM IR output
+            LOGGER.success("Final BC size %s bytes"%(len(bc), ))
 
 
 if __name__ == "__main__":

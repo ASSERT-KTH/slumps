@@ -59,7 +59,9 @@ class CToLLStage(ExternalStage):
 
         # -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include/c++/v1 -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/10.0.0/include -I/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.14.sdk/usr/include
 
-        new_inputs = [ "-I%s"%(sources,), "-I/Users/javier/Downloads/MacOSX10.9.sdk/usr/include", "-O0", "-Xclang", "-disable-O0-optnone", args, "-S", "-emit-llvm", "-o", "-"]
+        # Load from external file
+        
+        new_inputs = [ "-I%s"%(sources,), "-I/Users/javier/Downloads/MacOSX10.9.sdk/usr/include", "--target=wasm32", "-O0", "-Xclang", "-disable-O0-optnone", args, "-S", "-emit-llvm", "-o", "-"]
 
         return super(CToLLStage, self).__call__(new_inputs)
 
@@ -164,6 +166,24 @@ class SouperToLLVM(ExternalStage):
 
 
 class LLVMCompile(ExternalStage):
+
+    def __init__(self):
+        self.path_to_executable = Alias.llvm_as
+        self.name = "LLVM IR to BC"
+        
+
+
+    def __call__(self, args = [], std = None): # f -> inputs
+
+        new_inputs = [ "-", '-o', '-']
+        return super(LLVMCompile, self).__call__([], std)
+
+    def processInner(self, std):
+        # return the std output optimized LLVM IR
+        return std
+
+
+class LLVMTOWasm(ExternalStage):
 
     def __init__(self):
         self.path_to_executable = Alias.llvm_as

@@ -91,7 +91,7 @@ class SolutionNode(Node):
         parser = DependencyAnalyzer()
 
         LOGGER.info("Entrypoint instruction: %s"%(self.original_llvm,))
-        nodes, labels = parser.parse(self.original_llvm)
+        nodes, labels = parser.parse(self.original_llvm, [])
         
         ASSIGN = labels[0]
         LOGGER.info(ASSIGN)
