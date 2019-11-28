@@ -61,7 +61,7 @@ class CToLLStage(ExternalStage):
 
         # Load from external file
         
-        new_inputs = [ "-I%s"%(sources,), "-I/Users/javier/Downloads/MacOSX10.9.sdk/usr/include", "--target=wasm32", "-O0", "-Xclang", "-disable-O0-optnone", args, "-c", "-S", "-emit-llvm", "-o", "-"]
+        new_inputs = [ "-I%s"%(sources,), "-I/Users/javier/Downloads/MacOSX10.9.sdk/usr/include",  "-O0", "-Xclang", "-disable-O0-optnone", args, "-c", "-S", "-emit-llvm", "-o", "-"]
 
         return super(CToLLStage, self).__call__(new_inputs)
 
@@ -193,7 +193,7 @@ class LLVMTOWasm(ExternalStage):
 
     def __call__(self, args = [], std = None): # f -> inputs
 
-        new_inputs = ["-march=wasm32", "-filetype=obj", "-", '-o', '-']
+        new_inputs = ["-march=wasm32", "-filetype=obj", "-O0", "-", '-o', '-']
         return super(LLVMTOWasm, self).__call__(new_inputs, std)
 
     def processInner(self, std):
@@ -211,8 +211,26 @@ class ObjtoWASM(ExternalStage):
 
     def __call__(self, args = [], std = None): # f -> inputs
 
-        new_inputs = ["--no-entry", "--export-all",  '-o', args[1], args[0]]
+        new_inputs = ["--no-entry", "--export-all","-O0",  '-o', args[1], args[0]]
         return super(ObjtoWASM, self).__call__(new_inputs, std)
+
+    def processInner(self, std):
+        # return the std output optimized LLVM IR
+        return std
+
+
+class WASM2WAT(ExternalStage):
+
+    def __init__(self):
+        self.path_to_executable = Alias.wasm2wat
+        self.name = "WASM to WAT text"
+        
+
+
+    def __call__(self, args = [], std = None): # f -> inputs
+
+        new_inputs = ['-o', args[1], args[0]]
+        return super(WASM2WAT, self).__call__(new_inputs, std)
 
     def processInner(self, std):
         # return the std output optimized LLVM IR

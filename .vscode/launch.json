@@ -5,6 +5,19 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "Python: Current File",
+            "type": "python",
+            "request": "launch",
+            "program": "${file}",
+            "args": [
+                "/Users/javier/Documents/Develop/slumps/utils/pipeline/python/tests/_dummy/dummy.c"
+            ],
+            "env": {
+                "python": "/Users/javier/Documents/Develop/.virtualenvs/slumps/bin/python"
+            },
+            "console": "integratedTerminal"
+        },
+        {
             "name": "clang++ build and debug active file",
             "type": "cppdbg",
             "request": "launch",

@@ -148,25 +148,14 @@ void EMSCRIPTEN_KEEPALIVE format_string_bug(char *str) {
 
     <script src="./format_string_bug.js"></script>
     
+    
 
     <script>
 
-      console.log = function(...args){
-        $("#wrapper").html("")
-        args.forEach(i => {
-          $("#wrapper").append(`<p>${i}</p>`)
-        })
-      }
     
       Module.onRuntimeInitialized = function() {
-
-        $("#exploit-btn").click(() => {
-          Module.ccall('format_string_bug', 'None', ['string'], [$("#string").val()]); // Exploit
         
-        })
-        // var normal = binary.ccall('func_ptr_overwrite2', 'None', ['string', 'string'], ["Bob", "22"]); // Normal behavior
-          
-        }
+      }
 
     </script>
 </body>

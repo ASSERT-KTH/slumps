@@ -3,12 +3,12 @@ import os
 import sys
 import re
 from nodes import TextBlock, ModuleNode, CandidateNode, SolutionNode
-from stages import CandidatesToSouperParts, CToLLStage, LLToBC, LLToMem2RegLL, BCToSouper, LLVMCompile, LLVMTOWasm, ObjtoWASM
+from stages import CandidatesToSouperParts, CToLLStage, LLToBC, LLToMem2RegLL, BCToSouper, LLVMCompile, LLVMTOWasm, ObjtoWASM, WASM2WAT
 from utils import bcolors, DEBUG_FILE, flatten, OUT_FOLDER
 from logger import LOGGER
 import shutil
 from dependency import DependencyAnalyzer
-
+import hashlib
 import json
 
 import collections
@@ -17,11 +17,21 @@ import collections
 class Pipeline(object):
     def process(self, file):
         
+        # checking output directory
+
+        if os.path.exists(OUT_FOLDER):
+            LOGGER.warning("Removing out folder content...%s"%(OUT_FOLDER, ))
+            shutil.rmtree(OUT_FOLDER)
+
+        os.mkdir(OUT_FOLDER)
+
         ctoll = CToLLStage()
         ll1 = ctoll(file)
 
         lltoll = LLToMem2RegLL()
         ll2 = lltoll(std=ll1)
+
+        self.generateOriginalWASM(ll2, OUT_FOLDER, file)
 
         # Saving the ll file
         self.original_llvm = ll2.decode("utf-8")
@@ -89,20 +99,13 @@ class Pipeline(object):
         for i, solution in enumerate(solutions_candidates):
             candidateNodes[i].addChild(SolutionNode(solution, candidateNodes[i].entry_llvm))
 
-        # checking output directory
-
-        if os.path.exists(OUT_FOLDER):
-            LOGGER.warning("Removing out folder content...%s"%(OUT_FOLDER, ))
-            shutil.rmtree(OUT_FOLDER)
-
-        os.mkdir(OUT_FOLDER)
-
 
         #for k in nodes.keys():
         #    for k1 in nodes[k]["depends_on"]:
         #        print('%s -> %s;'%(k.replace("%", "_").replace(".", "_"), k1[0].replace("%", "_").replace(".", "_")))
 
         self.generateSuperLL(OUT_FOLDER, candidateNodes, file)
+        #self.generetaAllCandidates(OUT_FOLDER, candidateNodes, file)
 
         #print(len(sols.split("\n\n")))
 
@@ -111,6 +114,30 @@ class Pipeline(object):
         # Generate LLVM IR for solution
 
         # Generate Overall LLVM IR output
+
+    def generateOriginalWASM(self, ll, OUT_FOLDER, file):
+        llFileName = "%s/%s.all.ll"%(OUT_FOLDER, file.split("/")[-1])
+
+        finalObjCreator = LLVMTOWasm()
+        finalobj = finalObjCreator(std=ll)
+
+        open("%s.orig.obj"%(llFileName, ), 'wb').write(finalobj)
+
+        toWASM = ObjtoWASM()
+        toWASM(std=None, args=[
+            "%s.orig.obj"%(llFileName, ),
+            "%s.orig.wasm"%(llFileName, )
+        ])
+
+        wat = WASM2WAT()
+        wat(std=None, args=[
+            "%s.orig.wasm"%(llFileName, ),
+            "%s.orig.wat"%(llFileName, )]
+        )
+
+
+        LOGGER.warning("WASM SIZE %s"%(len(open("%s.orig.wasm"%(llFileName,), 'rb').read()), ))
+
     def generateSuperLL(self,OUT_FOLDER, candidateNodes, file):
         llFileName = "%s/%s.all.ll"%(OUT_FOLDER, file.split("/")[-1])
         OUT_FILE_IR = open(llFileName, 'wb')
@@ -130,26 +157,26 @@ class Pipeline(object):
 
         OUT_FILE_IR.close()
 
-        final_compl = LLVMCompile()
-        bc = final_compl(std=open(llFileName, 'rb').read())
-
-        # Write bc
-
-        open("%s.bc"%(llFileName, ), 'wb').write(bc)
-        LOGGER.success("Final BC size %s bytes"%(len(bc), ))
-
         finalObjCreator = LLVMTOWasm()
-        finalobj = finalObjCreator(std=bc)
+        finalobj = finalObjCreator(std=open(llFileName, 'rb').read())
 
         open("%s.obj"%(llFileName, ), 'wb').write(finalobj)
 
         toWASM = ObjtoWASM()
-        wasm = toWASM(std=None, args=[
+        toWASM(std=None, args=[
             "%s.obj"%(llFileName, ),
             "%s.wasm"%(llFileName, )
         ])
 
+        wat = WASM2WAT()
+        wat(std=None, args=[
+            "%s.wasm"%(llFileName,),
+            "%s.wat"%(llFileName,)]
+        )
 
+        finalWASM = open("%s.wasm"%(llFileName,), 'rb').read()
+
+        LOGGER.warning("WASM SIZE %s SHA %s"%(len(finalWASM), hashlib.sha256(finalWASM).hexdigest()))
 
     def generetaAllCandidates(self,OUT_FOLDER, candidateNodes, file):
             
@@ -170,14 +197,28 @@ class Pipeline(object):
 
             OUT_FILE_IR.close()
 
-            final_compl = LLVMCompile()
-            bc = final_compl(std=open(llFileName, 'rb').read())
-
             # Write bc
 
-            open("%s.bc"%(llFileName, ), 'wb').write(bc)
+            finalObjCreator = LLVMTOWasm()
+            finalobj = finalObjCreator(std=open(llFileName, 'rb').read())
 
-            LOGGER.success("Final BC size %s bytes"%(len(bc), ))
+            open("%s.%s.obj"%(llFileName, i), 'wb').write(finalobj)
+
+            toWASM = ObjtoWASM()
+            toWASM(std=None, args=[
+                "%s.%s.obj"%(llFileName, i),
+                "%s.%s.wasm"%(llFileName, i)
+            ])
+
+            wat = WASM2WAT()
+            wat(std=None, args=[
+                "%s.%s.wasm"%(llFileName, i),
+                "%s.%s.wat"%(llFileName, i)]
+            )
+
+            finalWASM = open("%s.%s.wasm"%(llFileName, i), 'rb').read()
+
+            LOGGER.warning("WASM SIZE %s SHA %s"%(len(finalWASM), hashlib.sha256(finalWASM).hexdigest()))
 
 
 if __name__ == "__main__":
