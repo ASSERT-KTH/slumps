@@ -1,0 +1,13 @@
+http://rosettacode.org/wiki/Chemical_Calculator#C.2B.2B
+http://rosettacode.org/wiki/Eban_numbers#C.2B.2B
+http://rosettacode.org/wiki/Elementary_cellular_automaton#C.2B.2B
+http://rosettacode.org/wiki/Geometric_algebra#C.2B.2B
+http://rosettacode.org/wiki/Kolakoski_sequence#C.2B.2B
+http://rosettacode.org/wiki/Latin_Squares_in_reduced_form#C.2B.2B
+http://rosettacode.org/wiki/N-queens_problem#C.2B.2B
+http://rosettacode.org/wiki/Nim_Game#C.2B.2B
+http://rosettacode.org/wiki/Ramer-Douglas-Peucker_line_simplification#C.2B.2B
+http://rosettacode.org/wiki/Resistor_mesh#C.2B.2B
+http://rosettacode.org/wiki/Sattolo_cycle#C.2B.2B
+http://rosettacode.org/wiki/Smith_numbers#C.2B.2B
+http://rosettacode.org/wiki/Zebra_puzzle#C.2B.2B
