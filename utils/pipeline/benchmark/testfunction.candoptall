@@ -1,0 +1,41 @@
+; No solver specified; listing all candidate replacements.
+
+; Function: _Z12testFunctionPii
+%0:i32 = var
+infer %0
+
+; Function: _Z12testFunctionPii
+%0:i32 = var (knownBits=0xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx) (nonNegative) (range=[0,-2147483648))
+infer %0
+
+; Function: _Z12testFunctionPii
+%0:i32 = var (knownBits=0xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx) (nonNegative) (range=[0,-2147483648))
+%1:i32 = var
+%2:i1 = slt %0, %1
+infer %2
+
+; Function: _Z12testFunctionPii
+%0:i32 = var (knownBits=0xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx) (nonNegative) (range=[0,-2147483648))
+%1:i32 = var
+%2:i1 = slt %0, %1
+pc %2 1:i1
+%3:i64 = sext %0
+infer %3
+
+; Function: _Z12testFunctionPii
+%0:i32 = var
+infer %0
+
+; Function: _Z12testFunctionPii
+%0:i32 = var
+%1:i32 = var
+%2:i32 = addnsw %0, %1
+infer %2
+
+; Function: _Z12testFunctionPii
+%0:i32 = var (knownBits=0xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx) (nonNegative) (range=[0,-2147483648))
+%1:i32 = var
+%2:i1 = slt %0, %1
+pc %2 1:i1
+%3:i32 = addnsw 1:i32, %0
+infer %3
