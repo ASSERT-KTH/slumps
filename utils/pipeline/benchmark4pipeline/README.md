@@ -1,3 +1,4 @@
+```
 http://rosettacode.org/wiki/Chemical_Calculator#C.2B.2B
 http://rosettacode.org/wiki/Eban_numbers#C.2B.2B
 http://rosettacode.org/wiki/Elementary_cellular_automaton#C.2B.2B
@@ -11,3 +12,4 @@ http://rosettacode.org/wiki/Resistor_mesh#C.2B.2B
 http://rosettacode.org/wiki/Sattolo_cycle#C.2B.2B
 http://rosettacode.org/wiki/Smith_numbers#C.2B.2B
 http://rosettacode.org/wiki/Zebra_puzzle#C.2B.2B
+```
