@@ -89,6 +89,16 @@
         "__errc": "cpp",
         "__node_handle": "cpp",
         "bit": "cpp",
-        "*.inc": "cpp"
+        "*.inc": "cpp",
+        "cfenv": "cpp",
+        "csetjmp": "cpp",
+        "csignal": "cpp",
+        "coroutine": "cpp",
+        "propagate_const": "cpp",
+        "scoped_allocator": "cpp",
+        "typeindex": "cpp",
+        "charconv": "cpp",
+        "compare": "cpp",
+        "span": "cpp"
     }
 }

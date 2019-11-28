@@ -16,6 +16,12 @@ if [ ! -d "../../souper/build/souper" ]; then
   cd ../../utils/pipeline
 fi
 
+cd ../../binaryen
+cmake . && make
+cd ../utils/pipeline
+
+
+
 
 name=$(echo $1 | sed 's/\.[^.]*$//')
 ext=$(echo $1 | sed 's/^.*\.//')
@@ -31,6 +37,52 @@ alias souper2llvm='../../souper/build/souper2llvm'
 alias libsouperPass.so='../../souper/build/libsouperPass.so'
 
 z3='../../souper/third_party/z3/build/z3'
+
+if [ "${ext}" == "wasm" ]; then
+  echo "### step wasm2opt \c"
+  echo ${name}
+  ../../binaryen/bin/wasm-opt ${name}.wasm --flatten --simplify-locals-nonesting --reorder-locals --souperify > ${name}.wasmopt
+  ext='wasmopt'
+  echo "okay"
+fi
+
+
+if [ "${ext}" == "wast" ]; then
+  echo "### step wasm2opt \c"
+  echo ${name}
+  ../../binaryen/bin/wasm-opt ${name}.wast --flatten --simplify-locals-nonesting --reorder-locals --souperify > ${name}.wasmopt
+  ext='wasmopt'
+  echo "okay"
+fi
+
+<<END
+
+static llvm::cl::opt<bool> MemCache(
+  "souper-internal-cache",
+  llvm::cl::desc("Cache solver results in memory (default=true)"),
+  llvm::cl::init(true));
+
+static llvm::cl::opt<bool> ExternalCache(
+  "souper-external-cache",
+  llvm::cl::desc("Use external Redis-based cache (default=false)"),
+  llvm::cl::init(false));
+
+static llvm::cl::opt<int> SolverTimeout(
+  "solver-timeout",
+  llvm::cl::desc("Solver timeout in seconds (default=no timeout)"),
+  llvm::cl::init(0));
+END
+
+if [ "${ext}" == "wasmopt" ]; then
+  echo "### step separating LHS and RHS from opt file \c"
+  # This command expect LHS, remove "result" instruction from it
+  # souper-infer-inst
+  # souper-enumerative-synthesis
+  souper-check -z3-path=${z3} -infer-rhs -souper-infer-iN -print-replacement-split -souper-infer-inst -souper-external-cache  ${name}.wasmopt > ${name}.wasmoptthso
+  ext='wasmoptthso' # save rhs but keep working with the other one
+  echo "okay"
+fi
+
 
 if [ "${ext}" == "c" ]; then
   echo "### step c2ll \c"

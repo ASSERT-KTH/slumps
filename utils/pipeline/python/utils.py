@@ -52,5 +52,6 @@ class Alias:
     souper = "%s/souper/build/souper"%(BASE_DIR,)
     souper_check = "%s/souper/build/souper-check"%(BASE_DIR,)
     souper2llvm = "%s/souper/build/souper2llvm"%(BASE_DIR,)
+    wasm2wat = "%s/wabt/bin/wasm2wat"%(BASE_DIR,)
     # libsouperPass_so = "../../souper/build/libsouperPass.so"
     z3 = "%s/souper/third_party/z3/build/z3"%(BASE_DIR,)

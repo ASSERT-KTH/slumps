@@ -39,6 +39,3 @@ cand %3 140:i32
 cand %0 30:i32
 ;[CANDIDATE]
 
-; Static profile 1
-; Function: a
-;[ORIGIN]   %add4 = add nsw i32 %add3, %call
