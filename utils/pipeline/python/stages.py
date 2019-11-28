@@ -61,7 +61,7 @@ class CToLLStage(ExternalStage):
 
         # Load from external file
         
-        new_inputs = [ "-I%s"%(sources,), "-I/Users/javier/Downloads/MacOSX10.9.sdk/usr/include", "--target=wasm32", "-O0", "-Xclang", "-disable-O0-optnone", args, "-S", "-emit-llvm", "-o", "-"]
+        new_inputs = [ "-I%s"%(sources,), "-I/Users/javier/Downloads/MacOSX10.9.sdk/usr/include", "--target=wasm32", "-O0", "-Xclang", "-disable-O0-optnone", args, "-c", "-S", "-emit-llvm", "-o", "-"]
 
         return super(CToLLStage, self).__call__(new_inputs)
 
@@ -176,7 +176,7 @@ class LLVMCompile(ExternalStage):
     def __call__(self, args = [], std = None): # f -> inputs
 
         new_inputs = [ "-", '-o', '-']
-        return super(LLVMCompile, self).__call__([], std)
+        return super(LLVMCompile, self).__call__(new_inputs, std)
 
     def processInner(self, std):
         # return the std output optimized LLVM IR
@@ -186,15 +186,33 @@ class LLVMCompile(ExternalStage):
 class LLVMTOWasm(ExternalStage):
 
     def __init__(self):
-        self.path_to_executable = Alias.llvm_as
-        self.name = "LLVM IR to BC"
+        self.path_to_executable = Alias.llc
+        self.name = "LLVM IR to Object"
         
 
 
     def __call__(self, args = [], std = None): # f -> inputs
 
-        new_inputs = [ "-", '-o', '-']
-        return super(LLVMCompile, self).__call__([], std)
+        new_inputs = ["-march=wasm32", "-filetype=obj", "-", '-o', '-']
+        return super(LLVMTOWasm, self).__call__(new_inputs, std)
+
+    def processInner(self, std):
+        # return the std output optimized LLVM IR
+        return std
+
+
+class ObjtoWASM(ExternalStage):
+
+    def __init__(self):
+        self.path_to_executable = Alias.wasm_ld
+        self.name = "LLVM obj to WASM"
+        
+
+
+    def __call__(self, args = [], std = None): # f -> inputs
+
+        new_inputs = ["--no-entry", "--export-all",  '-o', args[1], args[0]]
+        return super(ObjtoWASM, self).__call__(new_inputs, std)
 
     def processInner(self, std):
         # return the std output optimized LLVM IR

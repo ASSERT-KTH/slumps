@@ -46,9 +46,9 @@ class Alias:
     llc = "%s/souper/third_party/llvm/Release/bin/llc"%(BASE_DIR,)
     lli = "%s/souper/third_party/llvm/Release/bin/lli"%(BASE_DIR,)
     llvm_as = "%s/souper/third_party/llvm/Release/bin/llvm-as"%(BASE_DIR,)    
-    llc = "%s/souper/third_party/llvm/Release/bin/llc"%(BASE_DIR,) # /usr/local/opt/llvm/bin/wasm-ld
+    llc = "/usr/local/opt/llvm/bin/llc" #"%s/souper/third_party/llvm/Release/bin/llc"%(BASE_DIR,) # /usr/local/opt/llvm/bin/wasm-ld
 
-    wasm_ld = "%s/souper/third_party/llvm/Release/bin/wasm-ld"%(BASE_DIR,) # /usr/local/opt/llvm/bin/wasm-ld
+    wasm_ld = "/usr/local/opt/llvm/bin/wasm-ld" # /usr/local/opt/llvm/bin/wasm-ld
     souper = "%s/souper/build/souper"%(BASE_DIR,)
     souper_check = "%s/souper/build/souper-check"%(BASE_DIR,)
     souper2llvm = "%s/souper/build/souper2llvm"%(BASE_DIR,)
