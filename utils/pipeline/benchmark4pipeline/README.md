@@ -13,7 +13,7 @@
 - [Smith_numbers](http://rosettacode.org/wiki/Smith_numbers#C.2B.2B)
 - [Zebra_puzzle](http://rosettacode.org/wiki/Zebra_puzzle#C.2B.2B)
 
-### How We Pick Up?
+### How do we select these benchmark programs?
 We explore [the catalog of C++ pages in Rosetta Code](http://rosettacode.org/wiki/Category:C%2B%2B), and pick up programs which:
 1. have no specific header files (such as `windows.h`) or external libs (such as `Boost`)
 2. can be compiled correctly (no error messages when compiling to LLVM IR)
