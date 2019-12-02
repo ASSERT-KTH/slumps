@@ -19,6 +19,7 @@ We explore [the catalog of C++ pages in Rosetta Code](http://rosettacode.org/wik
 2. can be compiled correctly (no error messages when compiling to LLVM IR)
 3. take shorter time to generate optimized candidates by Souper, as compared to other programs
 4. can generate valid optimization of RHS results by Google/Souper
+5. The programs are self-contained
 
 These benchmark datasets are small-medium sized programs whose lines are between 30 and 200.
 

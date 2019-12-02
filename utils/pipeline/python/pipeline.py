@@ -43,6 +43,7 @@ class Pipeline(object):
 
         bctocand = BCToSouper()
         cand = bctocand(std=bc)
+        # Infer candidates one by one
 
         #Saving candidate
         candidates = cand.decode("utf-8").split(";[CANDIDATE]\n")[:-1] # Avoid the last separator
