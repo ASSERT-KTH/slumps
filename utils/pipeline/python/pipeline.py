@@ -46,7 +46,7 @@ class Pipeline(object):
         # Infer candidates one by one
 
         #Saving candidate
-        candidates = cand.decode("utf-8").split("\n\n")[:-1] # Avoid the last separator
+        candidates = cand.decode("utf-8").split("\n\n") # Avoid the last separator
         candidates = list(candidates)
 
         LOGGER.success("Found %s arithmetic expression candidates. Filtering and solving..."%(len(candidates),))
@@ -56,8 +56,10 @@ class Pipeline(object):
         
         finalCandidates = []
         for j, cand_text in enumerate(candidates):
+                
+            for i in range(1, min(MAX_INST, len(cand_text.split("\n")) - 2 )): # Less number of instructionns than the original
+                printProgressBar(j, total=len(candidates), suffix="Candidate %s. Trying %s instructions ...     "%(j, i))
 
-            for i in range(1, MAX_INST): # TODO put as CONFI
                 plump = CandidatesToSouperParts(i)
                 plump.debug = False
 
@@ -68,17 +70,28 @@ class Pipeline(object):
                         sols.decode("utf-8")
                     ])
                     break
-            printProgressBar(j, total=len(candidates), suffix="Candidate %s"%(j,))
+            printProgressBar(j, total=len(candidates), suffix="Candidate %s, up to %s instructions"%(j,  min(MAX_INST, len(cand_text.split("\n")) - 2)))
 
-        printProgressBar(len(candidates), total=len(candidates), suffix="Complete exploration")
+        printProgressBar(len(candidates), total=len(candidates), suffix="Complete exploration                                   ")
         LOGGER.success("%s Valid replacements"%(len(finalCandidates)))
                 
+
         children = [rootNode]
         candidateNodes = []
+
+        
 
         for cand_text, replacement in finalCandidates:
             search = ORIGIN__RE.search(cand_text)
             original_llvm_ir = search.group(1).lstrip().rstrip()
+
+            root = DependencyAnalyzer.Root()
+            # Go up finding dependencies
+
+            entry = DependencyAnalyzer.Instruction(original_llvm_ir, root)
+
+
+            
 
             index = -1
 
@@ -89,9 +102,14 @@ class Pipeline(object):
                     if index != -1:
                         candidateNodes.append(CandidateNode(cand_text, original_llvm_ir))
 
-                        candidateNodes[-1].addChild(SolutionNode(replacement, candidateNodes[-1].entry_llvm))
+                        merge = DependencyAnalyzer.merge(cand_text, replacement)
+
+                        LOGGER.warning(merge)
+
+                        candidateNodes[-1].addChild(SolutionNode(merge, candidateNodes[-1].entry_llvm))
 
                         left, middle, right = node.split(index, index + len(original_llvm_ir), candidateNodes[-1])
+
                         children[i] = [left, middle, right]
                         children = flatten(children)
                         break
@@ -132,7 +150,7 @@ class Pipeline(object):
 
         for i, cand in enumerate(candidateNodes):
 
-            OUT_FILE_IR.write(("\n; Replacing %s -> %s\n"%(cand.entry_llvm, cand.children[-1].return_instruction)).encode("utf-8"))
+            OUT_FILE_IR.write(("\n; Replacing %s \n"%(cand.entry_llvm,)).encode("utf-8"))
 
             cand.toggleTranslation()
             
