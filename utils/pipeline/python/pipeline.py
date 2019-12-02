@@ -4,7 +4,7 @@ import sys
 import re
 from nodes import TextBlock, ModuleNode, CandidateNode, SolutionNode
 from stages import CandidatesToSouperParts, CToLLStage, LLToBC, LLToMem2RegLL, BCToSouper, LLVMCompile, LLVMTOWasm, ObjtoWASM, WASM2WAT
-from utils import bcolors, DEBUG_FILE, flatten, OUT_FOLDER
+from utils import bcolors, DEBUG_FILE, flatten, OUT_FOLDER, MAX_INST, printProgressBar
 from logger import LOGGER
 import shutil
 from dependency import DependencyAnalyzer
@@ -46,21 +46,37 @@ class Pipeline(object):
         # Infer candidates one by one
 
         #Saving candidate
-        candidates = cand.decode("utf-8").split(";[CANDIDATE]\n")[:-1] # Avoid the last separator
-        candidates = map(lambda x: x.lstrip().rstrip(), candidates) # Getting only unique candidates
+        candidates = cand.decode("utf-8").split("\n\n")[:-1] # Avoid the last separator
         candidates = list(candidates)
 
-        LOGGER.success("Found %s candidates"%(len(candidates),))
+        LOGGER.success("Found %s arithmetic expression candidates. Filtering and solving..."%(len(candidates),))
         ORIGIN__RE = re.compile(r";\[ORIGIN\] (.*)\n")
 
         rootNode = TextBlock(self.original_llvm)
         
-        # Sort by appearing index in the original LLVM IR
+        finalCandidates = []
+        for j, cand_text in enumerate(candidates):
 
+            for i in range(1, MAX_INST): # TODO put as CONFI
+                plump = CandidatesToSouperParts(i)
+                plump.debug = False
+
+                sols = plump(std=cand_text.encode("utf-8"))
+
+                if '; RHS inferred successfully' in sols.decode("utf-8"):
+                    finalCandidates.append([cand_text,
+                        sols.decode("utf-8")
+                    ])
+                    break
+            printProgressBar(j, total=len(candidates), suffix="Candidate %s"%(j,))
+
+        printProgressBar(len(candidates), total=len(candidates), suffix="Complete exploration")
+        LOGGER.success("%s Valid replacements"%(len(finalCandidates)))
+                
         children = [rootNode]
         candidateNodes = []
-        
-        for cand_text in candidates:
+
+        for cand_text, replacement in finalCandidates:
             search = ORIGIN__RE.search(cand_text)
             original_llvm_ir = search.group(1).lstrip().rstrip()
 
@@ -72,49 +88,19 @@ class Pipeline(object):
 
                     if index != -1:
                         candidateNodes.append(CandidateNode(cand_text, original_llvm_ir))
+
+                        candidateNodes[-1].addChild(SolutionNode(replacement, candidateNodes[-1].entry_llvm))
+
                         left, middle, right = node.split(index, index + len(original_llvm_ir), candidateNodes[-1])
                         children[i] = [left, middle, right]
                         children = flatten(children)
                         break
-                    
 
         self.root = ModuleNode()
         self.root.children = children
 
-
-        # Detect origin entrypoints
-
-        # Report if no candidates
-
-        # map candidates to original code llvm ?
-
-        candtosols = CandidatesToSouperParts()
-        sols = candtosols(std=cand).decode("utf-8")
-
-        solutions_candidates = sols.split("\n\n")[:-1] # Remove last blank space
-
-        if len(solutions_candidates) != len(candidateNodes):
-            LOGGER.success("Candidates and solutions sets are different, %s/%s"%(len(solutions_candidates),
-             len(candidateNodes)))
-
-        for i, solution in enumerate(solutions_candidates):
-            candidateNodes[i].addChild(SolutionNode(solution, candidateNodes[i].entry_llvm))
-
-
-        #for k in nodes.keys():
-        #    for k1 in nodes[k]["depends_on"]:
-        #        print('%s -> %s;'%(k.replace("%", "_").replace(".", "_"), k1[0].replace("%", "_").replace(".", "_")))
-
         self.generateSuperLL(OUT_FOLDER, candidateNodes, file)
-        #self.generetaAllCandidates(OUT_FOLDER, candidateNodes, file)
 
-        #print(len(sols.split("\n\n")))
-
-        # Map solutions to original optimization candidate
-
-        # Generate LLVM IR for solution
-
-        # Generate Overall LLVM IR output
 
     def generateOriginalWASM(self, ll, OUT_FOLDER, file):
         llFileName = "%s/%s.all.ll"%(OUT_FOLDER, file.split("/")[-1])
