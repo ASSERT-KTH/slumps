@@ -61,7 +61,8 @@ class CToLLStage(ExternalStage):
 
         # Load from external file
         
-        new_inputs = [ "-I%s"%(sources,), "-I/Users/javier/Downloads/MacOSX10.9.sdk/usr/include",  "-O0", "-Xclang", "-disable-O0-optnone", args, "-c", "-S", "-emit-llvm", "-o", "-"]
+        new_inputs = ["-I%s"%(sources,)]
+        new_inputs += [ "-O0", "--target=wasm32-unknown-unknown" , "-Xclang", "-disable-O0-optnone", args, "-S",  "-emit-llvm", "-o", "-"]
 
         return super(CToLLStage, self).__call__(new_inputs)
 
@@ -114,7 +115,7 @@ class BCToSouper(ExternalStage):
     def __call__(self, args = [], std = None): # f -> inputs
         #    souper -z3-path=${z3} ${name}.bc > ${name}.candopt
 
-        new_inputs = [ "-z3-path", Alias.z3, "-"]
+        new_inputs = [ "-souper-enumerative-synthesis", "-souper-enumerative-synthesis-num-instructions=2",  "-"]
 
         return super(BCToSouper, self).__call__(new_inputs, std)
 
@@ -123,6 +124,7 @@ class BCToSouper(ExternalStage):
 
         # Process the candidates, raise error if none and interrupt the pipeline
 
+        
         return std
 
 
@@ -136,7 +138,10 @@ class CandidatesToSouperParts(ExternalStage):
     def __call__(self, args = [], std = None): # f -> inputs
         #    souper-check -z3-path=${z3} -print-replacement-split ${name}.candopt > ${name}.opt
 
-        new_inputs = [ "-z3-path", Alias.z3, "-print-replacement-split", "-"]
+        # -souper-infer-iN -print-replacement-split -souper-infer-inst -souper-external-cache
+        # -souper-synthesis-comps=mul,select,const,const,shl,lshr,ashr,and,or,xor,add,sub,slt,ult,sle,ule,eq,ne
+        # souper-enumerative-synthesis-ignore-cost
+        new_inputs = [ "-z3-path", Alias.z3, "-infer-rhs", "-souper-enumerative-synthesis", "-souper-enumerative-synthesis-num-instructions=2", "-"]
 
         return super(CandidatesToSouperParts, self).__call__(new_inputs, std)
 
@@ -211,7 +216,7 @@ class ObjtoWASM(ExternalStage):
 
     def __call__(self, args = [], std = None): # f -> inputs
 
-        new_inputs = ["--no-entry", "--export-all","-O0",  '-o', args[1], args[0]]
+        new_inputs = ["--no-entry", "--export-all","-O0", "--allow-undefined",  '-o', args[1], args[0]]
         return super(ObjtoWASM, self).__call__(new_inputs, std)
 
     def processInner(self, std):
