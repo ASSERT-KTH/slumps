@@ -6,7 +6,7 @@ import os
 DEBUG_FILE = open("debug.slumps.log", 'wb')
 
 OUT_FOLDER = "out"
-MAX_INST = 2
+MAX_INST = 3
 
 
 def getSubsetIterator(S,m):

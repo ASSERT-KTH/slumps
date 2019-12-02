@@ -7,9 +7,5 @@ int a(int t){
         return z;
     }
     int u = 10 + x;
-    return u + k();
-}
-int k(){
-    int c = a(20);
-    return a(20) + 900;
+    return u;
 }

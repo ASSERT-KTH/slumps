@@ -68,7 +68,7 @@ class CToLLStage(ExternalStage):
         # Load from external file
         
         new_inputs = ["-I%s"%(sources,)]
-        new_inputs += [ "-O0", "--target=wasm32-unknown-unknown" , "-Xclang", "-disable-O0-optnone", args, "-S",  "-emit-llvm", "-o", "-"]
+        new_inputs += [ "-O0", "--target=wasm32-unknown-unknown" , "-fdiscard-value-names", "-Xclang", "-disable-O0-optnone", args, "-S",  "-emit-llvm", "-o", "-"]
 
         return super(CToLLStage, self).__call__(new_inputs)
 

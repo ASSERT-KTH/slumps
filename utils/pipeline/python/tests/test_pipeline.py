@@ -94,31 +94,62 @@ def test_bctoSouper():
     bctoSouper(std=content) # Send llvm IR to std
 
 
-def test_souperCandidates():
+def _test_souperCandidates():
     # Receive a LLVM IR in the std
-    souperToLHS = stages.CandidatesToSouperParts()
+    souperToLHS = stages.CandidatesToSouperParts(MAX_INST=1)
     
     
-    souperToLHS(std=b'''; Listing valid replacements.
-                            ; Using solver: Z3 + internal cache
+    souperToLHS(std=b'''
+; Function: g
+;[ORIGIN]   %rem = urem i32 %a, 4
+%0:i32 = var
+%1:i32 = urem %0, 4:i32
+infer %1
 
-                            ; Static profile 1
-                            ; Function: a
-                            %0:i32 = addnsw 20:i32, 20:i32
-                            cand %0 40:i32
+; Function: g
+;[ORIGIN]   %add = add i32 %a, 3
+%0:i32 = var
+%1:i32 = urem %0, 4:i32
+pc %1 0:i32
+%2:i32 = add 3:i32, %0
+infer %2 (demandedBits=00000000000000000000000000000011)
 
-                            ; Static profile 1
-                            ; Function: a
-                            %0:i32 = addnsw 20:i32, 20:i32
-                            %1:i32 = mulnsw 2:i32, %0
-                            cand %1 80:i32
+; Function: g
+;[ORIGIN]   %add2 = add i32 %a, 2
+%0:i32 = var
+%1:i32 = urem %0, 4:i32
+pc %1 1:i32
+%2:i32 = add 2:i32, %0
+infer %2 (demandedBits=00000000000000000000000000000011)
 
-                            ; Static profile 1
-                            ; Function: a
-                            %0:i32 = addnsw 20:i32, 20:i32
-                            %1:i32 = mulnsw 2:i32, %0
-                            %2:i32 = addnsw 20:i32, %1
-                            cand %2 100:i32
+; Function: g
+;[ORIGIN]   %add4 = add i32 %a, 1
+%0:i32 = var
+%1:i32 = urem %0, 4:i32
+pc %1 2:i32
+%2:i32 = add 1:i32, %0
+infer %2 (demandedBits=00000000000000000000000000000011)
+
+; Function: g
+;[ORIGIN]   %a.addr.0 = phi i32 [ %a, %entry ], [ %add4, %sw.bb3 ], [ %add2, %sw.bb1 ], [ %add, %sw.bb ]
+%0 = block 4
+%1:i32 = var
+%2:i32 = add 1:i32, %1
+%3:i32 = add 2:i32, %1
+%4:i32 = add 3:i32, %1
+%5:i32 = phi %0, %1, %2, %3, %4
+infer %5 (demandedBits=00000000000000000000000000000011)
+
+; Function: g
+;[ORIGIN]   %and = and i32 %a.addr.0, 3
+%0 = block 4
+%1:i32 = var
+%2:i32 = add 1:i32, %1
+%3:i32 = add 2:i32, %1
+%4:i32 = add 3:i32, %1
+%5:i32 = phi %0, %1, %2, %3, %4
+%6:i32 = and 3:i32, %5
+infer %6
                         ''') # Send llvm IR to std
 
 
