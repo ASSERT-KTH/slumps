@@ -6,6 +6,8 @@ import os
 DEBUG_FILE = open("debug.slumps.log", 'wb')
 
 OUT_FOLDER = "out"
+MAX_INST = 2
+
 
 def getSubsetIterator(S,m):
     if m == len(S):
@@ -19,6 +21,27 @@ def flatten(x):
         return [a for i in x for a in flatten(i)]
     else:
         return [x]
+
+def printProgressBar (iteration, total, prefix = '', suffix = '', decimals = 1, length = 100, fill = '█', printEnd = "\r"):
+    """
+    Call in a loop to create terminal progress bar
+    @params:
+        iteration   - Required  : current iteration (Int)
+        total       - Required  : total iterations (Int)
+        prefix      - Optional  : prefix string (Str)
+        suffix      - Optional  : suffix string (Str)
+        decimals    - Optional  : positive number of decimals in percent complete (Int)
+        length      - Optional  : character length of bar (Int)
+        fill        - Optional  : bar fill character (Str)
+        printEnd    - Optional  : end character (e.g. "\r", "\r\n") (Str)
+    """
+    percent = ("{0:." + str(decimals) + "f}").format(100 * (iteration / float(total)))
+    filledLength = int(length * iteration // total)
+    bar = fill * filledLength + '-' * (length - filledLength)
+    print('\r%s |%s| %s%% %s' % (prefix, bar, percent, suffix), end = printEnd)
+    # Print New Line on Complete
+    if iteration == total: 
+        print()
 
 class bcolors:
     HEADER = '\033[95m'
@@ -46,9 +69,9 @@ class Alias:
     llc = "%s/souper/third_party/llvm/Release/bin/llc"%(BASE_DIR,)
     lli = "%s/souper/third_party/llvm/Release/bin/lli"%(BASE_DIR,)
     llvm_as = "%s/souper/third_party/llvm/Release/bin/llvm-as"%(BASE_DIR,)    
-    llc = "/usr/local/opt/llvm/bin/llc" #"%s/souper/third_party/llvm/Release/bin/llc"%(BASE_DIR,) # /usr/local/opt/llvm/bin/wasm-ld
+    #llc = "/usr/local/opt/llvm/bin/llc" #"%s/souper/third_party/llvm/Release/bin/llc"%(BASE_DIR,) # /usr/local/opt/llvm/bin/wasm-ld
 
-    wasm_ld = "/usr/local/opt/llvm/bin/wasm-ld" # /usr/local/opt/llvm/bin/wasm-ld
+    wasm_ld = "/usr/bin/wasm-ld-8" # /usr/local/opt/llvm/bin/wasm-ld
     souper = "%s/souper/build/souper"%(BASE_DIR,)
     souper_check = "%s/souper/build/souper-check"%(BASE_DIR,)
     souper2llvm = "%s/souper/build/souper2llvm"%(BASE_DIR,)

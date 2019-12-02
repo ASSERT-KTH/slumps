@@ -105,8 +105,8 @@ class SolutionNode(Node):
 
     def parse(self):
         # Find solution instruction
-        instructions = self.value.split("\n")
-
+        instructions = self.value.split("\n")[:-1]
+        
         if not instructions[-1].startswith("result"):
             raise Exception("Result instruction not found")
 

@@ -9,6 +9,7 @@ class ExternalStage(object):
     def __init__(self):
         self.name = "unknown"
         self.path_to_executable = "unknown"
+        self.debug = True
 
     def processInner(self, std):
         return b"Ops...Not implemented"
@@ -21,7 +22,9 @@ class ExternalStage(object):
         if stdin is not None:
             p.stdin.write(stdin)
 
-        LOGGER.success("Stage -> %s"%(self.name, ))
+        if self.debug:
+            LOGGER.success("Stage -> %s"%(self.name, ))
+
         std,err = p.communicate()
 
         rc = p.returncode
@@ -33,7 +36,8 @@ class ExternalStage(object):
         # Specific implementation process over the std out
         res = self.processInner(std)
 
-        LOGGER.debug("============================= Stage -> %s\n\n"%(self.name, ), res)
+        if self.debug:
+            LOGGER.debug("============================= Stage -> %s\n\n"%(self.name, ), res)
         
         # print("\t%s%s%s'"%(bcolors.WARNING, res, bcolors.ENDC))
 
@@ -45,6 +49,8 @@ class CToLLStage(ExternalStage):
     def __init__(self):
         self.path_to_executable = Alias.clang
         self.name = "C to LLVM IR"
+        self.debug = True
+
     
     def __call__(self, args=[], std = None): # f -> inputs
         # in this case inputs is a string
@@ -75,6 +81,8 @@ class LLToMem2RegLL(ExternalStage):
     def __init__(self):
         self.path_to_executable = Alias.opt
         self.name = "LLVM IR to -mem2reg optimized LLVM IR"
+        self.debug = True
+
 
     def __call__(self, args=[], std = None): # f -> inputs
         # opt -mem2reg ${name}.ll -S -o ${name}.ll
@@ -92,6 +100,8 @@ class LLToBC(ExternalStage):
     def __init__(self):
         self.path_to_executable = Alias.llvm_as
         self.name = "LLVM IR to LLVM bitcode"
+        self.debug = True
+
 
     def __call__(self, args = [], std = None): # f -> inputs
         # llvm-as ${name}.ll -o ${name}.bc
@@ -110,12 +120,14 @@ class BCToSouper(ExternalStage):
     def __init__(self):
         self.path_to_executable = Alias.souper
         self.name = "LLVM BC to Souper IR candidates"
+        self.debug = True
+
         
 
     def __call__(self, args = [], std = None): # f -> inputs
         #    souper -z3-path=${z3} ${name}.bc > ${name}.candopt
 
-        new_inputs = [ "-souper-enumerative-synthesis", "-souper-enumerative-synthesis-num-instructions=2",  "-"]
+        new_inputs = ["-souper-enumerative-synthesis", "-souper-enumerative-synthesis-num-instructions=2",  "-"]
 
         return super(BCToSouper, self).__call__(new_inputs, std)
 
@@ -130,9 +142,12 @@ class BCToSouper(ExternalStage):
 
 class CandidatesToSouperParts(ExternalStage):
 
-    def __init__(self):
+    def __init__(self, MAX_INST = 1):
         self.path_to_executable = Alias.souper_check
         self.name = "Souper candidates to LHS and RHS"
+        self.MAX_INST = MAX_INST
+        self.debug = True
+
         
 
     def __call__(self, args = [], std = None): # f -> inputs
@@ -141,7 +156,7 @@ class CandidatesToSouperParts(ExternalStage):
         # -souper-infer-iN -print-replacement-split -souper-infer-inst -souper-external-cache
         # -souper-synthesis-comps=mul,select,const,const,shl,lshr,ashr,and,or,xor,add,sub,slt,ult,sle,ule,eq,ne
         # souper-enumerative-synthesis-ignore-cost
-        new_inputs = [ "-z3-path", Alias.z3, "-infer-rhs", "-souper-enumerative-synthesis", "-souper-enumerative-synthesis-num-instructions=2", "-"]
+        new_inputs = [ "-z3-path", Alias.z3, "-infer-rhs", "-souper-enumerative-synthesis", "-souper-enumerative-synthesis-num-instructions=%s"%(self.MAX_INST,), "-"]
 
         return super(CandidatesToSouperParts, self).__call__(new_inputs, std)
 
@@ -156,6 +171,8 @@ class SouperToLLVM(ExternalStage):
     def __init__(self):
         self.path_to_executable = Alias.souper2llvm
         self.name = "Souper IR result to LLVM IR"
+        self.debug = True
+
         
 
 
@@ -175,6 +192,8 @@ class LLVMCompile(ExternalStage):
     def __init__(self):
         self.path_to_executable = Alias.llvm_as
         self.name = "LLVM IR to BC"
+        self.debug = True
+
         
 
 
@@ -193,6 +212,8 @@ class LLVMTOWasm(ExternalStage):
     def __init__(self):
         self.path_to_executable = Alias.llc
         self.name = "LLVM IR to Object"
+        self.debug = True
+
         
 
 
@@ -211,6 +232,8 @@ class ObjtoWASM(ExternalStage):
     def __init__(self):
         self.path_to_executable = Alias.wasm_ld
         self.name = "LLVM obj to WASM"
+        self.debug = True
+
         
 
 
@@ -229,6 +252,8 @@ class WASM2WAT(ExternalStage):
     def __init__(self):
         self.path_to_executable = Alias.wasm2wat
         self.name = "WASM to WAT text"
+        self.debug = True
+
         
 
 
