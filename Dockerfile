@@ -18,8 +18,8 @@ RUN mkdir build
     RUN git submodule init
     RUN git submodule update
     WORKDIR build
-    RUN cmake ..
-    RUN cmake --build .
+        RUN cmake ..
+        RUN cmake --build .
     WORKDIR ..
 WORKDIR ..
 
