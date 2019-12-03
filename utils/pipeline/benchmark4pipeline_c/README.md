@@ -1,3 +1,4 @@
+```
 http://rosettacode.org/wiki/2048#C
 http://rosettacode.org/wiki/A*_search_algorithm#C
 http://rosettacode.org/wiki/Addition_chains#C
@@ -26,4 +27,4 @@ http://rosettacode.org/wiki/Smith_numbers#C
 http://rosettacode.org/wiki/Validate_International_Securities_Identification_Number#C
 http://rosettacode.org/wiki/Weird_numbers#C
 http://rosettacode.org/wiki/Zebra_puzzle#C
-
+```
