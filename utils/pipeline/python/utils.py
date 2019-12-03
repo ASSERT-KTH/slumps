@@ -8,6 +8,8 @@ DEBUG_FILE = open("debug.slumps.log", 'wb')
 OUT_FOLDER = "out"
 MAX_INST = 3
 
+GLOBAL_COUNTER = 1
+
 
 def getSubsetIterator(S,m):
     if m == len(S):
