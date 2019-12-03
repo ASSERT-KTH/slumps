@@ -2,7 +2,7 @@
 FROM ubuntu:latest
 
 RUN apt-get update
-RUN apt-get -y install cmake re2c doxygen golang-go python python3 llvm git subversion curl build-essential apt-get lld-8 gcc-multilib
+RUN apt-get -y install cmake re2c doxygen golang-go python python3 llvm git subversion curl build-essential lld-8 gcc-multilib
 RUN go get github.com/gomodule/redigo/redis
 
 RUN mkdir slumps
