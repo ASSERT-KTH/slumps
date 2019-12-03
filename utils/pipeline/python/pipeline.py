@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 import argparse
 import os
 import sys
@@ -229,5 +231,7 @@ if __name__ == "__main__":
     
     pipeline = Pipeline()
 
-    pipeline.process(sys.argv[1])
+    f = '%s/%s'%(os.environ.get("INPUT_FOLDER", "."), sys.argv[1])
+
+    pipeline.process(f)
 

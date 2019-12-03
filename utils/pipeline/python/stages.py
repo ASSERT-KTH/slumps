@@ -1,5 +1,7 @@
+# -*- coding: utf-8 -*-
+
 from subprocess import Popen, PIPE
-from utils import bcolors, DEBUG_FILE, Alias, BASE_DIR
+from utils import bcolors, DEBUG_FILE, Alias, BASE_DIR, OPT1, OPT2, CHECK_OPTIONS
 from logger import LOGGER
 
 import sys, os
@@ -67,8 +69,8 @@ class CToLLStage(ExternalStage):
 
         # Load from external file
         
-        new_inputs = ["-I%s"%(sources,), "-I/Users/javier/Downloads/MacOSX10.9.sdk/usr/include"]
-        new_inputs += [ "-O0", "--target=wasm32-unknown-unknown" , "-fdiscard-value-names", "-Xclang", "-disable-O0-optnone", args, "-S",  "-emit-llvm", "-o", "-"]
+        new_inputs = ["-I%s"%(sources,)]
+        new_inputs += [ "-%s"%(OPT1,), "--target=wasm32-unknown-unknown" , "-fdiscard-value-names", "-Xclang", "-disable-O0-optnone", args, "-S",  "-emit-llvm", "-o", "-"]
 
         return super(CToLLStage, self).__call__(new_inputs)
 
@@ -156,8 +158,7 @@ class CandidatesToSouperParts(ExternalStage):
         # -souper-infer-iN -print-replacement-split -souper-infer-inst -souper-external-cache
         # -souper-synthesis-comps=mul,select,const,const,shl,lshr,ashr,and,or,xor,add,sub,slt,ult,sle,ule,eq,ne
         # souper-enumerative-synthesis-ignore-cost
-        new_inputs = [ "-z3-path", Alias.z3, "-infer-rhs", "-souper-enumerative-synthesis", "-souper-enumerative-synthesis-num-instructions=%s"%(self.MAX_INST,), "-"]
-
+        new_inputs = CHECK_OPTIONS + [ "-z3-path", Alias.z3, "-infer-rhs", "-souper-enumerative-synthesis", "-souper-enumerative-synthesis-num-instructions=%s"%(self.MAX_INST,), "-"]
         return super(CandidatesToSouperParts, self).__call__(new_inputs, std)
 
     def processInner(self, std):
@@ -219,7 +220,7 @@ class LLVMTOWasm(ExternalStage):
 
     def __call__(self, args = [], std = None): # f -> inputs
 
-        new_inputs = ["-march=wasm32", "-filetype=obj", "-O1", "-", '-o', '-']
+        new_inputs = ["-march=wasm32", "-filetype=obj", "-%s"%(OPT2,), "-", '-o', '-']
         return super(LLVMTOWasm, self).__call__(new_inputs, std)
 
     def processInner(self, std):
