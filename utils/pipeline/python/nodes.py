@@ -4,6 +4,7 @@ from logger import LOGGER
 import re
 
 from dependency import DependencyAnalyzer
+from io import StringIO
 
 class Node(object):
 
@@ -65,8 +66,7 @@ class SolutionNode(Node):
         instructions = self.LLVM_IR.split("\n")
 
         # Sanitize instructions, removing unneeded instructions
-        final = []
-        retInstruction =  'None'
+        block = []
         for inst in instructions:
             inst = inst.rstrip().lstrip()
             if inst.startswith(";"): # comment
@@ -79,44 +79,45 @@ class SolutionNode(Node):
                 continue
             if re.compile('(.)+:').search(inst): # basic block start
                 continue
-            if inst.startswith("ret"): # return instruction
-                inst = inst.replace("ret", "").rstrip().lstrip()
-                retInstruction = inst
+            
+            block.append(inst)
 
-            final.append(inst)
+        root = DependencyAnalyzer.Root()
+        originalRoot =  DependencyAnalyzer.Root()
 
-        self.instructions = final[:-1]
-        self.return_instruction = retInstruction
-
-        parser = DependencyAnalyzer()
-
-        LOGGER.info("Entrypoint instruction: %s"%(self.original_llvm,))
-        nodes, labels = parser.parse(self.original_llvm, [])
+        block = DependencyAnalyzer.parse(block, root)
         
-        ASSIGN = labels[0]
-        LOGGER.info(ASSIGN)
-        
+        original_instruction = DependencyAnalyzer.Instruction(self.original_llvm, originalRoot)
 
-        LOGGER.enter()
-        LOGGER.info("%s %s ret %s"%("Replacement instructions...", final[:-1], retInstruction))
-        LOGGER.exit()
-
-        self.ASSIGN = '%s = add %s, 0'%(ASSIGN, retInstruction)
+        if root.first_instruction.is_constant:
+            print(self.original_llvm)
+            self.ASSIGN = '%s = add %s, 0'%(original_instruction.inner.variable_name,
+                " ".join(root.first_instruction.children)
+             )
+        else:
+            out = StringIO()
+            initial = root.first_instruction.dependencies[0]
+            root.first_instruction = root.instructions[initial]
+            #root.first_instruction = DependencyAnalyzer.Declaration(original_instruction.inner.variable_name)
+            
+            root.write(out)
+            out = root.transform(initial, out.getvalue(), original_instruction.inner.variable_name)
+            
+            print(out)
+            self.ASSIGN = out
+            #root.first_instruction.dependencies[0])
 
     def parse(self):
         # Find solution instruction
-        instructions = self.value.split("\n")
-
-        if not instructions[-1].startswith("result"):
-            raise Exception("Result instruction not found")
+        instructions = self.value.split("\n")[:-1]
+        
 
         # Transform to LLVM IR
 
-        self.LLVM_IR = SouperToLLVM()(std=instructions[-1].encode("utf-8"))
+        self.LLVM_IR = SouperToLLVM()(std=self.value.encode("utf-8"))
 
         LOGGER.enter()
-        LOGGER.success("Getting entry function block...")
-        
+        LOGGER.warning(self.LLVM_IR.decode("utf-8"))
 
         self.LLVM_IR = self.LLVM_IR.decode("utf-8")
 

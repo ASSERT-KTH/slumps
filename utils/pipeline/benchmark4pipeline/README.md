@@ -13,12 +13,13 @@
 - [Smith_numbers](http://rosettacode.org/wiki/Smith_numbers#C.2B.2B)
 - [Zebra_puzzle](http://rosettacode.org/wiki/Zebra_puzzle#C.2B.2B)
 
-### How We Pick Up?
+### How do we select these benchmark programs?
 We explore [the catalog of C++ pages in Rosetta Code](http://rosettacode.org/wiki/Category:C%2B%2B), and pick up programs which:
 1. have no specific header files (such as `windows.h`) or external libs (such as `Boost`)
 2. can be compiled correctly (no error messages when compiling to LLVM IR)
-3. take short time to be generated optimization candidates by Souper
-4. can be generated valid optimization results by Souper
+3. take shorter time to generate optimized candidates by Souper, as compared to other programs
+4. can generate valid optimization of RHS results by Google/Souper
+5. The programs are self-contained
 
-These benchmark programs are small-sized, whose lines are between 30 and 200.
+These benchmark datasets are small-medium sized programs whose lines are between 30 and 200.
 
