@@ -8,8 +8,11 @@ DEBUG_FILE = open("debug.slumps.log", 'wb')
 OUT_FOLDER = "out"
 MAX_INST = 3
 
-GLOBAL_COUNTER = 1
-
+def globalCounter():
+    globalCounter.counter += 1
+    return globalCounter.counter
+    
+globalCounter.counter = 0
 
 def getSubsetIterator(S,m):
     if m == len(S):
@@ -73,7 +76,7 @@ class Alias:
     llvm_as = "%s/souper/third_party/llvm/Release/bin/llvm-as"%(BASE_DIR,)    
     #llc = "/usr/local/opt/llvm/bin/llc" #"%s/souper/third_party/llvm/Release/bin/llc"%(BASE_DIR,) # /usr/local/opt/llvm/bin/wasm-ld
 
-    wasm_ld = "/usr/bin/wasm-ld-8" # /usr/local/opt/llvm/bin/wasm-ld
+    wasm_ld = "/usr/local/opt/llvm/bin/wasm-ld" #"/usr/bin/wasm-ld-8" # /usr/local/opt/llvm/bin/wasm-ld
     souper = "%s/souper/build/souper"%(BASE_DIR,)
     souper_check = "%s/souper/build/souper-check"%(BASE_DIR,)
     souper2llvm = "%s/souper/build/souper2llvm"%(BASE_DIR,)
