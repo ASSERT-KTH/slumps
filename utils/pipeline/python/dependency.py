@@ -10,8 +10,8 @@ class DependencyAnalyzer(object):
     #%label ... %label1 %label2
 
     ASSIGN = r'='
-    DECLARATION = r'%\w+(:\w+)?'
-    _ID =  r'%\w+'
+    DECLARATION = r'%(\w)+(:\w+)?'
+    _ID =  r'%(\w)+'
     _TYPE = r':\w+'
     INFER = r'infer'
     RESULT = r'result'
@@ -73,8 +73,11 @@ class DependencyAnalyzer(object):
                 self.infer(index, self.tokens, root)
             
             if re.match(DependencyAnalyzer.RESULT, self.tokens[index]) or re.match(DependencyAnalyzer.RET, self.tokens[index]): # infer
-                children = self.result(index, self.tokens, root)
+                print(self.tokens)
+                self.children = self.result(index, self.tokens, root)
                 root.first_instruction = self
+
+                print(self.children)
 
         @property
         def is_constant(self):
@@ -115,7 +118,7 @@ class DependencyAnalyzer(object):
                 if re.match(DependencyAnalyzer._ID, tokens[index]): # reference
                     self.dependencies.append(re.match(DependencyAnalyzer._ID, tokens[index]).group(0))
                 
-                result += tokens[index]
+                result.append(current)
                 index += 1
 
             return result

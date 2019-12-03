@@ -89,10 +89,10 @@ class SolutionNode(Node):
         
         original_instruction = DependencyAnalyzer.Instruction(self.original_llvm, originalRoot)
 
-        print(original_instruction.inner.variable_name)
         if root.first_instruction.is_constant:
+            print(self.original_llvm)
             self.ASSIGN = '%s = add %s, 0'%(original_instruction.inner.variable_name,
-                " ".join(original_instruction.inner.children)
+                " ".join(root.first_instruction.children)
              )
         else:
             out = StringIO()

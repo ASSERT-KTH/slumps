@@ -56,7 +56,6 @@ class Pipeline(object):
         
         finalCandidates = []
         for j, cand_text in enumerate(candidates):
-                
             for i in range(1, min(MAX_INST, len(cand_text.split("\n")) - 2 )): # Less number of instructionns than the original
                 printProgressBar(j, total=len(candidates), suffix="Candidate %s. Trying %s instructions ...     "%(j, i))
 
