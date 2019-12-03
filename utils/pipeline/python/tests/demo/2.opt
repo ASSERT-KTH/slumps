@@ -1,8 +1,0 @@
-
-; function: $0
-
-; start LHS (in $0)
-%0:i32 = var
-%1 = mul 2:i32, %0
-infer %1
-
