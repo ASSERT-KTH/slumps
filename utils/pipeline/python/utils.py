@@ -1,17 +1,23 @@
 
+# -*- coding: utf-8 -*-
+
 import itertools
 import collections
 import os
 
 DEBUG_FILE = open("debug.slumps.log", 'wb')
 
-OUT_FOLDER = "out"
-MAX_INST = 3
+OUT_FOLDER = "%s/out"%(os.environ.get("INPUT_FOLDER", "."))
+MAX_INST = int(os.environ.get("MAX_INST", "3"))
+OPT1 = os.environ.get("OPT1", "O0")
+OPT2 = os.environ.get("OPT2", "O0")
+CHECK_OPTIONS = list(filter(lambda x: x, os.environ.get("CHECK_OPTS", "").split(" "))) 
+
 
 def globalCounter():
     globalCounter.counter += 1
     return globalCounter.counter
-    
+
 globalCounter.counter = 0
 
 def getSubsetIterator(S,m):
@@ -60,11 +66,11 @@ class bcolors:
 
 
 
-BASE_DIR = os.path.dirname(
+BASE_DIR = os.environ.get("SRC_DIR", os.path.dirname(
     os.path.dirname(
         os.path.dirname(
             os.path.dirname(
-                os.path.abspath(__file__)))))
+                os.path.abspath(__file__))))))
 
 
 class Alias:
@@ -76,7 +82,7 @@ class Alias:
     llvm_as = "%s/souper/third_party/llvm/Release/bin/llvm-as"%(BASE_DIR,)    
     #llc = "/usr/local/opt/llvm/bin/llc" #"%s/souper/third_party/llvm/Release/bin/llc"%(BASE_DIR,) # /usr/local/opt/llvm/bin/wasm-ld
 
-    wasm_ld = "/usr/local/opt/llvm/bin/wasm-ld" #"/usr/bin/wasm-ld-8" # /usr/local/opt/llvm/bin/wasm-ld
+    wasm_ld = os.environ.get("WASM_LD", "/usr/local/opt/llvm/bin/wasm-ld")  #"/usr/bin/wasm-ld-8" # /usr/local/opt/llvm/bin/wasm-ld
     souper = "%s/souper/build/souper"%(BASE_DIR,)
     souper_check = "%s/souper/build/souper-check"%(BASE_DIR,)
     souper2llvm = "%s/souper/build/souper2llvm"%(BASE_DIR,)

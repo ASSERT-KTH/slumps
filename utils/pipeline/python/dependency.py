@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from logger import LOGGER
 import re
 import sys

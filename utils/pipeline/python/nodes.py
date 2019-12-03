@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from stages import SouperToLLVM
 from utils import bcolors
 from logger import LOGGER

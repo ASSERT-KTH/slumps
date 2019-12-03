@@ -1,13 +1,29 @@
 # slumps
 Research on randomization and superoptimization for WebAssembly WASM 
 
-## Benchmarks programs
+# C to superoptimized WASM
 
-![valid](utils/compile_and_verify/valid_badge.svg) 
-![error](utils/compile_and_verify/error_badge.svg)
+## Docker images
 
-A collection of Webassembly programs used to evaluate our tools
+The pipeline to generate superoptimized WASM binaries is delivered in two docker images:
+- The parent image, it contains the plumping to work with souper (our little change version), binaryen and wabt
+- The child image containing the python script that performs the compound of the WASM binaries using the optimizations condidates found by souper
 
-## Study for some vulnerabilities
+### To build docker images
+- ```Docker build -t slumps:latest -m 8g -f Dockerfile .```
+- ```Docker build -t slumps:script -m 8g -f Dockerfile.front .```
+
+
+
+### Execute slumps C pipeline using the docker image:
+
+- ```docker run --rm -v $(pwd):/input slumps:script to_optimize.c```
+
+### Troubleshooting
+- LLVM build takes to long or fails due to memory lack in the image building:
+    >  Increase memory and/or CPU settings in the docker engine configuration
+
+
+## Study of memory disclosure vulnerabilities
 
 [Slides](https://jacarte.github.io/wasm_presentation/)
