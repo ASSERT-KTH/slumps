@@ -45,15 +45,8 @@ entry:
 }
 '''
 
-    r = parser.parse(text)
+    r = parser.parse(text, [])
 
-    add = r[0]["%add"]
-
-    print(r[0]["%mul"])
-    print(r[0]["%add3"])
-
-    for dp in add["references"]:
-        assert text[dp[0]:dp[0] + len("%add")] == "%add"
 
 
 
@@ -71,7 +64,8 @@ return:
 }
 '''
 
-    r = parser.parse(text)
+    r = parser.parse(text, [])
 
 
     print(r[0])
+
