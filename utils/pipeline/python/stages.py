@@ -67,7 +67,7 @@ class CToLLStage(ExternalStage):
 
         # Load from external file
         
-        new_inputs = ["-I%s"%(sources,)]
+        new_inputs = ["-I%s"%(sources,), "-I/Users/javier/Downloads/MacOSX10.9.sdk/usr/include"]
         new_inputs += [ "-O0", "--target=wasm32-unknown-unknown" , "-fdiscard-value-names", "-Xclang", "-disable-O0-optnone", args, "-S",  "-emit-llvm", "-o", "-"]
 
         return super(CToLLStage, self).__call__(new_inputs)
@@ -219,7 +219,7 @@ class LLVMTOWasm(ExternalStage):
 
     def __call__(self, args = [], std = None): # f -> inputs
 
-        new_inputs = ["-march=wasm32", "-filetype=obj", "-O0", "-", '-o', '-']
+        new_inputs = ["-march=wasm32", "-filetype=obj", "-O1", "-", '-o', '-']
         return super(LLVMTOWasm, self).__call__(new_inputs, std)
 
     def processInner(self, std):

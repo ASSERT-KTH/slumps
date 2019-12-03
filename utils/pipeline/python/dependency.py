@@ -2,6 +2,7 @@ from logger import LOGGER
 import re
 import sys
 from io import StringIO
+from utils import globalCounter
 
 class DependencyAnalyzer(object):
     
@@ -39,7 +40,7 @@ class DependencyAnalyzer(object):
             final = final.replace(initial, entry_name)
 
             for k in self.instructions.keys():
-                final = final.replace(k, k.replace("%", "%_"))
+                final = final.replace(k, k.replace("%", "%%_%s"%(globalCounter(), )))
 
             return final
 
