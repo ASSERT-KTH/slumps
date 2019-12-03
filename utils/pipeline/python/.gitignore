@@ -6,3 +6,5 @@ out
 external_C_sources.txt
 
 *.pyc
+
+debug.slumps.log
