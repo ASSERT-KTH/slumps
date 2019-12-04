@@ -21,9 +21,9 @@ class Pipeline(object):
         
         # checking output directory
 
-        if os.path.exists(OUT_FOLDER):
-            LOGGER.warning("Removing out folder content...%s"%(OUT_FOLDER, ))
-            shutil.rmtree(OUT_FOLDER)
+        # if os.path.exists(OUT_FOLDER):
+        #    LOGGER.warning("Removing out folder content...%s"%(OUT_FOLDER, ))
+        #    shutil.rmtree(OUT_FOLDER)
 
         os.mkdir(OUT_FOLDER)
 
