@@ -1,11 +1,12 @@
 FROM slumps:latest
 
-RUN apt-get install -y python3-pip gcc-multilib lld-8
+RUN apt-get install -y python3-pip
 
 COPY /utils/pipeline/python /slumps/python
 
 WORKDIR /slumps/python
 
+ENV LANG C.UTF-8
 
 ENV SRC_DIR /slumps
 ENV WASM_LD /usr/bin/wasm-ld-8
