@@ -1,12 +1,9 @@
 FROM slumps:backend
 
-RUN apt-get install -y python3-pip
-
-COPY /utils/pipeline/python /slumps/python
-COPY /run.sh /slumps/python/run.sh
+COPY /utils/pipeline/python/pipeline.sh /slumps
 
 
-WORKDIR /slumps/python
+WORKDIR /slumps
 
 ENV LANG C.UTF-8
 
@@ -19,7 +16,4 @@ ENV OPT2 O0
 ENV CHECK_OPTS ""
 ENV FILE ""
 
-
-RUN pip3 install -r requirements.txt
-
-ENTRYPOINT ["./run.sh"]
+ENTRYPOINT ["./pipeline.sh"]

@@ -7,7 +7,7 @@ Research on randomization and superoptimization for WebAssembly WASM
 
 The pipeline to generate superoptimized WASM binaries is delivered in two docker images:
 - The parent image, it contains the plumping to work with souper (our modest changed version), binaryen and wabt.
-- The child image containing the python script that performs the compound of the WASM binaries using the optimizations condidates found by souper and the original LLVM IR.
+- The child image containing the bash script that performs the compound of the WASM binaries using the souper pass.
 
 ### To build docker images
 - ```docker build -t slumps:backend -m 8g -f Dockerfile.back .```
@@ -18,7 +18,12 @@ The pipeline to generate superoptimized WASM binaries is delivered in two docker
 ### Execute slumps C pipeline using the docker image:
 
 - Go to folder that contains the code files to superoptimize
-- ```docker run --rm -v $(pwd):/input -e FILE="to_optimize.c" slumps:latest ```
+- ```docker run --rm -v $(pwd):/input slumps:latest ```
+
+### Develop mode
+
+- Go to python folder in the repo 
+- ```docker run --rm -it -v $(pwd):/slumps/python -v <absolute_path>/benchmark4pipeline_c:/input --entrypoint /bin/bash slumps:latest```
 
 ### Troubleshooting
 - LLVM build takes to long or fails due to memory lack in the image building:
