@@ -1,38 +1,25 @@
-# slumps backend
-FROM ubuntu:latest
+FROM slumps:back
 
-RUN apt-get update
-RUN apt-get -y install cmake re2c doxygen golang-go python python3 llvm git subversion curl build-essential lld-8 gcc-multilib
-RUN go get github.com/gomodule/redigo/redis
+RUN apt-get install -y python3-pip
 
-RUN mkdir slumps
-WORKDIR slumps
+COPY /utils/pipeline/python /slumps/python
+COPY /run.sh /slumps/python/run.sh
 
 
-RUN git clone https://github.com/KTH/binaryen
-RUN git clone https://github.com/KTH/souper
-RUN git clone https://github.com/WebAssembly/wabt
+WORKDIR /slumps/python
 
-WORKDIR wabt
-RUN mkdir build
-    RUN git submodule init
-    RUN git submodule update
-    WORKDIR build
-        RUN cmake ..
-        RUN cmake --build .
-    WORKDIR ..
-WORKDIR ..
+ENV LANG C.UTF-8
 
-WORKDIR binaryen
-RUN cmake . && make
-WORKDIR ..
+ENV SRC_DIR /slumps
+ENV WASM_LD /usr/bin/wasm-ld-8
+ENV INPUT_FOLDER /input
+ENV MAX_INST 3
+ENV OPT1 O0
+ENV OPT2 O0
+ENV CHECK_OPTS ""
+ENV FILE ""
 
-WORKDIR souper
-    RUN bash ./build_deps.sh
-    RUN mkdir build
-    WORKDIR build
-        RUN cmake ../
-        RUN make
-    WORKDIR ..
-WORKDIR .. 
 
+RUN pip3 install -r requirements.txt
+
+ENTRYPOINT ["./run.sh"]

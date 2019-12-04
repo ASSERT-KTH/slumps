@@ -10,14 +10,15 @@ The pipeline to generate superoptimized WASM binaries is delivered in two docker
 - The child image containing the python script that performs the compound of the WASM binaries using the optimizations condidates found by souper
 
 ### To build docker images
-- ```Docker build -t slumps:latest -m 8g -f Dockerfile .```
-- ```Docker build -t slumps:script -m 8g -f Dockerfile.front .```
+- ```Docker build -t slumps:backend -m 8g -f Dockerfile.back .```
+- ```Docker build -t slumps:latest -m 8g -f Dockerfiles .```
 
 
 
 ### Execute slumps C pipeline using the docker image:
 
-- ```docker run --rm -v $(pwd):/input slumps:script to_optimize.c```
+- Go to folder that contains the code files to superoptimize
+- ```docker run --rm -v $(pwd):/input -e FILE="to_optimize.c" slumps:script ```
 
 ### Troubleshooting
 - LLVM build takes to long or fails due to memory lack in the image building:
