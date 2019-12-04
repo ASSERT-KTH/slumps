@@ -24,6 +24,8 @@ The pipeline to generate superoptimized WASM binaries is delivered in two docker
 - LLVM build takes to long or fails due to memory lack in the image building:
     >  Increase memory and/or CPU ressources in the docker engine configuration
 
+- Right now both images take approx. 8Gb of size in disk
+
 
 ## Study of memory disclosure vulnerabilities
 
