@@ -75,7 +75,7 @@ class Pipeline(object):
                     LOGGER.debug(cand_text)
                     LOGGER.debug("===============================> RHS \n")
                     LOGGER.debug(sols.decode("utf-8"))
-                    
+
                     break
             printProgressBar(j, total=len(candidates), suffix="Candidate %s, up to %s instructions"%(j,  min(MAX_INST, len(cand_text.split("\n")) - 2)))
 

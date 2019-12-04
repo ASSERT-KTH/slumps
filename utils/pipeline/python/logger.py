@@ -17,12 +17,13 @@ class Logger(object):
     def getIndent(self):
         return "\t"*self.indent
 
-    def debug(self, message, std):
+    def debug(self, message, std = None):
         
 
         if self.debugToFile:
             DEBUG_FILE.write(message.encode("utf-8"))
-            DEBUG_FILE.write(std)
+            if std:
+                DEBUG_FILE.write(std)
         else:
             print("%s%s%s%s"%(self.getIndent(), bcolors.UNDERLINE, message, bcolors.ENDC))
 
