@@ -5,9 +5,9 @@ import itertools
 import collections
 import os
 
-DEBUG_FILE = open("debug.slumps.log", 'wb')
+DEBUG_FILE = open("%s/debug.slumps.log"%(os.environ.get("INPUT_FOLDER", "."),), 'wb')
 
-OUT_FOLDER = "%s/out"%(os.environ.get("INPUT_FOLDER", "."))
+OUT_FOLDER = "%s/out"%(os.environ.get("INPUT_FOLDER", "."),)
 MAX_INST = int(os.environ.get("MAX_INST", "3"))
 OPT1 = os.environ.get("OPT1", "O0")
 OPT2 = os.environ.get("OPT2", "O0")
