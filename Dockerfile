@@ -1,4 +1,4 @@
-FROM slumps:back
+FROM slumps:backend
 
 RUN apt-get install -y python3-pip
 
