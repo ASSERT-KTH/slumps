@@ -1,152 +1,33 @@
 #!/bin/bash
 
-# Download wabt releases
-
-if [ ! -d "../../souper/build/souper" ]; then
-  cd ../../souper
-  if [ ! -d "./third_party" ]; then
-    ./build_deps.sh $buildtype $extra_cmake_flags
-  fi
-
-  mkdir build
-  cd build
-  echo "Building..."
-  cmake  ../
-  make
-  cd ../../utils/pipeline
-fi
-
-cd ../../binaryen
-cmake . && make
-cd ../utils/pipeline
-
-
-
-
 name=$(echo $1 | sed 's/\.[^.]*$//')
 ext=$(echo $1 | sed 's/^.*\.//')
 
-shopt -s expand_aliases
-alias clang='../../souper/third_party/llvm/Release/bin/clang'
-alias llc='../../souper/third_party/llvm/Release/bin/llc'
-alias lli='../../souper/third_party/llvm/Release/bin/lli'
-alias llvm-as='../../souper/third_party/llvm/Release/bin/llvm-as'
-alias souper='../../souper/build/souper'
-alias souper-check='../../souper/build/souper-check'
-alias souper2llvm='../../souper/build/souper2llvm'
-alias libsouperPass.so='../../souper/build/libsouperPass.so'
 
-z3='../../souper/third_party/z3/build/z3'
+# vars
+z3=${SRC_DIR}'/souper/third_party/z3/build/z3'
+libsouperPass=${SRC_DIR}'/souper/build/libsouperPass.so'
 
-if [ "${ext}" == "wasm" ]; then
-  echo "### step wasm2opt \c"
-  echo ${name}
-  ../../binaryen/bin/wasm-opt ${name}.wasm --flatten --simplify-locals-nonesting --reorder-locals --souperify > ${name}.wasmopt
-  ext='wasmopt'
-  echo "okay"
-fi
-
-
-if [ "${ext}" == "wast" ]; then
-  echo "### step wasm2opt \c"
-  echo ${name}
-  ../../binaryen/bin/wasm-opt ${name}.wast --flatten --simplify-locals-nonesting --reorder-locals --souperify > ${name}.wasmopt
-  ext='wasmopt'
-  echo "okay"
-fi
-
-<<END
-
-static llvm::cl::opt<bool> MemCache(
-  "souper-internal-cache",
-  llvm::cl::desc("Cache solver results in memory (default=true)"),
-  llvm::cl::init(true));
-
-static llvm::cl::opt<bool> ExternalCache(
-  "souper-external-cache",
-  llvm::cl::desc("Use external Redis-based cache (default=false)"),
-  llvm::cl::init(false));
-
-static llvm::cl::opt<int> SolverTimeout(
-  "solver-timeout",
-  llvm::cl::desc("Solver timeout in seconds (default=no timeout)"),
-  llvm::cl::init(0));
-END
-
-if [ "${ext}" == "wasmopt" ]; then
-  echo "### step separating LHS and RHS from opt file \c"
-  # This command expect LHS, remove "result" instruction from it
-  # souper-infer-inst
-  # souper-enumerative-synthesis
-  souper-check -z3-path=${z3} -infer-rhs -souper-infer-iN -print-replacement-split -souper-infer-inst -souper-external-cache  ${name}.wasmopt > ${name}.wasmoptthso
-  ext='wasmoptthso' # save rhs but keep working with the other one
-  echo "okay"
-fi
+RED='\033[0;31m'
+NC='\033[0m' # No Color
 
 
 if [ "${ext}" == "c" ]; then
-  echo "### step c2ll \c"
-  clang -O0 -Xclang -disable-O0-optnone -S -emit-llvm ${name}.c -o ${name}.ll 
-  ext='ll'
-  echo "okay"
+  clang --target=wasm32-unknown-unknown -O3 $1 -S -emit-llvm -o  $name.ll
+  llvm-as -o $name.bc $name.ll 
 fi
 
-if [ "${ext}" == "rs" ]; then
-  echo "### step rs2ll \c"
-  rustc --emit=llvm-ir ${name}.rs -o ${name}.ll
-  # or https://github.com/bytecodealliance/cargo-wasi
-  ext='ll'
-  echo "okay"
-fi
+$WASM_LD --no-entry --export-all --allow-undefined -o $name.wasm $name.bc # $name.orig.obj
+wasm2wat -o $name.wat $name.wasm
 
-if [ "${ext}" == "ll" ]; then
-  echo "### step ll2bc \c"
-  opt -mem2reg ${name}.ll -S -o ${name}.ll
-  echo "### ll2bc \c"  
-  llvm-as ${name}.ll -o ${name}.bc
-  ext='bc'
-  echo "okay"
-fi
+#llvm-as $name.reg.ll -o $name.bc
+printf "${RED}Souperifying...${NC}\n"
 
+# "-souper-enumerative-synthesis", "-souper-enumerative-synthesis-num-instructions=%s"%(self.MAX_INST,) souper-infer-inst
+opt -load ${libsouperPass}  -souper -souper-enumerative-synthesis -souper-enumerative-synthesis-num-instructions=5 -souper-enumerative-synthesis-skip-solver  -z3-path=${z3} -souper-debug-level=3 -o $name.opt.bc $name.bc
+printf "${RED}Souper pass finished${NC}\n"
 
-if [ "${ext}" == "bc" ]; then
-  echo "### step bc optimization candidates \c"
-  souper -z3-path=${z3} ${name}.bc > ${name}.candopt
-  ext='candopt'
-  echo "okay" 
-fi
+$WASM_LD --no-entry --export-all -O0 --allow-undefined -o $name.opt.wasm $name.opt.bc
+wasm2wat -o $name.opt.wat $name.opt.wasm
 
-if [ "${ext}" == "candopt" ]; then
-  echo "### step optimization candidates to LHS/RHS optimization step \c"
-  souper-check -z3-path=${z3} -print-replacement-split ${name}.candopt > ${name}.opt
-  ext='opt' # This file contains both LHS and RHS solution
-  echo "okay"
-fi
-
-if [ "${ext}" == "opt" ]; then
-  echo "### step separating LHS and RHS from opt file \c"
-  # This command expect LHS, remove "result" instruction from it
-  cat ${name}.opt | sed '/^result/d' > ${name}.lhsopt
-  souper-check -z3-path=${z3} -infer-rhs -souper-infer-iN ${name}.lhsopt > ${name}.rhsopt
-  ext='rhsopt' # save rhs but keep working with the other one
-  echo "okay"
-fi
-
-if [ "${ext}" == "rhsopt" ]; then
-  echo "### step rhsopt->ll2 \c"
-  # python souper2llvm.py ${name}.rhsopt > ${name}.ll2
-  souper2llvm ${name}.rhsopt > ${name}.ll2
-  ext='ll2'
-  echo "okay"
-fi
-
-if [ "${ext}" == "ll2" ]; then
-  echo "### step ll2->bc2 \c"
-  llvm-as ${name}.ll2 -o ${name}.bc2
-  # llc -filetype=obj ${name}.bc2 -o ${name}.o2 # lli ${name}.o2
-  # llc -march=wasm32 -filetype=asm ${name}.ll2 -o ${name}.s2
-  # llc -march=wasm32 -filetype=obj ${name}.ll2 -o ${name}.o2
-  ext='bc2'
-  echo "okay"
-fi
-
+echo $(wc -c "$name.wat" | awk '{print $1}') $(wc -c "$name.opt.wat" | awk '{print $1}')
