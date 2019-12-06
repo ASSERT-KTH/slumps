@@ -10,8 +10,8 @@ The pipeline to generate superoptimized WASM binaries is delivered in two docker
 - The child image containing the bash script that performs the compound of the WASM binaries using the souper pass.
 
 ### To build docker images
-- ```docker build -t slumps:backend -m 8g -f Dockerfile.back .```
-- ```docker build -t slumps:latest -m 8g -f Dockerfile .```
+- ```docker build -t slumps:backend -m 8g -f Dockerfile .```
+- ```docker build -t slumps:tests -m 8g -f docker_images/souper_experiments/Dockerfile .```
 
 
 
@@ -23,7 +23,7 @@ The pipeline to generate superoptimized WASM binaries is delivered in two docker
 ### Develop mode
 
 - Go to python folder in the repo 
-- ```docker run --rm -it -v $(pwd):/slumps/python -v <absolute_path>/benchmark4pipeline_c:/input --entrypoint /bin/bash slumps:latest```
+- ```docker run --rm -it -v $(pwd):/slumps/python -v <absolute_path>/slumps/utils/pipeline:/input --entrypoint /bin/bash slumps:<label>```
 
 ### Troubleshooting
 - LLVM build takes to long or fails due to memory lack in the image building:
