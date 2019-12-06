@@ -1,6 +1,6 @@
 # slumps backend
 # slumps:back
-FROM ubuntu:latest
+FROM ubuntu:18.04
 
 RUN apt-get update
 RUN apt-get -y install cmake re2c doxygen golang-go python python3 llvm git subversion curl build-essential lld-8 gcc-multilib
@@ -51,7 +51,8 @@ RUN echo -e '#!/bin/bash\n/slumps/souper/build/souper-check "$@"' > /usr/bin/sou
 
 RUN echo -e '#!/bin/bash\n/slumps/wabt/bin/wasm2wat "$@"' > /usr/bin/wasm2wat && chmod +x /usr/bin/wasm2wat
 RUN echo -e '#!/bin/bash\n/slumps/wabt/bin/wasm2c "$@"' > /usr/bin/wasm2c && chmod +x /usr/bin/wasm2c
-#
+
+
 RUN echo -e '#!/bin/bash\n/usr/bin/wasm-ld-8 "$@"' > /usr/bin/wasm-ld && chmod +x /usr/bin/wasm-ld
 
 
