@@ -1,6 +1,6 @@
 FROM slumps:backend
 
-COPY /utils/pipeline/python/pipeline.sh /slumps
+COPY /utils/pipeline/pipeline.sh /slumps
 
 
 WORKDIR /slumps
