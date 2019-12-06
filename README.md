@@ -10,7 +10,7 @@ The pipeline to generate superoptimized WASM binaries is delivered in two docker
 - The child image containing the bash script that performs the compound of the WASM binaries using the souper pass.
 
 ### To build docker images
-- ```docker build -t slumps:backend -m 8g -f Dockerfile .```
+- ```docker build -t slumps:backend -m 8g -f docker_images/Dockerfile .```
 - ```docker build -t slumps:tests -m 8g -f docker_images/souper_experiments/Dockerfile .```
 
 
@@ -28,8 +28,6 @@ The pipeline to generate superoptimized WASM binaries is delivered in two docker
 ### Troubleshooting
 - LLVM build takes to long or fails due to memory lack in the image building:
     >  Increase memory and/or CPU ressources in the docker engine configuration
-
-- Right now, both images take approx. 8Gb of size in disk
 
 
 ## Study of memory disclosure vulnerabilities
