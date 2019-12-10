@@ -3,6 +3,17 @@
 name=$(echo $1 | sed 's/\.[^.]*$//')
 ext=$(echo $1 | sed 's/^.*\.//')
 
+# alias
+shopt -s expand_aliases
+alias clang='~/souper/third_party/llvm/Release/bin/clang'
+alias llc='~/souper/third_party/llvm/Release/bin/llc'
+alias llvm-as='~/souper/third_party/llvm/Release/bin/llvm-as'
+alias opt='~/souper/third_party/llvm/Release/bin/opt'
+alias souper='~/souper/build/souper'
+alias souper-check='~/souper/build/souper-check'
+alias wasm2c='~/wabt/bin/wasm2c'
+alias wasm2wat='~/wabt/bin/wasm2wat'
+alias wasm-ld='/usr/bin/wasm-ld-8'
 
 # vars
 z3=${SRC_DIR}'/souper/third_party/z3/build/z3'
