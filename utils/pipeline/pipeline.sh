@@ -24,7 +24,7 @@ wasm2wat -o $name.wat $name.wasm
 printf "${RED}Souperifying...${NC}\n"
 
 # "-souper-enumerative-synthesis", "-souper-enumerative-synthesis-num-instructions=%s"%(self.MAX_INST,) souper-infer-inst
-opt -load ${libsouperPass}  -souper -souper-enumerative-synthesis -souper-enumerative-synthesis-num-instructions=3 -souper-enumerative-synthesis-skip-solver  -z3-path=${z3} -souper-debug-level=3 -o $name.opt.bc $name.bc
+opt -load ${libsouperPass}  -souper -souper-enumerative-synthesis -souper-external-cache -souper-enumerative-synthesis-num-instructions=3 -souper-enumerative-synthesis-skip-solver  -z3-path=${z3} -souper-debug-level=3 -o $name.opt.bc $name.bc
 
 printf "${RED}Souper pass finished${NC}\n"
 
