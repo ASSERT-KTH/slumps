@@ -65,7 +65,7 @@ __dependency__
 
 For Ubuntu 18.04, we use `apt` to install dependencies:
 ```
-apt install git subversion cmake gcc g++ clang llvm-8 re2c z3
+apt install git subversion cmake gcc-multilib g++-multilib clang llvm-8 re2c z3
 ```
 
 __slumps__
