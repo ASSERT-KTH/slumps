@@ -65,8 +65,8 @@ benchmark4pipeline_c/pythagorean_triples.c T 0
 2265 2265
 benchmark4pipeline_c/resistor_mesh.c T 0
 
-1741 1736
-benchmark4pipeline_c/run-length_encoding.c T 0
+**1741 1736**
+**benchmark4pipeline_c/run-length_encoding.c T 0**
 
 1895 1895
 benchmark4pipeline_c/sattolo_cycle.c T 0
