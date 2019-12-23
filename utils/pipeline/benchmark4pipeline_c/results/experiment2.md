@@ -943,10 +943,7 @@ sys	0m0.032s
 ### Overall Result
 
 ```
-
-benchmark4pipeline_c/2048.1.c T 1
-
-13621
+13621 [Poison LHS]
 benchmark4pipeline_c/2048.c T 0
 
 3021 3021
@@ -976,7 +973,7 @@ benchmark4pipeline_c/evolutionary_algorithm.c T 0
 3517 3449
 benchmark4pipeline_c/flipping_bits_game.c T 0
 
-
+Compilation error
 benchmark4pipeline_c/heronian_triangles.c T 0
 
 1642 1642
