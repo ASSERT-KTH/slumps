@@ -99,6 +99,11 @@
         "typeindex": "cpp",
         "charconv": "cpp",
         "compare": "cpp",
-        "span": "cpp"
+        "span": "cpp",
+        "hash_map": "cpp",
+        "hash_set": "cpp",
+        "*.tcc": "cpp",
+        "cuchar": "cpp",
+        "memory_resource": "cpp"
     }
 }
