@@ -19,6 +19,7 @@ class DependencyAnalyzer(object):
     INFER = r'infer'
     RESULT = r'result'
     RET = r'ret'
+    _EXPLICIT_TYPE = r'i\w+'
 
     class Root(object):
 
@@ -27,24 +28,37 @@ class DependencyAnalyzer(object):
             self.entry_point = None
             self.first_instruction = None
 
-        def inner_write(self, instruction, out):
+        def inner_write(self, instruction, out, nonFinal=False):
             
             for dep in instruction.dependencies:
                 if dep in self.instructions:
                     self.inner_write(self.instructions[dep], out)
 
-            out.write("%s\n"%(instruction.expression,))
+            out.write(" %s%s"%(instruction.expression, "" if nonFinal else "\n"))
 
         def write(self, out):
-            self.inner_write(self.first_instruction, out)
+            self.inner_write(self.first_instruction, out, True)
 
-        def transform(self, initial, final, entry_name):
-            final = final.replace(initial, entry_name)
+
+        def transform(self,final, entry_name, initial):
+
+            # Find closure of the entry_name
 
             for k in self.instructions.keys():
                 final = final.replace(k, k.replace("%", "%%_%s"%(globalCounter(), )))
 
+            final = final.replace(initial, entry_name)
+
             return final
+
+
+    class LLVMType(object):
+
+        def __init__(self, expression):
+            self.expression = expression
+
+        def __str__(self):
+            return self.expression
 
     class Declaration(object):
         
@@ -60,6 +74,7 @@ class DependencyAnalyzer(object):
             self.dependencies = []
             self.is_declaration = False
             self.inner = None
+            self.type = DependencyAnalyzer.LLVMType("unk")
 
             self.tokens = list(filter( lambda x: x, re.split(r"[\r\t ]", self.expression)))
 
@@ -118,9 +133,10 @@ class DependencyAnalyzer(object):
             while index < len(tokens):
                 current = tokens[index]
 
-                if re.match(DependencyAnalyzer._ID, tokens[index]): # reference
-                    self.dependencies.append(re.match(DependencyAnalyzer._ID, tokens[index]).group(0))
-                
+                if re.match(DependencyAnalyzer._ID, current): # reference
+                    self.dependencies.append(re.match(DependencyAnalyzer._ID, current).group(0))
+                if re.match(DependencyAnalyzer._EXPLICIT_TYPE, current):
+                    self.type = DependencyAnalyzer.LLVMType(re.match(DependencyAnalyzer._EXPLICIT_TYPE, current).group(0))
                 result.append(current)
                 index += 1
 

@@ -210,10 +210,10 @@ class LLVMCompile(ExternalStage):
 
 class LLVMTOWasm(ExternalStage):
 
-    def __init__(self):
+    def __init__(self, DEBUG = True):
         self.path_to_executable = Alias.llc
         self.name = "LLVM IR to Object"
-        self.debug = True
+        self.debug = DEBUG
 
         
 
@@ -240,7 +240,7 @@ class ObjtoWASM(ExternalStage):
 
     def __call__(self, args = [], std = None): # f -> inputs
 
-        new_inputs = ["--no-entry", "--export-all","-O0", "--allow-undefined",  '-o', args[1], args[0]]
+        new_inputs = ["--no-entry", "--export-all","-%s"%(OPT2), "--allow-undefined",  '-o', args[1], args[0]]
         return super(ObjtoWASM, self).__call__(new_inputs, std)
 
     def processInner(self, std):
