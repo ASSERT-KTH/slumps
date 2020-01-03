@@ -1,0 +1,160 @@
+New session
+
+New session
+
+New session
+
+New session
+
+New session
+
+New session
+
+benchmark4pipeline_c/2048 14292
+benchmark4pipeline_c/Banker's_algorithm 2341
+benchmark4pipeline_c/addition_chains 3084
+benchmark4pipeline_c/aliquot_sequence_classifications_1 1657
+benchmark4pipeline_c/aliquot_sequence_classifications_2 2162
+benchmark4pipeline_c/babbage_problem 311
+benchmark4pipeline_c/base64 521
+benchmark4pipeline_c/bitwise_IO 1097
+benchmark4pipeline_c/eban_numbers 1011
+benchmark4pipeline_c/evolutionary_algorithm 1153
+benchmark4pipeline_c/flipping_bits_game 2430
+benchmark4pipeline_c/heronian_triangles 1563
+benchmark4pipeline_c/knuth's_algorithm_S 1223
+benchmark4pipeline_c/n-queens_problem 942
+benchmark4pipeline_c/nautical_bell 464
+benchmark4pipeline_c/paraffins 2081
+benchmark4pipeline_c/pascal_matrix_generation 3620
+benchmark4pipeline_c/perfect_shuffle 710
+benchmark4pipeline_c/pythagorean_triples 659
+benchmark4pipeline_c/resistor_mesh 1335
+benchmark4pipeline_c/run-length_encoding 1438
+benchmark4pipeline_c/sattolo_cycle 1461
+benchmark4pipeline_c/sexy_primes 2972
+benchmark4pipeline_c/shortest_common_supersequence 1022
+benchmark4pipeline_c/smith_numbers 654
+benchmark4pipeline_c/validate_international_securities_identification_number 855
+benchmark4pipeline_c/weird_numbers 1131
+benchmark4pipeline_c/zebra_puzzle 3398
+New session
+
+benchmark4pipeline_c/2048 14292 3674
+benchmark4pipeline_c/Banker's_algorithm 2341 2293
+benchmark4pipeline_c/addition_chains 3084 2420
+benchmark4pipeline_c/aliquot_sequence_classifications_1 1657 1418
+benchmark4pipeline_c/aliquot_sequence_classifications_2 2162 1861
+benchmark4pipeline_c/babbage_problem 311 315
+benchmark4pipeline_c/base64 521 517
+benchmark4pipeline_c/bitwise_IO 1097 1104
+benchmark4pipeline_c/eban_numbers 1011 811
+benchmark4pipeline_c/evolutionary_algorithm 1153 753
+benchmark4pipeline_c/flipping_bits_game 2430 1896
+benchmark4pipeline_c/heronian_triangles 1563 1729
+benchmark4pipeline_c/knuth's_algorithm_S 1223 726
+benchmark4pipeline_c/n-queens_problem 942 946
+benchmark4pipeline_c/nautical_bell 464 419
+benchmark4pipeline_c/paraffins 2081 1749
+benchmark4pipeline_c/pascal_matrix_generation 3620 1132
+benchmark4pipeline_c/perfect_shuffle 710 921
+benchmark4pipeline_c/pythagorean_triples 659 647
+benchmark4pipeline_c/resistor_mesh 1335 1068
+benchmark4pipeline_c/run-length_encoding 1438 1402
+benchmark4pipeline_c/sattolo_cycle 1461 914
+benchmark4pipeline_c/sexy_primes 2972 2135
+benchmark4pipeline_c/shortest_common_supersequence 1022 1029
+benchmark4pipeline_c/smith_numbers 654 668
+benchmark4pipeline_c/validate_international_securities_identification_number 855 886
+benchmark4pipeline_c/weird_numbers 1131 1159
+benchmark4pipeline_c/zebra_puzzle 3398 3382
+New session
+
+benchmark4pipeline_c/2048 8843 10728 14498 3674 3756
+benchmark4pipeline_c/Banker's_algorithm 3945 2314 2320 2293 2165
+benchmark4pipeline_c/addition_chains 5224 2546 3122 2420 2375
+benchmark4pipeline_c/aliquot_sequence_classifications_1 4119 1418
+benchmark4pipeline_c/aliquot_sequence_classifications_2 6593 2033 2176 1861 1711
+benchmark4pipeline_c/babbage_problem 797 319 315 315 311
+benchmark4pipeline_c/base64 1141 517
+benchmark4pipeline_c/bitwise_IO 1104
+benchmark4pipeline_c/eban_numbers 811
+benchmark4pipeline_c/evolutionary_algorithm 753
+benchmark4pipeline_c/flipping_bits_game 1896
+benchmark4pipeline_c/heronian_triangles 1729
+benchmark4pipeline_c/knuth's_algorithm_S 726
+benchmark4pipeline_c/n-queens_problem 946
+benchmark4pipeline_c/nautical_bell 419
+benchmark4pipeline_c/paraffins 1749
+benchmark4pipeline_c/pascal_matrix_generation 1132
+benchmark4pipeline_c/perfect_shuffle 921
+benchmark4pipeline_c/pythagorean_triples 647
+benchmark4pipeline_c/resistor_mesh 1068
+benchmark4pipeline_c/run-length_encoding 1402
+benchmark4pipeline_c/sattolo_cycle 914
+benchmark4pipeline_c/sexy_primes 2135 2231
+benchmark4pipeline_c/shortest_common_supersequence 2703 1116 1064 1029 1001
+benchmark4pipeline_c/smith_numbers 1545 708 658 668 654
+benchmark4pipeline_c/validate_international_securities_identification_number 1899 993 866 886 856
+benchmark4pipeline_c/weird_numbers 2520 1230 1168 1159 1152
+benchmark4pipeline_c/zebra_puzzle 10914 3712 3645 3382 3401
+New session
+
+benchmark4pipeline_c/2048 8843 10728 14498 14292 3674 3756
+benchmark4pipeline_c/Banker's_algorithm 3945 2314 2320 2341 2293 2165
+benchmark4pipeline_c/addition_chains 5224 2546 3122 3084 2420 2375
+benchmark4pipeline_c/aliquot_sequence_classifications_1 4119 1503 1671 1657 1418 1334
+benchmark4pipeline_c/aliquot_sequence_classifications_2 6593 2033 2176 2162 1861 1711
+benchmark4pipeline_c/babbage_problem 797 319 315 311 315 311
+benchmark4pipeline_c/base64 1141 541 537 521 517 513
+benchmark4pipeline_c/bitwise_IO 2436 1422 1121 1097 1104 1076
+benchmark4pipeline_c/eban_numbers 1786 821 1017 1011 811 801
+benchmark4pipeline_c/evolutionary_algorithm 1747 1168 1243 1153 753 754
+benchmark4pipeline_c/flipping_bits_game 3911 2065 2630 2430 1896 1795
+benchmark4pipeline_c/heronian_triangles 3853 1864 1686 1563 1729 1669
+benchmark4pipeline_c/knuth's_algorithm_S 1787 1091 1297 1223 726 719
+benchmark4pipeline_c/n-queens_problem 2014 944 949 942 946 950
+benchmark4pipeline_c/nautical_bell 1151 477 476 464 419 425
+benchmark4pipeline_c/paraffins 5282 1767 2116 2081 1749 1717
+benchmark4pipeline_c/pascal_matrix_generation 2776 3804 4318 3620 1132 1185
+benchmark4pipeline_c/perfect_shuffle 2109 972 721 710 921 925
+benchmark4pipeline_c/pythagorean_triples 1610 691 669 659 647 639
+benchmark4pipeline_c/resistor_mesh 2775 1323 1390 1335 1068 1130
+benchmark4pipeline_c/run-length_encoding 2844 1506 1502 1438 1402 1394
+benchmark4pipeline_c/sattolo_cycle 1743 1292 1522 1461 914 923
+benchmark4pipeline_c/sexy_primes 5434 2394 3109 2972 2135 2231
+benchmark4pipeline_c/shortest_common_supersequence 2703 1116 1064 1022 1029 1001
+benchmark4pipeline_c/smith_numbers 1545 708 658 654 668 654
+benchmark4pipeline_c/validate_international_securities_identification_number 1899 993 866 855 886 856
+benchmark4pipeline_c/weird_numbers 2520 1230 1168 1131 1159 1152
+benchmark4pipeline_c/zebra_puzzle 10914 3712 3645 3398 3382 3401
+New session
+
+benchmark4pipeline_c/2048 8843 10728 14498 14292 3674 3756
+benchmark4pipeline_c/Banker's_algorithm 3945 2314 2320 2341 2293 2165
+benchmark4pipeline_c/addition_chains 5224 2546 3122 3084 2420 2375
+benchmark4pipeline_c/aliquot_sequence_classifications_1 4119 1503 1671 1657 1418 1334
+benchmark4pipeline_c/aliquot_sequence_classifications_2 6593 2033 2176 2162 1861 1711
+benchmark4pipeline_c/babbage_problem 797 319 315 311 315 311
+benchmark4pipeline_c/base64 1141 541 537 521 517 513
+benchmark4pipeline_c/bitwise_IO 2436 1422 1121 1097 1104 1076
+benchmark4pipeline_c/eban_numbers 1786 821 1017 1011 811 801
+benchmark4pipeline_c/evolutionary_algorithm 1747 1168 1243 1153 753 754
+benchmark4pipeline_c/flipping_bits_game 3911 2065 2630 2430 1896 1795
+benchmark4pipeline_c/heronian_triangles 3853 1864 1686 1563 1729 1669
+benchmark4pipeline_c/knuth's_algorithm_S 1787 1091 1297 1223 726 719
+benchmark4pipeline_c/n-queens_problem 2014 944 949 942 946 950
+benchmark4pipeline_c/nautical_bell 1151 477 476 464 419 425
+benchmark4pipeline_c/paraffins 5282 1767 2116 2081 1749 1717
+benchmark4pipeline_c/pascal_matrix_generation 2776 3804 4318 3620 1132 1185
+benchmark4pipeline_c/perfect_shuffle 2109 972 721 710 921 925
+benchmark4pipeline_c/pythagorean_triples 1610 691 669 659 647 639
+benchmark4pipeline_c/resistor_mesh 2775 1323 1390 1335 1068 1130
+benchmark4pipeline_c/run-length_encoding 2844 1506 1502 1438 1402 1394
+benchmark4pipeline_c/sattolo_cycle 1743 1292 1522 1461 914 923
+benchmark4pipeline_c/sexy_primes 5434 2394 3109 2972 2135 2231
+benchmark4pipeline_c/shortest_common_supersequence 2703 1116 1064 1022 1029 1001
+benchmark4pipeline_c/smith_numbers 1545 708 658 654 668 654
+benchmark4pipeline_c/validate_international_securities_identification_number 1899 993 866 855 886 856
+benchmark4pipeline_c/weird_numbers 2520 1230 1168 1131 1159 1152
+benchmark4pipeline_c/zebra_puzzle 10914 3712 3645 3398 3382 3401
