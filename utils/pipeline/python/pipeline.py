@@ -59,7 +59,7 @@ class Pipeline(object):
         finalCandidates = []
         for j, cand_text in enumerate(candidates):
             for i in range(1, min(MAX_INST, len(cand_text.split("\n")) - 2 )): # Less number of instructionns than the original
-                printProgressBar(j, total=len(candidates), suffix="Candidate %s. Trying %s instructions ...     "%(j, i))
+                printProgressBar(j, total=len(candidates), suffix="Valid count %s. Candidate %s. Trying %s instructions ...     "%(len(finalCandidates),j, i))
 
                 plump = CandidatesToSouperParts(i)
                 plump.debug = False
@@ -92,14 +92,6 @@ class Pipeline(object):
             search = ORIGIN__RE.search(cand_text)
             original_llvm_ir = search.group(1).lstrip().rstrip()
 
-            root = DependencyAnalyzer.Root()
-            # Go up finding dependencies
-
-            entry = DependencyAnalyzer.Instruction(original_llvm_ir, root)
-
-
-            
-
             index = -1
 
             for i, node in enumerate(children):
@@ -124,7 +116,7 @@ class Pipeline(object):
         self.root = ModuleNode()
         self.root.children = children
 
-        self.generateSuperLL(OUT_FOLDER, candidateNodes, file)
+        self.generetaAllCandidates(OUT_FOLDER, candidateNodes, file)
 
 
     def generateOriginalWASM(self, ll, OUT_FOLDER, file):
@@ -154,12 +146,32 @@ class Pipeline(object):
         llFileName = "%s/%s.all.ll"%(OUT_FOLDER, file.split("/")[-1])
         OUT_FILE_IR = open(llFileName, 'wb')
             
+        VALID_COUNT = 0
 
         for i, cand in enumerate(candidateNodes):
+            printProgressBar(i, total=len(candidateNodes), suffix="Validating replacement. Valid count: %s"%(VALID_COUNT, ))
 
             OUT_FILE_IR.write(("\n; Replacing %s \n"%(cand.entry_llvm,)).encode("utf-8"))
 
+            TEMP_NAME = "%s/cand%s.ll"%(OUT_FOLDER, i,)
+            TEMP_FILE = open(TEMP_NAME, 'wb')
             cand.toggleTranslation()
+
+            self.root.infixVisit(TEMP_FILE)
+
+            TEMP_FILE.close()
+
+            try:
+                
+                finalObjCreator = LLVMTOWasm(DEBUG=False)
+                finalobj = finalObjCreator(std=open(TEMP_NAME, 'rb').read())
+                os.remove(TEMP_FILE)
+                VALID_COUNT += 1
+            except Exception as e:
+                cand.toggleTranslation()
+
+
+
             
         self.root.infixVisit(OUT_FILE_IR)
 

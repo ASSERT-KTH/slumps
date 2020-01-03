@@ -92,22 +92,35 @@ class SolutionNode(Node):
         original_instruction = DependencyAnalyzer.Instruction(self.original_llvm, originalRoot)
 
         if root.first_instruction.is_constant:
-            print(self.original_llvm)
             self.ASSIGN = '%s = add %s, 0'%(original_instruction.inner.variable_name,
                 " ".join(root.first_instruction.children)
              )
         else:
             out = StringIO()
             initial = root.first_instruction.dependencies[0]
-            root.first_instruction = root.instructions[initial]
+            entry = original_instruction.inner.variable_name
+
+
             #root.first_instruction = DependencyAnalyzer.Declaration(original_instruction.inner.variable_name)
-            
-            root.write(out)
-            out = root.transform(initial, out.getvalue(), original_instruction.inner.variable_name)
-            
-            print(out)
-            self.ASSIGN = out
-            #root.first_instruction.dependencies[0])
+            if initial not in root.instructions:
+                self.ASSIGN = self.original_llvm
+                LOGGER.error("Undefined entry var...")
+            else:
+                root.first_instruction = root.instructions[initial]
+                root.write(out)
+                out = out.getvalue()
+
+                out = out.replace(initial, "[SLUMPS]")
+                out += "\n;%s\n"%(self.original_llvm, )
+                print(out, initial)
+
+                # out.write("\n;%s -> %s\n"%(initial, original_instruction.inner.variable_name))
+                # out.write("\n;%s\n"%(self.original_llvm))
+
+                out = root.transform(out, entry, "[SLUMPS]")
+
+                print(out)
+                self.ASSIGN = out
 
     def parse(self):
         # Find solution instruction
