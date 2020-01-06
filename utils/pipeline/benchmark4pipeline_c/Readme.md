@@ -37,4 +37,58 @@
 ## Influential projects
 - SQLite
 - ZLib
-- Lua
+
+
+## Babbage problem candidates
+
+```
+; Function: main
+;[ORIGIN]   %current.0 = phi i32 [ 0, %entry ], [ %inc, %while.cond ]
+%0:i32 = var (knownBits=0xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx) (nonNegative) (range=[0,-2147483648))
+infer %0
+
+; Function: main
+;[ORIGIN]   %mul = mul nsw i32 %current.0, %current.0
+%0:i32 = var (knownBits=0xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx) (nonNegative) (range=[0,-2147483648))
+%1:i32 = mulnsw %0, %0
+infer %1
+
+; Function: main
+;[ORIGIN]   %rem = urem i32 %mul, 1000000
+%0:i32 = var (knownBits=0xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx) (nonNegative) (range=[0,-2147483648))
+%1:i32 = mulnsw %0, %0 (hasExternalUses)
+%2:i32 = urem %1, 1000000:i32
+infer %2
+
+; Function: main
+;[ORIGIN]   %cmp = icmp eq i32 %rem, 269696
+%0:i32 = var (knownBits=0xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx) (nonNegative) (range=[0,-2147483648))
+%1:i32 = mulnsw %0, %0 (hasExternalUses)
+%2:i32 = urem %1, 1000000:i32
+%3:i1 = eq 269696:i32, %2
+infer %3
+
+; Function: main
+;[ORIGIN]   %cmp1 = icmp ne i32 %mul, 2147483647
+%0:i32 = var (knownBits=0xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx) (nonNegative) (range=[0,-2147483648))
+%1:i32 = mulnsw %0, %0 (hasExternalUses)
+%2:i1 = ne 2147483647:i32, %1
+infer %2
+
+; Function: main
+;[ORIGIN]   %0 = select i1 %cmp, i1 false, i1 %cmp1
+%0:i32 = var (knownBits=0xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx) (nonNegative) (range=[0,-2147483648))
+%1:i32 = mulnsw %0, %0
+%2:i32 = urem %1, 1000000:i32
+%3:i1 = eq 269696:i32, %2
+%4:i1 = ne 2147483647:i32, %1
+%5:i1 = select %3, 0:i1, %4
+infer %5
+
+; Function: main
+;[ORIGIN]   %inc = add nuw nsw i32 %current.0, 1
+%0:i32 = var (knownBits=0xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx) (nonNegative) (range=[0,-2147483648))
+%1:i32 = addnw 1:i32, %0
+infer %1
+
+```
