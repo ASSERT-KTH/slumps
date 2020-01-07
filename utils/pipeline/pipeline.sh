@@ -27,7 +27,7 @@ NC='\033[0m' # No Color
 start=$(date)
 
 if [ "${ext}" == "c" ]; then
-  clang --target=wasm32-unknown-unknown -O3 $1 -S -emit-llvm -o  $name.ll
+  clang --target=wasm32-unknown-unknown -O3 $1 -S -emit-llvm -o  $name.ll ## Replace with large one from emscriptenba
   llvm-as -o $name.bc $name.ll
 fi
 

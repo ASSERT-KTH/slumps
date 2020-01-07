@@ -10,32 +10,31 @@ target triple = "wasm32-unknown-unknown"
 %struct.file_stream = type { i32 (%struct.stream_t*)*, i32 (%struct.stream_t*, i32)*, %struct._IO_FILE* }
 
 @.str = private unnamed_addr constant [68 x i8] c"WWWWWWWWWWWWBWWWWWWWWWWWWBBBWWWWWWWWWWWWWWWWWWWWWWWWBWWWWWWWWWWWWWW\00", align 1
-@__const.main.str_in = private unnamed_addr constant %struct.string_stream { i32 (%struct.stream_t*)* @sget, i32 (%struct.stream_t*, i32)* null, i8* getelementptr inbounds ([68 x i8], [68 x i8]* @.str, i32 0, i32 0), i32 0 }, align 4
+@main.str_in = private unnamed_addr constant %struct.string_stream { i32 (%struct.stream_t*)* @sget, i32 (%struct.stream_t*, i32)* null, i8* getelementptr inbounds ([68 x i8], [68 x i8]* @.str, i32 0, i32 0), i32 0 }, align 4
 @stdout = external local_unnamed_addr global %struct._IO_FILE*, align 4
 
 ; Function Attrs: norecurse nounwind
-define hidden i32 @sget(%struct.stream_t* nocapture %in) #0 {
-entry:
-  %string = getelementptr inbounds %struct.stream_t, %struct.stream_t* %in, i32 1
-  %0 = bitcast %struct.stream_t* %string to i8**
-  %1 = load i8*, i8** %0, align 4, !tbaa !2
-  %pos = getelementptr inbounds %struct.stream_t, %struct.stream_t* %in, i32 1, i32 1
-  %2 = bitcast i32 (%struct.stream_t*, i32)** %pos to i32*
-  %3 = load i32, i32* %2, align 4, !tbaa !8
-  %arrayidx = getelementptr inbounds i8, i8* %1, i32 %3
-  %4 = load i8, i8* %arrayidx, align 1, !tbaa !9
-  %cmp = icmp eq i8 %4, 0
-  br i1 %cmp, label %cleanup, label %if.end
+define hidden i32 @sget(%struct.stream_t* nocapture) #0 {
+  %2 = getelementptr inbounds %struct.stream_t, %struct.stream_t* %0, i32 1
+  %3 = bitcast %struct.stream_t* %2 to i8**
+  %4 = load i8*, i8** %3, align 4, !tbaa !2
+  %5 = getelementptr inbounds %struct.stream_t, %struct.stream_t* %0, i32 1, i32 1
+  %6 = bitcast i32 (%struct.stream_t*, i32)** %5 to i32*
+  %7 = load i32, i32* %6, align 4, !tbaa !8
+  %8 = getelementptr inbounds i8, i8* %4, i32 %7
+  %9 = load i8, i8* %8, align 1, !tbaa !9
+  %10 = icmp eq i8 %9, 0
+  br i1 %10, label %14, label %11
 
-if.end:                                           ; preds = %entry
-  %conv = zext i8 %4 to i32
-  %inc = add nsw i32 %3, 1
-  store i32 %inc, i32* %2, align 4, !tbaa !8
-  br label %cleanup
+; <label>:11:                                     ; preds = %1
+  %12 = zext i8 %9 to i32
+  %13 = add nsw i32 %7, 1
+  store i32 %13, i32* %6, align 4, !tbaa !8
+  br label %14
 
-cleanup:                                          ; preds = %entry, %if.end
-  %retval.0 = phi i32 [ %conv, %if.end ], [ -1, %entry ]
-  ret i32 %retval.0
+; <label>:14:                                     ; preds = %1, %11
+  %15 = phi i32 [ %12, %11 ], [ -1, %1 ]
+  ret i32 %15
 }
 
 ; Function Attrs: argmemonly nounwind
@@ -45,357 +44,359 @@ declare void @llvm.lifetime.start.p0i8(i64, i8* nocapture) #1
 declare void @llvm.lifetime.end.p0i8(i64, i8* nocapture) #1
 
 ; Function Attrs: norecurse nounwind
-define hidden i32 @sput(%struct.stream_t* nocapture %out, i32 %c) #0 {
-entry:
-  %cmp = icmp eq i32 %c, -1
-  %cond = select i1 %cmp, i32 0, i32 %c
-  %conv = trunc i32 %cond to i8
-  %string = getelementptr inbounds %struct.stream_t, %struct.stream_t* %out, i32 1
-  %0 = bitcast %struct.stream_t* %string to i8**
-  %1 = load i8*, i8** %0, align 4, !tbaa !2
-  %pos = getelementptr inbounds %struct.stream_t, %struct.stream_t* %out, i32 1, i32 1
-  %2 = bitcast i32 (%struct.stream_t*, i32)** %pos to i32*
-  %3 = load i32, i32* %2, align 4, !tbaa !8
-  %inc = add nsw i32 %3, 1
-  store i32 %inc, i32* %2, align 4, !tbaa !8
-  %arrayidx = getelementptr inbounds i8, i8* %1, i32 %3
-  store i8 %conv, i8* %arrayidx, align 1, !tbaa !9
-  br i1 %cmp, label %if.then, label %if.end
+define hidden i32 @sput(%struct.stream_t* nocapture, i32) #0 {
+  %3 = icmp eq i32 %1, -1
+  %4 = trunc i32 %1 to i8
+  %5 = select i1 %3, i8 0, i8 %4
+  %6 = getelementptr inbounds %struct.stream_t, %struct.stream_t* %0, i32 1
+  %7 = bitcast %struct.stream_t* %6 to i8**
+  %8 = load i8*, i8** %7, align 4, !tbaa !2
+  %9 = getelementptr inbounds %struct.stream_t, %struct.stream_t* %0, i32 1, i32 1
+  %10 = bitcast i32 (%struct.stream_t*, i32)** %9 to i32*
+  %11 = load i32, i32* %10, align 4, !tbaa !8
+  %12 = add nsw i32 %11, 1
+  store i32 %12, i32* %10, align 4, !tbaa !8
+  %13 = getelementptr inbounds i8, i8* %8, i32 %11
+  store i8 %5, i8* %13, align 1, !tbaa !9
+  br i1 %3, label %14, label %15
 
-if.then:                                          ; preds = %entry
-  store i32 0, i32* %2, align 4, !tbaa !8
-  br label %if.end
+; <label>:14:                                     ; preds = %2
+  store i32 0, i32* %10, align 4, !tbaa !8
+  br label %15
 
-if.end:                                           ; preds = %if.then, %entry
+; <label>:15:                                     ; preds = %14, %2
   ret i32 0
 }
 
 ; Function Attrs: nounwind
-define hidden i32 @file_put(%struct.stream_t* nocapture readonly %out, i32 %c) #2 {
-entry:
-  %fp = getelementptr inbounds %struct.stream_t, %struct.stream_t* %out, i32 1
-  %0 = bitcast %struct.stream_t* %fp to %struct._IO_FILE**
-  %1 = load %struct._IO_FILE*, %struct._IO_FILE** %0, align 4, !tbaa !10
-  %call = tail call i32 @fputc(i32 %c, %struct._IO_FILE* %1)
-  ret i32 %call
+define hidden i32 @file_put(%struct.stream_t* nocapture readonly, i32) #2 {
+  %3 = getelementptr inbounds %struct.stream_t, %struct.stream_t* %0, i32 1
+  %4 = bitcast %struct.stream_t* %3 to %struct._IO_FILE**
+  %5 = load %struct._IO_FILE*, %struct._IO_FILE** %4, align 4, !tbaa !10
+  %6 = tail call i32 @fputc(i32 %1, %struct._IO_FILE* %5)
+  ret i32 %6
 }
 
 ; Function Attrs: nounwind
 declare i32 @fputc(i32, %struct._IO_FILE* nocapture) local_unnamed_addr #3
 
 ; Function Attrs: nounwind
-define hidden void @output(%struct.stream_t* %out, i8* nocapture readonly %buf, i32 %len) local_unnamed_addr #2 {
-entry:
-  %put = getelementptr inbounds %struct.stream_t, %struct.stream_t* %out, i32 0, i32 1
-  %0 = load i32 (%struct.stream_t*, i32)*, i32 (%struct.stream_t*, i32)** %put, align 4, !tbaa !12
-  %add = add nsw i32 %len, 128
-  %call = tail call i32 %0(%struct.stream_t* %out, i32 %add) #4
-  %cmp10 = icmp sgt i32 %len, 0
-  br i1 %cmp10, label %for.body, label %for.end
+define hidden void @output(%struct.stream_t*, i8* nocapture readonly, i32) local_unnamed_addr #2 {
+  %4 = getelementptr inbounds %struct.stream_t, %struct.stream_t* %0, i32 0, i32 1
+  %5 = load i32 (%struct.stream_t*, i32)*, i32 (%struct.stream_t*, i32)** %4, align 4, !tbaa !12
+  %6 = add nsw i32 %2, 128
+  %7 = tail call i32 %5(%struct.stream_t* %0, i32 %6) #4
+  %8 = icmp sgt i32 %2, 0
+  br i1 %8, label %9, label %19
 
-for.body:                                         ; preds = %entry, %for.body
-  %i.011 = phi i32 [ %inc, %for.body ], [ 0, %entry ]
-  %1 = load i32 (%struct.stream_t*, i32)*, i32 (%struct.stream_t*, i32)** %put, align 4, !tbaa !12
-  %arrayidx = getelementptr inbounds i8, i8* %buf, i32 %i.011
-  %2 = load i8, i8* %arrayidx, align 1, !tbaa !9
-  %conv = zext i8 %2 to i32
-  %call2 = tail call i32 %1(%struct.stream_t* nonnull %out, i32 %conv) #4
-  %inc = add nuw nsw i32 %i.011, 1
-  %exitcond = icmp eq i32 %inc, %len
-  br i1 %exitcond, label %for.end, label %for.body
+; <label>:9:                                      ; preds = %3
+  br label %10
 
-for.end:                                          ; preds = %for.body, %entry
+; <label>:10:                                     ; preds = %9, %10
+  %11 = phi i32 [ %17, %10 ], [ 0, %9 ]
+  %12 = load i32 (%struct.stream_t*, i32)*, i32 (%struct.stream_t*, i32)** %4, align 4, !tbaa !12
+  %13 = getelementptr inbounds i8, i8* %1, i32 %11
+  %14 = load i8, i8* %13, align 1, !tbaa !9
+  %15 = zext i8 %14 to i32
+  %16 = tail call i32 %12(%struct.stream_t* nonnull %0, i32 %15) #4
+  %17 = add nuw nsw i32 %11, 1
+  %18 = icmp eq i32 %17, %2
+  br i1 %18, label %19, label %10
+
+; <label>:19:                                     ; preds = %10, %3
   ret void
 }
 
 ; Function Attrs: nounwind
-define hidden void @encode(%struct.stream_t* %in, %struct.stream_t* %out) local_unnamed_addr #2 {
-entry:
-  %buf = alloca [256 x i8], align 16
-  %0 = getelementptr inbounds [256 x i8], [256 x i8]* %buf, i32 0, i32 0
-  call void @llvm.lifetime.start.p0i8(i64 256, i8* nonnull %0) #4
-  %get2 = bitcast %struct.stream_t* %in to i32 (%struct.stream_t*)**
-  %1 = load i32 (%struct.stream_t*)*, i32 (%struct.stream_t*)** %get2, align 4, !tbaa !14
-  %put3 = getelementptr inbounds %struct.stream_t, %struct.stream_t* %out, i32 0, i32 1
-  %2 = load i32 (%struct.stream_t*, i32)*, i32 (%struct.stream_t*, i32)** %put3, align 4, !tbaa !12
-  %arrayidx52 = getelementptr inbounds [256 x i8], [256 x i8]* %buf, i32 0, i32 1
-  br label %while.cond.outer.outer
+define hidden void @encode(%struct.stream_t*, %struct.stream_t*) local_unnamed_addr #2 {
+  %3 = alloca [256 x i8], align 16
+  %4 = getelementptr inbounds [256 x i8], [256 x i8]* %3, i32 0, i32 0
+  call void @llvm.lifetime.start.p0i8(i64 256, i8* nonnull %4) #4
+  %5 = bitcast %struct.stream_t* %0 to i32 (%struct.stream_t*)**
+  %6 = load i32 (%struct.stream_t*)*, i32 (%struct.stream_t*)** %5, align 4, !tbaa !14
+  %7 = getelementptr inbounds %struct.stream_t, %struct.stream_t* %1, i32 0, i32 1
+  %8 = load i32 (%struct.stream_t*, i32)*, i32 (%struct.stream_t*, i32)** %7, align 4, !tbaa !12
+  %9 = getelementptr inbounds [256 x i8], [256 x i8]* %3, i32 0, i32 1
+  br label %10
 
-while.cond.outer.outer:                           ; preds = %while.cond.outer.outer.backedge, %entry
-  %end.0.ph.ph = phi i32 [ 0, %entry ], [ %conv.le, %while.cond.outer.outer.backedge ]
-  %repeat.0.ph.ph = phi i32 [ 0, %entry ], [ %repeat.0.ph.ph.be, %while.cond.outer.outer.backedge ]
-  %len.0.ph.ph = phi i32 [ 0, %entry ], [ %len.0.ph.ph.be, %while.cond.outer.outer.backedge ]
-  %tobool10 = icmp eq i32 %repeat.0.ph.ph, 0
-  br label %while.cond.outer
+; <label>:10:                                     ; preds = %84, %2
+  %11 = phi i32 [ 0, %2 ], [ %86, %84 ]
+  %12 = phi i32 [ 0, %2 ], [ %85, %84 ]
+  %13 = tail call i32 %6(%struct.stream_t* %0) #4
+  %14 = icmp eq i32 %13, -1
+  br i1 %14, label %26, label %15
 
-while.cond.outer:                                 ; preds = %while.cond.outer.outer, %if.then11
-  %end.0.ph = phi i32 [ %conv.le, %if.then11 ], [ %end.0.ph.ph, %while.cond.outer.outer ]
-  %len.0.ph = phi i32 [ %len.1, %if.then11 ], [ %len.0.ph.ph, %while.cond.outer.outer ]
-  br label %while.cond
+; <label>:15:                                     ; preds = %10
+  br label %19
 
-while.cond:                                       ; preds = %while.cond.outer, %if.then
-  %end.0 = phi i32 [ 0, %if.then ], [ %end.0.ph, %while.cond.outer ]
-  %len.0 = phi i32 [ %inc, %if.then ], [ %len.0.ph, %while.cond.outer ]
-  %tobool = icmp eq i32 %end.0, 0
-  br i1 %tobool, label %while.body, label %while.end
+; <label>:16:                                     ; preds = %19
+  %17 = tail call i32 %6(%struct.stream_t* %0) #4
+  %18 = icmp eq i32 %17, -1
+  br i1 %18, label %26, label %19
 
-while.body:                                       ; preds = %while.cond
-  %call = tail call i32 %1(%struct.stream_t* %in) #4
-  %cmp = icmp eq i32 %call, -1
-  br i1 %cmp, label %if.end9, label %if.then
+; <label>:19:                                     ; preds = %15, %16
+  %20 = phi i32 [ %17, %16 ], [ %13, %15 ]
+  %21 = phi i32 [ %23, %16 ], [ %11, %15 ]
+  %22 = trunc i32 %20 to i8
+  %23 = add nsw i32 %21, 1
+  %24 = getelementptr inbounds [256 x i8], [256 x i8]* %3, i32 0, i32 %21
+  store i8 %22, i8* %24, align 1, !tbaa !9
+  %25 = icmp slt i32 %21, 1
+  br i1 %25, label %16, label %26
 
-if.then:                                          ; preds = %while.body
-  %conv5 = trunc i32 %call to i8
-  %inc = add nsw i32 %len.0, 1
-  %arrayidx = getelementptr inbounds [256 x i8], [256 x i8]* %buf, i32 0, i32 %len.0
-  store i8 %conv5, i8* %arrayidx, align 1, !tbaa !9
-  %cmp6 = icmp slt i32 %inc, 2
-  br i1 %cmp6, label %while.cond, label %if.end9
+; <label>:26:                                     ; preds = %19, %16, %10
+  %27 = phi i1 [ true, %10 ], [ false, %19 ], [ true, %16 ]
+  %28 = phi i32 [ %11, %10 ], [ %23, %16 ], [ %23, %19 ]
+  %29 = icmp eq i32 %12, 0
+  %30 = add nsw i32 %28, -1
+  %31 = getelementptr inbounds [256 x i8], [256 x i8]* %3, i32 0, i32 %30
+  %32 = load i8, i8* %31, align 1, !tbaa !9
+  %33 = add nsw i32 %28, -2
+  %34 = getelementptr inbounds [256 x i8], [256 x i8]* %3, i32 0, i32 %33
+  %35 = load i8, i8* %34, align 1, !tbaa !9
+  %36 = icmp eq i8 %32, %35
+  br i1 %29, label %49, label %37
 
-if.end9:                                          ; preds = %while.body, %if.then
-  %cmp.lcssa = phi i1 [ false, %if.then ], [ true, %while.body ]
-  %len.1 = phi i32 [ %inc, %if.then ], [ %len.0, %while.body ]
-  %conv.le = zext i1 %cmp.lcssa to i32
-  %sub = add nsw i32 %len.1, -1
-  %arrayidx12 = getelementptr inbounds [256 x i8], [256 x i8]* %buf, i32 0, i32 %sub
-  %3 = load i8, i8* %arrayidx12, align 1, !tbaa !9
-  %sub14 = add nsw i32 %len.1, -2
-  %arrayidx15 = getelementptr inbounds [256 x i8], [256 x i8]* %buf, i32 0, i32 %sub14
-  %4 = load i8, i8* %arrayidx15, align 1, !tbaa !9
-  %cmp43 = icmp eq i8 %3, %4
-  br i1 %tobool10, label %if.else, label %if.then11
+; <label>:37:                                     ; preds = %26
+  %38 = select i1 %36, i32 %12, i32 0
+  %39 = icmp eq i32 %38, 0
+  %40 = icmp eq i32 %28, 129
+  %41 = or i1 %40, %39
+  %42 = or i1 %27, %41
+  br i1 %42, label %43, label %84
 
-if.then11:                                        ; preds = %if.end9
-  %spec.select = select i1 %cmp43, i32 %repeat.0.ph.ph, i32 0
-  %tobool21 = icmp eq i32 %spec.select, 0
-  %cmp22 = icmp eq i32 %len.1, 129
-  %or.cond = or i1 %cmp22, %tobool21
-  %or.cond65 = or i1 %cmp.lcssa, %or.cond
-  br i1 %or.cond65, label %if.then26, label %while.cond.outer
+; <label>:43:                                     ; preds = %37
+  %44 = select i1 %27, i32 %28, i32 %30
+  %45 = tail call i32 %8(%struct.stream_t* %1, i32 %44) #4
+  %46 = load i8, i8* %4, align 16, !tbaa !9
+  %47 = zext i8 %46 to i32
+  %48 = tail call i32 %8(%struct.stream_t* %1, i32 %47) #4
+  store i8 %32, i8* %4, align 16, !tbaa !9
+  br label %84
 
-if.then26:                                        ; preds = %if.then11
-  %cond = select i1 %cmp.lcssa, i32 %len.1, i32 %sub
-  %call29 = tail call i32 %2(%struct.stream_t* %out, i32 %cond) #4
-  %5 = load i8, i8* %0, align 16, !tbaa !9
-  %conv31 = zext i8 %5 to i32
-  %call32 = tail call i32 %2(%struct.stream_t* %out, i32 %conv31) #4
-  store i8 %3, i8* %0, align 16, !tbaa !9
-  br label %while.cond.outer.outer.backedge
+; <label>:49:                                     ; preds = %26
+  br i1 %36, label %50, label %66
 
-while.cond.outer.outer.backedge:                  ; preds = %for.body.i107, %if.then26, %if.end55, %if.then60, %if.then45, %output.exit
-  %repeat.0.ph.ph.be = phi i32 [ 1, %output.exit ], [ 1, %if.then45 ], [ 0, %if.then60 ], [ 0, %if.end55 ], [ %spec.select, %if.then26 ], [ 0, %for.body.i107 ]
-  %len.0.ph.ph.be = phi i32 [ 2, %output.exit ], [ %len.1, %if.then45 ], [ 0, %if.then60 ], [ %len.1, %if.end55 ], [ 1, %if.then26 ], [ 0, %for.body.i107 ]
-  br label %while.cond.outer.outer
+; <label>:50:                                     ; preds = %49
+  %51 = icmp sgt i32 %28, 2
+  br i1 %51, label %52, label %84
 
-if.else:                                          ; preds = %if.end9
-  br i1 %cmp43, label %if.then45, label %if.end55
+; <label>:52:                                     ; preds = %50
+  %53 = load i32 (%struct.stream_t*, i32)*, i32 (%struct.stream_t*, i32)** %7, align 4, !tbaa !12
+  %54 = add nsw i32 %28, 126
+  %55 = tail call i32 %53(%struct.stream_t* %1, i32 %54) #4
+  br label %56
 
-if.then45:                                        ; preds = %if.else
-  %cmp46 = icmp sgt i32 %len.1, 2
-  br i1 %cmp46, label %if.then48, label %while.cond.outer.outer.backedge
+; <label>:56:                                     ; preds = %56, %52
+  %57 = phi i32 [ 0, %52 ], [ %63, %56 ]
+  %58 = load i32 (%struct.stream_t*, i32)*, i32 (%struct.stream_t*, i32)** %7, align 4, !tbaa !12
+  %59 = getelementptr inbounds [256 x i8], [256 x i8]* %3, i32 0, i32 %57
+  %60 = load i8, i8* %59, align 1, !tbaa !9
+  %61 = zext i8 %60 to i32
+  %62 = tail call i32 %58(%struct.stream_t* nonnull %1, i32 %61) #4
+  %63 = add nuw nsw i32 %57, 1
+  %64 = icmp eq i32 %63, %33
+  br i1 %64, label %65, label %56
 
-if.then48:                                        ; preds = %if.then45
-  %6 = load i32 (%struct.stream_t*, i32)*, i32 (%struct.stream_t*, i32)** %put3, align 4, !tbaa !12
-  %add.i = add nsw i32 %len.1, 126
-  %call.i = tail call i32 %6(%struct.stream_t* %out, i32 %add.i) #4
-  %cmp10.i = icmp sgt i32 %sub14, 0
-  br i1 %cmp10.i, label %for.body.i, label %output.exit
+; <label>:65:                                     ; preds = %56
+  store i8 %32, i8* %9, align 1, !tbaa !9
+  store i8 %32, i8* %4, align 16, !tbaa !9
+  br label %84
 
-for.body.i:                                       ; preds = %if.then48, %for.body.i
-  %i.011.i = phi i32 [ %inc.i, %for.body.i ], [ 0, %if.then48 ]
-  %7 = load i32 (%struct.stream_t*, i32)*, i32 (%struct.stream_t*, i32)** %put3, align 4, !tbaa !12
-  %arrayidx.i = getelementptr inbounds [256 x i8], [256 x i8]* %buf, i32 0, i32 %i.011.i
-  %8 = load i8, i8* %arrayidx.i, align 1, !tbaa !9
-  %conv.i = zext i8 %8 to i32
-  %call2.i = tail call i32 %7(%struct.stream_t* nonnull %out, i32 %conv.i) #4
-  %inc.i = add nuw nsw i32 %i.011.i, 1
-  %exitcond.i = icmp eq i32 %inc.i, %sub14
-  br i1 %exitcond.i, label %output.exit, label %for.body.i
+; <label>:66:                                     ; preds = %49
+  %67 = icmp eq i32 %28, 128
+  %68 = or i1 %27, %67
+  br i1 %68, label %69, label %84
 
-output.exit:                                      ; preds = %for.body.i, %if.then48
-  store i8 %3, i8* %arrayidx52, align 1, !tbaa !9
-  store i8 %3, i8* %0, align 16, !tbaa !9
-  br label %while.cond.outer.outer.backedge
+; <label>:69:                                     ; preds = %66
+  %70 = load i32 (%struct.stream_t*, i32)*, i32 (%struct.stream_t*, i32)** %7, align 4, !tbaa !12
+  %71 = add nsw i32 %28, 128
+  %72 = tail call i32 %70(%struct.stream_t* %1, i32 %71) #4
+  %73 = icmp sgt i32 %28, 0
+  br i1 %73, label %74, label %84
 
-if.end55:                                         ; preds = %if.else
-  %cmp56 = icmp eq i32 %len.1, 128
-  %or.cond66 = or i1 %cmp.lcssa, %cmp56
-  br i1 %or.cond66, label %if.then60, label %while.cond.outer.outer.backedge
+; <label>:74:                                     ; preds = %69
+  br label %75
 
-if.then60:                                        ; preds = %if.end55
-  %9 = load i32 (%struct.stream_t*, i32)*, i32 (%struct.stream_t*, i32)** %put3, align 4, !tbaa !12
-  %add.i98 = add nsw i32 %len.1, 128
-  %call.i99 = tail call i32 %9(%struct.stream_t* %out, i32 %add.i98) #4
-  %cmp10.i100 = icmp sgt i32 %len.1, 0
-  br i1 %cmp10.i100, label %for.body.i107, label %while.cond.outer.outer.backedge
+; <label>:75:                                     ; preds = %74, %75
+  %76 = phi i32 [ %82, %75 ], [ 0, %74 ]
+  %77 = load i32 (%struct.stream_t*, i32)*, i32 (%struct.stream_t*, i32)** %7, align 4, !tbaa !12
+  %78 = getelementptr inbounds [256 x i8], [256 x i8]* %3, i32 0, i32 %76
+  %79 = load i8, i8* %78, align 1, !tbaa !9
+  %80 = zext i8 %79 to i32
+  %81 = tail call i32 %77(%struct.stream_t* nonnull %1, i32 %80) #4
+  %82 = add nuw nsw i32 %76, 1
+  %83 = icmp eq i32 %82, %28
+  br i1 %83, label %84, label %75
 
-for.body.i107:                                    ; preds = %if.then60, %for.body.i107
-  %i.011.i101 = phi i32 [ %inc.i105, %for.body.i107 ], [ 0, %if.then60 ]
-  %10 = load i32 (%struct.stream_t*, i32)*, i32 (%struct.stream_t*, i32)** %put3, align 4, !tbaa !12
-  %arrayidx.i102 = getelementptr inbounds [256 x i8], [256 x i8]* %buf, i32 0, i32 %i.011.i101
-  %11 = load i8, i8* %arrayidx.i102, align 1, !tbaa !9
-  %conv.i103 = zext i8 %11 to i32
-  %call2.i104 = tail call i32 %10(%struct.stream_t* nonnull %out, i32 %conv.i103) #4
-  %inc.i105 = add nuw nsw i32 %i.011.i101, 1
-  %exitcond.i106 = icmp eq i32 %inc.i105, %len.1
-  br i1 %exitcond.i106, label %while.cond.outer.outer.backedge, label %for.body.i107
+; <label>:84:                                     ; preds = %75, %37, %43, %66, %69, %50, %65
+  %85 = phi i32 [ 1, %65 ], [ 1, %50 ], [ %38, %43 ], [ %12, %37 ], [ 0, %66 ], [ 0, %69 ], [ 0, %75 ]
+  %86 = phi i32 [ 2, %65 ], [ %28, %50 ], [ 1, %43 ], [ %28, %37 ], [ %28, %66 ], [ 0, %69 ], [ 0, %75 ]
+  br i1 %27, label %87, label %10
 
-while.end:                                        ; preds = %while.cond
-  %call64 = tail call i32 %2(%struct.stream_t* %out, i32 -1) #4
-  call void @llvm.lifetime.end.p0i8(i64 256, i8* nonnull %0) #4
+; <label>:87:                                     ; preds = %84
+  %88 = tail call i32 %8(%struct.stream_t* %1, i32 -1) #4
+  call void @llvm.lifetime.end.p0i8(i64 256, i8* nonnull %4) #4
   ret void
 }
 
 ; Function Attrs: nounwind
-define hidden void @decode(%struct.stream_t* %in, %struct.stream_t* %out) local_unnamed_addr #2 {
-entry:
-  %get1 = bitcast %struct.stream_t* %in to i32 (%struct.stream_t*)**
-  %0 = load i32 (%struct.stream_t*)*, i32 (%struct.stream_t*)** %get1, align 4, !tbaa !14
-  %call44 = tail call i32 %0(%struct.stream_t* %in) #4
-  %cmp45 = icmp eq i32 %call44, -1
-  br i1 %cmp45, label %if.then, label %if.end.lr.ph
+define hidden void @decode(%struct.stream_t*, %struct.stream_t*) local_unnamed_addr #2 {
+  %3 = bitcast %struct.stream_t* %0 to i32 (%struct.stream_t*)**
+  %4 = load i32 (%struct.stream_t*)*, i32 (%struct.stream_t*)** %3, align 4, !tbaa !14
+  %5 = tail call i32 %4(%struct.stream_t* %0) #4
+  %6 = icmp eq i32 %5, -1
+  br i1 %6, label %9, label %7
 
-if.end.lr.ph:                                     ; preds = %entry
-  %put15 = getelementptr inbounds %struct.stream_t, %struct.stream_t* %out, i32 0, i32 1
-  br label %if.end
+; <label>:7:                                      ; preds = %2
+  %8 = getelementptr inbounds %struct.stream_t, %struct.stream_t* %1, i32 0, i32 1
+  br label %10
 
-if.then:                                          ; preds = %if.end20, %entry
+; <label>:9:                                      ; preds = %34, %2
   ret void
 
-if.end:                                           ; preds = %if.end.lr.ph, %if.end20
-  %call46 = phi i32 [ %call44, %if.end.lr.ph ], [ %call, %if.end20 ]
-  %cmp2 = icmp sgt i32 %call46, 128
-  br i1 %cmp2, label %for.body.preheader, label %if.else
+; <label>:10:                                     ; preds = %7, %34
+  %11 = phi i32 [ %5, %7 ], [ %36, %34 ]
+  %12 = icmp sgt i32 %11, 128
+  br i1 %12, label %13, label %23
 
-for.body.preheader:                               ; preds = %if.end
-  %sub = add i32 %call46, -128
-  br label %for.body
+; <label>:13:                                     ; preds = %10
+  %14 = add nsw i32 %11, -128
+  br label %15
 
-for.body:                                         ; preds = %for.body, %for.body.preheader
-  %i.043 = phi i32 [ %inc, %for.body ], [ 0, %for.body.preheader ]
-  %1 = load i32 (%struct.stream_t*, i32)*, i32 (%struct.stream_t*, i32)** %put15, align 4, !tbaa !12
-  %2 = load i32 (%struct.stream_t*)*, i32 (%struct.stream_t*)** %get1, align 4, !tbaa !14
-  %call7 = tail call i32 %2(%struct.stream_t* nonnull %in) #4
-  %call8 = tail call i32 %1(%struct.stream_t* %out, i32 %call7) #4
-  %inc = add nuw nsw i32 %i.043, 1
-  %exitcond48 = icmp eq i32 %inc, %sub
-  br i1 %exitcond48, label %if.end20, label %for.body
+; <label>:15:                                     ; preds = %15, %13
+  %16 = phi i32 [ 0, %13 ], [ %21, %15 ]
+  %17 = load i32 (%struct.stream_t*, i32)*, i32 (%struct.stream_t*, i32)** %8, align 4, !tbaa !12
+  %18 = load i32 (%struct.stream_t*)*, i32 (%struct.stream_t*)** %3, align 4, !tbaa !14
+  %19 = tail call i32 %18(%struct.stream_t* nonnull %0) #4
+  %20 = tail call i32 %17(%struct.stream_t* %1, i32 %19) #4
+  %21 = add nuw nsw i32 %16, 1
+  %22 = icmp eq i32 %21, %14
+  br i1 %22, label %34, label %15
 
-if.else:                                          ; preds = %if.end
-  %3 = load i32 (%struct.stream_t*)*, i32 (%struct.stream_t*)** %get1, align 4, !tbaa !14
-  %call11 = tail call i32 %3(%struct.stream_t* nonnull %in) #4
-  %cmp1340 = icmp sgt i32 %call46, 0
-  br i1 %cmp1340, label %for.body14, label %if.end20
+; <label>:23:                                     ; preds = %10
+  %24 = load i32 (%struct.stream_t*)*, i32 (%struct.stream_t*)** %3, align 4, !tbaa !14
+  %25 = tail call i32 %24(%struct.stream_t* nonnull %0) #4
+  %26 = icmp sgt i32 %11, 0
+  br i1 %26, label %27, label %34
 
-for.body14:                                       ; preds = %if.else, %for.body14
-  %i.141 = phi i32 [ %inc18, %for.body14 ], [ 0, %if.else ]
-  %4 = load i32 (%struct.stream_t*, i32)*, i32 (%struct.stream_t*, i32)** %put15, align 4, !tbaa !12
-  %call16 = tail call i32 %4(%struct.stream_t* %out, i32 %call11) #4
-  %inc18 = add nuw nsw i32 %i.141, 1
-  %exitcond = icmp eq i32 %inc18, %call46
-  br i1 %exitcond, label %if.end20, label %for.body14
+; <label>:27:                                     ; preds = %23
+  br label %28
 
-if.end20:                                         ; preds = %for.body14, %for.body, %if.else
-  %5 = load i32 (%struct.stream_t*)*, i32 (%struct.stream_t*)** %get1, align 4, !tbaa !14
-  %call = tail call i32 %5(%struct.stream_t* %in) #4
-  %cmp = icmp eq i32 %call, -1
-  br i1 %cmp, label %if.then, label %if.end
+; <label>:28:                                     ; preds = %27, %28
+  %29 = phi i32 [ %32, %28 ], [ 0, %27 ]
+  %30 = load i32 (%struct.stream_t*, i32)*, i32 (%struct.stream_t*, i32)** %8, align 4, !tbaa !12
+  %31 = tail call i32 %30(%struct.stream_t* %1, i32 %25) #4
+  %32 = add nuw nsw i32 %29, 1
+  %33 = icmp eq i32 %32, %11
+  br i1 %33, label %34, label %28
+
+; <label>:34:                                     ; preds = %28, %15, %23
+  %35 = load i32 (%struct.stream_t*)*, i32 (%struct.stream_t*)** %3, align 4, !tbaa !14
+  %36 = tail call i32 %35(%struct.stream_t* %0) #4
+  %37 = icmp eq i32 %36, -1
+  br i1 %37, label %9, label %10
 }
 
 ; Function Attrs: nounwind
 define hidden i32 @main() local_unnamed_addr #2 {
-entry:
-  %buf = alloca [256 x i8], align 16
-  %str_in = alloca %struct.string_stream, align 4
-  %str_out = alloca %struct.string_stream, align 4
-  %file = alloca %struct.file_stream, align 4
-  %0 = getelementptr inbounds [256 x i8], [256 x i8]* %buf, i32 0, i32 0
-  call void @llvm.lifetime.start.p0i8(i64 256, i8* nonnull %0) #4
-  %1 = bitcast %struct.string_stream* %str_in to i8*
-  call void @llvm.lifetime.start.p0i8(i64 16, i8* nonnull %1) #4
-  call void @llvm.memcpy.p0i8.p0i8.i32(i8* nonnull align 4 %1, i8* align 4 bitcast (%struct.string_stream* @__const.main.str_in to i8*), i32 16, i1 false)
-  %2 = bitcast %struct.string_stream* %str_out to i8*
-  call void @llvm.lifetime.start.p0i8(i64 16, i8* nonnull %2) #4
-  %get = getelementptr inbounds %struct.string_stream, %struct.string_stream* %str_out, i32 0, i32 0
-  store i32 (%struct.stream_t*)* @sget, i32 (%struct.stream_t*)** %get, align 4, !tbaa !15
-  %put = getelementptr inbounds %struct.string_stream, %struct.string_stream* %str_out, i32 0, i32 1
-  store i32 (%struct.stream_t*, i32)* @sput, i32 (%struct.stream_t*, i32)** %put, align 4, !tbaa !16
-  %string = getelementptr inbounds %struct.string_stream, %struct.string_stream* %str_out, i32 0, i32 2
-  store i8* %0, i8** %string, align 4, !tbaa !2
-  %pos = getelementptr inbounds %struct.string_stream, %struct.string_stream* %str_out, i32 0, i32 3
-  store i32 0, i32* %pos, align 4, !tbaa !8
-  %3 = bitcast %struct.file_stream* %file to i8*
-  call void @llvm.lifetime.start.p0i8(i64 12, i8* nonnull %3) #4
-  %get1 = getelementptr inbounds %struct.file_stream, %struct.file_stream* %file, i32 0, i32 0
-  store i32 (%struct.stream_t*)* null, i32 (%struct.stream_t*)** %get1, align 4, !tbaa !17
-  %put2 = getelementptr inbounds %struct.file_stream, %struct.file_stream* %file, i32 0, i32 1
-  store i32 (%struct.stream_t*, i32)* @file_put, i32 (%struct.stream_t*, i32)** %put2, align 4, !tbaa !18
-  %fp = getelementptr inbounds %struct.file_stream, %struct.file_stream* %file, i32 0, i32 2
-  %4 = load i32, i32* bitcast (%struct._IO_FILE** @stdout to i32*), align 4, !tbaa !19
-  %5 = bitcast %struct._IO_FILE** %fp to i32*
-  store i32 %4, i32* %5, align 4, !tbaa !10
-  %6 = bitcast %struct.string_stream* %str_in to %struct.stream_t*
-  %7 = bitcast %struct.string_stream* %str_out to %struct.stream_t*
-  call void @encode(%struct.stream_t* nonnull %6, %struct.stream_t* nonnull %7)
-  %8 = bitcast %struct.file_stream* %file to %struct.stream_t*
-  %9 = load i32 (%struct.stream_t*)*, i32 (%struct.stream_t*)** %get, align 4, !tbaa !14
-  %call44.i = call i32 %9(%struct.stream_t* nonnull %7) #4
-  %cmp45.i = icmp eq i32 %call44.i, -1
-  br i1 %cmp45.i, label %decode.exit, label %if.end.i
+  %1 = alloca [256 x i8], align 16
+  %2 = alloca %struct.string_stream, align 4
+  %3 = alloca %struct.string_stream, align 4
+  %4 = alloca %struct.file_stream, align 4
+  %5 = getelementptr inbounds [256 x i8], [256 x i8]* %1, i32 0, i32 0
+  call void @llvm.lifetime.start.p0i8(i64 256, i8* nonnull %5) #4
+  %6 = bitcast %struct.string_stream* %2 to i8*
+  call void @llvm.lifetime.start.p0i8(i64 16, i8* nonnull %6) #4
+  call void @llvm.memcpy.p0i8.p0i8.i32(i8* nonnull %6, i8* bitcast (%struct.string_stream* @main.str_in to i8*), i32 16, i32 4, i1 false)
+  %7 = bitcast %struct.string_stream* %3 to i8*
+  call void @llvm.lifetime.start.p0i8(i64 16, i8* nonnull %7) #4
+  %8 = getelementptr inbounds %struct.string_stream, %struct.string_stream* %3, i32 0, i32 0
+  store i32 (%struct.stream_t*)* @sget, i32 (%struct.stream_t*)** %8, align 4, !tbaa !15
+  %9 = getelementptr inbounds %struct.string_stream, %struct.string_stream* %3, i32 0, i32 1
+  store i32 (%struct.stream_t*, i32)* @sput, i32 (%struct.stream_t*, i32)** %9, align 4, !tbaa !16
+  %10 = getelementptr inbounds %struct.string_stream, %struct.string_stream* %3, i32 0, i32 2
+  store i8* %5, i8** %10, align 4, !tbaa !2
+  %11 = getelementptr inbounds %struct.string_stream, %struct.string_stream* %3, i32 0, i32 3
+  store i32 0, i32* %11, align 4, !tbaa !8
+  %12 = bitcast %struct.file_stream* %4 to i8*
+  call void @llvm.lifetime.start.p0i8(i64 12, i8* nonnull %12) #4
+  %13 = getelementptr inbounds %struct.file_stream, %struct.file_stream* %4, i32 0, i32 0
+  store i32 (%struct.stream_t*)* null, i32 (%struct.stream_t*)** %13, align 4, !tbaa !17
+  %14 = getelementptr inbounds %struct.file_stream, %struct.file_stream* %4, i32 0, i32 1
+  store i32 (%struct.stream_t*, i32)* @file_put, i32 (%struct.stream_t*, i32)** %14, align 4, !tbaa !18
+  %15 = getelementptr inbounds %struct.file_stream, %struct.file_stream* %4, i32 0, i32 2
+  %16 = load i32, i32* bitcast (%struct._IO_FILE** @stdout to i32*), align 4, !tbaa !19
+  %17 = bitcast %struct._IO_FILE** %15 to i32*
+  store i32 %16, i32* %17, align 4, !tbaa !10
+  %18 = bitcast %struct.string_stream* %2 to %struct.stream_t*
+  %19 = bitcast %struct.string_stream* %3 to %struct.stream_t*
+  call void @encode(%struct.stream_t* nonnull %18, %struct.stream_t* nonnull %19)
+  %20 = bitcast %struct.file_stream* %4 to %struct.stream_t*
+  %21 = load i32 (%struct.stream_t*)*, i32 (%struct.stream_t*)** %8, align 4, !tbaa !14
+  %22 = call i32 %21(%struct.stream_t* nonnull %19) #4
+  %23 = icmp eq i32 %22, -1
+  br i1 %23, label %53, label %24
 
-if.end.i:                                         ; preds = %entry, %if.end20.i
-  %call46.i = phi i32 [ %call.i, %if.end20.i ], [ %call44.i, %entry ]
-  %cmp2.i = icmp sgt i32 %call46.i, 128
-  br i1 %cmp2.i, label %for.body.preheader.i, label %if.else.i
+; <label>:24:                                     ; preds = %0
+  br label %25
 
-for.body.preheader.i:                             ; preds = %if.end.i
-  %sub.i = add i32 %call46.i, -128
-  br label %for.body.i
+; <label>:25:                                     ; preds = %24, %49
+  %26 = phi i32 [ %51, %49 ], [ %22, %24 ]
+  %27 = icmp sgt i32 %26, 128
+  br i1 %27, label %28, label %38
 
-for.body.i:                                       ; preds = %for.body.i, %for.body.preheader.i
-  %i.043.i = phi i32 [ %inc.i, %for.body.i ], [ 0, %for.body.preheader.i ]
-  %10 = load i32 (%struct.stream_t*, i32)*, i32 (%struct.stream_t*, i32)** %put2, align 4, !tbaa !12
-  %11 = load i32 (%struct.stream_t*)*, i32 (%struct.stream_t*)** %get, align 4, !tbaa !14
-  %call7.i = call i32 %11(%struct.stream_t* nonnull %7) #4
-  %call8.i = call i32 %10(%struct.stream_t* nonnull %8, i32 %call7.i) #4
-  %inc.i = add nuw nsw i32 %i.043.i, 1
-  %exitcond48.i = icmp eq i32 %inc.i, %sub.i
-  br i1 %exitcond48.i, label %if.end20.i, label %for.body.i
+; <label>:28:                                     ; preds = %25
+  %29 = add nsw i32 %26, -128
+  br label %30
 
-if.else.i:                                        ; preds = %if.end.i
-  %12 = load i32 (%struct.stream_t*)*, i32 (%struct.stream_t*)** %get, align 4, !tbaa !14
-  %call11.i = call i32 %12(%struct.stream_t* nonnull %7) #4
-  %cmp1340.i = icmp sgt i32 %call46.i, 0
-  br i1 %cmp1340.i, label %for.body14.i, label %if.end20.i
+; <label>:30:                                     ; preds = %30, %28
+  %31 = phi i32 [ 0, %28 ], [ %36, %30 ]
+  %32 = load i32 (%struct.stream_t*, i32)*, i32 (%struct.stream_t*, i32)** %14, align 4, !tbaa !12
+  %33 = load i32 (%struct.stream_t*)*, i32 (%struct.stream_t*)** %8, align 4, !tbaa !14
+  %34 = call i32 %33(%struct.stream_t* nonnull %19) #4
+  %35 = call i32 %32(%struct.stream_t* nonnull %20, i32 %34) #4
+  %36 = add nuw nsw i32 %31, 1
+  %37 = icmp eq i32 %36, %29
+  br i1 %37, label %49, label %30
 
-for.body14.i:                                     ; preds = %if.else.i, %for.body14.i
-  %i.141.i = phi i32 [ %inc18.i, %for.body14.i ], [ 0, %if.else.i ]
-  %13 = load i32 (%struct.stream_t*, i32)*, i32 (%struct.stream_t*, i32)** %put2, align 4, !tbaa !12
-  %call16.i = call i32 %13(%struct.stream_t* nonnull %8, i32 %call11.i) #4
-  %inc18.i = add nuw nsw i32 %i.141.i, 1
-  %exitcond.i = icmp eq i32 %inc18.i, %call46.i
-  br i1 %exitcond.i, label %if.end20.i, label %for.body14.i
+; <label>:38:                                     ; preds = %25
+  %39 = load i32 (%struct.stream_t*)*, i32 (%struct.stream_t*)** %8, align 4, !tbaa !14
+  %40 = call i32 %39(%struct.stream_t* nonnull %19) #4
+  %41 = icmp sgt i32 %26, 0
+  br i1 %41, label %42, label %49
 
-if.end20.i:                                       ; preds = %for.body14.i, %for.body.i, %if.else.i
-  %14 = load i32 (%struct.stream_t*)*, i32 (%struct.stream_t*)** %get, align 4, !tbaa !14
-  %call.i = call i32 %14(%struct.stream_t* nonnull %7) #4
-  %cmp.i = icmp eq i32 %call.i, -1
-  br i1 %cmp.i, label %decode.exit, label %if.end.i
+; <label>:42:                                     ; preds = %38
+  br label %43
 
-decode.exit:                                      ; preds = %if.end20.i, %entry
-  call void @llvm.lifetime.end.p0i8(i64 12, i8* nonnull %3) #4
-  call void @llvm.lifetime.end.p0i8(i64 16, i8* nonnull %2) #4
-  call void @llvm.lifetime.end.p0i8(i64 16, i8* nonnull %1) #4
-  call void @llvm.lifetime.end.p0i8(i64 256, i8* nonnull %0) #4
+; <label>:43:                                     ; preds = %42, %43
+  %44 = phi i32 [ %47, %43 ], [ 0, %42 ]
+  %45 = load i32 (%struct.stream_t*, i32)*, i32 (%struct.stream_t*, i32)** %14, align 4, !tbaa !12
+  %46 = call i32 %45(%struct.stream_t* nonnull %20, i32 %40) #4
+  %47 = add nuw nsw i32 %44, 1
+  %48 = icmp eq i32 %47, %26
+  br i1 %48, label %49, label %43
+
+; <label>:49:                                     ; preds = %43, %30, %38
+  %50 = load i32 (%struct.stream_t*)*, i32 (%struct.stream_t*)** %8, align 4, !tbaa !14
+  %51 = call i32 %50(%struct.stream_t* nonnull %19) #4
+  %52 = icmp eq i32 %51, -1
+  br i1 %52, label %53, label %25
+
+; <label>:53:                                     ; preds = %49, %0
+  call void @llvm.lifetime.end.p0i8(i64 12, i8* nonnull %12) #4
+  call void @llvm.lifetime.end.p0i8(i64 16, i8* nonnull %7) #4
+  call void @llvm.lifetime.end.p0i8(i64 16, i8* nonnull %6) #4
+  call void @llvm.lifetime.end.p0i8(i64 256, i8* nonnull %5) #4
   ret i32 0
 }
 
 ; Function Attrs: argmemonly nounwind
-declare void @llvm.memcpy.p0i8.p0i8.i32(i8* nocapture writeonly, i8* nocapture readonly, i32, i1) #1
+declare void @llvm.memcpy.p0i8.p0i8.i32(i8* nocapture writeonly, i8* nocapture readonly, i32, i32, i1) #1
 
-attributes #0 = { norecurse nounwind "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "less-precise-fpmad"="false" "min-legal-vector-width"="0" "no-frame-pointer-elim"="false" "no-infs-fp-math"="false" "no-jump-tables"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="false" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #0 = { norecurse nounwind "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "less-precise-fpmad"="false" "no-frame-pointer-elim"="false" "no-infs-fp-math"="false" "no-jump-tables"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="false" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
 attributes #1 = { argmemonly nounwind }
-attributes #2 = { nounwind "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "less-precise-fpmad"="false" "min-legal-vector-width"="0" "no-frame-pointer-elim"="false" "no-infs-fp-math"="false" "no-jump-tables"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="false" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #2 = { nounwind "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "less-precise-fpmad"="false" "no-frame-pointer-elim"="false" "no-infs-fp-math"="false" "no-jump-tables"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="false" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
 attributes #3 = { nounwind "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "less-precise-fpmad"="false" "no-frame-pointer-elim"="false" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="false" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
 attributes #4 = { nounwind }
 
@@ -403,7 +404,7 @@ attributes #4 = { nounwind }
 !llvm.ident = !{!1}
 
 !0 = !{i32 1, !"wchar_size", i32 4}
-!1 = !{!"clang version 8.0.0 (tags/RELEASE_800/final 375507)"}
+!1 = !{!"clang version 6.0.0-1ubuntu2 (tags/RELEASE_600/final)"}
 !2 = !{!3, !4, i64 8}
 !3 = !{!"", !4, i64 0, !4, i64 4, !4, i64 8, !7, i64 12}
 !4 = !{!"any pointer", !5, i64 0}
