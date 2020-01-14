@@ -1,39 +1,42 @@
-
 # -*- coding: utf-8 -*-
 
 import itertools
 import collections
 import os
+import configparser
 
-DEBUG_FILE = open("%s/debug.slumps.log"%(os.environ.get("INPUT_FOLDER", "."),), 'wb')
+config = configparser.ConfigParser(interpolation=configparser.ExtendedInterpolation())
+config.read("settings/config.ini")
 
-OUT_FOLDER = "%s/out"%(os.environ.get("INPUT_FOLDER", "."),)
-MAX_INST = int(os.environ.get("MAX_INST", "3"))
-OPT1 = os.environ.get("OPT1", "O0")
-OPT2 = os.environ.get("OPT2", "O0")
-CHECK_OPTIONS = list(filter(lambda x: x, os.environ.get("CHECK_OPTS", "").split(" "))) 
+DEBUG_FILE = open(config["DEFAULT"]["debugfile"], 'wb')
+
+OUT_FOLDER = config["DEFAULT"]["outfolder"]
 
 
 def globalCounter():
     globalCounter.counter += 1
     return globalCounter.counter
 
+
 globalCounter.counter = 0
 
-def getSubsetIterator(S,m):
+
+def getSubsetIterator(S, m):
     if m == len(S):
         yield S
     else:
         yield from itertools.combinations(S, m)
         yield from getSubsetIterator(S, m + 1)
-        
+
+
 def flatten(x):
     if isinstance(x, collections.Iterable):
         return [a for i in x for a in flatten(i)]
     else:
         return [x]
 
-def printProgressBar (iteration, total, prefix = '', suffix = '', decimals = 1, length = 100, fill = '█', printEnd = "\r"):
+
+def printProgressBar(iteration, total, prefix='', suffix='', decimals=1, length=100, fill='█', printEnd="\r"):
     """
     Call in a loop to create terminal progress bar
     @params:
@@ -49,10 +52,11 @@ def printProgressBar (iteration, total, prefix = '', suffix = '', decimals = 1, 
     percent = ("{0:." + str(decimals) + "f}").format(100 * (iteration / float(total)))
     filledLength = int(length * iteration // total)
     bar = fill * filledLength + '-' * (length - filledLength)
-    print('\r%s |%s| %s%% %s' % (prefix, bar, percent, suffix), end = printEnd)
+    print('\r%s |%s| %s%% %s' % (prefix, bar, percent, suffix), end=printEnd)
     # Print New Line on Complete
-    if iteration == total: 
+    if iteration == total:
         print()
+
 
 class bcolors:
     HEADER = '\033[95m'
@@ -65,27 +69,20 @@ class bcolors:
     UNDERLINE = '\033[4m'
 
 
-
-BASE_DIR = os.environ.get("SRC_DIR", os.path.dirname(
-    os.path.dirname(
-        os.path.dirname(
-            os.path.dirname(
-                os.path.abspath(__file__))))))
-
-
 class Alias:
-    
-    clang = "%s/souper/third_party/llvm/Release/bin/clang"%(BASE_DIR,)
-    opt = "%s/souper/third_party/llvm/Release/bin/opt"%(BASE_DIR,)
-    llc = "%s/souper/third_party/llvm/Release/bin/llc"%(BASE_DIR,)
-    lli = "%s/souper/third_party/llvm/Release/bin/lli"%(BASE_DIR,)
-    llvm_as = "%s/souper/third_party/llvm/Release/bin/llvm-as"%(BASE_DIR,)    
-    #llc = "/usr/local/opt/llvm/bin/llc" #"%s/souper/third_party/llvm/Release/bin/llc"%(BASE_DIR,) # /usr/local/opt/llvm/bin/wasm-ld
+    clang = config["clang"]["path"]
+    opt = config["opt"]["path"]
 
-    wasm_ld = os.environ.get("WASM_LD", "/usr/local/opt/llvm/bin/wasm-ld")  #"/usr/bin/wasm-ld-8" # /usr/local/opt/llvm/bin/wasm-ld
-    souper = "%s/souper/build/souper"%(BASE_DIR,)
-    souper_check = "%s/souper/build/souper-check"%(BASE_DIR,)
-    souper2llvm = "%s/souper/build/souper2llvm"%(BASE_DIR,)
-    wasm2wat = "%s/wabt/bin/wasm2wat"%(BASE_DIR,)
+    # llc = "%s/souper/third_party/llvm/Release/bin/llc"%(BASE_DIR,)
+    # lli = "%s/souper/third_party/llvm/Release/bin/lli"%(BASE_DIR,)
+    llvm_as = config["llvm-as"]["path"]
+    #"%s/souper/third_party/llvm/Release/bin/llvm-as"%(BASE_DIR,)
+    # llc = "/usr/local/opt/llvm/bin/llc" #"%s/souper/third_party/llvm/Release/bin/llc"%(BASE_DIR,) # /usr/local/opt/llvm/bin/wasm-ld
+
+    wasm_ld = config["wasm-ld"]["path"]  # os.environ.get("WASM_LD", "/usr/local/opt/llvm/bin/wasm-ld")  #"/usr/bin/wasm-ld-8" # /usr/local/opt/llvm/bin/wasm-ld
+    souper = config["souper"]["souper"]
+    souper_check = config["souper"]["check"]
+    # souper2llvm = "%s/souper/build/souper2llvm"%(BASE_DIR,)
+    wasm2wat = config["wabt"]["wasm2wat"]
     # libsouperPass_so = "../../souper/build/libsouperPass.so"
-    z3 = "%s/souper/third_party/z3/build/z3"%(BASE_DIR,)
+    # z3 = "%s/souper/third_party/z3/build/z3"%(BASE_DIR,)
