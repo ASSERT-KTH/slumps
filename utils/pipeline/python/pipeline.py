@@ -3,7 +3,7 @@
 import os
 import sys
 from stages import CToLLStage, LLToBC, BCToSouper, ObjtoWASM, WASM2WAT, BCCountCandidates
-from utils import bcolors, DEBUG_FILE, OUT_FOLDER, printProgressBar, config, createTmpFile
+from utils import bcolors, DEBUG_FILE, OUT_FOLDER, printProgressBar, config, createTmpFile, getIteratorByName
 from logger import LOGGER
 
 import collections
@@ -42,13 +42,13 @@ class Pipeline(object):
         if file.endswith(".ll"):
             ll1 = open(file, 'rb')
 
-        if config["DEFAULT"].getboolean("export-original"):
-            self.generateOriginalWASM(ll1, OUT_FOLDER, file)
-
         lltobc = LLToBC()
         bc = lltobc(std=ll1)
 
-        LOGGER.success("Initial BC size %s bytes" % (len(bc),))
+        program_name = file.split("/")[-1].split(".")[0]
+
+        if config["DEFAULT"].getboolean("export-original"):
+            self.generateWasm(bc, OUT_FOLDER, program_name)
 
         bctocand = BCCountCandidates()
 
@@ -73,32 +73,45 @@ class Pipeline(object):
 
         tmpInFile = open(tmpIn, 'wb')
         tmpInFile.write(bc)
+        tmpInFile.close()
 
-        optBc = BCToSouper(candidates=[2])
-        optBc(args=[tmpIn, tmpOut], std=None)
+        for set in getIteratorByName(config["DEFAULT"]["generator-method"])(range(cand[0])):
+            LOGGER.success("Generating version for %s" % set.__str__())
+            optBc = BCToSouper(candidates=list(set))
+            optBc(args=[tmpIn, tmpOut], std=None)
 
-        bsOpt = open(tmpOut, 'rb').read()
+            bsOpt = open(tmpOut, 'rb').read()
 
-        LOGGER.success("Optimized BC size %s bytes" % (len(bsOpt),))
+            sanitized_set_name =  "_".join(list(map(lambda x: x.__str__(), set)))
+            self.generateWasm(bsOpt, OUT_FOLDER, "%s%s"%(program_name, sanitized_set_name))
 
+            os.remove(tmpOut)
         os.remove(tmpIn)
-        os.remove(tmpOut)
 
-    def generateOriginalWASM(self, bc, OUT_FOLDER, file):
-        llFileName = "%s/%s.all.ll" % (OUT_FOLDER, file.split("/")[-1])
+
+
+    def generateWasm(self, bc, OUT_FOLDER, fileName):
+        llFileName = "%s/%s" % (OUT_FOLDER, fileName)
+
+        tmpWasm = createTmpFile(ext=".bc")
+        tmpWasmF = open(tmpWasm, 'wb')
+        tmpWasmF.write(bc)
+        tmpWasmF.close()
 
         finalObjCreator = ObjtoWASM()
-        finalobj = finalObjCreator(std=bc)
+        finalObjCreator(args=[
+            "%s.wasm"%(llFileName,),
+            tmpWasm
+        ], std=None)
 
-        open("%s.orig.wasm" % (llFileName,), 'wb').write(finalobj)
-
+        os.remove(tmpWasm)
         wat = WASM2WAT()
         wat(std=None, args=[
-            "%s.orig.wasm" % (llFileName,),
-            "%s.orig.wat" % (llFileName,)]
+            "%s.wasm" % (llFileName,),
+            "%s.wat" % (llFileName,)]
             )
 
-        LOGGER.warning("WASM SIZE %s" % (len(open("%s.orig.wasm" % (llFileName,), 'rb').read()),))
+        LOGGER.warning("WASM SIZE %s" % (len(open("%s.wasm" % (llFileName,), 'rb').read()),))
 
 
 if __name__ == "__main__":
