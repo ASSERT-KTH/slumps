@@ -142,7 +142,7 @@ class ObjtoWASM(ExternalStage):
 
     def __call__(self, args=[], std=None):  # f -> inputs
 
-        new_inputs = (config["wasm-ld"]["command"] % ("%s %s" % (args[1], args[0]))).split(" ")
+        new_inputs = (config["wasm-ld"]["command"] % ("%s %s" % (args[1], args[0]),)).split(" ")
         return super(ObjtoWASM, self).__call__(new_inputs, std)
 
     def processInner(self, std):
