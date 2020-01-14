@@ -1,10 +1,9 @@
 # -*- coding: utf-8 -*-
 
-import itertools
-import collections
 import os
 import configparser
 import uuid
+import iterators
 
 config = configparser.ConfigParser(interpolation=configparser.ExtendedInterpolation())
 config.read("settings/config.ini")
@@ -14,8 +13,13 @@ DEBUG_FILE = open(config["DEFAULT"]["debugfile"], 'wb')
 OUT_FOLDER = config["DEFAULT"]["outfolder"]
 
 
+def getIteratorByName(name: str):
+    return getattr(iterators, name)
+
+
 def createTmpFile():
-    return "%s/%s"%(OUT_FOLDER, uuid.uuid4())
+    return "%s/%s" % (OUT_FOLDER, uuid.uuid4())
+
 
 def globalCounter():
     globalCounter.counter += 1
@@ -23,21 +27,6 @@ def globalCounter():
 
 
 globalCounter.counter = 0
-
-
-def getSubsetIterator(S, m):
-    if m == len(S):
-        yield S
-    else:
-        yield from itertools.combinations(S, m)
-        yield from getSubsetIterator(S, m + 1)
-
-
-def flatten(x):
-    if isinstance(x, collections.Iterable):
-        return [a for i in x for a in flatten(i)]
-    else:
-        return [x]
 
 
 def printProgressBar(iteration, total, prefix='', suffix='', decimals=1, length=100, fill='█', printEnd="\r"):
@@ -80,10 +69,11 @@ class Alias:
     # llc = "%s/souper/third_party/llvm/Release/bin/llc"%(BASE_DIR,)
     # lli = "%s/souper/third_party/llvm/Release/bin/lli"%(BASE_DIR,)
     llvm_as = config["llvm-as"]["path"]
-    #"%s/souper/third_party/llvm/Release/bin/llvm-as"%(BASE_DIR,)
+    # "%s/souper/third_party/llvm/Release/bin/llvm-as"%(BASE_DIR,)
     # llc = "/usr/local/opt/llvm/bin/llc" #"%s/souper/third_party/llvm/Release/bin/llc"%(BASE_DIR,) # /usr/local/opt/llvm/bin/wasm-ld
 
-    wasm_ld = config["wasm-ld"]["path"]  # os.environ.get("WASM_LD", "/usr/local/opt/llvm/bin/wasm-ld")  #"/usr/bin/wasm-ld-8" # /usr/local/opt/llvm/bin/wasm-ld
+    wasm_ld = config["wasm-ld"][
+        "path"]  # os.environ.get("WASM_LD", "/usr/local/opt/llvm/bin/wasm-ld")  #"/usr/bin/wasm-ld-8" # /usr/local/opt/llvm/bin/wasm-ld
     souper = config["souper"]["souper"]
     souper_check = config["souper"]["check"]
     # souper2llvm = "%s/souper/build/souper2llvm"%(BASE_DIR,)

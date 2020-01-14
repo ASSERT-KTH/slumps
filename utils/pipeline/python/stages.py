@@ -125,8 +125,6 @@ class BCToSouper(ExternalStage):
 
     def __call__(self, args=[], std=None):  # f -> inputs
 
-        print(config["opt"]["path"])
-        print((config["souper"]["super-opt-pass"] % "%s -o %s"%(args[0], args[1])))
         new_inputs = (config["souper"]["super-opt-pass"] %"%s -o %s"%(args[0], args[1])).split(" ")
         return super(BCToSouper, self).__call__(new_inputs, std)
 
