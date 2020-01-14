@@ -5,8 +5,8 @@ import sys
 from stages import CToLLStage, LLToBC, BCToSouper, ObjtoWASM, WASM2WAT, BCCountCandidates
 from utils import bcolors, DEBUG_FILE, OUT_FOLDER, printProgressBar, config, createTmpFile, getIteratorByName
 from logger import LOGGER
-
 import collections
+import hashlib
 
 
 class Pipeline(object):
@@ -111,7 +111,10 @@ class Pipeline(object):
             "%s.wat" % (llFileName,)]
             )
 
-        LOGGER.warning("WASM SIZE %s" % (len(open("%s.wasm" % (llFileName,), 'rb').read()),))
+        finalStream = open("%s.wasm" % (llFileName,), 'rb').read()
+        LOGGER.warning("WASM SIZE %s" % (len(finalStream),))
+        hashvalue = hashlib.sha256(finalStream)
+        LOGGER.warning("WASM SHA %s" % (hashvalue.hexdigest(),))
 
 
 if __name__ == "__main__":
