@@ -25,22 +25,23 @@ def test_lltobc():
 
 def test_bctoSouperCandidates():
     # Receive a LLVM IR in the std
-    bctoSouper = stages.BCListCandidates()
-    content = open("%s/results/babbage_problem.bc"%(BASEDIR,), 'rb').read()
+    bctoSouper = stages.BCCountCandidates()
+    content = open("%s/results/babbage_problem.bc" % (BASEDIR,), 'rb').read()
 
-    lhs = bctoSouper( std=content) # Send llvm IR to std
+    bctoSouper(args=["%s/results/babbage_problem.bc" % (BASEDIR,)],
+               std=None)  # Send llvm IR to std
 
-    open("%s/results/babbage_problem.lhs"%(BASEDIR,), 'wb').write(lhs)
+    # open("%s/results/babbage_problem.opt.bc"%(BASEDIR,), 'wb').write(opt)
 
 
 def test_BCSouperPass():
     # Receive a LLVM IR in the std
-    bctoSouper = stages.BCToSouper(candidates=[2])
+    bctoSouper = stages.BCToSouper(candidates=[1,3])
     content = open("%s/results/babbage_problem.bc"%(BASEDIR,), 'rb').read()
 
-    opt = bctoSouper(args=["%s/results/babbage_problem.bc"%(BASEDIR,), "%s/results/babbage_problem.opt.bc"%(BASEDIR,)], std=None) # Send llvm IR to std
+    bctoSouper(args=["%s/results/babbage_problem.bc"%(BASEDIR,), "%s/results/babbage_problem.opt.bc"%(BASEDIR,)], std=None) # Send llvm IR to std
 
-    open("%s/results/babbage_problem.opt.bc"%(BASEDIR,), 'wb').write(opt)
+    # open("%s/results/babbage_problem.opt.bc"%(BASEDIR,), 'wb').write(opt)
 
 
 def test_bctoWasm():
@@ -60,16 +61,3 @@ def test_WASM2WAT():
                       "%s/results/babbage_problem.wat"%(BASEDIR,)]) # Send llvm IR to std
 
 
-
-def test_partial():
-    # Receive a LLVM IR in the std
-    #lltobc = stages.LLToBC()
-    #content = open("%s/benchmarks/babbage_problem.ll" % (BASEDIR,), 'rb').read()
-
-    #bc = lltobc(std=content) # Send llvm IR to std
-
-    #open()
-
-    #bcToCand = stages.BCToSouper()
-    #print(bcToCand(std=bc).decode("utf-8"))
-    pass

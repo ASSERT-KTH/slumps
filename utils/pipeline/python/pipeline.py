@@ -2,7 +2,7 @@
 
 import os
 import sys
-from stages import CToLLStage, LLToBC, BCToSouper, ObjtoWASM, WASM2WAT, BCListCandidates
+from stages import CToLLStage, LLToBC, BCToSouper, ObjtoWASM, WASM2WAT, BCCountCandidates
 from utils import bcolors, DEBUG_FILE, OUT_FOLDER, printProgressBar, config, createTmpFile
 from logger import LOGGER
 
@@ -50,15 +50,20 @@ class Pipeline(object):
 
         LOGGER.success("Initial BC size %s bytes" % (len(bc),))
 
-        bctocand = BCListCandidates()
-        cand = bctocand(std=bc)
+        bctocand = BCCountCandidates()
+
+        tmpBC = createTmpFile()
+        tmpBCF = open(tmpBC, 'wb')
+        tmpBCF.write(bc)
+        tmpBCF.close()
+
+        cand = bctocand(args=[tmpBC], std=None)
+        os.remove(tmpBC)
         # Infer candidates one by one
 
         # Saving candidate
-        candidates = cand.decode("utf-8").split("\n\n")  # Avoid the last separator
-        candidates = list(candidates)
 
-        LOGGER.success("Found %s arithmetic expression candidates. Filtering and solving..." % (len(candidates),))
+        LOGGER.success("Found %s arithmetic expression candidates. %s Can be replaced" % (cand[1], cand[0]))
 
         # Test set the second candidate for optimization
 
@@ -68,7 +73,6 @@ class Pipeline(object):
 
         tmpInFile = open(tmpIn, 'wb')
         tmpInFile.write(bc)
-
 
         optBc = BCToSouper(candidates=[2])
         optBc(args=[tmpIn, tmpOut], std=None)
