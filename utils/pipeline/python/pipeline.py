@@ -46,9 +46,10 @@ class Pipeline(object):
         bc = lltobc(std=ll1)
 
         program_name = file.split("/")[-1].split(".")[0]
+        sha = set([])
 
-        if config["DEFAULT"].getboolean("export-original"):
-            self.generateWasm(bc, OUT_FOLDER, program_name)
+        originalSha = self.generateWasm(bc, OUT_FOLDER, program_name)
+        sha.add(originalSha)
 
         bctocand = BCCountCandidates()
 
@@ -75,22 +76,38 @@ class Pipeline(object):
         tmpInFile.write(bc)
         tmpInFile.close()
 
-        for set in getIteratorByName(config["DEFAULT"]["generator-method"])(range(cand[0])):
-            LOGGER.success("Generating version for %s" % set.__str__())
-            optBc = BCToSouper(candidates=list(set))
-            optBc(args=[tmpIn, tmpOut], std=None)
+        total = 2 ** (cand[0])  # tentative, TODO change to the iterator
+        current = 1
 
-            bsOpt = open(tmpOut, 'rb').read()
+        if cand[0] > 0:
+            for s in getIteratorByName(config["DEFAULT"]["generator-method"])(range(cand[0])):
+                sanitized_set_name = "_".join(list(map(lambda x: x.__str__(), s)))
 
-            sanitized_set_name =  "_".join(list(map(lambda x: x.__str__(), set)))
-            self.generateWasm(bsOpt, OUT_FOLDER, "%s%s"%(program_name, sanitized_set_name))
+                optBc = BCToSouper(candidates=list(s))
+                optBc(args=[tmpIn, tmpOut], std=None)
 
-            os.remove(tmpOut)
+                bsOpt = open(tmpOut, 'rb').read()
+
+                hex = self.generateWasm(bsOpt, OUT_FOLDER, "%s[%s]" % (program_name, sanitized_set_name), debug=False)
+
+                os.remove(tmpOut)
+                printProgressBar(current, total,
+                                 suffix="Completed %s[%s] %s" % (program_name, sanitized_set_name, hex), length=50)
+
+                sha.add(hex)
+                current += 1
+
+            printProgressBar(current, total, suffix="Total number of programs %s. Different sha count %s      %s" % (
+            current, len(sha), " " * 100), length=50)
+        else:
+            LOGGER.error("No succesfull replacements. Total number of subexpressions  %s" % cand[1])
         os.remove(tmpIn)
 
+        if config["DEFAULT"].getboolean("print-sha"):
+            for s in sha:
+                LOGGER.warning("WASM SHA256 %s"%(s,))
 
-
-    def generateWasm(self, bc, OUT_FOLDER, fileName):
+    def generateWasm(self, bc, OUT_FOLDER, fileName, debug=True):
         llFileName = "%s/%s" % (OUT_FOLDER, fileName)
 
         tmpWasm = createTmpFile(ext=".bc")
@@ -98,23 +115,26 @@ class Pipeline(object):
         tmpWasmF.write(bc)
         tmpWasmF.close()
 
-        finalObjCreator = ObjtoWASM()
+        finalObjCreator = ObjtoWASM(debug=debug)
         finalObjCreator(args=[
-            "%s.wasm"%(llFileName,),
+            "%s.wasm" % (llFileName,),
             tmpWasm
         ], std=None)
 
         os.remove(tmpWasm)
-        wat = WASM2WAT()
+        wat = WASM2WAT(debug=debug)
         wat(std=None, args=[
             "%s.wasm" % (llFileName,),
             "%s.wat" % (llFileName,)]
             )
 
         finalStream = open("%s.wasm" % (llFileName,), 'rb').read()
-        LOGGER.warning("WASM SIZE %s" % (len(finalStream),))
+        if debug:
+            LOGGER.warning("WASM SIZE %s" % (len(finalStream),))
         hashvalue = hashlib.sha256(finalStream)
-        LOGGER.warning("WASM SHA %s" % (hashvalue.hexdigest(),))
+        if debug:
+            LOGGER.warning("WASM SHA %s" % (hashvalue.hexdigest(),))
+        return hashvalue.hexdigest()
 
 
 if __name__ == "__main__":

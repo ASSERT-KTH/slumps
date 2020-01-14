@@ -102,10 +102,10 @@ class BCCountCandidates(ExternalStage):
 
 class BCToSouper(ExternalStage):
 
-    def __init__(self, candidates=[]):
+    def __init__(self, candidates=[], debug=False):
         self.path_to_executable = Alias.opt
         self.name = "LLVM BC supertoptimization pass"
-        self.debug = True
+        self.debug = debug
         self.candidates = candidates
 
     def __call__(self, args=[], std=None):  # f -> inputs
@@ -120,10 +120,10 @@ class BCToSouper(ExternalStage):
 
 class ObjtoWASM(ExternalStage):
 
-    def __init__(self):
+    def __init__(self, debug=True):
         self.path_to_executable = Alias.wasm_ld
         self.name = "LLVM obj to WASM"
-        self.debug = True
+        self.debug = debug
 
     def __call__(self, args=[], std=None):  # f -> inputs
 
@@ -137,10 +137,11 @@ class ObjtoWASM(ExternalStage):
 
 class WASM2WAT(ExternalStage):
 
-    def __init__(self):
+    def __init__(self, debug=True):
         self.path_to_executable = Alias.wasm2wat
         self.name = "WASM to WAT text"
-        self.debug = True
+        self.debug = debug
+
 
     def __call__(self, args=[], std=None):  # f -> inputs
 
