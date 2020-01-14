@@ -1,9 +1,0 @@
-; RUN: %souper2llvm %s | %FileCheck %s
-
-%0:i4 = var
-%1:i16 = var
-%2:i8 = zext %0
-%3:i8 = trunc %1
-%4:i8 = and %2, %3
-result %4
-

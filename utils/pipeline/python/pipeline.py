@@ -1,255 +1,85 @@
 # -*- coding: utf-8 -*-
 
-import argparse
 import os
 import sys
-import re
-from nodes import TextBlock, ModuleNode, CandidateNode, SolutionNode
-from stages import CandidatesToSouperParts, CToLLStage, LLToBC, LLToMem2RegLL, BCToSouper, LLVMCompile, LLVMTOWasm, ObjtoWASM, WASM2WAT
-from utils import bcolors, DEBUG_FILE, flatten, OUT_FOLDER, MAX_INST, printProgressBar
+from stages import CToLLStage, LLToBC, BCToSouper, ObjtoWASM, WASM2WAT, BCListCandidates
+from utils import bcolors, DEBUG_FILE, flatten, OUT_FOLDER, printProgressBar, config
 from logger import LOGGER
-import shutil
-from dependency import DependencyAnalyzer
-import hashlib
-import json
 
 import collections
 
 
 class Pipeline(object):
-    def process(self, file):
-        
-        # checking output directory
 
-        # if os.path.exists(OUT_FOLDER):
-        #    LOGGER.warning("Removing out folder content...%s"%(OUT_FOLDER, ))
-        #    shutil.rmtree(OUT_FOLDER)
+    def check_file(self, file: str):
+        if file.endswith(".c") or file.endswith(".cpp"):
+            return True
+
+        if file.endswith(".ll"):
+            # Check triple
+            if not open(file, 'r').read().find('triple = "wasm32-unknown-unknown"'):
+                LOGGER.warning("LL file triple is not targeting wasm32-unknown-unknown")
+                return False
+
+            return True
+
+        return False
+
+    def process(self, file):
+
+        if not self.check_file(file):
+            LOGGER.error("Invalid file %s" % (file,))
+            return
+
         if not os.path.exists(OUT_FOLDER):
             os.mkdir(OUT_FOLDER)
 
-        ctoll = CToLLStage()
-        ll1 = ctoll(file)
+        ll1 = b''
 
-        lltoll = LLToMem2RegLL()
-        ll2 = lltoll(std=ll1)
+        if file.endswith(".c") or file.endswith(".cpp"):
+            ctoll = CToLLStage()
+            ll1 = ctoll(file)
+        if file.endswith(".ll"):
+            ll1 = open(file, 'rb')
 
-        self.generateOriginalWASM(ll2, OUT_FOLDER, file)
-
-        # Saving the ll file
-        self.original_llvm = ll2.decode("utf-8")
+        if config["DEFAULT"].getboolean("export-original"):
+            self.generateOriginalWASM(ll1, OUT_FOLDER, file)
 
         lltobc = LLToBC()
-        bc = lltobc(std=ll2)
+        bc = lltobc(std=ll1)
 
-        LOGGER.success("Initial BC size %s bytes"%(len(bc), ))
+        LOGGER.success("Initial BC size %s bytes" % (len(bc),))
 
-        bctocand = BCToSouper()
+        bctocand = BCListCandidates()
         cand = bctocand(std=bc)
         # Infer candidates one by one
 
-        #Saving candidate
-        candidates = cand.decode("utf-8").split("\n\n") # Avoid the last separator
+        # Saving candidate
+        candidates = cand.decode("utf-8").split("\n\n")  # Avoid the last separator
         candidates = list(candidates)
 
-        LOGGER.success("Found %s arithmetic expression candidates. Filtering and solving..."%(len(candidates),))
-        ORIGIN__RE = re.compile(r";\[ORIGIN\] (.*)\n")
+        LOGGER.success("Found %s arithmetic expression candidates. Filtering and solving..." % (len(candidates),))
 
-        rootNode = TextBlock(self.original_llvm)
-        
-        finalCandidates = []
-        for j, cand_text in enumerate(candidates):
-            for i in range(1, min(MAX_INST, len(cand_text.split("\n")) - 2 )): # Less number of instructionns than the original
-                printProgressBar(j, total=len(candidates), suffix="Valid count %s. Candidate %s. Trying %s instructions ...     "%(len(finalCandidates),j, i))
+    def generateOriginalWASM(self, bc, OUT_FOLDER, file):
+        llFileName = "%s/%s.all.ll" % (OUT_FOLDER, file.split("/")[-1])
 
-                plump = CandidatesToSouperParts(i)
-                plump.debug = False
+        finalObjCreator = ObjtoWASM()
+        finalobj = finalObjCreator(std=bc)
 
-                sols = plump(std=cand_text.encode("utf-8"))
-
-                if '; RHS inferred successfully' in sols.decode("utf-8"):
-                    finalCandidates.append([cand_text,
-                        sols.decode("utf-8")
-                    ])
-
-                    LOGGER.debug("===============================> Valid candidate \n")
-                    LOGGER.debug(cand_text)
-                    LOGGER.debug("===============================> RHS \n")
-                    LOGGER.debug(sols.decode("utf-8"))
-
-                    break
-            printProgressBar(j, total=len(candidates), suffix="Candidate %s, up to %s instructions"%(j,  min(MAX_INST, len(cand_text.split("\n")) - 2)))
-
-        printProgressBar(len(candidates), total=len(candidates), suffix="Complete exploration                                   ")
-        LOGGER.success("%s Valid replacements"%(len(finalCandidates)))
-                
-
-        children = [rootNode]
-        candidateNodes = []
-
-        
-
-        for cand_text, replacement in finalCandidates:
-            search = ORIGIN__RE.search(cand_text)
-            original_llvm_ir = search.group(1).lstrip().rstrip()
-
-            index = -1
-
-            for i, node in enumerate(children):
-                if type(node.value) == type(""):
-                    index = node.value.find(original_llvm_ir)
-
-                    if index != -1:
-                        candidateNodes.append(CandidateNode(cand_text, original_llvm_ir))
-
-                        merge = DependencyAnalyzer.merge(cand_text, replacement)
-
-                        LOGGER.warning(merge)
-
-                        candidateNodes[-1].addChild(SolutionNode(merge, candidateNodes[-1].entry_llvm))
-
-                        left, middle, right = node.split(index, index + len(original_llvm_ir), candidateNodes[-1])
-
-                        children[i] = [left, middle, right]
-                        children = flatten(children)
-                        break
-
-        self.root = ModuleNode()
-        self.root.children = children
-
-        self.generetaAllCandidates(OUT_FOLDER, candidateNodes, file)
-
-
-    def generateOriginalWASM(self, ll, OUT_FOLDER, file):
-        llFileName = "%s/%s.all.ll"%(OUT_FOLDER, file.split("/")[-1])
-
-        finalObjCreator = LLVMTOWasm()
-        finalobj = finalObjCreator(std=ll)
-
-        open("%s.orig.obj"%(llFileName, ), 'wb').write(finalobj)
-
-        toWASM = ObjtoWASM()
-        toWASM(std=None, args=[
-            "%s.orig.obj"%(llFileName, ),
-            "%s.orig.wasm"%(llFileName, )
-        ])
+        open("%s.orig.wasm" % (llFileName,), 'wb').write(finalobj)
 
         wat = WASM2WAT()
         wat(std=None, args=[
-            "%s.orig.wasm"%(llFileName, ),
-            "%s.orig.wat"%(llFileName, )]
-        )
-
-
-        LOGGER.warning("WASM SIZE %s"%(len(open("%s.orig.wasm"%(llFileName,), 'rb').read()), ))
-
-    def generateSuperLL(self,OUT_FOLDER, candidateNodes, file):
-        llFileName = "%s/%s.all.ll"%(OUT_FOLDER, file.split("/")[-1])
-        OUT_FILE_IR = open(llFileName, 'wb')
-            
-        VALID_COUNT = 0
-
-        for i, cand in enumerate(candidateNodes):
-            printProgressBar(i, total=len(candidateNodes), suffix="Validating replacement. Valid count: %s"%(VALID_COUNT, ))
-
-            OUT_FILE_IR.write(("\n; Replacing %s \n"%(cand.entry_llvm,)).encode("utf-8"))
-
-            TEMP_NAME = "%s/cand%s.ll"%(OUT_FOLDER, i,)
-            TEMP_FILE = open(TEMP_NAME, 'wb')
-            cand.toggleTranslation()
-
-            self.root.infixVisit(TEMP_FILE)
-
-            TEMP_FILE.close()
-
-            try:
-                
-                finalObjCreator = LLVMTOWasm(DEBUG=False)
-                finalobj = finalObjCreator(std=open(TEMP_NAME, 'rb').read())
-                os.remove(TEMP_FILE)
-                VALID_COUNT += 1
-            except Exception as e:
-                cand.toggleTranslation()
-
-
-
-            
-        self.root.infixVisit(OUT_FILE_IR)
-
-            # cand.toggleTranslation()
-
-        #print(json.dumps(self.root))
-
-        OUT_FILE_IR.close()
-
-        finalObjCreator = LLVMTOWasm()
-        finalobj = finalObjCreator(std=open(llFileName, 'rb').read())
-
-        open("%s.obj"%(llFileName, ), 'wb').write(finalobj)
-
-        toWASM = ObjtoWASM()
-        toWASM(std=None, args=[
-            "%s.obj"%(llFileName, ),
-            "%s.wasm"%(llFileName, )
-        ])
-
-        wat = WASM2WAT()
-        wat(std=None, args=[
-            "%s.wasm"%(llFileName,),
-            "%s.wat"%(llFileName,)]
-        )
-
-        finalWASM = open("%s.wasm"%(llFileName,), 'rb').read()
-
-        LOGGER.warning("WASM SIZE %s SHA %s"%(len(finalWASM), hashlib.sha256(finalWASM).hexdigest()))
-
-    def generetaAllCandidates(self,OUT_FOLDER, candidateNodes, file):
-            
-
-        for i, cand in enumerate(candidateNodes):
-            llFileName = "%s/%s.%s.ll"%(OUT_FOLDER, file.split("/")[-1], i)
-            OUT_FILE_IR = open(llFileName, 'wb')
-        
-            OUT_FILE_IR.write(("\n; Replacing %s -> %s\n"%(cand.entry_llvm, cand.children[-1].return_instruction)).encode("utf-8"))
-
-            cand.toggleTranslation()
-            
-            self.root.infixVisit(OUT_FILE_IR)
-
-            cand.toggleTranslation()
-
-        #print(json.dumps(self.root))
-
-            OUT_FILE_IR.close()
-
-            # Write bc
-
-            finalObjCreator = LLVMTOWasm()
-            finalobj = finalObjCreator(std=open(llFileName, 'rb').read())
-
-            open("%s.%s.obj"%(llFileName, i), 'wb').write(finalobj)
-
-            toWASM = ObjtoWASM()
-            toWASM(std=None, args=[
-                "%s.%s.obj"%(llFileName, i),
-                "%s.%s.wasm"%(llFileName, i)
-            ])
-
-            wat = WASM2WAT()
-            wat(std=None, args=[
-                "%s.%s.wasm"%(llFileName, i),
-                "%s.%s.wat"%(llFileName, i)]
+            "%s.orig.wasm" % (llFileName,),
+            "%s.orig.wat" % (llFileName,)]
             )
 
-            finalWASM = open("%s.%s.wasm"%(llFileName, i), 'rb').read()
-
-            LOGGER.warning("WASM SIZE %s SHA %s"%(len(finalWASM), hashlib.sha256(finalWASM).hexdigest()))
+        LOGGER.warning("WASM SIZE %s" % (len(open("%s.orig.wasm" % (llFileName,), 'rb').read()),))
 
 
 if __name__ == "__main__":
-    
     pipeline = Pipeline()
 
-    f = '%s/%s'%(os.environ.get("INPUT_FOLDER", "."), sys.argv[1])
+    f = sys.argv[1]
 
     pipeline.process(f)
-
