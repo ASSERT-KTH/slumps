@@ -3,7 +3,7 @@
 import os
 import sys
 from stages import CToLLStage, LLToBC, BCToSouper, ObjtoWASM, WASM2WAT, BCListCandidates
-from utils import bcolors, DEBUG_FILE, flatten, OUT_FOLDER, printProgressBar, config, createTmpFile
+from utils import bcolors, DEBUG_FILE, OUT_FOLDER, printProgressBar, config, createTmpFile
 from logger import LOGGER
 
 import collections
