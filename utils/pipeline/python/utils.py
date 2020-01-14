@@ -4,6 +4,7 @@ import itertools
 import collections
 import os
 import configparser
+import uuid
 
 config = configparser.ConfigParser(interpolation=configparser.ExtendedInterpolation())
 config.read("settings/config.ini")
@@ -12,6 +13,9 @@ DEBUG_FILE = open(config["DEFAULT"]["debugfile"], 'wb')
 
 OUT_FOLDER = config["DEFAULT"]["outfolder"]
 
+
+def createTmpFile():
+    return "%s/%s"%(OUT_FOLDER, uuid.uuid4())
 
 def globalCounter():
     globalCounter.counter += 1

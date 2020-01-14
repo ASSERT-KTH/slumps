@@ -55,9 +55,7 @@ class CToLLStage(ExternalStage):
 
     def __call__(self, args=[], std=None):  # f -> inputs
 
-        print((config["clang"]["command"] % (args,)).split(" "))
         new_inputs = (config["clang"]["command"] % (args,)).split(" ")
-
         return super(CToLLStage, self).__call__(new_inputs)
 
     def processInner(self, std):
@@ -119,14 +117,17 @@ class BCListCandidates(ExternalStage):
 
 class BCToSouper(ExternalStage):
 
-    def __init__(self):
+    def __init__(self, candidates=[]):
         self.path_to_executable = Alias.opt
-        self.name = "LLVM BC to Souper IR candidates"
+        self.name = "LLVM BC supertoptimization pass"
         self.debug = True
+        self.candidate = candidates
 
     def __call__(self, args=[], std=None):  # f -> inputs
 
-        new_inputs = config["souper"]["list-candidates"].split(" ")
+        print(config["opt"]["path"])
+        print((config["souper"]["super-opt-pass"] % "%s -o %s"%(args[0], args[1])))
+        new_inputs = (config["souper"]["super-opt-pass"] %"%s -o %s"%(args[0], args[1])).split(" ")
         return super(BCToSouper, self).__call__(new_inputs, std)
 
     def processInner(self, std):
