@@ -33,6 +33,16 @@ def test_bctoSouperCandidates():
     open("%s/results/babbage_problem.lhs"%(BASEDIR,), 'wb').write(lhs)
 
 
+def test_BCSouperPass():
+    # Receive a LLVM IR in the std
+    bctoSouper = stages.BCToSouper(candidates=[2])
+    content = open("%s/results/babbage_problem.bc"%(BASEDIR,), 'rb').read()
+
+    opt = bctoSouper(args=["%s/results/babbage_problem.bc"%(BASEDIR,), "%s/results/babbage_problem.opt.bc"%(BASEDIR,)], std=None) # Send llvm IR to std
+
+    open("%s/results/babbage_problem.opt.bc"%(BASEDIR,), 'wb').write(opt)
+
+
 def test_bctoWasm():
     # Receive a LLVM IR in the std
     bt2wasm = stages.ObjtoWASM()

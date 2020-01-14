@@ -3,7 +3,7 @@
 import os
 import sys
 from stages import CToLLStage, LLToBC, BCToSouper, ObjtoWASM, WASM2WAT, BCListCandidates
-from utils import bcolors, DEBUG_FILE, flatten, OUT_FOLDER, printProgressBar, config
+from utils import bcolors, DEBUG_FILE, flatten, OUT_FOLDER, printProgressBar, config, createTmpFile
 from logger import LOGGER
 
 import collections
@@ -59,6 +59,26 @@ class Pipeline(object):
         candidates = list(candidates)
 
         LOGGER.success("Found %s arithmetic expression candidates. Filtering and solving..." % (len(candidates),))
+
+        # Test set the second candidate for optimization
+
+        # BC to tmpfile
+        tmpIn = createTmpFile()
+        tmpOut = createTmpFile()
+
+        tmpInFile = open(tmpIn, 'wb')
+        tmpInFile.write(bc)
+
+
+        optBc = BCToSouper(candidates=[2])
+        optBc(args=[tmpIn, tmpOut], std=None)
+
+        bsOpt = open(tmpOut, 'rb').read()
+
+        LOGGER.success("Optimized BC size %s bytes" % (len(bsOpt),))
+
+        os.remove(tmpIn)
+        os.remove(tmpOut)
 
     def generateOriginalWASM(self, bc, OUT_FOLDER, file):
         llFileName = "%s/%s.all.ll" % (OUT_FOLDER, file.split("/")[-1])
