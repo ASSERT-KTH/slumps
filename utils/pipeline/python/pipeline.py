@@ -47,9 +47,12 @@ class Pipeline(object):
 
         program_name = file.split("/")[-1].split(".")[0]
         sha = set([])
+        sizes = {}
 
-        originalSha = self.generateWasm(bc, OUT_FOLDER, program_name)
+        originalSha, originalSize = self.generateWasm(bc, OUT_FOLDER, program_name)
         sha.add(originalSha)
+        sizes[originalSha] = [originalSize, []]
+
 
         bctocand = BCCountCandidates()
 
@@ -88,8 +91,9 @@ class Pipeline(object):
 
                 bsOpt = open(tmpOut, 'rb').read()
 
-                hex = self.generateWasm(bsOpt, OUT_FOLDER, "%s[%s]" % (program_name, sanitized_set_name), debug=False)
+                hex, size = self.generateWasm(bsOpt, OUT_FOLDER, "%s[%s]" % (program_name, sanitized_set_name), debug=False)
 
+                sizes[hex] = [size, list(s)]
                 os.remove(tmpOut)
                 printProgressBar(current, total,
                                  suffix="Completed %s[%s] %s" % (program_name, sanitized_set_name, hex), length=50)
@@ -104,8 +108,9 @@ class Pipeline(object):
         os.remove(tmpIn)
 
         if config["DEFAULT"].getboolean("print-sha"):
+            LOGGER.warning("Summary ")
             for s in sha:
-                LOGGER.warning("WASM SHA256 %s"%(s,))
+                LOGGER.warning("WASM SHA256 %s. Size %s. Combination %s"%(s, sizes[s][0],sizes[s][1] ))
 
     def generateWasm(self, bc, OUT_FOLDER, fileName, debug=True):
         llFileName = "%s/%s" % (OUT_FOLDER, fileName)
@@ -134,7 +139,7 @@ class Pipeline(object):
         hashvalue = hashlib.sha256(finalStream)
         if debug:
             LOGGER.warning("WASM SHA %s" % (hashvalue.hexdigest(),))
-        return hashvalue.hexdigest()
+        return hashvalue.hexdigest(), len(finalStream)
 
 
 if __name__ == "__main__":
