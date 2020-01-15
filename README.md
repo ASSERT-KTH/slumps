@@ -2,11 +2,14 @@
 *Research on randomization and superoptimization for WebAssembly WASM*
 
 
-Given a C program, SLUMPs repurposes a superoptimizer(Souper) to provide several WASM programs as output. This tool uses Souper, first, we search for optimizations candidates. Each resulting programs correspond to a subset of applied optimizations (extracted from the previous mentioned step).
+Given a C program, SLUMPs repurposes a superoptimizer(Souper) to provide several WASM programs as output. This tool uses Souper, we search for optimizations candidates. For each optimization candidates subset, we generate a new WASM program, as we whow in the image below.
+
+![pass](docs/pass.png)
+
 
 ### Prerequisites
 
-- You need to download our changed version of Souper. The main reason behind is that we include some extra options to be able of working together with the SLUMPs core. After downloading all the submodules in SLUMPs, build every one of them following the respective instructions.
+- Download our changed version of Souper. The main reason behind is that we include some extra options to be able of working together with the SLUMPs core. After downloading all the submodules in SLUMPs, build every one of them following the respective instructions in the original repos.
 - Build wabt toolkit to provide the WASM to WAT conversion for debugging reasons
 - Install the python requirements: ```pip3 install -r src/requirements.txt```
 
@@ -28,8 +31,6 @@ Change the remaining values to get different results, for instance, add extra ar
 ### How to use it
 
 Run ```python3  src/slumps.py <file.c>``` or run it directly to LLVM (it needs to be thought for the 'wasm32-unknown-unknown' target) ```python3 src/slumps.py <file.ll>```
-
-![pass](docs/pass.png)
 
 ## Docker images
 
@@ -59,13 +60,13 @@ To run slumps in an easy way. We provide a docker image to be used as the parent
 
 ## Souper new features
 
-We add some features/options to Souper. The included features are listed below
+We add some features/options to Souper. The included features are listed below.
 
-- **souper-subset**: Specify the candidates to be applied, for example
+- **souper-subset**: Based on the candidate indexes, specify the candidates to be applied, for example
 ```-souper-subset=1,2,3,4``` or ```-souper-subset=0,3```
 
 
-- **souper-valid-count**: Search for optimizations without replacing
+- **souper-valid-count**: Search for succesful optimizations without replacing
 
 - **souper-redis-host**: Host for redis
 - **souper-redis-pass**: Password for redis connection
@@ -74,13 +75,9 @@ We add some features/options to Souper. The included features are listed below
 ## Issues
 
 - Candidates overlapping
-
-Example for bitwise_IO problem
-
-```Total number of programs 2048. Different sha count 36. Prunned count 2012 ```
-
-Only 36 different programs
+   > Example for bitwise_IO problem
+     ```Total number of programs 2048. Different sha count 36. Prunned count 2012 ```
+     Only 36 different programs
 
 - LLVM frontend for WASM:
-
-This will provide the WASM -> WASM behavior in SLUMPs
+   > This will provide the WASM -> WASM behavior in SLUMPs
