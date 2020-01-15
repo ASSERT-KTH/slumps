@@ -29,6 +29,8 @@ Change the remaining values to get different results, for instance, add extra ar
 
 Run ```python3  src/slumps.py <file.c>``` or run it directly to LLVM (it needs to be thought for the 'wasm32-unknown-unknown' target) ```python3 src/slumps.py <file.ll>```
 
+![pass](docs/pass.png)
+
 ## Docker images
 
 To run slumps in an easy way. We provide a docker image to be used as the parent for SLUMPs. The parent image contains the plumping to work with souper (our modest changed version), binaryen and wabt
