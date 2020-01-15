@@ -1,3 +1,3 @@
 #! /bin/bash
 
-python3 pipeline.py $FILE
+python3 slumps.py $FILE

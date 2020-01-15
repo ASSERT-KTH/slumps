@@ -1,6 +1,6 @@
 
 
-## How to ues slumps
+## How to use slumps
 
 ### Config options
 
@@ -16,3 +16,14 @@ We add some features/options to Souper. The included features are listed below
 
 - **souper-redis-host**: Host for redis
 - **souper-redis-pass**: Password for redis connection
+
+
+## Issues
+
+Candidates overlapping
+
+Example for bitwise_IO problem
+
+```Total number of programs 2048. Different sha count 36. Prunned count 2012 ```
+
+Only 36 different programs
