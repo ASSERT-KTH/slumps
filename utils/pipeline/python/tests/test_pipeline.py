@@ -3,6 +3,7 @@ import os
 os.chdir("..")
 
 import stages
+import slumps
 
 BASEDIR = os.path.dirname(__file__)
 
@@ -59,5 +60,15 @@ def test_WASM2WAT():
 
     wasm2wat( args=["%s/results/babbage_problem.wasm"%(BASEDIR,),
                       "%s/results/babbage_problem.wat"%(BASEDIR,)]) # Send llvm IR to std
+
+
+
+
+
+
+def test_pipeline():
+    # Receive a LLVM IR in the std
+    p = slumps.Pipeline()
+    p.process("%s/benchmarks/babbage_problem.c"%(BASEDIR, ))
 
 
