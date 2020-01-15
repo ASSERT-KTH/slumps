@@ -4,6 +4,7 @@ from subprocess import Popen, PIPE
 from utils import bcolors, DEBUG_FILE, Alias, config
 from logger import LOGGER
 import re
+import time
 
 import sys, os
 
@@ -26,10 +27,13 @@ class ExternalStage(object):
         if stdin is not None:
             p.stdin.write(stdin)
 
-        if self.debug:
-            LOGGER.success("Stage -> %s" % (self.name,))
-            LOGGER.info(" ".join([self.path_to_executable] + args))
+        start = time.time_ns()
         std, err = p.communicate()
+        delta = time.time_ns() - start
+
+        if self.debug:
+            LOGGER.success("Stage -> %s (%.2f ms)" % (self.name, delta/1000000))
+            LOGGER.info(" ".join([self.path_to_executable] + args))
 
         rc = p.returncode
 
