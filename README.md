@@ -12,14 +12,18 @@ Given a C program, SLUMPs repurposes a superoptimizer(Souper) to provide several
 
 ### Troubleshooting
 
-- **SLUMPs shows a fail in the CLANG step**: Install emscripten and run it as follows ```emcc -v <file>.c```. Then copy all the include flies in the *includes* configuration for SLUMPs.
-- **SLUMPS shows a fail connecting to REDIS**: Install Redis in your local pc and ensure that its running, or change the usage of external cache in the Souper config.
-
+- **SLUMPs shows a fail in the CLANG step**: Install emscripten and run it as follows ```emcc -v <file>.c```. Then copy all the include flies in the [include](https://github.com/KTH/slumps/blob/18ef5189904e25019155fe305046f4b5b8907538/src/settings/config.ini#L17) configuration for SLUMPs.
+- **SLUMPs shows a fail connecting to REDIS**: Install Redis in your local pc and ensure that its running, or change the usage of external cache in the Souper [config](https://github.com/KTH/slumps/blob/18ef5189904e25019155fe305046f4b5b8907538/src/settings/config.ini#L58).
+- **SLUMPs doesn't find the souper folder**: Check the [path](https://github.com/KTH/slumps/blob/18ef5189904e25019155fe305046f4b5b8907538/src/settings/config.ini#L2) in the settings file
+- **SLUMPs fails in the souper opt pass**: Check the [name](https://github.com/KTH/slumps/blob/18ef5189904e25019155fe305046f4b5b8907538/src/settings/config.ini#L48) for the souper pass (for instance, the extension for Ubuntu can be different to the Mac one).
 
 ### Config options
 
+- **Optimization subset strategy**: [generator-method](https://github.com/KTH/slumps/blob/18ef5189904e25019155fe305046f4b5b8907538/src/settings/config.ini#L9) = subset | onexone | all
 
-In the config file we provide the following options:
+- **Output only different binaryes**: [prune-equal](https://github.com/KTH/slumps/blob/18ef5189904e25019155fe305046f4b5b8907538/src/settings/config.ini#L6), we calculate the sha256 value for evey WASM program, then we keep only the programs with different sha values.
+
+Change the remaining values to get different results, for instance, add extra arguments to the CLANG step.
 
 ### How to use it
 
@@ -42,7 +46,7 @@ To run slumps in an easy way. We provide a docker image to be used as the parent
 ### Develop mode
 
 - Go to python folder in the repo 
-- ```docker run --rm -it -v $(pwd):/slumps/python -v <absolute_path>/slumps/utils/pipeline:/input --entrypoint /bin/bash slumps:<label>```
+- ```docker run --rm -it -v $(pwd):/slumps/src -v <absolute_path>/slumps/src:/input --entrypoint /bin/bash slumps:<label>```
 
 
 ## Study of memory disclosure vulnerabilities
