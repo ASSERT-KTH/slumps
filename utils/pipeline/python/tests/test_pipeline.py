@@ -48,8 +48,8 @@ def test_bctoWasm():
     # Receive a LLVM IR in the std
     bt2wasm = stages.ObjtoWASM()
 
-    bt2wasm( args=["%s/results/babbage_problem.bc"%(BASEDIR,),
-                      "%s/results/babbage_problem.wasm"%(BASEDIR,)]) # Send llvm IR to std
+    bt2wasm( args=["%s/results/babbage_problem.wasm"%(BASEDIR,),
+                      "%s/results/babbage_problem.bc"%(BASEDIR,)]) # Send llvm IR to std
 
 
 
