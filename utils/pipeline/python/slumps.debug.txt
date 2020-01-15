@@ -1,0 +1,497 @@
+============================= Stage -> C to LLVM IR
+
+; ModuleID = 'tests/benchmarks/Banker's_algorithm.c'
+source_filename = "tests/benchmarks/Banker's_algorithm.c"
+target datalayout = "e-m:e-p:32:32-i64:64-n32:64-S128"
+target triple = "wasm32-unknown-unknown"
+
+@.str = private unnamed_addr constant [33 x i8] c"\0AEnter the number of resources: \00", align 1
+@.str.1 = private unnamed_addr constant [3 x i8] c"%d\00", align 1
+@.str.2 = private unnamed_addr constant [33 x i8] c"\0AEnter the number of processes: \00", align 1
+@.str.3 = private unnamed_addr constant [22 x i8] c"\0AEnter Claim Vector: \00", align 1
+@.str.4 = private unnamed_addr constant [34 x i8] c"\0AEnter Allocated Resource Table: \00", align 1
+@.str.5 = private unnamed_addr constant [29 x i8] c"\0AEnter Maximum Claim table: \00", align 1
+@.str.6 = private unnamed_addr constant [23 x i8] c"\0AThe Claim Vector is: \00", align 1
+@.str.7 = private unnamed_addr constant [4 x i8] c"%d \00", align 1
+@.str.9 = private unnamed_addr constant [4 x i8] c"\09%d\00", align 1
+@.str.12 = private unnamed_addr constant [23 x i8] c"\0AAllocated resources: \00", align 1
+@.str.13 = private unnamed_addr constant [23 x i8] c"\0AAvailable resources: \00", align 1
+@.str.14 = private unnamed_addr constant [26 x i8] c"\0AProcess%d is executing.\0A\00", align 1
+@.str.15 = private unnamed_addr constant [36 x i8] c"\0AThe processes are in unsafe state.\00", align 1
+@.str.16 = private unnamed_addr constant [31 x i8] c"\0AThe process is in safe state.\00", align 1
+@.str.17 = private unnamed_addr constant [20 x i8] c"\0AAvailable vector: \00", align 1
+@str = private unnamed_addr constant [31 x i8] c"\0AThe Allocated Resource Table:\00", align 1
+@str.18 = private unnamed_addr constant [26 x i8] c"\0AThe Maximum Claim Table:\00", align 1
+
+; Function Attrs: nounwind
+define hidden i32 @main() local_unnamed_addr #0 {
+entry:
+  %curr = alloca [5 x [5 x i32]], align 16
+  %max_claim = alloca [5 x [5 x i32]], align 16
+  %avl = alloca [5 x i32], align 16
+  %alloc = alloca [5 x i32], align 16
+  %max_res = alloca [5 x i32], align 16
+  %running = alloca [5 x i32], align 16
+  %r = alloca i32, align 4
+  %p = alloca i32, align 4
+  %0 = bitcast [5 x [5 x i32]]* %curr to i8*
+  call void @llvm.lifetime.start.p0i8(i64 100, i8* nonnull %0) #3
+  %1 = bitcast [5 x [5 x i32]]* %max_claim to i8*
+  call void @llvm.lifetime.start.p0i8(i64 100, i8* nonnull %1) #3
+  %2 = bitcast [5 x i32]* %avl to i8*
+  call void @llvm.lifetime.start.p0i8(i64 20, i8* nonnull %2) #3
+  %3 = bitcast [5 x i32]* %alloc to i8*
+  call void @llvm.lifetime.start.p0i8(i64 20, i8* nonnull %3) #3
+  call void @llvm.memset.p0i8.i32(i8* nonnull align 16 %3, i8 0, i32 20, i1 false)
+  %4 = bitcast [5 x i32]* %max_res to i8*
+  call void @llvm.lifetime.start.p0i8(i64 20, i8* nonnull %4) #3
+  %5 = bitcast [5 x i32]* %running to i8*
+  call void @llvm.lifetime.start.p0i8(i64 20, i8* nonnull %5) #3
+  %6 = bitcast i32* %r to i8*
+  call void @llvm.lifetime.start.p0i8(i64 4, i8* nonnull %6) #3
+  %7 = bitcast i32* %p to i8*
+  call void @llvm.lifetime.start.p0i8(i64 4, i8* nonnull %7) #3
+  %call = tail call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([33 x i8], [33 x i8]* @.str, i32 0, i32 0))
+  %call1 = call i32 (i8*, ...) @scanf(i8* getelementptr inbounds ([3 x i8], [3 x i8]* @.str.1, i32 0, i32 0), i32* nonnull %r)
+  %call2 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([33 x i8], [33 x i8]* @.str.2, i32 0, i32 0))
+  %call3 = call i32 (i8*, ...) @scanf(i8* getelementptr inbounds ([3 x i8], [3 x i8]* @.str.1, i32 0, i32 0), i32* nonnull %p)
+  %8 = load i32, i32* %p, align 4, !tbaa !2
+  %cmp318 = icmp sgt i32 %8, 0
+  br i1 %cmp318, label %for.body, label %for.end
+
+for.body:                                         ; preds = %entry, %for.body
+  %count.0320 = phi i32 [ %inc, %for.body ], [ 0, %entry ]
+  %arrayidx = getelementptr inbounds [5 x i32], [5 x i32]* %running, i32 0, i32 %count.0320
+  store i32 1, i32* %arrayidx, align 4, !tbaa !2
+  %inc = add nuw nsw i32 %count.0320, 1
+  %cmp = icmp slt i32 %inc, %8
+  br i1 %cmp, label %for.body, label %for.end
+
+for.end:                                          ; preds = %for.body, %entry
+  %count.0.lcssa = phi i32 [ 0, %entry ], [ %inc, %for.body ]
+  %call5 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([22 x i8], [22 x i8]* @.str.3, i32 0, i32 0))
+  %9 = load i32, i32* %r, align 4, !tbaa !2
+  %cmp7316 = icmp sgt i32 %9, 0
+  br i1 %cmp7316, label %for.body8, label %for.end13
+
+for.body8:                                        ; preds = %for.end, %for.body8
+  %i.1317 = phi i32 [ %inc12, %for.body8 ], [ 0, %for.end ]
+  %arrayidx9 = getelementptr inbounds [5 x i32], [5 x i32]* %max_res, i32 0, i32 %i.1317
+  %call10 = call i32 (i8*, ...) @scanf(i8* getelementptr inbounds ([3 x i8], [3 x i8]* @.str.1, i32 0, i32 0), i32* nonnull %arrayidx9)
+  %inc12 = add nuw nsw i32 %i.1317, 1
+  %10 = load i32, i32* %r, align 4, !tbaa !2
+  %cmp7 = icmp slt i32 %inc12, %10
+  br i1 %cmp7, label %for.body8, label %for.end13
+
+for.end13:                                        ; preds = %for.body8, %for.end
+  %call14 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([34 x i8], [34 x i8]* @.str.4, i32 0, i32 0))
+  %11 = load i32, i32* %p, align 4, !tbaa !2
+  %cmp16313 = icmp sgt i32 %11, 0
+  br i1 %cmp16313, label %for.cond18.preheader.preheader, label %for.end29
+
+for.cond18.preheader.preheader:                   ; preds = %for.end13
+  %.pre = load i32, i32* %r, align 4, !tbaa !2
+  br label %for.cond18.preheader
+
+for.cond18.preheader:                             ; preds = %for.cond18.preheader.preheader, %for.inc27
+  %12 = phi i32 [ %15, %for.inc27 ], [ %11, %for.cond18.preheader.preheader ]
+  %13 = phi i32 [ %16, %for.inc27 ], [ %.pre, %for.cond18.preheader.preheader ]
+  %i.2314 = phi i32 [ %inc28, %for.inc27 ], [ 0, %for.cond18.preheader.preheader ]
+  %cmp19311 = icmp sgt i32 %13, 0
+  br i1 %cmp19311, label %for.body20, label %for.inc27
+
+for.body20:                                       ; preds = %for.cond18.preheader, %for.body20
+  %j.0312 = phi i32 [ %inc25, %for.body20 ], [ 0, %for.cond18.preheader ]
+  %arrayidx22 = getelementptr inbounds [5 x [5 x i32]], [5 x [5 x i32]]* %curr, i32 0, i32 %i.2314, i32 %j.0312
+  %call23 = call i32 (i8*, ...) @scanf(i8* getelementptr inbounds ([3 x i8], [3 x i8]* @.str.1, i32 0, i32 0), i32* nonnull %arrayidx22)
+  %inc25 = add nuw nsw i32 %j.0312, 1
+  %14 = load i32, i32* %r, align 4, !tbaa !2
+  %cmp19 = icmp slt i32 %inc25, %14
+  br i1 %cmp19, label %for.body20, label %for.inc27.loopexit
+
+for.inc27.loopexit:                               ; preds = %for.body20
+  %.pre336 = load i32, i32* %p, align 4, !tbaa !2
+  br label %for.inc27
+
+for.inc27:                                        ; preds = %for.inc27.loopexit, %for.cond18.preheader
+  %15 = phi i32 [ %.pre336, %for.inc27.loopexit ], [ %12, %for.cond18.preheader ]
+  %16 = phi i32 [ %14, %for.inc27.loopexit ], [ %13, %for.cond18.preheader ]
+  %inc28 = add nuw nsw i32 %i.2314, 1
+  %cmp16 = icmp slt i32 %inc28, %15
+  br i1 %cmp16, label %for.cond18.preheader, label %for.end29
+
+for.end29:                                        ; preds = %for.inc27, %for.end13
+  %call30 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([29 x i8], [29 x i8]* @.str.5, i32 0, i32 0))
+  %17 = load i32, i32* %p, align 4, !tbaa !2
+  %cmp32308 = icmp sgt i32 %17, 0
+  br i1 %cmp32308, label %for.cond34.preheader.preheader, label %for.end45
+
+for.cond34.preheader.preheader:                   ; preds = %for.end29
+  %.pre337 = load i32, i32* %r, align 4, !tbaa !2
+  br label %for.cond34.preheader
+
+for.cond34.preheader:                             ; preds = %for.cond34.preheader.preheader, %for.inc43
+  %18 = phi i32 [ %21, %for.inc43 ], [ %17, %for.cond34.preheader.preheader ]
+  %19 = phi i32 [ %22, %for.inc43 ], [ %.pre337, %for.cond34.preheader.preheader ]
+  %i.3309 = phi i32 [ %inc44, %for.inc43 ], [ 0, %for.cond34.preheader.preheader ]
+  %cmp35306 = icmp sgt i32 %19, 0
+  br i1 %cmp35306, label %for.body36, label %for.inc43
+
+for.body36:                                       ; preds = %for.cond34.preheader, %for.body36
+  %j.1307 = phi i32 [ %inc41, %for.body36 ], [ 0, %for.cond34.preheader ]
+  %arrayidx38 = getelementptr inbounds [5 x [5 x i32]], [5 x [5 x i32]]* %max_claim, i32 0, i32 %i.3309, i32 %j.1307
+  %call39 = call i32 (i8*, ...) @scanf(i8* getelementptr inbounds ([3 x i8], [3 x i8]* @.str.1, i32 0, i32 0), i32* nonnull %arrayidx38)
+  %inc41 = add nuw nsw i32 %j.1307, 1
+  %20 = load i32, i32* %r, align 4, !tbaa !2
+  %cmp35 = icmp slt i32 %inc41, %20
+  br i1 %cmp35, label %for.body36, label %for.inc43.loopexit
+
+for.inc43.loopexit:                               ; preds = %for.body36
+  %.pre338 = load i32, i32* %p, align 4, !tbaa !2
+  br label %for.inc43
+
+for.inc43:                                        ; preds = %for.inc43.loopexit, %for.cond34.preheader
+  %21 = phi i32 [ %.pre338, %for.inc43.loopexit ], [ %18, %for.cond34.preheader ]
+  %22 = phi i32 [ %20, %for.inc43.loopexit ], [ %19, %for.cond34.preheader ]
+  %inc44 = add nuw nsw i32 %i.3309, 1
+  %cmp32 = icmp slt i32 %inc44, %21
+  br i1 %cmp32, label %for.cond34.preheader, label %for.end45
+
+for.end45:                                        ; preds = %for.inc43, %for.end29
+  %call46 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([23 x i8], [23 x i8]* @.str.6, i32 0, i32 0))
+  %23 = load i32, i32* %r, align 4, !tbaa !2
+  %cmp48304 = icmp sgt i32 %23, 0
+  br i1 %cmp48304, label %for.body49, label %for.end54
+
+for.body49:                                       ; preds = %for.end45, %for.body49
+  %i.4305 = phi i32 [ %inc53, %for.body49 ], [ 0, %for.end45 ]
+  %arrayidx50 = getelementptr inbounds [5 x i32], [5 x i32]* %max_res, i32 0, i32 %i.4305
+  %24 = load i32, i32* %arrayidx50, align 4, !tbaa !2
+  %call51 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([4 x i8], [4 x i8]* @.str.7, i32 0, i32 0), i32 %24)
+  %inc53 = add nuw nsw i32 %i.4305, 1
+  %25 = load i32, i32* %r, align 4, !tbaa !2
+  %cmp48 = icmp slt i32 %inc53, %25
+  br i1 %cmp48, label %for.body49, label %for.end54
+
+for.end54:                                        ; preds = %for.body49, %for.end45
+  %puts = call i32 @puts(i8* getelementptr inbounds ([31 x i8], [31 x i8]* @str, i32 0, i32 0))
+  %26 = load i32, i32* %p, align 4, !tbaa !2
+  %cmp57301 = icmp sgt i32 %26, 0
+  br i1 %cmp57301, label %for.cond59.preheader, label %for.end71
+
+for.cond59.preheader:                             ; preds = %for.end54, %for.end67
+  %i.5302 = phi i32 [ %inc70, %for.end67 ], [ 0, %for.end54 ]
+  %27 = load i32, i32* %r, align 4, !tbaa !2
+  %cmp60299 = icmp sgt i32 %27, 0
+  br i1 %cmp60299, label %for.body61, label %for.end67
+
+for.body61:                                       ; preds = %for.cond59.preheader, %for.body61
+  %j.2300 = phi i32 [ %inc66, %for.body61 ], [ 0, %for.cond59.preheader ]
+  %arrayidx63 = getelementptr inbounds [5 x [5 x i32]], [5 x [5 x i32]]* %curr, i32 0, i32 %i.5302, i32 %j.2300
+  %28 = load i32, i32* %arrayidx63, align 4, !tbaa !2
+  %call64 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([4 x i8], [4 x i8]* @.str.9, i32 0, i32 0), i32 %28)
+  %inc66 = add nuw nsw i32 %j.2300, 1
+  %29 = load i32, i32* %r, align 4, !tbaa !2
+  %cmp60 = icmp slt i32 %inc66, %29
+  br i1 %cmp60, label %for.body61, label %for.end67
+
+for.end67:                                        ; preds = %for.body61, %for.cond59.preheader
+  %putchar263 = call i32 @putchar(i32 10)
+  %inc70 = add nuw nsw i32 %i.5302, 1
+  %30 = load i32, i32* %p, align 4, !tbaa !2
+  %cmp57 = icmp slt i32 %inc70, %30
+  br i1 %cmp57, label %for.cond59.preheader, label %for.end71
+
+for.end71:                                        ; preds = %for.end67, %for.end54
+  %puts261 = call i32 @puts(i8* getelementptr inbounds ([26 x i8], [26 x i8]* @str.18, i32 0, i32 0))
+  %31 = load i32, i32* %p, align 4, !tbaa !2
+  %cmp74295 = icmp sgt i32 %31, 0
+  br i1 %cmp74295, label %for.cond76.preheader, label %for.end103
+
+for.cond76.preheader:                             ; preds = %for.end71, %for.end84
+  %i.6296 = phi i32 [ %inc87, %for.end84 ], [ 0, %for.end71 ]
+  %32 = load i32, i32* %r, align 4, !tbaa !2
+  %cmp77293 = icmp sgt i32 %32, 0
+  br i1 %cmp77293, label %for.body78, label %for.end84
+
+for.cond89.preheader:                             ; preds = %for.end84
+  %cmp90290 = icmp sgt i32 %38, 0
+  br i1 %cmp90290, label %for.cond92.preheader.lr.ph, label %for.end103
+
+for.cond92.preheader.lr.ph:                       ; preds = %for.cond89.preheader
+  %33 = load i32, i32* %r, align 4
+  %cmp93288 = icmp sgt i32 %33, 0
+  br i1 %cmp93288, label %for.cond92.preheader.us, label %for.end103
+
+for.cond92.preheader.us:                          ; preds = %for.cond92.preheader.lr.ph, %for.cond92.for.inc101_crit_edge.us
+  %i.7291.us = phi i32 [ %inc102.us, %for.cond92.for.inc101_crit_edge.us ], [ 0, %for.cond92.preheader.lr.ph ]
+  br label %for.body94.us
+
+for.body94.us:                                    ; preds = %for.body94.us, %for.cond92.preheader.us
+  %j.4289.us = phi i32 [ 0, %for.cond92.preheader.us ], [ %inc99.us, %for.body94.us ]
+  %arrayidx96.us = getelementptr inbounds [5 x [5 x i32]], [5 x [5 x i32]]* %curr, i32 0, i32 %i.7291.us, i32 %j.4289.us
+  %34 = load i32, i32* %arrayidx96.us, align 4, !tbaa !2
+  %arrayidx97.us = getelementptr inbounds [5 x i32], [5 x i32]* %alloc, i32 0, i32 %j.4289.us
+  %35 = load i32, i32* %arrayidx97.us, align 4, !tbaa !2
+  %add.us = add nsw i32 %35, %34
+  store i32 %add.us, i32* %arrayidx97.us, align 4, !tbaa !2
+  %inc99.us = add nuw nsw i32 %j.4289.us, 1
+  %exitcond333 = icmp eq i32 %inc99.us, %33
+  br i1 %exitcond333, label %for.cond92.for.inc101_crit_edge.us, label %for.body94.us
+
+for.cond92.for.inc101_crit_edge.us:               ; preds = %for.body94.us
+  %inc102.us = add nuw nsw i32 %i.7291.us, 1
+  %exitcond334 = icmp eq i32 %inc102.us, %38
+  br i1 %exitcond334, label %for.end103, label %for.cond92.preheader.us
+
+for.body78:                                       ; preds = %for.cond76.preheader, %for.body78
+  %j.3294 = phi i32 [ %inc83, %for.body78 ], [ 0, %for.cond76.preheader ]
+  %arrayidx80 = getelementptr inbounds [5 x [5 x i32]], [5 x [5 x i32]]* %max_claim, i32 0, i32 %i.6296, i32 %j.3294
+  %36 = load i32, i32* %arrayidx80, align 4, !tbaa !2
+  %call81 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([4 x i8], [4 x i8]* @.str.9, i32 0, i32 0), i32 %36)
+  %inc83 = add nuw nsw i32 %j.3294, 1
+  %37 = load i32, i32* %r, align 4, !tbaa !2
+  %cmp77 = icmp slt i32 %inc83, %37
+  br i1 %cmp77, label %for.body78, label %for.end84
+
+for.end84:                                        ; preds = %for.body78, %for.cond76.preheader
+  %putchar262 = call i32 @putchar(i32 10)
+  %inc87 = add nuw nsw i32 %i.6296, 1
+  %38 = load i32, i32* %p, align 4, !tbaa !2
+  %cmp74 = icmp slt i32 %inc87, %38
+  br i1 %cmp74, label %for.cond76.preheader, label %for.cond89.preheader
+
+for.end103:                                       ; preds = %for.cond92.for.inc101_crit_edge.us, %for.end71, %for.cond92.preheader.lr.ph, %for.cond89.preheader
+  %call104 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([23 x i8], [23 x i8]* @.str.12, i32 0, i32 0))
+  %39 = load i32, i32* %r, align 4, !tbaa !2
+  %cmp106285 = icmp sgt i32 %39, 0
+  br i1 %cmp106285, label %for.body107, label %for.end121
+
+for.cond113.preheader:                            ; preds = %for.body107
+  %cmp114283 = icmp sgt i32 %41, 0
+  br i1 %cmp114283, label %for.body115, label %for.end121
+
+for.body107:                                      ; preds = %for.end103, %for.body107
+  %i.8286 = phi i32 [ %inc111, %for.body107 ], [ 0, %for.end103 ]
+  %arrayidx108 = getelementptr inbounds [5 x i32], [5 x i32]* %alloc, i32 0, i32 %i.8286
+  %40 = load i32, i32* %arrayidx108, align 4, !tbaa !2
+  %call109 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([4 x i8], [4 x i8]* @.str.7, i32 0, i32 0), i32 %40)
+  %inc111 = add nuw nsw i32 %i.8286, 1
+  %41 = load i32, i32* %r, align 4, !tbaa !2
+  %cmp106 = icmp slt i32 %inc111, %41
+  br i1 %cmp106, label %for.body107, label %for.cond113.preheader
+
+for.body115:                                      ; preds = %for.cond113.preheader, %for.body115
+  %i.9284 = phi i32 [ %inc120, %for.body115 ], [ 0, %for.cond113.preheader ]
+  %arrayidx116 = getelementptr inbounds [5 x i32], [5 x i32]* %max_res, i32 0, i32 %i.9284
+  %42 = load i32, i32* %arrayidx116, align 4, !tbaa !2
+  %arrayidx117 = getelementptr inbounds [5 x i32], [5 x i32]* %alloc, i32 0, i32 %i.9284
+  %43 = load i32, i32* %arrayidx117, align 4, !tbaa !2
+  %sub = sub nsw i32 %42, %43
+  %arrayidx118 = getelementptr inbounds [5 x i32], [5 x i32]* %avl, i32 0, i32 %i.9284
+  store i32 %sub, i32* %arrayidx118, align 4, !tbaa !2
+  %inc120 = add nuw nsw i32 %i.9284, 1
+  %exitcond = icmp eq i32 %inc120, %41
+  br i1 %exitcond, label %for.end121, label %for.body115
+
+for.end121:                                       ; preds = %for.body115, %for.end103, %for.cond113.preheader
+  %call122 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([23 x i8], [23 x i8]* @.str.13, i32 0, i32 0))
+  %44 = load i32, i32* %r, align 4, !tbaa !2
+  %cmp124281 = icmp sgt i32 %44, 0
+  br i1 %cmp124281, label %for.body125, label %for.end130
+
+for.body125:                                      ; preds = %for.end121, %for.body125
+  %i.10282 = phi i32 [ %inc129, %for.body125 ], [ 0, %for.end121 ]
+  %arrayidx126 = getelementptr inbounds [5 x i32], [5 x i32]* %avl, i32 0, i32 %i.10282
+  %45 = load i32, i32* %arrayidx126, align 4, !tbaa !2
+  %call127 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([4 x i8], [4 x i8]* @.str.7, i32 0, i32 0), i32 %45)
+  %inc129 = add nuw nsw i32 %i.10282, 1
+  %46 = load i32, i32* %r, align 4, !tbaa !2
+  %cmp124 = icmp slt i32 %inc129, %46
+  br i1 %cmp124, label %for.body125, label %for.end130
+
+for.end130:                                       ; preds = %for.body125, %for.end121
+  %putchar = call i32 @putchar(i32 10)
+  %cmp132279 = icmp eq i32 %count.0.lcssa, 0
+  br i1 %cmp132279, label %while.end, label %for.cond133.preheader
+
+while.cond.loopexit:                              ; preds = %for.body182, %if.then176
+  %cmp132 = icmp eq i32 %dec, 0
+  br i1 %cmp132, label %while.end, label %for.cond133.preheader
+
+for.cond133.preheader:                            ; preds = %for.end130, %while.cond.loopexit
+  %count.1280 = phi i32 [ %dec, %while.cond.loopexit ], [ %count.0.lcssa, %for.end130 ]
+  %47 = load i32, i32* %p, align 4, !tbaa !2
+  %cmp134272 = icmp sgt i32 %47, 0
+  br i1 %cmp134272, label %for.body135.lr.ph, label %if.then172
+
+for.body135.lr.ph:                                ; preds = %for.cond133.preheader
+  %48 = load i32, i32* %r, align 4
+  %cmp138267 = icmp sgt i32 %48, 0
+  br i1 %cmp138267, label %for.body135.us, label %for.body135
+
+for.body135.us:                                   ; preds = %for.body135.lr.ph, %for.inc168.us
+  %i.11273.us = phi i32 [ %inc169.us, %for.inc168.us ], [ 0, %for.body135.lr.ph ]
+  %arrayidx136.us = getelementptr inbounds [5 x i32], [5 x i32]* %running, i32 0, i32 %i.11273.us
+  %49 = load i32, i32* %arrayidx136.us, align 4, !tbaa !2
+  %tobool.us = icmp eq i32 %49, 0
+  br i1 %tobool.us, label %for.inc168.us, label %for.body139.us
+
+for.cond137.us:                                   ; preds = %for.body139.us
+  %cmp138.us = icmp slt i32 %inc149.us, %48
+  br i1 %cmp138.us, label %for.body139.us, label %if.then152.critedge
+
+for.body139.us:                                   ; preds = %for.body135.us, %for.cond137.us
+  %j.5268.us = phi i32 [ %inc149.us, %for.cond137.us ], [ 0, %for.body135.us ]
+  %arrayidx141.us = getelementptr inbounds [5 x [5 x i32]], [5 x [5 x i32]]* %max_claim, i32 0, i32 %i.11273.us, i32 %j.5268.us
+  %50 = load i32, i32* %arrayidx141.us, align 4, !tbaa !2
+  %arrayidx143.us = getelementptr inbounds [5 x [5 x i32]], [5 x [5 x i32]]* %curr, i32 0, i32 %i.11273.us, i32 %j.5268.us
+  %51 = load i32, i32* %arrayidx143.us, align 4, !tbaa !2
+  %sub144.us = sub nsw i32 %50, %51
+  %arrayidx145.us = getelementptr inbounds [5 x i32], [5 x i32]* %avl, i32 0, i32 %j.5268.us
+  %52 = load i32, i32* %arrayidx145.us, align 4, !tbaa !2
+  %cmp146.us = icmp sgt i32 %sub144.us, %52
+  %inc149.us = add nuw nsw i32 %j.5268.us, 1
+  br i1 %cmp146.us, label %for.inc168.us, label %for.cond137.us
+
+for.inc168.us:                                    ; preds = %for.body139.us, %for.body135.us
+  %inc169.us = add nuw nsw i32 %i.11273.us, 1
+  %cmp134.us = icmp slt i32 %inc169.us, %47
+  br i1 %cmp134.us, label %for.body135.us, label %if.then172
+
+for.body135:                                      ; preds = %for.body135.lr.ph, %for.inc168
+  %i.11273 = phi i32 [ %inc169, %for.inc168 ], [ 0, %for.body135.lr.ph ]
+  %arrayidx136 = getelementptr inbounds [5 x i32], [5 x i32]* %running, i32 0, i32 %i.11273
+  %53 = load i32, i32* %arrayidx136, align 4, !tbaa !2
+  %tobool = icmp eq i32 %53, 0
+  br i1 %tobool, label %for.inc168, label %if.then152.critedge
+
+if.then152.critedge:                              ; preds = %for.body135, %for.cond137.us
+  %arrayidx136.lcssa = phi i32* [ %arrayidx136.us, %for.cond137.us ], [ %arrayidx136, %for.body135 ]
+  %i.11.lcssa265 = phi i32 [ %i.11273.us, %for.cond137.us ], [ %i.11273, %for.body135 ]
+  %add153 = add nuw nsw i32 %i.11.lcssa265, 1
+  %call154 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([26 x i8], [26 x i8]* @.str.14, i32 0, i32 0), i32 %add153)
+  store i32 0, i32* %arrayidx136.lcssa, align 4, !tbaa !2
+  %dec = add nsw i32 %count.1280, -1
+  %54 = load i32, i32* %r, align 4, !tbaa !2
+  %cmp157275 = icmp sgt i32 %54, 0
+  br i1 %cmp157275, label %for.body158, label %if.then176
+
+for.body158:                                      ; preds = %if.then152.critedge, %for.body158
+  %j.6276 = phi i32 [ %inc164, %for.body158 ], [ 0, %if.then152.critedge ]
+  %arrayidx160 = getelementptr inbounds [5 x [5 x i32]], [5 x [5 x i32]]* %curr, i32 0, i32 %i.11.lcssa265, i32 %j.6276
+  %55 = load i32, i32* %arrayidx160, align 4, !tbaa !2
+  %arrayidx161 = getelementptr inbounds [5 x i32], [5 x i32]* %avl, i32 0, i32 %j.6276
+  %56 = load i32, i32* %arrayidx161, align 4, !tbaa !2
+  %add162 = add nsw i32 %56, %55
+  store i32 %add162, i32* %arrayidx161, align 4, !tbaa !2
+  %inc164 = add nuw nsw i32 %j.6276, 1
+  %cmp157 = icmp slt i32 %inc164, %54
+  br i1 %cmp157, label %for.body158, label %if.then176
+
+for.inc168:                                       ; preds = %for.body135
+  %inc169 = add nuw nsw i32 %i.11273, 1
+  %cmp134 = icmp slt i32 %inc169, %47
+  br i1 %cmp134, label %for.body135, label %if.then172
+
+if.then172:                                       ; preds = %for.cond133.preheader, %for.inc168, %for.inc168.us
+  %call173 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([36 x i8], [36 x i8]* @.str.15, i32 0, i32 0))
+  br label %while.end
+
+if.then176:                                       ; preds = %for.body158, %if.then152.critedge
+  %call177 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([31 x i8], [31 x i8]* @.str.16, i32 0, i32 0))
+  %call179 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([20 x i8], [20 x i8]* @.str.17, i32 0, i32 0))
+  %57 = load i32, i32* %r, align 4, !tbaa !2
+  %cmp181277 = icmp sgt i32 %57, 0
+  br i1 %cmp181277, label %for.body182, label %while.cond.loopexit
+
+for.body182:                                      ; preds = %if.then176, %for.body182
+  %i.12278 = phi i32 [ %inc186, %for.body182 ], [ 0, %if.then176 ]
+  %arrayidx183 = getelementptr inbounds [5 x i32], [5 x i32]* %avl, i32 0, i32 %i.12278
+  %58 = load i32, i32* %arrayidx183, align 4, !tbaa !2
+  %call184 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([4 x i8], [4 x i8]* @.str.7, i32 0, i32 0), i32 %58)
+  %inc186 = add nuw nsw i32 %i.12278, 1
+  %59 = load i32, i32* %r, align 4, !tbaa !2
+  %cmp181 = icmp slt i32 %inc186, %59
+  br i1 %cmp181, label %for.body182, label %while.cond.loopexit
+
+while.end:                                        ; preds = %while.cond.loopexit, %for.end130, %if.then172
+  call void @llvm.lifetime.end.p0i8(i64 4, i8* nonnull %7) #3
+  call void @llvm.lifetime.end.p0i8(i64 4, i8* nonnull %6) #3
+  call void @llvm.lifetime.end.p0i8(i64 20, i8* nonnull %5) #3
+  call void @llvm.lifetime.end.p0i8(i64 20, i8* nonnull %4) #3
+  call void @llvm.lifetime.end.p0i8(i64 20, i8* nonnull %3) #3
+  call void @llvm.lifetime.end.p0i8(i64 20, i8* nonnull %2) #3
+  call void @llvm.lifetime.end.p0i8(i64 100, i8* nonnull %1) #3
+  call void @llvm.lifetime.end.p0i8(i64 100, i8* nonnull %0) #3
+  ret i32 0
+}
+
+; Function Attrs: argmemonly nounwind
+declare void @llvm.lifetime.start.p0i8(i64, i8* nocapture) #1
+
+; Function Attrs: argmemonly nounwind
+declare void @llvm.memset.p0i8.i32(i8* nocapture writeonly, i8, i32, i1) #1
+
+; Function Attrs: nounwind
+declare i32 @printf(i8* nocapture readonly, ...) local_unnamed_addr #2
+
+; Function Attrs: nounwind
+declare i32 @scanf(i8* nocapture readonly, ...) local_unnamed_addr #2
+
+; Function Attrs: argmemonly nounwind
+declare void @llvm.lifetime.end.p0i8(i64, i8* nocapture) #1
+
+; Function Attrs: nounwind
+declare i32 @puts(i8* nocapture readonly) local_unnamed_addr #3
+
+; Function Attrs: nounwind
+declare i32 @putchar(i32) local_unnamed_addr #3
+
+attributes #0 = { nounwind "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "less-precise-fpmad"="false" "min-legal-vector-width"="0" "no-frame-pointer-elim"="false" "no-infs-fp-math"="false" "no-jump-tables"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="false" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #1 = { argmemonly nounwind }
+attributes #2 = { nounwind "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "less-precise-fpmad"="false" "no-frame-pointer-elim"="false" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="false" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #3 = { nounwind }
+
+!llvm.module.flags = !{!0}
+!llvm.ident = !{!1}
+
+!0 = !{i32 1, !"wchar_size", i32 4}
+!1 = !{!"clang version 8.0.0 (tags/RELEASE_800/final 375507)"}
+!2 = !{!3, !3, i64 0}
+!3 = !{!"int", !4, i64 0}
+!4 = !{!"omnipotent char", !5, i64 0}
+!5 = !{!"Simple C/C++ TBAA"}
+stderr 
+
+  
+
+============================= Stage -> LLVM IR to LLVM bitcode
+
+BCÀŞ5     b0$IY¾&ïÓ>-D2    !  a  !       #‘AÈI29’„%‹b€EB’BÄ28K
+2bˆHpÄ!#D‡ŒA’dÈ± CFˆ É2b„*(*1|°\‘ ÆÈ   Q    ì%øÿÿÿÿˆqxy‡rz`‡|hyx‡zpr(rhrH{Hr(‡6˜‡xzhs€‡6h‡p t Ì!ØaÊ È!æ!ÄÊ¡è!ÒÚ`ÂØa sv˜‡r v(‡y˜‡6€y(‡qH‡y(‡60xh‡p ÀÂæ¡ ¢ÒÁÚ€ÊáÂÚÀÊaèáä¡î!ÈĞ€€p‡whs‡ph‡rhxx‡tpz(yhƒr`‡thÀÂæ¡ ÂŞ¡ÒÁÌaÚÀà¡Ú!è sv˜‡r wx‡6P‡zhxhzq`‡r˜ÀÂæ¡ ÂŞ¡Ü!ÜaÚÀà¡Ú!è sv˜‡r wx‡6˜‡t8w(rh}(yx‡yhs€‡6h‡p t Ì!ØaÊ ÜáÚ€ä!àÒÁÎ¡Ú!è sv˜‡r ˆy ‡p‡uhx‡w ‡rzxyhq¨s0‡r‡6˜‡tĞ‡r ğ  è!äáÊÚ`à¡€s(w(yH‡q ˆzp‡ys(‡60xhƒvz@ÀÂæ¡ ¢æ¡Ú`ŞÁè¡ÌŞ!è0‡p`‡y(`ƒ!üÿÿÿÿ ´ m X6D , l0•âÿÿÿÿ@"ÆáäAÊaèò¡äáêÁÈ¡È¡È!ì!È¡Ú`âAè¡ÌÚ ÂĞ0‡p`‡y(€ ‡t˜‡pv(‡6 ‡pHvhƒqv`‡y Ì!ØaÊ Ø¡æaÚ ä¡Æ!æ¡ÚÀà¡Â sv˜‡r wx‡60y‡v(‡6€‡wHw ‡r‡6(vH‡v Ì!ØaÊ ÜáÚ ÜÁæ¡ÌÚ ÂĞ0‡p`‡y(€p‡whww˜‡60xhƒvz@ÀÂæ¡ ÂŞ¡æ!ÎÁÊÚ@ÊAŞaÚÀà¡Ú!è sv˜‡r wx‡6 yx€‡tp‡shƒvz@ÀÂæ¡ bè!ÆaÚ äáè¡ÆŞAÚ@êÁÌ¡ä¡æ!ô¡ < zy8‡r ‡6x¨àÊÁÊAÒa ¢ÜaÂÁÊ¡ÌÚ ÂĞ0‡p`‡y(€¨‡y(‡6˜‡w0zhs`‡wz Ì!ØaÊØ`° Õâøÿÿÿÿ6ˆ œÁ†#	€3   I     ‚`‚ ˜ Æá0&Çá@&É„ ‰       2"ˆ	 d…#¤„#ã„¡LŒŒ„ÄL¼Á’! 9 Ğ )Ğ‘ %yĞ’ 5©Ğ“$ EùĞ” Us`P‚‹°€9P  ÚÆQ7G”Bã€ë#°
+Gb.È"\™YpeAJ*¥tM    ¬{‡yh‡9ƒ6¨wXwx‡{p‡6¨wXwx‡{p‡`PmĞzPm z0r s mv@z`tĞî0r v@m0q x ô€!)dÈH‘@#„ÉiĞËsúü%.»ÇèvX¾¿„a÷º,?Í¿aöù-OÓÑm×xÁ %    @°"ŒaØ’  €    Ø)F0pI  @   ì€ £º$      v@–q^     ; ÎH†/	     ‚Ë I  @   ì€ĞÀh†0H    €`äF3ˆA     ; :8–a’  €    ØíÁ±d     ÁHg(ƒ$      v@©pDƒ$    @°‚…cÎ 	     ‚Ğ-Õ€I  @   ì€|a˜†4H    €`Æ3¨A     C¦s 0       €!Ó:`         Ài$(0 `         2İ„!@         C¦(Ä    @     `È$V€         0dÂ‚€ (        †L|q˜   €     €ÄÂe  Y e   2˜LŒ	&GÆC
+E7½,ÑÑe»Ş—å ·$/Ïßuù¸<×hP¡D¦@Á@QtÓËr]¹ëmqYz›Apù{\ÏËsˆ
+­E7½,Ùátd-éo¹D‡†¢è¦—å  ›ı‡ée2HZ¿ëòqD‹ÙeˆåE7½,5Ãøt»ŞÙátD‹ÙeˆµTt4d‡Ómµ<¦¿å ô\¢F‡¤C¢D¦E-EÍ~Ãô2$/Ïßuù¸<×ÔRíá4;,f—Aòòü]—ËsˆÍPù{\ÏKdPz*ãËã:=í>»é(¨è2.Ëóyy
+ËË ´TwÏÃæ2hNÓË.šÔSPÑe\ş—çsPzJ»Aó°¹šÓÃô²‹*A{8Í‹Ùe½<¦¿å:Mê)¨è2(Èf¿Çaz™’–çïº|\QÃbvYGf
+*ºj†ñév½²Ãé6ˆ³Ë:ºJ h   ±  {   3€Äáf=ˆC8„ÃŒB€yxs˜qæ íô€3BÂÁÎ¡f0=ˆC8„ƒÌ=ÈC=Œ=ÌxŒtp{yH‡ppzpvx‡p ‡Ììá0n0ãğğP3ÄŞ!Ø!Âaf0‰;¼ƒ;ĞC9´<¼ƒ<„;Ìğv`{h7h‡rh7€‡p‡p`v(vøvx‡w€‡_‡q‡r˜‡y˜,îğîàõÀì0bÈ¡ä¡Ì¡ä¡ÜaÊ!ÄÊaÖC9ÈC9˜C9ÈC9¸Ã8”C8ˆ;”Ã/¼ƒ<ü‚;Ô;°ÃÇi‡pX‡rpƒthx`‡t‡t ‡ÎSî òPäã@á ìP3 (ÜÁÂAÒ!ÜÜàäáêfQ8°C:œƒ;ÌP$v`{h7`‡wxx˜QLôğP3jÊaè!ŞÁ~ä¡Ì!ğaT…ƒ8ÌÃ;°C=ĞC9üÂ<äC;ˆÃ;°ÃŒÅ
+‡y˜‡w‡tz(r˜\ãìÀåPó0#ÁÒAäáØáŞfH;°ƒ=´ƒ„Ã8ŒC9ÌÃ<¸Á9ÈÃ;Ô<    y   (   rH Cˆ	r2H #Œ‘‘ÑD (d<12B!£(¡ Ê  wchar_sizeclang version 8.0.0 (tags/RELEASE_800/final 375507)   #—Œ \k0Ã0Ä #	ÊˆÍ®Í¥í¬­ÌÅŒ-ìln”€H…Í®Í%¬Ìn”   ©     
+r(‡w€zXp˜C=¸Ã8°C9ĞÃ‚æÆ¡èAÂÁæ!è!ŞÁ Ñ     Ì<¤ƒ;œ;”= ƒ<”C8Ã   a   c  u  -   ´r@¡0@W¡Ğ7@[!Ğ5@ÜPG  ×\s0Ô1Á5×u‚pÍÁ5C…1\spÍÁPÇ×\s0Ô‘(Å5×u,ŒqÍÁ5Cs\spÍÁPÇD=×\s0ÔÑ8È5×ĞUÄu<tÍÁ5C“\spÍÁPÇÂ(×\s0Ôñ@Ë5×ĞUÄuDsÍÁ5CÕ\spÍÁPGe9×\s  ñ0     "GÈQÄ    Ã intomnipotent charSimple C/C++ TBAA „6É†Y”ÃÁ(†¦Q 3jp©A)ÌD¨Á¥¥0‘—”ÂLD\jP
+3ip©A)ÌD¤Á¥¥0q]j0
+3×¥£·#Æ‚`ĞùÁ‰p;b` İA·#Æ‚`Ğ‰p;b` ](”A0b€  ` 
+Œ$Âíˆq€ t¢`A"Ü‚A7
+g$Âíˆq€ t¤@A"Ü‚AW
+eŒ@‚ŒÂŒ	‚ŒÂ,# ‚` ¥0#F‚` ¥P5×nÒÀf!¨¸Š€€ÒÃDP€BÀÀpCP Á,C / D0bP  bà
+k@Ö5†‚80ƒY†*®c ¡§Ã6Áˆ‘€ ˆ,ÈA€ƒÀ q×n4˜eˆ`Ä  @Äàæ€¼k7z`³…P\c–À¨¸®Ä(*®+!ŠŠëJø¡nşÀf$¨¸$Œ®m
+C0b`$ b  àÀ
+0@jpá!@ƒY†	h®1KT\b‚X.² ÃÁ€³†Œ ‚¨C)P\c¸!h3˜eX €èà³Ì@Åu=Æ2Pq]±T\×#Ëpƒ f0ËĞ<Á@Åu4fÁt•øZ‚#A0ƒy˜… ‡_€êƒk7Ì24N@~pY‚g â‹¨¸Çbp)n4˜e` `Ä  @Ä nJáÃ8˜Á,C$W‰ÔÓAÄ! à# ‚` #Áî Ä
+×n4˜eˆ¤`Ä  @È€$~\áÃ:˜Á,Ãd×UÙ†D²pá† Ì`–ª‚Š+¡xcê*±ï@\cÄÀ @Ä &Î!@b`€ráÃB€³TŒ ‚À„:àò0@¼pá!@ƒY†É
+F
+ Á€j¢è®1ÜìƒÌ2\_0PqÍ‡Ã5†0ƒY†Î†#Òÿÿÿ¸şÁf²/ s¸ÆpCf0Ë }Á@Å5q$’Íl—‰hÍÖUHB(¸FO‡w0‰‚k`0€À°1€†LÀÀpC €Á,·˜Ğ7öÿÿÿ?€Á,Ã§WÒéÈÕU"\B
+(¸Æˆ€ ˆÁ[˜D€„NÀ áÃ5†„ f:/1( 3x‹”ÀÌ'`€öáÃB€³Œ ‚ÜÅJĞ?\c¸!Ğ	3˜eƒ1†#ôÿÿÿ¸vÂfÄ`‚Š+	<ùz:˜DO\cÄÀ @ÄÀ/n"@"-`€NâÃB€³a Á@Åõˆ©€AO– ‹€‚kôtx	³(¸Aôt˜‰´0†ˆ@ <æ†fÆ@‚ƒ A0ƒÕğ	š‰k7na³dPÁ@Å•¯ŒAO€‹€‚kŒ ‚Ä†ZHğN\c¸AĞ`–Ê 1( 3ˆµnH‰» ƒY:8ƒ`8"üÿÿÿ‡/À`–Î ¨¸úÀl¤è'®1Üì…Ì2 A$×núÂfÒ ‚Šëc~Aƒfñ×nBfØ`‚áûÿÿÿ.fÖÀ‚ŠkR“Iƒ®oAF@Á5ºJÈ…i ×À!s‘×n3À¤6``–Ô@ÀÇ6``¸! Ğ`–!â ¨¸Î |z:Ül\c¸!0˜e€7*Ú ÔÀhƒŠ‹Ô@i|F Á@êã4‚a‚¸@ï4@€üâÃAn˜Á,ÃÈA0Pq5o@7nĞUâ4vã(¸FO‡Óè‚k`0€À°1€FzÀÀpC Á,ÃÈA€ÓzÀÀpCh0ËĞqŒ ‚ŒÈlÌĞÁˆA€ ˆ‰ÌÆˆA€ ˆA‰ÌµÆ5†ô0ƒY†90ƒ` âJæ@vä §m¨G@Á5F Á@V„<$ìˆ6®1Ü h0Ë0fŒ‚A×"ñÑ#Æ‚`ĞµH|¸Æˆq€ t-R¯1b` ]‹ÔlŒ‚A×"õ#Æ‚`ĞµH}ÈÆˆq€ t-b³1b` ]‹Øm,|„  ş  ¶fÀ²Ô¸(@2\<mİÒµMŒR8‘4B­ó¶t0ÀõG„dß‡ ,KmÛg‘NäÍ°×VpÀ²ÔönæÒµİÛ~@"QAã>%ÙuÀD€!ÃU×º…‰oß4}TáD¾à4ÃûOD0‘q,@2\uÍ[vÀD€!ÃU×»Õ°,öm†E †W}ëş"HpTáD¾à4Ã®ûOD0‘õóÔºáóÔ½a°,µe°,¶i°,·‰°,¹å8@2\5~û”tIáD>Ñ<~^áD¾à4ÃûOD0‘ÿDÄA Z4Bm["0O­ßõm~† ,ËMÛxÀD€!ÃUÛº%@µe€øøMçw NäÎ€Ù´!°,woH	\¿° cFâëö®›@"0Oë>%Ù!PQdf	E †WoƒE †W}ëg@NäN3Ô¼ÿDÄA ™]4‚Ûd "0Îß4n|Ò6o…À<·m‘† ,®ßFS8‘8Öã>%Ùb@!0Ï[|€‚øumï·OI× NäÎ€İºÅ óì»İßæ<ÖD—¡NäN3ô¶ÿDÄA ùKä?Ç­8…ù3`õİû”dÕ†À<5­[¢À! ËRç¸]°,G“X²>Ñ¶` ÃàS’u óäûM×v`À²äõ±4…ùH#Ô:ïS’Ù$‰Û|ïSÒÅ(HáOÑÔ»m·E †W¯û”t2
+RøÓA4õ®›f@!0ÎÛ@‚4B÷>%Ùs€ø¼Íë¡NäÎ€á½åş÷­[`Àá?qß»1ş÷Í[}@"0O}ó>%Ù¤€4B­ãV)` Pë½%H#àµyˆŸß´mÒ8n¤† ,‹ÛvÀ Q­óä»¡óÔ6n—‡ ,K½ßv(Ğ ~]û‹ I€­çæ(° Q`ÈpÕ:mE †W­×–)pÀ²Ô{o˜‡ ,K½ïV€Ìsç7­f@4B~¢€Cß&€ÌÓÓvOÛi@!0N…R8‘8¦×¦(0„pbP8‘/8ÍĞÛ~áD>Ò5]ÿB„L?1„OI&à Q`ÈpÕ·îS’­óÔ·m–†À<õÛ§À! ËRó¸
+H#Ô¼~!KáD~àXMïÖ¥ÕL>}Û´I
+À0Ôº}HáD~à˜°,|m¥Òºn¹E †W¿û”dÊ…À<;~ UáD¾à4C]ßşDdÆ…À<ûn…Æä³˜u€ø½Íã×¡NäÎ€í¼9$óÔ5nó·ñ8@2\5û”dn„ÿD„õ,Ä…L‚Ó÷}ÛoÀB\È$8Ípßø‰,…ù3`u_ŠS8‘8Vß¹OIWàNäN3Ô¼ÿDÄA ùOD0‘u
+,@2\5[j@4ÂNo ‚4Bßû”d‰À<õû”dââ×´ÍÛ¦ÌSß¶½÷G²NäÎ€Õvn\†À<wÍ¥€!0Oï÷¡NäÍPÓ÷MP…ù‚Óyï?qÀ@DFP Àß†P ÀïÖÕL>í/‚$PÍaÖÌSÓºÍç—Nä#`ïö5 `ğ‰À<õÍÛú~-KáD~àX}ç¶)ÌSóµ½ïV şn÷µOIVf ~}×»Ñ)@2\¶}TáD¾à4ßûOD0‘ óè´İ÷æ€Ì³ãvŸJT8‘8Vß¹¿DşsAR8‘O4C}› Àøumï·¥5	™"0Oİßu}#JáD>Ñµ]p€‘ø·İãv  Q`Èpİ¼İ8@2\5^û”dá‰À<µÛ|}IáD>Òø}
+IáD>Ñvo¢†À<5_ß@R8‘8ÆÛœ‘øô]ÛW¢NäÍPßô½,…ù3`uÎÛf ñP“t&“u áN3ø‹ã<Ä…L( Pë½OI6ÌcqâÛw` "0Ïmß4o^E †—U(@2\9}'UáD¾à4C}ßşDtIáD>Ñx~.RøÓA4unûB„LÄ`Æ)p ~mÛ;oìŠàPÍä×6O›a€‘øõMïFLNà8‹OI§âNäN3Ô÷îSÒ	…ùD3˜h€D€!Ã¥ßF€ÌÓß6ÏÛq€òP“p ‘­Û† <Ô$@dë·¹$óÔ7nï¶-°,5ŸDR8‘O4C›tÀ! ËRÓ½©óì§qNäN3ô¶ÿDÄA ù”t3KáD~àXÍÛÆtDTÓ a¾	Ò5mû”döIâç¶Îû”d¬ÇCM’­×F` ş}Ó½)À²8‚MH#Ôum¯âëv¯Ù!0Ï~×ú9H…ùH#à·¿8ÎC\ÈtIáD>Ñú~RáD>Òöî/ó2£@"0OïötÀD€!ÃUÓ¼°,5mŞq!“à4 1  ?   [†.h¶b4[4š-ÃÍ–a‚fË`A³e… Ù2BĞlX!h¶¯4[]š-C/Í–¡‚fË A³eh‡ Ù2ÄCĞlê!h¶ú4[†~š-ƒHÍ–Á$‚fË A³e°‰ Ù2àDĞlt"h¶c4[³š-ÃZÍ–á-‚fË`A³eÈ‹ Ù2øEĞl@#h¶£4[Ôš-CkÍ–6‚fËA³e Ù2 GĞlÔ#h¶í4[ûš-CÍ–á?‚fË@"A³e0‘ Ù2 HĞlf$h¶84[†	    !1  #   Ò„AY˜Æ‰¤‰ª¬Ë´ë¼Â€ÊÀÎ Ò@ÖÀŞ â@æ€êÀî úÀş BÁNVZÁ^AfjÁrAvÁ~Â(ŒIHÆ€Ú ô`ø@FJ!TbápzAÆÊÁÎa        q      2"„€        e  ­   ”h      Ã      D      P       P      ¨      Ô      ê   %   ˜                 g      g      ÿÿÿÿ$  k      k      ÿÿÿÿ,  ƒ      ƒ      ÿÿÿÿ,  —      —      ÿÿÿÿ$              ÿÿÿÿ$  ¢      ¢      ÿÿÿÿ,  ¸      ¸      ÿÿÿÿ$  ¼      ¼      ÿÿÿÿ$              ÿÿÿÿ              ÿÿÿÿ        
+      ÿÿÿÿ   %           ÿÿÿÿ   -           ÿÿÿÿ   5           ÿÿÿÿ   =     "      ÿÿÿÿ   E     (      ÿÿÿÿ   M     .      ÿÿÿÿ   U  	   4      ÿÿÿÿ   ^  	   ;      ÿÿÿÿ   g  	   B      ÿÿÿÿ   p  	   I      ÿÿÿÿ   y  	   P      ÿÿÿÿ   ‚  	   W      ÿÿÿÿ   ‹     ^      ÿÿÿÿ        a      ÿÿÿÿ       ]  i   ”8   .str.str.1.str.2.str.3.str.4.str.5.str.6.str.7.str.9.str.12.str.13.str.14.str.15.str.16.str.17strstr.18mainllvm.lifetime.start.p0i8llvm.memset.p0i8.i32printfscanfllvm.lifetime.end.p0i8putsputchar8.0.0 svn-r375507wasm32-unknown-unknowntests/benchmarks/Banker's_algorithm.c.L.str.L.str.1.L.str.2.L.str.3.L.str.4.L.str.5.L.str.6.L.str.7.L.str.9.L.str.12.L.str.13.L.str.14.L.str.15.L.str.16.L.str.17.Lstr.Lstr.18    
