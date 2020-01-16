@@ -1,7 +1,6 @@
 **LUA Interpreter**
 
 ```
-; No solver specified; listing all candidate replacements.
 
 ; Function: main
 ;[ORIGIN]   %11 = icmp eq %struct.lua_State* %10, null
