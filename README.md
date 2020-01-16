@@ -10,7 +10,26 @@ Given a C program, SLUMPs repurposes a superoptimizer(Souper) to provide several
 ### Prerequisites
 
 - Download our changed version of Souper. The main reason behind is that we include some extra options to be able of working together with the SLUMPs core. After downloading all the submodules in SLUMPs, build every one of them following the respective instructions in the original repos.
-- Build wabt toolkit to provide the WASM to WAT conversion for debugging reasons
+    
+    Inside Souper folder
+    ```
+    $ ./build_deps.sh
+    ```
+
+    ```
+    $ mkdir build
+    $ cd build
+    $ cmake  ../
+    ```
+- Build wabt toolkit to provide the WASM to WAT conversion for debugging reasons. 
+
+    Follow this instructions inside the wabt folder
+    ```
+    $ mkdir build
+    $ cd build
+    $ cmake ..
+    $ cmake --build .
+    ```
 - Install the python requirements: ```pip3 install -r src/requirements.txt```
 
 ### Troubleshooting
