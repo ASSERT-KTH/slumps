@@ -4,9 +4,62 @@ import os
 import configparser
 import uuid
 import iterators
+import sys
+from subprocess import check_output
 
 config = configparser.ConfigParser(interpolation=configparser.ExtendedInterpolation())
 config.read("settings/config.ini")
+
+def updatesettings():
+    if not os.path.exists("settings/.slumps"):
+        print("Setting up slumps for the first time...")
+        open("settings/.slumps", 'w').write("SLUMPs them all!")
+
+        SLUMPS_DIR = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
+
+        print("Slumps dir...%s"%SLUMPS_DIR)
+        config["DEFAULT"]["slumpspath"] = SLUMPS_DIR
+
+        platform = ".so" if sys.platform == 'linux' else '.dylib' # dylib for MacOS
+        print("OS...%s"%sys.platform)
+        config["souper"]["passName"] = config["souper"]["passName"].split(".")[0] + platform
+
+        # WAS-ld binary
+
+        # Read available binaries
+        bins = check_output('compgen -c', shell=True, executable='/bin/bash').splitlines()
+
+        wasm_bins = list(filter(lambda x: x.startswith("wasm-ld") ,map(lambda x: x.decode("utf-8"), bins)))
+        emcc = list(filter(lambda x: x.startswith("emcc") ,map(lambda x: x.decode("utf-8"), bins)))
+
+
+        if len(wasm_bins) == 0:
+            raise Exception("WASM linker not found. Please install it (apt-get install lld-<version> for ubuntu)")
+
+        wasm_ld = wasm_bins[0]
+        if len(wasm_bins) > 1:
+            print("Multiple WASM linkers. Choose one, take into account the version of llvm built with Souper:")
+
+            for i, b in enumerate(wasm_bins):
+                print("%s -  %s"%(i + 1, b))
+
+            option = int(input("Option: "))
+            wasm_ld = wasm_bins[option - 1]
+
+        config["wasm-ld"]["path"] = wasm_ld
+
+        if len(emcc) == 0:
+            print("No Emscripten bins found. This can be harmful for SLUMPs")
+        else:
+            pass
+            #emcc = check_output('emcc - -o -', shell=True, executable='/bin/bash').splitlines()
+            #print(emcc)
+
+
+        with open("settings/config.ini", 'w') as configFile:
+            config.write(configFile)
+
+updatesettings()
 
 DEBUG_FILE = open(config["DEFAULT"]["debugfile"], 'wb')
 
