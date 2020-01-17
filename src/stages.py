@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from subprocess import Popen, PIPE
-from utils import bcolors, DEBUG_FILE, Alias, config
+from utils import bcolors, DEBUG_FILE, Alias, config, createTmpFile
 from logger import LOGGER
 import re
 import time

@@ -6,9 +6,33 @@ import uuid
 import iterators
 import sys
 from subprocess import check_output
+from subprocess import Popen, PIPE
 
 config = configparser.ConfigParser(interpolation=configparser.ExtendedInterpolation())
 config.read("settings/config.ini")
+
+
+class ContentToTmpFile(object):
+
+    def __init__(self, content=None, name=None):
+
+        tmp = createTmpFile() if not name else name
+
+        if content:
+            tmpF = open(tmp, "wb")
+            tmpF.write(content)
+            tmpF.close()
+
+        self.file = tmp
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        try:
+            os.remove(self.file)
+        except:
+            pass
 
 def updatesettings():
     if not os.path.exists("settings/.slumps"):
@@ -51,9 +75,19 @@ def updatesettings():
         if len(emcc) == 0:
             print("No Emscripten bins found. This can be harmful for SLUMPs")
         else:
-            pass
-            #emcc = check_output('emcc - -o -', shell=True, executable='/bin/bash').splitlines()
-            #print(emcc)
+            with ContentToTmpFile(name="setting.c", content=b'int main(){return 0;}') as tmpC:
+
+                emcc = Popen(('emcc -v %s -o -' % tmpC.file).split(" "),  stdout=PIPE, stderr=PIPE, stdin=PIPE)
+                emcc, err = emcc.communicate()
+
+                words = err.decode("utf-8").split(" ")
+
+                includes = []
+                for w in words:
+                    if w.startswith("-isystem"):
+                        includes.append(w)
+
+                config["clang"]["includes"] = " ".join(includes)
 
 
         with open("settings/config.ini", 'w') as configFile:
