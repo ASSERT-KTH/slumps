@@ -73,13 +73,14 @@ If the LLVM build takes to long or fails due to memory lack in the image buildin
 
 ## Souper new features
 
-We add some features/options to Souper:
+We added some features/options to Souper:
 
 - **`souper-subset`**: Based on the candidate indexes, specify the candidates to be applied, for example
 `-souper-subset=1,2,3,4` or `-souper-subset=0,3`
 - **`souper-valid-count`**: Search for successful optimizations without replacing
 - **`souper-redis-host`**: Host for redis
 - **`souper-redis-pass`**: Password for redis connection
+
 
 ## Issues
 
