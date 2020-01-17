@@ -32,7 +32,7 @@ class ExternalStage(object):
         #delta = time.time_ns() - start
         delta = 'not implemented'
         if self.debug:
-            LOGGER.success("Stage -> %s (%.2f ms)" % (self.name, delta))
+            LOGGER.success("Stage -> %s (%s)" % (self.name, delta))
             LOGGER.info(" ".join([self.path_to_executable] + args))
 
         rc = p.returncode
