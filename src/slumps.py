@@ -81,7 +81,7 @@ class Pipeline(object):
 
         total = 2 ** (cand[0])  # tentative, TODO change to the iterator
         current = 1
-        prunned = 0
+        pruned = 0
 
         if cand[0] > 0:
             for s in getIteratorByName(config["DEFAULT"]["generator-method"])(range(cand[0])):
@@ -104,15 +104,15 @@ class Pipeline(object):
                     if hex in sha:
                         os.remove(wasmFile)
                         os.remove(watFile)
-                        prunned+=1
+                        pruned+=1
                         continue
 
                 sizes[hex] = [size, list(s)]
 
                 sha.add(hex)
 
-            printProgressBar(current, total, suffix="Total number of programs %s. Different sha count %s. Prunned count %s      %s" % (
-            current, len(sha), prunned," " * 100), length=50)
+            printProgressBar(current, total, suffix="Total number of programs %s. Different sha count %s. Pruned count %s      %s" % (
+            current, len(sha), pruned," " * 100), length=50)
 
         else:
             LOGGER.error("No succesfull replacements. Total number of subexpressions  %s" % cand[1])
