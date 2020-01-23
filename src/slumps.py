@@ -58,6 +58,8 @@ class Pipeline(object):
 
             for level in range(1, 9):
 
+                LOGGER.success("Searching level (in increasing execution time) %s: %s..." % (level, config["souper"]["souper-level-%s"%level]))
+
                 bctocand = BCCountCandidates(level=level)
 
                 with ContentToTmpFile(content=bc) as TMP_BC:
