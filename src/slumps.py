@@ -59,7 +59,7 @@ class Pipeline(object):
 
             for level in range(1, 11):
 
-                LOGGER.success("Searching level (increasing execution time) %s: %s..." % (
+                LOGGER.success("%s: Searching level (increasing execution time) %s: %s..." % (program_name,
                 level, config["souper"]["souper-level-%s" % level]))
 
                 bctocand = BCCountCandidates(program_name, level=level)
@@ -68,7 +68,7 @@ class Pipeline(object):
                     cand = bctocand(args=[TMP_BC.file], std=None)
 
                     # Saving candidate
-                    LOGGER.success("Found %s arithmetic expression candidates. %s Can be replaced" % (cand[1], cand[0]))
+                    LOGGER.success("%s: Found %s arithmetic expression candidates. %s Can be replaced" % (program_name,cand[1], cand[0]))
 
                     # Test set the second candidate for optimization
 
@@ -122,13 +122,13 @@ class Pipeline(object):
 
                             else:
                                 LOGGER.error(
-                                    "No succesfull replacements. Total number of subexpressions  %s. Souper level %s" % (
+                                    "%s: No succesfull replacements. Total number of subexpressions  %s. Souper level %s" % (program_name,
                                     cand[1], level))
         except BreakException:
             pass
 
         if config["DEFAULT"].getboolean("print-sha"):
-            LOGGER.warning("Summary ")
+            LOGGER.warning("Summary %s:"%program_name)
             for s in sha:
                 LOGGER.warning("WASM SHA256 %s. Size %s. Combination %s" % (s, sizes[s][0], sizes[s][1]))
 
@@ -153,10 +153,10 @@ class Pipeline(object):
 
             finalStream = open("%s.wasm" % (llFileName,), 'rb').read()
             if debug:
-                LOGGER.warning("WASM SIZE %s" % (len(finalStream),))
+                LOGGER.warning("%s: WASM SIZE %s" % (namespace,len(finalStream),))
             hashvalue = hashlib.sha256(finalStream)
             if debug:
-                LOGGER.warning("WASM SHA %s" % (hashvalue.hexdigest(),))
+                LOGGER.warning("%s: WASM SHA %s" % (namespace,hashvalue.hexdigest(),))
             return hashvalue.hexdigest(), len(finalStream), "%s.wasm" % (llFileName,), "%s.wat" % (llFileName,)
 
 
