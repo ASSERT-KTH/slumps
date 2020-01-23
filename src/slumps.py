@@ -4,7 +4,7 @@ import os
 import sys
 from stages import CToLLStage, LLToBC, BCToSouper, ObjtoWASM, WASM2WAT, BCCountCandidates
 from utils import bcolors, DEBUG_FILE, OUT_FOLDER, printProgressBar, config, createTmpFile, getIteratorByName, \
-    ContentToTmpFile
+    ContentToTmpFile, BreakException
 from logger import LOGGER
 import collections
 import hashlib
@@ -54,67 +54,73 @@ class Pipeline(object):
         sha.add(originalSha)
         sizes[originalSha] = [originalSize, []]
 
-        bctocand = BCCountCandidates()
+        try:
 
-        with ContentToTmpFile(content=bc) as TMP_BC:
-            cand = bctocand(args=[TMP_BC.file], std=None)
+            for level in range(1, 9):
 
-            # Saving candidate
-            LOGGER.success("Found %s arithmetic expression candidates. %s Can be replaced" % (cand[1], cand[0]))
+                bctocand = BCCountCandidates(level=level)
 
-            # Test set the second candidate for optimization
+                with ContentToTmpFile(content=bc) as TMP_BC:
+                    cand = bctocand(args=[TMP_BC.file], std=None)
 
-            # BC to tmpfile
-            with ContentToTmpFile(content=bc) as BCIN:
-                with ContentToTmpFile() as BCOUT:
-                    tmpIn = BCIN.file
-                    tmpOut = BCOUT.file
+                    # Saving candidate
+                    LOGGER.success("Found %s arithmetic expression candidates. %s Can be replaced" % (cand[1], cand[0]))
 
-                    total = 2 ** (cand[0])  # tentative, TODO change to the iterator
-                    current = 1
-                    pruned = 0
+                    # Test set the second candidate for optimization
 
-                    if cand[0] > 0:
-                        for s in getIteratorByName(config["DEFAULT"]["generator-method"])(range(cand[0])):
-                            sanitized_set_name = "_".join(list(map(lambda x: x.__str__(), s)))
+                    # BC to tmpfile
+                    with ContentToTmpFile(content=bc) as BCIN:
+                        with ContentToTmpFile() as BCOUT:
+                            tmpIn = BCIN.file
+                            tmpOut = BCOUT.file
 
-                            optBc = BCToSouper(candidates=list(s))
-                            optBc(args=[tmpIn, tmpOut], std=None)
+                            total = 2 ** (cand[0])  # tentative, TODO change to the iterator
+                            current = 1
+                            pruned = 0
 
-                            bsOpt = open(tmpOut, 'rb').read()
+                            if cand[0] > 0 and config["DEFAULT"].getint("candidates-threshold") < cand[0]:
+                                for s in getIteratorByName(config["DEFAULT"]["generator-method"])(range(cand[0])):
+                                    sanitized_set_name = "_".join(list(map(lambda x: x.__str__(), s)))
 
-                            hex, size, wasmFile, watFile = self.generateWasm(bsOpt, OUT_FOLDER, "%s[%s]" % (
-                            program_name, sanitized_set_name), debug=False)
-                            os.remove(tmpOut)
+                                    optBc = BCToSouper(candidates=list(s), level=level)
+                                    optBc(args=[tmpIn, tmpOut], std=None)
 
-                            printProgressBar(current, total,
-                                             suffix="Completed %s[%s] %s" % (program_name, sanitized_set_name, hex),
-                                             length=50)
+                                    bsOpt = open(tmpOut, 'rb').read()
 
-                            current += 1
-                            if config["DEFAULT"].getboolean("prune-equal"):
-                                if hex in sha:
-                                    os.remove(wasmFile)
-                                    os.remove(watFile)
-                                    pruned += 1
-                                    continue
+                                    hex, size, wasmFile, watFile = self.generateWasm(bsOpt, OUT_FOLDER, "%s[%s]" % (
+                                    program_name, sanitized_set_name), debug=False)
 
-                            sizes[hex] = [size, list(s)]
+                                    printProgressBar(current, total,
+                                                     suffix="Completed %s[%s] %s" % (program_name, sanitized_set_name, hex),
+                                                     length=50)
 
-                            sha.add(hex)
+                                    current += 1
+                                    if config["DEFAULT"].getboolean("prune-equal"):
+                                        if hex in sha:
+                                            os.remove(wasmFile)
+                                            os.remove(watFile)
+                                            pruned += 1
+                                            continue
 
-                        printProgressBar(current, total,
-                                         suffix="Total number of programs %s. Different sha count %s. Pruned count %s      %s" % (
-                                             current, len(sha), pruned, " " * 100), length=50)
+                                    sizes[hex] = [size, list(s)]
 
-                    else:
-                        LOGGER.error("No succesfull replacements. Total number of subexpressions  %s" % cand[1])
-                    os.remove(tmpIn)
+                                    sha.add(hex)
 
-                    if config["DEFAULT"].getboolean("print-sha"):
-                        LOGGER.warning("Summary ")
-                        for s in sha:
-                            LOGGER.warning("WASM SHA256 %s. Size %s. Combination %s" % (s, sizes[s][0], sizes[s][1]))
+                                printProgressBar(current, total,
+                                                 suffix="Total number of programs %s. Different sha count %s. Pruned count %s      %s" % (
+                                                     current, len(sha), pruned, " " * 100), length=50)
+
+                                raise BreakException()
+
+                            else:
+                                LOGGER.error("No succesfull replacements. Total number of subexpressions  %s. Souper level %s" % (cand[1], level))
+        except BreakException:
+            pass
+
+        if config["DEFAULT"].getboolean("print-sha"):
+            LOGGER.warning("Summary ")
+            for s in sha:
+                LOGGER.warning("WASM SHA256 %s. Size %s. Combination %s" % (s, sizes[s][0], sizes[s][1]))
 
     def generateWasm(self, bc, OUT_FOLDER, fileName, debug=True):
         llFileName = "%s/%s" % (OUT_FOLDER, fileName)
