@@ -11,10 +11,11 @@ import sys, os
 
 class ExternalStage(object):
 
-    def __init__(self):
+    def __init__(self, namespace):
         self.name = "unknown"
         self.path_to_executable = "unknown"
         self.debug = True
+        self.namespace = namespace
 
     def processInner(self, std, err):
         return b"Ops...Not implemented"
@@ -45,8 +46,8 @@ class ExternalStage(object):
         res = self.processInner(std, err)
 
         if self.debug:
-            LOGGER.debug("============================= Stage -> %s\n\n" % (self.name,), res)
-            LOGGER.debug("stderr \n\n %s \n\n" % (err.decode("utf-8"),))
+            LOGGER.debug(self.namespace,"============================= Stage -> %s\n\n" % (self.name,), res)
+            LOGGER.debug(self.namespace,"stderr \n\n %s \n\n" % (err.decode("utf-8"),))
 
         # print("\t%s%s%s'"%(bcolors.WARNING, res, bcolors.ENDC))
 
@@ -55,10 +56,12 @@ class ExternalStage(object):
 
 class CToLLStage(ExternalStage):
 
-    def __init__(self):
+    def __init__(self, namespace):
         self.path_to_executable = Alias.clang
         self.name = "C to LLVM IR"
         self.debug = True
+
+        self.namespace = namespace
 
     def __call__(self, args=[], std=None):  # f -> inputs
 
@@ -70,10 +73,12 @@ class CToLLStage(ExternalStage):
 
 class LLToBC(ExternalStage):
 
-    def __init__(self):
+    def __init__(self, namespace):
         self.path_to_executable = Alias.llvm_as
         self.name = "LLVM IR to LLVM bitcode"
         self.debug = True
+
+        self.namespace = namespace
 
     def __call__(self, args=[], std=None):  # f -> inputs
 
@@ -86,12 +91,13 @@ class LLToBC(ExternalStage):
 
 class BCCountCandidates(ExternalStage):
 
-    def __init__(self, level=1):
+    def __init__(self,namespace, level=1):
         self.path_to_executable = Alias.opt
         self.name = "LLVM BC to Souper IR candidates"
         self.debug = True
         self.level = level
 
+        self.namespace = namespace
     def __call__(self, args=[], std=None):  # f -> inputs
         extra_commands = "%s -o %s" % (args[0], args[0])
 
@@ -107,12 +113,14 @@ class BCCountCandidates(ExternalStage):
 
 class BCToSouper(ExternalStage):
 
-    def __init__(self, candidates=[], debug=False, level=1):
+    def __init__(self,namespace,candidates=[], debug=False, level=1):
         self.path_to_executable = Alias.opt
         self.name = "LLVM BC supertoptimization pass"
         self.debug = debug
         self.candidates = candidates
         self.level = level
+
+        self.namespace = namespace
 
     def __call__(self, args=[], std=None):  # f -> inputs
 
@@ -126,11 +134,12 @@ class BCToSouper(ExternalStage):
 
 class ObjtoWASM(ExternalStage):
 
-    def __init__(self, debug=True):
+    def __init__(self,namespace, debug=True):
         self.path_to_executable = Alias.wasm_ld
         self.name = "LLVM obj to WASM"
         self.debug = debug
 
+        self.namespace = namespace
     def __call__(self, args=[], std=None):  # f -> inputs
 
         new_inputs = (config["wasm-ld"]["command"] % ("%s %s" % (args[0], args[1]),)).split(" ")
@@ -143,10 +152,11 @@ class ObjtoWASM(ExternalStage):
 
 class WASM2WAT(ExternalStage):
 
-    def __init__(self, debug=True):
+    def __init__(self, namespace, debug=True):
         self.path_to_executable = Alias.wasm2wat
         self.name = "WASM to WAT text"
         self.debug = debug
+        self.namespace = namespace
 
 
     def __call__(self, args=[], std=None):  # f -> inputs

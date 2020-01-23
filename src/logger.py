@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from utils import bcolors, RUNTIME_CONFIG
+from utils import bcolors, getlogfilename
 
 
 class Logger(object):
@@ -18,18 +18,13 @@ class Logger(object):
     def getIndent(self):
         return "\t" * self.indent
 
-    def debug(self, message, std=None):
+    def debug(self, file, message, std=None):
 
         if self.debugToFile:
-            if isinstance(message, list):
-                RUNTIME_CONFIG["DEBUG_FILE"].write(message)
-            else:
-                RUNTIME_CONFIG["DEBUG_FILE"].write(message.encode("utf-8"))
+            f = open(getlogfilename(file), 'a+')
+            f.write(message.__str__())
             if std:
-                if isinstance(std, list):
-                    RUNTIME_CONFIG["DEBUG_FILE"].write(std.__str__().encode("utf-8"))
-                else:
-                    RUNTIME_CONFIG["DEBUG_FILE"].write(std)
+                f.write(std.__str__())
         else:
             print("%s%s%s%s" % (self.getIndent(), bcolors.UNDERLINE, message, bcolors.ENDC))
 
