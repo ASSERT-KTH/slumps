@@ -89,7 +89,7 @@ class Pipeline(object):
 
                                     bsOpt = open(tmpOut, 'rb').read()
 
-                                    hex, size, wasmFile, watFile = self.generateWasm(bsOpt, OUT_FOLDER, "%s[%s]" % (
+                                    hex, size, wasmFile, watFile = self.generateWasm(bsOpt, OUT_FOLDER, "[%s]%s[%s]" % (level,
                                     program_name, sanitized_set_name), debug=False)
 
                                     printProgressBar(current, total,
