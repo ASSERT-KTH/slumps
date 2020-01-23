@@ -119,31 +119,29 @@ class Pipeline(object):
     def generateWasm(self, bc, OUT_FOLDER, fileName, debug=True):
         llFileName = "%s/%s" % (OUT_FOLDER, fileName)
 
-        tmpWasm = createTmpFile(ext=".bc")
-        tmpWasmF = open(tmpWasm, 'wb')
-        tmpWasmF.write(bc)
-        tmpWasmF.close()
+        with ContentToTmpFile(content=bc, ext=".bc") as TMP_WASM:
 
-        finalObjCreator = ObjtoWASM(debug=debug)
-        finalObjCreator(args=[
-            "%s.wasm" % (llFileName,),
-            tmpWasm
-        ], std=None)
+            tmpWasm = TMP_WASM.file
 
-        os.remove(tmpWasm)
-        wat = WASM2WAT(debug=debug)
-        wat(std=None, args=[
-            "%s.wasm" % (llFileName,),
-            "%s.wat" % (llFileName,)]
-            )
+            finalObjCreator = ObjtoWASM(debug=debug)
+            finalObjCreator(args=[
+                "%s.wasm" % (llFileName,),
+                tmpWasm
+            ], std=None)
 
-        finalStream = open("%s.wasm" % (llFileName,), 'rb').read()
-        if debug:
-            LOGGER.warning("WASM SIZE %s" % (len(finalStream),))
-        hashvalue = hashlib.sha256(finalStream)
-        if debug:
-            LOGGER.warning("WASM SHA %s" % (hashvalue.hexdigest(),))
-        return hashvalue.hexdigest(), len(finalStream), "%s.wasm" % (llFileName,), "%s.wat" % (llFileName,)
+            wat = WASM2WAT(debug=debug)
+            wat(std=None, args=[
+                "%s.wasm" % (llFileName,),
+                "%s.wat" % (llFileName,)]
+                )
+
+            finalStream = open("%s.wasm" % (llFileName,), 'rb').read()
+            if debug:
+                LOGGER.warning("WASM SIZE %s" % (len(finalStream),))
+            hashvalue = hashlib.sha256(finalStream)
+            if debug:
+                LOGGER.warning("WASM SHA %s" % (hashvalue.hexdigest(),))
+            return hashvalue.hexdigest(), len(finalStream), "%s.wasm" % (llFileName,), "%s.wat" % (llFileName,)
 
 
 if __name__ == "__main__":

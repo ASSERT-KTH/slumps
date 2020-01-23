@@ -14,9 +14,9 @@ config.read("settings/config.ini")
 
 class ContentToTmpFile(object):
 
-    def __init__(self, content=None, name=None):
+    def __init__(self, content=None, name=None, ext=None):
 
-        tmp = createTmpFile() if not name else name
+        tmp = createTmpFile(ext) if not name else name
 
         if content:
             tmpF = open(tmp, "wb")
