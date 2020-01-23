@@ -2,8 +2,6 @@ import iterators
 import utils
 
 
-def test_utils():
-    print(utils.DEBUG_FILE)
 
 def test_settings():
     print(utils.config.defaults(), utils.config["souper"]["path"])

@@ -3,7 +3,7 @@
 import os
 import sys
 from stages import CToLLStage, LLToBC, BCToSouper, ObjtoWASM, WASM2WAT, BCCountCandidates
-from utils import bcolors, RUNTIME_CONFIG, OUT_FOLDER, printProgressBar, config, createTmpFile, getIteratorByName, \
+from utils import bcolors, OUT_FOLDER, printProgressBar, config, createTmpFile, getIteratorByName, \
     ContentToTmpFile, BreakException
 from logger import LOGGER
 import collections
@@ -30,8 +30,6 @@ class Pipeline(object):
 
         program_name = file.split("/")[-1].split(".")[0]
 
-        RUNTIME_CONFIG["DEBUG_FILE"] = open("%s/%s.slumps.log"%(config["DEFAULT"]["slumpspath"], program_name), "wb")
-
         if not self.check_file(file):
             LOGGER.error("Invalid file %s" % (file,))
             return
@@ -42,28 +40,29 @@ class Pipeline(object):
         ll1 = b''
 
         if file.endswith(".c") or file.endswith(".cpp"):
-            ctoll = CToLLStage()
+            ctoll = CToLLStage(program_name)
             ll1 = ctoll(file)
         if file.endswith(".ll"):
             ll1 = open(file, 'rb')
 
-        lltobc = LLToBC()
+        lltobc = LLToBC(program_name)
         bc = lltobc(std=ll1)
 
         sha = set([])
         sizes = {}
 
-        originalSha, originalSize, _, _ = self.generateWasm(bc, OUT_FOLDER, program_name)
+        originalSha, originalSize, _, _ = self.generateWasm(program_name, bc, OUT_FOLDER, program_name)
         sha.add(originalSha)
         sizes[originalSha] = [originalSize, []]
 
         try:
 
-            for level in range(1, 9):
+            for level in range(1, 11):
 
-                LOGGER.success("Searching level (in increasing execution time) %s: %s..." % (level, config["souper"]["souper-level-%s"%level]))
+                LOGGER.success("Searching level (increasing execution time) %s: %s..." % (
+                level, config["souper"]["souper-level-%s" % level]))
 
-                bctocand = BCCountCandidates(level=level)
+                bctocand = BCCountCandidates(program_name, level=level)
 
                 with ContentToTmpFile(content=bc) as TMP_BC:
                     cand = bctocand(args=[TMP_BC.file], std=None)
@@ -87,16 +86,20 @@ class Pipeline(object):
                                 for s in getIteratorByName(config["DEFAULT"]["generator-method"])(range(cand[0])):
                                     sanitized_set_name = "_".join(list(map(lambda x: x.__str__(), s)))
 
-                                    optBc = BCToSouper(candidates=list(s), level=level)
+                                    optBc = BCToSouper(program_name, candidates=list(s), level=level)
                                     optBc(args=[tmpIn, tmpOut], std=None)
 
                                     bsOpt = open(tmpOut, 'rb').read()
 
-                                    hex, size, wasmFile, watFile = self.generateWasm(bsOpt, OUT_FOLDER, "[%s]%s[%s]" % (level,
-                                    program_name, sanitized_set_name), debug=False)
+                                    hex, size, wasmFile, watFile = self.generateWasm(program_name, bsOpt, OUT_FOLDER,
+                                                                                     "[%s]%s[%s]" % (level,
+                                                                                                     program_name,
+                                                                                                     sanitized_set_name),
+                                                                                     debug=False)
 
                                     printProgressBar(current, total,
-                                                     suffix="Completed %s[%s] %s" % (program_name, sanitized_set_name, hex),
+                                                     suffix="Completed %s[%s] %s" % (
+                                                     program_name, sanitized_set_name, hex),
                                                      length=50)
 
                                     current += 1
@@ -118,7 +121,9 @@ class Pipeline(object):
                                 raise BreakException()
 
                             else:
-                                LOGGER.error("No succesfull replacements. Total number of subexpressions  %s. Souper level %s" % (cand[1], level))
+                                LOGGER.error(
+                                    "No succesfull replacements. Total number of subexpressions  %s. Souper level %s" % (
+                                    cand[1], level))
         except BreakException:
             pass
 
@@ -127,20 +132,20 @@ class Pipeline(object):
             for s in sha:
                 LOGGER.warning("WASM SHA256 %s. Size %s. Combination %s" % (s, sizes[s][0], sizes[s][1]))
 
-    def generateWasm(self, bc, OUT_FOLDER, fileName, debug=True):
+    def generateWasm(self,namespace, bc, OUT_FOLDER, fileName, debug=True):
         llFileName = "%s/%s" % (OUT_FOLDER, fileName)
 
         with ContentToTmpFile(content=bc, ext=".bc") as TMP_WASM:
 
             tmpWasm = TMP_WASM.file
 
-            finalObjCreator = ObjtoWASM(debug=debug)
+            finalObjCreator = ObjtoWASM(namespace,debug=debug)
             finalObjCreator(args=[
                 "%s.wasm" % (llFileName,),
                 tmpWasm
             ], std=None)
 
-            wat = WASM2WAT(debug=debug)
+            wat = WASM2WAT(namespace,debug=debug)
             wat(std=None, args=[
                 "%s.wasm" % (llFileName,),
                 "%s.wat" % (llFileName,)]
@@ -160,6 +165,12 @@ if __name__ == "__main__":
 
     f = sys.argv[1]
 
-    pipeline.process(f)
+    if os.path.isfile(f):
+        pipeline.process(f)
+    else:
+        from multiprocessing import Pool
 
-    RUNTIME_CONFIG["DEBUG_FILE"].close()
+        LOGGER.info("Pool size: %s" % config["DEFAULT"].getint("thread-pool-size"))
+
+        with Pool(config["DEFAULT"].getint("thread-pool-size")) as p:
+            p.map(pipeline.process, ["%s/%s" % (f, i) for i in os.listdir(f)])

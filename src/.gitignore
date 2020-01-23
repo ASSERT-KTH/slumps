@@ -15,4 +15,5 @@ results
 
 *debug.txt
 
-.slumps
+*.slumps
+*.slumps.log
