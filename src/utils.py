@@ -11,6 +11,8 @@ from subprocess import Popen, PIPE
 config = configparser.ConfigParser(interpolation=configparser.ExtendedInterpolation())
 config.read("settings/config.ini")
 
+def getlogfilename(program_name):
+    return "%s/%s.slumps.log" % (config["DEFAULT"]["slumpspath"], program_name)
 
 class ContentToTmpFile(object):
 
@@ -99,12 +101,7 @@ def updatesettings():
 
 updatesettings()
 
-RUNTIME_CONFIG = {
-    "DEBUG_FILE":  None
-}
-
 OUT_FOLDER = config["DEFAULT"]["outfolder"]
-
 
 def getIteratorByName(name: str):
     return getattr(iterators, name)
