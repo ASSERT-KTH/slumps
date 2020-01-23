@@ -22,6 +22,8 @@ class ContentToTmpFile(object):
             tmpF = open(tmp, "wb")
             tmpF.write(content)
             tmpF.close()
+        else:
+            self.tmpF = open(tmp, 'wb')
 
         self.file = tmp
 
@@ -30,6 +32,8 @@ class ContentToTmpFile(object):
 
     def __exit__(self, exc_type, exc_val, exc_tb):
         try:
+            if self.tmpF:
+                self.tmpF.close()
             os.remove(self.file)
         except:
             pass
