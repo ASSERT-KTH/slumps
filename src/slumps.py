@@ -3,7 +3,7 @@
 import os
 import sys
 from stages import CToLLStage, LLToBC, BCToSouper, ObjtoWASM, WASM2WAT, BCCountCandidates
-from utils import bcolors, DEBUG_FILE, OUT_FOLDER, printProgressBar, config, createTmpFile, getIteratorByName, \
+from utils import bcolors, RUNTIME_CONFIG, OUT_FOLDER, printProgressBar, config, createTmpFile, getIteratorByName, \
     ContentToTmpFile, BreakException
 from logger import LOGGER
 import collections
@@ -28,6 +28,10 @@ class Pipeline(object):
 
     def process(self, file):
 
+        program_name = file.split("/")[-1].split(".")[0]
+
+        RUNTIME_CONFIG["DEBUG_FILE"] = open("%s/%s.slumps.log"%(config["DEFAULT"]["slumpspath"], program_name), "wb")
+
         if not self.check_file(file):
             LOGGER.error("Invalid file %s" % (file,))
             return
@@ -46,7 +50,6 @@ class Pipeline(object):
         lltobc = LLToBC()
         bc = lltobc(std=ll1)
 
-        program_name = file.split("/")[-1].split(".")[0]
         sha = set([])
         sizes = {}
 
@@ -158,3 +161,5 @@ if __name__ == "__main__":
     f = sys.argv[1]
 
     pipeline.process(f)
+
+    RUNTIME_CONFIG["DEBUG_FILE"].close()

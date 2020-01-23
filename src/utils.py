@@ -99,7 +99,9 @@ def updatesettings():
 
 updatesettings()
 
-DEBUG_FILE = open(config["DEFAULT"]["debugfile"], 'wb')
+RUNTIME_CONFIG = {
+    "DEBUG_FILE":  None
+}
 
 OUT_FOLDER = config["DEFAULT"]["outfolder"]
 
