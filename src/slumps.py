@@ -59,9 +59,9 @@ class Pipeline(object):
 
         try:
 
-            for level in range(1, 9):
+            for level in range(1, 11):
 
-                LOGGER.success("Searching level (in increasing execution time) %s: %s..." % (level, config["souper"]["souper-level-%s"%level]))
+                LOGGER.success("Searching level (increasing execution time) %s: %s..." % (level, config["souper"]["souper-level-%s"%level]))
 
                 bctocand = BCCountCandidates(level=level)
 
