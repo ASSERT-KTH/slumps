@@ -86,15 +86,16 @@ class LLToBC(ExternalStage):
 
 class BCCountCandidates(ExternalStage):
 
-    def __init__(self):
+    def __init__(self, level=1):
         self.path_to_executable = Alias.opt
         self.name = "LLVM BC to Souper IR candidates"
         self.debug = True
+        self.level = level
 
     def __call__(self, args=[], std=None):  # f -> inputs
         extra_commands = "%s -o %s" % (args[0], args[0])
 
-        new_inputs = (config["souper"]["list-candidates"] % extra_commands).split(" ")
+        new_inputs = (config["souper"]["list-candidates"] % (config["souper"]["souper-level-%s"%self.level],extra_commands)).split(" ")
         return super(BCCountCandidates, self).__call__(new_inputs, std)
 
     def processInner(self, std, err):
@@ -106,16 +107,17 @@ class BCCountCandidates(ExternalStage):
 
 class BCToSouper(ExternalStage):
 
-    def __init__(self, candidates=[], debug=False):
+    def __init__(self, candidates=[], debug=False, level=1):
         self.path_to_executable = Alias.opt
         self.name = "LLVM BC supertoptimization pass"
         self.debug = debug
         self.candidates = candidates
+        self.level = level
 
     def __call__(self, args=[], std=None):  # f -> inputs
 
         extra_commands = "-souper-subset=%s %s -o %s" % (",".join(map(lambda x: x.__str__(), self.candidates)), args[0], args[1])
-        new_inputs = (config["souper"]["super-opt-pass"] % extra_commands).split(" ")
+        new_inputs = (config["souper"]["super-opt-pass"] % (config["souper"]["souper-level-%s"%self.level],extra_commands)).split(" ")
         return super(BCToSouper, self).__call__(new_inputs, std)
 
     def processInner(self, std, err):

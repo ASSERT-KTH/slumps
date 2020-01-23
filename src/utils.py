@@ -171,3 +171,6 @@ class Alias:
     wasm2wat = config["wabt"]["wasm2wat"]
     # libsouperPass_so = "../../souper/build/libsouperPass.so"
     # z3 = "%s/souper/third_party/z3/build/z3"%(BASE_DIR,)
+
+class BreakException(Exception):
+    pass
