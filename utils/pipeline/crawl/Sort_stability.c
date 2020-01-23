@@ -1,0 +1,2 @@
+der|C}}==
+There is no built-in function in C ''language''.  <code>stdlib</code> which comes with any C ''implementation'' is required to provide a [[wp:Qsort|<code>qsort()</code>]] routine that can sort arbitrary datatypes.  Although the sorting algorithm is not specified, most (all?) implementions use a combined quicksort/insertion sort method for efficiency.  Quicksort is by nature unstable.

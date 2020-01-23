@@ -1,1 +1,0 @@
-Part of the project **noise-c.wasm**
