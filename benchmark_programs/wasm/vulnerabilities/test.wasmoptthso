@@ -1,7 +1,0 @@
-; RHS inferred successfully
-%0:i32 = add 10:i32, 30:i32
-%1:i32 = add 29:i32, 90:i32
-%2:i32 = add %0, %1
-infer %2
-result 159:i32
-
