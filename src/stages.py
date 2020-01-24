@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from subprocess import Popen, PIPE
-from utils import bcolors, Alias, config, createTmpFile
+from utils import bcolors, Alias, config, createTmpFile, RUNTIME_CONFIG
 from logger import LOGGER
 import re
 import time
@@ -28,12 +28,12 @@ class ExternalStage(object):
         if stdin is not None:
             p.stdin.write(stdin)
 
-        #start = time.time_ns()
+        start = time.time_ns()
         std, err = p.communicate()
-        #delta = time.time_ns() - start
-        delta = 'not implemented'
+        delta = time.time_ns() - start
+        #delta = 'not implemented'
         if self.debug:
-            LOGGER.success("Stage -> %s (%s)" % (self.name, delta))
+            LOGGER.success("Stage -> %s (%.2f)" % (self.name, delta))
             LOGGER.info(" ".join([self.path_to_executable] + args))
 
         rc = p.returncode
@@ -101,7 +101,13 @@ class BCCountCandidates(ExternalStage):
     def __call__(self, args=[], std=None):  # f -> inputs
         extra_commands = "%s -o %s" % (args[0], args[0])
 
-        new_inputs = (config["souper"]["list-candidates"] % (config["souper"]["souper-level-%s"%self.level],extra_commands)).split(" ")
+        new_inputs = (config["souper"]["list-candidates"] % (config["souper"]["souper-level-%s"%self.level],extra_commands))
+
+        if RUNTIME_CONFIG["USE_REDIS"]:
+            extra_commands += " -souper-external-cache"
+
+        new_inputs = new_inputs.split(" ")
+
         return super(BCCountCandidates, self).__call__(new_inputs, std)
 
     def processInner(self, std, err):
@@ -125,6 +131,10 @@ class BCToSouper(ExternalStage):
     def __call__(self, args=[], std=None):  # f -> inputs
 
         extra_commands = "-souper-subset=%s %s -o %s" % (",".join(map(lambda x: x.__str__(), self.candidates)), args[0], args[1])
+
+        if RUNTIME_CONFIG["USE_REDIS"]:
+            extra_commands += " -souper-external-cache"
+
         new_inputs = (config["souper"]["super-opt-pass"] % (config["souper"]["souper-level-%s"%self.level],extra_commands)).split(" ")
         return super(BCToSouper, self).__call__(new_inputs, std)
 

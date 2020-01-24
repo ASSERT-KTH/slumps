@@ -5,6 +5,7 @@ os.chdir("..")
 import stages
 import slumps
 from multiprocessing.pool import Pool
+import utils
 
 BASEDIR = os.path.dirname(__file__)
 
@@ -19,7 +20,7 @@ def test_ctoll():
 
 def test_lltobc():
     # Receive a LLVM IR in the std
-    lltobc = stages.LLToBC()
+    lltobc = stages.LLToBC("test")
 
     result = lltobc(std=open("%s/results/babbage_problem.ll"%(BASEDIR,), 'rb').read()) # Send llvm IR to std
 
@@ -67,22 +68,23 @@ def test_WASM2WAT():
 
 
 
-#def test_pipeline():
+def test_pipeline():
     # Receive a LLVM IR in the std
-#    p = slumps.Pipeline()
-#    p.process("%s/benchmarks/babbage_problem.c"%(BASEDIR, ))
-
-
-
-def test_multi_thread():
-    # Receive a LLVM IR in the std
-
-
-
-    files = os.listdir("%s/multi"%BASEDIR)
+    utils.RUNTIME_CONFIG["USE_REDIS"] = True
     p = slumps.Pipeline()
+    p.process("%s/benchmarks/babbage_problem.c"%(BASEDIR, ))
 
-    with Pool(4) as pool:
-        pool.map(p.process, ["%s/multi/%s"%(BASEDIR,f) for f in files])
+
+
+#def test_multi_thread():
+    # Receive a LLVM IR in the std
+
+
+
+#    files = os.listdir("%s/multi"%BASEDIR)
+#    p = slumps.Pipeline()
+
+#    with Pool(4) as pool:
+#        pool.map(p.process, ["%s/multi/%s"%(BASEDIR,f) for f in files])
 
 
