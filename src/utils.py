@@ -11,6 +11,8 @@ from subprocess import Popen, PIPE
 config = configparser.ConfigParser(interpolation=configparser.ExtendedInterpolation())
 config.read("settings/config.ini")
 
+RUNTIME_CONFIG  = dict(USE_REDIS=False)
+
 def getlogfilename(program_name):
     return "%s/%s.slumps.log" % (config["DEFAULT"]["slumpspath"], program_name)
 
