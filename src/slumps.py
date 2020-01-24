@@ -4,7 +4,7 @@ import os
 import sys
 from stages import CToLLStage, LLToBC, BCToSouper, ObjtoWASM, WASM2WAT, BCCountCandidates
 from utils import bcolors, OUT_FOLDER, printProgressBar, config, createTmpFile, getIteratorByName, \
-    ContentToTmpFile, BreakException
+    ContentToTmpFile, BreakException, RUNTIME_CONFIG
 from logger import LOGGER
 import collections
 import hashlib
@@ -57,7 +57,7 @@ class Pipeline(object):
 
         try:
 
-            for level in range(1, 11):
+            for level in range(1, 10):
 
                 LOGGER.success("%s: Searching level (increasing execution time) %s: %s..." % (program_name,
                 level, config["souper"]["souper-level-%s" % level]))
@@ -124,6 +124,14 @@ class Pipeline(object):
                                 LOGGER.error(
                                     "%s: No succesfull replacements. Total number of subexpressions  %s. Souper level %s" % (program_name,
                                     cand[1], level))
+                    if RUNTIME_CONFIG["USE_REDIS"]:
+                        import redis
+                        r = redis.Redis(host="localhost", port=6379, db=0)
+
+                        result = r.flushall()
+                        LOGGER.success("Flushing redis DB: result(%s)"%result)
+                        r.close()
+
         except BreakException:
             pass
 
@@ -166,6 +174,7 @@ if __name__ == "__main__":
     f = sys.argv[1]
 
     if os.path.isfile(f):
+        RUNTIME_CONFIG["USE_REDIS"] = True
         pipeline.process(f)
     else:
         from multiprocessing import Pool
