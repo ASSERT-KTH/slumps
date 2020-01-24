@@ -84,35 +84,43 @@ class Pipeline(object):
 
                             if cand[0] > 0 and config["DEFAULT"].getint("candidates-threshold") < cand[0]:
                                 for s in getIteratorByName(config["DEFAULT"]["generator-method"])(range(cand[0])):
-                                    sanitized_set_name = "_".join(list(map(lambda x: x.__str__(), s)))
 
-                                    optBc = BCToSouper(program_name, candidates=list(s), level=level)
-                                    optBc(args=[tmpIn, tmpOut], std=None)
+                                    try:
+                                        sanitized_set_name = "_".join(list(map(lambda x: x.__str__(), s)))
 
-                                    bsOpt = open(tmpOut, 'rb').read()
+                                        optBc = BCToSouper(program_name, candidates=list(s), level=level)
+                                        optBc(args=[tmpIn, tmpOut], std=None)
 
-                                    hex, size, wasmFile, watFile = self.generateWasm(program_name, bsOpt, OUT_FOLDER,
-                                                                                     "[%s]%s[%s]" % (level,
-                                                                                                     program_name,
-                                                                                                     sanitized_set_name),
-                                                                                     debug=False)
+                                        bsOpt = open(tmpOut, 'rb').read()
 
-                                    printProgressBar(current, total,
-                                                     suffix="Completed %s[%s] %s" % (
-                                                     program_name, sanitized_set_name, hex),
-                                                     length=50)
+                                        hex, size, wasmFile, watFile = self.generateWasm(program_name, bsOpt, OUT_FOLDER,
+                                                                                         "[%s]%s[%s]" % (level,
+                                                                                                         program_name,
+                                                                                                         sanitized_set_name),
+                                                                                         debug=False)
 
-                                    current += 1
-                                    if config["DEFAULT"].getboolean("prune-equal"):
-                                        if hex in sha:
-                                            os.remove(wasmFile)
-                                            os.remove(watFile)
-                                            pruned += 1
-                                            continue
+                                        printProgressBar(current, total,
+                                                         suffix="Completed %s[%s] %s" % (
+                                                         program_name, sanitized_set_name, hex),
+                                                         length=50)
 
-                                    sizes[hex] = [size, list(s)]
+                                        current += 1
+                                        if config["DEFAULT"].getboolean("prune-equal"):
+                                            if hex in sha:
+                                                os.remove(wasmFile)
+                                                os.remove(watFile)
+                                                pruned += 1
+                                                continue
 
-                                    sha.add(hex)
+                                        sizes[hex] = [size, list(s)]
+
+                                        sha.add(hex)
+                                    except Exception as e:
+                                        if config["DEFAULT"].getboolean("fail-silently"):
+                                            LOGGER.error(e)
+                                        else:
+                                            raise e
+
 
                                 printProgressBar(current, total,
                                                  suffix="Total number of programs %s. Different sha count %s. Pruned count %s      %s" % (
