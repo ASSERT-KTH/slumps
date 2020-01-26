@@ -8,6 +8,11 @@ import time
 
 import sys, os
 
+class CallException(Exception):
+
+    def __init__(self, message, stderr):
+        self.stderr = stderr
+        self.message = message
 
 class ExternalStage(object):
 
@@ -18,7 +23,7 @@ class ExternalStage(object):
         self.namespace = namespace
 
     def processInner(self, std, err):
-        return b"Ops...Not implemented"
+        return std, err
 
     def __call__(self, args=[], stdin=None):  # stdin byte stream
 
@@ -40,7 +45,7 @@ class ExternalStage(object):
 
         if rc != 0:
             LOGGER.error(err.decode("utf-8"))
-            raise Exception("Error on stage: %s" % (self.name,))
+            raise CallException("Error on stage: %s" % (self.name,), err)
 
         # Specific implementation process over the std out
         res = self.processInner(std, err)
@@ -53,6 +58,21 @@ class ExternalStage(object):
 
         return res
 
+
+class CCheck(ExternalStage):
+    def __init__(self, namespace, debug=False):
+        self.path_to_executable  = Alias.clang
+        self.name = "C check code"
+        self.debug = debug
+        self.namespace = namespace
+
+
+    
+    def __call__(self, args=[], std=None):
+        new_inputs = (config["clang"]["check_code"]).split(" ")
+        std, err = super(CCheck, self).__call__(args=new_inputs, stdin=std)
+        if err:
+            raise CallException("", err)
 
 class CToLLStage(ExternalStage):
 
@@ -101,13 +121,10 @@ class BCCountCandidates(ExternalStage):
     def __call__(self, args=[], std=None):  # f -> inputs
         extra_commands = "%s -o %s" % (args[0], args[0])
 
-        new_inputs = (config["souper"]["list-candidates"] % (config["souper"]["souper-level-%s"%self.level],extra_commands))
-
         if RUNTIME_CONFIG["USE_REDIS"]:
             extra_commands += " -souper-external-cache"
 
-        new_inputs = new_inputs.split(" ")
-
+        new_inputs = (config["souper"]["list-candidates"] % (config["souper"]["souper-level-%s"%self.level],extra_commands)).split(" ")
         return super(BCCountCandidates, self).__call__(new_inputs, std)
 
     def processInner(self, std, err):

@@ -189,5 +189,5 @@ if __name__ == "__main__":
 
         LOGGER.info("Pool size: %s" % config["DEFAULT"].getint("thread-pool-size"))
 
-        with Pool(config["DEFAULT"].getint("thread-pool-size")) as p:
-            p.map(pipeline.process, ["%s/%s" % (f, i) for i in os.listdir(f)])
+        for final in ["%s/%s" % (f, i) for i in os.listdir(f)]:
+            pipeline.process(final)
