@@ -1,0 +1,1 @@
+http://www.rosettacode.org/mw/index.php?title=Associative_array/Creation&action=edit&section=24

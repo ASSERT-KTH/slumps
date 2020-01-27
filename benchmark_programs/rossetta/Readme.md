@@ -1,3 +1,14 @@
 ### Rosetta code C code
 
-We crawled the C programs from Rosetta corpus: From 996 programs, we collected **991** programs ([here](https://github.com/KTH/slumps/tree/master/utils/pipeline/craw_rosetta.py) is the crawl script). We checked the syntax of the programs getting: **790** successfully checked programs and **201** invalid codes.
+We crawled the C programs from Rosetta corpus: From 998 programs, we collected **990** programs ([here](https://github.com/KTH/slumps/tree/master/src/crawl_rosetta.py) is the crawling script). We checked all the programs compiling them (with clang), getting: **880** successfully compiled programs and **109** invalid-to-compile codes.
+
+
+#### Folder structure
+
+- rosetta
+    - **fail** (8 files): Fail to crawl the C code
+    - **invalid** (109 files): We tried to compile the code targeting ```wasm32-unknown-unknown``` triple with clang. Compilation error is added as a C block comment in the file end ([for example](invalid/Bitmap.c)).
+    - **valid** (880 files): We classify this files in two categories: Input expecting code (looking for functions like scanf) and self-contained programs (no input expected from user)
+        - **no_input** (789 files)
+        - **input expected** (91 files)
+

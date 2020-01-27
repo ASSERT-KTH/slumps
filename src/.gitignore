@@ -8,7 +8,7 @@ external_C_sources.txt
 *.pyc
 
 debug.slumps.log
-
+crawl
 .idea
 
 results
@@ -17,3 +17,6 @@ results
 
 *.slumps
 *.slumps.log
+
+.coverage
+
