@@ -28,9 +28,9 @@ class ExternalStage(object):
         if stdin is not None:
             p.stdin.write(stdin)
 
-        start = time.time_ns()
+        start = time.time()
         std, err = p.communicate()
-        delta = time.time_ns() - start
+        delta = time.time() - start
         #delta = 'not implemented'
         if self.debug:
             LOGGER.success("Stage -> %s (%.2f)" % (self.name, delta))
