@@ -1,4 +1,4 @@
-# _ ![Logo](https://en.gravatar.com/userimage/133494879/d7a324075159773e826a7eb397da07d7.png?size=80) SLUMPs 
+# ![Logo](https://en.gravatar.com/userimage/133494879/d7a324075159773e826a7eb397da07d7.png?size=80) SLUMPs 
 
 *Research on randomization and superoptimization for WebAssembly WASM*
 
