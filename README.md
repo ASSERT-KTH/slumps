@@ -46,7 +46,7 @@ For each optimization candidate from Souper, we generate a new WASM program, as 
 
 - **Optimization subset strategy**: [generator-method](https://github.com/KTH/slumps/blob/18ef5189904e25019155fe305046f4b5b8907538/src/settings/config.ini#L9) = subset | onexone | all
 
-- **Output only different binaryes**: [prune-equal](https://github.com/KTH/slumps/blob/18ef5189904e25019155fe305046f4b5b8907538/src/settings/config.ini#L6), we calculate the sha256 value for evey WASM program, then we keep only the programs with different sha values.
+- **Output only different binaries**: [prune-equal](https://github.com/KTH/slumps/blob/18ef5189904e25019155fe305046f4b5b8907538/src/settings/config.ini#L6), we calculate the sha256 value for evey WASM program, then we keep only the programs with different sha values.
 
 Change the remaining values to get different results, for instance, add extra arguments to the CLANG step.
 

@@ -115,6 +115,9 @@ class Pipeline(object):
                                         sizes[hex] = [size, list(s)]
 
                                         sha.add(hex)
+
+                                        if len(sha) >= config["DEFAULT"]["upper-bound"]:
+                                            raise BreakException()
                                     except Exception as e:
                                         if config["DEFAULT"].getboolean("fail-silently"):
                                             LOGGER.error(e)
@@ -190,4 +193,7 @@ if __name__ == "__main__":
         LOGGER.info("Pool size: %s" % config["DEFAULT"].getint("thread-pool-size"))
 
         for final in ["%s/%s" % (f, i) for i in os.listdir(f)]:
-            pipeline.process(final)
+            try:
+                pipeline.process(final)
+            except Exception as e:
+                print(e)
