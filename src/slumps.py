@@ -6,9 +6,9 @@ from stages import CToLLStage, LLToBC, BCToSouper, ObjtoWASM, WASM2WAT, BCCountC
 from utils import bcolors, OUT_FOLDER, printProgressBar, config, createTmpFile, getIteratorByName, \
     ContentToTmpFile, BreakException, RUNTIME_CONFIG
 from logger import LOGGER
-import collections
 import hashlib
-
+import multiprocessing
+import time
 
 class Pipeline(object):
 
@@ -179,21 +179,37 @@ class Pipeline(object):
             return hashvalue.hexdigest(), len(finalStream), "%s.wasm" % (llFileName,), "%s.wat" % (llFileName,)
 
 
-if __name__ == "__main__":
+def process(f):
     pipeline = Pipeline()
+
+    def launch():
+        pipeline.process(f)
+
+    th = multiprocessing.Process(target=launch)
+    th.start()
+
+    time.sleep(config["DEFAULT"].getint("timeout"))
+
+    if th.is_alive():
+        th.kill()
+
+        LOGGER.error("Exiting %s due to timeout"%f)
+
+
+
+
+if __name__ == "__main__":
 
     f = sys.argv[1]
 
     if os.path.isfile(f):
         RUNTIME_CONFIG["USE_REDIS"] = True
-        pipeline.process(f)
+        process(f)
     else:
-        from multiprocessing import Pool
-
         LOGGER.info("Pool size: %s" % config["DEFAULT"].getint("thread-pool-size"))
 
         for final in ["%s/%s" % (f, i) for i in os.listdir(f)]:
             try:
-                pipeline.process(final)
+                process(f)
             except Exception as e:
                 print(e)
