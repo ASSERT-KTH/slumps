@@ -1,4 +1,4 @@
-FROM slumps:backend
+FROM jacarte/slumps:backend
 
 
 RUN apt-get update \
@@ -18,5 +18,13 @@ RUN rm settings/.slumps
 
 EXPOSE 6379
 ENV TIMEOUT 1800
+
+ENV TOUSER 1800
+ENV GUSER 1800
+ENV GPASS 1800
+
+ENV GITHUB_USER 1800
+ENV GITHUB_TOKEN 1800
+ENV REPO_NAME 1800
 
 ENTRYPOINT ["./start_docker.sh"]
