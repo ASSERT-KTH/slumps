@@ -140,7 +140,9 @@ class Pipeline(object):
                                                  suffix="Total number of programs %s. Different sha count %s. Pruned count %s      %s" % (
                                                      current, len(sha), pruned, " " * 100), length=50)
 
-                                raise BreakException()
+
+                                if config["DEFAULT"].getboolean("exit-on-find"):
+                                    raise BreakException()
 
                             else:
                                 LOGGER.error(program_name,

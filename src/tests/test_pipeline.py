@@ -79,6 +79,17 @@ def test_pipeline():
 
 
 
+def test_pipeline2():
+    # Receive a LLVM IR in the std
+    utils.RUNTIME_CONFIG["USE_REDIS"] = False
+    utils.config["DEFAULT"]["candidates-threshold"] = "1"
+    utils.config["DEFAULT"]["timeout"] = "3600"
+
+    import slumps
+    slumps.main("%s/benchmarks/nautic.c"%(BASEDIR, ))
+
+
+
 def test_multi_thread():
     # Receive a LLVM IR in the std
     utils.config["DEFAULT"]["candidates-threshold"] = "1"
