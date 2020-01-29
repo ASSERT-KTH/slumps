@@ -9,6 +9,7 @@ from logger import LOGGER
 import hashlib
 import multiprocessing
 import json
+import copy
 
 
 class Pipeline(object):
@@ -29,7 +30,7 @@ class Pipeline(object):
 
         return False
 
-    def process(self, file):
+    def process(self, file, outResult=None):
 
         program_name = file.split("/")[-1].split(".")[0]
         OUT_FOLDER = "%s/%s" % (config["DEFAULT"]["outfolder"], program_name)
@@ -59,7 +60,9 @@ class Pipeline(object):
         originalSha, originalSize, originalWasmName, _ = self.generateWasm(program_name, bc, OUT_FOLDER, program_name)
         sha.add(originalSha)
         sizes[originalSha] = [originalSize, []]
+
         meta[originalWasmName.split("/")[-1]] = dict(size=originalSize, sha=originalSha)
+        outResult["candidates"].append(dict(size=originalSize, sha=originalSha, name=originalWasmName.split("/")[-1]))
 
         try:
 
@@ -121,8 +124,9 @@ class Pipeline(object):
                                                 os.remove(watFile)
                                                 pruned += 1
                                                 continue
-                                            else:
-                                                meta[wasmFile.split("/")[-1]] = dict(size=size, sha=hex)
+                                        else:
+                                            meta[wasmFile.split("/")[-1]] = dict(size=size, sha=hex)
+                                            outResult["candidates"].append(dict(size=size, sha=hex, name=wasmFile))
 
                                         sizes[hex] = [size, list(s)]
 
@@ -200,18 +204,18 @@ class Pipeline(object):
             return hashvalue.hexdigest(), len(finalStream), "%s.wasm" % (llFileName,), "%s.wat" % (llFileName,)
 
 
-MANAGER = multiprocessing.Manager()
 
 def process(f):
+    MANAGER = multiprocessing.Manager()
     pipeline = Pipeline()
 
     result_overall = MANAGER.dict()
 
     def launch(file, result):
         result[file] = MANAGER.dict()
+        result[file]["candidates"] = MANAGER.list()
         try:
-            meta = pipeline.process(file)
-            result[file]["candidates"] = meta
+            pipeline.process(file, outResult=result[file])
         except Exception as e:
             result[file]["error"] = e.__str__()
 
@@ -229,11 +233,13 @@ def process(f):
         th.kill()
         program_name = f.split("/")[-1].split(".")[0]
         LOGGER.error(program_name, "Exiting %s due to timeout" % f)
-
         result_overall[f]["error"] = "Timeout %s" % timeout
 
+    result_overall[f]["candidates"] = result_overall[f]["candidates"].__deepcopy__({})
     result_overall[f] = result_overall[f].copy()
-    return result_overall.copy()
+    result_overall = result_overall.copy()
+
+    return result_overall
 
 
 def augmentMetadataResult(result):
@@ -273,6 +279,10 @@ def main(f):
         sendReportEmail("Experiment files %s" % f, json.dumps(result, indent=4), attach)
         make_github_issue("Experiment %s" % program_name, createIssueContent(result), "Slumps", 1, False, ["slumps-automated"])
 
+        OUT_FOLDER = "%s" % config["DEFAULT"]["outfolder"]
+        metaF = open("%s/%s" % (OUT_FOLDER, "meta.json"), 'w')
+        metaF.write(json.dumps(result, indent=4))
+        metaF.close()
 
 if __name__ == "__main__":
     updatesettings()
