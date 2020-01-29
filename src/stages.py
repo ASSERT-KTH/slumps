@@ -35,11 +35,11 @@ class ExternalStage(object):
         if stdin is not None:
             p.stdin.write(stdin)
 
-        start = time.time_ns()
+        start = time.time()
         std, err = p.communicate()
-        delta = time.time_ns() - start
+        delta = time.time() - start
         if self.debug:
-            LOGGER.success(self.namespace, "Command -> %s (%.2f ms)" % (self.name, delta / 1000000))
+            LOGGER.success(self.namespace, "Command -> %s (%.2f s)" % (self.name, delta))
             LOGGER.info(self.namespace, " ".join([self.path_to_executable] + args))
 
         rc = p.returncode

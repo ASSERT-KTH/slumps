@@ -86,10 +86,17 @@ def updatesettings():
         else:
             with ContentToTmpFile(name="setting.c", content=b'int main(){return 0;}') as tmpC:
 
+                # launch twice in case of first initialization
+                emcc = Popen(('emcc -v %s -o -' % tmpC.file).split(" "),  stdout=PIPE, stderr=PIPE, stdin=PIPE)
+                emcc, err = emcc.communicate()
+
+                # real call
                 emcc = Popen(('emcc -v %s -o -' % tmpC.file).split(" "),  stdout=PIPE, stderr=PIPE, stdin=PIPE)
                 emcc, err = emcc.communicate()
 
                 words = err.decode("utf-8").split(" ")
+
+                print(words)
 
                 includes = []
                 for w in words:
