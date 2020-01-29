@@ -4,7 +4,7 @@ import os
 import sys
 from stages import CToLLStage, LLToBC, BCToSouper, ObjtoWASM, WASM2WAT, BCCountCandidates
 from utils import printProgressBar, config, createTmpFile, getIteratorByName, \
-    ContentToTmpFile, BreakException, RUNTIME_CONFIG
+    ContentToTmpFile, BreakException, RUNTIME_CONFIG, updatesettings
 from logger import LOGGER
 import hashlib
 import multiprocessing
@@ -216,17 +216,19 @@ def process(f):
 
 if __name__ == "__main__":
 
+    updatesettings()
     f = sys.argv[1]
     program_name = f.split("/")[-1].split(".")[0]
 
+    RUNTIME_CONFIG["USE_REDIS"] = True
+    
     if os.path.isfile(f):
-        RUNTIME_CONFIG["USE_REDIS"] = True
         process(f)
     else:
         LOGGER.info(program_name, "Pool size: %s" % config["DEFAULT"].getint("thread-pool-size"))
 
         for final in ["%s/%s" % (f, i) for i in os.listdir(f)]:
             try:
-                process(f)
+                process(final)
             except Exception as e:
                 print(e)
