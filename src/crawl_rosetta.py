@@ -20,10 +20,10 @@ final_links = []
 
 input_expected_functions = [
     r"( |\t|\r|\n)scanf( )*\(",
-    r"( |\t|\r|\n)fgetc( )*\(",
-    r"( |\t|\r|\n)fopen( )*\(",
-    r"( |\t|\r|\n)fclose( )*\(",
-    r"( |\t|\r|\n)fputc( )*\(",
+    # r"( |\t|\r|\n)fgetc( )*\(",
+    # r"( |\t|\r|\n)fopen( )*\(",
+    # r"( |\t|\r|\n)fclose( )*\(",
+    # r"( |\t|\r|\n)fputc( )*\(",
 ]
 
 def sanitize(name:str):
