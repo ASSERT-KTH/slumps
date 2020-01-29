@@ -4,11 +4,10 @@ import os
 import sys
 from stages import CToLLStage, LLToBC, BCToSouper, ObjtoWASM, WASM2WAT, BCCountCandidates
 from utils import printProgressBar, config, createTmpFile, getIteratorByName, \
-    ContentToTmpFile, BreakException, RUNTIME_CONFIG, updatesettings
+    ContentToTmpFile, BreakException, RUNTIME_CONFIG, updatesettings, sendReportEmail, make_github_issue
 from logger import LOGGER
 import hashlib
 import multiprocessing
-import time
 import json
 
 
@@ -169,6 +168,8 @@ class Pipeline(object):
         metaF.write(json.dumps(meta, indent=4))
         metaF.close()
 
+        return meta
+
     def generateWasm(self, namespace, bc, OUT_FOLDER, fileName, debug=True):
         llFileName = "%s/%s" % (OUT_FOLDER, fileName)
 
@@ -197,13 +198,22 @@ class Pipeline(object):
             return hashvalue.hexdigest(), len(finalStream), "%s.wasm" % (llFileName,), "%s.wat" % (llFileName,)
 
 
+MANAGER = multiprocessing.Manager()
+
 def process(f):
     pipeline = Pipeline()
 
-    def launch():
-        pipeline.process(f)
+    result_overall = MANAGER.dict()
 
-    th = multiprocessing.Process(target=launch)
+    def launch(file, result):
+        result[file] = MANAGER.dict()
+        try:
+            meta = pipeline.process(file)
+            result[file]["candidates"] = meta
+        except Exception as e:
+            result[file]["error"] = e.__str__()
+
+    th = multiprocessing.Process(target=launch, args=(f, result_overall,))
     th.start()
 
     timeout = config["DEFAULT"].getint("timeout")
@@ -218,22 +228,42 @@ def process(f):
         program_name = f.split("/")[-1].split(".")[0]
         LOGGER.error(program_name, "Exiting %s due to timeout" % f)
 
+        result_overall[f]["error"] = "Timeout %s" % timeout
 
-if __name__ == "__main__":
+    result_overall[f] = result_overall[f].copy()
+    return result_overall.copy()
 
-    updatesettings()
-    f = sys.argv[1]
+
+def main(f):
     program_name = f.split("/")[-1].split(".")[0]
 
-    RUNTIME_CONFIG["USE_REDIS"] = True
-
     if os.path.isfile(f):
-        process(f)
+        try:
+            r = process(f)
+            sendReportEmail("Single file experiment %s" % f, json.dumps(r, indent=4), [])
+        except Exception as e:
+            sendReportEmail("Error processing single file experiment %s" % f, e.__str__(), [])
+
     else:
         LOGGER.info(program_name, "Pool size: %s" % config["DEFAULT"].getint("thread-pool-size"))
 
+        result = dict(namespace=program_name, programs=[])
+
         for final in ["%s/%s" % (f, i) for i in os.listdir(f)]:
             try:
-                process(final)
+                r = process(final)
+                result["programs"].append(r)
             except Exception as e:
                 print(e)
+
+        print(result)
+        #sendReportEmail("Experiment files %s" % f, json.dumps(result, indent=4), [])
+
+
+if __name__ == "__main__":
+    updatesettings()
+
+    RUNTIME_CONFIG["USE_REDIS"] = True
+
+    f = sys.argv[1]
+    main(f)
