@@ -70,9 +70,11 @@ def test_WASM2WAT():
 
 def test_pipeline():
     # Receive a LLVM IR in the std
-    utils.RUNTIME_CONFIG["USE_REDIS"] = True
-    p = slumps.Pipeline()
-    p.process("%s/benchmarks/babbage_problem.c"%(BASEDIR, ))
+    # utils.RUNTIME_CONFIG["USE_REDIS"] = False
+    utils.config["DEFAULT"]["candidates-threshold"] = "1"
+
+    import slumps
+    slumps.process("%s/benchmarks/babbage_problem.c"%(BASEDIR, ))
 
 
 

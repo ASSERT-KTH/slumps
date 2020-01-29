@@ -1,4 +1,7 @@
 import re
+import os
+
+BASEDIR = os.path.dirname(__file__)
 
 
 def test_re():
@@ -6,6 +9,6 @@ def test_re():
         r"( |\t|\r|\n)+scanf( )*\(",
     ]
 
-    content = open("test_re.c", 'r').read()
+    content = open("%s/test_re.c"%BASEDIR, 'r').read()
 
     print(any(map(lambda x: re.compile(x).search(content), input_expected_functions)))

@@ -20,24 +20,43 @@ class Logger(object):
 
     def debug(self, file, message, std=None):
 
+        try:
+            message = message.decode()
+        except (UnicodeDecodeError, AttributeError):
+            pass
+
+        try:
+            std = std.decode()
+        except (UnicodeDecodeError, AttributeError):
+            pass
+
+
         if self.debugToFile:
             f = open(getlogfilename(file), 'a+')
-            f.write(message.__str__())
+            f.write(message)
             if std:
                 f.write(std.__str__())
         else:
             print("%s%s%s%s" % (self.getIndent(), bcolors.UNDERLINE, message, bcolors.ENDC))
 
-    def error(self, message):
+    def error(self,file,  message):
+        f = open(getlogfilename(file), 'a+')
+        f.write(message.__str__() + "\n")
         print("%s%s%s%s" % (self.getIndent(), bcolors.FAIL, message, bcolors.ENDC))
 
-    def warning(self, message):
+    def warning(self,file, message):
+        f = open(getlogfilename(file), 'a+')
+        f.write(message.__str__() + "\n")
         print("%s%s%s%s" % (self.getIndent(), bcolors.WARNING, message, bcolors.ENDC))
 
-    def info(self, message):
+    def info(self,file,  message):
+        f = open(getlogfilename(file), 'a+')
+        f.write(message.__str__() + "\n")
         print("%s%s%s%s" % (self.getIndent(), bcolors.OKBLUE, message, bcolors.ENDC))
 
-    def success(self, message):
+    def success(self,file,  message):
+        f = open(getlogfilename(file), 'a+')
+        f.write(message.__str__() + "\n")
         print("%s%s%s%s" % (self.getIndent(), bcolors.OKGREEN, message, bcolors.ENDC))
 
 

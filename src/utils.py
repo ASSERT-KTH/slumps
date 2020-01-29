@@ -14,7 +14,7 @@ config.read("settings/config.ini")
 RUNTIME_CONFIG  = dict(USE_REDIS=False)
 
 def getlogfilename(program_name):
-    return "%s/%s.slumps.log" % (config["DEFAULT"]["slumpspath"], program_name)
+    return "%s/src/logs/%s.slumps.log" % (config["DEFAULT"]["slumpspath"], program_name)
 
 class ContentToTmpFile(object):
 
@@ -23,9 +23,9 @@ class ContentToTmpFile(object):
         tmp = createTmpFile(ext) if not name else name
 
         if content:
-            tmpF = open(tmp, "wb")
-            tmpF.write(content)
-            tmpF.close()
+            self.tmpF = open(tmp, "wb")
+            self.tmpF.write(content)
+            self.tmpF.close()
         else:
             self.tmpF = open(tmp, 'wb')
 
@@ -39,7 +39,8 @@ class ContentToTmpFile(object):
             if self.tmpF:
                 self.tmpF.close()
             os.remove(self.file)
-        except:
+        except Exception as e:
+            print(e)
             pass
 
 def updatesettings():
@@ -85,10 +86,17 @@ def updatesettings():
         else:
             with ContentToTmpFile(name="setting.c", content=b'int main(){return 0;}') as tmpC:
 
+                # launch twice in case of first initialization
+                emcc = Popen(('emcc -v %s -o -' % tmpC.file).split(" "),  stdout=PIPE, stderr=PIPE, stdin=PIPE)
+                emcc, err = emcc.communicate()
+
+                # real call
                 emcc = Popen(('emcc -v %s -o -' % tmpC.file).split(" "),  stdout=PIPE, stderr=PIPE, stdin=PIPE)
                 emcc, err = emcc.communicate()
 
                 words = err.decode("utf-8").split(" ")
+
+                print(words)
 
                 includes = []
                 for w in words:

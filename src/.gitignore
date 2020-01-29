@@ -18,5 +18,6 @@ results
 *.slumps
 *.slumps.log
 
-.coverage
+.coverage*
 
+meta.json
