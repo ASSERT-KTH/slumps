@@ -9,6 +9,11 @@ if __name__ == '__main__':
     out = sys.argv[3]  # out folder
     timeout = int(sys.argv[4])  # timeout in seconds per program
 
+    extra = ""
+
+    if len(sys.argv) > 5:
+        extra = " ".join(sys.argv[5:])
+
     jobs = []
 
     currentJob = []
@@ -43,6 +48,6 @@ if __name__ == '__main__':
             shutil.copy("%s/%s" % (folder, file), "%s/job%s/%s" % (out, i, file))
 
         # Generate the script
-        shStrip.write("docker run --name {job} -d -e TIMEOUT={timeout} -v $(pwd)/{job}:/input -v $(pwd)/{job}/out:/slumps/src/out -v "
-                      "$(pwd)/{job}/logs/:/slumps/src/logs jacarte/slumps:app \n".format(timeout=timeout, job=jobFolder))
+        shStrip.write("docker run --name {job} -d -e TIMEOUT={timeout} {extra} -v $(pwd)/{job}:/input -v $(pwd)/{job}/out:/slumps/src/out -v "
+                      "$(pwd)/{job}/logs/:/slumps/src/logs jacarte/slumps:app \n".format(timeout=timeout, job=jobFolder, extra=extra))
     shStrip.close()

@@ -168,7 +168,7 @@ class Pipeline(object):
         metaF.write(json.dumps(meta, indent=4))
         metaF.close()
 
-        return meta
+        return dict(programs=meta, count=len(meta.keys()))
 
     def generateWasm(self, namespace, bc, OUT_FOLDER, fileName, debug=True):
         llFileName = "%s/%s" % (OUT_FOLDER, fileName)
@@ -234,6 +234,16 @@ def process(f):
     return result_overall.copy()
 
 
+def augmentMetadataResult(result):
+    pass
+
+def createIssueContent(result):
+    return """
+```json
+{json}
+```
+        """.format(json=json.dumps(result, indent=4))
+
 def main(f):
     program_name = f.split("/")[-1].split(".")[0]
 
@@ -241,6 +251,7 @@ def main(f):
         try:
             r = process(f)
             sendReportEmail("Single file experiment %s" % f, json.dumps(r, indent=4), [getlogfilename(program_name)])
+            make_github_issue("Single experiment %s" % program_name, createIssueContent(r), "Slumps", 1, False, ["slumps-automated"])
         except Exception as e:
             sendReportEmail("Error processing single file experiment %s" % f, e.__str__(), [getlogfilename(program_name)])
 
@@ -258,6 +269,7 @@ def main(f):
                 print(e)
 
         sendReportEmail("Experiment files %s" % f, json.dumps(result, indent=4), attach)
+        make_github_issue("Experiment %s" % program_name, createIssueContent(result), "Slumps", 1, False, ["slumps-automated"])
 
 
 if __name__ == "__main__":

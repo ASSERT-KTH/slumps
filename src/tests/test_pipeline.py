@@ -82,7 +82,7 @@ def test_pipeline():
 def test_multi_thread():
     # Receive a LLVM IR in the std
     utils.config["DEFAULT"]["candidates-threshold"] = "1"
-    utils.config["DEFAULT"]["timeout"] = "5"
+    utils.config["DEFAULT"]["timeout"] = "1"
 
     import slumps
     slumps.main("%s/multi" % BASEDIR)

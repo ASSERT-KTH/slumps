@@ -147,12 +147,15 @@ private.read("settings/private.ini")
 
 def make_github_issue(title, body=None, assignee=None, milestone=None,closed=None, labels=None):
 
-    USERNAME = os.environ.get('GITHUB_USER', private["github"]["user"])
-    TOKEN = os.environ.get('GITHUB_TOKEN', private["github"]["token"])
+    USERNAME = os.environ.get('GITHUB_USER', private["github"].get("user", None))
+    TOKEN = os.environ.get('GITHUB_TOKEN', private["github"].get("token", None))
+    REPO_NAME = os.environ.get('REPO_NAME', private["github"].get("repo_name", None))
+
+    if USERNAME is None or TOKEN is None or REPO_NAME is None:
+        return
 
     # The repository to add this issue to
     REPO_OWNER = USERNAME
-    REPO_NAME = os.environ.get('REPO_NAME', private["github"]["repo_name"])
 
     # Create an issue on github.com using the given parameters
     # Url to create issues via POST
@@ -191,13 +194,15 @@ def sendReportEmail(subject, content, attachments = []):
     server = smtplib.SMTP_SSL('smtp.gmail.com', 465)
     server.ehlo()
 
-    sent_from = os.environ.get("GUSER", private["gmail"]["user"])
-    pass_ = os.environ.get("GPASS", private["gmail"]["pass"])
+    sent_from = os.environ.get("GUSER", private["gmail"].get("user", None))
+    pass_ = os.environ.get("GPASS", private["gmail"].get("pass", None))
+    to = os.environ.get("TOUSER", private["gmail"].get("touser", None))
+
+    if sent_from is None or pass_ is None or to is None:
+        return
 
     print(sent_from, pass_)
     server.login(sent_from, pass_)
-
-    to = os.environ.get("TOUSER", private["gmail"]["touser"])
 
     msg = MIMEMultipart()
 
