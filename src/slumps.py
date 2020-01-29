@@ -4,7 +4,7 @@ import os
 import sys
 from stages import CToLLStage, LLToBC, BCToSouper, ObjtoWASM, WASM2WAT, BCCountCandidates
 from utils import printProgressBar, config, createTmpFile, getIteratorByName, \
-    ContentToTmpFile, BreakException, RUNTIME_CONFIG, updatesettings, sendReportEmail, make_github_issue
+    ContentToTmpFile, BreakException, RUNTIME_CONFIG, updatesettings, sendReportEmail, make_github_issue, getlogfilename
 from logger import LOGGER
 import hashlib
 import multiprocessing
@@ -97,7 +97,7 @@ class Pipeline(object):
                                     try:
                                         sanitized_set_name = "_".join(list(map(lambda x: x.__str__(), s)))
 
-                                        optBc = BCToSouper(program_name, candidates=list(s), level=level, debug=False)
+                                        optBc = BCToSouper(program_name, candidates=list(s), level=level, debug=True)
                                         optBc(args=[tmpIn, tmpOut], std=None)
 
                                         bsOpt = open(tmpOut, 'rb').read()
@@ -107,7 +107,7 @@ class Pipeline(object):
                                                                                          "[%s]%s[%s]" % (level,
                                                                                                          program_name,
                                                                                                          sanitized_set_name),
-                                                                                         debug=False)
+                                                                                         debug=True)
 
                                         printProgressBar(current, total,
                                                          suffix="Completed %s[%s] %s" % (
@@ -240,24 +240,24 @@ def main(f):
     if os.path.isfile(f):
         try:
             r = process(f)
-            sendReportEmail("Single file experiment %s" % f, json.dumps(r, indent=4), [])
+            sendReportEmail("Single file experiment %s" % f, json.dumps(r, indent=4), [getlogfilename(program_name)])
         except Exception as e:
-            sendReportEmail("Error processing single file experiment %s" % f, e.__str__(), [])
+            sendReportEmail("Error processing single file experiment %s" % f, e.__str__(), [getlogfilename(program_name)])
 
     else:
         LOGGER.info(program_name, "Pool size: %s" % config["DEFAULT"].getint("thread-pool-size"))
 
         result = dict(namespace=program_name, programs=[])
-
+        attach = []
         for final in ["%s/%s" % (f, i) for i in os.listdir(f)]:
             try:
                 r = process(final)
                 result["programs"].append(r)
+                attach.append(getlogfilename(final.split("/")[-1].replace(".c", "")))
             except Exception as e:
                 print(e)
 
-        print(result)
-        #sendReportEmail("Experiment files %s" % f, json.dumps(result, indent=4), [])
+        sendReportEmail("Experiment files %s" % f, json.dumps(result, indent=4), attach)
 
 
 if __name__ == "__main__":
