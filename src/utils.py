@@ -8,13 +8,22 @@ import sys
 from subprocess import check_output
 from subprocess import Popen, PIPE
 
+import smtplib
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
+from email.mime.base import MIMEBase
+from email import encoders
+
+
 config = configparser.ConfigParser(interpolation=configparser.ExtendedInterpolation())
 config.read("settings/config.ini")
 
-RUNTIME_CONFIG  = dict(USE_REDIS=False)
+RUNTIME_CONFIG = dict(USE_REDIS=False)
+
 
 def getlogfilename(program_name):
     return "%s/src/logs/%s.slumps.log" % (config["DEFAULT"]["slumpspath"], program_name)
+
 
 class ContentToTmpFile(object):
 
@@ -43,6 +52,7 @@ class ContentToTmpFile(object):
             print(e)
             pass
 
+
 def updatesettings():
     if not os.path.exists("settings/.slumps"):
         print("Setting up slumps for the first time...")
@@ -50,11 +60,11 @@ def updatesettings():
 
         SLUMPS_DIR = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
 
-        print("Slumps dir...%s"%SLUMPS_DIR)
+        print("Slumps dir...%s" % SLUMPS_DIR)
         config["DEFAULT"]["slumpspath"] = SLUMPS_DIR
 
-        platform = ".so" if sys.platform == 'linux' else '.dylib' # dylib for MacOS
-        print("OS...%s"%sys.platform)
+        platform = ".so" if sys.platform == 'linux' else '.dylib'  # dylib for MacOS
+        print("OS...%s" % sys.platform)
         config["souper"]["passName"] = config["souper"]["passName"].split(".")[0] + platform
 
         # WAS-ld binary
@@ -62,9 +72,8 @@ def updatesettings():
         # Read available binaries
         bins = check_output('compgen -c', shell=True, executable='/bin/bash').splitlines()
 
-        wasm_bins = list(filter(lambda x: x.startswith("wasm-ld") ,map(lambda x: x.decode("utf-8"), bins)))
-        emcc = list(filter(lambda x: x.startswith("emcc") ,map(lambda x: x.decode("utf-8"), bins)))
-
+        wasm_bins = list(filter(lambda x: x.startswith("wasm-ld"), map(lambda x: x.decode("utf-8"), bins)))
+        emcc = list(filter(lambda x: x.startswith("emcc"), map(lambda x: x.decode("utf-8"), bins)))
 
         if len(wasm_bins) == 0:
             raise Exception("WASM linker not found. Please install it (apt-get install lld-<version> for ubuntu)")
@@ -74,7 +83,7 @@ def updatesettings():
             print("Multiple WASM linkers. Choose one, take into account the version of llvm built with Souper:")
 
             for i, b in enumerate(wasm_bins):
-                print("%s -  %s"%(i + 1, b))
+                print("%s -  %s" % (i + 1, b))
 
             option = int(input("Option: "))
             wasm_ld = wasm_bins[option - 1]
@@ -87,11 +96,11 @@ def updatesettings():
             with ContentToTmpFile(name="setting.c", content=b'int main(){return 0;}') as tmpC:
 
                 # launch twice in case of first initialization
-                emcc = Popen(('emcc -v %s -o -' % tmpC.file).split(" "),  stdout=PIPE, stderr=PIPE, stdin=PIPE)
+                emcc = Popen(('emcc -v %s -o -' % tmpC.file).split(" "), stdout=PIPE, stderr=PIPE, stdin=PIPE)
                 emcc, err = emcc.communicate()
 
                 # real call
-                emcc = Popen(('emcc -v %s -o -' % tmpC.file).split(" "),  stdout=PIPE, stderr=PIPE, stdin=PIPE)
+                emcc = Popen(('emcc -v %s -o -' % tmpC.file).split(" "), stdout=PIPE, stderr=PIPE, stdin=PIPE)
                 emcc, err = emcc.communicate()
 
                 words = err.decode("utf-8").split(" ")
@@ -105,13 +114,14 @@ def updatesettings():
 
                 config["clang"]["includes"] = " ".join(includes)
 
-
         with open("settings/config.ini", 'w') as configFile:
             config.write(configFile)
+
 
 updatesettings()
 
 OUT_FOLDER = config["DEFAULT"]["outfolder"]
+
 
 def getIteratorByName(name: str):
     return getattr(iterators, name)
@@ -127,6 +137,69 @@ def globalCounter():
 
 
 globalCounter.counter = 0
+
+private = configparser.ConfigParser(interpolation=configparser.ExtendedInterpolation())
+private.read("settings/private.ini")
+
+
+def sendReportEmail(subject, content, attachments = []):
+    # Send using gmail
+    #try:
+
+
+    server = smtplib.SMTP_SSL('smtp.gmail.com', 465)
+    server.ehlo()
+
+    sent_from = os.environ.get("GUSER", private["gmail"]["user"])
+    pass_ = os.environ.get("GPASS", private["gmail"]["pass"])
+
+    print(sent_from, pass_)
+    server.login(sent_from, pass_)
+
+    to = os.environ.get("TOUSER", private["gmail"]["touser"])
+
+    msg = MIMEMultipart()
+
+    # storing the senders email address
+    msg['From'] = sent_from
+
+    # storing the receivers email address
+    msg['To'] = to
+
+    # storing the subject
+    msg['Subject'] = subject
+
+    # string to store the body of the mail
+    body = content
+
+    for attach in attachments:
+        # attach the body with the msg instance
+
+        # open the file to be sent
+        filename = attach.split("/")[-1]
+        attachment = open(attach, "rb")
+
+        # instance of MIMEBase and named as p
+        p = MIMEBase('application', 'octet-stream')
+
+        # To change the payload into encoded form
+        p.set_payload(attachment.read())
+
+        # encode into base64
+        encoders.encode_base64(p)
+
+        p.add_header('Content-Disposition', "attachment", filename=filename)
+
+        # attach the instance 'p' to instance 'msg'
+        msg.attach(p)
+
+    msg.attach(MIMEText(body, 'plain'))
+
+    server.sendmail(sent_from, to, msg.as_string())
+    server.close()
+    #except Exception as e:
+
+        #print("Error", e.__str__())
 
 
 def printProgressBar(iteration, total, prefix='', suffix='', decimals=1, length=100, fill='█', printEnd="\r"):
@@ -180,6 +253,7 @@ class Alias:
     wasm2wat = config["wabt"]["wasm2wat"]
     # libsouperPass_so = "../../souper/build/libsouperPass.so"
     # z3 = "%s/souper/third_party/z3/build/z3"%(BASE_DIR,)
+
 
 class BreakException(Exception):
     pass

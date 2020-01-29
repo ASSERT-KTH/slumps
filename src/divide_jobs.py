@@ -43,6 +43,6 @@ if __name__ == '__main__':
             shutil.copy("%s/%s" % (folder, file), "%s/job%s/%s" % (out, i, file))
 
         # Generate the script
-        shStrip.write("docker -d -e TIMEOUT={timeout} -v $(pwd)/{job}:/input -v $(pwd)/{job}/out:/slumps/src/out -v "
+        shStrip.write("docker run --name {job} -d -e TIMEOUT={timeout} -v $(pwd)/{job}:/input -v $(pwd)/{job}/out:/slumps/src/out -v "
                       "$(pwd)/{job}/logs/:/slumps/src/logs jacarte/slumps:app \n".format(timeout=timeout, job=jobFolder))
     shStrip.close()
