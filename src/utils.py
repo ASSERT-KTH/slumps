@@ -15,6 +15,7 @@ from email.mime.base import MIMEBase
 from email import encoders
 import json
 import requests
+import threading
 
 config = configparser.ConfigParser(interpolation=configparser.ExtendedInterpolation())
 config.read("settings/config.ini")
@@ -297,3 +298,4 @@ class Alias:
 
 class BreakException(Exception):
     pass
+

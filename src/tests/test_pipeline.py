@@ -70,24 +70,22 @@ def test_WASM2WAT():
 
 def test_pipeline():
     # Receive a LLVM IR in the std
-    # utils.RUNTIME_CONFIG["USE_REDIS"] = False
+    utils.RUNTIME_CONFIG["USE_REDIS"] = False
+    utils.config["DEFAULT"]["candidates-threshold"] = "1"
+    utils.config["DEFAULT"]["timeout"] = "3600"
+
+    import slumps
+    slumps.main("%s/benchmarks/babbage_problem.c"%(BASEDIR, ))
+
+
+
+def test_multi_thread():
+    # Receive a LLVM IR in the std
     utils.config["DEFAULT"]["candidates-threshold"] = "1"
     utils.config["DEFAULT"]["timeout"] = "5"
 
     import slumps
-    slumps.process("%s/benchmarks/babbage_problem.c"%(BASEDIR, ))
+    slumps.main("%s/multi" % BASEDIR)
 
-
-
-#def test_multi_thread():
-    # Receive a LLVM IR in the std
-
-
-
-#    files = os.listdir("%s/multi"%BASEDIR)
-#    p = slumps.Pipeline()
-
-#    with Pool(4) as pool:
-#        pool.map(p.process, ["%s/multi/%s"%(BASEDIR,f) for f in files])
 
 
