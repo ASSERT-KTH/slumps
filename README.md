@@ -9,6 +9,8 @@ For each optimization candidate from Souper, we generate a new WASM program, as 
 
 ## Prerequisites
 
+- Python version 3.7
+
 - Download our changed version of Souper. The main reason behind is that we include some extra options to be able of working together with the SLUMPs core. After downloading all the submodules in SLUMPs, build every one of them following the respective instructions in the original repos.
 
     Inside the `souper` folder:
@@ -57,15 +59,14 @@ Run `python3  src/slumps.py <file.c>` or run it directly on LLVM IR (the 'wasm32
 ### Docker images
 
 To run slumps in an easy way, we provide a Docker image which contains the plumping to work with Souper (our modest changed version), binaryen and wabt.
-To build it, run: `docker build -t slumps:backend -m 8g -f Dockerfile .` inside the docker_images folder
+To build it, run: `docker build -t slumps:backend -m 8g -f Dockerfile .` inside the docker_images folder. 
 
 If the LLVM build takes to long or fails due to memory lack in the image building:
     >  Increase memory and/or CPU ressources in the docker engine configuration
 
-### Develop mode
+### Slumps dockerized app
 
-- Go to python folder in the repo
-- `docker run --rm -it -v $(pwd):/slumps/src -v <absolute_path>/slumps/src:/input --entrypoint /bin/bash slumps:<label>`
+The application can be ported to a docker container too. To do so, enter in the src file and build the docker image. Run the following command to start the application ```docker run -it -v $(pwd)/<logs>:/slumps/src/logs -v $(pwd)/<code to process folder>:/input -v $(pwd)/<out folder>:/slumps/src/out -e TIMEOUT=3600 slumps:app```. Slumps will process every code in the input volumen folder exporting the results to the out folder volumen. You can specify the timeout per program in seconds, set the environment variable ```TIMEOUT``` to do it.
 
 ## Study of memory disclosure vulnerabilities
 

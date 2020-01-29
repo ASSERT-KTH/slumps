@@ -78,7 +78,7 @@ class Pipeline(object):
 
                     # Saving candidate
                     LOGGER.success(program_name, "%s: Found %s arithmetic expression candidates. %s Can be replaced" % (
-                    program_name, cand[1], cand[0]))
+                        program_name, cand[1], cand[0]))
 
                     # Test set the second candidate for optimization
 
@@ -146,8 +146,8 @@ class Pipeline(object):
                             else:
                                 LOGGER.error(program_name,
                                              "%s: No succesfull replacements. Total number of subexpressions  %s. Souper level %s" % (
-                                             program_name,
-                                             cand[1], level))
+                                                 program_name,
+                                                 cand[1], level))
                     if RUNTIME_CONFIG["USE_REDIS"]:
                         import redis
                         r = redis.Redis(host="localhost", port=6379, db=0)
@@ -166,7 +166,7 @@ class Pipeline(object):
 
         print("Saving metadata...")
         metaF = open("%s/%s" % (OUT_FOLDER, "meta.json"), 'w')
-        metaF.write(json.dumps(meta,indent=4))
+        metaF.write(json.dumps(meta, indent=4))
         metaF.close()
 
     def generateWasm(self, namespace, bc, OUT_FOLDER, fileName, debug=True):
@@ -206,7 +206,12 @@ def process(f):
     th = multiprocessing.Process(target=launch)
     th.start()
 
-    th.join(timeout=config["DEFAULT"].getint("timeout"))
+    timeout = config["DEFAULT"].getint("timeout")
+    if "TIMEOUT" in os.environ:
+        timeout = int(os.environ['TIMEOUT'])
+        print("Getting timeout from environment variable...%s s" % timeout)
+
+    th.join(timeout=timeout)
 
     if th.is_alive():
         th.kill()
@@ -221,7 +226,7 @@ if __name__ == "__main__":
     program_name = f.split("/")[-1].split(".")[0]
 
     RUNTIME_CONFIG["USE_REDIS"] = True
-    
+
     if os.path.isfile(f):
         process(f)
     else:
