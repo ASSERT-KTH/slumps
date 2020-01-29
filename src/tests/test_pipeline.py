@@ -72,7 +72,7 @@ def test_pipeline():
     # Receive a LLVM IR in the std
     utils.RUNTIME_CONFIG["USE_REDIS"] = False
     utils.config["DEFAULT"]["candidates-threshold"] = "1"
-    utils.config["DEFAULT"]["timeout"] = "3600"
+    utils.config["DEFAULT"]["timeout"] = "100"
 
     import slumps
     slumps.main("%s/benchmarks/babbage_problem.c"%(BASEDIR, ))
