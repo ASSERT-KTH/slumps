@@ -34,7 +34,28 @@ if __name__ == '__main__':
 
     os.mkdir(out)
 
-    shStrip = open("%s/command.sh" % out, 'w')
+    shStrip = open("%s/command.sh" % out, 'w')    
+    mpiScript = open("%s/deploy_argo.yml" % out, 'w')
+
+    mpiScript.write(
+"""
+apiVersion: argoproj.io/v1alpha1
+  kind: Workflow
+  metadata:
+    generateName: slumps-distributed-
+  spec:
+    entrypoint: slumps-distributed
+    templates:
+    - name: slumps-distributed  
+      steps:
+      - - name: slumpsfy
+          template: slumps-template
+          arguments:
+            parameters:
+            - name: job_folder
+              value: "{{item.job_folder}}"
+          withItems:
+""")
 
     for i, j in enumerate(jobs):
         jobName = "%s/job%s" % (out, i)
@@ -50,4 +71,20 @@ if __name__ == '__main__':
         # Generate the script
         shStrip.write("docker run --name {job} -d -e TIMEOUT={timeout} {extra} -v $(pwd)/{job}:/input -v $(pwd)/{job}/out:/slumps/src/out -v "
                       "$(pwd)/{job}/logs/:/slumps/src/logs jacarte/slumps:app \n".format(timeout=timeout, job=jobFolder, extra=extra))
+        mpiScript.write(
+"""          - { job_folder: %s }\n"""%jobFolder)
+
+    mpiScript.write(
+"""
+    - name: slumps-template
+    inputs:
+      parameters:
+      - name: job_folder
+    container:
+      image: "jacarte/slumps:app"
+      command: [python3.7]
+      args: [-version] 
+""")
+
     shStrip.close()
+    mpiScript.close()

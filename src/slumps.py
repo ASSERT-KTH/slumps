@@ -35,6 +35,9 @@ class Pipeline(object):
         program_name = file.split("/")[-1].split(".")[0]
         OUT_FOLDER = "%s/%s" % (config["DEFAULT"]["outfolder"], program_name)
 
+        if not os.path.exists(OUT_FOLDER):
+            os.mkdir(OUT_FOLDER)
+
         if not self.check_file(file):
             LOGGER.error(program_name, "Invalid file %s" % (file,))
             return
@@ -132,8 +135,6 @@ class Pipeline(object):
 
                                         sha.add(hex)
 
-                                        if len(sha) >= config["DEFAULT"].getint("upper-bound"):
-                                            raise BreakException()
                                     except Exception as e:
                                         if config["DEFAULT"].getboolean("fail-silently"):
                                             LOGGER.error(program_name, e)
@@ -258,10 +259,8 @@ def main(f):
     if os.path.isfile(f):
         try:
             r = process(f)
-            sendReportEmail("Single file experiment %s" % f, json.dumps(r, indent=4), [getlogfilename(program_name)])
-            make_github_issue("Single experiment %s" % program_name, createIssueContent(r), "Slumps", 1, False, ["slumps-automated"])
         except Exception as e:
-            sendReportEmail("Error processing single file experiment %s" % f, e.__str__(), [getlogfilename(program_name)])
+            pass
 
     else:
         LOGGER.info(program_name, "Pool size: %s" % config["DEFAULT"].getint("thread-pool-size"))
@@ -276,13 +275,19 @@ def main(f):
             except Exception as e:
                 print(e)
 
-        sendReportEmail("Experiment files %s" % f, json.dumps(result, indent=4), attach)
-        make_github_issue("Experiment %s" % program_name, createIssueContent(result), "Slumps", 1, False, ["slumps-automated"])
+        #sendReportEmail("Experiment files %s" % f, json.dumps(result, indent=4), attach)
+        #make_github_issue("Experiment %s" % program_name, createIssueContent(result), "Slumps", 1, False, ["slumps-automated"])
 
         OUT_FOLDER = "%s" % config["DEFAULT"]["outfolder"]
+
+        if not os.path.exists(OUT_FOLDER):
+            os.mkdir(OUT_FOLDER)
+
         metaF = open("%s/%s" % (OUT_FOLDER, "meta.json"), 'w')
         metaF.write(json.dumps(result, indent=4))
         metaF.close()
+
+        print(json.dumps(result, indent=4))
 
 if __name__ == "__main__":
     updatesettings()
