@@ -2,7 +2,7 @@ FROM jacarte/slumps:backend
 
 
 RUN apt-get update \
-    && apt-get -y install python3.7 python3-pip
+    && apt-get -y install python3.7 python3-pip wget
 
 RUN python3.7 -m pip install pip
 
