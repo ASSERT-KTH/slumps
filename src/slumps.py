@@ -35,6 +35,9 @@ class Pipeline(object):
         program_name = file.split("/")[-1].split(".")[0]
         OUT_FOLDER = "%s/%s" % (config["DEFAULT"]["outfolder"], program_name)
 
+        if not os.path.exists(OUT_FOLDER):
+            os.mkdir(OUT_FOLDER)
+
         if not self.check_file(file):
             LOGGER.error(program_name, "Invalid file %s" % (file,))
             return
@@ -72,9 +75,11 @@ class Pipeline(object):
                                "%s: Searching level (increasing execution time) %s: %s..." % (program_name,
                                                                                               level, config["souper"][
                                                                                                   "souper-level-%s" % level]))
-
-                bctocand = BCCountCandidates(program_name, level=level)
-
+                try:
+                    bctocand = BCCountCandidates(program_name, level=level)
+                except Expception as e:
+                    print(e)
+                    continue
                 with ContentToTmpFile(content=bc) as TMP_BC:
                     cand = bctocand(args=[TMP_BC.file], std=None)
 
@@ -217,6 +222,7 @@ def process(f):
         try:
             pipeline.process(file, outResult=result[file])
         except Exception as e:
+            print(e)
             result[file]["error"] = e.__str__()
 
     th = multiprocessing.Process(target=launch, args=(f, result_overall,))
@@ -258,10 +264,8 @@ def main(f):
     if os.path.isfile(f):
         try:
             r = process(f)
-            sendReportEmail("Single file experiment %s" % f, json.dumps(r, indent=4), [getlogfilename(program_name)])
-            make_github_issue("Single experiment %s" % program_name, createIssueContent(r), "Slumps", 1, False, ["slumps-automated"])
         except Exception as e:
-            sendReportEmail("Error processing single file experiment %s" % f, e.__str__(), [getlogfilename(program_name)])
+            print(e)
 
     else:
         LOGGER.info(program_name, "Pool size: %s" % config["DEFAULT"].getint("thread-pool-size"))
@@ -276,9 +280,6 @@ def main(f):
             except Exception as e:
                 print(e)
 
-        sendReportEmail("Experiment files %s" % f, json.dumps(result, indent=4), attach)
-        make_github_issue("Experiment %s" % program_name, createIssueContent(result), "Slumps", 1, False, ["slumps-automated"])
-
         OUT_FOLDER = "%s" % config["DEFAULT"]["outfolder"]
         metaF = open("%s/%s" % (OUT_FOLDER, "meta.json"), 'w')
         metaF.write(json.dumps(result, indent=4))
@@ -286,6 +287,9 @@ def main(f):
 
 if __name__ == "__main__":
     updatesettings()
+
+    if not os.path.exists("out"):
+        os.mkdir("out")
 
     RUNTIME_CONFIG["USE_REDIS"] = True
 
