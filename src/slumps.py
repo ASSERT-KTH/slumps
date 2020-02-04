@@ -75,9 +75,11 @@ class Pipeline(object):
                                "%s: Searching level (increasing execution time) %s: %s..." % (program_name,
                                                                                               level, config["souper"][
                                                                                                   "souper-level-%s" % level]))
-
-                bctocand = BCCountCandidates(program_name, level=level)
-
+                try:
+                    bctocand = BCCountCandidates(program_name, level=level)
+                except Expception as e:
+                    print(e)
+                    continue
                 with ContentToTmpFile(content=bc) as TMP_BC:
                     cand = bctocand(args=[TMP_BC.file], std=None)
 
@@ -218,6 +220,7 @@ def process(f):
         try:
             pipeline.process(file, outResult=result[file])
         except Exception as e:
+            print(e)
             result[file]["error"] = e.__str__()
 
     th = multiprocessing.Process(target=launch, args=(f, result_overall,))
@@ -260,7 +263,7 @@ def main(f):
         try:
             r = process(f)
         except Exception as e:
-            pass
+            print(e)
 
     else:
         LOGGER.info(program_name, "Pool size: %s" % config["DEFAULT"].getint("thread-pool-size"))
@@ -275,9 +278,6 @@ def main(f):
             except Exception as e:
                 print(e)
 
-        #sendReportEmail("Experiment files %s" % f, json.dumps(result, indent=4), attach)
-        #make_github_issue("Experiment %s" % program_name, createIssueContent(result), "Slumps", 1, False, ["slumps-automated"])
-
         OUT_FOLDER = "%s" % config["DEFAULT"]["outfolder"]
 
         if not os.path.exists(OUT_FOLDER):
@@ -291,6 +291,9 @@ def main(f):
 
 if __name__ == "__main__":
     updatesettings()
+
+    if not os.path.exists("out"):
+        os.mkdir("out")
 
     RUNTIME_CONFIG["USE_REDIS"] = True
 

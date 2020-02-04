@@ -1,6 +1,5 @@
 #!/bin/bash
-
-mkdir /slumps/src/out
+rm -rf /slumps/src/out
+wget $1
 nohup redis-server &
-wget https://raw.githubusercontent.com/KTH/slumps/master/benchmark_programs/rossetta/valid/no_input/$1
-python3.7 slumps.py $1
+python3.7 slumps.py $1s
