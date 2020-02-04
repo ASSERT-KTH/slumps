@@ -12,3 +12,7 @@ We crawled the C programs from Rosetta corpus: From 998 programs, we collected *
         - **no_input** (789 files)
         - **input expected** (91 files)
 
+
+### SLUMPs output
+
+- [Experiment 1hour timeout per program](Experiment_report1.md)

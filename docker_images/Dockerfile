@@ -1,7 +1,26 @@
 # slumps backend
-FROM jacarte/slumps:deps
+FROM ubuntu:18.04
+# souper:deps
+
+RUN apt-get update \
+    && apt-get -y install cmake re2c doxygen golang-go python python3 llvm git subversion curl build-essential lld-9 gcc-multilib redis-server emscripten \
+    && go get github.com/gomodule/redigo/redis
+
+RUN mkdir slumps
+WORKDIR slumps
+
+# Rebuild on KTH repo update
+ADD https://api.github.com/repos/KTH/souper/git/refs/heads/master version.json
+
+RUN git clone https://github.com/KTH/souper \
+    && git clone https://github.com/WebAssembly/wabt
+
+RUN cd wabt \
+    && git submodule update --init \
+    && mkdir build && cd build \
+    && cmake .. \
+    && cmake --build .
 
 RUN cd souper \
-    && mkdir build && cd build \
-    && cmake ../ \
-    && make -j8
+    && bash ./build_deps.sh
+

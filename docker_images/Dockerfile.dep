@@ -1,0 +1,17 @@
+# slumps backend
+FROM jacarte/slumps:backend
+
+
+ADD https://api.github.com/repos/KTH/souper/git/refs/heads/master version.json
+
+WORKDIR /slumps/souper/
+RUN git pull
+RUN rm -rf build
+RUN mkdir build
+WORKDIR /slumps/souper/build
+
+
+RUN cmake ../
+RUN make -j8
+
+

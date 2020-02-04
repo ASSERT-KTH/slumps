@@ -1,4 +1,4 @@
-FROM jacarte/slumps:backend
+FROM jacarte/slumps:deps
 
 
 RUN apt-get update \
@@ -15,6 +15,7 @@ WORKDIR /slumps/src
 
 RUN python3.7 -m pip install -r requirements.txt
 RUN rm settings/.slumps
+
 
 EXPOSE 6379
 ENV TIMEOUT 1800

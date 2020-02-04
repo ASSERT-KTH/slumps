@@ -69,7 +69,7 @@ class Pipeline(object):
 
         try:
 
-            for level in range(1, 10):
+            for level in range(1, 18):
 
                 LOGGER.success(program_name,
                                "%s: Searching level (increasing execution time) %s: %s..." % (program_name,
@@ -78,14 +78,18 @@ class Pipeline(object):
                 try:
                     bctocand = BCCountCandidates(program_name, level=level)
                 except Expception as e:
-                    print(e)
+                    LOGGER.error(program_name, e)
                     continue
                 with ContentToTmpFile(content=bc) as TMP_BC:
-                    cand = bctocand(args=[TMP_BC.file], std=None)
-
+                    try:
+                        cand = bctocand(args=[TMP_BC.file], std=None)
+                    except Exception as e:
+                        LOGGER.error(program_name, e)
+                        continue
                     # Saving candidate
+                    canCount = len(cand[0])
                     LOGGER.success(program_name, "%s: Found %s arithmetic expression candidates. %s Can be replaced" % (
-                        program_name, cand[1], cand[0]))
+                        program_name, cand[1], canCount))
 
                     # Test set the second candidate for optimization
 
@@ -95,12 +99,12 @@ class Pipeline(object):
                             tmpIn = BCIN.file
                             tmpOut = BCOUT.file
 
-                            total = 2 ** (cand[0])  # tentative, TODO change to the iterator
+                            total = 2 ** (canCount)  # tentative, TODO change to the iterator
                             current = 1
                             pruned = 0
 
-                            if cand[0] > 0 and cand[0] >= config["DEFAULT"].getint("candidates-threshold"):
-                                for s in getIteratorByName(config["DEFAULT"]["generator-method"])(range(cand[0])):
+                            if canCount > 0 and canCount >= config["DEFAULT"].getint("candidates-threshold"):
+                                for s in getIteratorByName(config["DEFAULT"]["generator-method"])(cand[0]):
 
                                     try:
                                         sanitized_set_name = "_".join(list(map(lambda x: x.__str__(), s)))
