@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from subprocess import Popen, PIPE
-from utils import bcolors, Alias, config, createTmpFile, RUNTIME_CONFIG
+from utils import bcolors, Alias, config, createTmpFile, RUNTIME_CONFIG,processCandidatesMetaOutput
 from logger import LOGGER
 import re
 import time
@@ -45,7 +45,7 @@ class ExternalStage(object):
         rc = p.returncode
 
         if rc != 0:
-            LOGGER.error(self.namespace, err.decode("utf-8"))
+            LOGGER.error(self.namespace, "%s %s %s" % (err.decode("utf-8"), rc, std.decode("utf-8")))
             raise CallException("Error on stage: %s" % (self.name,), err)
 
         # Specific implementation process over the std out
@@ -133,9 +133,8 @@ class BCCountCandidates(ExternalStage):
         return super(BCCountCandidates, self).__call__(new_inputs, std)
 
     def processInner(self, std, err):
-        meta = re.compile(r'\[(\d+)/(\d+)\]')
-        match = meta.match(err.decode("utf-8"))
-        return [int(match.group(1)), int(match.group(2))]
+        return processCandidatesMetaOutput(err.decode("utf-8"))
+
 
 
 class BCToSouper(ExternalStage):

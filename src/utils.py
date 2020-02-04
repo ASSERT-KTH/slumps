@@ -16,6 +16,7 @@ from email import encoders
 import json
 import requests
 import threading
+import re
 
 config = configparser.ConfigParser(interpolation=configparser.ExtendedInterpolation())
 config.read("settings/config.ini")
@@ -300,6 +301,22 @@ class Alias:
     # libsouperPass_so = "../../souper/build/libsouperPass.so"
     # z3 = "%s/souper/third_party/z3/build/z3"%(BASE_DIR,)
 
+def processCandidatesMetaOutput(output):
+    meta = re.compile(r'\[(.*)/(\d+)\]')
+    setRe = re.compile(r",(\d+)")
+
+    match = meta.match(output)
+    set_ = match.group(1)
+
+    # process set
+
+    resultSet = [ int(r) for r in setRe.findall(set_) ]
+
+    total = int(match.group(2))
+
+    total = int(match.group(2))
+
+    return [resultSet, total]
 
 class BreakException(Exception):
     pass

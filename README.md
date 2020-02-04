@@ -59,7 +59,7 @@ Run `python3  src/slumps.py <file.c>` or run it directly on LLVM IR (the 'wasm32
 ### Docker images
 
 To run slumps in an easy way, we provide a Docker image which contains the plumping to work with Souper (our modest changed version), binaryen and wabt.
-To build it, run: `docker build -t slumps:backend -m 8g -f Dockerfile .` inside the docker_images folder. 
+To build it, run: `docker build -t slumps:backend -m 8g -f Dockerfile` inside the docker_images folder. 
 
 If the LLVM build takes to long or fails due to memory lack in the image building:
     >  Increase memory and/or CPU ressources in the docker engine configuration
