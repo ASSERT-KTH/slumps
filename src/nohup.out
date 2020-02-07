@@ -113,3 +113,227 @@
 17:M 04 Feb 14:16:40.877 * DB saved on disk
 17:M 04 Feb 14:23:05.439 * DB saved on disk
 17:M 04 Feb 14:29:32.801 * DB saved on disk
+17:M 04 Feb 15:29:33.089 * 1 changes in 3600 seconds. Saving...
+17:M 04 Feb 15:29:33.091 * Background saving started by pid 30369
+30369:C 04 Feb 15:29:33.097 * DB saved on disk
+30369:C 04 Feb 15:29:33.098 * RDB: 0 MB of memory used by copy-on-write
+17:M 04 Feb 15:29:33.198 * Background saving terminated with success
+7:C 07 Feb 10:59:54.158 # oO0OoO0OoO0Oo Redis is starting oO0OoO0OoO0Oo
+7:C 07 Feb 10:59:54.160 # Redis version=4.0.9, bits=64, commit=00000000, modified=0, pid=7, just started
+7:C 07 Feb 10:59:54.160 # Warning: no config file specified, using the default config. In order to specify a config file use redis-server /path/to/redis.conf
+7:M 07 Feb 10:59:54.164 * Running mode=standalone, port=6379.
+7:M 07 Feb 10:59:54.165 # WARNING: The TCP backlog setting of 511 cannot be enforced because /proc/sys/net/core/somaxconn is set to the lower value of 128.
+7:M 07 Feb 10:59:54.168 # Server initialized
+7:M 07 Feb 10:59:54.169 # WARNING you have Transparent Huge Pages (THP) support enabled in your kernel. This will create latency and memory usage issues with Redis. To fix this issue run the command 'echo never > /sys/kernel/mm/transparent_hugepage/enabled' as root, and add it to your /etc/rc.local in order to retain the setting after a reboot. Redis must be restarted after THP is disabled.
+7:M 07 Feb 10:59:54.208 * DB loaded from disk: 0.004 seconds
+7:M 07 Feb 10:59:54.209 * Ready to accept connections
+7:signal-handler (1581073291) Received SIGINT scheduling shutdown...
+8:C 07 Feb 11:09:25.308 # oO0OoO0OoO0Oo Redis is starting oO0OoO0OoO0Oo
+8:C 07 Feb 11:09:25.312 # Redis version=4.0.9, bits=64, commit=00000000, modified=0, pid=8, just started
+8:C 07 Feb 11:09:25.313 # Warning: no config file specified, using the default config. In order to specify a config file use redis-server /path/to/redis.conf
+8:M 07 Feb 11:09:25.316 * Running mode=standalone, port=6379.
+8:M 07 Feb 11:09:25.317 # WARNING: The TCP backlog setting of 511 cannot be enforced because /proc/sys/net/core/somaxconn is set to the lower value of 128.
+8:M 07 Feb 11:09:25.317 # Server initialized
+8:M 07 Feb 11:09:25.318 # WARNING you have Transparent Huge Pages (THP) support enabled in your kernel. This will create latency and memory usage issues with Redis. To fix this issue run the command 'echo never > /sys/kernel/mm/transparent_hugepage/enabled' as root, and add it to your /etc/rc.local in order to retain the setting after a reboot. Redis must be restarted after THP is disabled.
+8:M 07 Feb 11:09:25.323 * DB loaded from disk: 0.005 seconds
+8:M 07 Feb 11:09:25.323 * Ready to accept connections
+8:M 07 Feb 11:19:07.291 * DB saved on disk
+8:M 07 Feb 11:24:08.008 * 100 changes in 300 seconds. Saving...
+8:M 07 Feb 11:24:08.017 * Background saving started by pid 511
+511:C 07 Feb 11:24:08.029 * DB saved on disk
+511:C 07 Feb 11:24:08.030 * RDB: 0 MB of memory used by copy-on-write
+8:M 07 Feb 11:24:08.118 * Background saving terminated with success
+8:M 07 Feb 11:30:11.309 * DB saved on disk
+8:M 07 Feb 11:35:12.048 * 100 changes in 300 seconds. Saving...
+8:M 07 Feb 11:35:12.049 * Background saving started by pid 845
+845:C 07 Feb 11:35:12.057 * DB saved on disk
+845:C 07 Feb 11:35:12.057 * RDB: 0 MB of memory used by copy-on-write
+8:M 07 Feb 11:35:12.149 * Background saving terminated with success
+148:C 07 Feb 11:48:48.184 # oO0OoO0OoO0Oo Redis is starting oO0OoO0OoO0Oo
+148:C 07 Feb 11:48:48.186 # Redis version=4.0.9, bits=64, commit=00000000, modified=0, pid=148, just started
+148:C 07 Feb 11:48:48.187 # Warning: no config file specified, using the default config. In order to specify a config file use redis-server /path/to/redis.conf
+148:M 07 Feb 11:48:48.190 * Running mode=standalone, port=6379.
+148:M 07 Feb 11:48:48.190 # WARNING: The TCP backlog setting of 511 cannot be enforced because /proc/sys/net/core/somaxconn is set to the lower value of 128.
+148:M 07 Feb 11:48:48.191 # Server initialized
+148:M 07 Feb 11:48:48.191 # WARNING you have Transparent Huge Pages (THP) support enabled in your kernel. This will create latency and memory usage issues with Redis. To fix this issue run the command 'echo never > /sys/kernel/mm/transparent_hugepage/enabled' as root, and add it to your /etc/rc.local in order to retain the setting after a reboot. Redis must be restarted after THP is disabled.
+148:M 07 Feb 11:48:48.195 * DB loaded from disk: 0.003 seconds
+148:M 07 Feb 11:48:48.195 * Ready to accept connections
+148:signal-handler (1581076156) Received SIGINT scheduling shutdown...
+148:M 07 Feb 11:49:16.957 # User requested shutdown...
+148:M 07 Feb 11:49:16.958 * Saving the final RDB snapshot before exiting.
+148:M 07 Feb 11:49:17.165 * DB saved on disk
+148:M 07 Feb 11:49:17.166 # Redis is now ready to exit, bye bye...
+260:C 07 Feb 11:49:25.175 # oO0OoO0OoO0Oo Redis is starting oO0OoO0OoO0Oo
+260:C 07 Feb 11:49:25.177 # Redis version=4.0.9, bits=64, commit=00000000, modified=0, pid=260, just started
+260:C 07 Feb 11:49:25.177 # Warning: no config file specified, using the default config. In order to specify a config file use redis-server /path/to/redis.conf
+260:M 07 Feb 11:49:25.180 * Running mode=standalone, port=6379.
+260:M 07 Feb 11:49:25.180 # WARNING: The TCP backlog setting of 511 cannot be enforced because /proc/sys/net/core/somaxconn is set to the lower value of 128.
+260:M 07 Feb 11:49:25.181 # Server initialized
+260:M 07 Feb 11:49:25.181 # WARNING you have Transparent Huge Pages (THP) support enabled in your kernel. This will create latency and memory usage issues with Redis. To fix this issue run the command 'echo never > /sys/kernel/mm/transparent_hugepage/enabled' as root, and add it to your /etc/rc.local in order to retain the setting after a reboot. Redis must be restarted after THP is disabled.
+260:M 07 Feb 11:49:25.185 * DB loaded from disk: 0.004 seconds
+260:M 07 Feb 11:49:25.186 * Ready to accept connections
+628:C 07 Feb 12:14:55.597 # oO0OoO0OoO0Oo Redis is starting oO0OoO0OoO0Oo
+628:C 07 Feb 12:14:55.598 # Redis version=4.0.9, bits=64, commit=00000000, modified=0, pid=628, just started
+628:C 07 Feb 12:14:55.599 # Warning: no config file specified, using the default config. In order to specify a config file use redis-server /path/to/redis.conf
+628:M 07 Feb 12:14:55.600 # Creating Server TCP listening socket *:6379: bind: Address already in use
+260:M 07 Feb 12:50:44.077 * 1 changes in 3600 seconds. Saving...
+260:M 07 Feb 12:50:44.233 * Background saving started by pid 692
+692:C 07 Feb 12:50:44.259 * DB saved on disk
+692:C 07 Feb 12:50:44.260 * RDB: 0 MB of memory used by copy-on-write
+260:M 07 Feb 12:50:44.336 * Background saving terminated with success
+695:C 07 Feb 13:02:08.158 # oO0OoO0OoO0Oo Redis is starting oO0OoO0OoO0Oo
+695:C 07 Feb 13:02:08.160 # Redis version=4.0.9, bits=64, commit=00000000, modified=0, pid=695, just started
+695:C 07 Feb 13:02:08.161 # Warning: no config file specified, using the default config. In order to specify a config file use redis-server /path/to/redis.conf
+695:M 07 Feb 13:02:08.167 # Creating Server TCP listening socket *:6379: bind: Address already in use
+761:C 07 Feb 13:03:11.227 # oO0OoO0OoO0Oo Redis is starting oO0OoO0OoO0Oo
+761:C 07 Feb 13:03:11.228 # Redis version=4.0.9, bits=64, commit=00000000, modified=0, pid=761, just started
+761:C 07 Feb 13:03:11.229 # Warning: no config file specified, using the default config. In order to specify a config file use redis-server /path/to/redis.conf
+761:M 07 Feb 13:03:11.232 # Creating Server TCP listening socket *:6379: bind: Address already in use
+827:C 07 Feb 13:05:39.139 # oO0OoO0OoO0Oo Redis is starting oO0OoO0OoO0Oo
+827:C 07 Feb 13:05:39.142 # Redis version=4.0.9, bits=64, commit=00000000, modified=0, pid=827, just started
+827:C 07 Feb 13:05:39.142 # Warning: no config file specified, using the default config. In order to specify a config file use redis-server /path/to/redis.conf
+827:M 07 Feb 13:05:39.146 # Creating Server TCP listening socket *:6379: bind: Address already in use
+260:M 07 Feb 13:05:46.958 * DB saved on disk
+894:C 07 Feb 13:05:49.534 # oO0OoO0OoO0Oo Redis is starting oO0OoO0OoO0Oo
+894:C 07 Feb 13:05:49.535 # Redis version=4.0.9, bits=64, commit=00000000, modified=0, pid=894, just started
+894:C 07 Feb 13:05:49.536 # Warning: no config file specified, using the default config. In order to specify a config file use redis-server /path/to/redis.conf
+894:M 07 Feb 13:05:49.538 # Creating Server TCP listening socket *:6379: bind: Address already in use
+1017:C 07 Feb 13:06:27.994 # oO0OoO0OoO0Oo Redis is starting oO0OoO0OoO0Oo
+1017:C 07 Feb 13:06:27.995 # Redis version=4.0.9, bits=64, commit=00000000, modified=0, pid=1017, just started
+1017:C 07 Feb 13:06:27.996 # Warning: no config file specified, using the default config. In order to specify a config file use redis-server /path/to/redis.conf
+1017:M 07 Feb 13:06:27.997 # Creating Server TCP listening socket *:6379: bind: Address already in use
+1056:C 07 Feb 13:06:43.786 # oO0OoO0OoO0Oo Redis is starting oO0OoO0OoO0Oo
+1056:C 07 Feb 13:06:43.787 # Redis version=4.0.9, bits=64, commit=00000000, modified=0, pid=1056, just started
+1056:C 07 Feb 13:06:43.788 # Warning: no config file specified, using the default config. In order to specify a config file use redis-server /path/to/redis.conf
+1056:M 07 Feb 13:06:43.791 # Creating Server TCP listening socket *:6379: bind: Address already in use
+1107:C 07 Feb 13:15:23.496 # oO0OoO0OoO0Oo Redis is starting oO0OoO0OoO0Oo
+1107:C 07 Feb 13:15:23.497 # Redis version=4.0.9, bits=64, commit=00000000, modified=0, pid=1107, just started
+1107:C 07 Feb 13:15:23.497 # Warning: no config file specified, using the default config. In order to specify a config file use redis-server /path/to/redis.conf
+1107:M 07 Feb 13:15:23.499 # Creating Server TCP listening socket *:6379: bind: Address already in use
+1144:C 07 Feb 13:15:32.443 # oO0OoO0OoO0Oo Redis is starting oO0OoO0OoO0Oo
+1144:C 07 Feb 13:15:32.444 # Redis version=4.0.9, bits=64, commit=00000000, modified=0, pid=1144, just started
+1144:C 07 Feb 13:15:32.445 # Warning: no config file specified, using the default config. In order to specify a config file use redis-server /path/to/redis.conf
+1144:M 07 Feb 13:15:32.447 # Creating Server TCP listening socket *:6379: bind: Address already in use
+260:M 07 Feb 13:22:37.391 * 100 changes in 300 seconds. Saving...
+260:M 07 Feb 13:22:37.394 * Background saving started by pid 1343
+1343:C 07 Feb 13:22:37.401 * DB saved on disk
+1343:C 07 Feb 13:22:37.402 * RDB: 0 MB of memory used by copy-on-write
+260:M 07 Feb 13:22:37.495 * Background saving terminated with success
+1499:C 07 Feb 13:29:26.457 # oO0OoO0OoO0Oo Redis is starting oO0OoO0OoO0Oo
+1499:C 07 Feb 13:29:26.459 # Redis version=4.0.9, bits=64, commit=00000000, modified=0, pid=1499, just started
+1499:C 07 Feb 13:29:26.459 # Warning: no config file specified, using the default config. In order to specify a config file use redis-server /path/to/redis.conf
+1499:M 07 Feb 13:29:26.461 # Creating Server TCP listening socket *:6379: bind: Address already in use
+1566:C 07 Feb 13:29:43.232 # oO0OoO0OoO0Oo Redis is starting oO0OoO0OoO0Oo
+1566:C 07 Feb 13:29:43.233 # Redis version=4.0.9, bits=64, commit=00000000, modified=0, pid=1566, just started
+1566:C 07 Feb 13:29:43.233 # Warning: no config file specified, using the default config. In order to specify a config file use redis-server /path/to/redis.conf
+1566:M 07 Feb 13:29:43.235 # Creating Server TCP listening socket *:6379: bind: Address already in use
+1633:C 07 Feb 13:29:55.041 # oO0OoO0OoO0Oo Redis is starting oO0OoO0OoO0Oo
+1633:C 07 Feb 13:29:55.042 # Redis version=4.0.9, bits=64, commit=00000000, modified=0, pid=1633, just started
+1633:C 07 Feb 13:29:55.043 # Warning: no config file specified, using the default config. In order to specify a config file use redis-server /path/to/redis.conf
+1633:M 07 Feb 13:29:55.044 # Creating Server TCP listening socket *:6379: bind: Address already in use
+1700:C 07 Feb 13:30:03.411 # oO0OoO0OoO0Oo Redis is starting oO0OoO0OoO0Oo
+1700:C 07 Feb 13:30:03.413 # Redis version=4.0.9, bits=64, commit=00000000, modified=0, pid=1700, just started
+1700:C 07 Feb 13:30:03.414 # Warning: no config file specified, using the default config. In order to specify a config file use redis-server /path/to/redis.conf
+1700:M 07 Feb 13:30:03.417 # Creating Server TCP listening socket *:6379: bind: Address already in use
+1767:C 07 Feb 13:30:12.394 # oO0OoO0OoO0Oo Redis is starting oO0OoO0OoO0Oo
+1767:C 07 Feb 13:30:12.400 # Redis version=4.0.9, bits=64, commit=00000000, modified=0, pid=1767, just started
+1767:C 07 Feb 13:30:12.400 # Warning: no config file specified, using the default config. In order to specify a config file use redis-server /path/to/redis.conf
+1767:M 07 Feb 13:30:12.403 # Creating Server TCP listening socket *:6379: bind: Address already in use
+1834:C 07 Feb 13:30:19.587 # oO0OoO0OoO0Oo Redis is starting oO0OoO0OoO0Oo
+1834:C 07 Feb 13:30:19.587 # Redis version=4.0.9, bits=64, commit=00000000, modified=0, pid=1834, just started
+1834:C 07 Feb 13:30:19.588 # Warning: no config file specified, using the default config. In order to specify a config file use redis-server /path/to/redis.conf
+1834:M 07 Feb 13:30:19.589 # Creating Server TCP listening socket *:6379: bind: Address already in use
+1901:C 07 Feb 13:30:33.013 # oO0OoO0OoO0Oo Redis is starting oO0OoO0OoO0Oo
+1901:C 07 Feb 13:30:33.014 # Redis version=4.0.9, bits=64, commit=00000000, modified=0, pid=1901, just started
+1901:C 07 Feb 13:30:33.015 # Warning: no config file specified, using the default config. In order to specify a config file use redis-server /path/to/redis.conf
+1901:M 07 Feb 13:30:33.017 # Creating Server TCP listening socket *:6379: bind: Address already in use
+1968:C 07 Feb 13:30:44.449 # oO0OoO0OoO0Oo Redis is starting oO0OoO0OoO0Oo
+1968:C 07 Feb 13:30:44.450 # Redis version=4.0.9, bits=64, commit=00000000, modified=0, pid=1968, just started
+1968:C 07 Feb 13:30:44.451 # Warning: no config file specified, using the default config. In order to specify a config file use redis-server /path/to/redis.conf
+1968:M 07 Feb 13:30:44.452 # Creating Server TCP listening socket *:6379: bind: Address already in use
+260:M 07 Feb 13:30:44.995 * DB saved on disk
+2039:C 07 Feb 13:30:59.439 # oO0OoO0OoO0Oo Redis is starting oO0OoO0OoO0Oo
+2039:C 07 Feb 13:30:59.441 # Redis version=4.0.9, bits=64, commit=00000000, modified=0, pid=2039, just started
+2039:C 07 Feb 13:30:59.441 # Warning: no config file specified, using the default config. In order to specify a config file use redis-server /path/to/redis.conf
+2039:M 07 Feb 13:30:59.443 # Creating Server TCP listening socket *:6379: bind: Address already in use
+2146:C 07 Feb 13:32:00.440 # oO0OoO0OoO0Oo Redis is starting oO0OoO0OoO0Oo
+2146:C 07 Feb 13:32:00.442 # Redis version=4.0.9, bits=64, commit=00000000, modified=0, pid=2146, just started
+2146:C 07 Feb 13:32:00.442 # Warning: no config file specified, using the default config. In order to specify a config file use redis-server /path/to/redis.conf
+2146:M 07 Feb 13:32:00.443 # Creating Server TCP listening socket *:6379: bind: Address already in use
+2188:C 07 Feb 13:32:25.930 # oO0OoO0OoO0Oo Redis is starting oO0OoO0OoO0Oo
+2188:C 07 Feb 13:32:25.932 # Redis version=4.0.9, bits=64, commit=00000000, modified=0, pid=2188, just started
+2188:C 07 Feb 13:32:25.932 # Warning: no config file specified, using the default config. In order to specify a config file use redis-server /path/to/redis.conf
+2188:M 07 Feb 13:32:25.934 # Creating Server TCP listening socket *:6379: bind: Address already in use
+260:M 07 Feb 13:40:17.918 * 100 changes in 300 seconds. Saving...
+260:M 07 Feb 13:40:17.919 * Background saving started by pid 2293
+2293:C 07 Feb 13:40:17.926 * DB saved on disk
+2293:C 07 Feb 13:40:17.928 * RDB: 0 MB of memory used by copy-on-write
+260:M 07 Feb 13:40:18.020 * Background saving terminated with success
+260:M 07 Feb 13:41:13.312 * DB saved on disk
+18:C 07 Feb 14:03:24.244 # oO0OoO0OoO0Oo Redis is starting oO0OoO0OoO0Oo
+18:C 07 Feb 14:03:24.245 # Redis version=4.0.9, bits=64, commit=00000000, modified=0, pid=18, just started
+18:C 07 Feb 14:03:24.246 # Warning: no config file specified, using the default config. In order to specify a config file use redis-server /path/to/redis.conf
+18:M 07 Feb 14:03:24.249 * Running mode=standalone, port=6379.
+18:M 07 Feb 14:03:24.249 # WARNING: The TCP backlog setting of 511 cannot be enforced because /proc/sys/net/core/somaxconn is set to the lower value of 128.
+18:M 07 Feb 14:03:24.250 # Server initialized
+18:M 07 Feb 14:03:24.250 # WARNING you have Transparent Huge Pages (THP) support enabled in your kernel. This will create latency and memory usage issues with Redis. To fix this issue run the command 'echo never > /sys/kernel/mm/transparent_hugepage/enabled' as root, and add it to your /etc/rc.local in order to retain the setting after a reboot. Redis must be restarted after THP is disabled.
+18:M 07 Feb 14:03:24.253 * DB loaded from disk: 0.002 seconds
+18:M 07 Feb 14:03:24.253 * Ready to accept connections
+18:signal-handler (1581084211) Received SIGINT scheduling shutdown...
+18:M 07 Feb 14:03:31.491 # User requested shutdown...
+18:M 07 Feb 14:03:31.492 * Saving the final RDB snapshot before exiting.
+18:M 07 Feb 14:03:31.496 * DB saved on disk
+18:M 07 Feb 14:03:31.503 # Redis is now ready to exit, bye bye...
+136:C 07 Feb 14:03:36.235 # oO0OoO0OoO0Oo Redis is starting oO0OoO0OoO0Oo
+136:C 07 Feb 14:03:36.238 # Redis version=4.0.9, bits=64, commit=00000000, modified=0, pid=136, just started
+136:C 07 Feb 14:03:36.238 # Warning: no config file specified, using the default config. In order to specify a config file use redis-server /path/to/redis.conf
+136:M 07 Feb 14:03:36.241 * Running mode=standalone, port=6379.
+136:M 07 Feb 14:03:36.241 # WARNING: The TCP backlog setting of 511 cannot be enforced because /proc/sys/net/core/somaxconn is set to the lower value of 128.
+136:M 07 Feb 14:03:36.242 # Server initialized
+136:M 07 Feb 14:03:36.242 # WARNING you have Transparent Huge Pages (THP) support enabled in your kernel. This will create latency and memory usage issues with Redis. To fix this issue run the command 'echo never > /sys/kernel/mm/transparent_hugepage/enabled' as root, and add it to your /etc/rc.local in order to retain the setting after a reboot. Redis must be restarted after THP is disabled.
+136:M 07 Feb 14:03:36.247 * DB loaded from disk: 0.005 seconds
+136:M 07 Feb 14:03:36.248 * Ready to accept connections
+136:M 07 Feb 14:08:06.035 * DB saved on disk
+136:signal-handler (1581084505) Received SIGINT scheduling shutdown...
+136:M 07 Feb 14:08:25.262 # User requested shutdown...
+136:M 07 Feb 14:08:25.263 * Saving the final RDB snapshot before exiting.
+136:M 07 Feb 14:08:25.268 * DB saved on disk
+136:M 07 Feb 14:08:25.269 # Redis is now ready to exit, bye bye...
+513:C 07 Feb 14:08:26.593 # oO0OoO0OoO0Oo Redis is starting oO0OoO0OoO0Oo
+513:C 07 Feb 14:08:26.594 # Redis version=4.0.9, bits=64, commit=00000000, modified=0, pid=513, just started
+513:C 07 Feb 14:08:26.595 # Warning: no config file specified, using the default config. In order to specify a config file use redis-server /path/to/redis.conf
+513:M 07 Feb 14:08:26.597 * Running mode=standalone, port=6379.
+513:M 07 Feb 14:08:26.598 # WARNING: The TCP backlog setting of 511 cannot be enforced because /proc/sys/net/core/somaxconn is set to the lower value of 128.
+513:M 07 Feb 14:08:26.599 # Server initialized
+513:M 07 Feb 14:08:26.599 # WARNING you have Transparent Huge Pages (THP) support enabled in your kernel. This will create latency and memory usage issues with Redis. To fix this issue run the command 'echo never > /sys/kernel/mm/transparent_hugepage/enabled' as root, and add it to your /etc/rc.local in order to retain the setting after a reboot. Redis must be restarted after THP is disabled.
+513:M 07 Feb 14:08:26.604 * DB loaded from disk: 0.004 seconds
+513:M 07 Feb 14:08:26.604 * Ready to accept connections
+513:signal-handler (1581084510) Received SIGINT scheduling shutdown...
+513:M 07 Feb 14:08:30.121 # User requested shutdown...
+513:M 07 Feb 14:08:30.122 * Saving the final RDB snapshot before exiting.
+513:M 07 Feb 14:08:30.127 * DB saved on disk
+513:M 07 Feb 14:08:30.127 # Redis is now ready to exit, bye bye...
+18:C 07 Feb 14:44:41.440 # oO0OoO0OoO0Oo Redis is starting oO0OoO0OoO0Oo
+18:C 07 Feb 14:44:41.443 # Redis version=4.0.9, bits=64, commit=00000000, modified=0, pid=18, just started
+18:C 07 Feb 14:44:41.444 # Warning: no config file specified, using the default config. In order to specify a config file use redis-server /path/to/redis.conf
+18:M 07 Feb 14:44:41.452 * Running mode=standalone, port=6379.
+18:M 07 Feb 14:44:41.453 # WARNING: The TCP backlog setting of 511 cannot be enforced because /proc/sys/net/core/somaxconn is set to the lower value of 128.
+18:M 07 Feb 14:44:41.454 # Server initialized
+18:M 07 Feb 14:44:41.456 # WARNING you have Transparent Huge Pages (THP) support enabled in your kernel. This will create latency and memory usage issues with Redis. To fix this issue run the command 'echo never > /sys/kernel/mm/transparent_hugepage/enabled' as root, and add it to your /etc/rc.local in order to retain the setting after a reboot. Redis must be restarted after THP is disabled.
+18:M 07 Feb 14:44:41.465 * DB loaded from disk: 0.008 seconds
+18:M 07 Feb 14:44:41.466 * Ready to accept connections
+18:signal-handler (1581086686) Received SIGINT scheduling shutdown...
+18:M 07 Feb 14:44:46.807 # User requested shutdown...
+18:M 07 Feb 14:44:46.808 * Saving the final RDB snapshot before exiting.
+18:M 07 Feb 14:44:46.829 * DB saved on disk
+18:M 07 Feb 14:44:46.830 # Redis is now ready to exit, bye bye...
+58:C 07 Feb 14:44:56.171 # oO0OoO0OoO0Oo Redis is starting oO0OoO0OoO0Oo
+58:C 07 Feb 14:44:56.175 # Redis version=4.0.9, bits=64, commit=00000000, modified=0, pid=58, just started
+58:C 07 Feb 14:44:56.177 # Warning: no config file specified, using the default config. In order to specify a config file use redis-server /path/to/redis.conf
+58:M 07 Feb 14:44:56.188 * Running mode=standalone, port=6379.
+58:M 07 Feb 14:44:56.189 # WARNING: The TCP backlog setting of 511 cannot be enforced because /proc/sys/net/core/somaxconn is set to the lower value of 128.
+58:M 07 Feb 14:44:56.190 # Server initialized
+58:M 07 Feb 14:44:56.191 # WARNING you have Transparent Huge Pages (THP) support enabled in your kernel. This will create latency and memory usage issues with Redis. To fix this issue run the command 'echo never > /sys/kernel/mm/transparent_hugepage/enabled' as root, and add it to your /etc/rc.local in order to retain the setting after a reboot. Redis must be restarted after THP is disabled.
+58:M 07 Feb 14:44:56.203 * DB loaded from disk: 0.010 seconds
+58:M 07 Feb 14:44:56.204 * Ready to accept connections
+58:M 07 Feb 14:50:15.140 * DB saved on disk

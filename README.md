@@ -68,7 +68,7 @@ If the LLVM build takes to long or fails due to memory lack in the image buildin
 
 Bothg images are avaiable in the docker [Hub](https://hub.docker.com/repository/docker/jacarte/slumps)
 
-The application can be ported to a docker container too. To do so, enter in the src file and build the docker image. Run the following command to start the application ```docker run -it -v $(pwd)/<logs>:/slumps/src/logs -v $(pwd)/<code to process folder>:/input -v $(pwd)/<out folder>:/slumps/src/out -e TIMEOUT=3600 jacarte/slumps:app```. Slumps will process every code in the input volumen folder exporting the results to the out folder volumen. You can specify the timeout per program in seconds, set the environment variable ```TIMEOUT``` to do it.
+The application can be ported to a docker container too. To execute SLUMPs, enter in the src file and build the docker image. Run the following command to start the application ```docker run -it -v $(pwd)/<logs>:/slumps/src/logs -v $(pwd)/<out folder>:/slumps/src/out -e TIMEOUT=3600 jacarte/slumps:app <url to download the program code> <program file name>```. Slumps will process the fetched code from the arguments, exporting the results to the out folder volumen. You can specify the timeout per program in seconds, set the environment variable ```TIMEOUT``` to do it.
 
 ## Study of memory disclosure vulnerabilities
 

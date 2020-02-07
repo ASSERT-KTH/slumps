@@ -69,7 +69,7 @@ class Pipeline(object):
 
         try:
 
-            for level in range(1, 18):
+            for level in range(1, 19):
 
                 LOGGER.success(program_name,
                                "%s: Searching level (increasing execution time) %s: %s..." % (program_name,

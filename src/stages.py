@@ -125,6 +125,8 @@ class BCCountCandidates(ExternalStage):
     def __call__(self, args=[], std=None):  # f -> inputs
         extra_commands = "%s -o %s" % (args[0], args[0])
 
+        
+
         if RUNTIME_CONFIG["USE_REDIS"]:
             extra_commands += " -souper-external-cache"
 

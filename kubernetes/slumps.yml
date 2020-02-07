@@ -1,0 +1,57 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Workflow
+metadata:
+  generateName: slumps-distributed-
+spec:
+  entrypoint: slumps-distributed
+  parallelism: 46
+  templates:
+  - name: slumps-distributed
+    steps:
+    - - name: download-programs
+        template: download-template
+    - - name: slumpsfy
+        template: slumps-template
+        arguments:
+          parameters:
+          - name: program
+            value: "{{item}}"
+        withParam: "{{steps.download-programs.outputs.parameters.programs}}"
+        continueOn:
+          failed: true
+  - name: download-template
+    script:
+      image: madshansen/docker-git-ftp
+      command: [bash]
+      source: |
+        apt-get update && apt-get install -y python && git clone https://github.com/KTH/slumps.git && ls -l /slumps/benchmark_programs/rossetta/valid/no_input | wc -l && python -c "import json,os;  print(json.dumps(os.listdir('/slumps/benchmark_programs/rossetta/valid/no_input')))" > /out.txt && cat /out.txt
+    outputs:
+      parameters:
+        - name: programs
+          valueFrom: 
+            path: "/out.txt"
+  - name: slumps-template
+    retryStrategy: {}
+    inputs:
+      parameters:
+      - name: program
+    outputs:
+      artifacts:
+      - name: slumps
+        path: /slumps/src/out
+      - name: logs
+        path: /slumps/src/logs
+    container:
+      image: "jacarte/slumps:app"
+      command: [/bin/bash]
+      args: [start_docker.sh, "https://raw.githubusercontent.com/KTH/slumps/master/benchmark_programs/rossetta/valid/no_input/{{inputs.parameters.program}}", "{{inputs.parameters.program}}"]
+      env:
+      - name: TIMEOUT
+        value: 10800 # 3 hours per program
+    #  resources:
+    #    requests:
+    #      memory: 2.5G
+    #      cpu: 0.5
+    #    limits:
+    #      memory: 4G
+    #      cpu: 2
