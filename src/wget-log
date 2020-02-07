@@ -1,0 +1,11 @@
+--2020-02-07 13:32:25--  https://raw.githubusercontent.com/KTH/slumps/master/benchmark_programs/rossetta/valid/no_input/Catalan_numbers.c
+Resolving raw.githubusercontent.com (raw.githubusercontent.com)... 151.101.84.133
+Connecting to raw.githubusercontent.com (raw.githubusercontent.com)|151.101.84.133|:443... connected.
+HTTP request sent, awaiting response... 200 OK
+Length: 683 [text/plain]
+Saving to: 'Catalan_numbers.c.23'
+
+Catalan_numbers.c.23            0%[                                                ]       0  --.-KB/s               Catalan_numbers.c.23          100%[===============================================>]     683  --.-KB/s    in 0s      
+
+2020-02-07 13:32:26 (9.40 MB/s) - 'Catalan_numbers.c.23' saved [683/683]
+

@@ -302,21 +302,19 @@ class Alias:
     # z3 = "%s/souper/third_party/z3/build/z3"%(BASE_DIR,)
 
 def processCandidatesMetaOutput(output):
-    meta = re.compile(r'\[(.*)/(\d+)\]')
-    setRe = re.compile(r",(\d+)")
+    meta = re.compile(r'\[/(\d+)\]')
+    setRe = re.compile(r"\[SLUMPS-META replacement idx (\d+)\]\n")
 
-    match = meta.match(output)
-    set_ = match.group(1)
+    match = meta.search(output)
+    
+    total = int(match.group(1))
+    # process set 
+    try:
+        resultSet = [ int(r) for r in setRe.findall(output) ]
 
-    # process set
-
-    resultSet = [ int(r) for r in setRe.findall(set_) ]
-
-    total = int(match.group(2))
-
-    total = int(match.group(2))
-
-    return [resultSet, total]
+        return [resultSet, total]
+    except Exception as e:
+        return [[], total]
 
 class BreakException(Exception):
     pass

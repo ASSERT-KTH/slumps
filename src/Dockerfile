@@ -15,7 +15,11 @@ WORKDIR /slumps/src
 
 RUN python3.7 -m pip install -r requirements.txt
 RUN rm settings/.slumps
-
+RUN rm -rf out && mkdir out
+RUN rm -rf logs && mkdir logs
+RUN rm -rf .idea
+RUN rm -rf tests
+RUN rm -rf .pytest_cache
 
 EXPOSE 6379
 ENV TIMEOUT 1800
