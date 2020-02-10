@@ -28,7 +28,10 @@ souper-level-17 = -souper-enumerative-synthesis -souper-enumerative-synthesis-ig
 """
 
 markdown_template = """
-## {{namespace}}
+## [{{namespace}}](https://raw.githubusercontent.com/KTH/slumps/master/benchmark_programs/rossetta/valid/no_input/{{namespace}}.c) 
+
+(Sanitization percent {{sanitization}})
+
 | Program ({{count}})  | Instructions (Std {{ "%10.2f" | format(avg)}}, Mean {{ "%10.f" | format(mean)}}) | Memory trace size (Std {{ "%10.2f" | format(avg_mem)}}, Mean {{ "%10.f" | format(mean_mem)}})| Stack trace size (Std {{ "%10.2f" | format(avg_st)}}, Mean {{ "%10.f" | format(mean_st)}})| Opcode trace size (Std {{ "%10.2f" | format(avg_op)}}, Mean {{ "%10.f" | format(mean_op)}})
 | -------- |:--------:|:------:|:------:|:------:|
 {% for item in summaries %}{{item.0}} | {{item.2}} {{item.6}} |  {{item.3}} {{item.7}}|  {{item.4}} {{item.8}} |  {{item.5}} {{item.9}}
@@ -47,11 +50,11 @@ def getmetafromfilename(name):
 
     return name.split("/")[-1], opt_level
 
-def reportProgram(namespace, meta, summaryfd):
+def reportProgram(namespace, meta):
 
     template = Template(markdown_template)
 
-    summaries = [[*getmetafromfilename(p),meta[p]["instruction_count"], meta[p]["mem_trace_count"], meta[p]["stack_trace_count"], meta[p]["opcode_count"]] for p in meta.keys() if p.endswith(".wasm")]
+    summaries = [[*getmetafromfilename(p),meta[p]["instruction_count"], meta[p]["mem_trace_count"], meta[p]["stack_trace_count"], meta[p]["opcode_count"], meta[p]["output"]] for p in meta.keys() if p.endswith(".wasm")]
     summaries = sorted(summaries, key = lambda x: 0 if x[0].startswith("**(original)") else 1)
 
     baseline = summaries[0]
@@ -60,6 +63,10 @@ def reportProgram(namespace, meta, summaryfd):
     summaries = [[*s, "↑" if s[3] > baseline[3] else ("↓" if s[3] < baseline[3] else "") ] for s in summaries]
     summaries = [[*s, "↑" if s[4] > baseline[4] else ("↓" if s[4] < baseline[4] else "") ] for s in summaries]
     summaries = [[*s, "↑" if s[5] > baseline[5] else ("↓" if s[5] < baseline[5] else "") ] for s in summaries]
+
+    s = set([s[5] for s in summaries])
+
+    san = 1 - (len(s)/len(summaries)) if len(s) > 1 else 1
 
     content = template.render(
         count = len(summaries),
@@ -72,26 +79,39 @@ def reportProgram(namespace, meta, summaryfd):
         mean_st = np.mean([s[4] for s in summaries]),
         avg_st = np.std([s[4] for s in summaries]),
         mean_op = np.mean([s[5] for s in summaries]),
-        avg_op = np.std([s[5] for s in summaries])
+        avg_op = np.std([s[5] for s in summaries]),
+        sanitization="%10.2f %%"%(san*100)
     )
 
-    summaryfd.write(content)
+    return content
 
 def main(STRAC_JAR, REPORT_FOLDER):
     folders = [f for f in os.listdir(".") if os.path.isdir(f)]
     summ = open("SWAM_summary.md", 'w')
 
     #summ.write(markdown_header)
-    
+    overall = []
+    errors = []
     for f in folders:
         metaJsonFileName = "%s/%s.meta.json"%(f, f)
 
         try:
             metaJson = json.loads(open(metaJsonFileName, 'r').read())
-            reportProgram(f, metaJson, summ)
+            r = reportProgram(f, metaJson)
+
+            overall.append(r)
+            # RUN STRAC over the three channels
 
         except Exception as e:
             print(e)
+            errors.append("""**{f}:** {e}\n\n""".format(e=e, f= f))
+
+    summ.write("""### Fail ({fail})\n\n ### Success ({success})\n\n""".format(fail=len(errors), success=len(overall)))
+
+    for e in errors:
+        summ.write(e)
+    for r in overall:
+        summ.write(r)        
     summ.close()
 
     webbrowser.get("chrome").open("file://%s"%os.path.realpath("SWAM_summary.md"), new = 2)

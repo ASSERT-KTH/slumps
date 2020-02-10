@@ -49,4 +49,4 @@ cand %5 0:i1
 Total of 1 replacements done on this module
 Total of 1 replacements candidates on this module
 [/103]"""))
-    print(utils.processCandidatesMetaOutput("[,0,1,2,3,10/65]"))
+    print(utils.processCandidatesMetaOutput("[0/65]"))

@@ -20,9 +20,9 @@ markdown_template = """
       - **Count for no optimization candidates**: {{no_opt_total}} ({{"%10.2f%%" | format(no_opt_total/program_count*100)}})
       - **Timeout**: {{total_timeout}} ({{"%10.2f%%" | format(total_timeout/program_count*100)}})
 
-| Program Name  | Variants | Different variants  | Description | Log File
-| ------------- |:-------------------:| ------------------------------:|-------------|-----------|
-{% for item in summaries %}{{item.0}}      | {{item.1}}        | {{item.2}} | {{item.3 | join(". ") }}  | [{{item.0}}.slumps.log](logs/{{item.0}}.slumps.log)
+| Program Name  | Variants | Different variants  | Description |      Code     | Log File
+| ------------- |:-------------------:| ------------------------------:|-------------|-----------|---------|
+{% for item in summaries %}{{item.0}}      | {{item.1}}        | {{item.2}} | {{item.3 | join(". ") }}  | [{{item.0}}](https://raw.githubusercontent.com/KTH/slumps/master/benchmark_programs/rossetta/valid/no_input/{{item.0}}.c) | [{{item.0}}.slumps.log](logs/{{item.0}}.slumps.log)
 {% endfor %}
 """
 

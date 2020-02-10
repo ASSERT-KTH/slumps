@@ -15,4 +15,5 @@ We crawled the C programs from Rosetta corpus: From 998 programs, we collected *
 
 ### SLUMPs output
 
-- [Experiment 1hour timeout per program](Experiment_report1.md)
+- [Experiment 1hour timeout per program](experiment_report_1h.md)
+- [Experiment 6hour timeout per program](experiment_report_6h.md)

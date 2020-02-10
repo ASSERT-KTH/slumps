@@ -302,12 +302,12 @@ class Alias:
     # z3 = "%s/souper/third_party/z3/build/z3"%(BASE_DIR,)
 
 def processCandidatesMetaOutput(output):
-    meta = re.compile(r'\[/(\d+)\]')
+    meta = re.compile(r'\[(.*)/(\d+)\]')
     setRe = re.compile(r"\[SLUMPS-META replacement idx (\d+)\]\n")
 
     match = meta.search(output)
     
-    total = int(match.group(1))
+    total = int(match.group(2))
     # process set 
     try:
         resultSet = [ int(r) for r in setRe.findall(output) ]

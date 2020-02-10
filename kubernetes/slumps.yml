@@ -4,7 +4,7 @@ metadata:
   generateName: slumps-distributed-
 spec:
   entrypoint: slumps-distributed
-  parallelism: 46
+  parallelism: 100
   templates:
   - name: slumps-distributed
     steps:
@@ -42,12 +42,12 @@ spec:
       - name: logs
         path: /slumps/src/logs
     container:
-      image: "jacarte/slumps:app"
+      image: "jacarte/slumps:kuber2"
       command: [/bin/bash]
       args: [start_docker.sh, "https://raw.githubusercontent.com/KTH/slumps/master/benchmark_programs/rossetta/valid/no_input/{{inputs.parameters.program}}", "{{inputs.parameters.program}}"]
       env:
       - name: TIMEOUT
-        value: 10800 # 3 hours per program
+        value: 14400 # 3 hours per program
     #  resources:
     #    requests:
     #      memory: 2.5G

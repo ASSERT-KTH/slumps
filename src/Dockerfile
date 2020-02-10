@@ -1,4 +1,4 @@
-FROM jacarte/slumps:deps
+FROM jacarte/slumps:deps.2
 
 
 RUN apt-get update \

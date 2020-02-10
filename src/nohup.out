@@ -337,3 +337,58 @@
 58:M 07 Feb 14:44:56.203 * DB loaded from disk: 0.010 seconds
 58:M 07 Feb 14:44:56.204 * Ready to accept connections
 58:M 07 Feb 14:50:15.140 * DB saved on disk
+58:signal-handler (1581087127) Received SIGINT scheduling shutdown...
+58:M 07 Feb 14:52:07.277 # User requested shutdown...
+58:M 07 Feb 14:52:07.277 * Saving the final RDB snapshot before exiting.
+58:M 07 Feb 14:52:07.284 * DB saved on disk
+58:M 07 Feb 14:52:07.284 # Redis is now ready to exit, bye bye...
+451:C 07 Feb 14:52:53.992 # oO0OoO0OoO0Oo Redis is starting oO0OoO0OoO0Oo
+451:C 07 Feb 14:52:53.993 # Redis version=4.0.9, bits=64, commit=00000000, modified=0, pid=451, just started
+451:C 07 Feb 14:52:53.993 # Warning: no config file specified, using the default config. In order to specify a config file use redis-server /path/to/redis.conf
+451:M 07 Feb 14:52:53.995 * Running mode=standalone, port=6379.
+451:M 07 Feb 14:52:53.996 # WARNING: The TCP backlog setting of 511 cannot be enforced because /proc/sys/net/core/somaxconn is set to the lower value of 128.
+451:M 07 Feb 14:52:53.996 # Server initialized
+451:M 07 Feb 14:52:53.997 # WARNING you have Transparent Huge Pages (THP) support enabled in your kernel. This will create latency and memory usage issues with Redis. To fix this issue run the command 'echo never > /sys/kernel/mm/transparent_hugepage/enabled' as root, and add it to your /etc/rc.local in order to retain the setting after a reboot. Redis must be restarted after THP is disabled.
+451:M 07 Feb 14:52:54.001 * DB loaded from disk: 0.004 seconds
+451:M 07 Feb 14:52:54.001 * Ready to accept connections
+451:M 07 Feb 14:57:24.392 * DB saved on disk
+451:signal-handler (1581087688) Received SIGINT scheduling shutdown...
+451:M 07 Feb 15:01:28.699 # User requested shutdown...
+451:M 07 Feb 15:01:28.699 * Saving the final RDB snapshot before exiting.
+451:M 07 Feb 15:01:28.704 * DB saved on disk
+451:M 07 Feb 15:01:28.705 # Redis is now ready to exit, bye bye...
+915:C 07 Feb 15:01:46.907 # oO0OoO0OoO0Oo Redis is starting oO0OoO0OoO0Oo
+915:C 07 Feb 15:01:46.908 # Redis version=4.0.9, bits=64, commit=00000000, modified=0, pid=915, just started
+915:C 07 Feb 15:01:46.908 # Warning: no config file specified, using the default config. In order to specify a config file use redis-server /path/to/redis.conf
+915:M 07 Feb 15:01:46.911 * Running mode=standalone, port=6379.
+915:M 07 Feb 15:01:46.911 # WARNING: The TCP backlog setting of 511 cannot be enforced because /proc/sys/net/core/somaxconn is set to the lower value of 128.
+915:M 07 Feb 15:01:46.913 # Server initialized
+915:M 07 Feb 15:01:46.913 # WARNING you have Transparent Huge Pages (THP) support enabled in your kernel. This will create latency and memory usage issues with Redis. To fix this issue run the command 'echo never > /sys/kernel/mm/transparent_hugepage/enabled' as root, and add it to your /etc/rc.local in order to retain the setting after a reboot. Redis must be restarted after THP is disabled.
+915:M 07 Feb 15:01:46.917 * DB loaded from disk: 0.003 seconds
+915:M 07 Feb 15:01:46.917 * Ready to accept connections
+915:M 07 Feb 15:01:56.145 * DB saved on disk
+915:M 07 Feb 15:05:23.733 * DB saved on disk
+915:M 07 Feb 15:08:53.971 * DB saved on disk
+915:signal-handler (1581088172) Received SIGINT scheduling shutdown...
+915:M 07 Feb 15:09:32.884 # User requested shutdown...
+915:M 07 Feb 15:09:32.887 * Saving the final RDB snapshot before exiting.
+915:M 07 Feb 15:09:32.894 * DB saved on disk
+915:M 07 Feb 15:09:32.894 # Redis is now ready to exit, bye bye...
+1334:C 07 Feb 15:09:56.592 # oO0OoO0OoO0Oo Redis is starting oO0OoO0OoO0Oo
+1334:C 07 Feb 15:09:56.593 # Redis version=4.0.9, bits=64, commit=00000000, modified=0, pid=1334, just started
+1334:C 07 Feb 15:09:56.594 # Warning: no config file specified, using the default config. In order to specify a config file use redis-server /path/to/redis.conf
+1334:M 07 Feb 15:09:56.597 * Running mode=standalone, port=6379.
+1334:M 07 Feb 15:09:56.597 # WARNING: The TCP backlog setting of 511 cannot be enforced because /proc/sys/net/core/somaxconn is set to the lower value of 128.
+1334:M 07 Feb 15:09:56.598 # Server initialized
+1334:M 07 Feb 15:09:56.598 # WARNING you have Transparent Huge Pages (THP) support enabled in your kernel. This will create latency and memory usage issues with Redis. To fix this issue run the command 'echo never > /sys/kernel/mm/transparent_hugepage/enabled' as root, and add it to your /etc/rc.local in order to retain the setting after a reboot. Redis must be restarted after THP is disabled.
+1334:M 07 Feb 15:09:56.602 * DB loaded from disk: 0.003 seconds
+1334:M 07 Feb 15:09:56.603 * Ready to accept connections
+1334:M 07 Feb 15:09:58.365 * DB saved on disk
+2088:C 07 Feb 16:03:18.731 # oO0OoO0OoO0Oo Redis is starting oO0OoO0OoO0Oo
+2088:C 07 Feb 16:03:18.734 # Redis version=4.0.9, bits=64, commit=00000000, modified=0, pid=2088, just started
+2088:C 07 Feb 16:03:18.734 # Warning: no config file specified, using the default config. In order to specify a config file use redis-server /path/to/redis.conf
+2088:M 07 Feb 16:03:18.737 # Creating Server TCP listening socket *:6379: bind: Address already in use
+2416:C 07 Feb 16:07:03.707 # oO0OoO0OoO0Oo Redis is starting oO0OoO0OoO0Oo
+2416:C 07 Feb 16:07:03.708 # Redis version=4.0.9, bits=64, commit=00000000, modified=0, pid=2416, just started
+2416:C 07 Feb 16:07:03.709 # Warning: no config file specified, using the default config. In order to specify a config file use redis-server /path/to/redis.conf
+2416:M 07 Feb 16:07:03.710 # Creating Server TCP listening socket *:6379: bind: Address already in use
