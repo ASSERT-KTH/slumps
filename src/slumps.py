@@ -231,9 +231,8 @@ def process(f):
     th.start()
 
     timeout = config["DEFAULT"].getint("timeout")
-    if "TIMEOUT" in os.environ:
-        timeout = int(os.environ['TIMEOUT'])
-        print("Getting timeout from environment variable...%s s" % timeout)
+    
+    print("Timeout ... %s s" % timeout)
 
     th.join(timeout=timeout)
 
@@ -294,12 +293,13 @@ def main(f):
         print(json.dumps(result, indent=4))
 
 if __name__ == "__main__":
-    updatesettings()
+
+    updatesettings(sys.argv[1:-1])
 
     if not os.path.exists("out"):
         os.mkdir("out")
 
     RUNTIME_CONFIG["USE_REDIS"] = True
 
-    f = sys.argv[1]
+    f = sys.argv[-1]
     main(f)

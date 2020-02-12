@@ -56,7 +56,8 @@ class ContentToTmpFile(object):
             pass
 
 
-def updatesettings():
+def updatesettings(argvs):
+    print(argvs)
     if not os.path.exists("settings/.slumps"):
         print("Setting up slumps for the first time...")
         open("settings/.slumps", 'w').write("SLUMPs them all!")
@@ -119,9 +120,41 @@ def updatesettings():
 
         with open("settings/config.ini", 'w') as configFile:
             config.write(configFile)
+    pairs = []
+    for index, a in enumerate(argvs):
+        if a.startswith("-"):
+            if index + 1 < len(argvs) and not argvs[index + 1].startswith("-"):
+                pairs.append([a, argvs[index + 1]])
+            else:
+                raise Exception("Invalid option %s. Full options line %s"%(a, " ".join(argvs)))
+
+    for pair in pairs:
+        processOptionValuePair(pair)
+    
+    with open("settings/config.ini", 'w') as configFile:
+        config.write(configFile)
+
+def processOptionValuePair(pair):
+    option, value = pair
+    option = option[1:] # Remove the firsst dash
+    namespace, key = option.split(".") # Getting namespace and key
+
+    if not namespace in config:
+        print("Available namespace for configuration:")
+        for k in config.keys():
+            print("\t%s"%k)
+        raise Exception("%s namespace not found"%namespace)
+    
+    if not key in config[namespace]:
+        print("Available keys for namespace %s:"%namespace)
+        for k in config[namespace].keys():
+            print("\t%s: %s"%(k, config[namespace][k]))
+        raise Exception("%s key not found"%key)
+
+    config[namespace][key] = value
+    print(namespace, key, value)
 
 
-updatesettings()
 
 OUT_FOLDER = config["DEFAULT"]["outfolder"]
 
