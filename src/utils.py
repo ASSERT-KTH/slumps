@@ -57,7 +57,7 @@ class ContentToTmpFile(object):
 
 
 def updatesettings(argvs):
-    print(argvs)
+    
     if not os.path.exists("settings/.slumps"):
         print("Setting up slumps for the first time...")
         open("settings/.slumps", 'w').write("SLUMPs them all!")
