@@ -86,28 +86,11 @@ DEFAULT | slumpspath | /slumps | |
 clang | command | -S -O3 --target=wasm32-unknown-unknown -emit-llvm  | You can append extra includess |
 wasm-ld | command | --no-entry --export-all --allow-undefined -o %s | |
 wabt | path | /slumps/wabt/bin | |
-wabt | wasm2wat | /slumps/wabt/bin/wasm2wat | |
+| | wasm2wat | /slumps/wabt/bin/wasm2wat | |
 souper | solver | -z3-path=/slumps/souper/third_party/z3/build/z3 | |
-souper | passname | libsouperPass.so | |
-souper | souper-debug-level | 2 | |
-souper | souper-common | -solver-timeout=1800 | |
-souper | souper-level-1 | -souper-infer-iN | |
-souper | souper-level-2 | -souper-infer-iN -souper-synthesis-const-with-cegis -souper-infer-inst -souper-synthesis-comps=mul,select,const,const,shl,lshr,ashr,and,or,xor,add,sub,slt,ult,sle,ule,eq,ne | |
-souper | souper-level-3 | -souper-infer-iN -souper-enumerative-synthesis-num-instructions=2 -souper-infer-inst -souper-synthesis-comps=mul,select,const,const,shl,lshr,ashr,and,or,xor,add,sub,slt,ult,sle,ule,eq,ne | |
-souper | souper-level-4 | -souper-infer-iN -souper-enumerative-synthesis-num-instructions=5 -souper-infer-inst -souper-synthesis-comps=mul,select,const,const,shl,lshr,ashr,and,or,xor,add,sub,slt,ult,sle,ule,eq,ne | |
-souper | souper-level-5 | -souper-enumerative-synthesis-ignore-cost -souper-infer-iN -souper-enumerative-synthesis-num-instructions=2 -souper-infer-inst -souper-synthesis-comps=mul,select,const,const,shl,lshr,ashr,and,or,xor,add,sub,slt,ult,sle,ule,eq,ne | |
-souper | souper-level-6 | -souper-enumerative-synthesis-ignore-cost -souper-infer-iN -souper-enumerative-synthesis-num-instructions=5 -souper-infer-inst -souper-synthesis-comps=mul,select,const,const,shl,lshr,ashr,and,or,xor,add,sub,slt,ult,sle,ule,eq,ne | |
-souper | souper-level-7 | -souper-enumerative-synthesis-ignore-cost -souper-infer-iN -souper-enumerative-synthesis-num-instructions=10 -souper-infer-inst -souper-synthesis-comps=mul,select,const,const,shl,lshr,ashr,and,or,xor,add,sub,slt,ult,sle,ule,eq,ne | |
-souper | souper-level-8 | -souper-enumerative-synthesis-ignore-cost -souper-infer-iN -souper-enumerative-synthesis-num-instructions=20 -souper-infer-inst -souper-synthesis-comps=mul,select,const,const,shl,lshr,ashr,and,or,xor,add,sub,slt,ult,sle,ule,eq,ne | |
-souper | souper-level-9 | -souper-enumerative-synthesis -souper-infer-iN  -souper-infer-inst -souper-synthesis-comps=mul,select,const,const,shl,lshr,ashr,and,or,xor,add,sub,slt,ult,sle,ule,eq,ne | |
-souper | souper-level-10 | -souper-enumerative-synthesis -souper-infer-iN -souper-enumerative-synthesis-num-instructions=2 -souper-infer-inst -souper-synthesis-comps=mul,select,const,const,shl,lshr,ashr,and,or,xor,add,sub,slt,ult,sle,ule,eq,ne | |
-souper | souper-level-11 | -souper-enumerative-synthesis -souper-infer-iN -souper-enumerative-synthesis-num-instructions=5 -souper-infer-inst -souper-synthesis-comps=mul,select,const,const,shl,lshr,ashr,and,or,xor,add,sub,slt,ult,sle,ule,eq,ne | |
-souper | souper-level-12 | -souper-enumerative-synthesis -souper-infer-iN -souper-enumerative-synthesis-num-instructions=10 -souper-infer-inst -souper-synthesis-comps=mul,select,const,const,shl,lshr,ashr,and,or,xor,add,sub,slt,ult,sle,ule,eq,ne | |
-souper | souper-level-13 | -souper-enumerative-synthesis -souper-infer-iN -souper-enumerative-synthesis-num-instructions=20 -souper-infer-inst -souper-synthesis-comps=mul,select,const,const,shl,lshr,ashr,and,or,xor,add,sub,slt,ult,sle,ule,eq,ne | |
-souper | souper-level-14 | -souper-enumerative-synthesis -souper-enumerative-synthesis-ignore-cost  -souper-infer-iN -souper-enumerative-synthesis-num-instructions=2 -souper-infer-inst -souper-synthesis-comps=mul,select,const,const,shl,lshr,ashr,and,or,xor,add,sub,slt,ult,sle,ule,eq,ne | |
-souper | souper-level-15 | -souper-enumerative-synthesis -souper-enumerative-synthesis-ignore-cost -souper-infer-iN -souper-enumerative-synthesis-num-instructions=5 -souper-infer-inst -souper-synthesis-comps=mul,select,const,const,shl,lshr,ashr,and,or,xor,add,sub,slt,ult,sle,ule,eq,ne | |
-souper | souper-level-16 | -souper-enumerative-synthesis -souper-enumerative-synthesis-ignore-cost -souper-infer-iN -souper-enumerative-synthesis-num-instructions=8 -souper-infer-inst -souper-synthesis-comps=mul,select,const,const,shl,lshr,ashr,and,or,xor,add,sub,slt,ult,sle,ule,eq,ne | |
-souper | souper-level-17 | -souper-enumerative-synthesis -souper-enumerative-synthesis-ignore-cost -souper-infer-iN -souper-enumerative-synthesis-num-instructions=15 -souper-infer-inst -souper-synthesis-comps=mul,select,const,const,shl,lshr,ashr,and,or,xor,add,sub,slt,ult,sle,ule,eq,ne | |
+| | passname | libsouperPass.so | |
+| | souper-debug-level | 2 | |
+| | souper-common | -solver-timeout=1800 | |
 
 ## Study of memory disclosure vulnerabilities
 
