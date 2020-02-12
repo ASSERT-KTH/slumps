@@ -68,7 +68,46 @@ If the LLVM build takes to long or fails due to memory lack in the image buildin
 
 Bothg images are avaiable in the docker [Hub](https://hub.docker.com/repository/docker/jacarte/slumps)
 
-The application can be ported to a docker container too. To execute SLUMPs, enter in the src file and build the docker image. Run the following command to start the application ```docker run -it -v $(pwd)/<logs>:/slumps/src/logs -v $(pwd)/<out folder>:/slumps/src/out -e TIMEOUT=3600 jacarte/slumps:app <url to download the program code> <program file name>```. Slumps will process the fetched code from the arguments, exporting the results to the out folder volumen. You can specify the timeout per program in seconds, set the environment variable ```TIMEOUT``` to do it.
+The application can be ported to a docker container too. To execute SLUMPs, enter in the src file and build the docker image. Run the following command to start the application ```docker run -it -v $(pwd)/<logs>:/slumps/src/logs -v $(pwd)/<out folder>:/slumps/src/out jacarte/slumps:app <config-options> <url to download the program code> ```. Slumps will process the fetched code from the arguments, exporting the results to the out folder volumen. You can specify the config parameters, specify the values of ```<config-options>``` as ```-<namespace>.key <value>```. For example, to change the timeout per program use ```<docker_run> -DEFAULT.timeout 3600 <program_url>```, this example changes the timeout to 3600 seconds. The other available options and possible values are listed below.
+
+
+|Namespace|Key|Default value|Comments|
+|--|--|--|--|
+DEFAULT | slumpspath | /slumps | |
+| | debugfile | /slumps/src/slumps.debug.txt | |
+| | outfolder | /slumps/src/out | |
+| | print-sha | True | |
+| | prune-equal | True | |
+| | exit-on-find | False | |
+| | generator-method | subset | ```all``` to superoptimize :) |
+| | candidates-threshold | 1 | |
+| | fail-silently | True | |
+| | timeout | 3600 | |
+clang | command | -S -O3 --target=wasm32-unknown-unknown -emit-llvm  | You can append extra includess |
+wasm-ld | command | --no-entry --export-all --allow-undefined -o %s | |
+wabt | path | /slumps/wabt/bin | |
+wabt | wasm2wat | /slumps/wabt/bin/wasm2wat | |
+souper | solver | -z3-path=/slumps/souper/third_party/z3/build/z3 | |
+souper | passname | libsouperPass.so | |
+souper | souper-debug-level | 2 | |
+souper | souper-common | -solver-timeout=1800 | |
+souper | souper-level-1 | -souper-infer-iN | |
+souper | souper-level-2 | -souper-infer-iN -souper-synthesis-const-with-cegis -souper-infer-inst -souper-synthesis-comps=mul,select,const,const,shl,lshr,ashr,and,or,xor,add,sub,slt,ult,sle,ule,eq,ne | |
+souper | souper-level-3 | -souper-infer-iN -souper-enumerative-synthesis-num-instructions=2 -souper-infer-inst -souper-synthesis-comps=mul,select,const,const,shl,lshr,ashr,and,or,xor,add,sub,slt,ult,sle,ule,eq,ne | |
+souper | souper-level-4 | -souper-infer-iN -souper-enumerative-synthesis-num-instructions=5 -souper-infer-inst -souper-synthesis-comps=mul,select,const,const,shl,lshr,ashr,and,or,xor,add,sub,slt,ult,sle,ule,eq,ne | |
+souper | souper-level-5 | -souper-enumerative-synthesis-ignore-cost -souper-infer-iN -souper-enumerative-synthesis-num-instructions=2 -souper-infer-inst -souper-synthesis-comps=mul,select,const,const,shl,lshr,ashr,and,or,xor,add,sub,slt,ult,sle,ule,eq,ne | |
+souper | souper-level-6 | -souper-enumerative-synthesis-ignore-cost -souper-infer-iN -souper-enumerative-synthesis-num-instructions=5 -souper-infer-inst -souper-synthesis-comps=mul,select,const,const,shl,lshr,ashr,and,or,xor,add,sub,slt,ult,sle,ule,eq,ne | |
+souper | souper-level-7 | -souper-enumerative-synthesis-ignore-cost -souper-infer-iN -souper-enumerative-synthesis-num-instructions=10 -souper-infer-inst -souper-synthesis-comps=mul,select,const,const,shl,lshr,ashr,and,or,xor,add,sub,slt,ult,sle,ule,eq,ne | |
+souper | souper-level-8 | -souper-enumerative-synthesis-ignore-cost -souper-infer-iN -souper-enumerative-synthesis-num-instructions=20 -souper-infer-inst -souper-synthesis-comps=mul,select,const,const,shl,lshr,ashr,and,or,xor,add,sub,slt,ult,sle,ule,eq,ne | |
+souper | souper-level-9 | -souper-enumerative-synthesis -souper-infer-iN  -souper-infer-inst -souper-synthesis-comps=mul,select,const,const,shl,lshr,ashr,and,or,xor,add,sub,slt,ult,sle,ule,eq,ne | |
+souper | souper-level-10 | -souper-enumerative-synthesis -souper-infer-iN -souper-enumerative-synthesis-num-instructions=2 -souper-infer-inst -souper-synthesis-comps=mul,select,const,const,shl,lshr,ashr,and,or,xor,add,sub,slt,ult,sle,ule,eq,ne | |
+souper | souper-level-11 | -souper-enumerative-synthesis -souper-infer-iN -souper-enumerative-synthesis-num-instructions=5 -souper-infer-inst -souper-synthesis-comps=mul,select,const,const,shl,lshr,ashr,and,or,xor,add,sub,slt,ult,sle,ule,eq,ne | |
+souper | souper-level-12 | -souper-enumerative-synthesis -souper-infer-iN -souper-enumerative-synthesis-num-instructions=10 -souper-infer-inst -souper-synthesis-comps=mul,select,const,const,shl,lshr,ashr,and,or,xor,add,sub,slt,ult,sle,ule,eq,ne | |
+souper | souper-level-13 | -souper-enumerative-synthesis -souper-infer-iN -souper-enumerative-synthesis-num-instructions=20 -souper-infer-inst -souper-synthesis-comps=mul,select,const,const,shl,lshr,ashr,and,or,xor,add,sub,slt,ult,sle,ule,eq,ne | |
+souper | souper-level-14 | -souper-enumerative-synthesis -souper-enumerative-synthesis-ignore-cost  -souper-infer-iN -souper-enumerative-synthesis-num-instructions=2 -souper-infer-inst -souper-synthesis-comps=mul,select,const,const,shl,lshr,ashr,and,or,xor,add,sub,slt,ult,sle,ule,eq,ne | |
+souper | souper-level-15 | -souper-enumerative-synthesis -souper-enumerative-synthesis-ignore-cost -souper-infer-iN -souper-enumerative-synthesis-num-instructions=5 -souper-infer-inst -souper-synthesis-comps=mul,select,const,const,shl,lshr,ashr,and,or,xor,add,sub,slt,ult,sle,ule,eq,ne | |
+souper | souper-level-16 | -souper-enumerative-synthesis -souper-enumerative-synthesis-ignore-cost -souper-infer-iN -souper-enumerative-synthesis-num-instructions=8 -souper-infer-inst -souper-synthesis-comps=mul,select,const,const,shl,lshr,ashr,and,or,xor,add,sub,slt,ult,sle,ule,eq,ne | |
+souper | souper-level-17 | -souper-enumerative-synthesis -souper-enumerative-synthesis-ignore-cost -souper-infer-iN -souper-enumerative-synthesis-num-instructions=15 -souper-infer-inst -souper-synthesis-comps=mul,select,const,const,shl,lshr,ashr,and,or,xor,add,sub,slt,ult,sle,ule,eq,ne | |
 
 ## Study of memory disclosure vulnerabilities
 
