@@ -1,0 +1,41 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Workflow
+metadata:
+  generateName: slumps-superoptimize-
+spec:
+  entrypoint: slumps-distributed
+  templates:
+  - name: slumps-distributed
+    steps:
+    - - name: slumpsfy
+        template: slumps-template
+        arguments:
+          parameters:
+          - name: program
+            value: "{{item}}"
+        withItems: 
+          #- "https://raw.githubusercontent.com/KTH/slumps/master/benchmark_programs/rossetta/valid/input_expected/Banker's_algorithm.c"
+         # - "https://raw.githubusercontent.com/KTH/slumps/master/benchmark_programs/rossetta/valid/no_input/Babbage_problem.c"
+          - "https://raw.githubusercontent.com/KTH/slumps/master/benchmark_programs/rossetta/valid/no_input/Zebra_puzzle.c"
+          - "https://raw.githubusercontent.com/KTH/slumps/master/benchmark_programs/rossetta/valid/no_input/Addition_chains.c"
+          #- "https://raw.githubusercontent.com/KTH/slumps/master/benchmark_programs/rossetta/valid/no_input/Run-length_encoding.c"
+        continueOn:
+          failed: true
+  - name: slumps-template
+    retryStrategy: {}
+    inputs:
+      parameters:
+      - name: program
+    outputs:
+      artifacts:
+      - name: slumps
+        path: /slumps/src/out
+      - name: logs
+        path: /slumps/src/logs
+    container:
+      image: "jacarte/slumps:app"
+      command: [/bin/bash]
+      args: [start_docker.sh, "{{inputs.parameters.program}}","-DEFAULT.timeout","36000", "-DEFAULT.prune-equal", "True", "-DEFAULT.generator-method","all"]
+    #    limits:
+    #      memory: 4G
+    #      cpu: 2
