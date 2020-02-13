@@ -1,6 +1,3 @@
-### Fail (15)
-
- ### Success (109)
 
 **Knuth_shuffle:** list index out of range
 
