@@ -8,7 +8,7 @@
       - **Programs with multiple variants**: 134 (     17.01%)
         - **Programs with multiple variants and at least one different to original**: 60 (      7.61%)
       - **Count for no optimization candidates**: 83 (     10.53%)
-      - **Timeout**: 384 (     38.71%)
+      - **Timeout**: 384 (     48.71%)
 
 | Program Name  | Variants | Different variants  | Description |      Code     | Log File
 | ------------- |:-------------------:| ------------------------------:|-------------|-----------|---------|
