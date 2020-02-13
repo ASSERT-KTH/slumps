@@ -47,11 +47,11 @@ spec:
       args: [start_docker.sh, "https://raw.githubusercontent.com/KTH/slumps/master/benchmark_programs/rossetta/bio/{{inputs.parameters.program}}", "{{inputs.parameters.program}}"]
       env:
       - name: TIMEOUT
-        value: 21699 # 3 hours per program
-    #  resources:
-    #    requests:
-    #      memory: 2.5G
-    #      cpu: 0.5
+        value: 21600 # 3 hours per program
+      resources:
+        requests:
+          memory: 4Gi
+          cpu: 1
     #    limits:
     #      memory: 4G
     #      cpu: 2

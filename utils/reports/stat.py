@@ -10,6 +10,29 @@ import hashlib
 import sys
 import webbrowser
 
+generated_template = """
+package swam
+package slumps
+package test
+
+import cats.effect.IO
+import swam.runtime.internals.interpreter.Frame
+
+class Program(val namespace: String, val baseline: String, val variants: Seq[String], val main: Option[String],
+              val setup: Option[Frame[IO] => Vector[Long]])
+
+trait Generated {
+
+}
+
+object Generated {
+  val t = Seq(
+    {{overall}}
+  )
+
+}
+"""
+
 markdown_template = """
 {{header}}
 - **Number of programs**: {{program_count}} 
@@ -27,12 +50,7 @@ markdown_template = """
 """
 
 scala_template_for_swam = """
-test("slumps/test/resources/slumps") { runAndTrace("{{namespace}}",
-      "{{baseline}}"
-      , Seq(
-          {% for program in variants %}"{{program}}",
-          {% endfor %}
-      ), {{main}}, {{test}}) }
+    new Program("{{namespace}}", "{{baseline}}", Seq({{variants}}) , {{main}}, {{test}})
 """
 
 personalized_tests = dict(
@@ -46,31 +64,28 @@ personalized_tests = dict(
 
         Vector(offset._1.toLong)
       })"""],
-      Fibonacci_sequence= ["""Option("fibb")""", """Option((m, f) => {
+      Fibonacci_sequence= ["""Option("fibb")""", """Option((f) => {
         Vector(1L, 1L, 30)
       })"""]
       
 )
 
-personalized_tests["Sorting_algorithms-Gnome_sort"] = ["""Option("gnome_sort")""", """Option((m, f) => {
-        val offset = m.malloc(10)
+personalized_tests["Sorting_algorithms-Gnome_sort"] = ["""Option("gnome_sort")""", """Option(( f) => {
 
         f.pushInt(offset._1)
         f.pushLong(10L)
         Vector(offset._1.toLong, 10.toLong)
       })"""]
 
-personalized_tests["Execute_HQ9+"] = [""" Option("runCode")""", """Option((m, f) => {
+personalized_tests["Execute_HQ9+"] = [""" Option("runCode")""", """Option((f) => {
         val init = "input sentence"
-        val offset = m.malloc(init.length)
-
-        m.buffer.put(init.getBytes(), offset._1, init.length)
         f.pushInt(offset._1)
         Vector(offset._1.toLong)
       })"""]
 
 if __name__ == "__main__":
     
+    personalized_tests = {}
     os.chdir(sys.argv[1])
 
     def sha256sum(filename):
@@ -101,9 +116,9 @@ if __name__ == "__main__":
 
     def stat_programs(header, swam_folder):
 
-        shutil.rmtree(swam_folder)
+        #shutil.rmtree(swam_folder)
 
-        os.mkdir(swam_folder)
+        #os.mkdir(swam_folder)
 
         total_dis = []
         diff_dis = []
@@ -116,6 +131,7 @@ if __name__ == "__main__":
         huge_candidates = 0
         candidates = 0
         timeout = 0
+        fail_to_job = 0
 
         summary_file = open("summary.md", 'w')
 
@@ -130,17 +146,31 @@ if __name__ == "__main__":
                 variants = []
                 overall = []
                 baseline = ""
+                # look for baseline
+                try:
+                    baseline = list(filter(lambda x: x.endswith(".wasm") and not x.startswith("["), os.listdir("out/%s"%l)))[0]
+                    sh = sha256sum("out/%s/%s"%(l, baseline))
+                    overall.append(sh)
+                    sha.add(sh)
+                    variants.append(baseline)
+                except Exception as e:
+                    fail_to_job += 1
+                    print(e, l)
+                    
+
                 for wa in os.listdir("out/%s"%l): # sanitizing
                         
                     if wa.endswith(".wasm"):
                         sh = sha256sum("out/%s/%s"%(l,wa))
                         if sh not in sha:
                             variants.append(wa)
-                        sha.add(sh)
                         overall.append(sh)
+                        sha.add(sh)
 
                         if not wa.startswith("["):
                             baseline = wa
+                print(sha)
+                print(variants)
                 total += 1
 
                 total_dis.append(len(overall))
@@ -183,7 +213,7 @@ if __name__ == "__main__":
                     content = swamTemplate.render(
                         namespace = l,
                         baseline = baseline,
-                        variants = filter(lambda x: x != baseline, variants),
+                        variants = ",".join(map(lambda x: '"%s"'%x, filter(lambda x: x != baseline, variants))),
                         main = personalized_tests.get(l, ["None", "None"])[0],
                         test = personalized_tests.get(l, ["None", "None"])[1]
                     )
@@ -193,13 +223,13 @@ if __name__ == "__main__":
                     if not os.path.exists("common"):
                         os.mkdir("common")
 
-                    shutil.copy("out/%s/%s"%(l, baseline), "%s/%s"%(swam_folder,baseline))
+                    #shutil.copy("out/%s/%s"%(l, baseline), "%s/%s"%(swam_folder,baseline))
 
-                    for p in variants:
-                        shutil.copy("out/%s/%s"%(l, p), "%s/%s"%(swam_folder, p))
+                    #for p in variants:
+                    #    shutil.copy("out/%s/%s"%(l, p), "%s/%s"%(swam_folder, p))
 
                     tests.append(content)
-
+#
 
                 if len(overall) > 1:
                     candidates += 1
@@ -227,12 +257,13 @@ if __name__ == "__main__":
         summary_file.write(content)
 
 
-        f = open("%s/tests.sc"%swam_folder, 'w')
-        f.write("".join(tests))
-        f.close()
+        #f = open("%s/../../souper/src/Generated.scala"%swam_folder, 'w')
+        #f.write(Template(generated_template).render(overall = ",".join(tests)))
+        #f.close()
 
         print("Program count: %s"%total)
         print("Valid: %s"%huge_candidates)
+        print("Failed job: %s"%fail_to_job)
 
         webbrowser.get("chrome").open("file://%s"%os.path.realpath("summary.md"), new = 2)
         #webbrowser.open()
@@ -244,6 +275,7 @@ if __name__ == "__main__":
         #plt.show()
     if not os.path.exists("out"):
         extractall()
-    stat_programs("## 1 hour per program timeout\n\n", "/Users/javierca/Documents/Develop/swam/slumps/test/resources/slumps")
+   # stat_programs("## 1 hour per program timeout\n\n", "/Users/javierca/Documents/Develop/swam/slumps/test/resources/slumps")
+    stat_programs("## 1 hour per program timeout\n\n", "/Users/javierca/Downloads/test")
 
 

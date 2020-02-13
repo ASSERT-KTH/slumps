@@ -42,12 +42,9 @@ spec:
       - name: logs
         path: /slumps/src/logs
     container:
-      image: "jacarte/slumps:kuber2"
+      image: "jacarte/slumps:app"
       command: [/bin/bash]
-      args: [start_docker.sh, "https://raw.githubusercontent.com/KTH/slumps/master/benchmark_programs/rossetta/valid/no_input/{{inputs.parameters.program}}", "{{inputs.parameters.program}}"]
-      env:
-      - name: TIMEOUT
-        value: 14400 # 3 hours per program
+      args: [start_docker.sh, "-DEFAULT.timeout", "14400", "https://raw.githubusercontent.com/KTH/slumps/master/benchmark_programs/rossetta/valid/no_input/{{inputs.parameters.program}}"]
     #  resources:
     #    requests:
     #      memory: 2.5G
