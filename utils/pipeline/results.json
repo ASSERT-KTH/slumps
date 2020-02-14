@@ -1,0 +1,190 @@
+{
+  "Banker's_algorithm": {
+    "Banker's_algorithm.bc": [
+      "\r\nEnter the number of resources: 4\r\n\r\nEnter the number of processes: 5\r\n\r\nEnter Claim Vector: 8 5 9 7\r\n\r\nEnter Allocated Resource Table: 2 0 1 1 0 1 2 1 4 0 0 3 0 2 1 0 1 0 3 0\r\n\r\nEnter Maximum Claim table: 3 2 1 4 0 2 5 2 5 1 0 5 1 5 3 0 3 0 3 3\r\n\r\nThe Claim Vector is: 8 5 9 7 \r\nThe Allocated Resource Table:\r\n\t2\t0\t1\t1\r\n\t0\t1\t2\t1\r\n\t4\t0\t0\t3\r\n\t0\t2\t1\t0\r\n\t1\t0\t3\t0\r\n\r\nThe Maximum Claim Table:\r\n\t3\t2\t1\t4\r\n\t0\t2\t5\t2\r\n\t5\t1\t0\t5\r\n\t1\t5\t3\t0\r\n\t3\t0\t3\t3\r\n\r\nAllocated resources: 7 3 7 5 \r\nAvailable resources: 1 2 2 2 \r\n\r\nProcess3 is executing.\r\n\r\nThe process is in safe state.\r\nAvailable vector: 5 2 2 5 \r\nProcess1 is executing.\r\n\r\nThe process is in safe state.\r\nAvailable vector: 7 2 3 6 \r\nProcess2 is executing.\r\n\r\nThe process is in safe state.\r\nAvailable vector: 7 3 5 7 \r\nProcess4 is executing.\r\n\r\nThe process is in safe state.\r\nAvailable vector: 7 5 6 7 \r\nProcess5 is executing.\r\n\r\nThe process is in safe state.\r\nAvailable vector: 8 5 9 7 ",
+      0
+    ],
+    "Banker's_algorithm.c": [
+      "\r\nEnter the number of resources: 4\r\n\r\nEnter the number of processes: 5\r\n\r\nEnter Claim Vector: 8 5 9 7\r\n\r\nEnter Allocated Resource Table: 2 0 1 1 0 1 2 1 4 0 0 3 0 2 1 0 1 0 3 0\r\n\r\nEnter Maximum Claim table: 3 2 1 4 0 2 5 2 5 1 0 5 1 5 3 0 3 0 3 3\r\n\r\nThe Claim Vector is: 8 5 9 7 \r\nThe Allocated Resource Table:\r\n\t2\t0\t1\t1\r\n\t0\t1\t2\t1\r\n\t4\t0\t0\t3\r\n\t0\t2\t1\t0\r\n\t1\t0\t3\t0\r\n\r\nThe Maximum Claim Table:\r\n\t3\t2\t1\t4\r\n\t0\t2\t5\t2\r\n\t5\t1\t0\t5\r\n\t1\t5\t3\t0\r\n\t3\t0\t3\t3\r\n\r\nAllocated resources: 7 3 7 5 \r\nAvailable resources: 1 2 2 2 \r\n\r\nProcess3 is executing.\r\n\r\nThe process is in safe state.\r\nAvailable vector: 5 2 2 5 \r\nProcess1 is executing.\r\n\r\nThe process is in safe state.\r\nAvailable vector: 7 2 3 6 \r\nProcess2 is executing.\r\n\r\nThe process is in safe state.\r\nAvailable vector: 7 3 5 7 \r\nProcess4 is executing.\r\n\r\nThe process is in safe state.\r\nAvailable vector: 7 5 6 7 \r\nProcess5 is executing.\r\n\r\nThe process is in safe state.\r\nAvailable vector: 8 5 9 7 ",
+      0
+    ],
+    "Banker's_algorithm.opt.bc": [
+      "\r\nEnter the number of resources: 4\r\n\r\nEnter the number of processes: 5\r\n\r\nEnter Claim Vector: 8 5 9 7\r\n\r\nEnter Allocated Resource Table: 2 0 1 1 0 1 2 1 4 0 0 3 0 2 1 0 1 0 3 0\r\n\r\nEnter Maximum Claim table: 3 2 1 4 0 2 5 2 5 1 0 5 1 5 3 0 3 0 3 3\r\n\r\nThe Claim Vector is: 8 5 9 7 \r\nThe Allocated Resource Table:\r\n\t2\t0\t1\t1\r\n\t0\t1\t2\t1\r\n\t4\t0\t0\t3\r\n\t0\t2\t1\t0\r\n\t1\t0\t3\t0\r\n\r\nThe Maximum Claim Table:\r\n\t3\t2\t1\t4\r\n\t0\t2\t5\t2\r\n\t5\t1\t0\t5\r\n\t1\t5\t3\t0\r\n\t3\t0\t3\t3\r\n\r\nAllocated resources: 7 3 7 5 \r\nAvailable resources: 1 2 2 2 \r\n\r\nProcess3 is executing.\r\n\r\nThe process is in safe state.\r\nAvailable vector: 5 2 2 5 \r\nProcess1 is executing.\r\n\r\nThe process is in safe state.\r\nAvailable vector: 7 2 3 6 \r\nProcess2 is executing.\r\n\r\nThe process is in safe state.\r\nAvailable vector: 7 3 5 7 \r\nProcess4 is executing.\r\n\r\nThe process is in safe state.\r\nAvailable vector: 7 5 6 7 \r\nProcess5 is executing.\r\n\r\nThe process is in safe state.\r\nAvailable vector: 8 5 9 7 ",
+      0
+    ]
+  },
+  "addition_chains": {
+    "addition_chains.bc": [
+      "Searching for Brauer chains up to a minimum length of 12:\r\n\r\nN = 7\r\nMinimum length of chains : L(7) = 4\r\nNumber of minimum length Brauer chains : 5\r\nBrauer example : [1 2 3 4 7 \b]\r\nNumber of minimum length non-Brauer chains : 0\r\n\r\nN = 14\r\nMinimum length of chains : L(14) = 5\r\nNumber of minimum length Brauer chains : 14\r\nBrauer example : [1 2 3 4 7 14 \b]\r\nNumber of minimum length non-Brauer chains : 0\r\n\r\nN = 21\r\nMinimum length of chains : L(21) = 6\r\nNumber of minimum length Brauer chains : 26\r\nBrauer example : [1 2 3 4 7 14 21 \b]\r\nNumber of minimum length non-Brauer chains : 3\r\nNon-Brauer example : [1 2 4 5 8 13 21 \b]\r\n\r\nN = 29\r\nMinimum length of chains : L(29) = 7\r\nNumber of minimum length Brauer chains : 114\r\nBrauer example : [1 2 3 4 7 11 18 29 \b]\r\nNumber of minimum length non-Brauer chains : 18\r\nNon-Brauer example : [1 2 3 6 9 11 18 29 \b]\r\n\r\nN = 32\r\nMinimum length of chains : L(32) = 5\r\nNumber of minimum length Brauer chains : 1\r\nBrauer example : [1 2 4 8 16 32 \b]\r\nNumber of minimum length non-Brauer chains : 0\r\n\r\nN = 42\r\nMinimum length of chains : L(42) = 7\r\nNumber of minimum length Brauer chains : 78\r\nBrauer example : [1 2 3 4 7 14 21 42 \b]\r\nNumber of minimum length non-Brauer chains : 6\r\nNon-Brauer example : [1 2 4 5 8 13 21 42 \b]\r\n\r\nN = 64\r\nMinimum length of chains : L(64) = 6\r\nNumber of minimum length Brauer chains : 1\r\nBrauer example : [1 2 4 8 16 32 64 \b]\r\nNumber of minimum length non-Brauer chains : 0\r\n\r\nN = 47\r\nMinimum length of chains : L(47) = 8\r\nNumber of minimum length Brauer chains : 183\r\nBrauer example : [1 2 3 4 7 10 20 27 47 \b]\r\nNumber of minimum length non-Brauer chains : 37\r\nNon-Brauer example : [1 2 3 5 7 14 19 28 47 \b]\r\n\r\nN = 79\r\nMinimum length of chains : L(79) = 9\r\nNumber of minimum length Brauer chains : 492\r\nBrauer example : [1 2 3 4 7 9 18 36 43 79 \b]\r\nNumber of minimum length non-Brauer chains : 129\r\nNon-Brauer example : [1 2 3 5 7 12 24 31 48 79 \b]\r\n\r\nN = 191\r\nMinimum length of chains : L(191) = 11\r\nNumber of minimum length Brauer chains : 7172\r\nBrauer example : [1 2 3 4 7 8 15 22 44 88 103 191 \b]\r\nNon-Brauer analysis suppressed\r\n\r\nN = 382\r\nMinimum length of chains : L(382) = 11\r\nNumber of minimum length Brauer chains : 4\r\nBrauer example : [1 2 4 5 9 14 23 46 92 184 198 382 \b]\r\nNon-Brauer analysis suppressed\r\n\r\nN = 379\r\nMinimum length of chains : L(379) = 12\r\nNumber of minimum length Brauer chains : 6583\r\nBrauer example : [1 2 3 4 7 10 17 27 44 88 176 203 379 \b]\r\nNon-Brauer analysis suppressed\r\n",
+      0
+    ],
+    "addition_chains.c": [
+      "Searching for Brauer chains up to a minimum length of 12:\r\n\r\nN = 7\r\nMinimum length of chains : L(7) = 4\r\nNumber of minimum length Brauer chains : 5\r\nBrauer example : [1 2 3 4 7 \b]\r\nNumber of minimum length non-Brauer chains : 0\r\n\r\nN = 14\r\nMinimum length of chains : L(14) = 5\r\nNumber of minimum length Brauer chains : 14\r\nBrauer example : [1 2 3 4 7 14 \b]\r\nNumber of minimum length non-Brauer chains : 0\r\n\r\nN = 21\r\nMinimum length of chains : L(21) = 6\r\nNumber of minimum length Brauer chains : 26\r\nBrauer example : [1 2 3 4 7 14 21 \b]\r\nNumber of minimum length non-Brauer chains : 3\r\nNon-Brauer example : [1 2 4 5 8 13 21 \b]\r\n\r\nN = 29\r\nMinimum length of chains : L(29) = 7\r\nNumber of minimum length Brauer chains : 114\r\nBrauer example : [1 2 3 4 7 11 18 29 \b]\r\nNumber of minimum length non-Brauer chains : 18\r\nNon-Brauer example : [1 2 3 6 9 11 18 29 \b]\r\n\r\nN = 32\r\nMinimum length of chains : L(32) = 5\r\nNumber of minimum length Brauer chains : 1\r\nBrauer example : [1 2 4 8 16 32 \b]\r\nNumber of minimum length non-Brauer chains : 0\r\n\r\nN = 42\r\nMinimum length of chains : L(42) = 7\r\nNumber of minimum length Brauer chains : 78\r\nBrauer example : [1 2 3 4 7 14 21 42 \b]\r\nNumber of minimum length non-Brauer chains : 6\r\nNon-Brauer example : [1 2 4 5 8 13 21 42 \b]\r\n\r\nN = 64\r\nMinimum length of chains : L(64) = 6\r\nNumber of minimum length Brauer chains : 1\r\nBrauer example : [1 2 4 8 16 32 64 \b]\r\nNumber of minimum length non-Brauer chains : 0\r\n\r\nN = 47\r\nMinimum length of chains : L(47) = 8\r\nNumber of minimum length Brauer chains : 183\r\nBrauer example : [1 2 3 4 7 10 20 27 47 \b]\r\nNumber of minimum length non-Brauer chains : 37\r\nNon-Brauer example : [1 2 3 5 7 14 19 28 47 \b]\r\n\r\nN = 79\r\nMinimum length of chains : L(79) = 9\r\nNumber of minimum length Brauer chains : 492\r\nBrauer example : [1 2 3 4 7 9 18 36 43 79 \b]\r\nNumber of minimum length non-Brauer chains : 129\r\nNon-Brauer example : [1 2 3 5 7 12 24 31 48 79 \b]\r\n\r\nN = 191\r\nMinimum length of chains : L(191) = 11\r\nNumber of minimum length Brauer chains : 7172\r\nBrauer example : [1 2 3 4 7 8 15 22 44 88 103 191 \b]\r\nNon-Brauer analysis suppressed\r\n\r\nN = 382\r\nMinimum length of chains : L(382) = 11\r\nNumber of minimum length Brauer chains : 4\r\nBrauer example : [1 2 4 5 9 14 23 46 92 184 198 382 \b]\r\nNon-Brauer analysis suppressed\r\n\r\nN = 379\r\nMinimum length of chains : L(379) = 12\r\nNumber of minimum length Brauer chains : 6583\r\nBrauer example : [1 2 3 4 7 10 17 27 44 88 176 203 379 \b]\r\nNon-Brauer analysis suppressed\r\n",
+      0
+    ],
+    "addition_chains.opt.bc": [
+      "Searching for Brauer chains up to a minimum length of 12:\r\n\r\nN = 7\r\nMinimum length of chains : L(7) = 4\r\nNumber of minimum length Brauer chains : 5\r\nBrauer example : [1 2 3 4 7 \b]\r\nNumber of minimum length non-Brauer chains : 0\r\n\r\nN = 14\r\nMinimum length of chains : L(14) = 5\r\nNumber of minimum length Brauer chains : 14\r\nBrauer example : [1 2 3 4 7 14 \b]\r\nNumber of minimum length non-Brauer chains : 0\r\n\r\nN = 21\r\nMinimum length of chains : L(21) = 6\r\nNumber of minimum length Brauer chains : 26\r\nBrauer example : [1 2 3 4 7 14 21 \b]\r\nNumber of minimum length non-Brauer chains : 3\r\nNon-Brauer example : [1 2 4 5 8 13 21 \b]\r\n\r\nN = 29\r\nMinimum length of chains : L(29) = 7\r\nNumber of minimum length Brauer chains : 114\r\nBrauer example : [1 2 3 4 7 11 18 29 \b]\r\nNumber of minimum length non-Brauer chains : 18\r\nNon-Brauer example : [1 2 3 6 9 11 18 29 \b]\r\n\r\nN = 32\r\nMinimum length of chains : L(32) = 5\r\nNumber of minimum length Brauer chains : 1\r\nBrauer example : [1 2 4 8 16 32 \b]\r\nNumber of minimum length non-Brauer chains : 0\r\n\r\nN = 42\r\nMinimum length of chains : L(42) = 7\r\nNumber of minimum length Brauer chains : 78\r\nBrauer example : [1 2 3 4 7 14 21 42 \b]\r\nNumber of minimum length non-Brauer chains : 6\r\nNon-Brauer example : [1 2 4 5 8 13 21 42 \b]\r\n\r\nN = 64\r\nMinimum length of chains : L(64) = 6\r\nNumber of minimum length Brauer chains : 1\r\nBrauer example : [1 2 4 8 16 32 64 \b]\r\nNumber of minimum length non-Brauer chains : 0\r\n\r\nN = 47\r\nMinimum length of chains : L(47) = 8\r\nNumber of minimum length Brauer chains : 183\r\nBrauer example : [1 2 3 4 7 10 20 27 47 \b]\r\nNumber of minimum length non-Brauer chains : 37\r\nNon-Brauer example : [1 2 3 5 7 14 19 28 47 \b]\r\n\r\nN = 79\r\nMinimum length of chains : L(79) = 9\r\nNumber of minimum length Brauer chains : 492\r\nBrauer example : [1 2 3 4 7 9 18 36 43 79 \b]\r\nNumber of minimum length non-Brauer chains : 129\r\nNon-Brauer example : [1 2 3 5 7 12 24 31 48 79 \b]\r\n\r\nN = 191\r\nMinimum length of chains : L(191) = 11\r\nNumber of minimum length Brauer chains : 7172\r\nBrauer example : [1 2 3 4 7 8 15 22 44 88 103 191 \b]\r\nNon-Brauer analysis suppressed\r\n\r\nN = 382\r\nMinimum length of chains : L(382) = 11\r\nNumber of minimum length Brauer chains : 4\r\nBrauer example : [1 2 4 5 9 14 23 46 92 184 198 382 \b]\r\nNon-Brauer analysis suppressed\r\n\r\nN = 379\r\nMinimum length of chains : L(379) = 12\r\nNumber of minimum length Brauer chains : 6583\r\nBrauer example : [1 2 3 4 7 10 17 27 44 88 176 203 379 \b]\r\nNon-Brauer analysis suppressed\r\n",
+      0
+    ]
+  },
+  "aliquot_sequence_classifications_1": {
+    "aliquot_sequence_classifications_1.bc": [
+      "\r\nInteger : 10, Type : Terminating, Series : 10, 3, 1, 0",
+      0
+    ],
+    "aliquot_sequence_classifications_1.c": [
+      "\r\nInteger : 10, Type : Terminating, Series : 10, 3, 1, 0",
+      0
+    ],
+    "aliquot_sequence_classifications_1.opt.bc": [
+      "\r\nInteger : 10, Type : Terminating, Series : 10, 3, 1, 0",
+      0
+    ]
+  },
+  "babbage_problem": {
+    "babbage_problem.bc": [
+      "The smallest number whose square ends in 269696 is 25264\r\n",
+      0
+    ],
+    "babbage_problem.c": [
+      "The smallest number whose square ends in 269696 is 25264\r\n",
+      0
+    ],
+    "babbage_problem.opt.bc": [
+      "The smallest number whose square ends in 269696 is 25264\r\n",
+      0
+    ],
+    "babbage_problem.opt1.bc": [
+      "The smallest number whose square ends in 269696 is 25264\r\n",
+      0
+    ],
+    "babbage_problem.opt4.bc": [
+      "The smallest number whose square ends in 269696 is 25264\r\n",
+      0
+    ]
+  },
+  "bitwise_IO": {
+    "bitwise_IO.bc": [
+      "",
+      null
+    ],
+    "bitwise_IO.c": [
+      "abcdefghij\r\n",
+      0
+    ],
+    "bitwise_IO.opt2.bc": [
+      "",
+      null
+    ]
+  },
+  "eban_numbers": {
+    "eban_numbers.bc": [
+      "eban numbers up to and including 1000:\r\n2 4 6 30 32 34 36 40 42 44 46 50 52 54 56 60 62 64 66 \r\ncount = 19\r\n\r\neban numbers between 1000 and 4000 (inclusive:)2000 2002 2004 2006 2030 2032 2034 2036 2040 2042 2044 2046 2050 2052 2054 2056 2060 2062 2064 2066 4000 \r\ncount = 21\r\n\r\neban numbers up to and including 10000:\r\ncount = 79\r\n\r\neban numbers up to and including 100000:\r\ncount = 399\r\n\r\neban numbers up to and including 1000000:\r\ncount = 399\r\n\r\neban numbers up to and including 10000000:\r\ncount = 1599\r\n\r\neban numbers up to and including 100000000:\r\ncount = 7999\r\n\r\neban numbers up to and including 1000000000:\r\ncount = 7999\r\n\r\n",
+      0
+    ],
+    "eban_numbers.c": [
+      "eban numbers up to and including 1000:\r\n2 4 6 30 32 34 36 40 42 44 46 50 52 54 56 60 62 64 66 \r\ncount = 19\r\n\r\neban numbers between 1000 and 4000 (inclusive:)2000 2002 2004 2006 2030 2032 2034 2036 2040 2042 2044 2046 2050 2052 2054 2056 2060 2062 2064 2066 4000 \r\ncount = 21\r\n\r\neban numbers up to and including 10000:\r\ncount = 79\r\n\r\neban numbers up to and including 100000:\r\ncount = 399\r\n\r\neban numbers up to and including 1000000:\r\ncount = 399\r\n\r\neban numbers up to and including 10000000:\r\ncount = 1599\r\n\r\neban numbers up to and including 100000000:\r\ncount = 7999\r\n\r\neban numbers up to and including 1000000000:\r\ncount = 7999\r\n\r\n",
+      0
+    ],
+    "eban_numbers.opt.bc": [
+      "eban numbers up to and including 1000:\r\n2 4 6 30 32 34 36 40 42 44 46 50 52 54 56 60 62 64 66 \r\ncount = 19\r\n\r\neban numbers between 1000 and 4000 (inclusive:)2000 2002 2004 2006 2030 2032 2034 2036 2040 2042 2044 2046 2050 2052 2054 2056 2060 2062 2064 2066 4000 \r\ncount = 21\r\n\r\neban numbers up to and including 10000:\r\ncount = 79\r\n\r\neban numbers up to and including 100000:\r\ncount = 399\r\n\r\neban numbers up to and including 1000000:\r\ncount = 399\r\n\r\neban numbers up to and including 10000000:\r\ncount = 1599\r\n\r\neban numbers up to and including 100000000:\r\ncount = 7999\r\n\r\neban numbers up to and including 1000000000:\r\ncount = 7999\r\n\r\n",
+      0
+    ]
+  },
+  "flipping_bits_game": {
+    "flipping_bits_game.bc": [
+      "r2\r\nc2\r\n",
+      null
+    ],
+    "flipping_bits_game.c": [
+      "Target: \r\n  0 1 2\r\n0 1 0 1\r\n1 1 1 1\r\n2 0 0 1\r\n\r\nBoard: \r\n  0 1 2\r\n0 1 0 0\r\n1 1 1 0\r\n2 1 1 1\r\n\r\nWhat to flip: r2\r\nMoves Taken: 1\r\nTarget: \r\n  0 1 2\r\n0 1 0 1\r\n1 1 1 1\r\n2 0 0 1\r\n\r\nBoard: \r\n  0 1 2\r\n0 1 0 0\r\n1 1 1 0\r\n2 0 0 0\r\n\r\nWhat to flip: c2\r\nMoves Taken: 2\r\nYou win!\r\n",
+      2304
+    ],
+    "flipping_bits_game.opt.bc": [
+      "r2\r\nc2\r\n",
+      null
+    ],
+    "flipping_bits_game.opt1.bc": [
+      "r2\r\nc2\r\n",
+      null
+    ]
+  },
+  "paraffins": {
+    "paraffins.bc": [
+      "1: 1\r\n2: 1\r\n3: 1\r\n4: 2\r\n5: 3\r\n6: 5\r\n7: 9\r\n8: 18\r\n9: 35\r\n10: 75\r\n11: 159\r\n12: 355\r\n13: 802\r\n14: 1858\r\n15: 4347\r\n16: 10359\r\n17: 24894\r\n18: 60523\r\n19: 148284\r\n20: 366319\r\n21: 910726\r\n22: 2278658\r\n23: 5731580\r\n24: 14490245\r\n25: 36797588\r\n26: 93839412\r\n27: 240215803\r\n28: 617105614\r\n29: 1590507121\r\n30: 4111846763\r\n31: 10660307791\r\n32: 27711253769\r\n",
+      0
+    ],
+    "paraffins.c": [
+      "1: 1\r\n2: 1\r\n3: 1\r\n4: 2\r\n5: 3\r\n6: 5\r\n7: 9\r\n8: 18\r\n9: 35\r\n10: 75\r\n11: 159\r\n12: 355\r\n13: 802\r\n14: 1858\r\n15: 4347\r\n16: 10359\r\n17: 24894\r\n18: 60523\r\n19: 148284\r\n20: 366319\r\n21: 910726\r\n22: 2278658\r\n23: 5731580\r\n24: 14490245\r\n25: 36797588\r\n26: 93839412\r\n27: 240215803\r\n28: 617105614\r\n29: 1590507121\r\n30: 4111846763\r\n31: 10660307791\r\n32: 27711253769\r\n",
+      0
+    ],
+    "paraffins.opt.bc": [
+      "1: 1\r\n2: 1\r\n3: 1\r\n4: 2\r\n5: 3\r\n6: 5\r\n7: 9\r\n8: 18\r\n9: 35\r\n10: 75\r\n11: 159\r\n12: 355\r\n13: 802\r\n14: 1858\r\n15: 4347\r\n16: 10359\r\n17: 24894\r\n18: 60523\r\n19: 148284\r\n20: 366319\r\n21: 910726\r\n22: 2278658\r\n23: 5731580\r\n24: 14490245\r\n25: 36797588\r\n26: 93839412\r\n27: 240215803\r\n28: 617105614\r\n29: 1590507121\r\n30: 4111846763\r\n31: 10660307791\r\n32: 27711253769\r\n",
+      0
+    ],
+    "paraffins.opt1.bc": [
+      "1: 1\r\n2: 1\r\n3: 1\r\n4: 2\r\n5: 3\r\n6: 5\r\n7: 9\r\n8: 18\r\n9: 35\r\n10: 75\r\n11: 159\r\n12: 355\r\n13: 802\r\n14: 1858\r\n15: 4347\r\n16: 10359\r\n17: 24894\r\n18: 60523\r\n19: 148284\r\n20: 366319\r\n21: 910726\r\n22: 2278658\r\n23: 5731580\r\n24: 14490245\r\n25: 36797588\r\n26: 93839412\r\n27: 240215803\r\n28: 617105614\r\n29: 1590507121\r\n30: 4111846763\r\n31: 10660307791\r\n32: 27711253769\r\n",
+      0
+    ]
+  },
+  "pascal_matrix_generation": {
+    "pascal_matrix_generation.bc": [
+      "=== Pascal upper matrix ===\r\n",
+      null
+    ],
+    "pascal_matrix_generation.c": [
+      "=== Pascal upper matrix ===\r\n   1    1    1    1    1\r\n   0    1    2    3    4\r\n   0    0    1    3    6\r\n   0    0    0    1    4\r\n   0    0    0    0    1\r\n=== Pascal lower matrix ===\r\n   1    0    0    0    0\r\n   1    1    0    0    0\r\n   1    2    1    0    0\r\n   1    3    3    1    0\r\n   1    4    6    4    1\r\n=== Pascal symmetric matrix ===\r\n   1    1    1    1    1\r\n   1    2    3    4    5\r\n   1    3    6   10   15\r\n   1    4   10   20   35\r\n   1    5   15   35   70\r\n",
+      0
+    ],
+    "pascal_matrix_generation.opt.bc": [
+      "=== Pascal upper matrix ===\r\n",
+      null
+    ]
+  },
+  "resistor_mesh": {
+    "resistor_mesh.bc": [
+      "",
+      null
+    ],
+    "resistor_mesh.c": [
+      "R = 1.60899\r\n",
+      0
+    ],
+    "resistor_mesh.opt.bc": [
+      "",
+      null
+    ]
+  },
+  "run-length_encoding": {
+    "run-length_encoding.bc": [
+      "",
+      null
+    ],
+    "run-length_encoding.c": [
+      "WWWWWWWWWWWWBWWWWWWWWWWWWBBBWWWWWWWWWWWWWWWWWWWWWWWWBWWWWWWWWWWWWWW",
+      0
+    ],
+    "run-length_encoding.opt.bc": [
+      "",
+      null
+    ]
+  },
+  "zebra_puzzle": {
+    "zebra_puzzle.bc": [
+      "House     Color     Man       Drink     Animal    Smoke     \r\n0         Yellow    Norwegian Water     Cats      Dunhill   \r\n1         Blue      Dane      Tea       Horse     Blend     \r\n2         Red       English   Milk      Birds     PallMall  \r\n3         Green     German    Coffee    Zebra     Prince    \r\n4         White     Swede     Beer      Dog       BlueMaster\r\n",
+      0
+    ],
+    "zebra_puzzle.c": [
+      "House     Color     Man       Drink     Animal    Smoke     \r\n0         Yellow    Norwegian Water     Cats      Dunhill   \r\n1         Blue      Dane      Tea       Horse     Blend     \r\n2         Red       English   Milk      Birds     PallMall  \r\n3         Green     German    Coffee    Zebra     Prince    \r\n4         White     Swede     Beer      Dog       BlueMaster\r\n",
+      0
+    ],
+    "zebra_puzzle.opt.bc": [
+      "House     Color     Man       Drink     Animal    Smoke     \r\n0         Yellow    Norwegian Water     Cats      Dunhill   \r\n1         Blue      Dane      Tea       Horse     Blend     \r\n2         Red       English   Milk      Birds     PallMall  \r\n3         Green     German    Coffee    Zebra     Prince    \r\n4         White     Swede     Beer      Dog       BlueMaster\r\n",
+      0
+    ],
+    "zebra_puzzle.opt1.bc": [
+      "House     Color     Man       Drink     Animal    Smoke     \r\n0         Yellow    Norwegian Water     Cats      Dunhill   \r\n1         Blue      Dane      Tea       Horse     Blend     \r\n2         Red       English   Milk      Birds     PallMall  \r\n3         Green     German    Coffee    Zebra     Prince    \r\n4         White     Swede     Beer      Dog       BlueMaster\r\n",
+      0
+    ]
+  }
+}
