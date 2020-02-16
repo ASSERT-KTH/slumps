@@ -39,7 +39,7 @@ spec:
       image: madshansen/docker-git-ftp
       command: [bash]
       source: |
-         apt-get update && apt-get install -y python && git clone https://github.com/KTH/slumps.git && ls -l /slumps/benchmark_programs/variants && cp -r /slumps/benchmark_programs/variants /programs && python -c "import json,os;  print(json.dumps(os.listdir('/programs/variants')[1:2]))" > /out.txt && cat /out.txt
+         apt-get update && apt-get install -y python && git clone https://github.com/KTH/slumps.git && ls -l /slumps/benchmark_programs/variants && cp -r /slumps/benchmark_programs/variants /programs && python -c "import json,os;  print(json.dumps(os.listdir('/programs/variants')[2:4]))" > /out.txt && cat /out.txt
     
       volumeMounts:
       - name: result-directory
@@ -71,6 +71,8 @@ spec:
           parameters:
             - name: namespace
               value: "{{inputs.parameters.namespace}}"
+        continueOn:
+          failed: true
     - - name: run-STRAC-mem
         template: run-STRAC
         arguments:
@@ -79,6 +81,8 @@ spec:
               value: "/programs/traces/{{inputs.parameters.namespace}}/memSTRAC.json"
             - name: namespace
               value: "{{inputs.parameters.namespace}}"
+        continueOn:
+          failed: true
     - - name: run-STRAC-stack
         template: run-STRAC
         arguments:
@@ -87,6 +91,8 @@ spec:
               value: "/programs/traces/{{inputs.parameters.namespace}}/stackSTRAC.json"
             - name: namespace
               value: "{{inputs.parameters.namespace}}"
+        continueOn:
+          failed: true
     - - name: run-STRAC-opcode
         template: run-STRAC
         arguments:
@@ -95,6 +101,8 @@ spec:
               value: "/programs/traces/{{inputs.parameters.namespace}}/opcodeSTRAC.json"
             - name: namespace
               value: "{{inputs.parameters.namespace}}"
+        continueOn:
+          failed: true
     - - name: run-STRAC-static
         template: run-STRAC
         arguments:
@@ -103,12 +111,16 @@ spec:
               value: "/programs/traces/{{inputs.parameters.namespace}}/staticSTRAC.json"
             - name: namespace
               value: "{{inputs.parameters.namespace}}"
+        continueOn:
+          failed: true
     - - name: analyze-data
         template: plot
         arguments:
           parameters:
             - name: namespace
               value: "{{inputs.parameters.namespace}}"
+        continueOn:
+          failed: true
     # - - call STRAC 4 times (mem, stack, static and opcodes) with the specific json
     # - - collect the json in artifacts with merge
     # - - plot the heat maps
@@ -244,6 +256,7 @@ spec:
       source: |
         import matplotlib.pyplot as plt
         import json
+        import numpy as np
 
         def processSTRACResult(F, name):
             meta = json.loads(open(F, 'r').read())
@@ -284,19 +297,20 @@ spec:
 
         try:
             processSTRACResult("/programs/traces/{{inputs.parameters.namespace}}/{{inputs.parameters.namespace}}.mem.json", "memory_DTW.png")
-        except:
-            pass
+        except Exception as e:
+            print(e)
         try:
             processSTRACResult("/programs/traces/{{inputs.parameters.namespace}}/{{inputs.parameters.namespace}}.static.json", "static_DTW.png")
-        except:
-            pass
+        except Exception as e:
+            print(e)
         try:
             processSTRACResult("/programs/traces/{{inputs.parameters.namespace}}/{{inputs.parameters.namespace}}.stack.json", "stack_DTW.png")
-        except:
-            pass
+        except Exception as e:
+            print(e)
         try:
             processSTRACResult("/programs/traces/{{inputs.parameters.namespace}}/{{inputs.parameters.namespace}}.opcode.json", "opcode_DTW.png")
-            pass
+        except Exception as e:
+            print(e)
 
       volumeMounts:
         - name: result-directory
