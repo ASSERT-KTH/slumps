@@ -1,0 +1,262 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Workflow
+metadata:
+  generateName: swam-strac-
+spec:
+  entrypoint: multiple-runs
+  volumeClaimTemplates:
+  - metadata:
+      name: result-directory
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      resources:
+        requests:
+          storage: 6Gi
+  templates:
+  - name: multiple-runs
+    parallelism: 1
+    steps:
+    - - name: download
+        template: donwload-all
+    - - name: evaluate
+        template: evaluate
+        arguments:
+          parameters:
+            - name: namespace
+              value: "{{item}}"
+        withParam: "{{steps.download.outputs.parameters.namespaces}}"
+    - - name: merge
+        template: merge
+  - name: donwload-all
+    outputs:
+      parameters:
+        - name: namespaces
+          valueFrom: 
+            path: "/out.txt"
+    script:
+      image: madshansen/docker-git-ftp
+      command: [bash]
+      source: |
+         apt-get update && apt-get install -y python && git clone https://github.com/KTH/slumps.git && ls -l /slumps/benchmark_programs/variants && cp -r /slumps/benchmark_programs/variants /programs && python -c "import json,os;  print(json.dumps(os.listdir('/programs/variants')[:1]))" > /out.txt && cat /out.txt
+    
+      volumeMounts:
+      - name: result-directory
+        mountPath: /programs
+  - name: evaluate
+    inputs:
+      parameters:
+        - name: namespace
+    parallelism: 4
+    steps: 
+    - - name: organize
+        template: organize
+        arguments:
+          parameters:
+            - name: namespace
+              value: "{{inputs.parameters.namespace}}"
+    - - name: eval
+        template: execute-swam
+        arguments:
+          parameters:
+            - name: program 
+              value: "{{item}}"
+            - name: namespace 
+              value: "{{inputs.parameters.namespace}}"
+        withParam: "{{steps.organize.outputs.parameters.variants}}"
+    - - name: collect-traces # - - collect the traces and stdout, then build the STRAC json 
+        template: collect-traces
+        arguments:
+          parameters:
+            - name: namespace
+              value: "{{inputs.parameters.namespace}}"
+    - - name: run-STRAC-mem
+        template: run-STRAC
+        arguments:
+          parameters:
+            - name: payload
+              value: "/programs/traces/{{inputs.parameters.namespace}}/memSTRAC.json"
+            - name: namespace
+              value: "{{inputs.parameters.namespace}}"
+    - - name: run-STRAC-stack
+        template: run-STRAC
+        arguments:
+          parameters:
+            - name: payload
+              value: "/programs/traces/{{inputs.parameters.namespace}}/stackSTRAC.json"
+            - name: namespace
+              value: "{{inputs.parameters.namespace}}"
+    - - name: run-STRAC-opcode
+        template: run-STRAC
+        arguments:
+          parameters:
+            - name: payload
+              value: "/programs/traces/{{inputs.parameters.namespace}}/opcodeSTRAC.json"
+            - name: namespace
+              value: "{{inputs.parameters.namespace}}"
+    - - name: run-STRAC-static
+        template: run-STRAC
+        arguments:
+          parameters:
+            - name: payload
+              value: "/programs/traces/{{inputs.parameters.namespace}}/staticSTRAC.json"
+            - name: namespace
+              value: "{{inputs.parameters.namespace}}"
+    - - name: analyze-data
+        template: plot
+        arguments:
+          parameters:
+            - name: namespace
+              value: "{{inputs.parameters.namespace}}"
+    # - - call STRAC 4 times (mem, stack, static and opcodes) with the specific json
+    # - - collect the json in artifacts with merge
+    # - - plot the heat maps
+  - name: organize 
+    inputs:
+      parameters:
+        - name: namespace
+    script:
+      image: python:alpine3.6
+      command: [python]
+      source: |
+        
+        import os
+        import json
+
+
+        def main(folder):
+            names = []
+            for f in os.listdir(folder):
+
+                names.append(f)
+              
+            open("/names.json", 'w').write(json.dumps(names))
+
+            print(names, len(json.dumps(names)))
+        main("/programs/variants/{{inputs.parameters.namespace}}")
+      volumeMounts:
+      - name: result-directory
+        mountPath: /programs
+    outputs:
+      parameters:
+        - name: variants
+          valueFrom: 
+            path: "/names.json"
+
+  - name: execute-swam
+    inputs:
+      parameters:
+        - name: program
+        - name: namespace
+    script:
+      image: adoptopenjdk/openjdk12
+      command: ["bash"]
+      source: |
+        mkdir -p /programs/traces/{{inputs.parameters.namespace}} && apt-get update && apt-get install -y wget && wget https://github.com/KTH/slumps/raw/master/kubernetes/binaries/swam.jar && java -jar swam.jar /programs/variants/{{inputs.parameters.namespace}}/{{inputs.parameters.program}} /programs/traces/{{inputs.parameters.namespace}} && ls /programs/traces/{{inputs.parameters.namespace}}
+      volumeMounts:
+        - name: result-directory
+          mountPath: /programs
+
+
+  - name: collect-traces
+    inputs:
+      parameters:
+        - name: namespace
+    script:
+      image: python:alpine3.6
+      command: ["python"] 
+      source: |
+        import os
+        import json
+
+        stracMem = dict(
+          pairs=[],
+          method=dict(
+            name="FastDTW",
+            params=[3000]
+          ),
+          outputAlignment=True,
+          outputDir="/programs/traces/{{inputs.parameters.namespace}}",
+          outputAlignmentMap="{{inputs.parameters.namespace}}",
+          exportImage=True,
+          separator="[\r\n]",
+          clean=[],
+          include=None,
+          comparison=dict(
+            eq=0,
+            diff=5,
+            gap=1
+          )
+        )
+
+        files = os.listdir("/programs/traces/{{inputs.parameters.namespace}}")
+        print(files)
+        
+        memFiles = list(filter(lambda x: x.endswith("mem.strac.log"), files))
+        stackFiles = list(filter(lambda x: x.endswith("stack.strac.log"), files))
+        staticFiles = list(filter(lambda x: x.endswith("instructions.strac.log"), files))
+        opcodeFiles = list(filter(lambda x: x.endswith("strace.strac.log"), files))
+
+        stracMem["files"] = memFiles
+        stracMem["outputAlignmentMap"]="{{inputs.parameters.namespace}}.mem.json"
+        open("/programs/traces/{{inputs.parameters.namespace}}/memSTRAC.json", 'w').write(json.dumps(stracMem))
+
+
+        stracMem["files"] = stackFiles
+        stracMem["outputAlignmentMap"]="{{inputs.parameters.namespace}}.stack.json"
+        open("/programs/traces/{{inputs.parameters.namespace}}/stackSTRAC.json", 'w').write(json.dumps(stracMem))
+
+
+        stracMem["files"] = staticFiles
+        stracMem["outputAlignmentMap"]="{{inputs.parameters.namespace}}.static.json"
+        open("/programs/traces/{{inputs.parameters.namespace}}/staticSTRAC.json", 'w').write(json.dumps(stracMem))
+        print(stracMem)
+
+
+        stracMem["files"] = opcodeFiles
+        stracMem["outputAlignmentMap"]="{{inputs.parameters.namespace}}.opcode.json"
+        open("/programs/traces/{{inputs.parameters.namespace}}/opcodeSTRAC.json", 'w').write(json.dumps(stracMem))
+
+      volumeMounts:
+        - name: result-directory
+          mountPath: /programs
+        
+  - name: run-STRAC
+    inputs:
+      parameters:
+        - name: payload
+        - name: namespace
+    script:
+      image: adoptopenjdk/openjdk12
+      command: ["bash"] 
+      source: |
+        apt-get update && apt-get install -y wget unzip && cd /programs/traces/{{inputs.parameters.namespace}} && wget https://github.com/KTH/slumps/raw/master/kubernetes/binaries/STRAC.zip && unzip STRAC.zip -d STRAC &&  cp STRAC/log4j.properties log4j.properties && java -jar STRAC/STRAC-align-0.1.jar {{inputs.parameters.payload}} && rm -rf STRAC && rm STRAC.zip
+      volumeMounts:
+        - name: result-directory
+          mountPath: /programs
+  - name: plot
+    inputs:
+      parameters:
+        - name: namespace
+    script:
+      image: python:alpine3.6
+      command: ["python"] 
+      source: |
+        print('Plotting')
+      volumeMounts:
+        - name: result-directory
+          mountPath: /programs
+  - name: merge
+    script:
+      image: python:alpine3.6
+      command: ["python"] 
+      source: |
+        print('Merging')
+      volumeMounts:
+        - name: result-directory
+          mountPath: /programs
+    outputs:
+      artifacts:
+        - name: traces
+          path: "/programs/traces"
+    
+
