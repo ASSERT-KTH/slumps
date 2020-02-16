@@ -25,6 +25,8 @@ spec:
             - name: namespace
               value: "{{item}}"
         withParam: "{{steps.download.outputs.parameters.namespaces}}"
+        continueOn:
+          failed: true
     - - name: merge
         template: merge
   - name: donwload-all
@@ -37,7 +39,7 @@ spec:
       image: madshansen/docker-git-ftp
       command: [bash]
       source: |
-         apt-get update && apt-get install -y python && git clone https://github.com/KTH/slumps.git && ls -l /slumps/benchmark_programs/variants && cp -r /slumps/benchmark_programs/variants /programs && python -c "import json,os;  print(json.dumps(os.listdir('/programs/variants')[:1]))" > /out.txt && cat /out.txt
+         apt-get update && apt-get install -y python && git clone https://github.com/KTH/slumps.git && ls -l /slumps/benchmark_programs/variants && cp -r /slumps/benchmark_programs/variants /programs && python -c "import json,os;  print(json.dumps(os.listdir('/programs/variants')[1:2]))" > /out.txt && cat /out.txt
     
       volumeMounts:
       - name: result-directory
@@ -46,7 +48,7 @@ spec:
     inputs:
       parameters:
         - name: namespace
-    parallelism: 4
+    parallelism: 3
     steps: 
     - - name: organize
         template: organize
@@ -155,8 +157,7 @@ spec:
       volumeMounts:
         - name: result-directory
           mountPath: /programs
-
-
+    activeDeadlineSeconds: 600 # Adding timeout for swam interpreter
   - name: collect-traces
     inputs:
       parameters:
@@ -229,7 +230,7 @@ spec:
       image: adoptopenjdk/openjdk12
       command: ["bash"] 
       source: |
-        apt-get update && apt-get install -y wget unzip && cd /programs/traces/{{inputs.parameters.namespace}} && wget https://github.com/KTH/slumps/raw/master/kubernetes/binaries/STRAC.zip && unzip STRAC.zip -d STRAC &&  cp STRAC/log4j.properties log4j.properties && java -jar STRAC/STRAC-align-0.1.jar {{inputs.parameters.payload}} && rm -rf STRAC && rm STRAC.zip
+        apt-get update && apt-get install -y wget unzip && cd /programs/traces/{{inputs.parameters.namespace}} && wget https://github.com/KTH/slumps/raw/master/kubernetes/binaries/STRAC.zip && unzip -o STRAC.zip -d STRAC &&  cp STRAC/log4j.properties log4j.properties && java -jar STRAC/STRAC-align-0.1.jar {{inputs.parameters.payload}} && rm -rf STRAC && rm STRAC.zip
       volumeMounts:
         - name: result-directory
           mountPath: /programs
@@ -238,10 +239,65 @@ spec:
       parameters:
         - name: namespace
     script:
-      image: python:alpine3.6
+      image: continuumio/anaconda3
       command: ["python"] 
       source: |
-        print('Plotting')
+        import matplotlib.pyplot as plt
+        import json
+
+        def processSTRACResult(F, name):
+            meta = json.loads(open(F, 'r').read())
+            fig, ax = plt.subplots()
+
+            NAMES = meta["fileMap"]
+            DTW_VALUES = meta["functionMap"]
+
+            vals = [[0 for _ in range(len(NAMES))] for _ in range(len(NAMES))]
+
+            for index1, values in DTW_VALUES.items():
+                i = int(index1)
+                vals[i][i] = 0
+                for index2, val in values.items():
+                    j = int(index2)
+                    
+                    vals[i][j] = val
+                    vals[j][i] = val
+
+            im = ax.imshow(vals)
+            NAMES = [NAMES[k].split(".")[0] for k in NAMES.keys()]
+            ax.set_xticks(np.arange(len(NAMES)))
+            ax.set_yticks(np.arange(len(NAMES)))
+
+            ax.set_xticklabels(NAMES)
+            ax.set_yticklabels(NAMES)
+            plt.setp(ax.get_xticklabels(), rotation=45, ha="right", rotation_mode="anchor")
+
+            for i in range(len(NAMES)):
+                for j in range(len(NAMES)):
+                    text = ax.text(j, i, vals[i][j], ha="center", va="center", color="w")
+
+
+            fig.tight_layout()
+            plt.savefig("/programs/traces/{{inputs.parameters.namespace}}/%s"%name)
+
+        print('Plotting...')
+
+        try:
+            processSTRACResult("/programs/traces/{{inputs.parameters.namespace}}/{{inputs.parameters.namespace}}.mem.json", "memory_DTW.png")
+        except:
+            pass
+        try:
+            processSTRACResult("/programs/traces/{{inputs.parameters.namespace}}/{{inputs.parameters.namespace}}.static.json", "static_DTW.png")
+        except:
+            pass
+        try:
+            processSTRACResult("/programs/traces/{{inputs.parameters.namespace}}/{{inputs.parameters.namespace}}.stack.json", "stack_DTW.png")
+        except:
+            pass
+        try:
+            processSTRACResult("/programs/traces/{{inputs.parameters.namespace}}/{{inputs.parameters.namespace}}.opcode.json", "opcode_DTW.png")
+            pass
+
       volumeMounts:
         - name: result-directory
           mountPath: /programs
@@ -250,6 +306,7 @@ spec:
       image: python:alpine3.6
       command: ["python"] 
       source: |
+        
         print('Merging')
       volumeMounts:
         - name: result-directory
