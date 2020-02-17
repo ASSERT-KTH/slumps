@@ -18,10 +18,6 @@ java -jar out.jar /Users/javierca/Documents/Develop/slumps/benchmark_programs/va
 # C bridge error
 java -jar out.jar /Users/javierca/Documents/Develop/slumps/benchmark_programs/variants/Holidays_related_to_Easter/Holidays_related_to_Easter.wasm . 
 
-# Middle_three_digits
-# ERROR
-# C bridge error
-java -jar out.jar /Users/javierca/Documents/Develop/slumps/benchmark_programs/variants/Middle_three_digits/Middle_three_digits.wasm . 
 
 # Hofstadter-Conway_$10,000_sequence
 # ERROR
@@ -33,10 +29,6 @@ java -jar out.jar /Users/javierca/Documents/Develop/slumps/benchmark_programs/va
 # C bridge error
 java -jar out.jar /Users/javierca/Documents/Develop/slumps/benchmark_programs/variants/Show_Ascii_table/Show_Ascii_table.wasm . 
 
-# Tokenize_a_string_with_escaping
-# ERROR
-# Exception in thread "main" swam.runtime.TrapException: out of bounds memory access
-java -jar out.jar /Users/javierca/Documents/Develop/slumps/benchmark_programs/variants/Tokenize_a_string_with_escaping/Tokenize_a_string_with_escaping.wasm . 
 
 # URL_decoding
 # ERROR
@@ -154,10 +146,6 @@ java -jar out.jar /Users/javierca/Documents/Develop/slumps/benchmark_programs/va
 # TIMEOUT
 java -jar out.jar /Users/javierca/Documents/Develop/slumps/benchmark_programs/variants/Image_noise/Image_noise.wasm . 
 
-# Law_of_cosines_-_triples
-# ERROR
-# C bridge
-java -jar out.jar /Users/javierca/Documents/Develop/slumps/benchmark_programs/variants/Law_of_cosines_-_triples/Law_of_cosines_-_triples.wasm . 
 
 # Flatten_a_list
 # ERROR
@@ -167,6 +155,7 @@ java -jar out.jar /Users/javierca/Documents/Develop/slumps/benchmark_programs/va
 # Cartesian_product_of_two_or_more_lists
 # ERROR
 # Exception in thread "main" swam.runtime.StackOverflowException: call stack exhausted
+# Needs for input
 java -jar out.jar /Users/javierca/Documents/Develop/slumps/benchmark_programs/variants/Cartesian_product_of_two_or_more_lists/Cartesian_product_of_two_or_more_lists.wasm . 
 
 # Sorting_algorithms-Merge_sort

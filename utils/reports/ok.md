@@ -103,3 +103,27 @@ java -jar out.jar /Users/javierca/Documents/Develop/slumps/benchmark_programs/va
 # Thiele's_interpolation_formula 
 # OK
 java -jar out.jar /Users/javierca/Documents/Develop/slumps/benchmark_programs/variants/Thiele's_interpolation_formula/Thiele's_interpolation_formula.wasm . 
+
+
+# Law_of_cosines_-_triples
+# OK
+# printf sanitized
+java -jar out.jar /Users/javierca/Documents/Develop/slumps/benchmark_programs/variants/Law_of_cosines_-_triples/Law_of_cosines_-_triples.wasm . 
+
+
+# Tokenize_a_string_with_escaping
+# OK
+# Sanitized
+java -jar out.jar /Users/javierca/Documents/Develop/slumps/benchmark_programs/variants/Tokenize_a_string_with_escaping/Tokenize_a_string_with_escaping.wasm . 
+
+
+# Middle_three_digits
+# OK
+# mock sprintf 
+java -jar out.jar /Users/javierca/Documents/Develop/slumps/benchmark_programs/variants/Middle_three_digits/Middle_three_digits.wasm . 
+
+
+# Holidays_related_to_Easter
+# OK
+# mock printf
+java -jar out.jar /Users/javierca/Documents/Develop/slumps/benchmark_programs/variants/Holidays_related_to_Easter/Holidays_related_to_Easter.wasm . 

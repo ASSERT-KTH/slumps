@@ -116,9 +116,9 @@ if __name__ == "__main__":
 
     def stat_programs(header, swam_folder):
 
-        #shutil.rmtree(swam_folder)
+        shutil.rmtree(swam_folder)
 
-        #os.mkdir(swam_folder)
+        os.mkdir(swam_folder)
 
         total_dis = []
         diff_dis = []
@@ -218,15 +218,19 @@ if __name__ == "__main__":
                         test = personalized_tests.get(l, ["None", "None"])[1]
                     )
 
+                    namespace = baseline.split(".")[0]
+
+                    if not os.path.exists("%s/%s"%(swam_folder, namespace)):
+                        os.mkdir("%s/%s"%(swam_folder, namespace))
 
                     # Copy files to common folder
                     if not os.path.exists("common"):
                         os.mkdir("common")
 
-                    #shutil.copy("out/%s/%s"%(l, baseline), "%s/%s"%(swam_folder,baseline))
+                    shutil.copy("out/%s/%s"%(l, baseline), "%s/%s/%s"%(swam_folder,namespace, baseline))
 
-                    #for p in variants:
-                    #    shutil.copy("out/%s/%s"%(l, p), "%s/%s"%(swam_folder, p))
+                    for p in variants:
+                        shutil.copy("out/%s/%s"%(l, p), "%s/%s/%s"%(swam_folder, namespace, p))
 
                     tests.append(content)
 #

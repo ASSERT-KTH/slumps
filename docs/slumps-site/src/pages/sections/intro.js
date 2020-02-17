@@ -12,7 +12,7 @@ const IntroSection = () =>{
   
   return (<Content>
 
-          <Divider><h1>SLUMPS</h1></Divider>
+          <Divider><h1>SLUMPs</h1></Divider>
 
           <Row style={{marginBottom: 30}} type="flex" justify="center">
             <Col>
@@ -22,50 +22,30 @@ const IntroSection = () =>{
 
           <p className="center-p">Research on randomization and superoptimization for WebAssembly WASM</p>
 
-          <Row type="flex" justify="center">
-            <Col key={`obj1`} span={4}><Card
-                  
-                  style={{ margin: '15px' }}
-                >
-                      <Meta title={"Objective 1"} description={"Lorem ipsum"} />
-
-                </Card>
-                
-              </Col> 
-              <Col key={`obj2`} span={4}><Card
-                  
-                  style={{ margin: '15px' }}
-                >
-                      <Meta title={"Objective 2"} description={"Lorem ipsum"} />
-
-                </Card>
-                
-              </Col> 
-              <Col key={`obj3`} span={4}><Card
-                  
-                  style={{ margin: '15px' }}
-                >
-                      <Meta title={"Objective 3"} description={"Lorem ipsum"} />
-
-                </Card>
-                
-              </Col> 
           
-          </Row>
+          
+          <Section name="What is SLUMPs" color='#fff'>
+            <Row type="flex" justify="center">
+              <Col span={16}>
 
-          <Section name="Where are we?" color='#fff'>
+            <p>Given a C program, SLUMPs repurposes a superoptimizer (<a href="https://github.com/google/souper">Souper</a>) to output several equivalent WASM programs.
+  For each optimization candidates subset from Souper, we generate a new WASM program</p>
+
+              </Col>
+            </Row>
             <Row type="flex" justify="center">
               <Col>
                 <Steps direction="vertical" >
-                  <Step status="finish" title="WASM"  description={"WASM binary to Souper IR"} icon={<Icon type='code'/>} />
-                  <Step status="process" title="Souper (Work in progress)" description={"Souper generates several candidates in the path to the 'opmitimazed' version. We keep those candidates"} icon={<Icon type='loading'/>} />
-                  <Step status="process" title="LLVM (Work in progress)" description={"Get the LLVM IR from the optimization candidates"} icon={<Icon type='loading'/>}  />
-                  <Step status="wait" title="WASMs" description={"Generate the mutated versions of the original WASM file"} icon={<React.Fragment>
-                    <Icon type='code'/>
-                    <Icon type='code'/>
-                    <Icon type='code'/>
+                  <Step status="finish" title="C"  description={"C code to be ported in WASM"} icon={<Icon type='code'/>} />
+                  <Step status="finish" title="LLVM" description={"Create LLVM bitcode from the C input program. Targeting wasm32-unknown-unknonw as architecture"} icon={<Icon type='api'/>} />
+                  <Step status="finish" title="Souper" description={"Souper generates several candidates in the path to the 'opmitimazed' version. We keep those candidates and generate different programs from it"} icon={<Icon type='swap'/>} />
+                  <Step status="finish" title="WebAssembly lld port" description={"Generate WebAssembly code from LLVM bitcodes"} icon={<Icon type='api'/>} />
+                  <Step status="finish" title="WASMs" description={"Generate different WASM programs from the original C code"} icon={<React.Fragment>
+                    <Icon type='code-sandbox'/>
                     <Icon type='dash'/>
-                    <Icon type='code'/>
+                    <Icon type='code-sandbox'/>
+                    <Icon type='code-sandbox'/>
+                    <Icon type='code-sandbox'/>
                   </React.Fragment>} />
                 </Steps>
               </Col>

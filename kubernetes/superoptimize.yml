@@ -14,11 +14,11 @@ spec:
           - name: program
             value: "{{item}}"
         withItems: 
-          #- "https://raw.githubusercontent.com/KTH/slumps/master/benchmark_programs/rossetta/valid/input_expected/Banker's_algorithm.c"
-         # - "https://raw.githubusercontent.com/KTH/slumps/master/benchmark_programs/rossetta/valid/no_input/Babbage_problem.c"
+          - "https://raw.githubusercontent.com/KTH/slumps/master/benchmark_programs/rossetta/valid/input_expected/Banker's_algorithm.c"
+          - "https://raw.githubusercontent.com/KTH/slumps/master/benchmark_programs/rossetta/valid/no_input/Babbage_problem.c"
           - "https://raw.githubusercontent.com/KTH/slumps/master/benchmark_programs/rossetta/valid/no_input/Zebra_puzzle.c"
           - "https://raw.githubusercontent.com/KTH/slumps/master/benchmark_programs/rossetta/valid/no_input/Addition_chains.c"
-          #- "https://raw.githubusercontent.com/KTH/slumps/master/benchmark_programs/rossetta/valid/no_input/Run-length_encoding.c"
+          - "https://raw.githubusercontent.com/KTH/slumps/master/benchmark_programs/rossetta/valid/no_input/Run-length_encoding.c"
         continueOn:
           failed: true
   - name: slumps-template
