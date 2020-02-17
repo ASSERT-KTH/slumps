@@ -53,7 +53,7 @@ Examples
  ```
 
 ```bash
-  argo submit slumps.yml --watch -p repo="https://github.com/KTH/slumps.git" -p folder="/slumps/benchmark_programs/rossetta/valid/resumed" -p raw="https://raw.githubusercontent.com/KTH/slumps/master/benchmark_programs/rossetta/resumed"
+  argo submit slumps.yml --watch -p repo="https://github.com/KTH/slumps.git" -p folder="/slumps/benchmark_programs/rossetta/resumed" -p raw="https://raw.githubusercontent.com/KTH/slumps/master/benchmark_programs/rossetta/resumed"
 
 ```
 
