@@ -11,10 +11,10 @@ spec:
       accessModes: [ "ReadWriteOnce" ]
       resources:
         requests:
-          storage: 6Gi
+          storage: 1000Gi
   templates:
   - name: multiple-runs
-    parallelism: 1
+    parallelism: 10
     steps:
     - - name: download
         template: donwload-all
@@ -39,7 +39,7 @@ spec:
       image: madshansen/docker-git-ftp
       command: [bash]
       source: |
-         apt-get update && apt-get install -y python && git clone https://github.com/KTH/slumps.git && ls -l /slumps/benchmark_programs/variants && cp -r /slumps/benchmark_programs/variants /programs && python -c "import json,os;  print(json.dumps(os.listdir('/programs/variants')[2:4]))" > /out.txt && cat /out.txt
+         apt-get update && apt-get install -y python && git clone https://github.com/KTH/slumps.git && ls -l /slumps/benchmark_programs/variants && cp -r /slumps/benchmark_programs/variants /programs && python -c "import json,os;  print(json.dumps(os.listdir('/programs/variants')))" > /out.txt && cat /out.txt
     
       volumeMounts:
       - name: result-directory
@@ -65,6 +65,8 @@ spec:
             - name: namespace 
               value: "{{inputs.parameters.namespace}}"
         withParam: "{{steps.organize.outputs.parameters.variants}}"
+        continueOn:
+          failed: true
     - - name: collect-traces # - - collect the traces and stdout, then build the STRAC json 
         template: collect-traces
         arguments:
@@ -165,11 +167,11 @@ spec:
       image: adoptopenjdk/openjdk12
       command: ["bash"]
       source: |
-        mkdir -p /programs/traces/{{inputs.parameters.namespace}} && apt-get update && apt-get install -y wget && wget https://github.com/KTH/slumps/raw/master/kubernetes/binaries/swam.jar && java -jar swam.jar /programs/variants/{{inputs.parameters.namespace}}/{{inputs.parameters.program}} /programs/traces/{{inputs.parameters.namespace}} && ls /programs/traces/{{inputs.parameters.namespace}}
+        mkdir -p /programs/results && mkdir -p /programs/traces/{{inputs.parameters.namespace}} && apt-get update && apt-get install -y wget && wget https://github.com/KTH/slumps/raw/master/kubernetes/binaries/swam.jar && java -jar swam.jar /programs/variants/{{inputs.parameters.namespace}}/{{inputs.parameters.program}} /programs/traces/{{inputs.parameters.namespace}} && ls /programs/traces/{{inputs.parameters.namespace}}
       volumeMounts:
         - name: result-directory
           mountPath: /programs
-    activeDeadlineSeconds: 600 # Adding timeout for swam interpreter
+    activeDeadlineSeconds: 6000 # Adding timeout for swam interpreter
   - name: collect-traces
     inputs:
       parameters:
@@ -185,7 +187,7 @@ spec:
           pairs=[],
           method=dict(
             name="FastDTW",
-            params=[3000]
+            params=[30000]
           ),
           outputAlignment=True,
           outputDir="/programs/traces/{{inputs.parameters.namespace}}",
@@ -260,10 +262,14 @@ spec:
 
         def processSTRACResult(F, name):
             meta = json.loads(open(F, 'r').read())
-            fig, ax = plt.subplots()
-
             NAMES = meta["fileMap"]
+
+            NAMES = [NAMES[k].split(".")[0] for k in NAMES.keys()]
+            fig, ax = plt.subplots(figsize=(3*len(NAMES),3*len(NAMES)))
+
             DTW_VALUES = meta["functionMap"]
+
+            analysis_output = {}
 
             vals = [[0 for _ in range(len(NAMES))] for _ in range(len(NAMES))]
 
@@ -290,25 +296,34 @@ spec:
                     text = ax.text(j, i, vals[i][j], ha="center", va="center", color="w")
 
 
+            analysis_output["DTWS"] = [[d for d in a] for a in vals]
+            analysis_output["MAX_DTW"] = np.max(vals)
+            analysis_output["NAMES"] = NAMES
+            analysis_output["NORMALIZED"] = [[d for d in a ] for a in vals/np.max(vals)]
+
+            print(analysis_output)
             fig.tight_layout()
-            plt.savefig("/programs/traces/{{inputs.parameters.namespace}}/%s"%name)
+            plt.savefig("/programs/results/{{inputs.parameters.namespace}}_%s.pdf"%name)
+
+            open("/programs/results/{{inputs.parameters.namespace}}_%s.json"%name, 'w').write(json.dumps(analysis_output))
+
 
         print('Plotting...')
 
         try:
-            processSTRACResult("/programs/traces/{{inputs.parameters.namespace}}/{{inputs.parameters.namespace}}.mem.json", "memory_DTW.png")
+            processSTRACResult("/programs/traces/{{inputs.parameters.namespace}}/{{inputs.parameters.namespace}}.mem.json", "memory_DTW")
         except Exception as e:
             print(e)
         try:
-            processSTRACResult("/programs/traces/{{inputs.parameters.namespace}}/{{inputs.parameters.namespace}}.static.json", "static_DTW.png")
+            processSTRACResult("/programs/traces/{{inputs.parameters.namespace}}/{{inputs.parameters.namespace}}.static.json", "static_DTW")
         except Exception as e:
             print(e)
         try:
-            processSTRACResult("/programs/traces/{{inputs.parameters.namespace}}/{{inputs.parameters.namespace}}.stack.json", "stack_DTW.png")
+            processSTRACResult("/programs/traces/{{inputs.parameters.namespace}}/{{inputs.parameters.namespace}}.stack.json", "stack_DTW")
         except Exception as e:
             print(e)
         try:
-            processSTRACResult("/programs/traces/{{inputs.parameters.namespace}}/{{inputs.parameters.namespace}}.opcode.json", "opcode_DTW.png")
+            processSTRACResult("/programs/traces/{{inputs.parameters.namespace}}/{{inputs.parameters.namespace}}.opcode.json", "opcode_DTW")
         except Exception as e:
             print(e)
 
@@ -329,5 +344,7 @@ spec:
       artifacts:
         - name: traces
           path: "/programs/traces"
+        - name: results
+          path: "/programs/results"
     
 

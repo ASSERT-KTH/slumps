@@ -49,7 +49,7 @@ spec:
     container:
       image: "jacarte/slumps:app"
       command: [/bin/bash]
-      args: [start_docker.sh, "-DEFAULT.timeout", "14400", "{{workflow.parameters.raw}}/{{inputs.parameters.program}}"]
+      args: [start_docker.sh,"{{workflow.parameters.raw}}/{{inputs.parameters.program}}", "-DEFAULT.timeout", "14400", ]
     #  resources:
     #    requests:
     #      memory: 2.5G

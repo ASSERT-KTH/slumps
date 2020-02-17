@@ -170,9 +170,13 @@ const customPanelStyle = {
     
     <a id="benchmarks"></a>
     
-    <p className="center-p">A <a href="https://github.com/KTH/slumps/tree/master/benchmark_programs/wast">collection</a> of Webassembly programs used to evaluate our research</p>
-    
-
+    <Divider>Experiment Results</Divider>
+    <Divider>
+      <h5>Rosetta C codes <Badge count={880} overflowCount={10000} style={{ backgroundColor: '#fff', color: '#999', boxShadow: '0 0 0 1px #d9d9d9 inset' }} /></h5>
+    </Divider>
+    <p> We crawled the 88% of the C programs from Rosetta corpus. From <Badge count={998} overflowCount={10000} style={{ backgroundColor: '#52c41a' }}/> programs, we collected <Badge count={990} overflowCount={1000} style={{ backgroundColor: '#52c41a' }}/> programs (<a href="https://github.com/KTH/slumps/tree/master/src/crawl_rosetta.py">here</a> is the crawling script). Then, we checked all the programs compiling them (with clang), getting: <Badge count={880} overflowCount={1000} style={{ backgroundColor: '#52c41a' }}/> successfully compiled programs and <Badge count={109} overflowCount={1000}/> invalid-to-compile codes. We feed SLUMPs with all the succesfully compiled programs, with 4 hour timeout per program getting the following result. From the original 880 programs we collected <Badge count={60} style={{ backgroundColor: 'orange' }}/> in which SLUMPS found more than one variant per program. 
+     </p>
+   
 
 
     <Divider>Target Vulnerabilities </Divider>

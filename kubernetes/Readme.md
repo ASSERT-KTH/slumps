@@ -37,5 +37,26 @@ For more information about Argo workflows and experiments parallelization, go to
 - Forward minio service to download and manage artifacts: ```kubectl port-forward -n minio service/minio-service 9000```
   - Create storage if needed with Read-Write permissions
 - Set the number of concurrent threads in the ```parallelism``` setting in the yml file.
-- Set the timeout per program in the evironment variable for the slumps:app container.
+
+### Notes:
+ - To run SLUMPs over a different repor:
+ ```bash
+
+  argo submit slumps.yml -p repo="<url of the repo to be clone>" -p folder="<folder address after cloning>" -p raw="<raw url in the online repo>"
+
+ ```
+
+Examples
+ 
+ ```bash
+  argo submit slumps.yml -p repo="https://github.com/KTH/slumps.git" -p folder="/slumps/benchmark_programs/rossetta/valid/no_input" -p raw="https://raw.githubusercontent.com/KTH/slumps/master/benchmark_programs/rossetta/valid/no_input"
+ ```
+
+```bash
+  argo submit slumps.yml --watch -p repo="https://github.com/KTH/slumps.git" -p folder="/slumps/benchmark_programs/rossetta/valid/resumed" -p raw="https://raw.githubusercontent.com/KTH/slumps/master/benchmark_programs/rossetta/resumed"
+
+```
+
+
+## [Local deployment with minikube](https://kubernetes.io/docs/setup/learning-environment/minikube/)
 
