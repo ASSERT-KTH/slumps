@@ -4,7 +4,12 @@ metadata:
   generateName: slumps-distributed-
 spec:
   entrypoint: slumps-distributed
-  parallelism: 100
+  parallelism: 1
+  arguments:
+    parameters:
+    - name: repo
+    - name: folder
+    - name: raw
   templates:
   - name: slumps-distributed
     steps:
@@ -24,7 +29,7 @@ spec:
       image: madshansen/docker-git-ftp
       command: [bash]
       source: |
-        apt-get update && apt-get install -y python && git clone https://github.com/KTH/slumps.git && ls -l /slumps/benchmark_programs/rossetta/valid/no_input | wc -l && python -c "import json,os;  print(json.dumps(os.listdir('/slumps/benchmark_programs/rossetta/valid/no_input')))" > /out.txt && cat /out.txt
+        apt-get update && apt-get install -y python && git clone "{{workflow.parameters.repo}}" && ls -l "{{workflow.parameters.folder}}" | wc -l && python -c "import json,os;  print(json.dumps(os.listdir('{{workflow.parameters.folder}}')))" > /out.txt && cat /out.txt
     outputs:
       parameters:
         - name: programs
@@ -44,7 +49,7 @@ spec:
     container:
       image: "jacarte/slumps:app"
       command: [/bin/bash]
-      args: [start_docker.sh, "-DEFAULT.timeout", "14400", "https://raw.githubusercontent.com/KTH/slumps/master/benchmark_programs/rossetta/valid/no_input/{{inputs.parameters.program}}"]
+      args: [start_docker.sh, "-DEFAULT.timeout", "14400", "{{workflow.parameters.raw}}/{{inputs.parameters.program}}"]
     #  resources:
     #    requests:
     #      memory: 2.5G
