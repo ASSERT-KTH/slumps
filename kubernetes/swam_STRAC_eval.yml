@@ -14,7 +14,7 @@ spec:
           storage: 1000Gi
   templates:
   - name: multiple-runs
-    parallelism: 10
+    parallelism: 6
     steps:
     - - name: download
         template: donwload-all
