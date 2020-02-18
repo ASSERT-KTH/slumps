@@ -51,11 +51,7 @@ echo "Souperifying ${name}..."
 #llvm-opt -load ${libsouperPass} -souper -souper-enumerative-synthesis -souper-enumerative-synthesis-num-instructions=3 -solver-timeout=20   -z3-path=${z3} -souper-debug-level=4 -o $name.opt.bc $name.bc
 #llvm-opt -load ${libsouperPass}  -souper -souper-enumerative-synthesis -souper-infer-inst -souper-use-alive -souper-synthesis-const-with-cegis -souper-synthesis-comps=mul,select,const,const,shl,lshr,ashr,and,or,xor,add,sub,slt,ult,sle,ule,eq,ne -solver-timeout=40  -z3-path=${z3} -souper-debug-level=0 -o $name.opt.bc $name.bc
 #llvm-opt -load ${libsouperPass} -souper -souper-infer-inst -solver-timeout=3600 -souper-external-cache -z3-path=${z3} -souper-debug-level=4 -o $name.opt.bc $name.bc 
-    if [ "$2" = "5" ];
-    then
-    echo "option 5"
-    llvm-opt -load ${libsouperPass}  -souper -souper-external-cache -souper-infer-iN  -solver-timeout=300 -souper-synthesis-comps=mul,select,const,const,shl,lshr,ashr,and,or,xor,add,sub,slt,ult,sle,ule,eq,ne  -z3-path=${z3} -souper-debug-level=4 -o $name.opt$2.bc $name.bc
-    fi
+    
     if [ "$2" = "1" ]; 
     then
        echo "option 1"
