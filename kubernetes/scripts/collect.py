@@ -4,6 +4,7 @@ import sys
 
 def main(namespace, out):
 
+    print(namespace, out)
     stracMem = dict(
         pairs=[],
         method=dict(
