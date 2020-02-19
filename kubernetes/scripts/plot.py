@@ -4,13 +4,7 @@ import numpy as np
 import sys
 import os
 
-def processSTRACResult(F, namespace, name, out):
-
-    if not os.path.exists(F):
-        print("The file %s does not exist"%F)
-        return
-
-    meta = json.loads(open(F, 'r').read())
+def plot(meta, namespace, name, out):
     NAMES = meta["fileMap"]
 
     NAMES = [NAMES[k].split(".")[0] for k in NAMES.keys()]
@@ -34,7 +28,11 @@ def processSTRACResult(F, namespace, name, out):
     im = ax.imshow(vals)
     ax.set_xticks(np.arange(len(NAMES)))
     ax.set_yticks(np.arange(len(NAMES)))
+    
+    for edge, spine in ax.spines.items():
+        spine.set_visible(False)
 
+    ax.set_ylim(-0.8, len(NAMES) + 1)
     ax.set_xticklabels(NAMES)
     ax.set_yticklabels(NAMES)
     plt.setp(ax.get_xticklabels(), rotation=45, ha="right", rotation_mode="anchor")
@@ -51,8 +49,19 @@ def processSTRACResult(F, namespace, name, out):
 
     print(analysis_output)
     fig.tight_layout()
-    plt.savefig("%s/%s_%s.pdf"%(out, namespace, name))
 
+    return analysis_output
+
+def processSTRACResult(F, namespace, name, out):
+
+    if not os.path.exists(F):
+        print("The file %s does not exist"%F)
+        return
+
+    meta = json.loads(open(F, 'r').read())
+    
+    analysis_output = plot(meta, namespace, name, out)
+    plt.savefig("%s/%s_%s.pdf"%(out, namespace, name))
     open("%s/%s_%s.json"%(out, namespace, name), 'w').write(json.dumps(analysis_output))
 
 if __name__ == "__main__":
