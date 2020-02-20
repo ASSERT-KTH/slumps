@@ -6,29 +6,29 @@ target triple = "wasm32-unknown-unknown"
 @.str.1 = private unnamed_addr constant [55 x i8] c"The smallest number whose square ends in 269696 is %d\0A\00", align 1
 
 ; Function Attrs: nounwind
-define hidden i32 @main() local_unnamed_addr #0 {
+define i32 @main() local_unnamed_addr #0 {
   br label %1
 
 ; <label>:1:                                      ; preds = %1, %0
-  %2 = phi i32 [ 0, %0 ], [ %8, %1 ]
-  %3 = mul nsw i32 %2, %2
-  %4 = urem i32 %3, 1000000
-  %5 = icmp ne i32 %4, 269696
-  %6 = icmp ne i32 %3, 2147483647
-  %7 = and i1 %6, %5
-  %8 = add nuw nsw i32 %2, 1
-  br i1 %7, label %1, label %9
+  %current.0 = phi i32 [ 0, %0 ], [ %inc, %1 ]
+  %mul = mul nsw i32 %current.0, %current.0
+  %rem = urem i32 %mul, 1000000
+  %cmp = icmp ne i32 %rem, 269696
+  %cmp1 = icmp ne i32 %mul, 2147483647
+  %2 = and i1 %cmp1, %cmp
+  %inc = add nuw nsw i32 %current.0, 1
+  br i1 %2, label %1, label %3
 
-; <label>:9:                                      ; preds = %1
-  %10 = tail call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([55 x i8], [55 x i8]* @.str.1, i32 0, i32 0), i32 %2)
+; <label>:3:                                      ; preds = %1
+  %call3 = tail call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([55 x i8], [55 x i8]* @.str.1, i32 0, i32 0), i32 %current.0)
   ret i32 0
 }
 
 ; Function Attrs: nounwind
 declare i32 @printf(i8* nocapture readonly, ...) local_unnamed_addr #1
 
-attributes #0 = { nounwind "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "less-precise-fpmad"="false" "no-frame-pointer-elim"="false" "no-infs-fp-math"="false" "no-jump-tables"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="false" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
-attributes #1 = { nounwind "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "less-precise-fpmad"="false" "no-frame-pointer-elim"="false" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="false" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #0 = { nounwind "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "less-precise-fpmad"="false" "no-frame-pointer-elim"="true" "no-frame-pointer-elim-non-leaf" "no-infs-fp-math"="false" "no-jump-tables"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="false" "stack-protector-buffer-size"="8" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #1 = { nounwind "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "less-precise-fpmad"="false" "no-frame-pointer-elim"="true" "no-frame-pointer-elim-non-leaf" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="false" "stack-protector-buffer-size"="8" "unsafe-fp-math"="false" "use-soft-float"="false" }
 
 !llvm.module.flags = !{!0}
 !llvm.ident = !{!1}

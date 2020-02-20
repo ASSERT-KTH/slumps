@@ -1,49 +1,49 @@
-; ModuleID = 'benchmark4pipeline_c/resistor_mesh.c'
-source_filename = "benchmark4pipeline_c/resistor_mesh.c"
+; ModuleID = 'resistor_mesh.c'
+source_filename = "resistor_mesh.c"
 target datalayout = "e-m:e-p:32:32-i64:64-n32:64-S128"
-target triple = "wasm32-unknown-unknown"
+target triple = "wasm32-unknown-unknown-wasm"
 
 %struct.node = type { double, i32 }
 
 @.str = private unnamed_addr constant [8 x i8] c"R = %g\0A\00", align 1
 
 ; Function Attrs: nounwind
-define hidden %struct.node** @alloc2(i32, i32) local_unnamed_addr #0 {
-  %3 = shl i32 %0, 4
-  %4 = or i32 %3, 4
-  %5 = mul i32 %4, %1
-  %6 = tail call noalias i8* @calloc(i32 1, i32 %5) #4
-  %7 = bitcast i8* %6 to %struct.node**
-  %8 = icmp sgt i32 %1, 0
-  br i1 %8, label %9, label %25
+define %struct.node** @alloc2(i32 %w, i32 %h) local_unnamed_addr #0 {
+  %mul1 = shl i32 %w, 4
+  %mul217 = or i32 %mul1, 4
+  %add = mul i32 %mul217, %h
+  %call = tail call i8* @calloc(i32 1, i32 %add)
+  %1 = bitcast i8* %call to %struct.node**
+  %cmp18 = icmp sgt i32 %h, 0
+  br i1 %cmp18, label %.lr.ph, label %._crit_edge
 
-; <label>:9:                                      ; preds = %2
-  %10 = getelementptr inbounds %struct.node*, %struct.node** %7, i32 %1
-  %11 = bitcast %struct.node** %10 to %struct.node*
-  br label %12
+.lr.ph:                                           ; preds = %0
+  %add.ptr3 = getelementptr inbounds %struct.node*, %struct.node** %1, i32 %h
+  %2 = bitcast %struct.node** %add.ptr3 to %struct.node*
+  br label %3
 
-; <label>:12:                                     ; preds = %20, %9
-  %13 = phi i32 [ 0, %9 ], [ %23, %20 ]
-  %14 = icmp eq i32 %13, 0
-  br i1 %14, label %20, label %15
+; <label>:3:                                      ; preds = %6, %.lr.ph
+  %i.019 = phi i32 [ 0, %.lr.ph ], [ %inc, %6 ]
+  %tobool = icmp eq i32 %i.019, 0
+  br i1 %tobool, label %6, label %4
 
-; <label>:15:                                     ; preds = %12
-  %16 = add nsw i32 %13, -1
-  %17 = getelementptr inbounds %struct.node*, %struct.node** %7, i32 %16
-  %18 = load %struct.node*, %struct.node** %17, align 4, !tbaa !2
-  %19 = getelementptr inbounds %struct.node, %struct.node* %18, i32 %0
-  br label %20
+; <label>:4:                                      ; preds = %3
+  %sub = add nsw i32 %i.019, -1
+  %arrayidx = getelementptr inbounds %struct.node*, %struct.node** %1, i32 %sub
+  %5 = load %struct.node*, %struct.node** %arrayidx, align 4, !tbaa !2
+  %add.ptr = getelementptr inbounds %struct.node, %struct.node* %5, i32 %w
+  br label %6
 
-; <label>:20:                                     ; preds = %12, %15
-  %21 = phi %struct.node* [ %19, %15 ], [ %11, %12 ]
-  %22 = getelementptr inbounds %struct.node*, %struct.node** %7, i32 %13
-  store %struct.node* %21, %struct.node** %22, align 4, !tbaa !2
-  %23 = add nuw nsw i32 %13, 1
-  %24 = icmp eq i32 %23, %1
-  br i1 %24, label %25, label %12
+; <label>:6:                                      ; preds = %3, %4
+  %cond = phi %struct.node* [ %add.ptr, %4 ], [ %2, %3 ]
+  %arrayidx4 = getelementptr inbounds %struct.node*, %struct.node** %1, i32 %i.019
+  store %struct.node* %cond, %struct.node** %arrayidx4, align 4, !tbaa !2
+  %inc = add nuw nsw i32 %i.019, 1
+  %exitcond = icmp eq i32 %inc, %h
+  br i1 %exitcond, label %._crit_edge, label %3
 
-; <label>:25:                                     ; preds = %20, %2
-  ret %struct.node** %7
+._crit_edge:                                      ; preds = %6, %0
+  ret %struct.node** %1
 }
 
 ; Function Attrs: argmemonly nounwind
@@ -56,371 +56,371 @@ declare noalias i8* @calloc(i32, i32) local_unnamed_addr #2
 declare void @llvm.lifetime.end.p0i8(i64, i8* nocapture) #1
 
 ; Function Attrs: norecurse nounwind
-define hidden void @set_boundary(%struct.node** nocapture readonly) local_unnamed_addr #3 {
-  %2 = getelementptr inbounds %struct.node*, %struct.node** %0, i32 1
-  %3 = load %struct.node*, %struct.node** %2, align 4, !tbaa !2
-  %4 = getelementptr inbounds %struct.node, %struct.node* %3, i32 1, i32 1
-  store i32 1, i32* %4, align 8, !tbaa !6
-  %5 = getelementptr inbounds %struct.node, %struct.node* %3, i32 1, i32 0
-  store double 1.000000e+00, double* %5, align 8, !tbaa !10
-  %6 = getelementptr inbounds %struct.node*, %struct.node** %0, i32 6
-  %7 = load %struct.node*, %struct.node** %6, align 4, !tbaa !2
-  %8 = getelementptr inbounds %struct.node, %struct.node* %7, i32 7, i32 1
-  store i32 -1, i32* %8, align 8, !tbaa !6
-  %9 = getelementptr inbounds %struct.node, %struct.node* %7, i32 7, i32 0
-  store double -1.000000e+00, double* %9, align 8, !tbaa !10
+define void @set_boundary(%struct.node** nocapture readonly %m) local_unnamed_addr #3 {
+  %arrayidx = getelementptr inbounds %struct.node*, %struct.node** %m, i32 1
+  %1 = load %struct.node*, %struct.node** %arrayidx, align 4, !tbaa !2
+  %fixed = getelementptr inbounds %struct.node, %struct.node* %1, i32 1, i32 1
+  store i32 1, i32* %fixed, align 8, !tbaa !6
+  %v = getelementptr inbounds %struct.node, %struct.node* %1, i32 1, i32 0
+  store double 1.000000e+00, double* %v, align 8, !tbaa !10
+  %arrayidx4 = getelementptr inbounds %struct.node*, %struct.node** %m, i32 6
+  %2 = load %struct.node*, %struct.node** %arrayidx4, align 4, !tbaa !2
+  %fixed6 = getelementptr inbounds %struct.node, %struct.node* %2, i32 7, i32 1
+  store i32 -1, i32* %fixed6, align 8, !tbaa !6
+  %v9 = getelementptr inbounds %struct.node, %struct.node* %2, i32 7, i32 0
+  store double -1.000000e+00, double* %v9, align 8, !tbaa !10
   ret void
 }
 
 ; Function Attrs: norecurse nounwind
-define hidden double @calc_diff(%struct.node** nocapture readonly, %struct.node** nocapture readonly, i32, i32) local_unnamed_addr #3 {
-  %5 = icmp sgt i32 %3, 0
-  br i1 %5, label %6, label %122
+define double @calc_diff(%struct.node** nocapture readonly %m, %struct.node** nocapture readonly %d, i32 %w, i32 %h) local_unnamed_addr #3 {
+  %cmp86 = icmp sgt i32 %h, 0
+  br i1 %cmp86, label %.lr.ph90, label %._crit_edge91
 
-; <label>:6:                                      ; preds = %4
-  %7 = icmp sgt i32 %2, 0
-  br label %8
+.lr.ph90:                                         ; preds = %0
+  %cmp183 = icmp sgt i32 %w, 0
+  br label %1
 
-; <label>:8:                                      ; preds = %118, %6
-  %9 = phi double [ 0.000000e+00, %6 ], [ %120, %118 ]
-  %10 = phi i32 [ 0, %6 ], [ %119, %118 ]
-  br i1 %7, label %13, label %11
+; <label>:1:                                      ; preds = %._crit_edge, %.lr.ph90
+  %total.088 = phi double [ 0.000000e+00, %.lr.ph90 ], [ %total.1.lcssa, %._crit_edge ]
+  %i.087 = phi i32 [ 0, %.lr.ph90 ], [ %inc39.pre-phi, %._crit_edge ]
+  br i1 %cmp183, label %.lr.ph, label %.._crit_edge_crit_edge
 
-; <label>:11:                                     ; preds = %8
-  %12 = add nuw nsw i32 %10, 1
-  br label %118
+.._crit_edge_crit_edge:                           ; preds = %1
+  %.pre96 = add nuw nsw i32 %i.087, 1
+  br label %._crit_edge
 
-; <label>:13:                                     ; preds = %8
-  %14 = icmp eq i32 %10, 0
-  %15 = add nuw nsw i32 %10, 1
-  %16 = icmp slt i32 %15, %3
-  %17 = getelementptr inbounds %struct.node*, %struct.node** %0, i32 %10
-  %18 = getelementptr inbounds %struct.node*, %struct.node** %0, i32 %15
-  %19 = load %struct.node*, %struct.node** %17, align 4, !tbaa !2
-  %20 = getelementptr inbounds %struct.node*, %struct.node** %1, i32 %10
-  %21 = load %struct.node*, %struct.node** %20, align 4, !tbaa !2
-  br i1 %14, label %22, label %67
+.lr.ph:                                           ; preds = %1
+  %tobool = icmp eq i32 %i.087, 0
+  %add11 = add nuw nsw i32 %i.087, 1
+  %cmp12 = icmp slt i32 %add11, %h
+  %arrayidx5 = getelementptr inbounds %struct.node*, %struct.node** %m, i32 %i.087
+  %arrayidx14 = getelementptr inbounds %struct.node*, %struct.node** %m, i32 %add11
+  %2 = load %struct.node*, %struct.node** %arrayidx5, align 4, !tbaa !2
+  %arrayidx31 = getelementptr inbounds %struct.node*, %struct.node** %d, i32 %i.087
+  %3 = load %struct.node*, %struct.node** %arrayidx31, align 4, !tbaa !2
+  br i1 %tobool, label %.lr.ph.split.us.preheader, label %.lr.ph.split
 
-; <label>:22:                                     ; preds = %13
-  br label %23
+.lr.ph.split.us.preheader:                        ; preds = %.lr.ph
+  br label %.lr.ph.split.us
 
-; <label>:23:                                     ; preds = %22, %51
-  %24 = phi double [ %65, %51 ], [ %9, %22 ]
-  %25 = phi i32 [ %44, %51 ], [ 0, %22 ]
-  %26 = icmp eq i32 %25, 0
-  br i1 %26, label %32, label %27
+.lr.ph.split.us:                                  ; preds = %.lr.ph.split.us.preheader, %13
+  %total.185.us = phi double [ %total.2.us, %13 ], [ %total.088, %.lr.ph.split.us.preheader ]
+  %j.084.us = phi i32 [ %add19.us, %13 ], [ 0, %.lr.ph.split.us.preheader ]
+  %tobool4.us = icmp eq i32 %j.084.us, 0
+  br i1 %tobool4.us, label %6, label %4
 
-; <label>:27:                                     ; preds = %23
-  %28 = add nsw i32 %25, -1
-  %29 = getelementptr inbounds %struct.node, %struct.node* %19, i32 %28, i32 0
-  %30 = load double, double* %29, align 8, !tbaa !10
-  %31 = fadd double %30, 0.000000e+00
-  br label %32
+; <label>:4:                                      ; preds = %.lr.ph.split.us
+  %sub6.us = add nsw i32 %j.084.us, -1
+  %v8.us = getelementptr inbounds %struct.node, %struct.node* %2, i32 %sub6.us, i32 0
+  %5 = load double, double* %v8.us, align 8, !tbaa !10
+  %add9.us = fadd double %5, 0.000000e+00
+  br label %6
 
-; <label>:32:                                     ; preds = %27, %23
-  %33 = phi i32 [ 1, %27 ], [ 0, %23 ]
-  %34 = phi double [ %31, %27 ], [ 0.000000e+00, %23 ]
-  br i1 %16, label %35, label %41
+; <label>:6:                                      ; preds = %4, %.lr.ph.split.us
+  %n.1.us = phi i32 [ 1, %4 ], [ 0, %.lr.ph.split.us ]
+  %v.1.us = phi double [ %add9.us, %4 ], [ 0.000000e+00, %.lr.ph.split.us ]
+  br i1 %cmp12, label %7, label %10
 
-; <label>:35:                                     ; preds = %32
-  %36 = load %struct.node*, %struct.node** %18, align 4, !tbaa !2
-  %37 = getelementptr inbounds %struct.node, %struct.node* %36, i32 %25, i32 0
-  %38 = load double, double* %37, align 8, !tbaa !10
-  %39 = fadd double %34, %38
-  %40 = add nuw nsw i32 %33, 1
-  br label %41
+; <label>:7:                                      ; preds = %6
+  %8 = load %struct.node*, %struct.node** %arrayidx14, align 4, !tbaa !2
+  %v16.us = getelementptr inbounds %struct.node, %struct.node* %8, i32 %j.084.us, i32 0
+  %9 = load double, double* %v16.us, align 8, !tbaa !10
+  %add17.us = fadd double %v.1.us, %9
+  %inc18.us = add nuw nsw i32 %n.1.us, 1
+  br label %10
 
-; <label>:41:                                     ; preds = %35, %32
-  %42 = phi i32 [ %40, %35 ], [ %33, %32 ]
-  %43 = phi double [ %39, %35 ], [ %34, %32 ]
-  %44 = add nuw nsw i32 %25, 1
-  %45 = icmp slt i32 %44, %2
-  br i1 %45, label %46, label %51
+; <label>:10:                                     ; preds = %7, %6
+  %n.2.us = phi i32 [ %inc18.us, %7 ], [ %n.1.us, %6 ]
+  %v.2.us = phi double [ %add17.us, %7 ], [ %v.1.us, %6 ]
+  %add19.us = add nuw nsw i32 %j.084.us, 1
+  %cmp20.us = icmp slt i32 %add19.us, %w
+  br i1 %cmp20.us, label %11, label %13
 
-; <label>:46:                                     ; preds = %41
-  %47 = getelementptr inbounds %struct.node, %struct.node* %19, i32 %44, i32 0
-  %48 = load double, double* %47, align 8, !tbaa !10
-  %49 = fadd double %43, %48
-  %50 = add nsw i32 %42, 1
-  br label %51
+; <label>:11:                                     ; preds = %10
+  %v24.us = getelementptr inbounds %struct.node, %struct.node* %2, i32 %add19.us, i32 0
+  %12 = load double, double* %v24.us, align 8, !tbaa !10
+  %add25.us = fadd double %v.2.us, %12
+  %inc26.us = add nsw i32 %n.2.us, 1
+  br label %13
 
-; <label>:51:                                     ; preds = %46, %41
-  %52 = phi i32 [ %50, %46 ], [ %42, %41 ]
-  %53 = phi double [ %49, %46 ], [ %43, %41 ]
-  %54 = getelementptr inbounds %struct.node, %struct.node* %19, i32 %25, i32 0
-  %55 = load double, double* %54, align 8, !tbaa !10
-  %56 = sitofp i32 %52 to double
-  %57 = fdiv double %53, %56
-  %58 = fsub double %55, %57
-  %59 = getelementptr inbounds %struct.node, %struct.node* %21, i32 %25, i32 0
-  store double %58, double* %59, align 8, !tbaa !10
-  %60 = getelementptr inbounds %struct.node, %struct.node* %19, i32 %25, i32 1
-  %61 = load i32, i32* %60, align 8, !tbaa !6
-  %62 = icmp eq i32 %61, 0
-  %63 = fmul double %58, %58
-  %64 = fadd double %24, %63
-  %65 = select i1 %62, double %64, double %24
-  %66 = icmp eq i32 %44, %2
-  br i1 %66, label %118, label %23
+; <label>:13:                                     ; preds = %11, %10
+  %n.3.us = phi i32 [ %inc26.us, %11 ], [ %n.2.us, %10 ]
+  %v.3.us = phi double [ %add25.us, %11 ], [ %v.2.us, %10 ]
+  %v29.us = getelementptr inbounds %struct.node, %struct.node* %2, i32 %j.084.us, i32 0
+  %14 = load double, double* %v29.us, align 8, !tbaa !10
+  %conv.us = sitofp i32 %n.3.us to double
+  %div.us = fdiv double %v.3.us, %conv.us
+  %sub30.us = fsub double %14, %div.us
+  %v33.us = getelementptr inbounds %struct.node, %struct.node* %3, i32 %j.084.us, i32 0
+  store double %sub30.us, double* %v33.us, align 8, !tbaa !10
+  %fixed.us = getelementptr inbounds %struct.node, %struct.node* %2, i32 %j.084.us, i32 1
+  %15 = load i32, i32* %fixed.us, align 8, !tbaa !6
+  %tobool36.us = icmp eq i32 %15, 0
+  %mul.us = fmul double %sub30.us, %sub30.us
+  %add37.us = fadd double %total.185.us, %mul.us
+  %total.2.us = select i1 %tobool36.us, double %add37.us, double %total.185.us
+  %exitcond94 = icmp eq i32 %add19.us, %w
+  br i1 %exitcond94, label %._crit_edge, label %.lr.ph.split.us
 
-; <label>:67:                                     ; preds = %13
-  %68 = add nsw i32 %10, -1
-  %69 = getelementptr inbounds %struct.node*, %struct.node** %0, i32 %68
-  %70 = load %struct.node*, %struct.node** %69, align 4, !tbaa !2
-  br label %71
+.lr.ph.split:                                     ; preds = %.lr.ph
+  %sub = add nsw i32 %i.087, -1
+  %arrayidx = getelementptr inbounds %struct.node*, %struct.node** %m, i32 %sub
+  %.pre = load %struct.node*, %struct.node** %arrayidx, align 4, !tbaa !2
+  br label %16
 
-; <label>:71:                                     ; preds = %102, %67
-  %72 = phi double [ %9, %67 ], [ %116, %102 ]
-  %73 = phi i32 [ 0, %67 ], [ %95, %102 ]
-  %74 = getelementptr inbounds %struct.node, %struct.node* %70, i32 %73, i32 0
-  %75 = load double, double* %74, align 8, !tbaa !10
-  %76 = fadd double %75, 0.000000e+00
-  %77 = icmp eq i32 %73, 0
-  br i1 %77, label %83, label %78
+; <label>:16:                                     ; preds = %27, %.lr.ph.split
+  %total.185 = phi double [ %total.088, %.lr.ph.split ], [ %total.2, %27 ]
+  %j.084 = phi i32 [ 0, %.lr.ph.split ], [ %add19, %27 ]
+  %v3 = getelementptr inbounds %struct.node, %struct.node* %.pre, i32 %j.084, i32 0
+  %17 = load double, double* %v3, align 8, !tbaa !10
+  %add = fadd double %17, 0.000000e+00
+  %tobool4 = icmp eq i32 %j.084, 0
+  br i1 %tobool4, label %20, label %18
 
-; <label>:78:                                     ; preds = %71
-  %79 = add nsw i32 %73, -1
-  %80 = getelementptr inbounds %struct.node, %struct.node* %19, i32 %79, i32 0
-  %81 = load double, double* %80, align 8, !tbaa !10
-  %82 = fadd double %76, %81
-  br label %83
+; <label>:18:                                     ; preds = %16
+  %sub6 = add nsw i32 %j.084, -1
+  %v8 = getelementptr inbounds %struct.node, %struct.node* %2, i32 %sub6, i32 0
+  %19 = load double, double* %v8, align 8, !tbaa !10
+  %add9 = fadd double %add, %19
+  br label %20
 
-; <label>:83:                                     ; preds = %71, %78
-  %84 = phi i32 [ 2, %78 ], [ 1, %71 ]
-  %85 = phi double [ %82, %78 ], [ %76, %71 ]
-  br i1 %16, label %86, label %92
+; <label>:20:                                     ; preds = %16, %18
+  %n.1 = phi i32 [ 2, %18 ], [ 1, %16 ]
+  %v.1 = phi double [ %add9, %18 ], [ %add, %16 ]
+  br i1 %cmp12, label %21, label %24
 
-; <label>:86:                                     ; preds = %83
-  %87 = load %struct.node*, %struct.node** %18, align 4, !tbaa !2
-  %88 = getelementptr inbounds %struct.node, %struct.node* %87, i32 %73, i32 0
-  %89 = load double, double* %88, align 8, !tbaa !10
-  %90 = fadd double %85, %89
-  %91 = add nuw nsw i32 %84, 1
-  br label %92
+; <label>:21:                                     ; preds = %20
+  %22 = load %struct.node*, %struct.node** %arrayidx14, align 4, !tbaa !2
+  %v16 = getelementptr inbounds %struct.node, %struct.node* %22, i32 %j.084, i32 0
+  %23 = load double, double* %v16, align 8, !tbaa !10
+  %add17 = fadd double %v.1, %23
+  %inc18 = add nuw nsw i32 %n.1, 1
+  br label %24
 
-; <label>:92:                                     ; preds = %86, %83
-  %93 = phi i32 [ %91, %86 ], [ %84, %83 ]
-  %94 = phi double [ %90, %86 ], [ %85, %83 ]
-  %95 = add nuw nsw i32 %73, 1
-  %96 = icmp slt i32 %95, %2
-  br i1 %96, label %97, label %102
+; <label>:24:                                     ; preds = %21, %20
+  %n.2 = phi i32 [ %inc18, %21 ], [ %n.1, %20 ]
+  %v.2 = phi double [ %add17, %21 ], [ %v.1, %20 ]
+  %add19 = add nuw nsw i32 %j.084, 1
+  %cmp20 = icmp slt i32 %add19, %w
+  br i1 %cmp20, label %25, label %27
 
-; <label>:97:                                     ; preds = %92
-  %98 = getelementptr inbounds %struct.node, %struct.node* %19, i32 %95, i32 0
-  %99 = load double, double* %98, align 8, !tbaa !10
-  %100 = fadd double %94, %99
-  %101 = add nsw i32 %93, 1
-  br label %102
+; <label>:25:                                     ; preds = %24
+  %v24 = getelementptr inbounds %struct.node, %struct.node* %2, i32 %add19, i32 0
+  %26 = load double, double* %v24, align 8, !tbaa !10
+  %add25 = fadd double %v.2, %26
+  %inc26 = add nsw i32 %n.2, 1
+  br label %27
 
-; <label>:102:                                    ; preds = %97, %92
-  %103 = phi i32 [ %101, %97 ], [ %93, %92 ]
-  %104 = phi double [ %100, %97 ], [ %94, %92 ]
-  %105 = getelementptr inbounds %struct.node, %struct.node* %19, i32 %73, i32 0
-  %106 = load double, double* %105, align 8, !tbaa !10
-  %107 = sitofp i32 %103 to double
-  %108 = fdiv double %104, %107
-  %109 = fsub double %106, %108
-  %110 = getelementptr inbounds %struct.node, %struct.node* %21, i32 %73, i32 0
-  store double %109, double* %110, align 8, !tbaa !10
-  %111 = getelementptr inbounds %struct.node, %struct.node* %19, i32 %73, i32 1
-  %112 = load i32, i32* %111, align 8, !tbaa !6
-  %113 = icmp eq i32 %112, 0
-  %114 = fmul double %109, %109
-  %115 = fadd double %72, %114
-  %116 = select i1 %113, double %115, double %72
-  %117 = icmp eq i32 %95, %2
-  br i1 %117, label %118, label %71
+; <label>:27:                                     ; preds = %25, %24
+  %n.3 = phi i32 [ %inc26, %25 ], [ %n.2, %24 ]
+  %v.3 = phi double [ %add25, %25 ], [ %v.2, %24 ]
+  %v29 = getelementptr inbounds %struct.node, %struct.node* %2, i32 %j.084, i32 0
+  %28 = load double, double* %v29, align 8, !tbaa !10
+  %conv = sitofp i32 %n.3 to double
+  %div = fdiv double %v.3, %conv
+  %sub30 = fsub double %28, %div
+  %v33 = getelementptr inbounds %struct.node, %struct.node* %3, i32 %j.084, i32 0
+  store double %sub30, double* %v33, align 8, !tbaa !10
+  %fixed = getelementptr inbounds %struct.node, %struct.node* %2, i32 %j.084, i32 1
+  %29 = load i32, i32* %fixed, align 8, !tbaa !6
+  %tobool36 = icmp eq i32 %29, 0
+  %mul = fmul double %sub30, %sub30
+  %add37 = fadd double %total.185, %mul
+  %total.2 = select i1 %tobool36, double %add37, double %total.185
+  %exitcond = icmp eq i32 %add19, %w
+  br i1 %exitcond, label %._crit_edge, label %16
 
-; <label>:118:                                    ; preds = %102, %51, %11
-  %119 = phi i32 [ %12, %11 ], [ %15, %51 ], [ %15, %102 ]
-  %120 = phi double [ %9, %11 ], [ %65, %51 ], [ %116, %102 ]
-  %121 = icmp eq i32 %119, %3
-  br i1 %121, label %122, label %8
+._crit_edge:                                      ; preds = %27, %13, %.._crit_edge_crit_edge
+  %inc39.pre-phi = phi i32 [ %.pre96, %.._crit_edge_crit_edge ], [ %add11, %13 ], [ %add11, %27 ]
+  %total.1.lcssa = phi double [ %total.088, %.._crit_edge_crit_edge ], [ %total.2.us, %13 ], [ %total.2, %27 ]
+  %exitcond95 = icmp eq i32 %inc39.pre-phi, %h
+  br i1 %exitcond95, label %._crit_edge91, label %1
 
-; <label>:122:                                    ; preds = %118, %4
-  %123 = phi double [ 0.000000e+00, %4 ], [ %120, %118 ]
-  ret double %123
+._crit_edge91:                                    ; preds = %._crit_edge, %0
+  %total.0.lcssa = phi double [ 0.000000e+00, %0 ], [ %total.1.lcssa, %._crit_edge ]
+  ret double %total.0.lcssa
 }
 
 ; Function Attrs: nounwind
-define hidden double @iter(%struct.node** nocapture readonly, i32, i32) local_unnamed_addr #0 {
-  %4 = alloca [3 x double], align 16
-  %5 = shl i32 %1, 4
-  %6 = or i32 %5, 4
-  %7 = mul i32 %6, %2
-  %8 = tail call noalias i8* @calloc(i32 1, i32 %7) #4
-  %9 = bitcast i8* %8 to %struct.node**
-  %10 = icmp sgt i32 %2, 0
-  br i1 %10, label %11, label %27
+define double @iter(%struct.node** nocapture readonly %m, i32 %w, i32 %h) local_unnamed_addr #0 {
+  %cur = alloca [3 x double], align 16
+  %mul1.i = shl i32 %w, 4
+  %mul217.i = or i32 %mul1.i, 4
+  %add.i = mul i32 %mul217.i, %h
+  %call.i = tail call i8* @calloc(i32 1, i32 %add.i) #4
+  %1 = bitcast i8* %call.i to %struct.node**
+  %cmp18.i = icmp sgt i32 %h, 0
+  br i1 %cmp18.i, label %.lr.ph.i, label %alloc2.exit
 
-; <label>:11:                                     ; preds = %3
-  %12 = getelementptr inbounds %struct.node*, %struct.node** %9, i32 %2
-  %13 = bitcast %struct.node** %12 to %struct.node*
-  br label %14
+.lr.ph.i:                                         ; preds = %0
+  %add.ptr3.i = getelementptr inbounds %struct.node*, %struct.node** %1, i32 %h
+  %2 = bitcast %struct.node** %add.ptr3.i to %struct.node*
+  br label %3
 
-; <label>:14:                                     ; preds = %22, %11
-  %15 = phi i32 [ 0, %11 ], [ %25, %22 ]
-  %16 = icmp eq i32 %15, 0
-  br i1 %16, label %22, label %17
+; <label>:3:                                      ; preds = %6, %.lr.ph.i
+  %i.019.i = phi i32 [ 0, %.lr.ph.i ], [ %inc.i, %6 ]
+  %tobool.i = icmp eq i32 %i.019.i, 0
+  br i1 %tobool.i, label %6, label %4
 
-; <label>:17:                                     ; preds = %14
-  %18 = add nsw i32 %15, -1
-  %19 = getelementptr inbounds %struct.node*, %struct.node** %9, i32 %18
-  %20 = load %struct.node*, %struct.node** %19, align 4, !tbaa !2
-  %21 = getelementptr inbounds %struct.node, %struct.node* %20, i32 %1
-  br label %22
+; <label>:4:                                      ; preds = %3
+  %sub.i = add nsw i32 %i.019.i, -1
+  %arrayidx.i = getelementptr inbounds %struct.node*, %struct.node** %1, i32 %sub.i
+  %5 = load %struct.node*, %struct.node** %arrayidx.i, align 4, !tbaa !2
+  %add.ptr.i = getelementptr inbounds %struct.node, %struct.node* %5, i32 %w
+  br label %6
 
-; <label>:22:                                     ; preds = %17, %14
-  %23 = phi %struct.node* [ %21, %17 ], [ %13, %14 ]
-  %24 = getelementptr inbounds %struct.node*, %struct.node** %9, i32 %15
-  store %struct.node* %23, %struct.node** %24, align 4, !tbaa !2
-  %25 = add nuw nsw i32 %15, 1
-  %26 = icmp eq i32 %25, %2
-  br i1 %26, label %27, label %14
+; <label>:6:                                      ; preds = %4, %3
+  %cond.i = phi %struct.node* [ %add.ptr.i, %4 ], [ %2, %3 ]
+  %arrayidx4.i = getelementptr inbounds %struct.node*, %struct.node** %1, i32 %i.019.i
+  store %struct.node* %cond.i, %struct.node** %arrayidx4.i, align 4, !tbaa !2
+  %inc.i = add nuw nsw i32 %i.019.i, 1
+  %exitcond.i = icmp eq i32 %inc.i, %h
+  br i1 %exitcond.i, label %alloc2.exit, label %3
 
-; <label>:27:                                     ; preds = %22, %3
-  %28 = bitcast [3 x double]* %4 to i8*
-  call void @llvm.lifetime.start.p0i8(i64 24, i8* nonnull %28) #4
-  call void @llvm.memset.p0i8.i32(i8* nonnull %28, i8 0, i32 24, i32 16, i1 false)
-  %29 = getelementptr inbounds %struct.node*, %struct.node** %0, i32 1
-  %30 = getelementptr inbounds %struct.node*, %struct.node** %0, i32 6
-  %31 = icmp sgt i32 %1, 0
-  br i1 %10, label %33, label %32
+alloc2.exit:                                      ; preds = %6, %0
+  %7 = bitcast [3 x double]* %cur to i8*
+  call void @llvm.lifetime.start.p0i8(i64 24, i8* nonnull %7) #4
+  call void @llvm.memset.p0i8.i32(i8* nonnull %7, i8 0, i32 24, i32 16, i1 false)
+  %arrayidx.i74 = getelementptr inbounds %struct.node*, %struct.node** %m, i32 1
+  %arrayidx4.i75 = getelementptr inbounds %struct.node*, %struct.node** %m, i32 6
+  %cmp383 = icmp sgt i32 %w, 0
+  br i1 %cmp18.i, label %.lr.ph91.us.preheader, label %alloc2.exit.split.preheader
 
-; <label>:32:                                     ; preds = %27
-  br label %63
+alloc2.exit.split.preheader:                      ; preds = %alloc2.exit
+  br label %alloc2.exit.split
 
-; <label>:33:                                     ; preds = %27
-  br label %34
+.lr.ph91.us.preheader:                            ; preds = %alloc2.exit
+  br label %.lr.ph91.us
 
-; <label>:34:                                     ; preds = %33, %43
-  %35 = load %struct.node*, %struct.node** %29, align 4, !tbaa !2
-  %36 = getelementptr inbounds %struct.node, %struct.node* %35, i32 1, i32 1
-  store i32 1, i32* %36, align 8, !tbaa !6
-  %37 = getelementptr inbounds %struct.node, %struct.node* %35, i32 1, i32 0
-  store double 1.000000e+00, double* %37, align 8, !tbaa !10
-  %38 = load %struct.node*, %struct.node** %30, align 4, !tbaa !2
-  %39 = getelementptr inbounds %struct.node, %struct.node* %38, i32 7, i32 1
-  store i32 -1, i32* %39, align 8, !tbaa !6
-  %40 = getelementptr inbounds %struct.node, %struct.node* %38, i32 7, i32 0
-  store double -1.000000e+00, double* %40, align 8, !tbaa !10
-  %41 = tail call double @calc_diff(%struct.node** %0, %struct.node** %9, i32 %1, i32 %2)
-  br i1 %31, label %42, label %43
+.lr.ph91.us:                                      ; preds = %.lr.ph91.us.preheader, %._crit_edge92.us
+  %8 = load %struct.node*, %struct.node** %arrayidx.i74, align 4, !tbaa !2
+  %fixed.i.us = getelementptr inbounds %struct.node, %struct.node* %8, i32 1, i32 1
+  store i32 1, i32* %fixed.i.us, align 8, !tbaa !6
+  %v.i.us = getelementptr inbounds %struct.node, %struct.node* %8, i32 1, i32 0
+  store double 1.000000e+00, double* %v.i.us, align 8, !tbaa !10
+  %9 = load %struct.node*, %struct.node** %arrayidx4.i75, align 4, !tbaa !2
+  %fixed6.i.us = getelementptr inbounds %struct.node, %struct.node* %9, i32 7, i32 1
+  store i32 -1, i32* %fixed6.i.us, align 8, !tbaa !6
+  %v9.i.us = getelementptr inbounds %struct.node, %struct.node* %9, i32 7, i32 0
+  store double -1.000000e+00, double* %v9.i.us, align 8, !tbaa !10
+  %call1.us = tail call double @calc_diff(%struct.node** %m, %struct.node** %1, i32 %w, i32 %h)
+  br i1 %cmp383, label %.lr.ph86.us.us.preheader, label %._crit_edge92.us
 
-; <label>:42:                                     ; preds = %34
-  br label %45
+.lr.ph86.us.us.preheader:                         ; preds = %.lr.ph91.us
+  br label %.lr.ph86.us.us
 
-; <label>:43:                                     ; preds = %51, %34
-  %44 = fcmp ogt double %41, 0x3AF357C299A88EA7
-  br i1 %44, label %34, label %72
+._crit_edge92.us:                                 ; preds = %._crit_edge87.us.us, %.lr.ph91.us
+  %cmp.us = fcmp ogt double %call1.us, 0x3AF357C299A88EA7
+  br i1 %cmp.us, label %.lr.ph91.us, label %.us-lcssa.us
 
-; <label>:45:                                     ; preds = %42, %51
-  %46 = phi i32 [ %52, %51 ], [ 0, %42 ]
-  %47 = getelementptr inbounds %struct.node*, %struct.node** %9, i32 %46
-  %48 = load %struct.node*, %struct.node** %47, align 4, !tbaa !2
-  %49 = getelementptr inbounds %struct.node*, %struct.node** %0, i32 %46
-  %50 = load %struct.node*, %struct.node** %49, align 4, !tbaa !2
-  br label %54
+.lr.ph86.us.us:                                   ; preds = %.lr.ph86.us.us.preheader, %._crit_edge87.us.us
+  %i.089.us.us = phi i32 [ %inc8.us.us, %._crit_edge87.us.us ], [ 0, %.lr.ph86.us.us.preheader ]
+  %arrayidx.us.us = getelementptr inbounds %struct.node*, %struct.node** %1, i32 %i.089.us.us
+  %10 = load %struct.node*, %struct.node** %arrayidx.us.us, align 4, !tbaa !2
+  %arrayidx5.us.us = getelementptr inbounds %struct.node*, %struct.node** %m, i32 %i.089.us.us
+  %11 = load %struct.node*, %struct.node** %arrayidx5.us.us, align 4, !tbaa !2
+  br label %12
 
-; <label>:51:                                     ; preds = %54
-  %52 = add nuw nsw i32 %46, 1
-  %53 = icmp eq i32 %52, %2
-  br i1 %53, label %43, label %45
+._crit_edge87.us.us:                              ; preds = %12
+  %inc8.us.us = add nuw nsw i32 %i.089.us.us, 1
+  %exitcond115 = icmp eq i32 %inc8.us.us, %h
+  br i1 %exitcond115, label %._crit_edge92.us, label %.lr.ph86.us.us
 
-; <label>:54:                                     ; preds = %54, %45
-  %55 = phi i32 [ 0, %45 ], [ %61, %54 ]
-  %56 = getelementptr inbounds %struct.node, %struct.node* %48, i32 %55, i32 0
-  %57 = load double, double* %56, align 8, !tbaa !10
-  %58 = getelementptr inbounds %struct.node, %struct.node* %50, i32 %55, i32 0
-  %59 = load double, double* %58, align 8, !tbaa !10
-  %60 = fsub double %59, %57
-  store double %60, double* %58, align 8, !tbaa !10
-  %61 = add nuw nsw i32 %55, 1
-  %62 = icmp eq i32 %61, %1
-  br i1 %62, label %51, label %54
+; <label>:12:                                     ; preds = %12, %.lr.ph86.us.us
+  %j.084.us.us = phi i32 [ 0, %.lr.ph86.us.us ], [ %inc.us.us, %12 ]
+  %v.us.us = getelementptr inbounds %struct.node, %struct.node* %10, i32 %j.084.us.us, i32 0
+  %13 = load double, double* %v.us.us, align 8, !tbaa !10
+  %v7.us.us = getelementptr inbounds %struct.node, %struct.node* %11, i32 %j.084.us.us, i32 0
+  %14 = load double, double* %v7.us.us, align 8, !tbaa !10
+  %sub.us.us = fsub double %14, %13
+  store double %sub.us.us, double* %v7.us.us, align 8, !tbaa !10
+  %inc.us.us = add nuw nsw i32 %j.084.us.us, 1
+  %exitcond114 = icmp eq i32 %inc.us.us, %w
+  br i1 %exitcond114, label %._crit_edge87.us.us, label %12
 
-; <label>:63:                                     ; preds = %32, %63
-  %64 = load %struct.node*, %struct.node** %29, align 4, !tbaa !2
-  %65 = getelementptr inbounds %struct.node, %struct.node* %64, i32 1, i32 1
-  store i32 1, i32* %65, align 8, !tbaa !6
-  %66 = getelementptr inbounds %struct.node, %struct.node* %64, i32 1, i32 0
-  store double 1.000000e+00, double* %66, align 8, !tbaa !10
-  %67 = load %struct.node*, %struct.node** %30, align 4, !tbaa !2
-  %68 = getelementptr inbounds %struct.node, %struct.node* %67, i32 7, i32 1
-  store i32 -1, i32* %68, align 8, !tbaa !6
-  %69 = getelementptr inbounds %struct.node, %struct.node* %67, i32 7, i32 0
-  store double -1.000000e+00, double* %69, align 8, !tbaa !10
-  %70 = tail call double @calc_diff(%struct.node** %0, %struct.node** %9, i32 %1, i32 %2)
-  %71 = fcmp ogt double %70, 0x3AF357C299A88EA7
-  br i1 %71, label %63, label %72
+alloc2.exit.split:                                ; preds = %alloc2.exit.split.preheader, %alloc2.exit.split
+  %15 = load %struct.node*, %struct.node** %arrayidx.i74, align 4, !tbaa !2
+  %fixed.i = getelementptr inbounds %struct.node, %struct.node* %15, i32 1, i32 1
+  store i32 1, i32* %fixed.i, align 8, !tbaa !6
+  %v.i = getelementptr inbounds %struct.node, %struct.node* %15, i32 1, i32 0
+  store double 1.000000e+00, double* %v.i, align 8, !tbaa !10
+  %16 = load %struct.node*, %struct.node** %arrayidx4.i75, align 4, !tbaa !2
+  %fixed6.i = getelementptr inbounds %struct.node, %struct.node* %16, i32 7, i32 1
+  store i32 -1, i32* %fixed6.i, align 8, !tbaa !6
+  %v9.i = getelementptr inbounds %struct.node, %struct.node* %16, i32 7, i32 0
+  store double -1.000000e+00, double* %v9.i, align 8, !tbaa !10
+  %call1 = tail call double @calc_diff(%struct.node** %m, %struct.node** %1, i32 %w, i32 %h)
+  %cmp = fcmp ogt double %call1, 0x3AF357C299A88EA7
+  br i1 %cmp, label %alloc2.exit.split, label %.us-lcssa.us
 
-; <label>:72:                                     ; preds = %63, %43
-  br i1 %10, label %73, label %116
+.us-lcssa.us:                                     ; preds = %alloc2.exit.split, %._crit_edge92.us
+  br i1 %cmp18.i, label %.lr.ph81, label %._crit_edge82
 
-; <label>:73:                                     ; preds = %72
-  %74 = add nsw i32 %2, -1
-  %75 = add nsw i32 %1, -1
-  br i1 %31, label %76, label %116
+.lr.ph81:                                         ; preds = %.us-lcssa.us
+  %sub20 = add nsw i32 %h, -1
+  %sub23 = add nsw i32 %w, -1
+  br i1 %cmp383, label %.lr.ph.us.preheader, label %._crit_edge82
 
-; <label>:76:                                     ; preds = %73
-  br label %77
+.lr.ph.us.preheader:                              ; preds = %.lr.ph81
+  br label %.lr.ph.us
 
-; <label>:77:                                     ; preds = %76, %108
-  %78 = phi i32 [ %109, %108 ], [ 0, %76 ]
-  %79 = getelementptr inbounds %struct.node*, %struct.node** %9, i32 %78
-  %80 = load %struct.node*, %struct.node** %79, align 4, !tbaa !2
-  %81 = icmp ne i32 %78, 0
-  %82 = zext i1 %81 to i32
-  %83 = icmp slt i32 %78, %74
-  %84 = zext i1 %83 to i32
-  %85 = add nuw nsw i32 %84, %82
-  %86 = getelementptr inbounds %struct.node*, %struct.node** %0, i32 %78
-  %87 = load %struct.node*, %struct.node** %86, align 4, !tbaa !2
-  br label %88
+.lr.ph.us:                                        ; preds = %.lr.ph.us.preheader, %._crit_edge.us
+  %i.179.us = phi i32 [ %inc34.us, %._crit_edge.us ], [ 0, %.lr.ph.us.preheader ]
+  %arrayidx11.us = getelementptr inbounds %struct.node*, %struct.node** %1, i32 %i.179.us
+  %17 = load %struct.node*, %struct.node** %arrayidx11.us, align 4, !tbaa !2
+  %tobool.us = icmp ne i32 %i.179.us, 0
+  %lnot.ext.us = zext i1 %tobool.us to i32
+  %cmp21.us = icmp slt i32 %i.179.us, %sub20
+  %conv.us = zext i1 %cmp21.us to i32
+  %add.us = add nuw nsw i32 %conv.us, %lnot.ext.us
+  %arrayidx28.us = getelementptr inbounds %struct.node*, %struct.node** %m, i32 %i.179.us
+  %18 = load %struct.node*, %struct.node** %arrayidx28.us, align 4, !tbaa !2
+  br label %19
 
-; <label>:88:                                     ; preds = %88, %77
-  %89 = phi i32 [ 0, %77 ], [ %106, %88 ]
-  %90 = getelementptr inbounds %struct.node, %struct.node* %80, i32 %89, i32 0
-  %91 = load double, double* %90, align 8, !tbaa !10
-  %92 = icmp ne i32 %89, 0
-  %93 = zext i1 %92 to i32
-  %94 = icmp slt i32 %89, %75
-  %95 = zext i1 %94 to i32
-  %96 = add nuw nsw i32 %85, %93
-  %97 = add nuw nsw i32 %96, %95
-  %98 = sitofp i32 %97 to double
-  %99 = fmul double %91, %98
-  %100 = getelementptr inbounds %struct.node, %struct.node* %87, i32 %89, i32 1
-  %101 = load i32, i32* %100, align 8, !tbaa !6
-  %102 = add nsw i32 %101, 1
-  %103 = getelementptr inbounds [3 x double], [3 x double]* %4, i32 0, i32 %102
-  %104 = load double, double* %103, align 8, !tbaa !11
-  %105 = fadd double %99, %104
-  store double %105, double* %103, align 8, !tbaa !11
-  %106 = add nuw nsw i32 %89, 1
-  %107 = icmp eq i32 %106, %1
-  br i1 %107, label %108, label %88
+; <label>:19:                                     ; preds = %19, %.lr.ph.us
+  %j.177.us = phi i32 [ 0, %.lr.ph.us ], [ %inc33.us, %19 ]
+  %v13.us = getelementptr inbounds %struct.node, %struct.node* %17, i32 %j.177.us, i32 0
+  %20 = load double, double* %v13.us, align 8, !tbaa !10
+  %tobool15.us = icmp ne i32 %j.177.us, 0
+  %lnot.ext19.us = zext i1 %tobool15.us to i32
+  %cmp24.us = icmp slt i32 %j.177.us, %sub23
+  %conv25.us = zext i1 %cmp24.us to i32
+  %add22.us = add nuw nsw i32 %add.us, %lnot.ext19.us
+  %add26.us = add nuw nsw i32 %add22.us, %conv25.us
+  %conv27.us = sitofp i32 %add26.us to double
+  %mul.us = fmul double %20, %conv27.us
+  %fixed.us = getelementptr inbounds %struct.node, %struct.node* %18, i32 %j.177.us, i32 1
+  %21 = load i32, i32* %fixed.us, align 8, !tbaa !6
+  %add30.us = add nsw i32 %21, 1
+  %arrayidx31.us = getelementptr inbounds [3 x double], [3 x double]* %cur, i32 0, i32 %add30.us
+  %22 = load double, double* %arrayidx31.us, align 8, !tbaa !11
+  %add32.us = fadd double %mul.us, %22
+  store double %add32.us, double* %arrayidx31.us, align 8, !tbaa !11
+  %inc33.us = add nuw nsw i32 %j.177.us, 1
+  %exitcond = icmp eq i32 %inc33.us, %w
+  br i1 %exitcond, label %._crit_edge.us, label %19
 
-; <label>:108:                                    ; preds = %88
-  %109 = add nuw nsw i32 %78, 1
-  %110 = icmp eq i32 %109, %2
-  br i1 %110, label %111, label %77
+._crit_edge.us:                                   ; preds = %19
+  %inc34.us = add nuw nsw i32 %i.179.us, 1
+  %exitcond111 = icmp eq i32 %inc34.us, %h
+  br i1 %exitcond111, label %._crit_edge82.loopexit, label %.lr.ph.us
 
-; <label>:111:                                    ; preds = %108
-  %112 = getelementptr inbounds [3 x double], [3 x double]* %4, i32 0, i32 2
-  %113 = load double, double* %112, align 16, !tbaa !11
-  %114 = getelementptr inbounds [3 x double], [3 x double]* %4, i32 0, i32 0
-  %115 = load double, double* %114, align 16, !tbaa !11
-  br label %116
+._crit_edge82.loopexit:                           ; preds = %._crit_edge.us
+  %arrayidx35.phi.trans.insert = getelementptr inbounds [3 x double], [3 x double]* %cur, i32 0, i32 2
+  %.pre = load double, double* %arrayidx35.phi.trans.insert, align 16, !tbaa !11
+  %arrayidx36.phi.trans.insert = getelementptr inbounds [3 x double], [3 x double]* %cur, i32 0, i32 0
+  %.pre116 = load double, double* %arrayidx36.phi.trans.insert, align 16, !tbaa !11
+  br label %._crit_edge82
 
-; <label>:116:                                    ; preds = %73, %111, %72
-  %117 = phi double [ %115, %111 ], [ 0.000000e+00, %72 ], [ 0.000000e+00, %73 ]
-  %118 = phi double [ %113, %111 ], [ 0.000000e+00, %72 ], [ 0.000000e+00, %73 ]
-  tail call void @free(i8* %8) #4
-  %119 = fsub double %118, %117
-  %120 = fmul double %119, 5.000000e-01
-  call void @llvm.lifetime.end.p0i8(i64 24, i8* nonnull %28) #4
-  ret double %120
+._crit_edge82:                                    ; preds = %.lr.ph81, %._crit_edge82.loopexit, %.us-lcssa.us
+  %23 = phi double [ %.pre116, %._crit_edge82.loopexit ], [ 0.000000e+00, %.us-lcssa.us ], [ 0.000000e+00, %.lr.ph81 ]
+  %24 = phi double [ %.pre, %._crit_edge82.loopexit ], [ 0.000000e+00, %.us-lcssa.us ], [ 0.000000e+00, %.lr.ph81 ]
+  tail call void @free(i8* %call.i)
+  %sub37 = fsub double %24, %23
+  %div = fmul double %sub37, 5.000000e-01
+  call void @llvm.lifetime.end.p0i8(i64 24, i8* nonnull %7) #4
+  ret double %div
 }
 
 ; Function Attrs: argmemonly nounwind
@@ -430,61 +430,62 @@ declare void @llvm.memset.p0i8.i32(i8* nocapture writeonly, i8, i32, i32, i1) #1
 declare void @free(i8* nocapture) local_unnamed_addr #2
 
 ; Function Attrs: nounwind
-define hidden i32 @main() local_unnamed_addr #0 {
-  %1 = tail call noalias i8* @calloc(i32 1, i32 1640) #4
-  %2 = bitcast i8* %1 to %struct.node**
-  %3 = getelementptr inbounds i8, i8* %1, i32 40
-  %4 = bitcast i8* %1 to i8**
-  store i8* %3, i8** %4, align 4, !tbaa !2
-  %5 = getelementptr inbounds i8, i8* %1, i32 200
-  %6 = getelementptr inbounds i8, i8* %1, i32 4
-  %7 = bitcast i8* %6 to i8**
-  store i8* %5, i8** %7, align 4, !tbaa !2
-  %8 = getelementptr inbounds i8, i8* %1, i32 360
-  %9 = getelementptr inbounds i8, i8* %1, i32 8
-  %10 = bitcast i8* %9 to i8**
-  store i8* %8, i8** %10, align 4, !tbaa !2
-  %11 = getelementptr inbounds i8, i8* %1, i32 520
-  %12 = getelementptr inbounds i8, i8* %1, i32 12
-  %13 = bitcast i8* %12 to i8**
-  store i8* %11, i8** %13, align 4, !tbaa !2
-  %14 = getelementptr inbounds i8, i8* %1, i32 680
-  %15 = getelementptr inbounds i8, i8* %1, i32 16
-  %16 = bitcast i8* %15 to i8**
-  store i8* %14, i8** %16, align 4, !tbaa !2
-  %17 = getelementptr inbounds i8, i8* %1, i32 840
-  %18 = getelementptr inbounds i8, i8* %1, i32 20
-  %19 = bitcast i8* %18 to i8**
-  store i8* %17, i8** %19, align 4, !tbaa !2
-  %20 = getelementptr inbounds i8, i8* %1, i32 1000
-  %21 = getelementptr inbounds i8, i8* %1, i32 24
-  %22 = bitcast i8* %21 to i8**
-  store i8* %20, i8** %22, align 4, !tbaa !2
-  %23 = getelementptr inbounds i8, i8* %1, i32 1160
-  %24 = getelementptr inbounds i8, i8* %1, i32 28
-  %25 = bitcast i8* %24 to i8**
-  store i8* %23, i8** %25, align 4, !tbaa !2
-  %26 = getelementptr inbounds i8, i8* %1, i32 1320
-  %27 = getelementptr inbounds i8, i8* %1, i32 32
-  %28 = bitcast i8* %27 to i8**
-  store i8* %26, i8** %28, align 4, !tbaa !2
-  %29 = getelementptr inbounds i8, i8* %1, i32 1480
-  %30 = getelementptr inbounds i8, i8* %1, i32 36
-  %31 = bitcast i8* %30 to i8**
-  store i8* %29, i8** %31, align 4, !tbaa !2
-  %32 = tail call double @iter(%struct.node** nonnull %2, i32 10, i32 10)
-  %33 = fdiv double 2.000000e+00, %32
-  %34 = tail call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([8 x i8], [8 x i8]* @.str, i32 0, i32 0), double %33)
+define i32 @main() local_unnamed_addr #0 {
+alloc2.exit4:
+  %call.i = tail call i8* @calloc(i32 1, i32 1640) #4
+  %0 = bitcast i8* %call.i to %struct.node**
+  %add.ptr3.i = getelementptr inbounds i8, i8* %call.i, i32 40
+  %1 = bitcast i8* %call.i to i8**
+  store i8* %add.ptr3.i, i8** %1, align 4, !tbaa !2
+  %add.ptr.i.1 = getelementptr inbounds i8, i8* %call.i, i32 200
+  %arrayidx4.i.1 = getelementptr inbounds i8, i8* %call.i, i32 4
+  %2 = bitcast i8* %arrayidx4.i.1 to i8**
+  store i8* %add.ptr.i.1, i8** %2, align 4, !tbaa !2
+  %add.ptr.i.2 = getelementptr inbounds i8, i8* %call.i, i32 360
+  %arrayidx4.i.2 = getelementptr inbounds i8, i8* %call.i, i32 8
+  %3 = bitcast i8* %arrayidx4.i.2 to i8**
+  store i8* %add.ptr.i.2, i8** %3, align 4, !tbaa !2
+  %add.ptr.i.3 = getelementptr inbounds i8, i8* %call.i, i32 520
+  %arrayidx4.i.3 = getelementptr inbounds i8, i8* %call.i, i32 12
+  %4 = bitcast i8* %arrayidx4.i.3 to i8**
+  store i8* %add.ptr.i.3, i8** %4, align 4, !tbaa !2
+  %add.ptr.i.4 = getelementptr inbounds i8, i8* %call.i, i32 680
+  %arrayidx4.i.4 = getelementptr inbounds i8, i8* %call.i, i32 16
+  %5 = bitcast i8* %arrayidx4.i.4 to i8**
+  store i8* %add.ptr.i.4, i8** %5, align 4, !tbaa !2
+  %add.ptr.i.5 = getelementptr inbounds i8, i8* %call.i, i32 840
+  %arrayidx4.i.5 = getelementptr inbounds i8, i8* %call.i, i32 20
+  %6 = bitcast i8* %arrayidx4.i.5 to i8**
+  store i8* %add.ptr.i.5, i8** %6, align 4, !tbaa !2
+  %add.ptr.i.6 = getelementptr inbounds i8, i8* %call.i, i32 1000
+  %arrayidx4.i.6 = getelementptr inbounds i8, i8* %call.i, i32 24
+  %7 = bitcast i8* %arrayidx4.i.6 to i8**
+  store i8* %add.ptr.i.6, i8** %7, align 4, !tbaa !2
+  %add.ptr.i.7 = getelementptr inbounds i8, i8* %call.i, i32 1160
+  %arrayidx4.i.7 = getelementptr inbounds i8, i8* %call.i, i32 28
+  %8 = bitcast i8* %arrayidx4.i.7 to i8**
+  store i8* %add.ptr.i.7, i8** %8, align 4, !tbaa !2
+  %add.ptr.i.8 = getelementptr inbounds i8, i8* %call.i, i32 1320
+  %arrayidx4.i.8 = getelementptr inbounds i8, i8* %call.i, i32 32
+  %9 = bitcast i8* %arrayidx4.i.8 to i8**
+  store i8* %add.ptr.i.8, i8** %9, align 4, !tbaa !2
+  %add.ptr.i.9 = getelementptr inbounds i8, i8* %call.i, i32 1480
+  %arrayidx4.i.9 = getelementptr inbounds i8, i8* %call.i, i32 36
+  %10 = bitcast i8* %arrayidx4.i.9 to i8**
+  store i8* %add.ptr.i.9, i8** %10, align 4, !tbaa !2
+  %call1 = tail call double @iter(%struct.node** nonnull %0, i32 10, i32 10)
+  %div = fdiv double 2.000000e+00, %call1
+  %call2 = tail call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([8 x i8], [8 x i8]* @.str, i32 0, i32 0), double %div)
   ret i32 0
 }
 
 ; Function Attrs: nounwind
 declare i32 @printf(i8* nocapture readonly, ...) local_unnamed_addr #2
 
-attributes #0 = { nounwind "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "less-precise-fpmad"="false" "no-frame-pointer-elim"="false" "no-infs-fp-math"="false" "no-jump-tables"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="false" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #0 = { nounwind "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "less-precise-fpmad"="false" "no-frame-pointer-elim"="true" "no-frame-pointer-elim-non-leaf" "no-infs-fp-math"="false" "no-jump-tables"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="false" "stack-protector-buffer-size"="8" "unsafe-fp-math"="false" "use-soft-float"="false" }
 attributes #1 = { argmemonly nounwind }
-attributes #2 = { nounwind "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "less-precise-fpmad"="false" "no-frame-pointer-elim"="false" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="false" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
-attributes #3 = { norecurse nounwind "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "less-precise-fpmad"="false" "no-frame-pointer-elim"="false" "no-infs-fp-math"="false" "no-jump-tables"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="false" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #2 = { nounwind "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "less-precise-fpmad"="false" "no-frame-pointer-elim"="true" "no-frame-pointer-elim-non-leaf" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="false" "stack-protector-buffer-size"="8" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #3 = { norecurse nounwind "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "less-precise-fpmad"="false" "no-frame-pointer-elim"="true" "no-frame-pointer-elim-non-leaf" "no-infs-fp-math"="false" "no-jump-tables"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="false" "stack-protector-buffer-size"="8" "unsafe-fp-math"="false" "use-soft-float"="false" }
 attributes #4 = { nounwind }
 
 !llvm.module.flags = !{!0}

@@ -1,0 +1,2722 @@
+; starting synthesis for LHS
+%0:i32 = var (knownBits=0xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx) (nonNegative) (range=[0,-2147483648))
+infer %0
+inputs: 1, constants: 2
+N: 3, M: 19
+default width: 32
+output width: 32
+component library: add (32, { 32 32 }); sub (32, { 32 32 }); mul (32, { 32 32 }); and (32, { 32 32 }); or (32, { 32 32 }); xor (32, { 32 32 }); shl (32, { 32 32 }); lshr (32, { 32 32 }); ashr (32, { 32 32 }); select (32, { 1 32 32 }); eq (1, { 32 32 }); ne (1, { 32 32 }); ult (1, { 32 32 }); slt (1, { 32 32 }); ule (1, { 32 32 }); sle (1, { 32 32 }); 
+const components: const (32); const (32); 
+I: 0_1 (input,i32) 0_2 (const,i32) 0_3 (const,i32) 
+P: 1_1 (add,i32) 1_2 (add,i32) 2_1 (sub,i32) 2_2 (sub,i32) 3_1 (mul,i32) 3_2 (mul,i32) 4_1 (and,i32) 4_2 (and,i32) 5_1 (or,i32) 5_2 (or,i32) 6_1 (xor,i32) 6_2 (xor,i32) 7_1 (shl,i32) 7_2 (shl,i32) 8_1 (lshr,i32) 8_2 (lshr,i32) 9_1 (ashr,i32) 9_2 (ashr,i32) 10_1 (select,i32) 10_2 (select,i32) 10_3 (select,i32) 11_1 (eq,i32) 11_2 (eq,i32) 12_1 (ne,i32) 12_2 (ne,i32) 13_1 (ult,i32) 13_2 (ult,i32) 14_1 (slt,i32) 14_2 (slt,i32) 15_1 (ule,i32) 15_2 (ule,i32) 16_1 (sle,i32) 16_2 (sle,i32) 
+R: 1_0 (add,i32) 2_0 (sub,i32) 3_0 (mul,i32) 4_0 (and,i32) 5_0 (or,i32) 6_0 (xor,i32) 7_0 (shl,i32) 8_0 (lshr,i32) 9_0 (ashr,i32) 10_0 (select,i32) 11_0 (zext,eq,i32) 12_0 (zext,ne,i32) 13_0 (zext,ult,i32) 14_0 (zext,slt,i32) 15_0 (zext,ule,i32) 16_0 (zext,sle,i32) 
+L: 0_1 (input,i32) 0_2 (const,i32) 0_3 (const,i32) 1_1 (add,i32) 1_2 (add,i32) 2_1 (sub,i32) 2_2 (sub,i32) 3_1 (mul,i32) 3_2 (mul,i32) 4_1 (and,i32) 4_2 (and,i32) 5_1 (or,i32) 5_2 (or,i32) 6_1 (xor,i32) 6_2 (xor,i32) 7_1 (shl,i32) 7_2 (shl,i32) 8_1 (lshr,i32) 8_2 (lshr,i32) 9_1 (ashr,i32) 9_2 (ashr,i32) 10_1 (select,i32) 10_2 (select,i32) 10_3 (select,i32) 11_1 (eq,i32) 11_2 (eq,i32) 12_1 (ne,i32) 12_2 (ne,i32) 13_1 (ult,i32) 13_2 (ult,i32) 14_1 (slt,i32) 14_2 (slt,i32) 15_1 (ule,i32) 15_2 (ule,i32) 16_1 (sle,i32) 16_2 (sle,i32) 1_0 (add,i32) 2_0 (sub,i32) 3_0 (mul,i32) 4_0 (and,i32) 5_0 (or,i32) 6_0 (xor,i32) 7_0 (shl,i32) 8_0 (lshr,i32) 9_0 (ashr,i32) 10_0 (select,i32) 11_0 (zext,eq,i32) 12_0 (zext,ne,i32) 13_0 (zext,ult,i32) 14_0 (zext,slt,i32) 15_0 (zext,ule,i32) 16_0 (zext,sle,i32) 17_0 (output,i32) 
+O: 17_0 (output,i32)
+consistency constraints:
+1_0 (add,i32) != 2_0 (sub,i32)
+1_0 (add,i32) != 3_0 (mul,i32)
+1_0 (add,i32) != 4_0 (and,i32)
+1_0 (add,i32) != 5_0 (or,i32)
+1_0 (add,i32) != 6_0 (xor,i32)
+1_0 (add,i32) != 7_0 (shl,i32)
+1_0 (add,i32) != 8_0 (lshr,i32)
+1_0 (add,i32) != 9_0 (ashr,i32)
+1_0 (add,i32) != 10_0 (select,i32)
+1_0 (add,i32) != 11_0 (zext,eq,i32)
+1_0 (add,i32) != 12_0 (zext,ne,i32)
+1_0 (add,i32) != 13_0 (zext,ult,i32)
+1_0 (add,i32) != 14_0 (zext,slt,i32)
+1_0 (add,i32) != 15_0 (zext,ule,i32)
+1_0 (add,i32) != 16_0 (zext,sle,i32)
+2_0 (sub,i32) != 3_0 (mul,i32)
+2_0 (sub,i32) != 4_0 (and,i32)
+2_0 (sub,i32) != 5_0 (or,i32)
+2_0 (sub,i32) != 6_0 (xor,i32)
+2_0 (sub,i32) != 7_0 (shl,i32)
+2_0 (sub,i32) != 8_0 (lshr,i32)
+2_0 (sub,i32) != 9_0 (ashr,i32)
+2_0 (sub,i32) != 10_0 (select,i32)
+2_0 (sub,i32) != 11_0 (zext,eq,i32)
+2_0 (sub,i32) != 12_0 (zext,ne,i32)
+2_0 (sub,i32) != 13_0 (zext,ult,i32)
+2_0 (sub,i32) != 14_0 (zext,slt,i32)
+2_0 (sub,i32) != 15_0 (zext,ule,i32)
+2_0 (sub,i32) != 16_0 (zext,sle,i32)
+3_0 (mul,i32) != 4_0 (and,i32)
+3_0 (mul,i32) != 5_0 (or,i32)
+3_0 (mul,i32) != 6_0 (xor,i32)
+3_0 (mul,i32) != 7_0 (shl,i32)
+3_0 (mul,i32) != 8_0 (lshr,i32)
+3_0 (mul,i32) != 9_0 (ashr,i32)
+3_0 (mul,i32) != 10_0 (select,i32)
+3_0 (mul,i32) != 11_0 (zext,eq,i32)
+3_0 (mul,i32) != 12_0 (zext,ne,i32)
+3_0 (mul,i32) != 13_0 (zext,ult,i32)
+3_0 (mul,i32) != 14_0 (zext,slt,i32)
+3_0 (mul,i32) != 15_0 (zext,ule,i32)
+3_0 (mul,i32) != 16_0 (zext,sle,i32)
+4_0 (and,i32) != 5_0 (or,i32)
+4_0 (and,i32) != 6_0 (xor,i32)
+4_0 (and,i32) != 7_0 (shl,i32)
+4_0 (and,i32) != 8_0 (lshr,i32)
+4_0 (and,i32) != 9_0 (ashr,i32)
+4_0 (and,i32) != 10_0 (select,i32)
+4_0 (and,i32) != 11_0 (zext,eq,i32)
+4_0 (and,i32) != 12_0 (zext,ne,i32)
+4_0 (and,i32) != 13_0 (zext,ult,i32)
+4_0 (and,i32) != 14_0 (zext,slt,i32)
+4_0 (and,i32) != 15_0 (zext,ule,i32)
+4_0 (and,i32) != 16_0 (zext,sle,i32)
+5_0 (or,i32) != 6_0 (xor,i32)
+5_0 (or,i32) != 7_0 (shl,i32)
+5_0 (or,i32) != 8_0 (lshr,i32)
+5_0 (or,i32) != 9_0 (ashr,i32)
+5_0 (or,i32) != 10_0 (select,i32)
+5_0 (or,i32) != 11_0 (zext,eq,i32)
+5_0 (or,i32) != 12_0 (zext,ne,i32)
+5_0 (or,i32) != 13_0 (zext,ult,i32)
+5_0 (or,i32) != 14_0 (zext,slt,i32)
+5_0 (or,i32) != 15_0 (zext,ule,i32)
+5_0 (or,i32) != 16_0 (zext,sle,i32)
+6_0 (xor,i32) != 7_0 (shl,i32)
+6_0 (xor,i32) != 8_0 (lshr,i32)
+6_0 (xor,i32) != 9_0 (ashr,i32)
+6_0 (xor,i32) != 10_0 (select,i32)
+6_0 (xor,i32) != 11_0 (zext,eq,i32)
+6_0 (xor,i32) != 12_0 (zext,ne,i32)
+6_0 (xor,i32) != 13_0 (zext,ult,i32)
+6_0 (xor,i32) != 14_0 (zext,slt,i32)
+6_0 (xor,i32) != 15_0 (zext,ule,i32)
+6_0 (xor,i32) != 16_0 (zext,sle,i32)
+7_0 (shl,i32) != 8_0 (lshr,i32)
+7_0 (shl,i32) != 9_0 (ashr,i32)
+7_0 (shl,i32) != 10_0 (select,i32)
+7_0 (shl,i32) != 11_0 (zext,eq,i32)
+7_0 (shl,i32) != 12_0 (zext,ne,i32)
+7_0 (shl,i32) != 13_0 (zext,ult,i32)
+7_0 (shl,i32) != 14_0 (zext,slt,i32)
+7_0 (shl,i32) != 15_0 (zext,ule,i32)
+7_0 (shl,i32) != 16_0 (zext,sle,i32)
+8_0 (lshr,i32) != 9_0 (ashr,i32)
+8_0 (lshr,i32) != 10_0 (select,i32)
+8_0 (lshr,i32) != 11_0 (zext,eq,i32)
+8_0 (lshr,i32) != 12_0 (zext,ne,i32)
+8_0 (lshr,i32) != 13_0 (zext,ult,i32)
+8_0 (lshr,i32) != 14_0 (zext,slt,i32)
+8_0 (lshr,i32) != 15_0 (zext,ule,i32)
+8_0 (lshr,i32) != 16_0 (zext,sle,i32)
+9_0 (ashr,i32) != 10_0 (select,i32)
+9_0 (ashr,i32) != 11_0 (zext,eq,i32)
+9_0 (ashr,i32) != 12_0 (zext,ne,i32)
+9_0 (ashr,i32) != 13_0 (zext,ult,i32)
+9_0 (ashr,i32) != 14_0 (zext,slt,i32)
+9_0 (ashr,i32) != 15_0 (zext,ule,i32)
+9_0 (ashr,i32) != 16_0 (zext,sle,i32)
+10_0 (select,i32) != 11_0 (zext,eq,i32)
+10_0 (select,i32) != 12_0 (zext,ne,i32)
+10_0 (select,i32) != 13_0 (zext,ult,i32)
+10_0 (select,i32) != 14_0 (zext,slt,i32)
+10_0 (select,i32) != 15_0 (zext,ule,i32)
+10_0 (select,i32) != 16_0 (zext,sle,i32)
+11_0 (zext,eq,i32) != 12_0 (zext,ne,i32)
+11_0 (zext,eq,i32) != 13_0 (zext,ult,i32)
+11_0 (zext,eq,i32) != 14_0 (zext,slt,i32)
+11_0 (zext,eq,i32) != 15_0 (zext,ule,i32)
+11_0 (zext,eq,i32) != 16_0 (zext,sle,i32)
+12_0 (zext,ne,i32) != 13_0 (zext,ult,i32)
+12_0 (zext,ne,i32) != 14_0 (zext,slt,i32)
+12_0 (zext,ne,i32) != 15_0 (zext,ule,i32)
+12_0 (zext,ne,i32) != 16_0 (zext,sle,i32)
+13_0 (zext,ult,i32) != 14_0 (zext,slt,i32)
+13_0 (zext,ult,i32) != 15_0 (zext,ule,i32)
+13_0 (zext,ult,i32) != 16_0 (zext,sle,i32)
+14_0 (zext,slt,i32) != 15_0 (zext,ule,i32)
+14_0 (zext,slt,i32) != 16_0 (zext,sle,i32)
+15_0 (zext,ule,i32) != 16_0 (zext,sle,i32)
+acyclicity constraints:
+1_1 (add,i32) < 1_0
+1_2 (add,i32) < 1_0
+2_1 (sub,i32) < 2_0
+2_2 (sub,i32) < 2_0
+3_1 (mul,i32) < 3_0
+3_2 (mul,i32) < 3_0
+4_1 (and,i32) < 4_0
+4_2 (and,i32) < 4_0
+5_1 (or,i32) < 5_0
+5_2 (or,i32) < 5_0
+6_1 (xor,i32) < 6_0
+6_2 (xor,i32) < 6_0
+7_1 (shl,i32) < 7_0
+7_2 (shl,i32) < 7_0
+8_1 (lshr,i32) < 8_0
+8_2 (lshr,i32) < 8_0
+9_1 (ashr,i32) < 9_0
+9_2 (ashr,i32) < 9_0
+10_1 (select,i32) < 10_0
+10_2 (select,i32) < 10_0
+10_3 (select,i32) < 10_0
+11_1 (eq,i32) < 11_0
+11_2 (eq,i32) < 11_0
+12_1 (ne,i32) < 12_0
+12_2 (ne,i32) < 12_0
+13_1 (ult,i32) < 13_0
+13_2 (ult,i32) < 13_0
+14_1 (slt,i32) < 14_0
+14_2 (slt,i32) < 14_0
+15_1 (ule,i32) < 15_0
+15_2 (ule,i32) < 15_0
+16_1 (sle,i32) < 16_0
+16_2 (sle,i32) < 16_0
+location variable constraints:
+0 <= 1_1 (add,i32) < 19
+0 <= 1_2 (add,i32) < 19
+0 <= 2_1 (sub,i32) < 19
+0 <= 2_2 (sub,i32) < 19
+0 <= 3_1 (mul,i32) < 19
+0 <= 3_2 (mul,i32) < 19
+0 <= 4_1 (and,i32) < 19
+0 <= 4_2 (and,i32) < 19
+0 <= 5_1 (or,i32) < 19
+0 <= 5_2 (or,i32) < 19
+0 <= 6_1 (xor,i32) < 19
+0 <= 6_2 (xor,i32) < 19
+0 <= 7_1 (shl,i32) < 19
+0 <= 7_2 (shl,i32) < 19
+0 <= 8_1 (lshr,i32) < 19
+0 <= 8_2 (lshr,i32) < 19
+0 <= 9_1 (ashr,i32) < 19
+0 <= 9_2 (ashr,i32) < 19
+0 <= 10_1 (select,i32) < 19
+0 <= 10_2 (select,i32) < 19
+0 <= 10_3 (select,i32) < 19
+0 <= 11_1 (eq,i32) < 19
+0 <= 11_2 (eq,i32) < 19
+0 <= 12_1 (ne,i32) < 19
+0 <= 12_2 (ne,i32) < 19
+0 <= 13_1 (ult,i32) < 19
+0 <= 13_2 (ult,i32) < 19
+0 <= 14_1 (slt,i32) < 19
+0 <= 14_2 (slt,i32) < 19
+0 <= 15_1 (ule,i32) < 19
+0 <= 15_2 (ule,i32) < 19
+0 <= 16_1 (sle,i32) < 19
+0 <= 16_2 (sle,i32) < 19
+0 <= 0_1 (input,i32) < 19
+0 <= 0_2 (const,i32) < 19
+0 <= 0_3 (const,i32) < 19
+3 <= 1_0 (add,i32) < 19
+3 <= 2_0 (sub,i32) < 19
+3 <= 3_0 (mul,i32) < 19
+3 <= 4_0 (and,i32) < 19
+3 <= 5_0 (or,i32) < 19
+3 <= 6_0 (xor,i32) < 19
+3 <= 7_0 (shl,i32) < 19
+3 <= 8_0 (lshr,i32) < 19
+3 <= 9_0 (ashr,i32) < 19
+3 <= 10_0 (select,i32) < 19
+3 <= 11_0 (zext,eq,i32) < 19
+3 <= 12_0 (zext,ne,i32) < 19
+3 <= 13_0 (zext,ult,i32) < 19
+3 <= 14_0 (zext,slt,i32) < 19
+3 <= 15_0 (zext,ule,i32) < 19
+3 <= 16_0 (zext,sle,i32) < 19
+component input constraints:
+1_1 (add,i32) == 0_1 (input,i32) || 1_1 (add,i32) == 0_2 (const,i32) || 1_1 (add,i32) == 0_3 (const,i32) || 1_1 (add,i32) == 2_0 (sub,i32) || 1_1 (add,i32) == 3_0 (mul,i32) || 1_1 (add,i32) == 4_0 (and,i32) || 1_1 (add,i32) == 5_0 (or,i32) || 1_1 (add,i32) == 6_0 (xor,i32) || 1_1 (add,i32) == 7_0 (shl,i32) || 1_1 (add,i32) == 8_0 (lshr,i32) || 1_1 (add,i32) == 9_0 (ashr,i32) || 1_1 (add,i32) == 10_0 (select,i32) || 1_1 (add,i32) == 11_0 (zext,eq,i32) || 1_1 (add,i32) == 12_0 (zext,ne,i32) || 1_1 (add,i32) == 13_0 (zext,ult,i32) || 1_1 (add,i32) == 14_0 (zext,slt,i32) || 1_1 (add,i32) == 15_0 (zext,ule,i32) || 1_1 (add,i32) == 16_0 (zext,sle,i32) || false
+1_2 (add,i32) == 0_1 (input,i32) || 1_2 (add,i32) == 0_2 (const,i32) || 1_2 (add,i32) == 0_3 (const,i32) || 1_2 (add,i32) == 2_0 (sub,i32) || 1_2 (add,i32) == 3_0 (mul,i32) || 1_2 (add,i32) == 4_0 (and,i32) || 1_2 (add,i32) == 5_0 (or,i32) || 1_2 (add,i32) == 6_0 (xor,i32) || 1_2 (add,i32) == 7_0 (shl,i32) || 1_2 (add,i32) == 8_0 (lshr,i32) || 1_2 (add,i32) == 9_0 (ashr,i32) || 1_2 (add,i32) == 10_0 (select,i32) || 1_2 (add,i32) == 11_0 (zext,eq,i32) || 1_2 (add,i32) == 12_0 (zext,ne,i32) || 1_2 (add,i32) == 13_0 (zext,ult,i32) || 1_2 (add,i32) == 14_0 (zext,slt,i32) || 1_2 (add,i32) == 15_0 (zext,ule,i32) || 1_2 (add,i32) == 16_0 (zext,sle,i32) || false
+2_1 (sub,i32) == 0_1 (input,i32) || 2_1 (sub,i32) == 0_2 (const,i32) || 2_1 (sub,i32) == 0_3 (const,i32) || 2_1 (sub,i32) == 1_0 (add,i32) || 2_1 (sub,i32) == 3_0 (mul,i32) || 2_1 (sub,i32) == 4_0 (and,i32) || 2_1 (sub,i32) == 5_0 (or,i32) || 2_1 (sub,i32) == 6_0 (xor,i32) || 2_1 (sub,i32) == 7_0 (shl,i32) || 2_1 (sub,i32) == 8_0 (lshr,i32) || 2_1 (sub,i32) == 9_0 (ashr,i32) || 2_1 (sub,i32) == 10_0 (select,i32) || 2_1 (sub,i32) == 11_0 (zext,eq,i32) || 2_1 (sub,i32) == 12_0 (zext,ne,i32) || 2_1 (sub,i32) == 13_0 (zext,ult,i32) || 2_1 (sub,i32) == 14_0 (zext,slt,i32) || 2_1 (sub,i32) == 15_0 (zext,ule,i32) || 2_1 (sub,i32) == 16_0 (zext,sle,i32) || false
+2_2 (sub,i32) == 0_1 (input,i32) || 2_2 (sub,i32) == 0_2 (const,i32) || 2_2 (sub,i32) == 0_3 (const,i32) || 2_2 (sub,i32) == 1_0 (add,i32) || 2_2 (sub,i32) == 3_0 (mul,i32) || 2_2 (sub,i32) == 4_0 (and,i32) || 2_2 (sub,i32) == 5_0 (or,i32) || 2_2 (sub,i32) == 6_0 (xor,i32) || 2_2 (sub,i32) == 7_0 (shl,i32) || 2_2 (sub,i32) == 8_0 (lshr,i32) || 2_2 (sub,i32) == 9_0 (ashr,i32) || 2_2 (sub,i32) == 10_0 (select,i32) || 2_2 (sub,i32) == 11_0 (zext,eq,i32) || 2_2 (sub,i32) == 12_0 (zext,ne,i32) || 2_2 (sub,i32) == 13_0 (zext,ult,i32) || 2_2 (sub,i32) == 14_0 (zext,slt,i32) || 2_2 (sub,i32) == 15_0 (zext,ule,i32) || 2_2 (sub,i32) == 16_0 (zext,sle,i32) || false
+3_1 (mul,i32) == 0_1 (input,i32) || 3_1 (mul,i32) == 0_2 (const,i32) || 3_1 (mul,i32) == 0_3 (const,i32) || 3_1 (mul,i32) == 1_0 (add,i32) || 3_1 (mul,i32) == 2_0 (sub,i32) || 3_1 (mul,i32) == 4_0 (and,i32) || 3_1 (mul,i32) == 5_0 (or,i32) || 3_1 (mul,i32) == 6_0 (xor,i32) || 3_1 (mul,i32) == 7_0 (shl,i32) || 3_1 (mul,i32) == 8_0 (lshr,i32) || 3_1 (mul,i32) == 9_0 (ashr,i32) || 3_1 (mul,i32) == 10_0 (select,i32) || 3_1 (mul,i32) == 11_0 (zext,eq,i32) || 3_1 (mul,i32) == 12_0 (zext,ne,i32) || 3_1 (mul,i32) == 13_0 (zext,ult,i32) || 3_1 (mul,i32) == 14_0 (zext,slt,i32) || 3_1 (mul,i32) == 15_0 (zext,ule,i32) || 3_1 (mul,i32) == 16_0 (zext,sle,i32) || false
+3_2 (mul,i32) == 0_1 (input,i32) || 3_2 (mul,i32) == 0_2 (const,i32) || 3_2 (mul,i32) == 0_3 (const,i32) || 3_2 (mul,i32) == 1_0 (add,i32) || 3_2 (mul,i32) == 2_0 (sub,i32) || 3_2 (mul,i32) == 4_0 (and,i32) || 3_2 (mul,i32) == 5_0 (or,i32) || 3_2 (mul,i32) == 6_0 (xor,i32) || 3_2 (mul,i32) == 7_0 (shl,i32) || 3_2 (mul,i32) == 8_0 (lshr,i32) || 3_2 (mul,i32) == 9_0 (ashr,i32) || 3_2 (mul,i32) == 10_0 (select,i32) || 3_2 (mul,i32) == 11_0 (zext,eq,i32) || 3_2 (mul,i32) == 12_0 (zext,ne,i32) || 3_2 (mul,i32) == 13_0 (zext,ult,i32) || 3_2 (mul,i32) == 14_0 (zext,slt,i32) || 3_2 (mul,i32) == 15_0 (zext,ule,i32) || 3_2 (mul,i32) == 16_0 (zext,sle,i32) || false
+4_1 (and,i32) == 0_1 (input,i32) || 4_1 (and,i32) == 0_2 (const,i32) || 4_1 (and,i32) == 0_3 (const,i32) || 4_1 (and,i32) == 1_0 (add,i32) || 4_1 (and,i32) == 2_0 (sub,i32) || 4_1 (and,i32) == 3_0 (mul,i32) || 4_1 (and,i32) == 5_0 (or,i32) || 4_1 (and,i32) == 6_0 (xor,i32) || 4_1 (and,i32) == 7_0 (shl,i32) || 4_1 (and,i32) == 8_0 (lshr,i32) || 4_1 (and,i32) == 9_0 (ashr,i32) || 4_1 (and,i32) == 10_0 (select,i32) || 4_1 (and,i32) == 11_0 (zext,eq,i32) || 4_1 (and,i32) == 12_0 (zext,ne,i32) || 4_1 (and,i32) == 13_0 (zext,ult,i32) || 4_1 (and,i32) == 14_0 (zext,slt,i32) || 4_1 (and,i32) == 15_0 (zext,ule,i32) || 4_1 (and,i32) == 16_0 (zext,sle,i32) || false
+4_2 (and,i32) == 0_1 (input,i32) || 4_2 (and,i32) == 0_2 (const,i32) || 4_2 (and,i32) == 0_3 (const,i32) || 4_2 (and,i32) == 1_0 (add,i32) || 4_2 (and,i32) == 2_0 (sub,i32) || 4_2 (and,i32) == 3_0 (mul,i32) || 4_2 (and,i32) == 5_0 (or,i32) || 4_2 (and,i32) == 6_0 (xor,i32) || 4_2 (and,i32) == 7_0 (shl,i32) || 4_2 (and,i32) == 8_0 (lshr,i32) || 4_2 (and,i32) == 9_0 (ashr,i32) || 4_2 (and,i32) == 10_0 (select,i32) || 4_2 (and,i32) == 11_0 (zext,eq,i32) || 4_2 (and,i32) == 12_0 (zext,ne,i32) || 4_2 (and,i32) == 13_0 (zext,ult,i32) || 4_2 (and,i32) == 14_0 (zext,slt,i32) || 4_2 (and,i32) == 15_0 (zext,ule,i32) || 4_2 (and,i32) == 16_0 (zext,sle,i32) || false
+5_1 (or,i32) == 0_1 (input,i32) || 5_1 (or,i32) == 0_2 (const,i32) || 5_1 (or,i32) == 0_3 (const,i32) || 5_1 (or,i32) == 1_0 (add,i32) || 5_1 (or,i32) == 2_0 (sub,i32) || 5_1 (or,i32) == 3_0 (mul,i32) || 5_1 (or,i32) == 4_0 (and,i32) || 5_1 (or,i32) == 6_0 (xor,i32) || 5_1 (or,i32) == 7_0 (shl,i32) || 5_1 (or,i32) == 8_0 (lshr,i32) || 5_1 (or,i32) == 9_0 (ashr,i32) || 5_1 (or,i32) == 10_0 (select,i32) || 5_1 (or,i32) == 11_0 (zext,eq,i32) || 5_1 (or,i32) == 12_0 (zext,ne,i32) || 5_1 (or,i32) == 13_0 (zext,ult,i32) || 5_1 (or,i32) == 14_0 (zext,slt,i32) || 5_1 (or,i32) == 15_0 (zext,ule,i32) || 5_1 (or,i32) == 16_0 (zext,sle,i32) || false
+5_2 (or,i32) == 0_1 (input,i32) || 5_2 (or,i32) == 0_2 (const,i32) || 5_2 (or,i32) == 0_3 (const,i32) || 5_2 (or,i32) == 1_0 (add,i32) || 5_2 (or,i32) == 2_0 (sub,i32) || 5_2 (or,i32) == 3_0 (mul,i32) || 5_2 (or,i32) == 4_0 (and,i32) || 5_2 (or,i32) == 6_0 (xor,i32) || 5_2 (or,i32) == 7_0 (shl,i32) || 5_2 (or,i32) == 8_0 (lshr,i32) || 5_2 (or,i32) == 9_0 (ashr,i32) || 5_2 (or,i32) == 10_0 (select,i32) || 5_2 (or,i32) == 11_0 (zext,eq,i32) || 5_2 (or,i32) == 12_0 (zext,ne,i32) || 5_2 (or,i32) == 13_0 (zext,ult,i32) || 5_2 (or,i32) == 14_0 (zext,slt,i32) || 5_2 (or,i32) == 15_0 (zext,ule,i32) || 5_2 (or,i32) == 16_0 (zext,sle,i32) || false
+6_1 (xor,i32) == 0_1 (input,i32) || 6_1 (xor,i32) == 0_2 (const,i32) || 6_1 (xor,i32) == 0_3 (const,i32) || 6_1 (xor,i32) == 1_0 (add,i32) || 6_1 (xor,i32) == 2_0 (sub,i32) || 6_1 (xor,i32) == 3_0 (mul,i32) || 6_1 (xor,i32) == 4_0 (and,i32) || 6_1 (xor,i32) == 5_0 (or,i32) || 6_1 (xor,i32) == 7_0 (shl,i32) || 6_1 (xor,i32) == 8_0 (lshr,i32) || 6_1 (xor,i32) == 9_0 (ashr,i32) || 6_1 (xor,i32) == 10_0 (select,i32) || 6_1 (xor,i32) == 11_0 (zext,eq,i32) || 6_1 (xor,i32) == 12_0 (zext,ne,i32) || 6_1 (xor,i32) == 13_0 (zext,ult,i32) || 6_1 (xor,i32) == 14_0 (zext,slt,i32) || 6_1 (xor,i32) == 15_0 (zext,ule,i32) || 6_1 (xor,i32) == 16_0 (zext,sle,i32) || false
+6_2 (xor,i32) == 0_1 (input,i32) || 6_2 (xor,i32) == 0_2 (const,i32) || 6_2 (xor,i32) == 0_3 (const,i32) || 6_2 (xor,i32) == 1_0 (add,i32) || 6_2 (xor,i32) == 2_0 (sub,i32) || 6_2 (xor,i32) == 3_0 (mul,i32) || 6_2 (xor,i32) == 4_0 (and,i32) || 6_2 (xor,i32) == 5_0 (or,i32) || 6_2 (xor,i32) == 7_0 (shl,i32) || 6_2 (xor,i32) == 8_0 (lshr,i32) || 6_2 (xor,i32) == 9_0 (ashr,i32) || 6_2 (xor,i32) == 10_0 (select,i32) || 6_2 (xor,i32) == 11_0 (zext,eq,i32) || 6_2 (xor,i32) == 12_0 (zext,ne,i32) || 6_2 (xor,i32) == 13_0 (zext,ult,i32) || 6_2 (xor,i32) == 14_0 (zext,slt,i32) || 6_2 (xor,i32) == 15_0 (zext,ule,i32) || 6_2 (xor,i32) == 16_0 (zext,sle,i32) || false
+7_1 (shl,i32) == 0_1 (input,i32) || 7_1 (shl,i32) == 0_2 (const,i32) || 7_1 (shl,i32) == 0_3 (const,i32) || 7_1 (shl,i32) == 1_0 (add,i32) || 7_1 (shl,i32) == 2_0 (sub,i32) || 7_1 (shl,i32) == 3_0 (mul,i32) || 7_1 (shl,i32) == 4_0 (and,i32) || 7_1 (shl,i32) == 5_0 (or,i32) || 7_1 (shl,i32) == 6_0 (xor,i32) || 7_1 (shl,i32) == 8_0 (lshr,i32) || 7_1 (shl,i32) == 9_0 (ashr,i32) || 7_1 (shl,i32) == 10_0 (select,i32) || 7_1 (shl,i32) == 11_0 (zext,eq,i32) || 7_1 (shl,i32) == 12_0 (zext,ne,i32) || 7_1 (shl,i32) == 13_0 (zext,ult,i32) || 7_1 (shl,i32) == 14_0 (zext,slt,i32) || 7_1 (shl,i32) == 15_0 (zext,ule,i32) || 7_1 (shl,i32) == 16_0 (zext,sle,i32) || false
+7_2 (shl,i32) == 0_1 (input,i32) || 7_2 (shl,i32) == 0_2 (const,i32) || 7_2 (shl,i32) == 0_3 (const,i32) || 7_2 (shl,i32) == 1_0 (add,i32) || 7_2 (shl,i32) == 2_0 (sub,i32) || 7_2 (shl,i32) == 3_0 (mul,i32) || 7_2 (shl,i32) == 4_0 (and,i32) || 7_2 (shl,i32) == 5_0 (or,i32) || 7_2 (shl,i32) == 6_0 (xor,i32) || 7_2 (shl,i32) == 8_0 (lshr,i32) || 7_2 (shl,i32) == 9_0 (ashr,i32) || 7_2 (shl,i32) == 10_0 (select,i32) || 7_2 (shl,i32) == 11_0 (zext,eq,i32) || 7_2 (shl,i32) == 12_0 (zext,ne,i32) || 7_2 (shl,i32) == 13_0 (zext,ult,i32) || 7_2 (shl,i32) == 14_0 (zext,slt,i32) || 7_2 (shl,i32) == 15_0 (zext,ule,i32) || 7_2 (shl,i32) == 16_0 (zext,sle,i32) || false
+8_1 (lshr,i32) == 0_1 (input,i32) || 8_1 (lshr,i32) == 0_2 (const,i32) || 8_1 (lshr,i32) == 0_3 (const,i32) || 8_1 (lshr,i32) == 1_0 (add,i32) || 8_1 (lshr,i32) == 2_0 (sub,i32) || 8_1 (lshr,i32) == 3_0 (mul,i32) || 8_1 (lshr,i32) == 4_0 (and,i32) || 8_1 (lshr,i32) == 5_0 (or,i32) || 8_1 (lshr,i32) == 6_0 (xor,i32) || 8_1 (lshr,i32) == 7_0 (shl,i32) || 8_1 (lshr,i32) == 9_0 (ashr,i32) || 8_1 (lshr,i32) == 10_0 (select,i32) || 8_1 (lshr,i32) == 11_0 (zext,eq,i32) || 8_1 (lshr,i32) == 12_0 (zext,ne,i32) || 8_1 (lshr,i32) == 13_0 (zext,ult,i32) || 8_1 (lshr,i32) == 14_0 (zext,slt,i32) || 8_1 (lshr,i32) == 15_0 (zext,ule,i32) || 8_1 (lshr,i32) == 16_0 (zext,sle,i32) || false
+8_2 (lshr,i32) == 0_1 (input,i32) || 8_2 (lshr,i32) == 0_2 (const,i32) || 8_2 (lshr,i32) == 0_3 (const,i32) || 8_2 (lshr,i32) == 1_0 (add,i32) || 8_2 (lshr,i32) == 2_0 (sub,i32) || 8_2 (lshr,i32) == 3_0 (mul,i32) || 8_2 (lshr,i32) == 4_0 (and,i32) || 8_2 (lshr,i32) == 5_0 (or,i32) || 8_2 (lshr,i32) == 6_0 (xor,i32) || 8_2 (lshr,i32) == 7_0 (shl,i32) || 8_2 (lshr,i32) == 9_0 (ashr,i32) || 8_2 (lshr,i32) == 10_0 (select,i32) || 8_2 (lshr,i32) == 11_0 (zext,eq,i32) || 8_2 (lshr,i32) == 12_0 (zext,ne,i32) || 8_2 (lshr,i32) == 13_0 (zext,ult,i32) || 8_2 (lshr,i32) == 14_0 (zext,slt,i32) || 8_2 (lshr,i32) == 15_0 (zext,ule,i32) || 8_2 (lshr,i32) == 16_0 (zext,sle,i32) || false
+9_1 (ashr,i32) == 0_1 (input,i32) || 9_1 (ashr,i32) == 0_2 (const,i32) || 9_1 (ashr,i32) == 0_3 (const,i32) || 9_1 (ashr,i32) == 1_0 (add,i32) || 9_1 (ashr,i32) == 2_0 (sub,i32) || 9_1 (ashr,i32) == 3_0 (mul,i32) || 9_1 (ashr,i32) == 4_0 (and,i32) || 9_1 (ashr,i32) == 5_0 (or,i32) || 9_1 (ashr,i32) == 6_0 (xor,i32) || 9_1 (ashr,i32) == 7_0 (shl,i32) || 9_1 (ashr,i32) == 8_0 (lshr,i32) || 9_1 (ashr,i32) == 10_0 (select,i32) || 9_1 (ashr,i32) == 11_0 (zext,eq,i32) || 9_1 (ashr,i32) == 12_0 (zext,ne,i32) || 9_1 (ashr,i32) == 13_0 (zext,ult,i32) || 9_1 (ashr,i32) == 14_0 (zext,slt,i32) || 9_1 (ashr,i32) == 15_0 (zext,ule,i32) || 9_1 (ashr,i32) == 16_0 (zext,sle,i32) || false
+9_2 (ashr,i32) == 0_1 (input,i32) || 9_2 (ashr,i32) == 0_2 (const,i32) || 9_2 (ashr,i32) == 0_3 (const,i32) || 9_2 (ashr,i32) == 1_0 (add,i32) || 9_2 (ashr,i32) == 2_0 (sub,i32) || 9_2 (ashr,i32) == 3_0 (mul,i32) || 9_2 (ashr,i32) == 4_0 (and,i32) || 9_2 (ashr,i32) == 5_0 (or,i32) || 9_2 (ashr,i32) == 6_0 (xor,i32) || 9_2 (ashr,i32) == 7_0 (shl,i32) || 9_2 (ashr,i32) == 8_0 (lshr,i32) || 9_2 (ashr,i32) == 10_0 (select,i32) || 9_2 (ashr,i32) == 11_0 (zext,eq,i32) || 9_2 (ashr,i32) == 12_0 (zext,ne,i32) || 9_2 (ashr,i32) == 13_0 (zext,ult,i32) || 9_2 (ashr,i32) == 14_0 (zext,slt,i32) || 9_2 (ashr,i32) == 15_0 (zext,ule,i32) || 9_2 (ashr,i32) == 16_0 (zext,sle,i32) || false
+10_1 (select,i32) == 1_0 (add,i32) || 10_1 (select,i32) == 2_0 (sub,i32) || 10_1 (select,i32) == 3_0 (mul,i32) || 10_1 (select,i32) == 4_0 (and,i32) || 10_1 (select,i32) == 5_0 (or,i32) || 10_1 (select,i32) == 6_0 (xor,i32) || 10_1 (select,i32) == 7_0 (shl,i32) || 10_1 (select,i32) == 8_0 (lshr,i32) || 10_1 (select,i32) == 9_0 (ashr,i32) || 10_1 (select,i32) == 11_0 (zext,eq,i32) || 10_1 (select,i32) == 12_0 (zext,ne,i32) || 10_1 (select,i32) == 13_0 (zext,ult,i32) || 10_1 (select,i32) == 14_0 (zext,slt,i32) || 10_1 (select,i32) == 15_0 (zext,ule,i32) || 10_1 (select,i32) == 16_0 (zext,sle,i32) || false
+10_2 (select,i32) == 0_1 (input,i32) || 10_2 (select,i32) == 0_2 (const,i32) || 10_2 (select,i32) == 0_3 (const,i32) || 10_2 (select,i32) == 1_0 (add,i32) || 10_2 (select,i32) == 2_0 (sub,i32) || 10_2 (select,i32) == 3_0 (mul,i32) || 10_2 (select,i32) == 4_0 (and,i32) || 10_2 (select,i32) == 5_0 (or,i32) || 10_2 (select,i32) == 6_0 (xor,i32) || 10_2 (select,i32) == 7_0 (shl,i32) || 10_2 (select,i32) == 8_0 (lshr,i32) || 10_2 (select,i32) == 9_0 (ashr,i32) || 10_2 (select,i32) == 11_0 (zext,eq,i32) || 10_2 (select,i32) == 12_0 (zext,ne,i32) || 10_2 (select,i32) == 13_0 (zext,ult,i32) || 10_2 (select,i32) == 14_0 (zext,slt,i32) || 10_2 (select,i32) == 15_0 (zext,ule,i32) || 10_2 (select,i32) == 16_0 (zext,sle,i32) || false
+10_3 (select,i32) == 0_1 (input,i32) || 10_3 (select,i32) == 0_2 (const,i32) || 10_3 (select,i32) == 0_3 (const,i32) || 10_3 (select,i32) == 1_0 (add,i32) || 10_3 (select,i32) == 2_0 (sub,i32) || 10_3 (select,i32) == 3_0 (mul,i32) || 10_3 (select,i32) == 4_0 (and,i32) || 10_3 (select,i32) == 5_0 (or,i32) || 10_3 (select,i32) == 6_0 (xor,i32) || 10_3 (select,i32) == 7_0 (shl,i32) || 10_3 (select,i32) == 8_0 (lshr,i32) || 10_3 (select,i32) == 9_0 (ashr,i32) || 10_3 (select,i32) == 11_0 (zext,eq,i32) || 10_3 (select,i32) == 12_0 (zext,ne,i32) || 10_3 (select,i32) == 13_0 (zext,ult,i32) || 10_3 (select,i32) == 14_0 (zext,slt,i32) || 10_3 (select,i32) == 15_0 (zext,ule,i32) || 10_3 (select,i32) == 16_0 (zext,sle,i32) || false
+11_1 (eq,i32) == 0_1 (input,i32) || 11_1 (eq,i32) == 0_2 (const,i32) || 11_1 (eq,i32) == 0_3 (const,i32) || 11_1 (eq,i32) == 1_0 (add,i32) || 11_1 (eq,i32) == 2_0 (sub,i32) || 11_1 (eq,i32) == 3_0 (mul,i32) || 11_1 (eq,i32) == 4_0 (and,i32) || 11_1 (eq,i32) == 5_0 (or,i32) || 11_1 (eq,i32) == 6_0 (xor,i32) || 11_1 (eq,i32) == 7_0 (shl,i32) || 11_1 (eq,i32) == 8_0 (lshr,i32) || 11_1 (eq,i32) == 9_0 (ashr,i32) || 11_1 (eq,i32) == 10_0 (select,i32) || 11_1 (eq,i32) == 12_0 (zext,ne,i32) || 11_1 (eq,i32) == 13_0 (zext,ult,i32) || 11_1 (eq,i32) == 14_0 (zext,slt,i32) || 11_1 (eq,i32) == 15_0 (zext,ule,i32) || 11_1 (eq,i32) == 16_0 (zext,sle,i32) || false
+11_2 (eq,i32) == 0_1 (input,i32) || 11_2 (eq,i32) == 0_2 (const,i32) || 11_2 (eq,i32) == 0_3 (const,i32) || 11_2 (eq,i32) == 1_0 (add,i32) || 11_2 (eq,i32) == 2_0 (sub,i32) || 11_2 (eq,i32) == 3_0 (mul,i32) || 11_2 (eq,i32) == 4_0 (and,i32) || 11_2 (eq,i32) == 5_0 (or,i32) || 11_2 (eq,i32) == 6_0 (xor,i32) || 11_2 (eq,i32) == 7_0 (shl,i32) || 11_2 (eq,i32) == 8_0 (lshr,i32) || 11_2 (eq,i32) == 9_0 (ashr,i32) || 11_2 (eq,i32) == 10_0 (select,i32) || 11_2 (eq,i32) == 12_0 (zext,ne,i32) || 11_2 (eq,i32) == 13_0 (zext,ult,i32) || 11_2 (eq,i32) == 14_0 (zext,slt,i32) || 11_2 (eq,i32) == 15_0 (zext,ule,i32) || 11_2 (eq,i32) == 16_0 (zext,sle,i32) || false
+12_1 (ne,i32) == 0_1 (input,i32) || 12_1 (ne,i32) == 0_2 (const,i32) || 12_1 (ne,i32) == 0_3 (const,i32) || 12_1 (ne,i32) == 1_0 (add,i32) || 12_1 (ne,i32) == 2_0 (sub,i32) || 12_1 (ne,i32) == 3_0 (mul,i32) || 12_1 (ne,i32) == 4_0 (and,i32) || 12_1 (ne,i32) == 5_0 (or,i32) || 12_1 (ne,i32) == 6_0 (xor,i32) || 12_1 (ne,i32) == 7_0 (shl,i32) || 12_1 (ne,i32) == 8_0 (lshr,i32) || 12_1 (ne,i32) == 9_0 (ashr,i32) || 12_1 (ne,i32) == 10_0 (select,i32) || 12_1 (ne,i32) == 11_0 (zext,eq,i32) || 12_1 (ne,i32) == 13_0 (zext,ult,i32) || 12_1 (ne,i32) == 14_0 (zext,slt,i32) || 12_1 (ne,i32) == 15_0 (zext,ule,i32) || 12_1 (ne,i32) == 16_0 (zext,sle,i32) || false
+12_2 (ne,i32) == 0_1 (input,i32) || 12_2 (ne,i32) == 0_2 (const,i32) || 12_2 (ne,i32) == 0_3 (const,i32) || 12_2 (ne,i32) == 1_0 (add,i32) || 12_2 (ne,i32) == 2_0 (sub,i32) || 12_2 (ne,i32) == 3_0 (mul,i32) || 12_2 (ne,i32) == 4_0 (and,i32) || 12_2 (ne,i32) == 5_0 (or,i32) || 12_2 (ne,i32) == 6_0 (xor,i32) || 12_2 (ne,i32) == 7_0 (shl,i32) || 12_2 (ne,i32) == 8_0 (lshr,i32) || 12_2 (ne,i32) == 9_0 (ashr,i32) || 12_2 (ne,i32) == 10_0 (select,i32) || 12_2 (ne,i32) == 11_0 (zext,eq,i32) || 12_2 (ne,i32) == 13_0 (zext,ult,i32) || 12_2 (ne,i32) == 14_0 (zext,slt,i32) || 12_2 (ne,i32) == 15_0 (zext,ule,i32) || 12_2 (ne,i32) == 16_0 (zext,sle,i32) || false
+13_1 (ult,i32) == 0_1 (input,i32) || 13_1 (ult,i32) == 0_2 (const,i32) || 13_1 (ult,i32) == 0_3 (const,i32) || 13_1 (ult,i32) == 1_0 (add,i32) || 13_1 (ult,i32) == 2_0 (sub,i32) || 13_1 (ult,i32) == 3_0 (mul,i32) || 13_1 (ult,i32) == 4_0 (and,i32) || 13_1 (ult,i32) == 5_0 (or,i32) || 13_1 (ult,i32) == 6_0 (xor,i32) || 13_1 (ult,i32) == 7_0 (shl,i32) || 13_1 (ult,i32) == 8_0 (lshr,i32) || 13_1 (ult,i32) == 9_0 (ashr,i32) || 13_1 (ult,i32) == 10_0 (select,i32) || 13_1 (ult,i32) == 11_0 (zext,eq,i32) || 13_1 (ult,i32) == 12_0 (zext,ne,i32) || 13_1 (ult,i32) == 14_0 (zext,slt,i32) || 13_1 (ult,i32) == 15_0 (zext,ule,i32) || 13_1 (ult,i32) == 16_0 (zext,sle,i32) || false
+13_2 (ult,i32) == 0_1 (input,i32) || 13_2 (ult,i32) == 0_2 (const,i32) || 13_2 (ult,i32) == 0_3 (const,i32) || 13_2 (ult,i32) == 1_0 (add,i32) || 13_2 (ult,i32) == 2_0 (sub,i32) || 13_2 (ult,i32) == 3_0 (mul,i32) || 13_2 (ult,i32) == 4_0 (and,i32) || 13_2 (ult,i32) == 5_0 (or,i32) || 13_2 (ult,i32) == 6_0 (xor,i32) || 13_2 (ult,i32) == 7_0 (shl,i32) || 13_2 (ult,i32) == 8_0 (lshr,i32) || 13_2 (ult,i32) == 9_0 (ashr,i32) || 13_2 (ult,i32) == 10_0 (select,i32) || 13_2 (ult,i32) == 11_0 (zext,eq,i32) || 13_2 (ult,i32) == 12_0 (zext,ne,i32) || 13_2 (ult,i32) == 14_0 (zext,slt,i32) || 13_2 (ult,i32) == 15_0 (zext,ule,i32) || 13_2 (ult,i32) == 16_0 (zext,sle,i32) || false
+14_1 (slt,i32) == 0_1 (input,i32) || 14_1 (slt,i32) == 0_2 (const,i32) || 14_1 (slt,i32) == 0_3 (const,i32) || 14_1 (slt,i32) == 1_0 (add,i32) || 14_1 (slt,i32) == 2_0 (sub,i32) || 14_1 (slt,i32) == 3_0 (mul,i32) || 14_1 (slt,i32) == 4_0 (and,i32) || 14_1 (slt,i32) == 5_0 (or,i32) || 14_1 (slt,i32) == 6_0 (xor,i32) || 14_1 (slt,i32) == 7_0 (shl,i32) || 14_1 (slt,i32) == 8_0 (lshr,i32) || 14_1 (slt,i32) == 9_0 (ashr,i32) || 14_1 (slt,i32) == 10_0 (select,i32) || 14_1 (slt,i32) == 11_0 (zext,eq,i32) || 14_1 (slt,i32) == 12_0 (zext,ne,i32) || 14_1 (slt,i32) == 13_0 (zext,ult,i32) || 14_1 (slt,i32) == 15_0 (zext,ule,i32) || 14_1 (slt,i32) == 16_0 (zext,sle,i32) || false
+14_2 (slt,i32) == 0_1 (input,i32) || 14_2 (slt,i32) == 0_2 (const,i32) || 14_2 (slt,i32) == 0_3 (const,i32) || 14_2 (slt,i32) == 1_0 (add,i32) || 14_2 (slt,i32) == 2_0 (sub,i32) || 14_2 (slt,i32) == 3_0 (mul,i32) || 14_2 (slt,i32) == 4_0 (and,i32) || 14_2 (slt,i32) == 5_0 (or,i32) || 14_2 (slt,i32) == 6_0 (xor,i32) || 14_2 (slt,i32) == 7_0 (shl,i32) || 14_2 (slt,i32) == 8_0 (lshr,i32) || 14_2 (slt,i32) == 9_0 (ashr,i32) || 14_2 (slt,i32) == 10_0 (select,i32) || 14_2 (slt,i32) == 11_0 (zext,eq,i32) || 14_2 (slt,i32) == 12_0 (zext,ne,i32) || 14_2 (slt,i32) == 13_0 (zext,ult,i32) || 14_2 (slt,i32) == 15_0 (zext,ule,i32) || 14_2 (slt,i32) == 16_0 (zext,sle,i32) || false
+15_1 (ule,i32) == 0_1 (input,i32) || 15_1 (ule,i32) == 0_2 (const,i32) || 15_1 (ule,i32) == 0_3 (const,i32) || 15_1 (ule,i32) == 1_0 (add,i32) || 15_1 (ule,i32) == 2_0 (sub,i32) || 15_1 (ule,i32) == 3_0 (mul,i32) || 15_1 (ule,i32) == 4_0 (and,i32) || 15_1 (ule,i32) == 5_0 (or,i32) || 15_1 (ule,i32) == 6_0 (xor,i32) || 15_1 (ule,i32) == 7_0 (shl,i32) || 15_1 (ule,i32) == 8_0 (lshr,i32) || 15_1 (ule,i32) == 9_0 (ashr,i32) || 15_1 (ule,i32) == 10_0 (select,i32) || 15_1 (ule,i32) == 11_0 (zext,eq,i32) || 15_1 (ule,i32) == 12_0 (zext,ne,i32) || 15_1 (ule,i32) == 13_0 (zext,ult,i32) || 15_1 (ule,i32) == 14_0 (zext,slt,i32) || 15_1 (ule,i32) == 16_0 (zext,sle,i32) || false
+15_2 (ule,i32) == 0_1 (input,i32) || 15_2 (ule,i32) == 0_2 (const,i32) || 15_2 (ule,i32) == 0_3 (const,i32) || 15_2 (ule,i32) == 1_0 (add,i32) || 15_2 (ule,i32) == 2_0 (sub,i32) || 15_2 (ule,i32) == 3_0 (mul,i32) || 15_2 (ule,i32) == 4_0 (and,i32) || 15_2 (ule,i32) == 5_0 (or,i32) || 15_2 (ule,i32) == 6_0 (xor,i32) || 15_2 (ule,i32) == 7_0 (shl,i32) || 15_2 (ule,i32) == 8_0 (lshr,i32) || 15_2 (ule,i32) == 9_0 (ashr,i32) || 15_2 (ule,i32) == 10_0 (select,i32) || 15_2 (ule,i32) == 11_0 (zext,eq,i32) || 15_2 (ule,i32) == 12_0 (zext,ne,i32) || 15_2 (ule,i32) == 13_0 (zext,ult,i32) || 15_2 (ule,i32) == 14_0 (zext,slt,i32) || 15_2 (ule,i32) == 16_0 (zext,sle,i32) || false
+16_1 (sle,i32) == 0_1 (input,i32) || 16_1 (sle,i32) == 0_2 (const,i32) || 16_1 (sle,i32) == 0_3 (const,i32) || 16_1 (sle,i32) == 1_0 (add,i32) || 16_1 (sle,i32) == 2_0 (sub,i32) || 16_1 (sle,i32) == 3_0 (mul,i32) || 16_1 (sle,i32) == 4_0 (and,i32) || 16_1 (sle,i32) == 5_0 (or,i32) || 16_1 (sle,i32) == 6_0 (xor,i32) || 16_1 (sle,i32) == 7_0 (shl,i32) || 16_1 (sle,i32) == 8_0 (lshr,i32) || 16_1 (sle,i32) == 9_0 (ashr,i32) || 16_1 (sle,i32) == 10_0 (select,i32) || 16_1 (sle,i32) == 11_0 (zext,eq,i32) || 16_1 (sle,i32) == 12_0 (zext,ne,i32) || 16_1 (sle,i32) == 13_0 (zext,ult,i32) || 16_1 (sle,i32) == 14_0 (zext,slt,i32) || 16_1 (sle,i32) == 15_0 (zext,ule,i32) || false
+16_2 (sle,i32) == 0_1 (input,i32) || 16_2 (sle,i32) == 0_2 (const,i32) || 16_2 (sle,i32) == 0_3 (const,i32) || 16_2 (sle,i32) == 1_0 (add,i32) || 16_2 (sle,i32) == 2_0 (sub,i32) || 16_2 (sle,i32) == 3_0 (mul,i32) || 16_2 (sle,i32) == 4_0 (and,i32) || 16_2 (sle,i32) == 5_0 (or,i32) || 16_2 (sle,i32) == 6_0 (xor,i32) || 16_2 (sle,i32) == 7_0 (shl,i32) || 16_2 (sle,i32) == 8_0 (lshr,i32) || 16_2 (sle,i32) == 9_0 (ashr,i32) || 16_2 (sle,i32) == 10_0 (select,i32) || 16_2 (sle,i32) == 11_0 (zext,eq,i32) || 16_2 (sle,i32) == 12_0 (zext,ne,i32) || 16_2 (sle,i32) == 13_0 (zext,ult,i32) || 16_2 (sle,i32) == 14_0 (zext,slt,i32) || 16_2 (sle,i32) == 15_0 (zext,ule,i32) || false
+component const input constraints:
+1_1 (add,i32) == 0_2 (const,i32) || 1_1 (add,i32) == 0_3 (const,i32) || false
+1_2 (add,i32) == 0_2 (const,i32) || 1_2 (add,i32) == 0_3 (const,i32) || false
+false
+2_1 (sub,i32) == 0_2 (const,i32) || 2_1 (sub,i32) == 0_3 (const,i32) || false
+2_2 (sub,i32) == 0_2 (const,i32) || 2_2 (sub,i32) == 0_3 (const,i32) || false
+false
+3_1 (mul,i32) == 0_2 (const,i32) || 3_1 (mul,i32) == 0_3 (const,i32) || false
+3_2 (mul,i32) == 0_2 (const,i32) || 3_2 (mul,i32) == 0_3 (const,i32) || false
+false
+4_1 (and,i32) == 0_2 (const,i32) || 4_1 (and,i32) == 0_3 (const,i32) || false
+4_2 (and,i32) == 0_2 (const,i32) || 4_2 (and,i32) == 0_3 (const,i32) || false
+false
+5_1 (or,i32) == 0_2 (const,i32) || 5_1 (or,i32) == 0_3 (const,i32) || false
+5_2 (or,i32) == 0_2 (const,i32) || 5_2 (or,i32) == 0_3 (const,i32) || false
+false
+6_1 (xor,i32) == 0_2 (const,i32) || 6_1 (xor,i32) == 0_3 (const,i32) || false
+6_2 (xor,i32) == 0_2 (const,i32) || 6_2 (xor,i32) == 0_3 (const,i32) || false
+false
+7_1 (shl,i32) == 0_2 (const,i32) || 7_1 (shl,i32) == 0_3 (const,i32) || false
+7_2 (shl,i32) == 0_2 (const,i32) || 7_2 (shl,i32) == 0_3 (const,i32) || false
+false
+8_1 (lshr,i32) == 0_2 (const,i32) || 8_1 (lshr,i32) == 0_3 (const,i32) || false
+8_2 (lshr,i32) == 0_2 (const,i32) || 8_2 (lshr,i32) == 0_3 (const,i32) || false
+false
+9_1 (ashr,i32) == 0_2 (const,i32) || 9_1 (ashr,i32) == 0_3 (const,i32) || false
+9_2 (ashr,i32) == 0_2 (const,i32) || 9_2 (ashr,i32) == 0_3 (const,i32) || false
+false
+false
+10_2 (select,i32) == 0_2 (const,i32) || 10_2 (select,i32) == 0_3 (const,i32) || false
+10_3 (select,i32) == 0_2 (const,i32) || 10_3 (select,i32) == 0_3 (const,i32) || false
+false
+11_1 (eq,i32) == 0_2 (const,i32) || 11_1 (eq,i32) == 0_3 (const,i32) || false
+11_2 (eq,i32) == 0_2 (const,i32) || 11_2 (eq,i32) == 0_3 (const,i32) || false
+false
+12_1 (ne,i32) == 0_2 (const,i32) || 12_1 (ne,i32) == 0_3 (const,i32) || false
+12_2 (ne,i32) == 0_2 (const,i32) || 12_2 (ne,i32) == 0_3 (const,i32) || false
+false
+13_1 (ult,i32) == 0_2 (const,i32) || 13_1 (ult,i32) == 0_3 (const,i32) || false
+13_2 (ult,i32) == 0_2 (const,i32) || 13_2 (ult,i32) == 0_3 (const,i32) || false
+false
+14_1 (slt,i32) == 0_2 (const,i32) || 14_1 (slt,i32) == 0_3 (const,i32) || false
+14_2 (slt,i32) == 0_2 (const,i32) || 14_2 (slt,i32) == 0_3 (const,i32) || false
+false
+15_1 (ule,i32) == 0_2 (const,i32) || 15_1 (ule,i32) == 0_3 (const,i32) || false
+15_2 (ule,i32) == 0_2 (const,i32) || 15_2 (ule,i32) == 0_3 (const,i32) || false
+false
+16_1 (sle,i32) == 0_2 (const,i32) || 16_1 (sle,i32) == 0_3 (const,i32) || false
+16_2 (sle,i32) == 0_2 (const,i32) || 16_2 (sle,i32) == 0_3 (const,i32) || false
+false
+component output constraints:
+17_0 (output,i32) == 0_1 (input,i32) || 17_0 (output,i32) == 0_2 (const,i32) || 17_0 (output,i32) == 0_3 (const,i32) || 17_0 (output,i32) == 1_0 (add,i32) || 17_0 (output,i32) == 2_0 (sub,i32) || 17_0 (output,i32) == 3_0 (mul,i32) || 17_0 (output,i32) == 4_0 (and,i32) || 17_0 (output,i32) == 5_0 (or,i32) || 17_0 (output,i32) == 6_0 (xor,i32) || 17_0 (output,i32) == 7_0 (shl,i32) || 17_0 (output,i32) == 8_0 (lshr,i32) || 17_0 (output,i32) == 9_0 (ashr,i32) || 17_0 (output,i32) == 10_0 (select,i32) || 17_0 (output,i32) == 11_0 (zext,eq,i32) || 17_0 (output,i32) == 12_0 (zext,ne,i32) || 17_0 (output,i32) == 13_0 (zext,ult,i32) || 17_0 (output,i32) == 14_0 (zext,slt,i32) || 17_0 (output,i32) == 15_0 (zext,ule,i32) || 17_0 (output,i32) == 16_0 (zext,sle,i32) || false
+possible wirings:
+0_1 (input,i32) == 1_1 (add,i32)
+0_1 (input,i32) == 1_2 (add,i32)
+0_1 (input,i32) == 2_1 (sub,i32)
+0_1 (input,i32) == 2_2 (sub,i32)
+0_1 (input,i32) == 3_1 (mul,i32)
+0_1 (input,i32) == 3_2 (mul,i32)
+0_1 (input,i32) == 4_1 (and,i32)
+0_1 (input,i32) == 4_2 (and,i32)
+0_1 (input,i32) == 5_1 (or,i32)
+0_1 (input,i32) == 5_2 (or,i32)
+0_1 (input,i32) == 6_1 (xor,i32)
+0_1 (input,i32) == 6_2 (xor,i32)
+0_1 (input,i32) == 7_1 (shl,i32)
+0_1 (input,i32) == 7_2 (shl,i32)
+0_1 (input,i32) == 8_1 (lshr,i32)
+0_1 (input,i32) == 8_2 (lshr,i32)
+0_1 (input,i32) == 9_1 (ashr,i32)
+0_1 (input,i32) == 9_2 (ashr,i32)
+0_1 (input,i32) == 10_2 (select,i32)
+0_1 (input,i32) == 10_3 (select,i32)
+0_1 (input,i32) == 11_1 (eq,i32)
+0_1 (input,i32) == 11_2 (eq,i32)
+0_1 (input,i32) == 12_1 (ne,i32)
+0_1 (input,i32) == 12_2 (ne,i32)
+0_1 (input,i32) == 13_1 (ult,i32)
+0_1 (input,i32) == 13_2 (ult,i32)
+0_1 (input,i32) == 14_1 (slt,i32)
+0_1 (input,i32) == 14_2 (slt,i32)
+0_1 (input,i32) == 15_1 (ule,i32)
+0_1 (input,i32) == 15_2 (ule,i32)
+0_1 (input,i32) == 16_1 (sle,i32)
+0_1 (input,i32) == 16_2 (sle,i32)
+0_1 (input,i32) == 17_0 (output,i32)
+0_2 (const,i32) == 1_1 (add,i32)
+0_2 (const,i32) == 1_2 (add,i32)
+0_2 (const,i32) == 2_1 (sub,i32)
+0_2 (const,i32) == 2_2 (sub,i32)
+0_2 (const,i32) == 3_1 (mul,i32)
+0_2 (const,i32) == 3_2 (mul,i32)
+0_2 (const,i32) == 4_1 (and,i32)
+0_2 (const,i32) == 4_2 (and,i32)
+0_2 (const,i32) == 5_1 (or,i32)
+0_2 (const,i32) == 5_2 (or,i32)
+0_2 (const,i32) == 6_1 (xor,i32)
+0_2 (const,i32) == 6_2 (xor,i32)
+0_2 (const,i32) == 7_1 (shl,i32)
+0_2 (const,i32) == 7_2 (shl,i32)
+0_2 (const,i32) == 8_1 (lshr,i32)
+0_2 (const,i32) == 8_2 (lshr,i32)
+0_2 (const,i32) == 9_1 (ashr,i32)
+0_2 (const,i32) == 9_2 (ashr,i32)
+0_2 (const,i32) == 10_2 (select,i32)
+0_2 (const,i32) == 10_3 (select,i32)
+0_2 (const,i32) == 11_1 (eq,i32)
+0_2 (const,i32) == 11_2 (eq,i32)
+0_2 (const,i32) == 12_1 (ne,i32)
+0_2 (const,i32) == 12_2 (ne,i32)
+0_2 (const,i32) == 13_1 (ult,i32)
+0_2 (const,i32) == 13_2 (ult,i32)
+0_2 (const,i32) == 14_1 (slt,i32)
+0_2 (const,i32) == 14_2 (slt,i32)
+0_2 (const,i32) == 15_1 (ule,i32)
+0_2 (const,i32) == 15_2 (ule,i32)
+0_2 (const,i32) == 16_1 (sle,i32)
+0_2 (const,i32) == 16_2 (sle,i32)
+0_2 (const,i32) == 17_0 (output,i32)
+0_3 (const,i32) == 1_1 (add,i32)
+0_3 (const,i32) == 1_2 (add,i32)
+0_3 (const,i32) == 2_1 (sub,i32)
+0_3 (const,i32) == 2_2 (sub,i32)
+0_3 (const,i32) == 3_1 (mul,i32)
+0_3 (const,i32) == 3_2 (mul,i32)
+0_3 (const,i32) == 4_1 (and,i32)
+0_3 (const,i32) == 4_2 (and,i32)
+0_3 (const,i32) == 5_1 (or,i32)
+0_3 (const,i32) == 5_2 (or,i32)
+0_3 (const,i32) == 6_1 (xor,i32)
+0_3 (const,i32) == 6_2 (xor,i32)
+0_3 (const,i32) == 7_1 (shl,i32)
+0_3 (const,i32) == 7_2 (shl,i32)
+0_3 (const,i32) == 8_1 (lshr,i32)
+0_3 (const,i32) == 8_2 (lshr,i32)
+0_3 (const,i32) == 9_1 (ashr,i32)
+0_3 (const,i32) == 9_2 (ashr,i32)
+0_3 (const,i32) == 10_2 (select,i32)
+0_3 (const,i32) == 10_3 (select,i32)
+0_3 (const,i32) == 11_1 (eq,i32)
+0_3 (const,i32) == 11_2 (eq,i32)
+0_3 (const,i32) == 12_1 (ne,i32)
+0_3 (const,i32) == 12_2 (ne,i32)
+0_3 (const,i32) == 13_1 (ult,i32)
+0_3 (const,i32) == 13_2 (ult,i32)
+0_3 (const,i32) == 14_1 (slt,i32)
+0_3 (const,i32) == 14_2 (slt,i32)
+0_3 (const,i32) == 15_1 (ule,i32)
+0_3 (const,i32) == 15_2 (ule,i32)
+0_3 (const,i32) == 16_1 (sle,i32)
+0_3 (const,i32) == 16_2 (sle,i32)
+0_3 (const,i32) == 17_0 (output,i32)
+1_1 (add,i32) == 2_0 (sub,i32)
+1_1 (add,i32) == 3_0 (mul,i32)
+1_1 (add,i32) == 4_0 (and,i32)
+1_1 (add,i32) == 5_0 (or,i32)
+1_1 (add,i32) == 6_0 (xor,i32)
+1_1 (add,i32) == 7_0 (shl,i32)
+1_1 (add,i32) == 8_0 (lshr,i32)
+1_1 (add,i32) == 9_0 (ashr,i32)
+1_1 (add,i32) == 10_0 (select,i32)
+1_1 (add,i32) == 11_0 (zext,eq,i32)
+1_1 (add,i32) == 12_0 (zext,ne,i32)
+1_1 (add,i32) == 13_0 (zext,ult,i32)
+1_1 (add,i32) == 14_0 (zext,slt,i32)
+1_1 (add,i32) == 15_0 (zext,ule,i32)
+1_1 (add,i32) == 16_0 (zext,sle,i32)
+1_2 (add,i32) == 2_0 (sub,i32)
+1_2 (add,i32) == 3_0 (mul,i32)
+1_2 (add,i32) == 4_0 (and,i32)
+1_2 (add,i32) == 5_0 (or,i32)
+1_2 (add,i32) == 6_0 (xor,i32)
+1_2 (add,i32) == 7_0 (shl,i32)
+1_2 (add,i32) == 8_0 (lshr,i32)
+1_2 (add,i32) == 9_0 (ashr,i32)
+1_2 (add,i32) == 10_0 (select,i32)
+1_2 (add,i32) == 11_0 (zext,eq,i32)
+1_2 (add,i32) == 12_0 (zext,ne,i32)
+1_2 (add,i32) == 13_0 (zext,ult,i32)
+1_2 (add,i32) == 14_0 (zext,slt,i32)
+1_2 (add,i32) == 15_0 (zext,ule,i32)
+1_2 (add,i32) == 16_0 (zext,sle,i32)
+2_1 (sub,i32) == 1_0 (add,i32)
+2_1 (sub,i32) == 3_0 (mul,i32)
+2_1 (sub,i32) == 4_0 (and,i32)
+2_1 (sub,i32) == 5_0 (or,i32)
+2_1 (sub,i32) == 6_0 (xor,i32)
+2_1 (sub,i32) == 7_0 (shl,i32)
+2_1 (sub,i32) == 8_0 (lshr,i32)
+2_1 (sub,i32) == 9_0 (ashr,i32)
+2_1 (sub,i32) == 10_0 (select,i32)
+2_1 (sub,i32) == 11_0 (zext,eq,i32)
+2_1 (sub,i32) == 12_0 (zext,ne,i32)
+2_1 (sub,i32) == 13_0 (zext,ult,i32)
+2_1 (sub,i32) == 14_0 (zext,slt,i32)
+2_1 (sub,i32) == 15_0 (zext,ule,i32)
+2_1 (sub,i32) == 16_0 (zext,sle,i32)
+2_2 (sub,i32) == 1_0 (add,i32)
+2_2 (sub,i32) == 3_0 (mul,i32)
+2_2 (sub,i32) == 4_0 (and,i32)
+2_2 (sub,i32) == 5_0 (or,i32)
+2_2 (sub,i32) == 6_0 (xor,i32)
+2_2 (sub,i32) == 7_0 (shl,i32)
+2_2 (sub,i32) == 8_0 (lshr,i32)
+2_2 (sub,i32) == 9_0 (ashr,i32)
+2_2 (sub,i32) == 10_0 (select,i32)
+2_2 (sub,i32) == 11_0 (zext,eq,i32)
+2_2 (sub,i32) == 12_0 (zext,ne,i32)
+2_2 (sub,i32) == 13_0 (zext,ult,i32)
+2_2 (sub,i32) == 14_0 (zext,slt,i32)
+2_2 (sub,i32) == 15_0 (zext,ule,i32)
+2_2 (sub,i32) == 16_0 (zext,sle,i32)
+3_1 (mul,i32) == 1_0 (add,i32)
+3_1 (mul,i32) == 2_0 (sub,i32)
+3_1 (mul,i32) == 4_0 (and,i32)
+3_1 (mul,i32) == 5_0 (or,i32)
+3_1 (mul,i32) == 6_0 (xor,i32)
+3_1 (mul,i32) == 7_0 (shl,i32)
+3_1 (mul,i32) == 8_0 (lshr,i32)
+3_1 (mul,i32) == 9_0 (ashr,i32)
+3_1 (mul,i32) == 10_0 (select,i32)
+3_1 (mul,i32) == 11_0 (zext,eq,i32)
+3_1 (mul,i32) == 12_0 (zext,ne,i32)
+3_1 (mul,i32) == 13_0 (zext,ult,i32)
+3_1 (mul,i32) == 14_0 (zext,slt,i32)
+3_1 (mul,i32) == 15_0 (zext,ule,i32)
+3_1 (mul,i32) == 16_0 (zext,sle,i32)
+3_2 (mul,i32) == 1_0 (add,i32)
+3_2 (mul,i32) == 2_0 (sub,i32)
+3_2 (mul,i32) == 4_0 (and,i32)
+3_2 (mul,i32) == 5_0 (or,i32)
+3_2 (mul,i32) == 6_0 (xor,i32)
+3_2 (mul,i32) == 7_0 (shl,i32)
+3_2 (mul,i32) == 8_0 (lshr,i32)
+3_2 (mul,i32) == 9_0 (ashr,i32)
+3_2 (mul,i32) == 10_0 (select,i32)
+3_2 (mul,i32) == 11_0 (zext,eq,i32)
+3_2 (mul,i32) == 12_0 (zext,ne,i32)
+3_2 (mul,i32) == 13_0 (zext,ult,i32)
+3_2 (mul,i32) == 14_0 (zext,slt,i32)
+3_2 (mul,i32) == 15_0 (zext,ule,i32)
+3_2 (mul,i32) == 16_0 (zext,sle,i32)
+4_1 (and,i32) == 1_0 (add,i32)
+4_1 (and,i32) == 2_0 (sub,i32)
+4_1 (and,i32) == 3_0 (mul,i32)
+4_1 (and,i32) == 5_0 (or,i32)
+4_1 (and,i32) == 6_0 (xor,i32)
+4_1 (and,i32) == 7_0 (shl,i32)
+4_1 (and,i32) == 8_0 (lshr,i32)
+4_1 (and,i32) == 9_0 (ashr,i32)
+4_1 (and,i32) == 10_0 (select,i32)
+4_1 (and,i32) == 11_0 (zext,eq,i32)
+4_1 (and,i32) == 12_0 (zext,ne,i32)
+4_1 (and,i32) == 13_0 (zext,ult,i32)
+4_1 (and,i32) == 14_0 (zext,slt,i32)
+4_1 (and,i32) == 15_0 (zext,ule,i32)
+4_1 (and,i32) == 16_0 (zext,sle,i32)
+4_2 (and,i32) == 1_0 (add,i32)
+4_2 (and,i32) == 2_0 (sub,i32)
+4_2 (and,i32) == 3_0 (mul,i32)
+4_2 (and,i32) == 5_0 (or,i32)
+4_2 (and,i32) == 6_0 (xor,i32)
+4_2 (and,i32) == 7_0 (shl,i32)
+4_2 (and,i32) == 8_0 (lshr,i32)
+4_2 (and,i32) == 9_0 (ashr,i32)
+4_2 (and,i32) == 10_0 (select,i32)
+4_2 (and,i32) == 11_0 (zext,eq,i32)
+4_2 (and,i32) == 12_0 (zext,ne,i32)
+4_2 (and,i32) == 13_0 (zext,ult,i32)
+4_2 (and,i32) == 14_0 (zext,slt,i32)
+4_2 (and,i32) == 15_0 (zext,ule,i32)
+4_2 (and,i32) == 16_0 (zext,sle,i32)
+5_1 (or,i32) == 1_0 (add,i32)
+5_1 (or,i32) == 2_0 (sub,i32)
+5_1 (or,i32) == 3_0 (mul,i32)
+5_1 (or,i32) == 4_0 (and,i32)
+5_1 (or,i32) == 6_0 (xor,i32)
+5_1 (or,i32) == 7_0 (shl,i32)
+5_1 (or,i32) == 8_0 (lshr,i32)
+5_1 (or,i32) == 9_0 (ashr,i32)
+5_1 (or,i32) == 10_0 (select,i32)
+5_1 (or,i32) == 11_0 (zext,eq,i32)
+5_1 (or,i32) == 12_0 (zext,ne,i32)
+5_1 (or,i32) == 13_0 (zext,ult,i32)
+5_1 (or,i32) == 14_0 (zext,slt,i32)
+5_1 (or,i32) == 15_0 (zext,ule,i32)
+5_1 (or,i32) == 16_0 (zext,sle,i32)
+5_2 (or,i32) == 1_0 (add,i32)
+5_2 (or,i32) == 2_0 (sub,i32)
+5_2 (or,i32) == 3_0 (mul,i32)
+5_2 (or,i32) == 4_0 (and,i32)
+5_2 (or,i32) == 6_0 (xor,i32)
+5_2 (or,i32) == 7_0 (shl,i32)
+5_2 (or,i32) == 8_0 (lshr,i32)
+5_2 (or,i32) == 9_0 (ashr,i32)
+5_2 (or,i32) == 10_0 (select,i32)
+5_2 (or,i32) == 11_0 (zext,eq,i32)
+5_2 (or,i32) == 12_0 (zext,ne,i32)
+5_2 (or,i32) == 13_0 (zext,ult,i32)
+5_2 (or,i32) == 14_0 (zext,slt,i32)
+5_2 (or,i32) == 15_0 (zext,ule,i32)
+5_2 (or,i32) == 16_0 (zext,sle,i32)
+6_1 (xor,i32) == 1_0 (add,i32)
+6_1 (xor,i32) == 2_0 (sub,i32)
+6_1 (xor,i32) == 3_0 (mul,i32)
+6_1 (xor,i32) == 4_0 (and,i32)
+6_1 (xor,i32) == 5_0 (or,i32)
+6_1 (xor,i32) == 7_0 (shl,i32)
+6_1 (xor,i32) == 8_0 (lshr,i32)
+6_1 (xor,i32) == 9_0 (ashr,i32)
+6_1 (xor,i32) == 10_0 (select,i32)
+6_1 (xor,i32) == 11_0 (zext,eq,i32)
+6_1 (xor,i32) == 12_0 (zext,ne,i32)
+6_1 (xor,i32) == 13_0 (zext,ult,i32)
+6_1 (xor,i32) == 14_0 (zext,slt,i32)
+6_1 (xor,i32) == 15_0 (zext,ule,i32)
+6_1 (xor,i32) == 16_0 (zext,sle,i32)
+6_2 (xor,i32) == 1_0 (add,i32)
+6_2 (xor,i32) == 2_0 (sub,i32)
+6_2 (xor,i32) == 3_0 (mul,i32)
+6_2 (xor,i32) == 4_0 (and,i32)
+6_2 (xor,i32) == 5_0 (or,i32)
+6_2 (xor,i32) == 7_0 (shl,i32)
+6_2 (xor,i32) == 8_0 (lshr,i32)
+6_2 (xor,i32) == 9_0 (ashr,i32)
+6_2 (xor,i32) == 10_0 (select,i32)
+6_2 (xor,i32) == 11_0 (zext,eq,i32)
+6_2 (xor,i32) == 12_0 (zext,ne,i32)
+6_2 (xor,i32) == 13_0 (zext,ult,i32)
+6_2 (xor,i32) == 14_0 (zext,slt,i32)
+6_2 (xor,i32) == 15_0 (zext,ule,i32)
+6_2 (xor,i32) == 16_0 (zext,sle,i32)
+7_1 (shl,i32) == 1_0 (add,i32)
+7_1 (shl,i32) == 2_0 (sub,i32)
+7_1 (shl,i32) == 3_0 (mul,i32)
+7_1 (shl,i32) == 4_0 (and,i32)
+7_1 (shl,i32) == 5_0 (or,i32)
+7_1 (shl,i32) == 6_0 (xor,i32)
+7_1 (shl,i32) == 8_0 (lshr,i32)
+7_1 (shl,i32) == 9_0 (ashr,i32)
+7_1 (shl,i32) == 10_0 (select,i32)
+7_1 (shl,i32) == 11_0 (zext,eq,i32)
+7_1 (shl,i32) == 12_0 (zext,ne,i32)
+7_1 (shl,i32) == 13_0 (zext,ult,i32)
+7_1 (shl,i32) == 14_0 (zext,slt,i32)
+7_1 (shl,i32) == 15_0 (zext,ule,i32)
+7_1 (shl,i32) == 16_0 (zext,sle,i32)
+7_2 (shl,i32) == 1_0 (add,i32)
+7_2 (shl,i32) == 2_0 (sub,i32)
+7_2 (shl,i32) == 3_0 (mul,i32)
+7_2 (shl,i32) == 4_0 (and,i32)
+7_2 (shl,i32) == 5_0 (or,i32)
+7_2 (shl,i32) == 6_0 (xor,i32)
+7_2 (shl,i32) == 8_0 (lshr,i32)
+7_2 (shl,i32) == 9_0 (ashr,i32)
+7_2 (shl,i32) == 10_0 (select,i32)
+7_2 (shl,i32) == 11_0 (zext,eq,i32)
+7_2 (shl,i32) == 12_0 (zext,ne,i32)
+7_2 (shl,i32) == 13_0 (zext,ult,i32)
+7_2 (shl,i32) == 14_0 (zext,slt,i32)
+7_2 (shl,i32) == 15_0 (zext,ule,i32)
+7_2 (shl,i32) == 16_0 (zext,sle,i32)
+8_1 (lshr,i32) == 1_0 (add,i32)
+8_1 (lshr,i32) == 2_0 (sub,i32)
+8_1 (lshr,i32) == 3_0 (mul,i32)
+8_1 (lshr,i32) == 4_0 (and,i32)
+8_1 (lshr,i32) == 5_0 (or,i32)
+8_1 (lshr,i32) == 6_0 (xor,i32)
+8_1 (lshr,i32) == 7_0 (shl,i32)
+8_1 (lshr,i32) == 9_0 (ashr,i32)
+8_1 (lshr,i32) == 10_0 (select,i32)
+8_1 (lshr,i32) == 11_0 (zext,eq,i32)
+8_1 (lshr,i32) == 12_0 (zext,ne,i32)
+8_1 (lshr,i32) == 13_0 (zext,ult,i32)
+8_1 (lshr,i32) == 14_0 (zext,slt,i32)
+8_1 (lshr,i32) == 15_0 (zext,ule,i32)
+8_1 (lshr,i32) == 16_0 (zext,sle,i32)
+8_2 (lshr,i32) == 1_0 (add,i32)
+8_2 (lshr,i32) == 2_0 (sub,i32)
+8_2 (lshr,i32) == 3_0 (mul,i32)
+8_2 (lshr,i32) == 4_0 (and,i32)
+8_2 (lshr,i32) == 5_0 (or,i32)
+8_2 (lshr,i32) == 6_0 (xor,i32)
+8_2 (lshr,i32) == 7_0 (shl,i32)
+8_2 (lshr,i32) == 9_0 (ashr,i32)
+8_2 (lshr,i32) == 10_0 (select,i32)
+8_2 (lshr,i32) == 11_0 (zext,eq,i32)
+8_2 (lshr,i32) == 12_0 (zext,ne,i32)
+8_2 (lshr,i32) == 13_0 (zext,ult,i32)
+8_2 (lshr,i32) == 14_0 (zext,slt,i32)
+8_2 (lshr,i32) == 15_0 (zext,ule,i32)
+8_2 (lshr,i32) == 16_0 (zext,sle,i32)
+9_1 (ashr,i32) == 1_0 (add,i32)
+9_1 (ashr,i32) == 2_0 (sub,i32)
+9_1 (ashr,i32) == 3_0 (mul,i32)
+9_1 (ashr,i32) == 4_0 (and,i32)
+9_1 (ashr,i32) == 5_0 (or,i32)
+9_1 (ashr,i32) == 6_0 (xor,i32)
+9_1 (ashr,i32) == 7_0 (shl,i32)
+9_1 (ashr,i32) == 8_0 (lshr,i32)
+9_1 (ashr,i32) == 10_0 (select,i32)
+9_1 (ashr,i32) == 11_0 (zext,eq,i32)
+9_1 (ashr,i32) == 12_0 (zext,ne,i32)
+9_1 (ashr,i32) == 13_0 (zext,ult,i32)
+9_1 (ashr,i32) == 14_0 (zext,slt,i32)
+9_1 (ashr,i32) == 15_0 (zext,ule,i32)
+9_1 (ashr,i32) == 16_0 (zext,sle,i32)
+9_2 (ashr,i32) == 1_0 (add,i32)
+9_2 (ashr,i32) == 2_0 (sub,i32)
+9_2 (ashr,i32) == 3_0 (mul,i32)
+9_2 (ashr,i32) == 4_0 (and,i32)
+9_2 (ashr,i32) == 5_0 (or,i32)
+9_2 (ashr,i32) == 6_0 (xor,i32)
+9_2 (ashr,i32) == 7_0 (shl,i32)
+9_2 (ashr,i32) == 8_0 (lshr,i32)
+9_2 (ashr,i32) == 10_0 (select,i32)
+9_2 (ashr,i32) == 11_0 (zext,eq,i32)
+9_2 (ashr,i32) == 12_0 (zext,ne,i32)
+9_2 (ashr,i32) == 13_0 (zext,ult,i32)
+9_2 (ashr,i32) == 14_0 (zext,slt,i32)
+9_2 (ashr,i32) == 15_0 (zext,ule,i32)
+9_2 (ashr,i32) == 16_0 (zext,sle,i32)
+10_1 (select,i32) == 1_0 (add,i32)
+10_1 (select,i32) == 2_0 (sub,i32)
+10_1 (select,i32) == 3_0 (mul,i32)
+10_1 (select,i32) == 4_0 (and,i32)
+10_1 (select,i32) == 5_0 (or,i32)
+10_1 (select,i32) == 6_0 (xor,i32)
+10_1 (select,i32) == 7_0 (shl,i32)
+10_1 (select,i32) == 8_0 (lshr,i32)
+10_1 (select,i32) == 9_0 (ashr,i32)
+10_1 (select,i32) == 11_0 (zext,eq,i32)
+10_1 (select,i32) == 12_0 (zext,ne,i32)
+10_1 (select,i32) == 13_0 (zext,ult,i32)
+10_1 (select,i32) == 14_0 (zext,slt,i32)
+10_1 (select,i32) == 15_0 (zext,ule,i32)
+10_1 (select,i32) == 16_0 (zext,sle,i32)
+10_2 (select,i32) == 1_0 (add,i32)
+10_2 (select,i32) == 2_0 (sub,i32)
+10_2 (select,i32) == 3_0 (mul,i32)
+10_2 (select,i32) == 4_0 (and,i32)
+10_2 (select,i32) == 5_0 (or,i32)
+10_2 (select,i32) == 6_0 (xor,i32)
+10_2 (select,i32) == 7_0 (shl,i32)
+10_2 (select,i32) == 8_0 (lshr,i32)
+10_2 (select,i32) == 9_0 (ashr,i32)
+10_2 (select,i32) == 11_0 (zext,eq,i32)
+10_2 (select,i32) == 12_0 (zext,ne,i32)
+10_2 (select,i32) == 13_0 (zext,ult,i32)
+10_2 (select,i32) == 14_0 (zext,slt,i32)
+10_2 (select,i32) == 15_0 (zext,ule,i32)
+10_2 (select,i32) == 16_0 (zext,sle,i32)
+10_3 (select,i32) == 1_0 (add,i32)
+10_3 (select,i32) == 2_0 (sub,i32)
+10_3 (select,i32) == 3_0 (mul,i32)
+10_3 (select,i32) == 4_0 (and,i32)
+10_3 (select,i32) == 5_0 (or,i32)
+10_3 (select,i32) == 6_0 (xor,i32)
+10_3 (select,i32) == 7_0 (shl,i32)
+10_3 (select,i32) == 8_0 (lshr,i32)
+10_3 (select,i32) == 9_0 (ashr,i32)
+10_3 (select,i32) == 11_0 (zext,eq,i32)
+10_3 (select,i32) == 12_0 (zext,ne,i32)
+10_3 (select,i32) == 13_0 (zext,ult,i32)
+10_3 (select,i32) == 14_0 (zext,slt,i32)
+10_3 (select,i32) == 15_0 (zext,ule,i32)
+10_3 (select,i32) == 16_0 (zext,sle,i32)
+11_1 (eq,i32) == 1_0 (add,i32)
+11_1 (eq,i32) == 2_0 (sub,i32)
+11_1 (eq,i32) == 3_0 (mul,i32)
+11_1 (eq,i32) == 4_0 (and,i32)
+11_1 (eq,i32) == 5_0 (or,i32)
+11_1 (eq,i32) == 6_0 (xor,i32)
+11_1 (eq,i32) == 7_0 (shl,i32)
+11_1 (eq,i32) == 8_0 (lshr,i32)
+11_1 (eq,i32) == 9_0 (ashr,i32)
+11_1 (eq,i32) == 10_0 (select,i32)
+11_1 (eq,i32) == 12_0 (zext,ne,i32)
+11_1 (eq,i32) == 13_0 (zext,ult,i32)
+11_1 (eq,i32) == 14_0 (zext,slt,i32)
+11_1 (eq,i32) == 15_0 (zext,ule,i32)
+11_1 (eq,i32) == 16_0 (zext,sle,i32)
+11_2 (eq,i32) == 1_0 (add,i32)
+11_2 (eq,i32) == 2_0 (sub,i32)
+11_2 (eq,i32) == 3_0 (mul,i32)
+11_2 (eq,i32) == 4_0 (and,i32)
+11_2 (eq,i32) == 5_0 (or,i32)
+11_2 (eq,i32) == 6_0 (xor,i32)
+11_2 (eq,i32) == 7_0 (shl,i32)
+11_2 (eq,i32) == 8_0 (lshr,i32)
+11_2 (eq,i32) == 9_0 (ashr,i32)
+11_2 (eq,i32) == 10_0 (select,i32)
+11_2 (eq,i32) == 12_0 (zext,ne,i32)
+11_2 (eq,i32) == 13_0 (zext,ult,i32)
+11_2 (eq,i32) == 14_0 (zext,slt,i32)
+11_2 (eq,i32) == 15_0 (zext,ule,i32)
+11_2 (eq,i32) == 16_0 (zext,sle,i32)
+12_1 (ne,i32) == 1_0 (add,i32)
+12_1 (ne,i32) == 2_0 (sub,i32)
+12_1 (ne,i32) == 3_0 (mul,i32)
+12_1 (ne,i32) == 4_0 (and,i32)
+12_1 (ne,i32) == 5_0 (or,i32)
+12_1 (ne,i32) == 6_0 (xor,i32)
+12_1 (ne,i32) == 7_0 (shl,i32)
+12_1 (ne,i32) == 8_0 (lshr,i32)
+12_1 (ne,i32) == 9_0 (ashr,i32)
+12_1 (ne,i32) == 10_0 (select,i32)
+12_1 (ne,i32) == 11_0 (zext,eq,i32)
+12_1 (ne,i32) == 13_0 (zext,ult,i32)
+12_1 (ne,i32) == 14_0 (zext,slt,i32)
+12_1 (ne,i32) == 15_0 (zext,ule,i32)
+12_1 (ne,i32) == 16_0 (zext,sle,i32)
+12_2 (ne,i32) == 1_0 (add,i32)
+12_2 (ne,i32) == 2_0 (sub,i32)
+12_2 (ne,i32) == 3_0 (mul,i32)
+12_2 (ne,i32) == 4_0 (and,i32)
+12_2 (ne,i32) == 5_0 (or,i32)
+12_2 (ne,i32) == 6_0 (xor,i32)
+12_2 (ne,i32) == 7_0 (shl,i32)
+12_2 (ne,i32) == 8_0 (lshr,i32)
+12_2 (ne,i32) == 9_0 (ashr,i32)
+12_2 (ne,i32) == 10_0 (select,i32)
+12_2 (ne,i32) == 11_0 (zext,eq,i32)
+12_2 (ne,i32) == 13_0 (zext,ult,i32)
+12_2 (ne,i32) == 14_0 (zext,slt,i32)
+12_2 (ne,i32) == 15_0 (zext,ule,i32)
+12_2 (ne,i32) == 16_0 (zext,sle,i32)
+13_1 (ult,i32) == 1_0 (add,i32)
+13_1 (ult,i32) == 2_0 (sub,i32)
+13_1 (ult,i32) == 3_0 (mul,i32)
+13_1 (ult,i32) == 4_0 (and,i32)
+13_1 (ult,i32) == 5_0 (or,i32)
+13_1 (ult,i32) == 6_0 (xor,i32)
+13_1 (ult,i32) == 7_0 (shl,i32)
+13_1 (ult,i32) == 8_0 (lshr,i32)
+13_1 (ult,i32) == 9_0 (ashr,i32)
+13_1 (ult,i32) == 10_0 (select,i32)
+13_1 (ult,i32) == 11_0 (zext,eq,i32)
+13_1 (ult,i32) == 12_0 (zext,ne,i32)
+13_1 (ult,i32) == 14_0 (zext,slt,i32)
+13_1 (ult,i32) == 15_0 (zext,ule,i32)
+13_1 (ult,i32) == 16_0 (zext,sle,i32)
+13_2 (ult,i32) == 1_0 (add,i32)
+13_2 (ult,i32) == 2_0 (sub,i32)
+13_2 (ult,i32) == 3_0 (mul,i32)
+13_2 (ult,i32) == 4_0 (and,i32)
+13_2 (ult,i32) == 5_0 (or,i32)
+13_2 (ult,i32) == 6_0 (xor,i32)
+13_2 (ult,i32) == 7_0 (shl,i32)
+13_2 (ult,i32) == 8_0 (lshr,i32)
+13_2 (ult,i32) == 9_0 (ashr,i32)
+13_2 (ult,i32) == 10_0 (select,i32)
+13_2 (ult,i32) == 11_0 (zext,eq,i32)
+13_2 (ult,i32) == 12_0 (zext,ne,i32)
+13_2 (ult,i32) == 14_0 (zext,slt,i32)
+13_2 (ult,i32) == 15_0 (zext,ule,i32)
+13_2 (ult,i32) == 16_0 (zext,sle,i32)
+14_1 (slt,i32) == 1_0 (add,i32)
+14_1 (slt,i32) == 2_0 (sub,i32)
+14_1 (slt,i32) == 3_0 (mul,i32)
+14_1 (slt,i32) == 4_0 (and,i32)
+14_1 (slt,i32) == 5_0 (or,i32)
+14_1 (slt,i32) == 6_0 (xor,i32)
+14_1 (slt,i32) == 7_0 (shl,i32)
+14_1 (slt,i32) == 8_0 (lshr,i32)
+14_1 (slt,i32) == 9_0 (ashr,i32)
+14_1 (slt,i32) == 10_0 (select,i32)
+14_1 (slt,i32) == 11_0 (zext,eq,i32)
+14_1 (slt,i32) == 12_0 (zext,ne,i32)
+14_1 (slt,i32) == 13_0 (zext,ult,i32)
+14_1 (slt,i32) == 15_0 (zext,ule,i32)
+14_1 (slt,i32) == 16_0 (zext,sle,i32)
+14_2 (slt,i32) == 1_0 (add,i32)
+14_2 (slt,i32) == 2_0 (sub,i32)
+14_2 (slt,i32) == 3_0 (mul,i32)
+14_2 (slt,i32) == 4_0 (and,i32)
+14_2 (slt,i32) == 5_0 (or,i32)
+14_2 (slt,i32) == 6_0 (xor,i32)
+14_2 (slt,i32) == 7_0 (shl,i32)
+14_2 (slt,i32) == 8_0 (lshr,i32)
+14_2 (slt,i32) == 9_0 (ashr,i32)
+14_2 (slt,i32) == 10_0 (select,i32)
+14_2 (slt,i32) == 11_0 (zext,eq,i32)
+14_2 (slt,i32) == 12_0 (zext,ne,i32)
+14_2 (slt,i32) == 13_0 (zext,ult,i32)
+14_2 (slt,i32) == 15_0 (zext,ule,i32)
+14_2 (slt,i32) == 16_0 (zext,sle,i32)
+15_1 (ule,i32) == 1_0 (add,i32)
+15_1 (ule,i32) == 2_0 (sub,i32)
+15_1 (ule,i32) == 3_0 (mul,i32)
+15_1 (ule,i32) == 4_0 (and,i32)
+15_1 (ule,i32) == 5_0 (or,i32)
+15_1 (ule,i32) == 6_0 (xor,i32)
+15_1 (ule,i32) == 7_0 (shl,i32)
+15_1 (ule,i32) == 8_0 (lshr,i32)
+15_1 (ule,i32) == 9_0 (ashr,i32)
+15_1 (ule,i32) == 10_0 (select,i32)
+15_1 (ule,i32) == 11_0 (zext,eq,i32)
+15_1 (ule,i32) == 12_0 (zext,ne,i32)
+15_1 (ule,i32) == 13_0 (zext,ult,i32)
+15_1 (ule,i32) == 14_0 (zext,slt,i32)
+15_1 (ule,i32) == 16_0 (zext,sle,i32)
+15_2 (ule,i32) == 1_0 (add,i32)
+15_2 (ule,i32) == 2_0 (sub,i32)
+15_2 (ule,i32) == 3_0 (mul,i32)
+15_2 (ule,i32) == 4_0 (and,i32)
+15_2 (ule,i32) == 5_0 (or,i32)
+15_2 (ule,i32) == 6_0 (xor,i32)
+15_2 (ule,i32) == 7_0 (shl,i32)
+15_2 (ule,i32) == 8_0 (lshr,i32)
+15_2 (ule,i32) == 9_0 (ashr,i32)
+15_2 (ule,i32) == 10_0 (select,i32)
+15_2 (ule,i32) == 11_0 (zext,eq,i32)
+15_2 (ule,i32) == 12_0 (zext,ne,i32)
+15_2 (ule,i32) == 13_0 (zext,ult,i32)
+15_2 (ule,i32) == 14_0 (zext,slt,i32)
+15_2 (ule,i32) == 16_0 (zext,sle,i32)
+16_1 (sle,i32) == 1_0 (add,i32)
+16_1 (sle,i32) == 2_0 (sub,i32)
+16_1 (sle,i32) == 3_0 (mul,i32)
+16_1 (sle,i32) == 4_0 (and,i32)
+16_1 (sle,i32) == 5_0 (or,i32)
+16_1 (sle,i32) == 6_0 (xor,i32)
+16_1 (sle,i32) == 7_0 (shl,i32)
+16_1 (sle,i32) == 8_0 (lshr,i32)
+16_1 (sle,i32) == 9_0 (ashr,i32)
+16_1 (sle,i32) == 10_0 (select,i32)
+16_1 (sle,i32) == 11_0 (zext,eq,i32)
+16_1 (sle,i32) == 12_0 (zext,ne,i32)
+16_1 (sle,i32) == 13_0 (zext,ult,i32)
+16_1 (sle,i32) == 14_0 (zext,slt,i32)
+16_1 (sle,i32) == 15_0 (zext,ule,i32)
+16_2 (sle,i32) == 1_0 (add,i32)
+16_2 (sle,i32) == 2_0 (sub,i32)
+16_2 (sle,i32) == 3_0 (mul,i32)
+16_2 (sle,i32) == 4_0 (and,i32)
+16_2 (sle,i32) == 5_0 (or,i32)
+16_2 (sle,i32) == 6_0 (xor,i32)
+16_2 (sle,i32) == 7_0 (shl,i32)
+16_2 (sle,i32) == 8_0 (lshr,i32)
+16_2 (sle,i32) == 9_0 (ashr,i32)
+16_2 (sle,i32) == 10_0 (select,i32)
+16_2 (sle,i32) == 11_0 (zext,eq,i32)
+16_2 (sle,i32) == 12_0 (zext,ne,i32)
+16_2 (sle,i32) == 13_0 (zext,ult,i32)
+16_2 (sle,i32) == 14_0 (zext,slt,i32)
+16_2 (sle,i32) == 15_0 (zext,ule,i32)
+1_0 (add,i32) == 17_0 (output,i32)
+2_0 (sub,i32) == 17_0 (output,i32)
+3_0 (mul,i32) == 17_0 (output,i32)
+4_0 (and,i32) == 17_0 (output,i32)
+5_0 (or,i32) == 17_0 (output,i32)
+6_0 (xor,i32) == 17_0 (output,i32)
+7_0 (shl,i32) == 17_0 (output,i32)
+8_0 (lshr,i32) == 17_0 (output,i32)
+9_0 (ashr,i32) == 17_0 (output,i32)
+10_0 (select,i32) == 17_0 (output,i32)
+11_0 (zext,eq,i32) == 17_0 (output,i32)
+12_0 (zext,ne,i32) == 17_0 (output,i32)
+13_0 (zext,ult,i32) == 17_0 (output,i32)
+14_0 (zext,slt,i32) == 17_0 (output,i32)
+15_0 (zext,ule,i32) == 17_0 (output,i32)
+16_0 (zext,sle,i32) == 17_0 (output,i32)
+; no valid wiring found
+; starting synthesis for LHS
+%0:i32 = var (knownBits=0xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx) (nonNegative) (range=[0,-2147483648))
+%1:i32 = mulnsw %0, %0
+infer %1
+inputs: 1, constants: 2
+N: 3, M: 19
+default width: 32
+output width: 32
+component library: add (32, { 32 32 }); sub (32, { 32 32 }); mul (32, { 32 32 }); and (32, { 32 32 }); or (32, { 32 32 }); xor (32, { 32 32 }); shl (32, { 32 32 }); lshr (32, { 32 32 }); ashr (32, { 32 32 }); select (32, { 1 32 32 }); eq (1, { 32 32 }); ne (1, { 32 32 }); ult (1, { 32 32 }); slt (1, { 32 32 }); ule (1, { 32 32 }); sle (1, { 32 32 }); 
+const components: const (32); const (32); 
+I: 0_1 (input,i32) 0_2 (const,i32) 0_3 (const,i32) 
+P: 1_1 (add,i32) 1_2 (add,i32) 2_1 (sub,i32) 2_2 (sub,i32) 3_1 (mul,i32) 3_2 (mul,i32) 4_1 (and,i32) 4_2 (and,i32) 5_1 (or,i32) 5_2 (or,i32) 6_1 (xor,i32) 6_2 (xor,i32) 7_1 (shl,i32) 7_2 (shl,i32) 8_1 (lshr,i32) 8_2 (lshr,i32) 9_1 (ashr,i32) 9_2 (ashr,i32) 10_1 (select,i32) 10_2 (select,i32) 10_3 (select,i32) 11_1 (eq,i32) 11_2 (eq,i32) 12_1 (ne,i32) 12_2 (ne,i32) 13_1 (ult,i32) 13_2 (ult,i32) 14_1 (slt,i32) 14_2 (slt,i32) 15_1 (ule,i32) 15_2 (ule,i32) 16_1 (sle,i32) 16_2 (sle,i32) 
+R: 1_0 (add,i32) 2_0 (sub,i32) 3_0 (mul,i32) 4_0 (and,i32) 5_0 (or,i32) 6_0 (xor,i32) 7_0 (shl,i32) 8_0 (lshr,i32) 9_0 (ashr,i32) 10_0 (select,i32) 11_0 (zext,eq,i32) 12_0 (zext,ne,i32) 13_0 (zext,ult,i32) 14_0 (zext,slt,i32) 15_0 (zext,ule,i32) 16_0 (zext,sle,i32) 
+L: 0_1 (input,i32) 0_2 (const,i32) 0_3 (const,i32) 1_1 (add,i32) 1_2 (add,i32) 2_1 (sub,i32) 2_2 (sub,i32) 3_1 (mul,i32) 3_2 (mul,i32) 4_1 (and,i32) 4_2 (and,i32) 5_1 (or,i32) 5_2 (or,i32) 6_1 (xor,i32) 6_2 (xor,i32) 7_1 (shl,i32) 7_2 (shl,i32) 8_1 (lshr,i32) 8_2 (lshr,i32) 9_1 (ashr,i32) 9_2 (ashr,i32) 10_1 (select,i32) 10_2 (select,i32) 10_3 (select,i32) 11_1 (eq,i32) 11_2 (eq,i32) 12_1 (ne,i32) 12_2 (ne,i32) 13_1 (ult,i32) 13_2 (ult,i32) 14_1 (slt,i32) 14_2 (slt,i32) 15_1 (ule,i32) 15_2 (ule,i32) 16_1 (sle,i32) 16_2 (sle,i32) 1_0 (add,i32) 2_0 (sub,i32) 3_0 (mul,i32) 4_0 (and,i32) 5_0 (or,i32) 6_0 (xor,i32) 7_0 (shl,i32) 8_0 (lshr,i32) 9_0 (ashr,i32) 10_0 (select,i32) 11_0 (zext,eq,i32) 12_0 (zext,ne,i32) 13_0 (zext,ult,i32) 14_0 (zext,slt,i32) 15_0 (zext,ule,i32) 16_0 (zext,sle,i32) 17_0 (output,i32) 
+O: 17_0 (output,i32)
+consistency constraints:
+1_0 (add,i32) != 2_0 (sub,i32)
+1_0 (add,i32) != 3_0 (mul,i32)
+1_0 (add,i32) != 4_0 (and,i32)
+1_0 (add,i32) != 5_0 (or,i32)
+1_0 (add,i32) != 6_0 (xor,i32)
+1_0 (add,i32) != 7_0 (shl,i32)
+1_0 (add,i32) != 8_0 (lshr,i32)
+1_0 (add,i32) != 9_0 (ashr,i32)
+1_0 (add,i32) != 10_0 (select,i32)
+1_0 (add,i32) != 11_0 (zext,eq,i32)
+1_0 (add,i32) != 12_0 (zext,ne,i32)
+1_0 (add,i32) != 13_0 (zext,ult,i32)
+1_0 (add,i32) != 14_0 (zext,slt,i32)
+1_0 (add,i32) != 15_0 (zext,ule,i32)
+1_0 (add,i32) != 16_0 (zext,sle,i32)
+2_0 (sub,i32) != 3_0 (mul,i32)
+2_0 (sub,i32) != 4_0 (and,i32)
+2_0 (sub,i32) != 5_0 (or,i32)
+2_0 (sub,i32) != 6_0 (xor,i32)
+2_0 (sub,i32) != 7_0 (shl,i32)
+2_0 (sub,i32) != 8_0 (lshr,i32)
+2_0 (sub,i32) != 9_0 (ashr,i32)
+2_0 (sub,i32) != 10_0 (select,i32)
+2_0 (sub,i32) != 11_0 (zext,eq,i32)
+2_0 (sub,i32) != 12_0 (zext,ne,i32)
+2_0 (sub,i32) != 13_0 (zext,ult,i32)
+2_0 (sub,i32) != 14_0 (zext,slt,i32)
+2_0 (sub,i32) != 15_0 (zext,ule,i32)
+2_0 (sub,i32) != 16_0 (zext,sle,i32)
+3_0 (mul,i32) != 4_0 (and,i32)
+3_0 (mul,i32) != 5_0 (or,i32)
+3_0 (mul,i32) != 6_0 (xor,i32)
+3_0 (mul,i32) != 7_0 (shl,i32)
+3_0 (mul,i32) != 8_0 (lshr,i32)
+3_0 (mul,i32) != 9_0 (ashr,i32)
+3_0 (mul,i32) != 10_0 (select,i32)
+3_0 (mul,i32) != 11_0 (zext,eq,i32)
+3_0 (mul,i32) != 12_0 (zext,ne,i32)
+3_0 (mul,i32) != 13_0 (zext,ult,i32)
+3_0 (mul,i32) != 14_0 (zext,slt,i32)
+3_0 (mul,i32) != 15_0 (zext,ule,i32)
+3_0 (mul,i32) != 16_0 (zext,sle,i32)
+4_0 (and,i32) != 5_0 (or,i32)
+4_0 (and,i32) != 6_0 (xor,i32)
+4_0 (and,i32) != 7_0 (shl,i32)
+4_0 (and,i32) != 8_0 (lshr,i32)
+4_0 (and,i32) != 9_0 (ashr,i32)
+4_0 (and,i32) != 10_0 (select,i32)
+4_0 (and,i32) != 11_0 (zext,eq,i32)
+4_0 (and,i32) != 12_0 (zext,ne,i32)
+4_0 (and,i32) != 13_0 (zext,ult,i32)
+4_0 (and,i32) != 14_0 (zext,slt,i32)
+4_0 (and,i32) != 15_0 (zext,ule,i32)
+4_0 (and,i32) != 16_0 (zext,sle,i32)
+5_0 (or,i32) != 6_0 (xor,i32)
+5_0 (or,i32) != 7_0 (shl,i32)
+5_0 (or,i32) != 8_0 (lshr,i32)
+5_0 (or,i32) != 9_0 (ashr,i32)
+5_0 (or,i32) != 10_0 (select,i32)
+5_0 (or,i32) != 11_0 (zext,eq,i32)
+5_0 (or,i32) != 12_0 (zext,ne,i32)
+5_0 (or,i32) != 13_0 (zext,ult,i32)
+5_0 (or,i32) != 14_0 (zext,slt,i32)
+5_0 (or,i32) != 15_0 (zext,ule,i32)
+5_0 (or,i32) != 16_0 (zext,sle,i32)
+6_0 (xor,i32) != 7_0 (shl,i32)
+6_0 (xor,i32) != 8_0 (lshr,i32)
+6_0 (xor,i32) != 9_0 (ashr,i32)
+6_0 (xor,i32) != 10_0 (select,i32)
+6_0 (xor,i32) != 11_0 (zext,eq,i32)
+6_0 (xor,i32) != 12_0 (zext,ne,i32)
+6_0 (xor,i32) != 13_0 (zext,ult,i32)
+6_0 (xor,i32) != 14_0 (zext,slt,i32)
+6_0 (xor,i32) != 15_0 (zext,ule,i32)
+6_0 (xor,i32) != 16_0 (zext,sle,i32)
+7_0 (shl,i32) != 8_0 (lshr,i32)
+7_0 (shl,i32) != 9_0 (ashr,i32)
+7_0 (shl,i32) != 10_0 (select,i32)
+7_0 (shl,i32) != 11_0 (zext,eq,i32)
+7_0 (shl,i32) != 12_0 (zext,ne,i32)
+7_0 (shl,i32) != 13_0 (zext,ult,i32)
+7_0 (shl,i32) != 14_0 (zext,slt,i32)
+7_0 (shl,i32) != 15_0 (zext,ule,i32)
+7_0 (shl,i32) != 16_0 (zext,sle,i32)
+8_0 (lshr,i32) != 9_0 (ashr,i32)
+8_0 (lshr,i32) != 10_0 (select,i32)
+8_0 (lshr,i32) != 11_0 (zext,eq,i32)
+8_0 (lshr,i32) != 12_0 (zext,ne,i32)
+8_0 (lshr,i32) != 13_0 (zext,ult,i32)
+8_0 (lshr,i32) != 14_0 (zext,slt,i32)
+8_0 (lshr,i32) != 15_0 (zext,ule,i32)
+8_0 (lshr,i32) != 16_0 (zext,sle,i32)
+9_0 (ashr,i32) != 10_0 (select,i32)
+9_0 (ashr,i32) != 11_0 (zext,eq,i32)
+9_0 (ashr,i32) != 12_0 (zext,ne,i32)
+9_0 (ashr,i32) != 13_0 (zext,ult,i32)
+9_0 (ashr,i32) != 14_0 (zext,slt,i32)
+9_0 (ashr,i32) != 15_0 (zext,ule,i32)
+9_0 (ashr,i32) != 16_0 (zext,sle,i32)
+10_0 (select,i32) != 11_0 (zext,eq,i32)
+10_0 (select,i32) != 12_0 (zext,ne,i32)
+10_0 (select,i32) != 13_0 (zext,ult,i32)
+10_0 (select,i32) != 14_0 (zext,slt,i32)
+10_0 (select,i32) != 15_0 (zext,ule,i32)
+10_0 (select,i32) != 16_0 (zext,sle,i32)
+11_0 (zext,eq,i32) != 12_0 (zext,ne,i32)
+11_0 (zext,eq,i32) != 13_0 (zext,ult,i32)
+11_0 (zext,eq,i32) != 14_0 (zext,slt,i32)
+11_0 (zext,eq,i32) != 15_0 (zext,ule,i32)
+11_0 (zext,eq,i32) != 16_0 (zext,sle,i32)
+12_0 (zext,ne,i32) != 13_0 (zext,ult,i32)
+12_0 (zext,ne,i32) != 14_0 (zext,slt,i32)
+12_0 (zext,ne,i32) != 15_0 (zext,ule,i32)
+12_0 (zext,ne,i32) != 16_0 (zext,sle,i32)
+13_0 (zext,ult,i32) != 14_0 (zext,slt,i32)
+13_0 (zext,ult,i32) != 15_0 (zext,ule,i32)
+13_0 (zext,ult,i32) != 16_0 (zext,sle,i32)
+14_0 (zext,slt,i32) != 15_0 (zext,ule,i32)
+14_0 (zext,slt,i32) != 16_0 (zext,sle,i32)
+15_0 (zext,ule,i32) != 16_0 (zext,sle,i32)
+acyclicity constraints:
+1_1 (add,i32) < 1_0
+1_2 (add,i32) < 1_0
+2_1 (sub,i32) < 2_0
+2_2 (sub,i32) < 2_0
+3_1 (mul,i32) < 3_0
+3_2 (mul,i32) < 3_0
+4_1 (and,i32) < 4_0
+4_2 (and,i32) < 4_0
+5_1 (or,i32) < 5_0
+5_2 (or,i32) < 5_0
+6_1 (xor,i32) < 6_0
+6_2 (xor,i32) < 6_0
+7_1 (shl,i32) < 7_0
+7_2 (shl,i32) < 7_0
+8_1 (lshr,i32) < 8_0
+8_2 (lshr,i32) < 8_0
+9_1 (ashr,i32) < 9_0
+9_2 (ashr,i32) < 9_0
+10_1 (select,i32) < 10_0
+10_2 (select,i32) < 10_0
+10_3 (select,i32) < 10_0
+11_1 (eq,i32) < 11_0
+11_2 (eq,i32) < 11_0
+12_1 (ne,i32) < 12_0
+12_2 (ne,i32) < 12_0
+13_1 (ult,i32) < 13_0
+13_2 (ult,i32) < 13_0
+14_1 (slt,i32) < 14_0
+14_2 (slt,i32) < 14_0
+15_1 (ule,i32) < 15_0
+15_2 (ule,i32) < 15_0
+16_1 (sle,i32) < 16_0
+16_2 (sle,i32) < 16_0
+location variable constraints:
+0 <= 1_1 (add,i32) < 19
+0 <= 1_2 (add,i32) < 19
+0 <= 2_1 (sub,i32) < 19
+0 <= 2_2 (sub,i32) < 19
+0 <= 3_1 (mul,i32) < 19
+0 <= 3_2 (mul,i32) < 19
+0 <= 4_1 (and,i32) < 19
+0 <= 4_2 (and,i32) < 19
+0 <= 5_1 (or,i32) < 19
+0 <= 5_2 (or,i32) < 19
+0 <= 6_1 (xor,i32) < 19
+0 <= 6_2 (xor,i32) < 19
+0 <= 7_1 (shl,i32) < 19
+0 <= 7_2 (shl,i32) < 19
+0 <= 8_1 (lshr,i32) < 19
+0 <= 8_2 (lshr,i32) < 19
+0 <= 9_1 (ashr,i32) < 19
+0 <= 9_2 (ashr,i32) < 19
+0 <= 10_1 (select,i32) < 19
+0 <= 10_2 (select,i32) < 19
+0 <= 10_3 (select,i32) < 19
+0 <= 11_1 (eq,i32) < 19
+0 <= 11_2 (eq,i32) < 19
+0 <= 12_1 (ne,i32) < 19
+0 <= 12_2 (ne,i32) < 19
+0 <= 13_1 (ult,i32) < 19
+0 <= 13_2 (ult,i32) < 19
+0 <= 14_1 (slt,i32) < 19
+0 <= 14_2 (slt,i32) < 19
+0 <= 15_1 (ule,i32) < 19
+0 <= 15_2 (ule,i32) < 19
+0 <= 16_1 (sle,i32) < 19
+0 <= 16_2 (sle,i32) < 19
+0 <= 0_1 (input,i32) < 19
+0 <= 0_2 (const,i32) < 19
+0 <= 0_3 (const,i32) < 19
+3 <= 1_0 (add,i32) < 19
+3 <= 2_0 (sub,i32) < 19
+3 <= 3_0 (mul,i32) < 19
+3 <= 4_0 (and,i32) < 19
+3 <= 5_0 (or,i32) < 19
+3 <= 6_0 (xor,i32) < 19
+3 <= 7_0 (shl,i32) < 19
+3 <= 8_0 (lshr,i32) < 19
+3 <= 9_0 (ashr,i32) < 19
+3 <= 10_0 (select,i32) < 19
+3 <= 11_0 (zext,eq,i32) < 19
+3 <= 12_0 (zext,ne,i32) < 19
+3 <= 13_0 (zext,ult,i32) < 19
+3 <= 14_0 (zext,slt,i32) < 19
+3 <= 15_0 (zext,ule,i32) < 19
+3 <= 16_0 (zext,sle,i32) < 19
+component input constraints:
+1_1 (add,i32) == 0_1 (input,i32) || 1_1 (add,i32) == 0_2 (const,i32) || 1_1 (add,i32) == 0_3 (const,i32) || 1_1 (add,i32) == 2_0 (sub,i32) || 1_1 (add,i32) == 3_0 (mul,i32) || 1_1 (add,i32) == 4_0 (and,i32) || 1_1 (add,i32) == 5_0 (or,i32) || 1_1 (add,i32) == 6_0 (xor,i32) || 1_1 (add,i32) == 7_0 (shl,i32) || 1_1 (add,i32) == 8_0 (lshr,i32) || 1_1 (add,i32) == 9_0 (ashr,i32) || 1_1 (add,i32) == 10_0 (select,i32) || 1_1 (add,i32) == 11_0 (zext,eq,i32) || 1_1 (add,i32) == 12_0 (zext,ne,i32) || 1_1 (add,i32) == 13_0 (zext,ult,i32) || 1_1 (add,i32) == 14_0 (zext,slt,i32) || 1_1 (add,i32) == 15_0 (zext,ule,i32) || 1_1 (add,i32) == 16_0 (zext,sle,i32) || false
+1_2 (add,i32) == 0_1 (input,i32) || 1_2 (add,i32) == 0_2 (const,i32) || 1_2 (add,i32) == 0_3 (const,i32) || 1_2 (add,i32) == 2_0 (sub,i32) || 1_2 (add,i32) == 3_0 (mul,i32) || 1_2 (add,i32) == 4_0 (and,i32) || 1_2 (add,i32) == 5_0 (or,i32) || 1_2 (add,i32) == 6_0 (xor,i32) || 1_2 (add,i32) == 7_0 (shl,i32) || 1_2 (add,i32) == 8_0 (lshr,i32) || 1_2 (add,i32) == 9_0 (ashr,i32) || 1_2 (add,i32) == 10_0 (select,i32) || 1_2 (add,i32) == 11_0 (zext,eq,i32) || 1_2 (add,i32) == 12_0 (zext,ne,i32) || 1_2 (add,i32) == 13_0 (zext,ult,i32) || 1_2 (add,i32) == 14_0 (zext,slt,i32) || 1_2 (add,i32) == 15_0 (zext,ule,i32) || 1_2 (add,i32) == 16_0 (zext,sle,i32) || false
+2_1 (sub,i32) == 0_1 (input,i32) || 2_1 (sub,i32) == 0_2 (const,i32) || 2_1 (sub,i32) == 0_3 (const,i32) || 2_1 (sub,i32) == 1_0 (add,i32) || 2_1 (sub,i32) == 3_0 (mul,i32) || 2_1 (sub,i32) == 4_0 (and,i32) || 2_1 (sub,i32) == 5_0 (or,i32) || 2_1 (sub,i32) == 6_0 (xor,i32) || 2_1 (sub,i32) == 7_0 (shl,i32) || 2_1 (sub,i32) == 8_0 (lshr,i32) || 2_1 (sub,i32) == 9_0 (ashr,i32) || 2_1 (sub,i32) == 10_0 (select,i32) || 2_1 (sub,i32) == 11_0 (zext,eq,i32) || 2_1 (sub,i32) == 12_0 (zext,ne,i32) || 2_1 (sub,i32) == 13_0 (zext,ult,i32) || 2_1 (sub,i32) == 14_0 (zext,slt,i32) || 2_1 (sub,i32) == 15_0 (zext,ule,i32) || 2_1 (sub,i32) == 16_0 (zext,sle,i32) || false
+2_2 (sub,i32) == 0_1 (input,i32) || 2_2 (sub,i32) == 0_2 (const,i32) || 2_2 (sub,i32) == 0_3 (const,i32) || 2_2 (sub,i32) == 1_0 (add,i32) || 2_2 (sub,i32) == 3_0 (mul,i32) || 2_2 (sub,i32) == 4_0 (and,i32) || 2_2 (sub,i32) == 5_0 (or,i32) || 2_2 (sub,i32) == 6_0 (xor,i32) || 2_2 (sub,i32) == 7_0 (shl,i32) || 2_2 (sub,i32) == 8_0 (lshr,i32) || 2_2 (sub,i32) == 9_0 (ashr,i32) || 2_2 (sub,i32) == 10_0 (select,i32) || 2_2 (sub,i32) == 11_0 (zext,eq,i32) || 2_2 (sub,i32) == 12_0 (zext,ne,i32) || 2_2 (sub,i32) == 13_0 (zext,ult,i32) || 2_2 (sub,i32) == 14_0 (zext,slt,i32) || 2_2 (sub,i32) == 15_0 (zext,ule,i32) || 2_2 (sub,i32) == 16_0 (zext,sle,i32) || false
+3_1 (mul,i32) == 0_1 (input,i32) || 3_1 (mul,i32) == 0_2 (const,i32) || 3_1 (mul,i32) == 0_3 (const,i32) || 3_1 (mul,i32) == 1_0 (add,i32) || 3_1 (mul,i32) == 2_0 (sub,i32) || 3_1 (mul,i32) == 4_0 (and,i32) || 3_1 (mul,i32) == 5_0 (or,i32) || 3_1 (mul,i32) == 6_0 (xor,i32) || 3_1 (mul,i32) == 7_0 (shl,i32) || 3_1 (mul,i32) == 8_0 (lshr,i32) || 3_1 (mul,i32) == 9_0 (ashr,i32) || 3_1 (mul,i32) == 10_0 (select,i32) || 3_1 (mul,i32) == 11_0 (zext,eq,i32) || 3_1 (mul,i32) == 12_0 (zext,ne,i32) || 3_1 (mul,i32) == 13_0 (zext,ult,i32) || 3_1 (mul,i32) == 14_0 (zext,slt,i32) || 3_1 (mul,i32) == 15_0 (zext,ule,i32) || 3_1 (mul,i32) == 16_0 (zext,sle,i32) || false
+3_2 (mul,i32) == 0_1 (input,i32) || 3_2 (mul,i32) == 0_2 (const,i32) || 3_2 (mul,i32) == 0_3 (const,i32) || 3_2 (mul,i32) == 1_0 (add,i32) || 3_2 (mul,i32) == 2_0 (sub,i32) || 3_2 (mul,i32) == 4_0 (and,i32) || 3_2 (mul,i32) == 5_0 (or,i32) || 3_2 (mul,i32) == 6_0 (xor,i32) || 3_2 (mul,i32) == 7_0 (shl,i32) || 3_2 (mul,i32) == 8_0 (lshr,i32) || 3_2 (mul,i32) == 9_0 (ashr,i32) || 3_2 (mul,i32) == 10_0 (select,i32) || 3_2 (mul,i32) == 11_0 (zext,eq,i32) || 3_2 (mul,i32) == 12_0 (zext,ne,i32) || 3_2 (mul,i32) == 13_0 (zext,ult,i32) || 3_2 (mul,i32) == 14_0 (zext,slt,i32) || 3_2 (mul,i32) == 15_0 (zext,ule,i32) || 3_2 (mul,i32) == 16_0 (zext,sle,i32) || false
+4_1 (and,i32) == 0_1 (input,i32) || 4_1 (and,i32) == 0_2 (const,i32) || 4_1 (and,i32) == 0_3 (const,i32) || 4_1 (and,i32) == 1_0 (add,i32) || 4_1 (and,i32) == 2_0 (sub,i32) || 4_1 (and,i32) == 3_0 (mul,i32) || 4_1 (and,i32) == 5_0 (or,i32) || 4_1 (and,i32) == 6_0 (xor,i32) || 4_1 (and,i32) == 7_0 (shl,i32) || 4_1 (and,i32) == 8_0 (lshr,i32) || 4_1 (and,i32) == 9_0 (ashr,i32) || 4_1 (and,i32) == 10_0 (select,i32) || 4_1 (and,i32) == 11_0 (zext,eq,i32) || 4_1 (and,i32) == 12_0 (zext,ne,i32) || 4_1 (and,i32) == 13_0 (zext,ult,i32) || 4_1 (and,i32) == 14_0 (zext,slt,i32) || 4_1 (and,i32) == 15_0 (zext,ule,i32) || 4_1 (and,i32) == 16_0 (zext,sle,i32) || false
+4_2 (and,i32) == 0_1 (input,i32) || 4_2 (and,i32) == 0_2 (const,i32) || 4_2 (and,i32) == 0_3 (const,i32) || 4_2 (and,i32) == 1_0 (add,i32) || 4_2 (and,i32) == 2_0 (sub,i32) || 4_2 (and,i32) == 3_0 (mul,i32) || 4_2 (and,i32) == 5_0 (or,i32) || 4_2 (and,i32) == 6_0 (xor,i32) || 4_2 (and,i32) == 7_0 (shl,i32) || 4_2 (and,i32) == 8_0 (lshr,i32) || 4_2 (and,i32) == 9_0 (ashr,i32) || 4_2 (and,i32) == 10_0 (select,i32) || 4_2 (and,i32) == 11_0 (zext,eq,i32) || 4_2 (and,i32) == 12_0 (zext,ne,i32) || 4_2 (and,i32) == 13_0 (zext,ult,i32) || 4_2 (and,i32) == 14_0 (zext,slt,i32) || 4_2 (and,i32) == 15_0 (zext,ule,i32) || 4_2 (and,i32) == 16_0 (zext,sle,i32) || false
+5_1 (or,i32) == 0_1 (input,i32) || 5_1 (or,i32) == 0_2 (const,i32) || 5_1 (or,i32) == 0_3 (const,i32) || 5_1 (or,i32) == 1_0 (add,i32) || 5_1 (or,i32) == 2_0 (sub,i32) || 5_1 (or,i32) == 3_0 (mul,i32) || 5_1 (or,i32) == 4_0 (and,i32) || 5_1 (or,i32) == 6_0 (xor,i32) || 5_1 (or,i32) == 7_0 (shl,i32) || 5_1 (or,i32) == 8_0 (lshr,i32) || 5_1 (or,i32) == 9_0 (ashr,i32) || 5_1 (or,i32) == 10_0 (select,i32) || 5_1 (or,i32) == 11_0 (zext,eq,i32) || 5_1 (or,i32) == 12_0 (zext,ne,i32) || 5_1 (or,i32) == 13_0 (zext,ult,i32) || 5_1 (or,i32) == 14_0 (zext,slt,i32) || 5_1 (or,i32) == 15_0 (zext,ule,i32) || 5_1 (or,i32) == 16_0 (zext,sle,i32) || false
+5_2 (or,i32) == 0_1 (input,i32) || 5_2 (or,i32) == 0_2 (const,i32) || 5_2 (or,i32) == 0_3 (const,i32) || 5_2 (or,i32) == 1_0 (add,i32) || 5_2 (or,i32) == 2_0 (sub,i32) || 5_2 (or,i32) == 3_0 (mul,i32) || 5_2 (or,i32) == 4_0 (and,i32) || 5_2 (or,i32) == 6_0 (xor,i32) || 5_2 (or,i32) == 7_0 (shl,i32) || 5_2 (or,i32) == 8_0 (lshr,i32) || 5_2 (or,i32) == 9_0 (ashr,i32) || 5_2 (or,i32) == 10_0 (select,i32) || 5_2 (or,i32) == 11_0 (zext,eq,i32) || 5_2 (or,i32) == 12_0 (zext,ne,i32) || 5_2 (or,i32) == 13_0 (zext,ult,i32) || 5_2 (or,i32) == 14_0 (zext,slt,i32) || 5_2 (or,i32) == 15_0 (zext,ule,i32) || 5_2 (or,i32) == 16_0 (zext,sle,i32) || false
+6_1 (xor,i32) == 0_1 (input,i32) || 6_1 (xor,i32) == 0_2 (const,i32) || 6_1 (xor,i32) == 0_3 (const,i32) || 6_1 (xor,i32) == 1_0 (add,i32) || 6_1 (xor,i32) == 2_0 (sub,i32) || 6_1 (xor,i32) == 3_0 (mul,i32) || 6_1 (xor,i32) == 4_0 (and,i32) || 6_1 (xor,i32) == 5_0 (or,i32) || 6_1 (xor,i32) == 7_0 (shl,i32) || 6_1 (xor,i32) == 8_0 (lshr,i32) || 6_1 (xor,i32) == 9_0 (ashr,i32) || 6_1 (xor,i32) == 10_0 (select,i32) || 6_1 (xor,i32) == 11_0 (zext,eq,i32) || 6_1 (xor,i32) == 12_0 (zext,ne,i32) || 6_1 (xor,i32) == 13_0 (zext,ult,i32) || 6_1 (xor,i32) == 14_0 (zext,slt,i32) || 6_1 (xor,i32) == 15_0 (zext,ule,i32) || 6_1 (xor,i32) == 16_0 (zext,sle,i32) || false
+6_2 (xor,i32) == 0_1 (input,i32) || 6_2 (xor,i32) == 0_2 (const,i32) || 6_2 (xor,i32) == 0_3 (const,i32) || 6_2 (xor,i32) == 1_0 (add,i32) || 6_2 (xor,i32) == 2_0 (sub,i32) || 6_2 (xor,i32) == 3_0 (mul,i32) || 6_2 (xor,i32) == 4_0 (and,i32) || 6_2 (xor,i32) == 5_0 (or,i32) || 6_2 (xor,i32) == 7_0 (shl,i32) || 6_2 (xor,i32) == 8_0 (lshr,i32) || 6_2 (xor,i32) == 9_0 (ashr,i32) || 6_2 (xor,i32) == 10_0 (select,i32) || 6_2 (xor,i32) == 11_0 (zext,eq,i32) || 6_2 (xor,i32) == 12_0 (zext,ne,i32) || 6_2 (xor,i32) == 13_0 (zext,ult,i32) || 6_2 (xor,i32) == 14_0 (zext,slt,i32) || 6_2 (xor,i32) == 15_0 (zext,ule,i32) || 6_2 (xor,i32) == 16_0 (zext,sle,i32) || false
+7_1 (shl,i32) == 0_1 (input,i32) || 7_1 (shl,i32) == 0_2 (const,i32) || 7_1 (shl,i32) == 0_3 (const,i32) || 7_1 (shl,i32) == 1_0 (add,i32) || 7_1 (shl,i32) == 2_0 (sub,i32) || 7_1 (shl,i32) == 3_0 (mul,i32) || 7_1 (shl,i32) == 4_0 (and,i32) || 7_1 (shl,i32) == 5_0 (or,i32) || 7_1 (shl,i32) == 6_0 (xor,i32) || 7_1 (shl,i32) == 8_0 (lshr,i32) || 7_1 (shl,i32) == 9_0 (ashr,i32) || 7_1 (shl,i32) == 10_0 (select,i32) || 7_1 (shl,i32) == 11_0 (zext,eq,i32) || 7_1 (shl,i32) == 12_0 (zext,ne,i32) || 7_1 (shl,i32) == 13_0 (zext,ult,i32) || 7_1 (shl,i32) == 14_0 (zext,slt,i32) || 7_1 (shl,i32) == 15_0 (zext,ule,i32) || 7_1 (shl,i32) == 16_0 (zext,sle,i32) || false
+7_2 (shl,i32) == 0_1 (input,i32) || 7_2 (shl,i32) == 0_2 (const,i32) || 7_2 (shl,i32) == 0_3 (const,i32) || 7_2 (shl,i32) == 1_0 (add,i32) || 7_2 (shl,i32) == 2_0 (sub,i32) || 7_2 (shl,i32) == 3_0 (mul,i32) || 7_2 (shl,i32) == 4_0 (and,i32) || 7_2 (shl,i32) == 5_0 (or,i32) || 7_2 (shl,i32) == 6_0 (xor,i32) || 7_2 (shl,i32) == 8_0 (lshr,i32) || 7_2 (shl,i32) == 9_0 (ashr,i32) || 7_2 (shl,i32) == 10_0 (select,i32) || 7_2 (shl,i32) == 11_0 (zext,eq,i32) || 7_2 (shl,i32) == 12_0 (zext,ne,i32) || 7_2 (shl,i32) == 13_0 (zext,ult,i32) || 7_2 (shl,i32) == 14_0 (zext,slt,i32) || 7_2 (shl,i32) == 15_0 (zext,ule,i32) || 7_2 (shl,i32) == 16_0 (zext,sle,i32) || false
+8_1 (lshr,i32) == 0_1 (input,i32) || 8_1 (lshr,i32) == 0_2 (const,i32) || 8_1 (lshr,i32) == 0_3 (const,i32) || 8_1 (lshr,i32) == 1_0 (add,i32) || 8_1 (lshr,i32) == 2_0 (sub,i32) || 8_1 (lshr,i32) == 3_0 (mul,i32) || 8_1 (lshr,i32) == 4_0 (and,i32) || 8_1 (lshr,i32) == 5_0 (or,i32) || 8_1 (lshr,i32) == 6_0 (xor,i32) || 8_1 (lshr,i32) == 7_0 (shl,i32) || 8_1 (lshr,i32) == 9_0 (ashr,i32) || 8_1 (lshr,i32) == 10_0 (select,i32) || 8_1 (lshr,i32) == 11_0 (zext,eq,i32) || 8_1 (lshr,i32) == 12_0 (zext,ne,i32) || 8_1 (lshr,i32) == 13_0 (zext,ult,i32) || 8_1 (lshr,i32) == 14_0 (zext,slt,i32) || 8_1 (lshr,i32) == 15_0 (zext,ule,i32) || 8_1 (lshr,i32) == 16_0 (zext,sle,i32) || false
+8_2 (lshr,i32) == 0_1 (input,i32) || 8_2 (lshr,i32) == 0_2 (const,i32) || 8_2 (lshr,i32) == 0_3 (const,i32) || 8_2 (lshr,i32) == 1_0 (add,i32) || 8_2 (lshr,i32) == 2_0 (sub,i32) || 8_2 (lshr,i32) == 3_0 (mul,i32) || 8_2 (lshr,i32) == 4_0 (and,i32) || 8_2 (lshr,i32) == 5_0 (or,i32) || 8_2 (lshr,i32) == 6_0 (xor,i32) || 8_2 (lshr,i32) == 7_0 (shl,i32) || 8_2 (lshr,i32) == 9_0 (ashr,i32) || 8_2 (lshr,i32) == 10_0 (select,i32) || 8_2 (lshr,i32) == 11_0 (zext,eq,i32) || 8_2 (lshr,i32) == 12_0 (zext,ne,i32) || 8_2 (lshr,i32) == 13_0 (zext,ult,i32) || 8_2 (lshr,i32) == 14_0 (zext,slt,i32) || 8_2 (lshr,i32) == 15_0 (zext,ule,i32) || 8_2 (lshr,i32) == 16_0 (zext,sle,i32) || false
+9_1 (ashr,i32) == 0_1 (input,i32) || 9_1 (ashr,i32) == 0_2 (const,i32) || 9_1 (ashr,i32) == 0_3 (const,i32) || 9_1 (ashr,i32) == 1_0 (add,i32) || 9_1 (ashr,i32) == 2_0 (sub,i32) || 9_1 (ashr,i32) == 3_0 (mul,i32) || 9_1 (ashr,i32) == 4_0 (and,i32) || 9_1 (ashr,i32) == 5_0 (or,i32) || 9_1 (ashr,i32) == 6_0 (xor,i32) || 9_1 (ashr,i32) == 7_0 (shl,i32) || 9_1 (ashr,i32) == 8_0 (lshr,i32) || 9_1 (ashr,i32) == 10_0 (select,i32) || 9_1 (ashr,i32) == 11_0 (zext,eq,i32) || 9_1 (ashr,i32) == 12_0 (zext,ne,i32) || 9_1 (ashr,i32) == 13_0 (zext,ult,i32) || 9_1 (ashr,i32) == 14_0 (zext,slt,i32) || 9_1 (ashr,i32) == 15_0 (zext,ule,i32) || 9_1 (ashr,i32) == 16_0 (zext,sle,i32) || false
+9_2 (ashr,i32) == 0_1 (input,i32) || 9_2 (ashr,i32) == 0_2 (const,i32) || 9_2 (ashr,i32) == 0_3 (const,i32) || 9_2 (ashr,i32) == 1_0 (add,i32) || 9_2 (ashr,i32) == 2_0 (sub,i32) || 9_2 (ashr,i32) == 3_0 (mul,i32) || 9_2 (ashr,i32) == 4_0 (and,i32) || 9_2 (ashr,i32) == 5_0 (or,i32) || 9_2 (ashr,i32) == 6_0 (xor,i32) || 9_2 (ashr,i32) == 7_0 (shl,i32) || 9_2 (ashr,i32) == 8_0 (lshr,i32) || 9_2 (ashr,i32) == 10_0 (select,i32) || 9_2 (ashr,i32) == 11_0 (zext,eq,i32) || 9_2 (ashr,i32) == 12_0 (zext,ne,i32) || 9_2 (ashr,i32) == 13_0 (zext,ult,i32) || 9_2 (ashr,i32) == 14_0 (zext,slt,i32) || 9_2 (ashr,i32) == 15_0 (zext,ule,i32) || 9_2 (ashr,i32) == 16_0 (zext,sle,i32) || false
+10_1 (select,i32) == 1_0 (add,i32) || 10_1 (select,i32) == 2_0 (sub,i32) || 10_1 (select,i32) == 3_0 (mul,i32) || 10_1 (select,i32) == 4_0 (and,i32) || 10_1 (select,i32) == 5_0 (or,i32) || 10_1 (select,i32) == 6_0 (xor,i32) || 10_1 (select,i32) == 7_0 (shl,i32) || 10_1 (select,i32) == 8_0 (lshr,i32) || 10_1 (select,i32) == 9_0 (ashr,i32) || 10_1 (select,i32) == 11_0 (zext,eq,i32) || 10_1 (select,i32) == 12_0 (zext,ne,i32) || 10_1 (select,i32) == 13_0 (zext,ult,i32) || 10_1 (select,i32) == 14_0 (zext,slt,i32) || 10_1 (select,i32) == 15_0 (zext,ule,i32) || 10_1 (select,i32) == 16_0 (zext,sle,i32) || false
+10_2 (select,i32) == 0_1 (input,i32) || 10_2 (select,i32) == 0_2 (const,i32) || 10_2 (select,i32) == 0_3 (const,i32) || 10_2 (select,i32) == 1_0 (add,i32) || 10_2 (select,i32) == 2_0 (sub,i32) || 10_2 (select,i32) == 3_0 (mul,i32) || 10_2 (select,i32) == 4_0 (and,i32) || 10_2 (select,i32) == 5_0 (or,i32) || 10_2 (select,i32) == 6_0 (xor,i32) || 10_2 (select,i32) == 7_0 (shl,i32) || 10_2 (select,i32) == 8_0 (lshr,i32) || 10_2 (select,i32) == 9_0 (ashr,i32) || 10_2 (select,i32) == 11_0 (zext,eq,i32) || 10_2 (select,i32) == 12_0 (zext,ne,i32) || 10_2 (select,i32) == 13_0 (zext,ult,i32) || 10_2 (select,i32) == 14_0 (zext,slt,i32) || 10_2 (select,i32) == 15_0 (zext,ule,i32) || 10_2 (select,i32) == 16_0 (zext,sle,i32) || false
+10_3 (select,i32) == 0_1 (input,i32) || 10_3 (select,i32) == 0_2 (const,i32) || 10_3 (select,i32) == 0_3 (const,i32) || 10_3 (select,i32) == 1_0 (add,i32) || 10_3 (select,i32) == 2_0 (sub,i32) || 10_3 (select,i32) == 3_0 (mul,i32) || 10_3 (select,i32) == 4_0 (and,i32) || 10_3 (select,i32) == 5_0 (or,i32) || 10_3 (select,i32) == 6_0 (xor,i32) || 10_3 (select,i32) == 7_0 (shl,i32) || 10_3 (select,i32) == 8_0 (lshr,i32) || 10_3 (select,i32) == 9_0 (ashr,i32) || 10_3 (select,i32) == 11_0 (zext,eq,i32) || 10_3 (select,i32) == 12_0 (zext,ne,i32) || 10_3 (select,i32) == 13_0 (zext,ult,i32) || 10_3 (select,i32) == 14_0 (zext,slt,i32) || 10_3 (select,i32) == 15_0 (zext,ule,i32) || 10_3 (select,i32) == 16_0 (zext,sle,i32) || false
+11_1 (eq,i32) == 0_1 (input,i32) || 11_1 (eq,i32) == 0_2 (const,i32) || 11_1 (eq,i32) == 0_3 (const,i32) || 11_1 (eq,i32) == 1_0 (add,i32) || 11_1 (eq,i32) == 2_0 (sub,i32) || 11_1 (eq,i32) == 3_0 (mul,i32) || 11_1 (eq,i32) == 4_0 (and,i32) || 11_1 (eq,i32) == 5_0 (or,i32) || 11_1 (eq,i32) == 6_0 (xor,i32) || 11_1 (eq,i32) == 7_0 (shl,i32) || 11_1 (eq,i32) == 8_0 (lshr,i32) || 11_1 (eq,i32) == 9_0 (ashr,i32) || 11_1 (eq,i32) == 10_0 (select,i32) || 11_1 (eq,i32) == 12_0 (zext,ne,i32) || 11_1 (eq,i32) == 13_0 (zext,ult,i32) || 11_1 (eq,i32) == 14_0 (zext,slt,i32) || 11_1 (eq,i32) == 15_0 (zext,ule,i32) || 11_1 (eq,i32) == 16_0 (zext,sle,i32) || false
+11_2 (eq,i32) == 0_1 (input,i32) || 11_2 (eq,i32) == 0_2 (const,i32) || 11_2 (eq,i32) == 0_3 (const,i32) || 11_2 (eq,i32) == 1_0 (add,i32) || 11_2 (eq,i32) == 2_0 (sub,i32) || 11_2 (eq,i32) == 3_0 (mul,i32) || 11_2 (eq,i32) == 4_0 (and,i32) || 11_2 (eq,i32) == 5_0 (or,i32) || 11_2 (eq,i32) == 6_0 (xor,i32) || 11_2 (eq,i32) == 7_0 (shl,i32) || 11_2 (eq,i32) == 8_0 (lshr,i32) || 11_2 (eq,i32) == 9_0 (ashr,i32) || 11_2 (eq,i32) == 10_0 (select,i32) || 11_2 (eq,i32) == 12_0 (zext,ne,i32) || 11_2 (eq,i32) == 13_0 (zext,ult,i32) || 11_2 (eq,i32) == 14_0 (zext,slt,i32) || 11_2 (eq,i32) == 15_0 (zext,ule,i32) || 11_2 (eq,i32) == 16_0 (zext,sle,i32) || false
+12_1 (ne,i32) == 0_1 (input,i32) || 12_1 (ne,i32) == 0_2 (const,i32) || 12_1 (ne,i32) == 0_3 (const,i32) || 12_1 (ne,i32) == 1_0 (add,i32) || 12_1 (ne,i32) == 2_0 (sub,i32) || 12_1 (ne,i32) == 3_0 (mul,i32) || 12_1 (ne,i32) == 4_0 (and,i32) || 12_1 (ne,i32) == 5_0 (or,i32) || 12_1 (ne,i32) == 6_0 (xor,i32) || 12_1 (ne,i32) == 7_0 (shl,i32) || 12_1 (ne,i32) == 8_0 (lshr,i32) || 12_1 (ne,i32) == 9_0 (ashr,i32) || 12_1 (ne,i32) == 10_0 (select,i32) || 12_1 (ne,i32) == 11_0 (zext,eq,i32) || 12_1 (ne,i32) == 13_0 (zext,ult,i32) || 12_1 (ne,i32) == 14_0 (zext,slt,i32) || 12_1 (ne,i32) == 15_0 (zext,ule,i32) || 12_1 (ne,i32) == 16_0 (zext,sle,i32) || false
+12_2 (ne,i32) == 0_1 (input,i32) || 12_2 (ne,i32) == 0_2 (const,i32) || 12_2 (ne,i32) == 0_3 (const,i32) || 12_2 (ne,i32) == 1_0 (add,i32) || 12_2 (ne,i32) == 2_0 (sub,i32) || 12_2 (ne,i32) == 3_0 (mul,i32) || 12_2 (ne,i32) == 4_0 (and,i32) || 12_2 (ne,i32) == 5_0 (or,i32) || 12_2 (ne,i32) == 6_0 (xor,i32) || 12_2 (ne,i32) == 7_0 (shl,i32) || 12_2 (ne,i32) == 8_0 (lshr,i32) || 12_2 (ne,i32) == 9_0 (ashr,i32) || 12_2 (ne,i32) == 10_0 (select,i32) || 12_2 (ne,i32) == 11_0 (zext,eq,i32) || 12_2 (ne,i32) == 13_0 (zext,ult,i32) || 12_2 (ne,i32) == 14_0 (zext,slt,i32) || 12_2 (ne,i32) == 15_0 (zext,ule,i32) || 12_2 (ne,i32) == 16_0 (zext,sle,i32) || false
+13_1 (ult,i32) == 0_1 (input,i32) || 13_1 (ult,i32) == 0_2 (const,i32) || 13_1 (ult,i32) == 0_3 (const,i32) || 13_1 (ult,i32) == 1_0 (add,i32) || 13_1 (ult,i32) == 2_0 (sub,i32) || 13_1 (ult,i32) == 3_0 (mul,i32) || 13_1 (ult,i32) == 4_0 (and,i32) || 13_1 (ult,i32) == 5_0 (or,i32) || 13_1 (ult,i32) == 6_0 (xor,i32) || 13_1 (ult,i32) == 7_0 (shl,i32) || 13_1 (ult,i32) == 8_0 (lshr,i32) || 13_1 (ult,i32) == 9_0 (ashr,i32) || 13_1 (ult,i32) == 10_0 (select,i32) || 13_1 (ult,i32) == 11_0 (zext,eq,i32) || 13_1 (ult,i32) == 12_0 (zext,ne,i32) || 13_1 (ult,i32) == 14_0 (zext,slt,i32) || 13_1 (ult,i32) == 15_0 (zext,ule,i32) || 13_1 (ult,i32) == 16_0 (zext,sle,i32) || false
+13_2 (ult,i32) == 0_1 (input,i32) || 13_2 (ult,i32) == 0_2 (const,i32) || 13_2 (ult,i32) == 0_3 (const,i32) || 13_2 (ult,i32) == 1_0 (add,i32) || 13_2 (ult,i32) == 2_0 (sub,i32) || 13_2 (ult,i32) == 3_0 (mul,i32) || 13_2 (ult,i32) == 4_0 (and,i32) || 13_2 (ult,i32) == 5_0 (or,i32) || 13_2 (ult,i32) == 6_0 (xor,i32) || 13_2 (ult,i32) == 7_0 (shl,i32) || 13_2 (ult,i32) == 8_0 (lshr,i32) || 13_2 (ult,i32) == 9_0 (ashr,i32) || 13_2 (ult,i32) == 10_0 (select,i32) || 13_2 (ult,i32) == 11_0 (zext,eq,i32) || 13_2 (ult,i32) == 12_0 (zext,ne,i32) || 13_2 (ult,i32) == 14_0 (zext,slt,i32) || 13_2 (ult,i32) == 15_0 (zext,ule,i32) || 13_2 (ult,i32) == 16_0 (zext,sle,i32) || false
+14_1 (slt,i32) == 0_1 (input,i32) || 14_1 (slt,i32) == 0_2 (const,i32) || 14_1 (slt,i32) == 0_3 (const,i32) || 14_1 (slt,i32) == 1_0 (add,i32) || 14_1 (slt,i32) == 2_0 (sub,i32) || 14_1 (slt,i32) == 3_0 (mul,i32) || 14_1 (slt,i32) == 4_0 (and,i32) || 14_1 (slt,i32) == 5_0 (or,i32) || 14_1 (slt,i32) == 6_0 (xor,i32) || 14_1 (slt,i32) == 7_0 (shl,i32) || 14_1 (slt,i32) == 8_0 (lshr,i32) || 14_1 (slt,i32) == 9_0 (ashr,i32) || 14_1 (slt,i32) == 10_0 (select,i32) || 14_1 (slt,i32) == 11_0 (zext,eq,i32) || 14_1 (slt,i32) == 12_0 (zext,ne,i32) || 14_1 (slt,i32) == 13_0 (zext,ult,i32) || 14_1 (slt,i32) == 15_0 (zext,ule,i32) || 14_1 (slt,i32) == 16_0 (zext,sle,i32) || false
+14_2 (slt,i32) == 0_1 (input,i32) || 14_2 (slt,i32) == 0_2 (const,i32) || 14_2 (slt,i32) == 0_3 (const,i32) || 14_2 (slt,i32) == 1_0 (add,i32) || 14_2 (slt,i32) == 2_0 (sub,i32) || 14_2 (slt,i32) == 3_0 (mul,i32) || 14_2 (slt,i32) == 4_0 (and,i32) || 14_2 (slt,i32) == 5_0 (or,i32) || 14_2 (slt,i32) == 6_0 (xor,i32) || 14_2 (slt,i32) == 7_0 (shl,i32) || 14_2 (slt,i32) == 8_0 (lshr,i32) || 14_2 (slt,i32) == 9_0 (ashr,i32) || 14_2 (slt,i32) == 10_0 (select,i32) || 14_2 (slt,i32) == 11_0 (zext,eq,i32) || 14_2 (slt,i32) == 12_0 (zext,ne,i32) || 14_2 (slt,i32) == 13_0 (zext,ult,i32) || 14_2 (slt,i32) == 15_0 (zext,ule,i32) || 14_2 (slt,i32) == 16_0 (zext,sle,i32) || false
+15_1 (ule,i32) == 0_1 (input,i32) || 15_1 (ule,i32) == 0_2 (const,i32) || 15_1 (ule,i32) == 0_3 (const,i32) || 15_1 (ule,i32) == 1_0 (add,i32) || 15_1 (ule,i32) == 2_0 (sub,i32) || 15_1 (ule,i32) == 3_0 (mul,i32) || 15_1 (ule,i32) == 4_0 (and,i32) || 15_1 (ule,i32) == 5_0 (or,i32) || 15_1 (ule,i32) == 6_0 (xor,i32) || 15_1 (ule,i32) == 7_0 (shl,i32) || 15_1 (ule,i32) == 8_0 (lshr,i32) || 15_1 (ule,i32) == 9_0 (ashr,i32) || 15_1 (ule,i32) == 10_0 (select,i32) || 15_1 (ule,i32) == 11_0 (zext,eq,i32) || 15_1 (ule,i32) == 12_0 (zext,ne,i32) || 15_1 (ule,i32) == 13_0 (zext,ult,i32) || 15_1 (ule,i32) == 14_0 (zext,slt,i32) || 15_1 (ule,i32) == 16_0 (zext,sle,i32) || false
+15_2 (ule,i32) == 0_1 (input,i32) || 15_2 (ule,i32) == 0_2 (const,i32) || 15_2 (ule,i32) == 0_3 (const,i32) || 15_2 (ule,i32) == 1_0 (add,i32) || 15_2 (ule,i32) == 2_0 (sub,i32) || 15_2 (ule,i32) == 3_0 (mul,i32) || 15_2 (ule,i32) == 4_0 (and,i32) || 15_2 (ule,i32) == 5_0 (or,i32) || 15_2 (ule,i32) == 6_0 (xor,i32) || 15_2 (ule,i32) == 7_0 (shl,i32) || 15_2 (ule,i32) == 8_0 (lshr,i32) || 15_2 (ule,i32) == 9_0 (ashr,i32) || 15_2 (ule,i32) == 10_0 (select,i32) || 15_2 (ule,i32) == 11_0 (zext,eq,i32) || 15_2 (ule,i32) == 12_0 (zext,ne,i32) || 15_2 (ule,i32) == 13_0 (zext,ult,i32) || 15_2 (ule,i32) == 14_0 (zext,slt,i32) || 15_2 (ule,i32) == 16_0 (zext,sle,i32) || false
+16_1 (sle,i32) == 0_1 (input,i32) || 16_1 (sle,i32) == 0_2 (const,i32) || 16_1 (sle,i32) == 0_3 (const,i32) || 16_1 (sle,i32) == 1_0 (add,i32) || 16_1 (sle,i32) == 2_0 (sub,i32) || 16_1 (sle,i32) == 3_0 (mul,i32) || 16_1 (sle,i32) == 4_0 (and,i32) || 16_1 (sle,i32) == 5_0 (or,i32) || 16_1 (sle,i32) == 6_0 (xor,i32) || 16_1 (sle,i32) == 7_0 (shl,i32) || 16_1 (sle,i32) == 8_0 (lshr,i32) || 16_1 (sle,i32) == 9_0 (ashr,i32) || 16_1 (sle,i32) == 10_0 (select,i32) || 16_1 (sle,i32) == 11_0 (zext,eq,i32) || 16_1 (sle,i32) == 12_0 (zext,ne,i32) || 16_1 (sle,i32) == 13_0 (zext,ult,i32) || 16_1 (sle,i32) == 14_0 (zext,slt,i32) || 16_1 (sle,i32) == 15_0 (zext,ule,i32) || false
+16_2 (sle,i32) == 0_1 (input,i32) || 16_2 (sle,i32) == 0_2 (const,i32) || 16_2 (sle,i32) == 0_3 (const,i32) || 16_2 (sle,i32) == 1_0 (add,i32) || 16_2 (sle,i32) == 2_0 (sub,i32) || 16_2 (sle,i32) == 3_0 (mul,i32) || 16_2 (sle,i32) == 4_0 (and,i32) || 16_2 (sle,i32) == 5_0 (or,i32) || 16_2 (sle,i32) == 6_0 (xor,i32) || 16_2 (sle,i32) == 7_0 (shl,i32) || 16_2 (sle,i32) == 8_0 (lshr,i32) || 16_2 (sle,i32) == 9_0 (ashr,i32) || 16_2 (sle,i32) == 10_0 (select,i32) || 16_2 (sle,i32) == 11_0 (zext,eq,i32) || 16_2 (sle,i32) == 12_0 (zext,ne,i32) || 16_2 (sle,i32) == 13_0 (zext,ult,i32) || 16_2 (sle,i32) == 14_0 (zext,slt,i32) || 16_2 (sle,i32) == 15_0 (zext,ule,i32) || false
+component const input constraints:
+1_1 (add,i32) == 0_2 (const,i32) || 1_1 (add,i32) == 0_3 (const,i32) || false
+1_2 (add,i32) == 0_2 (const,i32) || 1_2 (add,i32) == 0_3 (const,i32) || false
+false
+2_1 (sub,i32) == 0_2 (const,i32) || 2_1 (sub,i32) == 0_3 (const,i32) || false
+2_2 (sub,i32) == 0_2 (const,i32) || 2_2 (sub,i32) == 0_3 (const,i32) || false
+false
+3_1 (mul,i32) == 0_2 (const,i32) || 3_1 (mul,i32) == 0_3 (const,i32) || false
+3_2 (mul,i32) == 0_2 (const,i32) || 3_2 (mul,i32) == 0_3 (const,i32) || false
+false
+4_1 (and,i32) == 0_2 (const,i32) || 4_1 (and,i32) == 0_3 (const,i32) || false
+4_2 (and,i32) == 0_2 (const,i32) || 4_2 (and,i32) == 0_3 (const,i32) || false
+false
+5_1 (or,i32) == 0_2 (const,i32) || 5_1 (or,i32) == 0_3 (const,i32) || false
+5_2 (or,i32) == 0_2 (const,i32) || 5_2 (or,i32) == 0_3 (const,i32) || false
+false
+6_1 (xor,i32) == 0_2 (const,i32) || 6_1 (xor,i32) == 0_3 (const,i32) || false
+6_2 (xor,i32) == 0_2 (const,i32) || 6_2 (xor,i32) == 0_3 (const,i32) || false
+false
+7_1 (shl,i32) == 0_2 (const,i32) || 7_1 (shl,i32) == 0_3 (const,i32) || false
+7_2 (shl,i32) == 0_2 (const,i32) || 7_2 (shl,i32) == 0_3 (const,i32) || false
+false
+8_1 (lshr,i32) == 0_2 (const,i32) || 8_1 (lshr,i32) == 0_3 (const,i32) || false
+8_2 (lshr,i32) == 0_2 (const,i32) || 8_2 (lshr,i32) == 0_3 (const,i32) || false
+false
+9_1 (ashr,i32) == 0_2 (const,i32) || 9_1 (ashr,i32) == 0_3 (const,i32) || false
+9_2 (ashr,i32) == 0_2 (const,i32) || 9_2 (ashr,i32) == 0_3 (const,i32) || false
+false
+false
+10_2 (select,i32) == 0_2 (const,i32) || 10_2 (select,i32) == 0_3 (const,i32) || false
+10_3 (select,i32) == 0_2 (const,i32) || 10_3 (select,i32) == 0_3 (const,i32) || false
+false
+11_1 (eq,i32) == 0_2 (const,i32) || 11_1 (eq,i32) == 0_3 (const,i32) || false
+11_2 (eq,i32) == 0_2 (const,i32) || 11_2 (eq,i32) == 0_3 (const,i32) || false
+false
+12_1 (ne,i32) == 0_2 (const,i32) || 12_1 (ne,i32) == 0_3 (const,i32) || false
+12_2 (ne,i32) == 0_2 (const,i32) || 12_2 (ne,i32) == 0_3 (const,i32) || false
+false
+13_1 (ult,i32) == 0_2 (const,i32) || 13_1 (ult,i32) == 0_3 (const,i32) || false
+13_2 (ult,i32) == 0_2 (const,i32) || 13_2 (ult,i32) == 0_3 (const,i32) || false
+false
+14_1 (slt,i32) == 0_2 (const,i32) || 14_1 (slt,i32) == 0_3 (const,i32) || false
+14_2 (slt,i32) == 0_2 (const,i32) || 14_2 (slt,i32) == 0_3 (const,i32) || false
+false
+15_1 (ule,i32) == 0_2 (const,i32) || 15_1 (ule,i32) == 0_3 (const,i32) || false
+15_2 (ule,i32) == 0_2 (const,i32) || 15_2 (ule,i32) == 0_3 (const,i32) || false
+false
+16_1 (sle,i32) == 0_2 (const,i32) || 16_1 (sle,i32) == 0_3 (const,i32) || false
+16_2 (sle,i32) == 0_2 (const,i32) || 16_2 (sle,i32) == 0_3 (const,i32) || false
+false
+component output constraints:
+17_0 (output,i32) == 0_1 (input,i32) || 17_0 (output,i32) == 0_2 (const,i32) || 17_0 (output,i32) == 0_3 (const,i32) || 17_0 (output,i32) == 1_0 (add,i32) || 17_0 (output,i32) == 2_0 (sub,i32) || 17_0 (output,i32) == 3_0 (mul,i32) || 17_0 (output,i32) == 4_0 (and,i32) || 17_0 (output,i32) == 5_0 (or,i32) || 17_0 (output,i32) == 6_0 (xor,i32) || 17_0 (output,i32) == 7_0 (shl,i32) || 17_0 (output,i32) == 8_0 (lshr,i32) || 17_0 (output,i32) == 9_0 (ashr,i32) || 17_0 (output,i32) == 10_0 (select,i32) || 17_0 (output,i32) == 11_0 (zext,eq,i32) || 17_0 (output,i32) == 12_0 (zext,ne,i32) || 17_0 (output,i32) == 13_0 (zext,ult,i32) || 17_0 (output,i32) == 14_0 (zext,slt,i32) || 17_0 (output,i32) == 15_0 (zext,ule,i32) || 17_0 (output,i32) == 16_0 (zext,sle,i32) || false
+possible wirings:
+0_1 (input,i32) == 1_1 (add,i32)
+0_1 (input,i32) == 1_2 (add,i32)
+0_1 (input,i32) == 2_1 (sub,i32)
+0_1 (input,i32) == 2_2 (sub,i32)
+0_1 (input,i32) == 3_1 (mul,i32)
+0_1 (input,i32) == 3_2 (mul,i32)
+0_1 (input,i32) == 4_1 (and,i32)
+0_1 (input,i32) == 4_2 (and,i32)
+0_1 (input,i32) == 5_1 (or,i32)
+0_1 (input,i32) == 5_2 (or,i32)
+0_1 (input,i32) == 6_1 (xor,i32)
+0_1 (input,i32) == 6_2 (xor,i32)
+0_1 (input,i32) == 7_1 (shl,i32)
+0_1 (input,i32) == 7_2 (shl,i32)
+0_1 (input,i32) == 8_1 (lshr,i32)
+0_1 (input,i32) == 8_2 (lshr,i32)
+0_1 (input,i32) == 9_1 (ashr,i32)
+0_1 (input,i32) == 9_2 (ashr,i32)
+0_1 (input,i32) == 10_2 (select,i32)
+0_1 (input,i32) == 10_3 (select,i32)
+0_1 (input,i32) == 11_1 (eq,i32)
+0_1 (input,i32) == 11_2 (eq,i32)
+0_1 (input,i32) == 12_1 (ne,i32)
+0_1 (input,i32) == 12_2 (ne,i32)
+0_1 (input,i32) == 13_1 (ult,i32)
+0_1 (input,i32) == 13_2 (ult,i32)
+0_1 (input,i32) == 14_1 (slt,i32)
+0_1 (input,i32) == 14_2 (slt,i32)
+0_1 (input,i32) == 15_1 (ule,i32)
+0_1 (input,i32) == 15_2 (ule,i32)
+0_1 (input,i32) == 16_1 (sle,i32)
+0_1 (input,i32) == 16_2 (sle,i32)
+0_1 (input,i32) == 17_0 (output,i32)
+0_2 (const,i32) == 1_1 (add,i32)
+0_2 (const,i32) == 1_2 (add,i32)
+0_2 (const,i32) == 2_1 (sub,i32)
+0_2 (const,i32) == 2_2 (sub,i32)
+0_2 (const,i32) == 3_1 (mul,i32)
+0_2 (const,i32) == 3_2 (mul,i32)
+0_2 (const,i32) == 4_1 (and,i32)
+0_2 (const,i32) == 4_2 (and,i32)
+0_2 (const,i32) == 5_1 (or,i32)
+0_2 (const,i32) == 5_2 (or,i32)
+0_2 (const,i32) == 6_1 (xor,i32)
+0_2 (const,i32) == 6_2 (xor,i32)
+0_2 (const,i32) == 7_1 (shl,i32)
+0_2 (const,i32) == 7_2 (shl,i32)
+0_2 (const,i32) == 8_1 (lshr,i32)
+0_2 (const,i32) == 8_2 (lshr,i32)
+0_2 (const,i32) == 9_1 (ashr,i32)
+0_2 (const,i32) == 9_2 (ashr,i32)
+0_2 (const,i32) == 10_2 (select,i32)
+0_2 (const,i32) == 10_3 (select,i32)
+0_2 (const,i32) == 11_1 (eq,i32)
+0_2 (const,i32) == 11_2 (eq,i32)
+0_2 (const,i32) == 12_1 (ne,i32)
+0_2 (const,i32) == 12_2 (ne,i32)
+0_2 (const,i32) == 13_1 (ult,i32)
+0_2 (const,i32) == 13_2 (ult,i32)
+0_2 (const,i32) == 14_1 (slt,i32)
+0_2 (const,i32) == 14_2 (slt,i32)
+0_2 (const,i32) == 15_1 (ule,i32)
+0_2 (const,i32) == 15_2 (ule,i32)
+0_2 (const,i32) == 16_1 (sle,i32)
+0_2 (const,i32) == 16_2 (sle,i32)
+0_2 (const,i32) == 17_0 (output,i32)
+0_3 (const,i32) == 1_1 (add,i32)
+0_3 (const,i32) == 1_2 (add,i32)
+0_3 (const,i32) == 2_1 (sub,i32)
+0_3 (const,i32) == 2_2 (sub,i32)
+0_3 (const,i32) == 3_1 (mul,i32)
+0_3 (const,i32) == 3_2 (mul,i32)
+0_3 (const,i32) == 4_1 (and,i32)
+0_3 (const,i32) == 4_2 (and,i32)
+0_3 (const,i32) == 5_1 (or,i32)
+0_3 (const,i32) == 5_2 (or,i32)
+0_3 (const,i32) == 6_1 (xor,i32)
+0_3 (const,i32) == 6_2 (xor,i32)
+0_3 (const,i32) == 7_1 (shl,i32)
+0_3 (const,i32) == 7_2 (shl,i32)
+0_3 (const,i32) == 8_1 (lshr,i32)
+0_3 (const,i32) == 8_2 (lshr,i32)
+0_3 (const,i32) == 9_1 (ashr,i32)
+0_3 (const,i32) == 9_2 (ashr,i32)
+0_3 (const,i32) == 10_2 (select,i32)
+0_3 (const,i32) == 10_3 (select,i32)
+0_3 (const,i32) == 11_1 (eq,i32)
+0_3 (const,i32) == 11_2 (eq,i32)
+0_3 (const,i32) == 12_1 (ne,i32)
+0_3 (const,i32) == 12_2 (ne,i32)
+0_3 (const,i32) == 13_1 (ult,i32)
+0_3 (const,i32) == 13_2 (ult,i32)
+0_3 (const,i32) == 14_1 (slt,i32)
+0_3 (const,i32) == 14_2 (slt,i32)
+0_3 (const,i32) == 15_1 (ule,i32)
+0_3 (const,i32) == 15_2 (ule,i32)
+0_3 (const,i32) == 16_1 (sle,i32)
+0_3 (const,i32) == 16_2 (sle,i32)
+0_3 (const,i32) == 17_0 (output,i32)
+1_1 (add,i32) == 2_0 (sub,i32)
+1_1 (add,i32) == 3_0 (mul,i32)
+1_1 (add,i32) == 4_0 (and,i32)
+1_1 (add,i32) == 5_0 (or,i32)
+1_1 (add,i32) == 6_0 (xor,i32)
+1_1 (add,i32) == 7_0 (shl,i32)
+1_1 (add,i32) == 8_0 (lshr,i32)
+1_1 (add,i32) == 9_0 (ashr,i32)
+1_1 (add,i32) == 10_0 (select,i32)
+1_1 (add,i32) == 11_0 (zext,eq,i32)
+1_1 (add,i32) == 12_0 (zext,ne,i32)
+1_1 (add,i32) == 13_0 (zext,ult,i32)
+1_1 (add,i32) == 14_0 (zext,slt,i32)
+1_1 (add,i32) == 15_0 (zext,ule,i32)
+1_1 (add,i32) == 16_0 (zext,sle,i32)
+1_2 (add,i32) == 2_0 (sub,i32)
+1_2 (add,i32) == 3_0 (mul,i32)
+1_2 (add,i32) == 4_0 (and,i32)
+1_2 (add,i32) == 5_0 (or,i32)
+1_2 (add,i32) == 6_0 (xor,i32)
+1_2 (add,i32) == 7_0 (shl,i32)
+1_2 (add,i32) == 8_0 (lshr,i32)
+1_2 (add,i32) == 9_0 (ashr,i32)
+1_2 (add,i32) == 10_0 (select,i32)
+1_2 (add,i32) == 11_0 (zext,eq,i32)
+1_2 (add,i32) == 12_0 (zext,ne,i32)
+1_2 (add,i32) == 13_0 (zext,ult,i32)
+1_2 (add,i32) == 14_0 (zext,slt,i32)
+1_2 (add,i32) == 15_0 (zext,ule,i32)
+1_2 (add,i32) == 16_0 (zext,sle,i32)
+2_1 (sub,i32) == 1_0 (add,i32)
+2_1 (sub,i32) == 3_0 (mul,i32)
+2_1 (sub,i32) == 4_0 (and,i32)
+2_1 (sub,i32) == 5_0 (or,i32)
+2_1 (sub,i32) == 6_0 (xor,i32)
+2_1 (sub,i32) == 7_0 (shl,i32)
+2_1 (sub,i32) == 8_0 (lshr,i32)
+2_1 (sub,i32) == 9_0 (ashr,i32)
+2_1 (sub,i32) == 10_0 (select,i32)
+2_1 (sub,i32) == 11_0 (zext,eq,i32)
+2_1 (sub,i32) == 12_0 (zext,ne,i32)
+2_1 (sub,i32) == 13_0 (zext,ult,i32)
+2_1 (sub,i32) == 14_0 (zext,slt,i32)
+2_1 (sub,i32) == 15_0 (zext,ule,i32)
+2_1 (sub,i32) == 16_0 (zext,sle,i32)
+2_2 (sub,i32) == 1_0 (add,i32)
+2_2 (sub,i32) == 3_0 (mul,i32)
+2_2 (sub,i32) == 4_0 (and,i32)
+2_2 (sub,i32) == 5_0 (or,i32)
+2_2 (sub,i32) == 6_0 (xor,i32)
+2_2 (sub,i32) == 7_0 (shl,i32)
+2_2 (sub,i32) == 8_0 (lshr,i32)
+2_2 (sub,i32) == 9_0 (ashr,i32)
+2_2 (sub,i32) == 10_0 (select,i32)
+2_2 (sub,i32) == 11_0 (zext,eq,i32)
+2_2 (sub,i32) == 12_0 (zext,ne,i32)
+2_2 (sub,i32) == 13_0 (zext,ult,i32)
+2_2 (sub,i32) == 14_0 (zext,slt,i32)
+2_2 (sub,i32) == 15_0 (zext,ule,i32)
+2_2 (sub,i32) == 16_0 (zext,sle,i32)
+3_1 (mul,i32) == 1_0 (add,i32)
+3_1 (mul,i32) == 2_0 (sub,i32)
+3_1 (mul,i32) == 4_0 (and,i32)
+3_1 (mul,i32) == 5_0 (or,i32)
+3_1 (mul,i32) == 6_0 (xor,i32)
+3_1 (mul,i32) == 7_0 (shl,i32)
+3_1 (mul,i32) == 8_0 (lshr,i32)
+3_1 (mul,i32) == 9_0 (ashr,i32)
+3_1 (mul,i32) == 10_0 (select,i32)
+3_1 (mul,i32) == 11_0 (zext,eq,i32)
+3_1 (mul,i32) == 12_0 (zext,ne,i32)
+3_1 (mul,i32) == 13_0 (zext,ult,i32)
+3_1 (mul,i32) == 14_0 (zext,slt,i32)
+3_1 (mul,i32) == 15_0 (zext,ule,i32)
+3_1 (mul,i32) == 16_0 (zext,sle,i32)
+3_2 (mul,i32) == 1_0 (add,i32)
+3_2 (mul,i32) == 2_0 (sub,i32)
+3_2 (mul,i32) == 4_0 (and,i32)
+3_2 (mul,i32) == 5_0 (or,i32)
+3_2 (mul,i32) == 6_0 (xor,i32)
+3_2 (mul,i32) == 7_0 (shl,i32)
+3_2 (mul,i32) == 8_0 (lshr,i32)
+3_2 (mul,i32) == 9_0 (ashr,i32)
+3_2 (mul,i32) == 10_0 (select,i32)
+3_2 (mul,i32) == 11_0 (zext,eq,i32)
+3_2 (mul,i32) == 12_0 (zext,ne,i32)
+3_2 (mul,i32) == 13_0 (zext,ult,i32)
+3_2 (mul,i32) == 14_0 (zext,slt,i32)
+3_2 (mul,i32) == 15_0 (zext,ule,i32)
+3_2 (mul,i32) == 16_0 (zext,sle,i32)
+4_1 (and,i32) == 1_0 (add,i32)
+4_1 (and,i32) == 2_0 (sub,i32)
+4_1 (and,i32) == 3_0 (mul,i32)
+4_1 (and,i32) == 5_0 (or,i32)
+4_1 (and,i32) == 6_0 (xor,i32)
+4_1 (and,i32) == 7_0 (shl,i32)
+4_1 (and,i32) == 8_0 (lshr,i32)
+4_1 (and,i32) == 9_0 (ashr,i32)
+4_1 (and,i32) == 10_0 (select,i32)
+4_1 (and,i32) == 11_0 (zext,eq,i32)
+4_1 (and,i32) == 12_0 (zext,ne,i32)
+4_1 (and,i32) == 13_0 (zext,ult,i32)
+4_1 (and,i32) == 14_0 (zext,slt,i32)
+4_1 (and,i32) == 15_0 (zext,ule,i32)
+4_1 (and,i32) == 16_0 (zext,sle,i32)
+4_2 (and,i32) == 1_0 (add,i32)
+4_2 (and,i32) == 2_0 (sub,i32)
+4_2 (and,i32) == 3_0 (mul,i32)
+4_2 (and,i32) == 5_0 (or,i32)
+4_2 (and,i32) == 6_0 (xor,i32)
+4_2 (and,i32) == 7_0 (shl,i32)
+4_2 (and,i32) == 8_0 (lshr,i32)
+4_2 (and,i32) == 9_0 (ashr,i32)
+4_2 (and,i32) == 10_0 (select,i32)
+4_2 (and,i32) == 11_0 (zext,eq,i32)
+4_2 (and,i32) == 12_0 (zext,ne,i32)
+4_2 (and,i32) == 13_0 (zext,ult,i32)
+4_2 (and,i32) == 14_0 (zext,slt,i32)
+4_2 (and,i32) == 15_0 (zext,ule,i32)
+4_2 (and,i32) == 16_0 (zext,sle,i32)
+5_1 (or,i32) == 1_0 (add,i32)
+5_1 (or,i32) == 2_0 (sub,i32)
+5_1 (or,i32) == 3_0 (mul,i32)
+5_1 (or,i32) == 4_0 (and,i32)
+5_1 (or,i32) == 6_0 (xor,i32)
+5_1 (or,i32) == 7_0 (shl,i32)
+5_1 (or,i32) == 8_0 (lshr,i32)
+5_1 (or,i32) == 9_0 (ashr,i32)
+5_1 (or,i32) == 10_0 (select,i32)
+5_1 (or,i32) == 11_0 (zext,eq,i32)
+5_1 (or,i32) == 12_0 (zext,ne,i32)
+5_1 (or,i32) == 13_0 (zext,ult,i32)
+5_1 (or,i32) == 14_0 (zext,slt,i32)
+5_1 (or,i32) == 15_0 (zext,ule,i32)
+5_1 (or,i32) == 16_0 (zext,sle,i32)
+5_2 (or,i32) == 1_0 (add,i32)
+5_2 (or,i32) == 2_0 (sub,i32)
+5_2 (or,i32) == 3_0 (mul,i32)
+5_2 (or,i32) == 4_0 (and,i32)
+5_2 (or,i32) == 6_0 (xor,i32)
+5_2 (or,i32) == 7_0 (shl,i32)
+5_2 (or,i32) == 8_0 (lshr,i32)
+5_2 (or,i32) == 9_0 (ashr,i32)
+5_2 (or,i32) == 10_0 (select,i32)
+5_2 (or,i32) == 11_0 (zext,eq,i32)
+5_2 (or,i32) == 12_0 (zext,ne,i32)
+5_2 (or,i32) == 13_0 (zext,ult,i32)
+5_2 (or,i32) == 14_0 (zext,slt,i32)
+5_2 (or,i32) == 15_0 (zext,ule,i32)
+5_2 (or,i32) == 16_0 (zext,sle,i32)
+6_1 (xor,i32) == 1_0 (add,i32)
+6_1 (xor,i32) == 2_0 (sub,i32)
+6_1 (xor,i32) == 3_0 (mul,i32)
+6_1 (xor,i32) == 4_0 (and,i32)
+6_1 (xor,i32) == 5_0 (or,i32)
+6_1 (xor,i32) == 7_0 (shl,i32)
+6_1 (xor,i32) == 8_0 (lshr,i32)
+6_1 (xor,i32) == 9_0 (ashr,i32)
+6_1 (xor,i32) == 10_0 (select,i32)
+6_1 (xor,i32) == 11_0 (zext,eq,i32)
+6_1 (xor,i32) == 12_0 (zext,ne,i32)
+6_1 (xor,i32) == 13_0 (zext,ult,i32)
+6_1 (xor,i32) == 14_0 (zext,slt,i32)
+6_1 (xor,i32) == 15_0 (zext,ule,i32)
+6_1 (xor,i32) == 16_0 (zext,sle,i32)
+6_2 (xor,i32) == 1_0 (add,i32)
+6_2 (xor,i32) == 2_0 (sub,i32)
+6_2 (xor,i32) == 3_0 (mul,i32)
+6_2 (xor,i32) == 4_0 (and,i32)
+6_2 (xor,i32) == 5_0 (or,i32)
+6_2 (xor,i32) == 7_0 (shl,i32)
+6_2 (xor,i32) == 8_0 (lshr,i32)
+6_2 (xor,i32) == 9_0 (ashr,i32)
+6_2 (xor,i32) == 10_0 (select,i32)
+6_2 (xor,i32) == 11_0 (zext,eq,i32)
+6_2 (xor,i32) == 12_0 (zext,ne,i32)
+6_2 (xor,i32) == 13_0 (zext,ult,i32)
+6_2 (xor,i32) == 14_0 (zext,slt,i32)
+6_2 (xor,i32) == 15_0 (zext,ule,i32)
+6_2 (xor,i32) == 16_0 (zext,sle,i32)
+7_1 (shl,i32) == 1_0 (add,i32)
+7_1 (shl,i32) == 2_0 (sub,i32)
+7_1 (shl,i32) == 3_0 (mul,i32)
+7_1 (shl,i32) == 4_0 (and,i32)
+7_1 (shl,i32) == 5_0 (or,i32)
+7_1 (shl,i32) == 6_0 (xor,i32)
+7_1 (shl,i32) == 8_0 (lshr,i32)
+7_1 (shl,i32) == 9_0 (ashr,i32)
+7_1 (shl,i32) == 10_0 (select,i32)
+7_1 (shl,i32) == 11_0 (zext,eq,i32)
+7_1 (shl,i32) == 12_0 (zext,ne,i32)
+7_1 (shl,i32) == 13_0 (zext,ult,i32)
+7_1 (shl,i32) == 14_0 (zext,slt,i32)
+7_1 (shl,i32) == 15_0 (zext,ule,i32)
+7_1 (shl,i32) == 16_0 (zext,sle,i32)
+7_2 (shl,i32) == 1_0 (add,i32)
+7_2 (shl,i32) == 2_0 (sub,i32)
+7_2 (shl,i32) == 3_0 (mul,i32)
+7_2 (shl,i32) == 4_0 (and,i32)
+7_2 (shl,i32) == 5_0 (or,i32)
+7_2 (shl,i32) == 6_0 (xor,i32)
+7_2 (shl,i32) == 8_0 (lshr,i32)
+7_2 (shl,i32) == 9_0 (ashr,i32)
+7_2 (shl,i32) == 10_0 (select,i32)
+7_2 (shl,i32) == 11_0 (zext,eq,i32)
+7_2 (shl,i32) == 12_0 (zext,ne,i32)
+7_2 (shl,i32) == 13_0 (zext,ult,i32)
+7_2 (shl,i32) == 14_0 (zext,slt,i32)
+7_2 (shl,i32) == 15_0 (zext,ule,i32)
+7_2 (shl,i32) == 16_0 (zext,sle,i32)
+8_1 (lshr,i32) == 1_0 (add,i32)
+8_1 (lshr,i32) == 2_0 (sub,i32)
+8_1 (lshr,i32) == 3_0 (mul,i32)
+8_1 (lshr,i32) == 4_0 (and,i32)
+8_1 (lshr,i32) == 5_0 (or,i32)
+8_1 (lshr,i32) == 6_0 (xor,i32)
+8_1 (lshr,i32) == 7_0 (shl,i32)
+8_1 (lshr,i32) == 9_0 (ashr,i32)
+8_1 (lshr,i32) == 10_0 (select,i32)
+8_1 (lshr,i32) == 11_0 (zext,eq,i32)
+8_1 (lshr,i32) == 12_0 (zext,ne,i32)
+8_1 (lshr,i32) == 13_0 (zext,ult,i32)
+8_1 (lshr,i32) == 14_0 (zext,slt,i32)
+8_1 (lshr,i32) == 15_0 (zext,ule,i32)
+8_1 (lshr,i32) == 16_0 (zext,sle,i32)
+8_2 (lshr,i32) == 1_0 (add,i32)
+8_2 (lshr,i32) == 2_0 (sub,i32)
+8_2 (lshr,i32) == 3_0 (mul,i32)
+8_2 (lshr,i32) == 4_0 (and,i32)
+8_2 (lshr,i32) == 5_0 (or,i32)
+8_2 (lshr,i32) == 6_0 (xor,i32)
+8_2 (lshr,i32) == 7_0 (shl,i32)
+8_2 (lshr,i32) == 9_0 (ashr,i32)
+8_2 (lshr,i32) == 10_0 (select,i32)
+8_2 (lshr,i32) == 11_0 (zext,eq,i32)
+8_2 (lshr,i32) == 12_0 (zext,ne,i32)
+8_2 (lshr,i32) == 13_0 (zext,ult,i32)
+8_2 (lshr,i32) == 14_0 (zext,slt,i32)
+8_2 (lshr,i32) == 15_0 (zext,ule,i32)
+8_2 (lshr,i32) == 16_0 (zext,sle,i32)
+9_1 (ashr,i32) == 1_0 (add,i32)
+9_1 (ashr,i32) == 2_0 (sub,i32)
+9_1 (ashr,i32) == 3_0 (mul,i32)
+9_1 (ashr,i32) == 4_0 (and,i32)
+9_1 (ashr,i32) == 5_0 (or,i32)
+9_1 (ashr,i32) == 6_0 (xor,i32)
+9_1 (ashr,i32) == 7_0 (shl,i32)
+9_1 (ashr,i32) == 8_0 (lshr,i32)
+9_1 (ashr,i32) == 10_0 (select,i32)
+9_1 (ashr,i32) == 11_0 (zext,eq,i32)
+9_1 (ashr,i32) == 12_0 (zext,ne,i32)
+9_1 (ashr,i32) == 13_0 (zext,ult,i32)
+9_1 (ashr,i32) == 14_0 (zext,slt,i32)
+9_1 (ashr,i32) == 15_0 (zext,ule,i32)
+9_1 (ashr,i32) == 16_0 (zext,sle,i32)
+9_2 (ashr,i32) == 1_0 (add,i32)
+9_2 (ashr,i32) == 2_0 (sub,i32)
+9_2 (ashr,i32) == 3_0 (mul,i32)
+9_2 (ashr,i32) == 4_0 (and,i32)
+9_2 (ashr,i32) == 5_0 (or,i32)
+9_2 (ashr,i32) == 6_0 (xor,i32)
+9_2 (ashr,i32) == 7_0 (shl,i32)
+9_2 (ashr,i32) == 8_0 (lshr,i32)
+9_2 (ashr,i32) == 10_0 (select,i32)
+9_2 (ashr,i32) == 11_0 (zext,eq,i32)
+9_2 (ashr,i32) == 12_0 (zext,ne,i32)
+9_2 (ashr,i32) == 13_0 (zext,ult,i32)
+9_2 (ashr,i32) == 14_0 (zext,slt,i32)
+9_2 (ashr,i32) == 15_0 (zext,ule,i32)
+9_2 (ashr,i32) == 16_0 (zext,sle,i32)
+10_1 (select,i32) == 1_0 (add,i32)
+10_1 (select,i32) == 2_0 (sub,i32)
+10_1 (select,i32) == 3_0 (mul,i32)
+10_1 (select,i32) == 4_0 (and,i32)
+10_1 (select,i32) == 5_0 (or,i32)
+10_1 (select,i32) == 6_0 (xor,i32)
+10_1 (select,i32) == 7_0 (shl,i32)
+10_1 (select,i32) == 8_0 (lshr,i32)
+10_1 (select,i32) == 9_0 (ashr,i32)
+10_1 (select,i32) == 11_0 (zext,eq,i32)
+10_1 (select,i32) == 12_0 (zext,ne,i32)
+10_1 (select,i32) == 13_0 (zext,ult,i32)
+10_1 (select,i32) == 14_0 (zext,slt,i32)
+10_1 (select,i32) == 15_0 (zext,ule,i32)
+10_1 (select,i32) == 16_0 (zext,sle,i32)
+10_2 (select,i32) == 1_0 (add,i32)
+10_2 (select,i32) == 2_0 (sub,i32)
+10_2 (select,i32) == 3_0 (mul,i32)
+10_2 (select,i32) == 4_0 (and,i32)
+10_2 (select,i32) == 5_0 (or,i32)
+10_2 (select,i32) == 6_0 (xor,i32)
+10_2 (select,i32) == 7_0 (shl,i32)
+10_2 (select,i32) == 8_0 (lshr,i32)
+10_2 (select,i32) == 9_0 (ashr,i32)
+10_2 (select,i32) == 11_0 (zext,eq,i32)
+10_2 (select,i32) == 12_0 (zext,ne,i32)
+10_2 (select,i32) == 13_0 (zext,ult,i32)
+10_2 (select,i32) == 14_0 (zext,slt,i32)
+10_2 (select,i32) == 15_0 (zext,ule,i32)
+10_2 (select,i32) == 16_0 (zext,sle,i32)
+10_3 (select,i32) == 1_0 (add,i32)
+10_3 (select,i32) == 2_0 (sub,i32)
+10_3 (select,i32) == 3_0 (mul,i32)
+10_3 (select,i32) == 4_0 (and,i32)
+10_3 (select,i32) == 5_0 (or,i32)
+10_3 (select,i32) == 6_0 (xor,i32)
+10_3 (select,i32) == 7_0 (shl,i32)
+10_3 (select,i32) == 8_0 (lshr,i32)
+10_3 (select,i32) == 9_0 (ashr,i32)
+10_3 (select,i32) == 11_0 (zext,eq,i32)
+10_3 (select,i32) == 12_0 (zext,ne,i32)
+10_3 (select,i32) == 13_0 (zext,ult,i32)
+10_3 (select,i32) == 14_0 (zext,slt,i32)
+10_3 (select,i32) == 15_0 (zext,ule,i32)
+10_3 (select,i32) == 16_0 (zext,sle,i32)
+11_1 (eq,i32) == 1_0 (add,i32)
+11_1 (eq,i32) == 2_0 (sub,i32)
+11_1 (eq,i32) == 3_0 (mul,i32)
+11_1 (eq,i32) == 4_0 (and,i32)
+11_1 (eq,i32) == 5_0 (or,i32)
+11_1 (eq,i32) == 6_0 (xor,i32)
+11_1 (eq,i32) == 7_0 (shl,i32)
+11_1 (eq,i32) == 8_0 (lshr,i32)
+11_1 (eq,i32) == 9_0 (ashr,i32)
+11_1 (eq,i32) == 10_0 (select,i32)
+11_1 (eq,i32) == 12_0 (zext,ne,i32)
+11_1 (eq,i32) == 13_0 (zext,ult,i32)
+11_1 (eq,i32) == 14_0 (zext,slt,i32)
+11_1 (eq,i32) == 15_0 (zext,ule,i32)
+11_1 (eq,i32) == 16_0 (zext,sle,i32)
+11_2 (eq,i32) == 1_0 (add,i32)
+11_2 (eq,i32) == 2_0 (sub,i32)
+11_2 (eq,i32) == 3_0 (mul,i32)
+11_2 (eq,i32) == 4_0 (and,i32)
+11_2 (eq,i32) == 5_0 (or,i32)
+11_2 (eq,i32) == 6_0 (xor,i32)
+11_2 (eq,i32) == 7_0 (shl,i32)
+11_2 (eq,i32) == 8_0 (lshr,i32)
+11_2 (eq,i32) == 9_0 (ashr,i32)
+11_2 (eq,i32) == 10_0 (select,i32)
+11_2 (eq,i32) == 12_0 (zext,ne,i32)
+11_2 (eq,i32) == 13_0 (zext,ult,i32)
+11_2 (eq,i32) == 14_0 (zext,slt,i32)
+11_2 (eq,i32) == 15_0 (zext,ule,i32)
+11_2 (eq,i32) == 16_0 (zext,sle,i32)
+12_1 (ne,i32) == 1_0 (add,i32)
+12_1 (ne,i32) == 2_0 (sub,i32)
+12_1 (ne,i32) == 3_0 (mul,i32)
+12_1 (ne,i32) == 4_0 (and,i32)
+12_1 (ne,i32) == 5_0 (or,i32)
+12_1 (ne,i32) == 6_0 (xor,i32)
+12_1 (ne,i32) == 7_0 (shl,i32)
+12_1 (ne,i32) == 8_0 (lshr,i32)
+12_1 (ne,i32) == 9_0 (ashr,i32)
+12_1 (ne,i32) == 10_0 (select,i32)
+12_1 (ne,i32) == 11_0 (zext,eq,i32)
+12_1 (ne,i32) == 13_0 (zext,ult,i32)
+12_1 (ne,i32) == 14_0 (zext,slt,i32)
+12_1 (ne,i32) == 15_0 (zext,ule,i32)
+12_1 (ne,i32) == 16_0 (zext,sle,i32)
+12_2 (ne,i32) == 1_0 (add,i32)
+12_2 (ne,i32) == 2_0 (sub,i32)
+12_2 (ne,i32) == 3_0 (mul,i32)
+12_2 (ne,i32) == 4_0 (and,i32)
+12_2 (ne,i32) == 5_0 (or,i32)
+12_2 (ne,i32) == 6_0 (xor,i32)
+12_2 (ne,i32) == 7_0 (shl,i32)
+12_2 (ne,i32) == 8_0 (lshr,i32)
+12_2 (ne,i32) == 9_0 (ashr,i32)
+12_2 (ne,i32) == 10_0 (select,i32)
+12_2 (ne,i32) == 11_0 (zext,eq,i32)
+12_2 (ne,i32) == 13_0 (zext,ult,i32)
+12_2 (ne,i32) == 14_0 (zext,slt,i32)
+12_2 (ne,i32) == 15_0 (zext,ule,i32)
+12_2 (ne,i32) == 16_0 (zext,sle,i32)
+13_1 (ult,i32) == 1_0 (add,i32)
+13_1 (ult,i32) == 2_0 (sub,i32)
+13_1 (ult,i32) == 3_0 (mul,i32)
+13_1 (ult,i32) == 4_0 (and,i32)
+13_1 (ult,i32) == 5_0 (or,i32)
+13_1 (ult,i32) == 6_0 (xor,i32)
+13_1 (ult,i32) == 7_0 (shl,i32)
+13_1 (ult,i32) == 8_0 (lshr,i32)
+13_1 (ult,i32) == 9_0 (ashr,i32)
+13_1 (ult,i32) == 10_0 (select,i32)
+13_1 (ult,i32) == 11_0 (zext,eq,i32)
+13_1 (ult,i32) == 12_0 (zext,ne,i32)
+13_1 (ult,i32) == 14_0 (zext,slt,i32)
+13_1 (ult,i32) == 15_0 (zext,ule,i32)
+13_1 (ult,i32) == 16_0 (zext,sle,i32)
+13_2 (ult,i32) == 1_0 (add,i32)
+13_2 (ult,i32) == 2_0 (sub,i32)
+13_2 (ult,i32) == 3_0 (mul,i32)
+13_2 (ult,i32) == 4_0 (and,i32)
+13_2 (ult,i32) == 5_0 (or,i32)
+13_2 (ult,i32) == 6_0 (xor,i32)
+13_2 (ult,i32) == 7_0 (shl,i32)
+13_2 (ult,i32) == 8_0 (lshr,i32)
+13_2 (ult,i32) == 9_0 (ashr,i32)
+13_2 (ult,i32) == 10_0 (select,i32)
+13_2 (ult,i32) == 11_0 (zext,eq,i32)
+13_2 (ult,i32) == 12_0 (zext,ne,i32)
+13_2 (ult,i32) == 14_0 (zext,slt,i32)
+13_2 (ult,i32) == 15_0 (zext,ule,i32)
+13_2 (ult,i32) == 16_0 (zext,sle,i32)
+14_1 (slt,i32) == 1_0 (add,i32)
+14_1 (slt,i32) == 2_0 (sub,i32)
+14_1 (slt,i32) == 3_0 (mul,i32)
+14_1 (slt,i32) == 4_0 (and,i32)
+14_1 (slt,i32) == 5_0 (or,i32)
+14_1 (slt,i32) == 6_0 (xor,i32)
+14_1 (slt,i32) == 7_0 (shl,i32)
+14_1 (slt,i32) == 8_0 (lshr,i32)
+14_1 (slt,i32) == 9_0 (ashr,i32)
+14_1 (slt,i32) == 10_0 (select,i32)
+14_1 (slt,i32) == 11_0 (zext,eq,i32)
+14_1 (slt,i32) == 12_0 (zext,ne,i32)
+14_1 (slt,i32) == 13_0 (zext,ult,i32)
+14_1 (slt,i32) == 15_0 (zext,ule,i32)
+14_1 (slt,i32) == 16_0 (zext,sle,i32)
+14_2 (slt,i32) == 1_0 (add,i32)
+14_2 (slt,i32) == 2_0 (sub,i32)
+14_2 (slt,i32) == 3_0 (mul,i32)
+14_2 (slt,i32) == 4_0 (and,i32)
+14_2 (slt,i32) == 5_0 (or,i32)
+14_2 (slt,i32) == 6_0 (xor,i32)
+14_2 (slt,i32) == 7_0 (shl,i32)
+14_2 (slt,i32) == 8_0 (lshr,i32)
+14_2 (slt,i32) == 9_0 (ashr,i32)
+14_2 (slt,i32) == 10_0 (select,i32)
+14_2 (slt,i32) == 11_0 (zext,eq,i32)
+14_2 (slt,i32) == 12_0 (zext,ne,i32)
+14_2 (slt,i32) == 13_0 (zext,ult,i32)
+14_2 (slt,i32) == 15_0 (zext,ule,i32)
+14_2 (slt,i32) == 16_0 (zext,sle,i32)
+15_1 (ule,i32) == 1_0 (add,i32)
+15_1 (ule,i32) == 2_0 (sub,i32)
+15_1 (ule,i32) == 3_0 (mul,i32)
+15_1 (ule,i32) == 4_0 (and,i32)
+15_1 (ule,i32) == 5_0 (or,i32)
+15_1 (ule,i32) == 6_0 (xor,i32)
+15_1 (ule,i32) == 7_0 (shl,i32)
+15_1 (ule,i32) == 8_0 (lshr,i32)
+15_1 (ule,i32) == 9_0 (ashr,i32)
+15_1 (ule,i32) == 10_0 (select,i32)
+15_1 (ule,i32) == 11_0 (zext,eq,i32)
+15_1 (ule,i32) == 12_0 (zext,ne,i32)
+15_1 (ule,i32) == 13_0 (zext,ult,i32)
+15_1 (ule,i32) == 14_0 (zext,slt,i32)
+15_1 (ule,i32) == 16_0 (zext,sle,i32)
+15_2 (ule,i32) == 1_0 (add,i32)
+15_2 (ule,i32) == 2_0 (sub,i32)
+15_2 (ule,i32) == 3_0 (mul,i32)
+15_2 (ule,i32) == 4_0 (and,i32)
+15_2 (ule,i32) == 5_0 (or,i32)
+15_2 (ule,i32) == 6_0 (xor,i32)
+15_2 (ule,i32) == 7_0 (shl,i32)
+15_2 (ule,i32) == 8_0 (lshr,i32)
+15_2 (ule,i32) == 9_0 (ashr,i32)
+15_2 (ule,i32) == 10_0 (select,i32)
+15_2 (ule,i32) == 11_0 (zext,eq,i32)
+15_2 (ule,i32) == 12_0 (zext,ne,i32)
+15_2 (ule,i32) == 13_0 (zext,ult,i32)
+15_2 (ule,i32) == 14_0 (zext,slt,i32)
+15_2 (ule,i32) == 16_0 (zext,sle,i32)
+16_1 (sle,i32) == 1_0 (add,i32)
+16_1 (sle,i32) == 2_0 (sub,i32)
+16_1 (sle,i32) == 3_0 (mul,i32)
+16_1 (sle,i32) == 4_0 (and,i32)
+16_1 (sle,i32) == 5_0 (or,i32)
+16_1 (sle,i32) == 6_0 (xor,i32)
+16_1 (sle,i32) == 7_0 (shl,i32)
+16_1 (sle,i32) == 8_0 (lshr,i32)
+16_1 (sle,i32) == 9_0 (ashr,i32)
+16_1 (sle,i32) == 10_0 (select,i32)
+16_1 (sle,i32) == 11_0 (zext,eq,i32)
+16_1 (sle,i32) == 12_0 (zext,ne,i32)
+16_1 (sle,i32) == 13_0 (zext,ult,i32)
+16_1 (sle,i32) == 14_0 (zext,slt,i32)
+16_1 (sle,i32) == 15_0 (zext,ule,i32)
+16_2 (sle,i32) == 1_0 (add,i32)
+16_2 (sle,i32) == 2_0 (sub,i32)
+16_2 (sle,i32) == 3_0 (mul,i32)
+16_2 (sle,i32) == 4_0 (and,i32)
+16_2 (sle,i32) == 5_0 (or,i32)
+16_2 (sle,i32) == 6_0 (xor,i32)
+16_2 (sle,i32) == 7_0 (shl,i32)
+16_2 (sle,i32) == 8_0 (lshr,i32)
+16_2 (sle,i32) == 9_0 (ashr,i32)
+16_2 (sle,i32) == 10_0 (select,i32)
+16_2 (sle,i32) == 11_0 (zext,eq,i32)
+16_2 (sle,i32) == 12_0 (zext,ne,i32)
+16_2 (sle,i32) == 13_0 (zext,ult,i32)
+16_2 (sle,i32) == 14_0 (zext,slt,i32)
+16_2 (sle,i32) == 15_0 (zext,ule,i32)
+1_0 (add,i32) == 17_0 (output,i32)
+2_0 (sub,i32) == 17_0 (output,i32)
+3_0 (mul,i32) == 17_0 (output,i32)
+4_0 (and,i32) == 17_0 (output,i32)
+5_0 (or,i32) == 17_0 (output,i32)
+6_0 (xor,i32) == 17_0 (output,i32)
+7_0 (shl,i32) == 17_0 (output,i32)
+8_0 (lshr,i32) == 17_0 (output,i32)
+9_0 (ashr,i32) == 17_0 (output,i32)
+10_0 (select,i32) == 17_0 (output,i32)
+11_0 (zext,eq,i32) == 17_0 (output,i32)
+12_0 (zext,ne,i32) == 17_0 (output,i32)
+13_0 (zext,ult,i32) == 17_0 (output,i32)
+14_0 (zext,slt,i32) == 17_0 (output,i32)
+15_0 (zext,ule,i32) == 17_0 (output,i32)
+16_0 (zext,sle,i32) == 17_0 (output,i32)
+synthesizing using 0 component(s)
+0 <= 17_0 (output,i32) < 3
+setting input in_0_1 to 43919
+setting input in_0_1 to 28037
+setting input in_0_1 to 39647
+setting input in_0_1 to 2936
+solving synthesis constraint.. UNSAT
+; no valid wiring found
+; starting synthesis for LHS
+%0:i32 = var (knownBits=0xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx) (nonNegative) (range=[0,-2147483648))
+%1:i32 = mulnsw %0, %0 (hasExternalUses)
+%2:i32 = urem %1, 1000000:i32
+infer %2
+inputs: 1, constants: 2
+N: 3, M: 19
+default width: 32
+output width: 32
+component library: add (32, { 32 32 }); sub (32, { 32 32 }); mul (32, { 32 32 }); and (32, { 32 32 }); or (32, { 32 32 }); xor (32, { 32 32 }); shl (32, { 32 32 }); lshr (32, { 32 32 }); ashr (32, { 32 32 }); select (32, { 1 32 32 }); eq (1, { 32 32 }); ne (1, { 32 32 }); ult (1, { 32 32 }); slt (1, { 32 32 }); ule (1, { 32 32 }); sle (1, { 32 32 }); 
+const components: const (32); const (32); 
+I: 0_1 (input,i32) 0_2 (const,i32) 0_3 (const,i32) 
+P: 1_1 (add,i32) 1_2 (add,i32) 2_1 (sub,i32) 2_2 (sub,i32) 3_1 (mul,i32) 3_2 (mul,i32) 4_1 (and,i32) 4_2 (and,i32) 5_1 (or,i32) 5_2 (or,i32) 6_1 (xor,i32) 6_2 (xor,i32) 7_1 (shl,i32) 7_2 (shl,i32) 8_1 (lshr,i32) 8_2 (lshr,i32) 9_1 (ashr,i32) 9_2 (ashr,i32) 10_1 (select,i32) 10_2 (select,i32) 10_3 (select,i32) 11_1 (eq,i32) 11_2 (eq,i32) 12_1 (ne,i32) 12_2 (ne,i32) 13_1 (ult,i32) 13_2 (ult,i32) 14_1 (slt,i32) 14_2 (slt,i32) 15_1 (ule,i32) 15_2 (ule,i32) 16_1 (sle,i32) 16_2 (sle,i32) 
+R: 1_0 (add,i32) 2_0 (sub,i32) 3_0 (mul,i32) 4_0 (and,i32) 5_0 (or,i32) 6_0 (xor,i32) 7_0 (shl,i32) 8_0 (lshr,i32) 9_0 (ashr,i32) 10_0 (select,i32) 11_0 (zext,eq,i32) 12_0 (zext,ne,i32) 13_0 (zext,ult,i32) 14_0 (zext,slt,i32) 15_0 (zext,ule,i32) 16_0 (zext,sle,i32) 
+L: 0_1 (input,i32) 0_2 (const,i32) 0_3 (const,i32) 1_1 (add,i32) 1_2 (add,i32) 2_1 (sub,i32) 2_2 (sub,i32) 3_1 (mul,i32) 3_2 (mul,i32) 4_1 (and,i32) 4_2 (and,i32) 5_1 (or,i32) 5_2 (or,i32) 6_1 (xor,i32) 6_2 (xor,i32) 7_1 (shl,i32) 7_2 (shl,i32) 8_1 (lshr,i32) 8_2 (lshr,i32) 9_1 (ashr,i32) 9_2 (ashr,i32) 10_1 (select,i32) 10_2 (select,i32) 10_3 (select,i32) 11_1 (eq,i32) 11_2 (eq,i32) 12_1 (ne,i32) 12_2 (ne,i32) 13_1 (ult,i32) 13_2 (ult,i32) 14_1 (slt,i32) 14_2 (slt,i32) 15_1 (ule,i32) 15_2 (ule,i32) 16_1 (sle,i32) 16_2 (sle,i32) 1_0 (add,i32) 2_0 (sub,i32) 3_0 (mul,i32) 4_0 (and,i32) 5_0 (or,i32) 6_0 (xor,i32) 7_0 (shl,i32) 8_0 (lshr,i32) 9_0 (ashr,i32) 10_0 (select,i32) 11_0 (zext,eq,i32) 12_0 (zext,ne,i32) 13_0 (zext,ult,i32) 14_0 (zext,slt,i32) 15_0 (zext,ule,i32) 16_0 (zext,sle,i32) 17_0 (output,i32) 
+O: 17_0 (output,i32)
+consistency constraints:
+1_0 (add,i32) != 2_0 (sub,i32)
+1_0 (add,i32) != 3_0 (mul,i32)
+1_0 (add,i32) != 4_0 (and,i32)
+1_0 (add,i32) != 5_0 (or,i32)
+1_0 (add,i32) != 6_0 (xor,i32)
+1_0 (add,i32) != 7_0 (shl,i32)
+1_0 (add,i32) != 8_0 (lshr,i32)
+1_0 (add,i32) != 9_0 (ashr,i32)
+1_0 (add,i32) != 10_0 (select,i32)
+1_0 (add,i32) != 11_0 (zext,eq,i32)
+1_0 (add,i32) != 12_0 (zext,ne,i32)
+1_0 (add,i32) != 13_0 (zext,ult,i32)
+1_0 (add,i32) != 14_0 (zext,slt,i32)
+1_0 (add,i32) != 15_0 (zext,ule,i32)
+1_0 (add,i32) != 16_0 (zext,sle,i32)
+2_0 (sub,i32) != 3_0 (mul,i32)
+2_0 (sub,i32) != 4_0 (and,i32)
+2_0 (sub,i32) != 5_0 (or,i32)
+2_0 (sub,i32) != 6_0 (xor,i32)
+2_0 (sub,i32) != 7_0 (shl,i32)
+2_0 (sub,i32) != 8_0 (lshr,i32)
+2_0 (sub,i32) != 9_0 (ashr,i32)
+2_0 (sub,i32) != 10_0 (select,i32)
+2_0 (sub,i32) != 11_0 (zext,eq,i32)
+2_0 (sub,i32) != 12_0 (zext,ne,i32)
+2_0 (sub,i32) != 13_0 (zext,ult,i32)
+2_0 (sub,i32) != 14_0 (zext,slt,i32)
+2_0 (sub,i32) != 15_0 (zext,ule,i32)
+2_0 (sub,i32) != 16_0 (zext,sle,i32)
+3_0 (mul,i32) != 4_0 (and,i32)
+3_0 (mul,i32) != 5_0 (or,i32)
+3_0 (mul,i32) != 6_0 (xor,i32)
+3_0 (mul,i32) != 7_0 (shl,i32)
+3_0 (mul,i32) != 8_0 (lshr,i32)
+3_0 (mul,i32) != 9_0 (ashr,i32)
+3_0 (mul,i32) != 10_0 (select,i32)
+3_0 (mul,i32) != 11_0 (zext,eq,i32)
+3_0 (mul,i32) != 12_0 (zext,ne,i32)
+3_0 (mul,i32) != 13_0 (zext,ult,i32)
+3_0 (mul,i32) != 14_0 (zext,slt,i32)
+3_0 (mul,i32) != 15_0 (zext,ule,i32)
+3_0 (mul,i32) != 16_0 (zext,sle,i32)
+4_0 (and,i32) != 5_0 (or,i32)
+4_0 (and,i32) != 6_0 (xor,i32)
+4_0 (and,i32) != 7_0 (shl,i32)
+4_0 (and,i32) != 8_0 (lshr,i32)
+4_0 (and,i32) != 9_0 (ashr,i32)
+4_0 (and,i32) != 10_0 (select,i32)
+4_0 (and,i32) != 11_0 (zext,eq,i32)
+4_0 (and,i32) != 12_0 (zext,ne,i32)
+4_0 (and,i32) != 13_0 (zext,ult,i32)
+4_0 (and,i32) != 14_0 (zext,slt,i32)
+4_0 (and,i32) != 15_0 (zext,ule,i32)
+4_0 (and,i32) != 16_0 (zext,sle,i32)
+5_0 (or,i32) != 6_0 (xor,i32)
+5_0 (or,i32) != 7_0 (shl,i32)
+5_0 (or,i32) != 8_0 (lshr,i32)
+5_0 (or,i32) != 9_0 (ashr,i32)
+5_0 (or,i32) != 10_0 (select,i32)
+5_0 (or,i32) != 11_0 (zext,eq,i32)
+5_0 (or,i32) != 12_0 (zext,ne,i32)
+5_0 (or,i32) != 13_0 (zext,ult,i32)
+5_0 (or,i32) != 14_0 (zext,slt,i32)
+5_0 (or,i32) != 15_0 (zext,ule,i32)
+5_0 (or,i32) != 16_0 (zext,sle,i32)
+6_0 (xor,i32) != 7_0 (shl,i32)
+6_0 (xor,i32) != 8_0 (lshr,i32)
+6_0 (xor,i32) != 9_0 (ashr,i32)
+6_0 (xor,i32) != 10_0 (select,i32)
+6_0 (xor,i32) != 11_0 (zext,eq,i32)
+6_0 (xor,i32) != 12_0 (zext,ne,i32)
+6_0 (xor,i32) != 13_0 (zext,ult,i32)
+6_0 (xor,i32) != 14_0 (zext,slt,i32)
+6_0 (xor,i32) != 15_0 (zext,ule,i32)
+6_0 (xor,i32) != 16_0 (zext,sle,i32)
+7_0 (shl,i32) != 8_0 (lshr,i32)
+7_0 (shl,i32) != 9_0 (ashr,i32)
+7_0 (shl,i32) != 10_0 (select,i32)
+7_0 (shl,i32) != 11_0 (zext,eq,i32)
+7_0 (shl,i32) != 12_0 (zext,ne,i32)
+7_0 (shl,i32) != 13_0 (zext,ult,i32)
+7_0 (shl,i32) != 14_0 (zext,slt,i32)
+7_0 (shl,i32) != 15_0 (zext,ule,i32)
+7_0 (shl,i32) != 16_0 (zext,sle,i32)
+8_0 (lshr,i32) != 9_0 (ashr,i32)
+8_0 (lshr,i32) != 10_0 (select,i32)
+8_0 (lshr,i32) != 11_0 (zext,eq,i32)
+8_0 (lshr,i32) != 12_0 (zext,ne,i32)
+8_0 (lshr,i32) != 13_0 (zext,ult,i32)
+8_0 (lshr,i32) != 14_0 (zext,slt,i32)
+8_0 (lshr,i32) != 15_0 (zext,ule,i32)
+8_0 (lshr,i32) != 16_0 (zext,sle,i32)
+9_0 (ashr,i32) != 10_0 (select,i32)
+9_0 (ashr,i32) != 11_0 (zext,eq,i32)
+9_0 (ashr,i32) != 12_0 (zext,ne,i32)
+9_0 (ashr,i32) != 13_0 (zext,ult,i32)
+9_0 (ashr,i32) != 14_0 (zext,slt,i32)
+9_0 (ashr,i32) != 15_0 (zext,ule,i32)
+9_0 (ashr,i32) != 16_0 (zext,sle,i32)
+10_0 (select,i32) != 11_0 (zext,eq,i32)
+10_0 (select,i32) != 12_0 (zext,ne,i32)
+10_0 (select,i32) != 13_0 (zext,ult,i32)
+10_0 (select,i32) != 14_0 (zext,slt,i32)
+10_0 (select,i32) != 15_0 (zext,ule,i32)
+10_0 (select,i32) != 16_0 (zext,sle,i32)
+11_0 (zext,eq,i32) != 12_0 (zext,ne,i32)
+11_0 (zext,eq,i32) != 13_0 (zext,ult,i32)
+11_0 (zext,eq,i32) != 14_0 (zext,slt,i32)
+11_0 (zext,eq,i32) != 15_0 (zext,ule,i32)
+11_0 (zext,eq,i32) != 16_0 (zext,sle,i32)
+12_0 (zext,ne,i32) != 13_0 (zext,ult,i32)
+12_0 (zext,ne,i32) != 14_0 (zext,slt,i32)
+12_0 (zext,ne,i32) != 15_0 (zext,ule,i32)
+12_0 (zext,ne,i32) != 16_0 (zext,sle,i32)
+13_0 (zext,ult,i32) != 14_0 (zext,slt,i32)
+13_0 (zext,ult,i32) != 15_0 (zext,ule,i32)
+13_0 (zext,ult,i32) != 16_0 (zext,sle,i32)
+14_0 (zext,slt,i32) != 15_0 (zext,ule,i32)
+14_0 (zext,slt,i32) != 16_0 (zext,sle,i32)
+15_0 (zext,ule,i32) != 16_0 (zext,sle,i32)
+acyclicity constraints:
+1_1 (add,i32) < 1_0
+1_2 (add,i32) < 1_0
+2_1 (sub,i32) < 2_0
+2_2 (sub,i32) < 2_0
+3_1 (mul,i32) < 3_0
+3_2 (mul,i32) < 3_0
+4_1 (and,i32) < 4_0
+4_2 (and,i32) < 4_0
+5_1 (or,i32) < 5_0
+5_2 (or,i32) < 5_0
+6_1 (xor,i32) < 6_0
+6_2 (xor,i32) < 6_0
+7_1 (shl,i32) < 7_0
+7_2 (shl,i32) < 7_0
+8_1 (lshr,i32) < 8_0
+8_2 (lshr,i32) < 8_0
+9_1 (ashr,i32) < 9_0
+9_2 (ashr,i32) < 9_0
+10_1 (select,i32) < 10_0
+10_2 (select,i32) < 10_0
+10_3 (select,i32) < 10_0
+11_1 (eq,i32) < 11_0
+11_2 (eq,i32) < 11_0
+12_1 (ne,i32) < 12_0
+12_2 (ne,i32) < 12_0
+13_1 (ult,i32) < 13_0
+13_2 (ult,i32) < 13_0
+14_1 (slt,i32) < 14_0
+14_2 (slt,i32) < 14_0
+15_1 (ule,i32) < 15_0
+15_2 (ule,i32) < 15_0
+16_1 (sle,i32) < 16_0
+16_2 (sle,i32) < 16_0
+location variable constraints:
+0 <= 1_1 (add,i32) < 19
+0 <= 1_2 (add,i32) < 19
+0 <= 2_1 (sub,i32) < 19
+0 <= 2_2 (sub,i32) < 19
+0 <= 3_1 (mul,i32) < 19
+0 <= 3_2 (mul,i32) < 19
+0 <= 4_1 (and,i32) < 19
+0 <= 4_2 (and,i32) < 19
+0 <= 5_1 (or,i32) < 19
+0 <= 5_2 (or,i32) < 19
+0 <= 6_1 (xor,i32) < 19
+0 <= 6_2 (xor,i32) < 19
+0 <= 7_1 (shl,i32) < 19
+0 <= 7_2 (shl,i32) < 19
+0 <= 8_1 (lshr,i32) < 19
+0 <= 8_2 (lshr,i32) < 19
+0 <= 9_1 (ashr,i32) < 19
+0 <= 9_2 (ashr,i32) < 19
+0 <= 10_1 (select,i32) < 19
+0 <= 10_2 (select,i32) < 19
+0 <= 10_3 (select,i32) < 19
+0 <= 11_1 (eq,i32) < 19
+0 <= 11_2 (eq,i32) < 19
+0 <= 12_1 (ne,i32) < 19
+0 <= 12_2 (ne,i32) < 19
+0 <= 13_1 (ult,i32) < 19
+0 <= 13_2 (ult,i32) < 19
+0 <= 14_1 (slt,i32) < 19
+0 <= 14_2 (slt,i32) < 19
+0 <= 15_1 (ule,i32) < 19
+0 <= 15_2 (ule,i32) < 19
+0 <= 16_1 (sle,i32) < 19
+0 <= 16_2 (sle,i32) < 19
+0 <= 0_1 (input,i32) < 19
+0 <= 0_2 (const,i32) < 19
+0 <= 0_3 (const,i32) < 19
+3 <= 1_0 (add,i32) < 19
+3 <= 2_0 (sub,i32) < 19
+3 <= 3_0 (mul,i32) < 19
+3 <= 4_0 (and,i32) < 19
+3 <= 5_0 (or,i32) < 19
+3 <= 6_0 (xor,i32) < 19
+3 <= 7_0 (shl,i32) < 19
+3 <= 8_0 (lshr,i32) < 19
+3 <= 9_0 (ashr,i32) < 19
+3 <= 10_0 (select,i32) < 19
+3 <= 11_0 (zext,eq,i32) < 19
+3 <= 12_0 (zext,ne,i32) < 19
+3 <= 13_0 (zext,ult,i32) < 19
+3 <= 14_0 (zext,slt,i32) < 19
+3 <= 15_0 (zext,ule,i32) < 19
+3 <= 16_0 (zext,sle,i32) < 19
+component input constraints:
+1_1 (add,i32) == 0_1 (input,i32) || 1_1 (add,i32) == 0_2 (const,i32) || 1_1 (add,i32) == 0_3 (const,i32) || 1_1 (add,i32) == 2_0 (sub,i32) || 1_1 (add,i32) == 3_0 (mul,i32) || 1_1 (add,i32) == 4_0 (and,i32) || 1_1 (add,i32) == 5_0 (or,i32) || 1_1 (add,i32) == 6_0 (xor,i32) || 1_1 (add,i32) == 7_0 (shl,i32) || 1_1 (add,i32) == 8_0 (lshr,i32) || 1_1 (add,i32) == 9_0 (ashr,i32) || 1_1 (add,i32) == 10_0 (select,i32) || 1_1 (add,i32) == 11_0 (zext,eq,i32) || 1_1 (add,i32) == 12_0 (zext,ne,i32) || 1_1 (add,i32) == 13_0 (zext,ult,i32) || 1_1 (add,i32) == 14_0 (zext,slt,i32) || 1_1 (add,i32) == 15_0 (zext,ule,i32) || 1_1 (add,i32) == 16_0 (zext,sle,i32) || false
+1_2 (add,i32) == 0_1 (input,i32) || 1_2 (add,i32) == 0_2 (const,i32) || 1_2 (add,i32) == 0_3 (const,i32) || 1_2 (add,i32) == 2_0 (sub,i32) || 1_2 (add,i32) == 3_0 (mul,i32) || 1_2 (add,i32) == 4_0 (and,i32) || 1_2 (add,i32) == 5_0 (or,i32) || 1_2 (add,i32) == 6_0 (xor,i32) || 1_2 (add,i32) == 7_0 (shl,i32) || 1_2 (add,i32) == 8_0 (lshr,i32) || 1_2 (add,i32) == 9_0 (ashr,i32) || 1_2 (add,i32) == 10_0 (select,i32) || 1_2 (add,i32) == 11_0 (zext,eq,i32) || 1_2 (add,i32) == 12_0 (zext,ne,i32) || 1_2 (add,i32) == 13_0 (zext,ult,i32) || 1_2 (add,i32) == 14_0 (zext,slt,i32) || 1_2 (add,i32) == 15_0 (zext,ule,i32) || 1_2 (add,i32) == 16_0 (zext,sle,i32) || false
+2_1 (sub,i32) == 0_1 (input,i32) || 2_1 (sub,i32) == 0_2 (const,i32) || 2_1 (sub,i32) == 0_3 (const,i32) || 2_1 (sub,i32) == 1_0 (add,i32) || 2_1 (sub,i32) == 3_0 (mul,i32) || 2_1 (sub,i32) == 4_0 (and,i32) || 2_1 (sub,i32) == 5_0 (or,i32) || 2_1 (sub,i32) == 6_0 (xor,i32) || 2_1 (sub,i32) == 7_0 (shl,i32) || 2_1 (sub,i32) == 8_0 (lshr,i32) || 2_1 (sub,i32) == 9_0 (ashr,i32) || 2_1 (sub,i32) == 10_0 (select,i32) || 2_1 (sub,i32) == 11_0 (zext,eq,i32) || 2_1 (sub,i32) == 12_0 (zext,ne,i32) || 2_1 (sub,i32) == 13_0 (zext,ult,i32) || 2_1 (sub,i32) == 14_0 (zext,slt,i32) || 2_1 (sub,i32) == 15_0 (zext,ule,i32) || 2_1 (sub,i32) == 16_0 (zext,sle,i32) || false
+2_2 (sub,i32) == 0_1 (input,i32) || 2_2 (sub,i32) == 0_2 (const,i32) || 2_2 (sub,i32) == 0_3 (const,i32) || 2_2 (sub,i32) == 1_0 (add,i32) || 2_2 (sub,i32) == 3_0 (mul,i32) || 2_2 (sub,i32) == 4_0 (and,i32) || 2_2 (sub,i32) == 5_0 (or,i32) || 2_2 (sub,i32) == 6_0 (xor,i32) || 2_2 (sub,i32) == 7_0 (shl,i32) || 2_2 (sub,i32) == 8_0 (lshr,i32) || 2_2 (sub,i32) == 9_0 (ashr,i32) || 2_2 (sub,i32) == 10_0 (select,i32) || 2_2 (sub,i32) == 11_0 (zext,eq,i32) || 2_2 (sub,i32) == 12_0 (zext,ne,i32) || 2_2 (sub,i32) == 13_0 (zext,ult,i32) || 2_2 (sub,i32) == 14_0 (zext,slt,i32) || 2_2 (sub,i32) == 15_0 (zext,ule,i32) || 2_2 (sub,i32) == 16_0 (zext,sle,i32) || false
+3_1 (mul,i32) == 0_1 (input,i32) || 3_1 (mul,i32) == 0_2 (const,i32) || 3_1 (mul,i32) == 0_3 (const,i32) || 3_1 (mul,i32) == 1_0 (add,i32) || 3_1 (mul,i32) == 2_0 (sub,i32) || 3_1 (mul,i32) == 4_0 (and,i32) || 3_1 (mul,i32) == 5_0 (or,i32) || 3_1 (mul,i32) == 6_0 (xor,i32) || 3_1 (mul,i32) == 7_0 (shl,i32) || 3_1 (mul,i32) == 8_0 (lshr,i32) || 3_1 (mul,i32) == 9_0 (ashr,i32) || 3_1 (mul,i32) == 10_0 (select,i32) || 3_1 (mul,i32) == 11_0 (zext,eq,i32) || 3_1 (mul,i32) == 12_0 (zext,ne,i32) || 3_1 (mul,i32) == 13_0 (zext,ult,i32) || 3_1 (mul,i32) == 14_0 (zext,slt,i32) || 3_1 (mul,i32) == 15_0 (zext,ule,i32) || 3_1 (mul,i32) == 16_0 (zext,sle,i32) || false
+3_2 (mul,i32) == 0_1 (input,i32) || 3_2 (mul,i32) == 0_2 (const,i32) || 3_2 (mul,i32) == 0_3 (const,i32) || 3_2 (mul,i32) == 1_0 (add,i32) || 3_2 (mul,i32) == 2_0 (sub,i32) || 3_2 (mul,i32) == 4_0 (and,i32) || 3_2 (mul,i32) == 5_0 (or,i32) || 3_2 (mul,i32) == 6_0 (xor,i32) || 3_2 (mul,i32) == 7_0 (shl,i32) || 3_2 (mul,i32) == 8_0 (lshr,i32) || 3_2 (mul,i32) == 9_0 (ashr,i32) || 3_2 (mul,i32) == 10_0 (select,i32) || 3_2 (mul,i32) == 11_0 (zext,eq,i32) || 3_2 (mul,i32) == 12_0 (zext,ne,i32) || 3_2 (mul,i32) == 13_0 (zext,ult,i32) || 3_2 (mul,i32) == 14_0 (zext,slt,i32) || 3_2 (mul,i32) == 15_0 (zext,ule,i32) || 3_2 (mul,i32) == 16_0 (zext,sle,i32) || false
+4_1 (and,i32) == 0_1 (input,i32) || 4_1 (and,i32) == 0_2 (const,i32) || 4_1 (and,i32) == 0_3 (const,i32) || 4_1 (and,i32) == 1_0 (add,i32) || 4_1 (and,i32) == 2_0 (sub,i32) || 4_1 (and,i32) == 3_0 (mul,i32) || 4_1 (and,i32) == 5_0 (or,i32) || 4_1 (and,i32) == 6_0 (xor,i32) || 4_1 (and,i32) == 7_0 (shl,i32) || 4_1 (and,i32) == 8_0 (lshr,i32) || 4_1 (and,i32) == 9_0 (ashr,i32) || 4_1 (and,i32) == 10_0 (select,i32) || 4_1 (and,i32) == 11_0 (zext,eq,i32) || 4_1 (and,i32) == 12_0 (zext,ne,i32) || 4_1 (and,i32) == 13_0 (zext,ult,i32) || 4_1 (and,i32) == 14_0 (zext,slt,i32) || 4_1 (and,i32) == 15_0 (zext,ule,i32) || 4_1 (and,i32) == 16_0 (zext,sle,i32) || false
+4_2 (and,i32) == 0_1 (input,i32) || 4_2 (and,i32) == 0_2 (const,i32) || 4_2 (and,i32) == 0_3 (const,i32) || 4_2 (and,i32) == 1_0 (add,i32) || 4_2 (and,i32) == 2_0 (sub,i32) || 4_2 (and,i32) == 3_0 (mul,i32) || 4_2 (and,i32) == 5_0 (or,i32) || 4_2 (and,i32) == 6_0 (xor,i32) || 4_2 (and,i32) == 7_0 (shl,i32) || 4_2 (and,i32) == 8_0 (lshr,i32) || 4_2 (and,i32) == 9_0 (ashr,i32) || 4_2 (and,i32) == 10_0 (select,i32) || 4_2 (and,i32) == 11_0 (zext,eq,i32) || 4_2 (and,i32) == 12_0 (zext,ne,i32) || 4_2 (and,i32) == 13_0 (zext,ult,i32) || 4_2 (and,i32) == 14_0 (zext,slt,i32) || 4_2 (and,i32) == 15_0 (zext,ule,i32) || 4_2 (and,i32) == 16_0 (zext,sle,i32) || false
+5_1 (or,i32) == 0_1 (input,i32) || 5_1 (or,i32) == 0_2 (const,i32) || 5_1 (or,i32) == 0_3 (const,i32) || 5_1 (or,i32) == 1_0 (add,i32) || 5_1 (or,i32) == 2_0 (sub,i32) || 5_1 (or,i32) == 3_0 (mul,i32) || 5_1 (or,i32) == 4_0 (and,i32) || 5_1 (or,i32) == 6_0 (xor,i32) || 5_1 (or,i32) == 7_0 (shl,i32) || 5_1 (or,i32) == 8_0 (lshr,i32) || 5_1 (or,i32) == 9_0 (ashr,i32) || 5_1 (or,i32) == 10_0 (select,i32) || 5_1 (or,i32) == 11_0 (zext,eq,i32) || 5_1 (or,i32) == 12_0 (zext,ne,i32) || 5_1 (or,i32) == 13_0 (zext,ult,i32) || 5_1 (or,i32) == 14_0 (zext,slt,i32) || 5_1 (or,i32) == 15_0 (zext,ule,i32) || 5_1 (or,i32) == 16_0 (zext,sle,i32) || false
+5_2 (or,i32) == 0_1 (input,i32) || 5_2 (or,i32) == 0_2 (const,i32) || 5_2 (or,i32) == 0_3 (const,i32) || 5_2 (or,i32) == 1_0 (add,i32) || 5_2 (or,i32) == 2_0 (sub,i32) || 5_2 (or,i32) == 3_0 (mul,i32) || 5_2 (or,i32) == 4_0 (and,i32) || 5_2 (or,i32) == 6_0 (xor,i32) || 5_2 (or,i32) == 7_0 (shl,i32) || 5_2 (or,i32) == 8_0 (lshr,i32) || 5_2 (or,i32) == 9_0 (ashr,i32) || 5_2 (or,i32) == 10_0 (select,i32) || 5_2 (or,i32) == 11_0 (zext,eq,i32) || 5_2 (or,i32) == 12_0 (zext,ne,i32) || 5_2 (or,i32) == 13_0 (zext,ult,i32) || 5_2 (or,i32) == 14_0 (zext,slt,i32) || 5_2 (or,i32) == 15_0 (zext,ule,i32) || 5_2 (or,i32) == 16_0 (zext,sle,i32) || false
+6_1 (xor,i32) == 0_1 (input,i32) || 6_1 (xor,i32) == 0_2 (const,i32) || 6_1 (xor,i32) == 0_3 (const,i32) || 6_1 (xor,i32) == 1_0 (add,i32) || 6_1 (xor,i32) == 2_0 (sub,i32) || 6_1 (xor,i32) == 3_0 (mul,i32) || 6_1 (xor,i32) == 4_0 (and,i32) || 6_1 (xor,i32) == 5_0 (or,i32) || 6_1 (xor,i32) == 7_0 (shl,i32) || 6_1 (xor,i32) == 8_0 (lshr,i32) || 6_1 (xor,i32) == 9_0 (ashr,i32) || 6_1 (xor,i32) == 10_0 (select,i32) || 6_1 (xor,i32) == 11_0 (zext,eq,i32) || 6_1 (xor,i32) == 12_0 (zext,ne,i32) || 6_1 (xor,i32) == 13_0 (zext,ult,i32) || 6_1 (xor,i32) == 14_0 (zext,slt,i32) || 6_1 (xor,i32) == 15_0 (zext,ule,i32) || 6_1 (xor,i32) == 16_0 (zext,sle,i32) || false
+6_2 (xor,i32) == 0_1 (input,i32) || 6_2 (xor,i32) == 0_2 (const,i32) || 6_2 (xor,i32) == 0_3 (const,i32) || 6_2 (xor,i32) == 1_0 (add,i32) || 6_2 (xor,i32) == 2_0 (sub,i32) || 6_2 (xor,i32) == 3_0 (mul,i32) || 6_2 (xor,i32) == 4_0 (and,i32) || 6_2 (xor,i32) == 5_0 (or,i32) || 6_2 (xor,i32) == 7_0 (shl,i32) || 6_2 (xor,i32) == 8_0 (lshr,i32) || 6_2 (xor,i32) == 9_0 (ashr,i32) || 6_2 (xor,i32) == 10_0 (select,i32) || 6_2 (xor,i32) == 11_0 (zext,eq,i32) || 6_2 (xor,i32) == 12_0 (zext,ne,i32) || 6_2 (xor,i32) == 13_0 (zext,ult,i32) || 6_2 (xor,i32) == 14_0 (zext,slt,i32) || 6_2 (xor,i32) == 15_0 (zext,ule,i32) || 6_2 (xor,i32) == 16_0 (zext,sle,i32) || false
+7_1 (shl,i32) == 0_1 (input,i32) || 7_1 (shl,i32) == 0_2 (const,i32) || 7_1 (shl,i32) == 0_3 (const,i32) || 7_1 (shl,i32) == 1_0 (add,i32) || 7_1 (shl,i32) == 2_0 (sub,i32) || 7_1 (shl,i32) == 3_0 (mul,i32) || 7_1 (shl,i32) == 4_0 (and,i32) || 7_1 (shl,i32) == 5_0 (or,i32) || 7_1 (shl,i32) == 6_0 (xor,i32) || 7_1 (shl,i32) == 8_0 (lshr,i32) || 7_1 (shl,i32) == 9_0 (ashr,i32) || 7_1 (shl,i32) == 10_0 (select,i32) || 7_1 (shl,i32) == 11_0 (zext,eq,i32) || 7_1 (shl,i32) == 12_0 (zext,ne,i32) || 7_1 (shl,i32) == 13_0 (zext,ult,i32) || 7_1 (shl,i32) == 14_0 (zext,slt,i32) || 7_1 (shl,i32) == 15_0 (zext,ule,i32) || 7_1 (shl,i32) == 16_0 (zext,sle,i32) || false
+7_2 (shl,i32) == 0_1 (input,i32) || 7_2 (shl,i32) == 0_2 (const,i32) || 7_2 (shl,i32) == 0_3 (const,i32) || 7_2 (shl,i32) == 1_0 (add,i32) || 7_2 (shl,i32) == 2_0 (sub,i32) || 7_2 (shl,i32) == 3_0 (mul,i32) || 7_2 (shl,i32) == 4_0 (and,i32) || 7_2 (shl,i32) == 5_0 (or,i32) || 7_2 (shl,i32) == 6_0 (xor,i32) || 7_2 (shl,i32) == 8_0 (lshr,i32) || 7_2 (shl,i32) == 9_0 (ashr,i32) || 7_2 (shl,i32) == 10_0 (select,i32) || 7_2 (shl,i32) == 11_0 (zext,eq,i32) || 7_2 (shl,i32) == 12_0 (zext,ne,i32) || 7_2 (shl,i32) == 13_0 (zext,ult,i32) || 7_2 (shl,i32) == 14_0 (zext,slt,i32) || 7_2 (shl,i32) == 15_0 (zext,ule,i32) || 7_2 (shl,i32) == 16_0 (zext,sle,i32) || false
+8_1 (lshr,i32) == 0_1 (input,i32) || 8_1 (lshr,i32) == 0_2 (const,i32) || 8_1 (lshr,i32) == 0_3 (const,i32) || 8_1 (lshr,i32) == 1_0 (add,i32) || 8_1 (lshr,i32) == 2_0 (sub,i32) || 8_1 (lshr,i32) == 3_0 (mul,i32) || 8_1 (lshr,i32) == 4_0 (and,i32) || 8_1 (lshr,i32) == 5_0 (or,i32) || 8_1 (lshr,i32) == 6_0 (xor,i32) || 8_1 (lshr,i32) == 7_0 (shl,i32) || 8_1 (lshr,i32) == 9_0 (ashr,i32) || 8_1 (lshr,i32) == 10_0 (select,i32) || 8_1 (lshr,i32) == 11_0 (zext,eq,i32) || 8_1 (lshr,i32) == 12_0 (zext,ne,i32) || 8_1 (lshr,i32) == 13_0 (zext,ult,i32) || 8_1 (lshr,i32) == 14_0 (zext,slt,i32) || 8_1 (lshr,i32) == 15_0 (zext,ule,i32) || 8_1 (lshr,i32) == 16_0 (zext,sle,i32) || false
+8_2 (lshr,i32) == 0_1 (input,i32) || 8_2 (lshr,i32) == 0_2 (const,i32) || 8_2 (lshr,i32) == 0_3 (const,i32) || 8_2 (lshr,i32) == 1_0 (add,i32) || 8_2 (lshr,i32) == 2_0 (sub,i32) || 8_2 (lshr,i32) == 3_0 (mul,i32) || 8_2 (lshr,i32) == 4_0 (and,i32) || 8_2 (lshr,i32) == 5_0 (or,i32) || 8_2 (lshr,i32) == 6_0 (xor,i32) || 8_2 (lshr,i32) == 7_0 (shl,i32) || 8_2 (lshr,i32) == 9_0 (ashr,i32) || 8_2 (lshr,i32) == 10_0 (select,i32) || 8_2 (lshr,i32) == 11_0 (zext,eq,i32) || 8_2 (lshr,i32) == 12_0 (zext,ne,i32) || 8_2 (lshr,i32) == 13_0 (zext,ult,i32) || 8_2 (lshr,i32) == 14_0 (zext,slt,i32) || 8_2 (lshr,i32) == 15_0 (zext,ule,i32) || 8_2 (lshr,i32) == 16_0 (zext,sle,i32) || false
+9_1 (ashr,i32) == 0_1 (input,i32) || 9_1 (ashr,i32) == 0_2 (const,i32) || 9_1 (ashr,i32) == 0_3 (const,i32) || 9_1 (ashr,i32) == 1_0 (add,i32) || 9_1 (ashr,i32) == 2_0 (sub,i32) || 9_1 (ashr,i32) == 3_0 (mul,i32) || 9_1 (ashr,i32) == 4_0 (and,i32) || 9_1 (ashr,i32) == 5_0 (or,i32) || 9_1 (ashr,i32) == 6_0 (xor,i32) || 9_1 (ashr,i32) == 7_0 (shl,i32) || 9_1 (ashr,i32) == 8_0 (lshr,i32) || 9_1 (ashr,i32) == 10_0 (select,i32) || 9_1 (ashr,i32) == 11_0 (zext,eq,i32) || 9_1 (ashr,i32) == 12_0 (zext,ne,i32) || 9_1 (ashr,i32) == 13_0 (zext,ult,i32) || 9_1 (ashr,i32) == 14_0 (zext,slt,i32) || 9_1 (ashr,i32) == 15_0 (zext,ule,i32) || 9_1 (ashr,i32) == 16_0 (zext,sle,i32) || false
+9_2 (ashr,i32) == 0_1 (input,i32) || 9_2 (ashr,i32) == 0_2 (const,i32) || 9_2 (ashr,i32) == 0_3 (const,i32) || 9_2 (ashr,i32) == 1_0 (add,i32) || 9_2 (ashr,i32) == 2_0 (sub,i32) || 9_2 (ashr,i32) == 3_0 (mul,i32) || 9_2 (ashr,i32) == 4_0 (and,i32) || 9_2 (ashr,i32) == 5_0 (or,i32) || 9_2 (ashr,i32) == 6_0 (xor,i32) || 9_2 (ashr,i32) == 7_0 (shl,i32) || 9_2 (ashr,i32) == 8_0 (lshr,i32) || 9_2 (ashr,i32) == 10_0 (select,i32) || 9_2 (ashr,i32) == 11_0 (zext,eq,i32) || 9_2 (ashr,i32) == 12_0 (zext,ne,i32) || 9_2 (ashr,i32) == 13_0 (zext,ult,i32) || 9_2 (ashr,i32) == 14_0 (zext,slt,i32) || 9_2 (ashr,i32) == 15_0 (zext,ule,i32) || 9_2 (ashr,i32) == 16_0 (zext,sle,i32) || false
+10_1 (select,i32) == 1_0 (add,i32) || 10_1 (select,i32) == 2_0 (sub,i32) || 10_1 (select,i32) == 3_0 (mul,i32) || 10_1 (select,i32) == 4_0 (and,i32) || 10_1 (select,i32) == 5_0 (or,i32) || 10_1 (select,i32) == 6_0 (xor,i32) || 10_1 (select,i32) == 7_0 (shl,i32) || 10_1 (select,i32) == 8_0 (lshr,i32) || 10_1 (select,i32) == 9_0 (ashr,i32) || 10_1 (select,i32) == 11_0 (zext,eq,i32) || 10_1 (select,i32) == 12_0 (zext,ne,i32) || 10_1 (select,i32) == 13_0 (zext,ult,i32) || 10_1 (select,i32) == 14_0 (zext,slt,i32) || 10_1 (select,i32) == 15_0 (zext,ule,i32) || 10_1 (select,i32) == 16_0 (zext,sle,i32) || false
+10_2 (select,i32) == 0_1 (input,i32) || 10_2 (select,i32) == 0_2 (const,i32) || 10_2 (select,i32) == 0_3 (const,i32) || 10_2 (select,i32) == 1_0 (add,i32) || 10_2 (select,i32) == 2_0 (sub,i32) || 10_2 (select,i32) == 3_0 (mul,i32) || 10_2 (select,i32) == 4_0 (and,i32) || 10_2 (select,i32) == 5_0 (or,i32) || 10_2 (select,i32) == 6_0 (xor,i32) || 10_2 (select,i32) == 7_0 (shl,i32) || 10_2 (select,i32) == 8_0 (lshr,i32) || 10_2 (select,i32) == 9_0 (ashr,i32) || 10_2 (select,i32) == 11_0 (zext,eq,i32) || 10_2 (select,i32) == 12_0 (zext,ne,i32) || 10_2 (select,i32) == 13_0 (zext,ult,i32) || 10_2 (select,i32) == 14_0 (zext,slt,i32) || 10_2 (select,i32) == 15_0 (zext,ule,i32) || 10_2 (select,i32) == 16_0 (zext,sle,i32) || false
+10_3 (select,i32) == 0_1 (input,i32) || 10_3 (select,i32) == 0_2 (const,i32) || 10_3 (select,i32) == 0_3 (const,i32) || 10_3 (select,i32) == 1_0 (add,i32) || 10_3 (select,i32) == 2_0 (sub,i32) || 10_3 (select,i32) == 3_0 (mul,i32) || 10_3 (select,i32) == 4_0 (and,i32) || 10_3 (select,i32) == 5_0 (or,i32) || 10_3 (select,i32) == 6_0 (xor,i32) || 10_3 (select,i32) == 7_0 (shl,i32) || 10_3 (select,i32) == 8_0 (lshr,i32) || 10_3 (select,i32) == 9_0 (ashr,i32) || 10_3 (select,i32) == 11_0 (zext,eq,i32) || 10_3 (select,i32) == 12_0 (zext,ne,i32) || 10_3 (select,i32) == 13_0 (zext,ult,i32) || 10_3 (select,i32) == 14_0 (zext,slt,i32) || 10_3 (select,i32) == 15_0 (zext,ule,i32) || 10_3 (select,i32) == 16_0 (zext,sle,i32) || false
+11_1 (eq,i32) == 0_1 (input,i32) || 11_1 (eq,i32) == 0_2 (const,i32) || 11_1 (eq,i32) == 0_3 (const,i32) || 11_1 (eq,i32) == 1_0 (add,i32) || 11_1 (eq,i32) == 2_0 (sub,i32) || 11_1 (eq,i32) == 3_0 (mul,i32) || 11_1 (eq,i32) == 4_0 (and,i32) || 11_1 (eq,i32) == 5_0 (or,i32) || 11_1 (eq,i32) == 6_0 (xor,i32) || 11_1 (eq,i32) == 7_0 (shl,i32) || 11_1 (eq,i32) == 8_0 (lshr,i32) || 11_1 (eq,i32) == 9_0 (ashr,i32) || 11_1 (eq,i32) == 10_0 (select,i32) || 11_1 (eq,i32) == 12_0 (zext,ne,i32) || 11_1 (eq,i32) == 13_0 (zext,ult,i32) || 11_1 (eq,i32) == 14_0 (zext,slt,i32) || 11_1 (eq,i32) == 15_0 (zext,ule,i32) || 11_1 (eq,i32) == 16_0 (zext,sle,i32) || false
+11_2 (eq,i32) == 0_1 (input,i32) || 11_2 (eq,i32) == 0_2 (const,i32) || 11_2 (eq,i32) == 0_3 (const,i32) || 11_2 (eq,i32) == 1_0 (add,i32) || 11_2 (eq,i32) == 2_0 (sub,i32) || 11_2 (eq,i32) == 3_0 (mul,i32) || 11_2 (eq,i32) == 4_0 (and,i32) || 11_2 (eq,i32) == 5_0 (or,i32) || 11_2 (eq,i32) == 6_0 (xor,i32) || 11_2 (eq,i32) == 7_0 (shl,i32) || 11_2 (eq,i32) == 8_0 (lshr,i32) || 11_2 (eq,i32) == 9_0 (ashr,i32) || 11_2 (eq,i32) == 10_0 (select,i32) || 11_2 (eq,i32) == 12_0 (zext,ne,i32) || 11_2 (eq,i32) == 13_0 (zext,ult,i32) || 11_2 (eq,i32) == 14_0 (zext,slt,i32) || 11_2 (eq,i32) == 15_0 (zext,ule,i32) || 11_2 (eq,i32) == 16_0 (zext,sle,i32) || false
+12_1 (ne,i32) == 0_1 (input,i32) || 12_1 (ne,i32) == 0_2 (const,i32) || 12_1 (ne,i32) == 0_3 (const,i32) || 12_1 (ne,i32) == 1_0 (add,i32) || 12_1 (ne,i32) == 2_0 (sub,i32) || 12_1 (ne,i32) == 3_0 (mul,i32) || 12_1 (ne,i32) == 4_0 (and,i32) || 12_1 (ne,i32) == 5_0 (or,i32) || 12_1 (ne,i32) == 6_0 (xor,i32) || 12_1 (ne,i32) == 7_0 (shl,i32) || 12_1 (ne,i32) == 8_0 (lshr,i32) || 12_1 (ne,i32) == 9_0 (ashr,i32) || 12_1 (ne,i32) == 10_0 (select,i32) || 12_1 (ne,i32) == 11_0 (zext,eq,i32) || 12_1 (ne,i32) == 13_0 (zext,ult,i32) || 12_1 (ne,i32) == 14_0 (zext,slt,i32) || 12_1 (ne,i32) == 15_0 (zext,ule,i32) || 12_1 (ne,i32) == 16_0 (zext,sle,i32) || false
+12_2 (ne,i32) == 0_1 (input,i32) || 12_2 (ne,i32) == 0_2 (const,i32) || 12_2 (ne,i32) == 0_3 (const,i32) || 12_2 (ne,i32) == 1_0 (add,i32) || 12_2 (ne,i32) == 2_0 (sub,i32) || 12_2 (ne,i32) == 3_0 (mul,i32) || 12_2 (ne,i32) == 4_0 (and,i32) || 12_2 (ne,i32) == 5_0 (or,i32) || 12_2 (ne,i32) == 6_0 (xor,i32) || 12_2 (ne,i32) == 7_0 (shl,i32) || 12_2 (ne,i32) == 8_0 (lshr,i32) || 12_2 (ne,i32) == 9_0 (ashr,i32) || 12_2 (ne,i32) == 10_0 (select,i32) || 12_2 (ne,i32) == 11_0 (zext,eq,i32) || 12_2 (ne,i32) == 13_0 (zext,ult,i32) || 12_2 (ne,i32) == 14_0 (zext,slt,i32) || 12_2 (ne,i32) == 15_0 (zext,ule,i32) || 12_2 (ne,i32) == 16_0 (zext,sle,i32) || false
+13_1 (ult,i32) == 0_1 (input,i32) || 13_1 (ult,i32) == 0_2 (const,i32) || 13_1 (ult,i32) == 0_3 (const,i32) || 13_1 (ult,i32) == 1_0 (add,i32) || 13_1 (ult,i32) == 2_0 (sub,i32) || 13_1 (ult,i32) == 3_0 (mul,i32) || 13_1 (ult,i32) == 4_0 (and,i32) || 13_1 (ult,i32) == 5_0 (or,i32) || 13_1 (ult,i32) == 6_0 (xor,i32) || 13_1 (ult,i32) == 7_0 (shl,i32) || 13_1 (ult,i32) == 8_0 (lshr,i32) || 13_1 (ult,i32) == 9_0 (ashr,i32) || 13_1 (ult,i32) == 10_0 (select,i32) || 13_1 (ult,i32) == 11_0 (zext,eq,i32) || 13_1 (ult,i32) == 12_0 (zext,ne,i32) || 13_1 (ult,i32) == 14_0 (zext,slt,i32) || 13_1 (ult,i32) == 15_0 (zext,ule,i32) || 13_1 (ult,i32) == 16_0 (zext,sle,i32) || false
+13_2 (ult,i32) == 0_1 (input,i32) || 13_2 (ult,i32) == 0_2 (const,i32) || 13_2 (ult,i32) == 0_3 (const,i32) || 13_2 (ult,i32) == 1_0 (add,i32) || 13_2 (ult,i32) == 2_0 (sub,i32) || 13_2 (ult,i32) == 3_0 (mul,i32) || 13_2 (ult,i32) == 4_0 (and,i32) || 13_2 (ult,i32) == 5_0 (or,i32) || 13_2 (ult,i32) == 6_0 (xor,i32) || 13_2 (ult,i32) == 7_0 (shl,i32) || 13_2 (ult,i32) == 8_0 (lshr,i32) || 13_2 (ult,i32) == 9_0 (ashr,i32) || 13_2 (ult,i32) == 10_0 (select,i32) || 13_2 (ult,i32) == 11_0 (zext,eq,i32) || 13_2 (ult,i32) == 12_0 (zext,ne,i32) || 13_2 (ult,i32) == 14_0 (zext,slt,i32) || 13_2 (ult,i32) == 15_0 (zext,ule,i32) || 13_2 (ult,i32) == 16_0 (zext,sle,i32) || false
+14_1 (slt,i32) == 0_1 (input,i32) || 14_1 (slt,i32) == 0_2 (const,i32) || 14_1 (slt,i32) == 0_3 (const,i32) || 14_1 (slt,i32) == 1_0 (add,i32) || 14_1 (slt,i32) == 2_0 (sub,i32) || 14_1 (slt,i32) == 3_0 (mul,i32) || 14_1 (slt,i32) == 4_0 (and,i32) || 14_1 (slt,i32) == 5_0 (or,i32) || 14_1 (slt,i32) == 6_0 (xor,i32) || 14_1 (slt,i32) == 7_0 (shl,i32) || 14_1 (slt,i32) == 8_0 (lshr,i32) || 14_1 (slt,i32) == 9_0 (ashr,i32) || 14_1 (slt,i32) == 10_0 (select,i32) || 14_1 (slt,i32) == 11_0 (zext,eq,i32) || 14_1 (slt,i32) == 12_0 (zext,ne,i32) || 14_1 (slt,i32) == 13_0 (zext,ult,i32) || 14_1 (slt,i32) == 15_0 (zext,ule,i32) || 14_1 (slt,i32) == 16_0 (zext,sle,i32) || false
+14_2 (slt,i32) == 0_1 (input,i32) || 14_2 (slt,i32) == 0_2 (const,i32) || 14_2 (slt,i32) == 0_3 (const,i32) || 14_2 (slt,i32) == 1_0 (add,i32) || 14_2 (slt,i32) == 2_0 (sub,i32) || 14_2 (slt,i32) == 3_0 (mul,i32) || 14_2 (slt,i32) == 4_0 (and,i32) || 14_2 (slt,i32) == 5_0 (or,i32) || 14_2 (slt,i32) == 6_0 (xor,i32) || 14_2 (slt,i32) == 7_0 (shl,i32) || 14_2 (slt,i32) == 8_0 (lshr,i32) || 14_2 (slt,i32) == 9_0 (ashr,i32) || 14_2 (slt,i32) == 10_0 (select,i32) || 14_2 (slt,i32) == 11_0 (zext,eq,i32) || 14_2 (slt,i32) == 12_0 (zext,ne,i32) || 14_2 (slt,i32) == 13_0 (zext,ult,i32) || 14_2 (slt,i32) == 15_0 (zext,ule,i32) || 14_2 (slt,i32) == 16_0 (zext,sle,i32) || false
+15_1 (ule,i32) == 0_1 (input,i32) || 15_1 (ule,i32) == 0_2 (const,i32) || 15_1 (ule,i32) == 0_3 (const,i32) || 15_1 (ule,i32) == 1_0 (add,i32) || 15_1 (ule,i32) == 2_0 (sub,i32) || 15_1 (ule,i32) == 3_0 (mul,i32) || 15_1 (ule,i32) == 4_0 (and,i32) || 15_1 (ule,i32) == 5_0 (or,i32) || 15_1 (ule,i32) == 6_0 (xor,i32) || 15_1 (ule,i32) == 7_0 (shl,i32) || 15_1 (ule,i32) == 8_0 (lshr,i32) || 15_1 (ule,i32) == 9_0 (ashr,i32) || 15_1 (ule,i32) == 10_0 (select,i32) || 15_1 (ule,i32) == 11_0 (zext,eq,i32) || 15_1 (ule,i32) == 12_0 (zext,ne,i32) || 15_1 (ule,i32) == 13_0 (zext,ult,i32) || 15_1 (ule,i32) == 14_0 (zext,slt,i32) || 15_1 (ule,i32) == 16_0 (zext,sle,i32) || false
+15_2 (ule,i32) == 0_1 (input,i32) || 15_2 (ule,i32) == 0_2 (const,i32) || 15_2 (ule,i32) == 0_3 (const,i32) || 15_2 (ule,i32) == 1_0 (add,i32) || 15_2 (ule,i32) == 2_0 (sub,i32) || 15_2 (ule,i32) == 3_0 (mul,i32) || 15_2 (ule,i32) == 4_0 (and,i32) || 15_2 (ule,i32) == 5_0 (or,i32) || 15_2 (ule,i32) == 6_0 (xor,i32) || 15_2 (ule,i32) == 7_0 (shl,i32) || 15_2 (ule,i32) == 8_0 (lshr,i32) || 15_2 (ule,i32) == 9_0 (ashr,i32) || 15_2 (ule,i32) == 10_0 (select,i32) || 15_2 (ule,i32) == 11_0 (zext,eq,i32) || 15_2 (ule,i32) == 12_0 (zext,ne,i32) || 15_2 (ule,i32) == 13_0 (zext,ult,i32) || 15_2 (ule,i32) == 14_0 (zext,slt,i32) || 15_2 (ule,i32) == 16_0 (zext,sle,i32) || false
+16_1 (sle,i32) == 0_1 (input,i32) || 16_1 (sle,i32) == 0_2 (const,i32) || 16_1 (sle,i32) == 0_3 (const,i32) || 16_1 (sle,i32) == 1_0 (add,i32) || 16_1 (sle,i32) == 2_0 (sub,i32) || 16_1 (sle,i32) == 3_0 (mul,i32) || 16_1 (sle,i32) == 4_0 (and,i32) || 16_1 (sle,i32) == 5_0 (or,i32) || 16_1 (sle,i32) == 6_0 (xor,i32) || 16_1 (sle,i32) == 7_0 (shl,i32) || 16_1 (sle,i32) == 8_0 (lshr,i32) || 16_1 (sle,i32) == 9_0 (ashr,i32) || 16_1 (sle,i32) == 10_0 (select,i32) || 16_1 (sle,i32) == 11_0 (zext,eq,i32) || 16_1 (sle,i32) == 12_0 (zext,ne,i32) || 16_1 (sle,i32) == 13_0 (zext,ult,i32) || 16_1 (sle,i32) == 14_0 (zext,slt,i32) || 16_1 (sle,i32) == 15_0 (zext,ule,i32) || false
+16_2 (sle,i32) == 0_1 (input,i32) || 16_2 (sle,i32) == 0_2 (const,i32) || 16_2 (sle,i32) == 0_3 (const,i32) || 16_2 (sle,i32) == 1_0 (add,i32) || 16_2 (sle,i32) == 2_0 (sub,i32) || 16_2 (sle,i32) == 3_0 (mul,i32) || 16_2 (sle,i32) == 4_0 (and,i32) || 16_2 (sle,i32) == 5_0 (or,i32) || 16_2 (sle,i32) == 6_0 (xor,i32) || 16_2 (sle,i32) == 7_0 (shl,i32) || 16_2 (sle,i32) == 8_0 (lshr,i32) || 16_2 (sle,i32) == 9_0 (ashr,i32) || 16_2 (sle,i32) == 10_0 (select,i32) || 16_2 (sle,i32) == 11_0 (zext,eq,i32) || 16_2 (sle,i32) == 12_0 (zext,ne,i32) || 16_2 (sle,i32) == 13_0 (zext,ult,i32) || 16_2 (sle,i32) == 14_0 (zext,slt,i32) || 16_2 (sle,i32) == 15_0 (zext,ule,i32) || false
+component const input constraints:
+1_1 (add,i32) == 0_2 (const,i32) || 1_1 (add,i32) == 0_3 (const,i32) || false
+1_2 (add,i32) == 0_2 (const,i32) || 1_2 (add,i32) == 0_3 (const,i32) || false
+false
+2_1 (sub,i32) == 0_2 (const,i32) || 2_1 (sub,i32) == 0_3 (const,i32) || false
+2_2 (sub,i32) == 0_2 (const,i32) || 2_2 (sub,i32) == 0_3 (const,i32) || false
+false
+3_1 (mul,i32) == 0_2 (const,i32) || 3_1 (mul,i32) == 0_3 (const,i32) || false
+3_2 (mul,i32) == 0_2 (const,i32) || 3_2 (mul,i32) == 0_3 (const,i32) || false
+false
+4_1 (and,i32) == 0_2 (const,i32) || 4_1 (and,i32) == 0_3 (const,i32) || false
+4_2 (and,i32) == 0_2 (const,i32) || 4_2 (and,i32) == 0_3 (const,i32) || false
+false
+5_1 (or,i32) == 0_2 (const,i32) || 5_1 (or,i32) == 0_3 (const,i32) || false
+5_2 (or,i32) == 0_2 (const,i32) || 5_2 (or,i32) == 0_3 (const,i32) || false
+false
+6_1 (xor,i32) == 0_2 (const,i32) || 6_1 (xor,i32) == 0_3 (const,i32) || false
+6_2 (xor,i32) == 0_2 (const,i32) || 6_2 (xor,i32) == 0_3 (const,i32) || false
+false
+7_1 (shl,i32) == 0_2 (const,i32) || 7_1 (shl,i32) == 0_3 (const,i32) || false
+7_2 (shl,i32) == 0_2 (const,i32) || 7_2 (shl,i32) == 0_3 (const,i32) || false
+false
+8_1 (lshr,i32) == 0_2 (const,i32) || 8_1 (lshr,i32) == 0_3 (const,i32) || false
+8_2 (lshr,i32) == 0_2 (const,i32) || 8_2 (lshr,i32) == 0_3 (const,i32) || false
+false
+9_1 (ashr,i32) == 0_2 (const,i32) || 9_1 (ashr,i32) == 0_3 (const,i32) || false
+9_2 (ashr,i32) == 0_2 (const,i32) || 9_2 (ashr,i32) == 0_3 (const,i32) || false
+false
+false
+10_2 (select,i32) == 0_2 (const,i32) || 10_2 (select,i32) == 0_3 (const,i32) || false
+10_3 (select,i32) == 0_2 (const,i32) || 10_3 (select,i32) == 0_3 (const,i32) || false
+false
+11_1 (eq,i32) == 0_2 (const,i32) || 11_1 (eq,i32) == 0_3 (const,i32) || false
+11_2 (eq,i32) == 0_2 (const,i32) || 11_2 (eq,i32) == 0_3 (const,i32) || false
+false
+12_1 (ne,i32) == 0_2 (const,i32) || 12_1 (ne,i32) == 0_3 (const,i32) || false
+12_2 (ne,i32) == 0_2 (const,i32) || 12_2 (ne,i32) == 0_3 (const,i32) || false
+false
+13_1 (ult,i32) == 0_2 (const,i32) || 13_1 (ult,i32) == 0_3 (const,i32) || false
+13_2 (ult,i32) == 0_2 (const,i32) || 13_2 (ult,i32) == 0_3 (const,i32) || false
+false
+14_1 (slt,i32) == 0_2 (const,i32) || 14_1 (slt,i32) == 0_3 (const,i32) || false
+14_2 (slt,i32) == 0_2 (const,i32) || 14_2 (slt,i32) == 0_3 (const,i32) || false
+false
+15_1 (ule,i32) == 0_2 (const,i32) || 15_1 (ule,i32) == 0_3 (const,i32) || false
+15_2 (ule,i32) == 0_2 (const,i32) || 15_2 (ule,i32) == 0_3 (const,i32) || false
+false
+16_1 (sle,i32) == 0_2 (const,i32) || 16_1 (sle,i32) == 0_3 (const,i32) || false
+16_2 (sle,i32) == 0_2 (const,i32) || 16_2 (sle,i32) == 0_3 (const,i32) || false
+false
+component output constraints:
+17_0 (output,i32) == 0_1 (input,i32) || 17_0 (output,i32) == 0_2 (const,i32) || 17_0 (output,i32) == 0_3 (const,i32) || 17_0 (output,i32) == 1_0 (add,i32) || 17_0 (output,i32) == 2_0 (sub,i32) || 17_0 (output,i32) == 3_0 (mul,i32) || 17_0 (output,i32) == 4_0 (and,i32) || 17_0 (output,i32) == 5_0 (or,i32) || 17_0 (output,i32) == 6_0 (xor,i32) || 17_0 (output,i32) == 7_0 (shl,i32) || 17_0 (output,i32) == 8_0 (lshr,i32) || 17_0 (output,i32) == 9_0 (ashr,i32) || 17_0 (output,i32) == 10_0 (select,i32) || 17_0 (output,i32) == 11_0 (zext,eq,i32) || 17_0 (output,i32) == 12_0 (zext,ne,i32) || 17_0 (output,i32) == 13_0 (zext,ult,i32) || 17_0 (output,i32) == 14_0 (zext,slt,i32) || 17_0 (output,i32) == 15_0 (zext,ule,i32) || 17_0 (output,i32) == 16_0 (zext,sle,i32) || false
+possible wirings:
+0_1 (input,i32) == 1_1 (add,i32)
+0_1 (input,i32) == 1_2 (add,i32)
+0_1 (input,i32) == 2_1 (sub,i32)
+0_1 (input,i32) == 2_2 (sub,i32)
+0_1 (input,i32) == 3_1 (mul,i32)
+0_1 (input,i32) == 3_2 (mul,i32)
+0_1 (input,i32) == 4_1 (and,i32)
+0_1 (input,i32) == 4_2 (and,i32)
+0_1 (input,i32) == 5_1 (or,i32)
+0_1 (input,i32) == 5_2 (or,i32)
+0_1 (input,i32) == 6_1 (xor,i32)
+0_1 (input,i32) == 6_2 (xor,i32)
+0_1 (input,i32) == 7_1 (shl,i32)
+0_1 (input,i32) == 7_2 (shl,i32)
+0_1 (input,i32) == 8_1 (lshr,i32)
+0_1 (input,i32) == 8_2 (lshr,i32)
+0_1 (input,i32) == 9_1 (ashr,i32)
+0_1 (input,i32) == 9_2 (ashr,i32)
+0_1 (input,i32) == 10_2 (select,i32)
+0_1 (input,i32) == 10_3 (select,i32)
+0_1 (input,i32) == 11_1 (eq,i32)
+0_1 (input,i32) == 11_2 (eq,i32)
+0_1 (input,i32) == 12_1 (ne,i32)
+0_1 (input,i32) == 12_2 (ne,i32)
+0_1 (input,i32) == 13_1 (ult,i32)
+0_1 (input,i32) == 13_2 (ult,i32)
+0_1 (input,i32) == 14_1 (slt,i32)
+0_1 (input,i32) == 14_2 (slt,i32)
+0_1 (input,i32) == 15_1 (ule,i32)
+0_1 (input,i32) == 15_2 (ule,i32)
+0_1 (input,i32) == 16_1 (sle,i32)
+0_1 (input,i32) == 16_2 (sle,i32)
+0_1 (input,i32) == 17_0 (output,i32)
+0_2 (const,i32) == 1_1 (add,i32)
+0_2 (const,i32) == 1_2 (add,i32)
+0_2 (const,i32) == 2_1 (sub,i32)
+0_2 (const,i32) == 2_2 (sub,i32)
+0_2 (const,i32) == 3_1 (mul,i32)
+0_2 (const,i32) == 3_2 (mul,i32)
+0_2 (const,i32) == 4_1 (and,i32)
+0_2 (const,i32) == 4_2 (and,i32)
+0_2 (const,i32) == 5_1 (or,i32)
+0_2 (const,i32) == 5_2 (or,i32)
+0_2 (const,i32) == 6_1 (xor,i32)
+0_2 (const,i32) == 6_2 (xor,i32)
+0_2 (const,i32) == 7_1 (shl,i32)
+0_2 (const,i32) == 7_2 (shl,i32)
+0_2 (const,i32) == 8_1 (lshr,i32)
+0_2 (const,i32) == 8_2 (lshr,i32)
+0_2 (const,i32) == 9_1 (ashr,i32)
+0_2 (const,i32) == 9_2 (ashr,i32)
+0_2 (const,i32) == 10_2 (select,i32)
+0_2 (const,i32) == 10_3 (select,i32)
+0_2 (const,i32) == 11_1 (eq,i32)
+0_2 (const,i32) == 11_2 (eq,i32)
+0_2 (const,i32) == 12_1 (ne,i32)
+0_2 (const,i32) == 12_2 (ne,i32)
+0_2 (const,i32) == 13_1 (ult,i32)
+0_2 (const,i32) == 13_2 (ult,i32)
+0_2 (const,i32) == 14_1 (slt,i32)
+0_2 (const,i32) == 14_2 (slt,i32)
+0_2 (const,i32) == 15_1 (ule,i32)
+0_2 (const,i32) == 15_2 (ule,i32)
+0_2 (const,i32) == 16_1 (sle,i32)
+0_2 (const,i32) == 16_2 (sle,i32)
+0_2 (const,i32) == 17_0 (output,i32)
+0_3 (const,i32) == 1_1 (add,i32)
+0_3 (const,i32) == 1_2 (add,i32)
+0_3 (const,i32) == 2_1 (sub,i32)
+0_3 (const,i32) == 2_2 (sub,i32)
+0_3 (const,i32) == 3_1 (mul,i32)
+0_3 (const,i32) == 3_2 (mul,i32)
+0_3 (const,i32) == 4_1 (and,i32)
+0_3 (const,i32) == 4_2 (and,i32)
+0_3 (const,i32) == 5_1 (or,i32)
+0_3 (const,i32) == 5_2 (or,i32)
+0_3 (const,i32) == 6_1 (xor,i32)
+0_3 (const,i32) == 6_2 (xor,i32)
+0_3 (const,i32) == 7_1 (shl,i32)
+0_3 (const,i32) == 7_2 (shl,i32)
+0_3 (const,i32) == 8_1 (lshr,i32)
+0_3 (const,i32) == 8_2 (lshr,i32)
+0_3 (const,i32) == 9_1 (ashr,i32)
+0_3 (const,i32) == 9_2 (ashr,i32)
+0_3 (const,i32) == 10_2 (select,i32)
+0_3 (const,i32) == 10_3 (select,i32)
+0_3 (const,i32) == 11_1 (eq,i32)
+0_3 (const,i32) == 11_2 (eq,i32)
+0_3 (const,i32) == 12_1 (ne,i32)
+0_3 (const,i32) == 12_2 (ne,i32)
+0_3 (const,i32) == 13_1 (ult,i32)
+0_3 (const,i32) == 13_2 (ult,i32)
+0_3 (const,i32) == 14_1 (slt,i32)
+0_3 (const,i32) == 14_2 (slt,i32)
+0_3 (const,i32) == 15_1 (ule,i32)
+0_3 (const,i32) == 15_2 (ule,i32)
+0_3 (const,i32) == 16_1 (sle,i32)
+0_3 (const,i32) == 16_2 (sle,i32)
+0_3 (const,i32) == 17_0 (output,i32)
+1_1 (add,i32) == 2_0 (sub,i32)
+1_1 (add,i32) == 3_0 (mul,i32)
+1_1 (add,i32) == 4_0 (and,i32)
+1_1 (add,i32) == 5_0 (or,i32)
+1_1 (add,i32) == 6_0 (xor,i32)
+1_1 (add,i32) == 7_0 (shl,i32)
+1_1 (add,i32) == 8_0 (lshr,i32)
+1_1 (add,i32) == 9_0 (ashr,i32)
+1_1 (add,i32) == 10_0 (select,i32)
+1_1 (add,i32) == 11_0 (zext,eq,i32)
+1_1 (add,i32) == 12_0 (zext,ne,i32)
+1_1 (add,i32) == 13_0 (zext,ult,i32)
+1_1 (add,i32) == 14_0 (zext,slt,i32)
+1_1 (add,i32) == 15_0 (zext,ule,i32)
+1_1 (add,i32) == 16_0 (zext,sle,i32)
+1_2 (add,i32) == 2_0 (sub,i32)
+1_2 (add,i32) == 3_0 (mul,i32)
+1_2 (add,i32) == 4_0 (and,i32)
+1_2 (add,i32) == 5_0 (or,i32)
+1_2 (add,i32) == 6_0 (xor,i32)
+1_2 (add,i32) == 7_0 (shl,i32)
+1_2 (add,i32) == 8_0 (lshr,i32)
+1_2 (add,i32) == 9_0 (ashr,i32)
+1_2 (add,i32) == 10_0 (select,i32)
+1_2 (add,i32) == 11_0 (zext,eq,i32)
+1_2 (add,i32) == 12_0 (zext,ne,i32)
+1_2 (add,i32) == 13_0 (zext,ult,i32)
+1_2 (add,i32) == 14_0 (zext,slt,i32)
+1_2 (add,i32) == 15_0 (zext,ule,i32)
+1_2 (add,i32) == 16_0 (zext,sle,i32)
+2_1 (sub,i32) == 1_0 (add,i32)
+2_1 (sub,i32) == 3_0 (mul,i32)
+2_1 (sub,i32) == 4_0 (and,i32)
+2_1 (sub,i32) == 5_0 (or,i32)
+2_1 (sub,i32) == 6_0 (xor,i32)
+2_1 (sub,i32) == 7_0 (shl,i32)
+2_1 (sub,i32) == 8_0 (lshr,i32)
+2_1 (sub,i32) == 9_0 (ashr,i32)
+2_1 (sub,i32) == 10_0 (select,i32)
+2_1 (sub,i32) == 11_0 (zext,eq,i32)
+2_1 (sub,i32) == 12_0 (zext,ne,i32)
+2_1 (sub,i32) == 13_0 (zext,ult,i32)
+2_1 (sub,i32) == 14_0 (zext,slt,i32)
+2_1 (sub,i32) == 15_0 (zext,ule,i32)
+2_1 (sub,i32) == 16_0 (zext,sle,i32)
+2_2 (sub,i32) == 1_0 (add,i32)
+2_2 (sub,i32) == 3_0 (mul,i32)
+2_2 (sub,i32) == 4_0 (and,i32)
+2_2 (sub,i32) == 5_0 (or,i32)
+2_2 (sub,i32) == 6_0 (xor,i32)
+2_2 (sub,i32) == 7_0 (shl,i32)
+2_2 (sub,i32) == 8_0 (lshr,i32)
+2_2 (sub,i32) == 9_0 (ashr,i32)
+2_2 (sub,i32) == 10_0 (select,i32)
+2_2 (sub,i32) == 11_0 (zext,eq,i32)
+2_2 (sub,i32) == 12_0 (zext,ne,i32)
+2_2 (sub,i32) == 13_0 (zext,ult,i32)
+2_2 (sub,i32) == 14_0 (zext,slt,i32)
+2_2 (sub,i32) == 15_0 (zext,ule,i32)
+2_2 (sub,i32) == 16_0 (zext,sle,i32)
+3_1 (mul,i32) == 1_0 (add,i32)
+3_1 (mul,i32) == 2_0 (sub,i32)
+3_1 (mul,i32) == 4_0 (and,i32)
+3_1 (mul,i32) == 5_0 (or,i32)
+3_1 (mul,i32) == 6_0 (xor,i32)
+3_1 (mul,i32) == 7_0 (shl,i32)
+3_1 (mul,i32) == 8_0 (lshr,i32)
+3_1 (mul,i32) == 9_0 (ashr,i32)
+3_1 (mul,i32) == 10_0 (select,i32)
+3_1 (mul,i32) == 11_0 (zext,eq,i32)
+3_1 (mul,i32) == 12_0 (zext,ne,i32)
+3_1 (mul,i32) == 13_0 (zext,ult,i32)
+3_1 (mul,i32) == 14_0 (zext,slt,i32)
+3_1 (mul,i32) == 15_0 (zext,ule,i32)
+3_1 (mul,i32) == 16_0 (zext,sle,i32)
+3_2 (mul,i32) == 1_0 (add,i32)
+3_2 (mul,i32) == 2_0 (sub,i32)
+3_2 (mul,i32) == 4_0 (and,i32)
+3_2 (mul,i32) == 5_0 (or,i32)
+3_2 (mul,i32) == 6_0 (xor,i32)
+3_2 (mul,i32) == 7_0 (shl,i32)
+3_2 (mul,i32) == 8_0 (lshr,i32)
+3_2 (mul,i32) == 9_0 (ashr,i32)
+3_2 (mul,i32) == 10_0 (select,i32)
+3_2 (mul,i32) == 11_0 (zext,eq,i32)
+3_2 (mul,i32) == 12_0 (zext,ne,i32)
+3_2 (mul,i32) == 13_0 (zext,ult,i32)
+3_2 (mul,i32) == 14_0 (zext,slt,i32)
+3_2 (mul,i32) == 15_0 (zext,ule,i32)
+3_2 (mul,i32) == 16_0 (zext,sle,i32)
+4_1 (and,i32) == 1_0 (add,i32)
+4_1 (and,i32) == 2_0 (sub,i32)
+4_1 (and,i32) == 3_0 (mul,i32)
+4_1 (and,i32) == 5_0 (or,i32)
+4_1 (and,i32) == 6_0 (xor,i32)
+4_1 (and,i32) == 7_0 (shl,i32)
+4_1 (and,i32) == 8_0 (lshr,i32)
+4_1 (and,i32) == 9_0 (ashr,i32)
+4_1 (and,i32) == 10_0 (select,i32)
+4_1 (and,i32) == 11_0 (zext,eq,i32)
+4_1 (and,i32) == 12_0 (zext,ne,i32)
+4_1 (and,i32) == 13_0 (zext,ult,i32)
+4_1 (and,i32) == 14_0 (zext,slt,i32)
+4_1 (and,i32) == 15_0 (zext,ule,i32)
+4_1 (and,i32) == 16_0 (zext,sle,i32)
+4_2 (and,i32) == 1_0 (add,i32)
+4_2 (and,i32) == 2_0 (sub,i32)
+4_2 (and,i32) == 3_0 (mul,i32)
+4_2 (and,i32) == 5_0 (or,i32)
+4_2 (and,i32) == 6_0 (xor,i32)
+4_2 (and,i32) == 7_0 (shl,i32)
+4_2 (and,i32) == 8_0 (lshr,i32)
+4_2 (and,i32) == 9_0 (ashr,i32)
+4_2 (and,i32) == 10_0 (select,i32)
+4_2 (and,i32) == 11_0 (zext,eq,i32)
+4_2 (and,i32) == 12_0 (zext,ne,i32)
+4_2 (and,i32) == 13_0 (zext,ult,i32)
+4_2 (and,i32) == 14_0 (zext,slt,i32)
+4_2 (and,i32) == 15_0 (zext,ule,i32)
+4_2 (and,i32) == 16_0 (zext,sle,i32)
+5_1 (or,i32) == 1_0 (add,i32)
+5_1 (or,i32) == 2_0 (sub,i32)
+5_1 (or,i32) == 3_0 (mul,i32)
+5_1 (or,i32) == 4_0 (and,i32)
+5_1 (or,i32) == 6_0 (xor,i32)
+5_1 (or,i32) == 7_0 (shl,i32)
+5_1 (or,i32) == 8_0 (lshr,i32)
+5_1 (or,i32) == 9_0 (ashr,i32)
+5_1 (or,i32) == 10_0 (select,i32)
+5_1 (or,i32) == 11_0 (zext,eq,i32)
+5_1 (or,i32) == 12_0 (zext,ne,i32)
+5_1 (or,i32) == 13_0 (zext,ult,i32)
+5_1 (or,i32) == 14_0 (zext,slt,i32)
+5_1 (or,i32) == 15_0 (zext,ule,i32)
+5_1 (or,i32) == 16_0 (zext,sle,i32)
+5_2 (or,i32) == 1_0 (add,i32)
+5_2 (or,i32) == 2_0 (sub,i32)
+5_2 (or,i32) == 3_0 (mul,i32)
+5_2 (or,i32) == 4_0 (and,i32)
+5_2 (or,i32) == 6_0 (xor,i32)
+5_2 (or,i32) == 7_0 (shl,i32)
+5_2 (or,i32) == 8_0 (lshr,i32)
+5_2 (or,i32) == 9_0 (ashr,i32)
+5_2 (or,i32) == 10_0 (select,i32)
+5_2 (or,i32) == 11_0 (zext,eq,i32)
+5_2 (or,i32) == 12_0 (zext,ne,i32)
+5_2 (or,i32) == 13_0 (zext,ult,i32)
+5_2 (or,i32) == 14_0 (zext,slt,i32)
+5_2 (or,i32) == 15_0 (zext,ule,i32)
+5_2 (or,i32) == 16_0 (zext,sle,i32)
+6_1 (xor,i32) == 1_0 (add,i32)
+6_1 (xor,i32) == 2_0 (sub,i32)
+6_1 (xor,i32) == 3_0 (mul,i32)
+6_1 (xor,i32) == 4_0 (and,i32)
+6_1 (xor,i32) == 5_0 (or,i32)
+6_1 (xor,i32) == 7_0 (shl,i32)
+6_1 (xor,i32) == 8_0 (lshr,i32)
+6_1 (xor,i32) == 9_0 (ashr,i32)
+6_1 (xor,i32) == 10_0 (select,i32)
+6_1 (xor,i32) == 11_0 (zext,eq,i32)
+6_1 (xor,i32) == 12_0 (zext,ne,i32)
+6_1 (xor,i32) == 13_0 (zext,ult,i32)
+6_1 (xor,i32) == 14_0 (zext,slt,i32)
+6_1 (xor,i32) == 15_0 (zext,ule,i32)
+6_1 (xor,i32) == 16_0 (zext,sle,i32)
+6_2 (xor,i32) == 1_0 (add,i32)
+6_2 (xor,i32) == 2_0 (sub,i32)
+6_2 (xor,i32) == 3_0 (mul,i32)
+6_2 (xor,i32) == 4_0 (and,i32)
+6_2 (xor,i32) == 5_0 (or,i32)
+6_2 (xor,i32) == 7_0 (shl,i32)
+6_2 (xor,i32) == 8_0 (lshr,i32)
+6_2 (xor,i32) == 9_0 (ashr,i32)
+6_2 (xor,i32) == 10_0 (select,i32)
+6_2 (xor,i32) == 11_0 (zext,eq,i32)
+6_2 (xor,i32) == 12_0 (zext,ne,i32)
+6_2 (xor,i32) == 13_0 (zext,ult,i32)
+6_2 (xor,i32) == 14_0 (zext,slt,i32)
+6_2 (xor,i32) == 15_0 (zext,ule,i32)
+6_2 (xor,i32) == 16_0 (zext,sle,i32)
+7_1 (shl,i32) == 1_0 (add,i32)
+7_1 (shl,i32) == 2_0 (sub,i32)
+7_1 (shl,i32) == 3_0 (mul,i32)
+7_1 (shl,i32) == 4_0 (and,i32)
+7_1 (shl,i32) == 5_0 (or,i32)
+7_1 (shl,i32) == 6_0 (xor,i32)
+7_1 (shl,i32) == 8_0 (lshr,i32)
+7_1 (shl,i32) == 9_0 (ashr,i32)
+7_1 (shl,i32) == 10_0 (select,i32)
+7_1 (shl,i32) == 11_0 (zext,eq,i32)
+7_1 (shl,i32) == 12_0 (zext,ne,i32)
+7_1 (shl,i32) == 13_0 (zext,ult,i32)
+7_1 (shl,i32) == 14_0 (zext,slt,i32)
+7_1 (shl,i32) == 15_0 (zext,ule,i32)
+7_1 (shl,i32) == 16_0 (zext,sle,i32)
+7_2 (shl,i32) == 1_0 (add,i32)
+7_2 (shl,i32) == 2_0 (sub,i32)
+7_2 (shl,i32) == 3_0 (mul,i32)
+7_2 (shl,i32) == 4_0 (and,i32)
+7_2 (shl,i32) == 5_0 (or,i32)
+7_2 (shl,i32) == 6_0 (xor,i32)
+7_2 (shl,i32) == 8_0 (lshr,i32)
+7_2 (shl,i32) == 9_0 (ashr,i32)
+7_2 (shl,i32) == 10_0 (select,i32)
+7_2 (shl,i32) == 11_0 (zext,eq,i32)
+7_2 (shl,i32) == 12_0 (zext,ne,i32)
+7_2 (shl,i32) == 13_0 (zext,ult,i32)
+7_2 (shl,i32) == 14_0 (zext,slt,i32)
+7_2 (shl,i32) == 15_0 (zext,ule,i32)
+7_2 (shl,i32) == 16_0 (zext,sle,i32)
+8_1 (lshr,i32) == 1_0 (add,i32)
+8_1 (lshr,i32) == 2_0 (sub,i32)
+8_1 (lshr,i32) == 3_0 (mul,i32)
+8_1 (lshr,i32) == 4_0 (and,i32)
+8_1 (lshr,i32) == 5_0 (or,i32)
+8_1 (lshr,i32) == 6_0 (xor,i32)
+8_1 (lshr,i32) == 7_0 (shl,i32)
+8_1 (lshr,i32) == 9_0 (ashr,i32)
+8_1 (lshr,i32) == 10_0 (select,i32)
+8_1 (lshr,i32) == 11_0 (zext,eq,i32)
+8_1 (lshr,i32) == 12_0 (zext,ne,i32)
+8_1 (lshr,i32) == 13_0 (zext,ult,i32)
+8_1 (lshr,i32) == 14_0 (zext,slt,i32)
+8_1 (lshr,i32) == 15_0 (zext,ule,i32)
+8_1 (lshr,i32) == 16_0 (zext,sle,i32)
+8_2 (lshr,i32) == 1_0 (add,i32)
+8_2 (lshr,i32) == 2_0 (sub,i32)
+8_2 (lshr,i32) == 3_0 (mul,i32)
+8_2 (lshr,i32) == 4_0 (and,i32)
+8_2 (lshr,i32) == 5_0 (or,i32)
+8_2 (lshr,i32) == 6_0 (xor,i32)
+8_2 (lshr,i32) == 7_0 (shl,i32)
+8_2 (lshr,i32) == 9_0 (ashr,i32)
+8_2 (lshr,i32) == 10_0 (select,i32)
+8_2 (lshr,i32) == 11_0 (zext,eq,i32)
+8_2 (lshr,i32) == 12_0 (zext,ne,i32)
+8_2 (lshr,i32) == 13_0 (zext,ult,i32)
+8_2 (lshr,i32) == 14_0 (zext,slt,i32)
+8_2 (lshr,i32) == 15_0 (zext,ule,i32)
+8_2 (lshr,i32) == 16_0 (zext,sle,i32)
+9_1 (ashr,i32) == 1_0 (add,i32)
+9_1 (ashr,i32) == 2_0 (sub,i32)
+9_1 (ashr,i32) == 3_0 (mul,i32)
+9_1 (ashr,i32) == 4_0 (and,i32)
+9_1 (ashr,i32) == 5_0 (or,i32)
+9_1 (ashr,i32) == 6_0 (xor,i32)
+9_1 (ashr,i32) == 7_0 (shl,i32)
+9_1 (ashr,i32) == 8_0 (lshr,i32)
+9_1 (ashr,i32) == 10_0 (select,i32)
+9_1 (ashr,i32) == 11_0 (zext,eq,i32)
+9_1 (ashr,i32) == 12_0 (zext,ne,i32)
+9_1 (ashr,i32) == 13_0 (zext,ult,i32)
+9_1 (ashr,i32) == 14_0 (zext,slt,i32)
+9_1 (ashr,i32) == 15_0 (zext,ule,i32)
+9_1 (ashr,i32) == 16_0 (zext,sle,i32)
+9_2 (ashr,i32) == 1_0 (add,i32)
+9_2 (ashr,i32) == 2_0 (sub,i32)
+9_2 (ashr,i32) == 3_0 (mul,i32)
+9_2 (ashr,i32) == 4_0 (and,i32)
+9_2 (ashr,i32) == 5_0 (or,i32)
+9_2 (ashr,i32) == 6_0 (xor,i32)
+9_2 (ashr,i32) == 7_0 (shl,i32)
+9_2 (ashr,i32) == 8_0 (lshr,i32)
+9_2 (ashr,i32) == 10_0 (select,i32)
+9_2 (ashr,i32) == 11_0 (zext,eq,i32)
+9_2 (ashr,i32) == 12_0 (zext,ne,i32)
+9_2 (ashr,i32) == 13_0 (zext,ult,i32)
+9_2 (ashr,i32) == 14_0 (zext,slt,i32)
+9_2 (ashr,i32) == 15_0 (zext,ule,i32)
+9_2 (ashr,i32) == 16_0 (zext,sle,i32)
+10_1 (select,i32) == 1_0 (add,i32)
+10_1 (select,i32) == 2_0 (sub,i32)
+10_1 (select,i32) == 3_0 (mul,i32)
+10_1 (select,i32) == 4_0 (and,i32)
+10_1 (select,i32) == 5_0 (or,i32)
+10_1 (select,i32) == 6_0 (xor,i32)
+10_1 (select,i32) == 7_0 (shl,i32)
+10_1 (select,i32) == 8_0 (lshr,i32)
+10_1 (select,i32) == 9_0 (ashr,i32)
+10_1 (select,i32) == 11_0 (zext,eq,i32)
+10_1 (select,i32) == 12_0 (zext,ne,i32)
+10_1 (select,i32) == 13_0 (zext,ult,i32)
+10_1 (select,i32) == 14_0 (zext,slt,i32)
+10_1 (select,i32) == 15_0 (zext,ule,i32)
+10_1 (select,i32) == 16_0 (zext,sle,i32)
+10_2 (select,i32) == 1_0 (add,i32)
+10_2 (select,i32) == 2_0 (sub,i32)
+10_2 (select,i32) == 3_0 (mul,i32)
+10_2 (select,i32) == 4_0 (and,i32)
+10_2 (select,i32) == 5_0 (or,i32)
+10_2 (select,i32) == 6_0 (xor,i32)
+10_2 (select,i32) == 7_0 (shl,i32)
+10_2 (select,i32) == 8_0 (lshr,i32)
+10_2 (select,i32) == 9_0 (ashr,i32)
+10_2 (select,i32) == 11_0 (zext,eq,i32)
+10_2 (select,i32) == 12_0 (zext,ne,i32)
+10_2 (select,i32) == 13_0 (zext,ult,i32)
+10_2 (select,i32) == 14_0 (zext,slt,i32)
+10_2 (select,i32) == 15_0 (zext,ule,i32)
+10_2 (select,i32) == 16_0 (zext,sle,i32)
+10_3 (select,i32) == 1_0 (add,i32)
+10_3 (select,i32) == 2_0 (sub,i32)
+10_3 (select,i32) == 3_0 (mul,i32)
+10_3 (select,i32) == 4_0 (and,i32)
+10_3 (select,i32) == 5_0 (or,i32)
+10_3 (select,i32) == 6_0 (xor,i32)
+10_3 (select,i32) == 7_0 (shl,i32)
+10_3 (select,i32) == 8_0 (lshr,i32)
+10_3 (select,i32) == 9_0 (ashr,i32)
+10_3 (select,i32) == 11_0 (zext,eq,i32)
+10_3 (select,i32) == 12_0 (zext,ne,i32)
+10_3 (select,i32) == 13_0 (zext,ult,i32)
+10_3 (select,i32) == 14_0 (zext,slt,i32)
+10_3 (select,i32) == 15_0 (zext,ule,i32)
+10_3 (select,i32) == 16_0 (zext,sle,i32)
+11_1 (eq,i32) == 1_0 (add,i32)
+11_1 (eq,i32) == 2_0 (sub,i32)
+11_1 (eq,i32) == 3_0 (mul,i32)
+11_1 (eq,i32) == 4_0 (and,i32)
+11_1 (eq,i32) == 5_0 (or,i32)
+11_1 (eq,i32) == 6_0 (xor,i32)
+11_1 (eq,i32) == 7_0 (shl,i32)
+11_1 (eq,i32) == 8_0 (lshr,i32)
+11_1 (eq,i32) == 9_0 (ashr,i32)
+11_1 (eq,i32) == 10_0 (select,i32)
+11_1 (eq,i32) == 12_0 (zext,ne,i32)
+11_1 (eq,i32) == 13_0 (zext,ult,i32)
+11_1 (eq,i32) == 14_0 (zext,slt,i32)
+11_1 (eq,i32) == 15_0 (zext,ule,i32)
+11_1 (eq,i32) == 16_0 (zext,sle,i32)
+11_2 (eq,i32) == 1_0 (add,i32)
+11_2 (eq,i32) == 2_0 (sub,i32)
+11_2 (eq,i32) == 3_0 (mul,i32)
+11_2 (eq,i32) == 4_0 (and,i32)
+11_2 (eq,i32) == 5_0 (or,i32)
+11_2 (eq,i32) == 6_0 (xor,i32)
+11_2 (eq,i32) == 7_0 (shl,i32)
+11_2 (eq,i32) == 8_0 (lshr,i32)
+11_2 (eq,i32) == 9_0 (ashr,i32)
+11_2 (eq,i32) == 10_0 (select,i32)
+11_2 (eq,i32) == 12_0 (zext,ne,i32)
+11_2 (eq,i32) == 13_0 (zext,ult,i32)
+11_2 (eq,i32) == 14_0 (zext,slt,i32)
+11_2 (eq,i32) == 15_0 (zext,ule,i32)
+11_2 (eq,i32) == 16_0 (zext,sle,i32)
+12_1 (ne,i32) == 1_0 (add,i32)
+12_1 (ne,i32) == 2_0 (sub,i32)
+12_1 (ne,i32) == 3_0 (mul,i32)
+12_1 (ne,i32) == 4_0 (and,i32)
+12_1 (ne,i32) == 5_0 (or,i32)
+12_1 (ne,i32) == 6_0 (xor,i32)
+12_1 (ne,i32) == 7_0 (shl,i32)
+12_1 (ne,i32) == 8_0 (lshr,i32)
+12_1 (ne,i32) == 9_0 (ashr,i32)
+12_1 (ne,i32) == 10_0 (select,i32)
+12_1 (ne,i32) == 11_0 (zext,eq,i32)
+12_1 (ne,i32) == 13_0 (zext,ult,i32)
+12_1 (ne,i32) == 14_0 (zext,slt,i32)
+12_1 (ne,i32) == 15_0 (zext,ule,i32)
+12_1 (ne,i32) == 16_0 (zext,sle,i32)
+12_2 (ne,i32) == 1_0 (add,i32)
+12_2 (ne,i32) == 2_0 (sub,i32)
+12_2 (ne,i32) == 3_0 (mul,i32)
+12_2 (ne,i32) == 4_0 (and,i32)
+12_2 (ne,i32) == 5_0 (or,i32)
+12_2 (ne,i32) == 6_0 (xor,i32)
+12_2 (ne,i32) == 7_0 (shl,i32)
+12_2 (ne,i32) == 8_0 (lshr,i32)
+12_2 (ne,i32) == 9_0 (ashr,i32)
+12_2 (ne,i32) == 10_0 (select,i32)
+12_2 (ne,i32) == 11_0 (zext,eq,i32)
+12_2 (ne,i32) == 13_0 (zext,ult,i32)
+12_2 (ne,i32) == 14_0 (zext,slt,i32)
+12_2 (ne,i32) == 15_0 (zext,ule,i32)
+12_2 (ne,i32) == 16_0 (zext,sle,i32)
+13_1 (ult,i32) == 1_0 (add,i32)
+13_1 (ult,i32) == 2_0 (sub,i32)
+13_1 (ult,i32) == 3_0 (mul,i32)
+13_1 (ult,i32) == 4_0 (and,i32)
+13_1 (ult,i32) == 5_0 (or,i32)
+13_1 (ult,i32) == 6_0 (xor,i32)
+13_1 (ult,i32) == 7_0 (shl,i32)
+13_1 (ult,i32) == 8_0 (lshr,i32)
+13_1 (ult,i32) == 9_0 (ashr,i32)
+13_1 (ult,i32) == 10_0 (select,i32)
+13_1 (ult,i32) == 11_0 (zext,eq,i32)
+13_1 (ult,i32) == 12_0 (zext,ne,i32)
+13_1 (ult,i32) == 14_0 (zext,slt,i32)
+13_1 (ult,i32) == 15_0 (zext,ule,i32)
+13_1 (ult,i32) == 16_0 (zext,sle,i32)
+13_2 (ult,i32) == 1_0 (add,i32)
+13_2 (ult,i32) == 2_0 (sub,i32)
+13_2 (ult,i32) == 3_0 (mul,i32)
+13_2 (ult,i32) == 4_0 (and,i32)
+13_2 (ult,i32) == 5_0 (or,i32)
+13_2 (ult,i32) == 6_0 (xor,i32)
+13_2 (ult,i32) == 7_0 (shl,i32)
+13_2 (ult,i32) == 8_0 (lshr,i32)
+13_2 (ult,i32) == 9_0 (ashr,i32)
+13_2 (ult,i32) == 10_0 (select,i32)
+13_2 (ult,i32) == 11_0 (zext,eq,i32)
+13_2 (ult,i32) == 12_0 (zext,ne,i32)
+13_2 (ult,i32) == 14_0 (zext,slt,i32)
+13_2 (ult,i32) == 15_0 (zext,ule,i32)
+13_2 (ult,i32) == 16_0 (zext,sle,i32)
+14_1 (slt,i32) == 1_0 (add,i32)
+14_1 (slt,i32) == 2_0 (sub,i32)
+14_1 (slt,i32) == 3_0 (mul,i32)
+14_1 (slt,i32) == 4_0 (and,i32)
+14_1 (slt,i32) == 5_0 (or,i32)
+14_1 (slt,i32) == 6_0 (xor,i32)
+14_1 (slt,i32) == 7_0 (shl,i32)
+14_1 (slt,i32) == 8_0 (lshr,i32)
+14_1 (slt,i32) == 9_0 (ashr,i32)
+14_1 (slt,i32) == 10_0 (select,i32)
+14_1 (slt,i32) == 11_0 (zext,eq,i32)
+14_1 (slt,i32) == 12_0 (zext,ne,i32)
+14_1 (slt,i32) == 13_0 (zext,ult,i32)
+14_1 (slt,i32) == 15_0 (zext,ule,i32)
+14_1 (slt,i32) == 16_0 (zext,sle,i32)
+14_2 (slt,i32) == 1_0 (add,i32)
+14_2 (slt,i32) == 2_0 (sub,i32)
+14_2 (slt,i32) == 3_0 (mul,i32)
+14_2 (slt,i32) == 4_0 (and,i32)
+14_2 (slt,i32) == 5_0 (or,i32)
+14_2 (slt,i32) == 6_0 (xor,i32)
+14_2 (slt,i32) == 7_0 (shl,i32)
+14_2 (slt,i32) == 8_0 (lshr,i32)
+14_2 (slt,i32) == 9_0 (ashr,i32)
+14_2 (slt,i32) == 10_0 (select,i32)
+14_2 (slt,i32) == 11_0 (zext,eq,i32)
+14_2 (slt,i32) == 12_0 (zext,ne,i32)
+14_2 (slt,i32) == 13_0 (zext,ult,i32)
+14_2 (slt,i32) == 15_0 (zext,ule,i32)
+14_2 (slt,i32) == 16_0 (zext,sle,i32)
+15_1 (ule,i32) == 1_0 (add,i32)
+15_1 (ule,i32) == 2_0 (sub,i32)
+15_1 (ule,i32) == 3_0 (mul,i32)
+15_1 (ule,i32) == 4_0 (and,i32)
+15_1 (ule,i32) == 5_0 (or,i32)
+15_1 (ule,i32) == 6_0 (xor,i32)
+15_1 (ule,i32) == 7_0 (shl,i32)
+15_1 (ule,i32) == 8_0 (lshr,i32)
+15_1 (ule,i32) == 9_0 (ashr,i32)
+15_1 (ule,i32) == 10_0 (select,i32)
+15_1 (ule,i32) == 11_0 (zext,eq,i32)
+15_1 (ule,i32) == 12_0 (zext,ne,i32)
+15_1 (ule,i32) == 13_0 (zext,ult,i32)
+15_1 (ule,i32) == 14_0 (zext,slt,i32)
+15_1 (ule,i32) == 16_0 (zext,sle,i32)
+15_2 (ule,i32) == 1_0 (add,i32)
+15_2 (ule,i32) == 2_0 (sub,i32)
+15_2 (ule,i32) == 3_0 (mul,i32)
+15_2 (ule,i32) == 4_0 (and,i32)
+15_2 (ule,i32) == 5_0 (or,i32)
+15_2 (ule,i32) == 6_0 (xor,i32)
+15_2 (ule,i32) == 7_0 (shl,i32)
+15_2 (ule,i32) == 8_0 (lshr,i32)
+15_2 (ule,i32) == 9_0 (ashr,i32)
+15_2 (ule,i32) == 10_0 (select,i32)
+15_2 (ule,i32) == 11_0 (zext,eq,i32)
+15_2 (ule,i32) == 12_0 (zext,ne,i32)
+15_2 (ule,i32) == 13_0 (zext,ult,i32)
+15_2 (ule,i32) == 14_0 (zext,slt,i32)

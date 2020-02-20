@@ -164,7 +164,7 @@ class Pipeline(object):
                         import redis
                         r = redis.Redis(host="localhost", port=6379, db=0)
 
-                        result = r.flushall()
+                        result = r.flushdb()
                         LOGGER.success(program_name, "Flushing redis DB: result(%s)" % result)
                         r.close()
 
