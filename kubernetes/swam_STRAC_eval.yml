@@ -14,7 +14,7 @@ spec:
           storage: 1000Gi
   templates:
   - name: multiple-runs
-    parallelism: 6
+    parallelism: 2
     steps:
     - - name: download
         template: donwload-all
@@ -48,7 +48,7 @@ spec:
     inputs:
       parameters:
         - name: namespace
-    parallelism: 3
+    parallelism: 10
     steps: 
     - - name: organize
         template: organize
@@ -218,11 +218,10 @@ spec:
           path: "/programs/results"
   - name: merge
     script:
-      image: python:alpine3.6
-      command: ["python"] 
+      image: continuumio/anaconda3
+      command: ["bash"] 
       source: |
-        
-        print('Merging')
+        wget https://raw.githubusercontent.com/KTH/slumps/master/kubernetes/scripts/merge.py && ls && python3 merge.py
       volumeMounts:
         - name: result-directory
           mountPath: /programs
