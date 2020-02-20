@@ -171,15 +171,16 @@ spec:
       volumeMounts:
         - name: result-directory
           mountPath: /programs
-    activeDeadlineSeconds: 6000 # Adding timeout for swam interpreter
+    activeDeadlineSeconds: 3600 # Adding timeout for swam interpreter
   - name: collect-traces
     inputs:
       parameters:
         - name: namespace
-    container:
+    script:
       image: continuumio/anaconda3
       command: ["bash"] 
-      args: ['wget https://raw.githubusercontent.com/KTH/slumps/master/kubernetes/scripts/collect.py && python3 collect.py {{inputs.parameters.namespace}} /programs/traces/{{inputs.parameters.namespace}}' ]
+      source: |
+        wget https://raw.githubusercontent.com/KTH/slumps/master/kubernetes/scripts/collect.py && ls && python3 collect.py '{{inputs.parameters.namespace}}' '/programs/traces/{{inputs.parameters.namespace}}' 
 
       volumeMounts:
         - name: result-directory
@@ -202,14 +203,11 @@ spec:
     inputs:
       parameters:
         - name: namespace
-    container:
+    script:
       image: continuumio/anaconda3
       command: ["bash"] 
-      args: ["wget https://raw.githubusercontent.com/KTH/slumps/master/kubernetes/scripts/plot.py 
-      && python3 plot.py /programs/traces/{{inputs.parameters.namespace}}/{{inputs.parameters.namespace}}.mem.json {{inputs.parameters.namespace}} mem_DTW /programs/results/{{inputs.parameters.namespace}}
-      && python3 plot.py /programs/traces/{{inputs.parameters.namespace}}/{{inputs.parameters.namespace}}.static.json {{inputs.parameters.namespace}} static_DTW /programs/results/{{inputs.parameters.namespace}}
-      && python3 plot.py /programs/traces/{{inputs.parameters.namespace}}/{{inputs.parameters.namespace}}.stack.json {{inputs.parameters.namespace}} stack_DTW /programs/results/{{inputs.parameters.namespace}}
-      && python3 plot.py /programs/traces/{{inputs.parameters.namespace}}/{{inputs.parameters.namespace}}.opcode.json {{inputs.parameters.namespace}} opcode_DTW /programs/results/{{inputs.parameters.namespace}}"]
+      source: |
+        mkdir -p /programs/results/{{inputs.parameters.namespace}} && wget https://raw.githubusercontent.com/KTH/slumps/master/kubernetes/scripts/plot.py && python3 plot.py /programs/traces/{{inputs.parameters.namespace}}/{{inputs.parameters.namespace}}.mem.json {{inputs.parameters.namespace}} mem_DTW /programs/results/{{inputs.parameters.namespace}} && python3 plot.py /programs/traces/{{inputs.parameters.namespace}}/{{inputs.parameters.namespace}}.static.json {{inputs.parameters.namespace}} static_DTW /programs/results/{{inputs.parameters.namespace}} && python3 plot.py /programs/traces/{{inputs.parameters.namespace}}/{{inputs.parameters.namespace}}.stack.json {{inputs.parameters.namespace}} stack_DTW /programs/results/{{inputs.parameters.namespace}} && python3 plot.py /programs/traces/{{inputs.parameters.namespace}}/{{inputs.parameters.namespace}}.opcode.json {{inputs.parameters.namespace}} opcode_DTW /programs/results/{{inputs.parameters.namespace}}
 
       volumeMounts:
         - name: result-directory

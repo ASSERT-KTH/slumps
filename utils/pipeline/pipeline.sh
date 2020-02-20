@@ -2,13 +2,15 @@
 
 #!/bin/bash
 
+# Run it inside the SLUMPS docker container
+
 name=$(echo $1 | sed 's/\.[^.]*$//')
 ext=$(echo $1 | sed 's/^.*\.//')
 
 clo(){
    echo "CLO on $1 $2"
 
-   clang  -cc1 -triple wasm32-unknown-unknown -S -O3 -emit-llvm -emit-llvm-uselists -disable-free -disable-llvm-verifier  -main-file-name $1 -mrelocation-model static -mthread-model posix -mdisable-fp-elim -no-integrated-as -mconstructor-aliases -fuse-init-array -nostdsysteminc -nobuiltininc -resource-dir /usr/lib/llvm-8.0/lib/clang/8.0.0   -U __native_client__ -U __pnacl__ -U __ELF__ -D __IEEE_LITTLE_ENDIAN -Werror=implicit-function-declaration -fno-dwarf-directory-asm -fno-math-builtin -fobjc-runtime=gcc  -nobuiltininc -nostdsysteminc -isystem/usr/share/emscripten/system/local/include -isystem/usr/share/emscripten/system/include/compat -isystem/usr/share/emscripten/system/include -isystem/usr/share/emscripten/system/include/emscripten -isystem/usr/share/emscripten/system/include/libc -isystem/usr/share/emscripten/system/lib/libc/musl/arch/js -isystem/usr/share/emscripten/system/include/gfx -isystem/usr/share/emscripten/system/include/SDL -isystem/usr/share/emscripten/system/include/libcxx -o $2 -x c $1
+   clang   -cc1 -triple=wasm32-unknown-unknown-wasm  -S -O3 -emit-llvm  -main-file-name $1 -mrelocation-model static -mthread-model posix -mdisable-fp-elim -no-integrated-as -mconstructor-aliases -fuse-init-array -nostdsysteminc -nobuiltininc -resource-dir /slumps/souper/third_party/llvm/Release/lib/clang/9.0.0/   -U __native_client__ -U __pnacl__ -U __ELF__ -D __IEEE_LITTLE_ENDIAN -Werror=implicit-function-declaration -fno-dwarf-directory-asm -fno-math-builtin -fobjc-runtime=gcc  -nobuiltininc -nostdsysteminc -isystem/usr/share/emscripten/system/local/include -isystem/usr/share/emscripten/system/include/compat -isystem/usr/share/emscripten/system/include -isystem/usr/share/emscripten/system/include/emscripten -isystem/usr/share/emscripten/system/include/libc -isystem/usr/share/emscripten/system/lib/libc/musl/arch/js -isystem/usr/share/emscripten/system/include/gfx -isystem/usr/share/emscripten/system/include/SDL -isystem/usr/share/emscripten/system/include/libcxx -o $2 -x c $1
 }
 
 
@@ -16,18 +18,18 @@ clo(){
 # alias
 shopt -s expand_aliases
 #alias clang='~/slumps/souper/third_party/llvm/Release/bin/clang'
-alias llc='~/slumps/souper/third_party/llvm/Release/bin/llc'
-alias llvm-as='~/slumps/souper/third_party/llvm/Release/bin/llvm-as'
-alias llvm-opt='~/slumps/souper/third_party/llvm/Release/bin/opt'
-alias souper='~/slumps/souper/build/souper'
+alias llc='/slumps/souper/third_party/llvm/Release/bin/llc'
+alias llvm-as='/slumps/souper/third_party/llvm/Release/bin/llvm-as'
+alias llvm-opt='/slumps/souper/third_party/llvm/Release/bin/opt'
+alias souper='/slumps/souper/build/souper'
 alias souper-check='~/slumps/souper/build/souper-check'
-alias wasm2c='~/slumps/wabt/bin/wasm2c'
-alias wasm2wat='~/slumps/wabt/bin/wasm2wat'
-alias wasm-ld='/usr/bin/wasm-ld-8'
+alias wasm2c='/slumps/wabt/bin/wasm2c'
+alias wasm2wat='/slumps/wabt/bin/wasm2wat'
+alias wasm-ld='/usr/bin/wasm-ld-9'
 
 # vars
-z3='/home/slumps/slumps/souper/third_party/z3/build/z3'
-libsouperPass='/home/slumps/slumps/souper/build/libsouperPass.so'
+z3='/slumps/souper/third_party/z3/build/z3'
+libsouperPass='/slumps/souper/build/libsouperPass.so'
 
 RED='\033[0;31m'
 NC='\033[0m' # No Color
@@ -55,25 +57,25 @@ echo "Souperifying ${name}..."
     if [ "$2" = "1" ]; 
     then
        echo "option 1"
-        llvm-opt -load ${libsouperPass}  -souper -souper-external-cache -souper-infer-iN  -solver-timeout=300 -z3-path=${z3} -souper-debug-level=2 -o $name.opt$2.bc $name.bc
+        llvm-opt -load ${libsouperPass}  -souper -souper-external-cache -souper-infer-iN -dump-klee-exprs -souper-synthesis-debug-level=4 -solver-timeout=300 -z3-path=${z3} -souper-debug-level=4 -o $name.opt$2.bc $name.bc
     fi
 
     if [ "$2" = "2" ]; 
     then
        echo "option 2"
-        llvm-opt -load ${libsouperPass}  -souper -souper-external-cache -souper-infer-iN=false -souper-infer-inst  -solver-timeout=300 -souper-synthesis-comps=mul,select,const,const,shl,lshr,ashr,and,or,xor,add,sub,slt,ult,sle,ule,eq,ne -z3-path=${z3} -souper-debug-level=4 -o $name.opt$2.bc $name.bc
+        llvm-opt -load ${libsouperPass}  -souper -souper-external-cache -souper-infer-iN=false -souper-synthesis-debug-level=4 -souper-infer-inst -dump-klee-exprs -solver-timeout=300 -souper-synthesis-comps=mul,select,const,const,shl,lshr,ashr,and,or,xor,add,sub,slt,ult,sle,ule,eq,ne -z3-path=${z3} -souper-debug-level=4 -o $name.opt$2.bc $name.bc
     fi
 
     if [ "$2" = "3" ]; 
     then
        echo "option 3"
-        llvm-opt -load ${libsouperPass}  -souper -souper-external-cache -souper-infer-iN  -souper-infer-inst -solver-timeout=300 -souper-synthesis-comps=mul,select,const,const,shl,lshr,ashr,and,or,xor,add,sub,slt,ult,sle,ule,eq,ne -z3-path=${z3} -souper-debug-level=4 -o $name.opt$2.bc $name.bc
+        llvm-opt -load ${libsouperPass}  -souper -souper-external-cache -souper-infer-iN -souper-synthesis-debug-level=4 -souper-infer-inst -solver-timeout=300 -dump-klee-exprs=true -souper-synthesis-comps=mul,select,const,const,shl,lshr,ashr,and,or,xor,add,sub,slt,ult,sle,ule,eq,ne -z3-path=${z3} -souper-debug-level=4 -o $name.opt$2.bc $name.bc
     fi
 
     if [ "$2" = "4" ]; 
     then
         echo "option 4"
-        llvm-opt -load ${libsouperPass}  -souper  -souper-external-cache  -souper-enumerative-synthesis -souper-infer-inst -souper-use-alive -souper-synthesis-const-with-cegis -solver-timeout=300  -souper-synthesis-comps=mul,select,const,const,shl,lshr,ashr,and,or,xor,add,sub,slt,ult,sle,ule,eq,ne -z3-path=${z3} -souper-debug-level=4 -o $name.opt$2.bc $name.bc 
+        llvm-opt -load ${libsouperPass}  -souper  -souper-external-cache -souper-synthesis-debug-level -souper-enumerative-synthesis=4 -souper-infer-inst -dump-klee-exprs -souper-use-alive -souper-synthesis-const-with-cegis -solver-timeout=300  -souper-synthesis-comps=mul,select,const,const,shl,lshr,ashr,and,or,xor,add,sub,slt,ult,sle,ule,eq,ne -z3-path=${z3} -souper-debug-level=4 -o $name.opt$2.bc $name.bc 
     fi
 
 echo  "Souper pass finished"

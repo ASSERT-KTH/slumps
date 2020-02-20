@@ -1,0 +1,207 @@
+Name:                swam-strac-j9ssd
+Namespace:           default
+ServiceAccount:      default
+Status:              Running
+Created:             Wed Feb 19 09:36:05 +0100 (1 hour ago)
+Started:             Wed Feb 19 09:36:05 +0100 (1 hour ago)
+Duration:            1 hour 18 minutes
+
+[39mSTEP[0m                                                                                              PODNAME                      DURATION  MESSAGE
+ [36m●[0m swam-strac-j9ssd (multiple-runs)                                                                                                      
+ ├---[32m✔[0m download (donwload-all)                                                                    swam-strac-j9ssd-4217490283  3m        
+ └-·-[36m●[0m evaluate(0:Total_circles_area) (evaluate)                                                                                         
+   | ├---[32m✔[0m organize (organize)                                                                    swam-strac-j9ssd-3290749963  33s       
+   | └-·-[36m●[0m eval(0:Total_circles_area.wasm) (execute-swam)                                         swam-strac-j9ssd-2930538994  1h        
+   |   └-[36m●[0m eval(1:[14]Total_circles_area[0_1_2].wasm) (execute-swam)                              swam-strac-j9ssd-1122739223  1h        
+   ├-[32m✔[0m evaluate(1:Cycle_detection) (evaluate)                                                                                            
+   | ├---[32m✔[0m organize (organize)                                                                    swam-strac-j9ssd-756272546   46s       
+   | ├-·-[32m✔[0m eval(0:Cycle_detection.wasm) (execute-swam)                                            swam-strac-j9ssd-2711768363  1m        
+   | | └-[32m✔[0m eval(1:[1]Cycle_detection[0].wasm) (execute-swam)                                      swam-strac-j9ssd-4012061869  2m        
+   | ├---[32m✔[0m collect-traces (collect-traces)                                                        swam-strac-j9ssd-3164549046  10s       
+   | ├---[32m✔[0m run-STRAC-mem (run-STRAC)                                                              swam-strac-j9ssd-1452317417  24s       
+   | ├---[32m✔[0m run-STRAC-stack (run-STRAC)                                                            swam-strac-j9ssd-2828900507  21s       
+   | ├---[32m✔[0m run-STRAC-opcode (run-STRAC)                                                           swam-strac-j9ssd-2900298752  20s       
+   | ├---[32m✔[0m run-STRAC-static (run-STRAC)                                                           swam-strac-j9ssd-376046965   19s       
+   | └---[32m✔[0m analyze-data (plot)                                                                    swam-strac-j9ssd-3125419633  16s       
+   ├-[32m✔[0m evaluate(2:Cartesian_product_of_two_or_more_lists) (evaluate)                                                                     
+   | ├---[32m✔[0m organize (organize)                                                                    swam-strac-j9ssd-1038697666  51s       
+   | ├-·-[32m✔[0m eval(0:[14]Cartesian_product_of_two_or_more_lists[1_3_5_8_15_18].wasm) (execute-swam)  swam-strac-j9ssd-2507418664  2m        
+   | | ├-[32m✔[0m eval(1:[14]Cartesian_product_of_two_or_more_lists[5_6_9_13_19].wasm) (execute-swam)    swam-strac-j9ssd-558354996   2m        
+   | | ├-[32m✔[0m eval(2:[14]Cartesian_product_of_two_or_more_lists[9_10_14_15_19].wasm) (execute-swam)  swam-strac-j9ssd-2650864708  2m        
+   | | └-[32m✔[0m eval(3:Cartesian_product_of_two_or_more_lists.wasm) (execute-swam)                     swam-strac-j9ssd-1829830655  1m        
+   | ├---[32m✔[0m collect-traces (collect-traces)                                                        swam-strac-j9ssd-3255596118  15s       
+   | ├---[32m✔[0m run-STRAC-mem (run-STRAC)                                                              swam-strac-j9ssd-1578486985  27s       
+   | ├---[32m✔[0m run-STRAC-stack (run-STRAC)                                                            swam-strac-j9ssd-135401979   25s       
+   | ├---[32m✔[0m run-STRAC-opcode (run-STRAC)                                                           swam-strac-j9ssd-2606150240  39s       
+   | ├---[32m✔[0m run-STRAC-static (run-STRAC)                                                           swam-strac-j9ssd-646445525   25s       
+   | └---[32m✔[0m analyze-data (plot)                                                                    swam-strac-j9ssd-1919122449  19s       
+   ├-[36m●[0m evaluate(3:Babbage_problem) (evaluate)                                                                                            
+   | ├---[32m✔[0m organize (organize)                                                                    swam-strac-j9ssd-3925903562  58s       
+   | ├-·-[32m✔[0m eval(0:[5]Babbage_problem[0].wasm) (execute-swam)                                      swam-strac-j9ssd-3830807848  2m        
+   | | ├-[32m✔[0m eval(1:Babbage_problem.wasm) (execute-swam)                                            swam-strac-j9ssd-1802293006  2m        
+   | | ├-[32m✔[0m eval(2:[2]Babbage_problem[1].wasm) (execute-swam)                                      swam-strac-j9ssd-307285100   2m        
+   | | └-[32m✔[0m eval(3:[4]Babbage_problem[0_2].wasm) (execute-swam)                                    swam-strac-j9ssd-2777938183  1m        
+   | ├---[32m✔[0m collect-traces (collect-traces)                                                        swam-strac-j9ssd-2848828126  10s       
+   | ├---[32m✔[0m run-STRAC-mem (run-STRAC)                                                              swam-strac-j9ssd-916583057   22s       
+   | └---[36m●[0m run-STRAC-stack (run-STRAC)                                                            swam-strac-j9ssd-1676052435  1h        
+   ├-[32m✔[0m evaluate(4:Deconvolution-1D) (evaluate)                                                                                           
+   | ├---[32m✔[0m organize (organize)                                                                    swam-strac-j9ssd-3368645274  1m        
+   | ├-·-[32m✔[0m eval(0:[2]Deconvolution-1D[0].wasm) (execute-swam)                                     swam-strac-j9ssd-2240968970  2m        
+   | | └-[31m✖[0m eval(1:Deconvolution-1D.wasm) (execute-swam)                                           swam-strac-j9ssd-2741364087  1m        failed with exit code 134
+   | ├---[32m✔[0m collect-traces (collect-traces)                                                        swam-strac-j9ssd-3904822382  19s       
+   | ├---[32m✔[0m run-STRAC-mem (run-STRAC)                                                              swam-strac-j9ssd-1408823201  22s       
+   | ├---[32m✔[0m run-STRAC-stack (run-STRAC)                                                            swam-strac-j9ssd-3388966435  27s       
+   | ├---[32m✔[0m run-STRAC-opcode (run-STRAC)                                                           swam-strac-j9ssd-2841260648  23s       
+   | ├---[32m✔[0m run-STRAC-static (run-STRAC)                                                           swam-strac-j9ssd-2962206285  24s       
+   | └---[32m✔[0m analyze-data (plot)                                                                    swam-strac-j9ssd-159732761   26s       
+   ├-[32m✔[0m evaluate(5:Sorting_algorithms-Sleep_sort) (evaluate)                                                                              
+   | ├---[32m✔[0m organize (organize)                                                                    swam-strac-j9ssd-764054938   40s       
+   | ├-·-[32m✔[0m eval(0:[14]Sorting_algorithms-Sleep_sort[0_1].wasm) (execute-swam)                     swam-strac-j9ssd-2991971370  2m        
+   | | └-[32m✔[0m eval(1:Sorting_algorithms-Sleep_sort.wasm) (execute-swam)                              swam-strac-j9ssd-2986791192  2m        
+   | ├---[32m✔[0m collect-traces (collect-traces)                                                        swam-strac-j9ssd-815734638   9s        
+   | ├---[32m✔[0m run-STRAC-mem (run-STRAC)                                                              swam-strac-j9ssd-1049460897  22s       
+   | ├---[32m✔[0m run-STRAC-stack (run-STRAC)                                                            swam-strac-j9ssd-4027121443  24s       
+   | ├---[32m✔[0m run-STRAC-opcode (run-STRAC)                                                           swam-strac-j9ssd-2319691112  20s       
+   | ├---[32m✔[0m run-STRAC-static (run-STRAC)                                                           swam-strac-j9ssd-2440636749  20s       
+   | └---[32m✔[0m analyze-data (plot)                                                                    swam-strac-j9ssd-3825016601  14s       
+   ├-[36m●[0m evaluate(6:Thieles_interpolation_formula) (evaluate)                                                                              
+   | ├---[32m✔[0m organize (organize)                                                                    swam-strac-j9ssd-3020395869  13s       
+   | └-·-[36m●[0m eval(0:[2]Thieles_interpolation_formula[0].wasm) (execute-swam)                        swam-strac-j9ssd-2665678378  1h        
+   |   └-[36m●[0m eval(1:Thieles_interpolation_formula.wasm) (execute-swam)                              swam-strac-j9ssd-1330480967  1h        
+   ├-[32m✔[0m evaluate(7:Hofstadter-Conway_$10,000_sequence) (evaluate)                                                                         
+   | ├---[32m✔[0m organize (organize)                                                                    swam-strac-j9ssd-3923425574  17s       
+   | ├-·-[31m✖[0m eval(0:Hofstadter-Conway_$10,000_sequence.wasm) (execute-swam)                         swam-strac-j9ssd-2934821961  1m        failed with exit code 1
+   | | └-[31m✖[0m eval(1:[14]Hofstadter-Conway_$10,000_sequence[1_3].wasm) (execute-swam)                swam-strac-j9ssd-1330547158  1m        failed with exit code 1
+   | ├---[31m✖[0m collect-traces (collect-traces)                                                        swam-strac-j9ssd-383158234   9s        failed with exit code 1
+   | ├---[31m✖[0m run-STRAC-mem (run-STRAC)                                                              swam-strac-j9ssd-3380586517  26s       failed with exit code 1
+   | ├---[31m✖[0m run-STRAC-stack (run-STRAC)                                                            swam-strac-j9ssd-1660256063  35s       failed with exit code 1
+   | ├---[31m✖[0m run-STRAC-opcode (run-STRAC)                                                           swam-strac-j9ssd-57889860    29s       failed with exit code 1
+   | ├---[31m✖[0m run-STRAC-static (run-STRAC)                                                           swam-strac-j9ssd-2373080601  18s       failed with exit code 1
+   | └---[32m✔[0m analyze-data (plot)                                                                    swam-strac-j9ssd-2429033885  17s       
+   ├-[32m✔[0m evaluate(8:Fibonacci_sequence) (evaluate)                                                                                         
+   | ├---[32m✔[0m organize (organize)                                                                    swam-strac-j9ssd-1596278411  10s       
+   | ├-·-[32m✔[0m eval(0:[14]Fibonacci_sequence[1_2].wasm) (execute-swam)                                swam-strac-j9ssd-2673600417  1m        
+   | | ├-[32m✔[0m eval(1:Fibonacci_sequence.wasm) (execute-swam)                                         swam-strac-j9ssd-3403225739  1m        
+   | | ├-[32m✔[0m eval(2:[14]Fibonacci_sequence[0_1].wasm) (execute-swam)                                swam-strac-j9ssd-3548371093  1m        
+   | | └-[32m✔[0m eval(3:[14]Fibonacci_sequence[2].wasm) (execute-swam)                                  swam-strac-j9ssd-1692075880  1m        
+   | ├---[32m✔[0m collect-traces (collect-traces)                                                        swam-strac-j9ssd-3131871259  24s       
+   | ├---[32m✔[0m run-STRAC-mem (run-STRAC)                                                              swam-strac-j9ssd-558673674   28s       
+   | ├---[32m✔[0m run-STRAC-stack (run-STRAC)                                                            swam-strac-j9ssd-969121440   22s       
+   | ├---[32m✔[0m run-STRAC-opcode (run-STRAC)                                                           swam-strac-j9ssd-3022971225  18s       
+   | ├---[32m✔[0m run-STRAC-static (run-STRAC)                                                           swam-strac-j9ssd-3053075040  22s       
+   | └---[32m✔[0m analyze-data (plot)                                                                    swam-strac-j9ssd-1208776604  13s       
+   ├-[32m✔[0m evaluate(9:N'th) (evaluate)                                                                                                       
+   | ├---[32m✔[0m organize (organize)                                                                    swam-strac-j9ssd-1731889773  11s       
+   | ├-·-[31m✖[0m eval(0:[1]N'th[1].wasm) (execute-swam)                                                 swam-strac-j9ssd-1823058735  22s       failed with exit code 2
+   | | ├-[31m✖[0m eval(1:[1]N'th[0_1_2_4_5].wasm) (execute-swam)                                         swam-strac-j9ssd-2589294617  18s       failed with exit code 2
+   | | ├-[31m✖[0m eval(2:[1]N'th[0_2_3].wasm) (execute-swam)                                             swam-strac-j9ssd-3509552033  27s       failed with exit code 2
+   | | ├-[31m✖[0m eval(3:[1]N'th[2_4_5].wasm) (execute-swam)                                             swam-strac-j9ssd-144410538   16s       failed with exit code 2
+   | | ├-[31m✖[0m eval(4:[1]N'th[5].wasm) (execute-swam)                                                 swam-strac-j9ssd-3778140799  15s       failed with exit code 2
+   | | ├-[31m✖[0m eval(5:[1]N'th[0_1_4_5].wasm) (execute-swam)                                           swam-strac-j9ssd-3366246434  11s       failed with exit code 2
+   | | ├-[31m✖[0m eval(6:[1]N'th[3].wasm) (execute-swam)                                                 swam-strac-j9ssd-2750293515  11s       failed with exit code 2
+   | | └-[31m✖[0m eval(7:N'th.wasm) (execute-swam)                                                       swam-strac-j9ssd-3241499112  12s       failed with exit code 2
+   | ├---[31m✖[0m collect-traces (collect-traces)                                                        swam-strac-j9ssd-745985565   14s       failed with exit code 1
+   | ├---[31m✖[0m run-STRAC-mem (run-STRAC)                                                              swam-strac-j9ssd-2172944028  19s       failed with exit code 1
+   | ├---[31m✖[0m run-STRAC-stack (run-STRAC)                                                            swam-strac-j9ssd-2753559282  21s       failed with exit code 1
+   | ├---[31m✖[0m run-STRAC-opcode (run-STRAC)                                                           swam-strac-j9ssd-2349816535  23s       failed with exit code 1
+   | ├---[31m✖[0m run-STRAC-static (run-STRAC)                                                           swam-strac-j9ssd-2201040926  19s       failed with exit code 1
+   | └---[31m✖[0m analyze-data (plot)                                                                    swam-strac-j9ssd-1815759070  13s       failed with exit code 2
+   ├-[32m✔[0m evaluate(10:Execute_HQ9+) (evaluate)                                                                                              
+   | ├---[32m✔[0m organize (organize)                                                                    swam-strac-j9ssd-140697645   10s       
+   | ├-·-[32m✔[0m eval(0:[14]Execute_HQ9+[0_1].wasm) (execute-swam)                                      swam-strac-j9ssd-1506231380  1m        
+   | | └-[32m✔[0m eval(1:Execute_HQ9+.wasm) (execute-swam)                                               swam-strac-j9ssd-777546610   1m        
+   | ├---[32m✔[0m collect-traces (collect-traces)                                                        swam-strac-j9ssd-298599005   11s       
+   | ├---[32m✔[0m run-STRAC-mem (run-STRAC)                                                              swam-strac-j9ssd-1545592668  25s       
+   | ├---[32m✔[0m run-STRAC-stack (run-STRAC)                                                            swam-strac-j9ssd-1132203442  32s       
+   | ├---[32m✔[0m run-STRAC-opcode (run-STRAC)                                                           swam-strac-j9ssd-2739017623  30s       
+   | ├---[32m✔[0m run-STRAC-static (run-STRAC)                                                           swam-strac-j9ssd-507624158   45s       
+   | └---[32m✔[0m analyze-data (plot)                                                                    swam-strac-j9ssd-4164526366  28s       
+   ├-[32m✔[0m evaluate(11:Compare_a_list_of_strings) (evaluate)                                                                                 
+   | ├---[32m✔[0m organize (organize)                                                                    swam-strac-j9ssd-2944441518  10s       
+   | ├-·-[32m✔[0m eval(0:[14]Compare_a_list_of_strings[1].wasm) (execute-swam)                           swam-strac-j9ssd-975313798   1m        
+   | | └-[32m✔[0m eval(1:Compare_a_list_of_strings.wasm) (execute-swam)                                  swam-strac-j9ssd-3537798743  1m        
+   | ├---[32m✔[0m collect-traces (collect-traces)                                                        swam-strac-j9ssd-1159516162  18s       
+   | ├---[32m✔[0m run-STRAC-mem (run-STRAC)                                                              swam-strac-j9ssd-3855611901  38s       
+   | ├---[32m✔[0m run-STRAC-stack (run-STRAC)                                                            swam-strac-j9ssd-1419471799  46s       
+   | ├---[32m✔[0m run-STRAC-opcode (run-STRAC)                                                           swam-strac-j9ssd-3718314972  47s       
+   | ├---[32m✔[0m run-STRAC-static (run-STRAC)                                                           swam-strac-j9ssd-2749864929  31s       
+   | └---[32m✔[0m analyze-data (plot)                                                                    swam-strac-j9ssd-664111733   15s       
+   ├-[32m✔[0m evaluate(12:Fast_Fourier_transform) (evaluate)                                                                                    
+   | ├---[32m✔[0m organize (organize)                                                                    swam-strac-j9ssd-2857540288  10s       
+   | ├-·-[32m✔[0m eval(0:Fast_Fourier_transform.wasm) (execute-swam)                                     swam-strac-j9ssd-2059330385  1m        
+   | | └-[32m✔[0m eval(1:[2]Fast_Fourier_transform[0].wasm) (execute-swam)                               swam-strac-j9ssd-388026402   1m        
+   | ├---[32m✔[0m collect-traces (collect-traces)                                                        swam-strac-j9ssd-2822129964  24s       
+   | ├---[32m✔[0m run-STRAC-mem (run-STRAC)                                                              swam-strac-j9ssd-4148726095  56s       
+   | ├---[32m✔[0m run-STRAC-stack (run-STRAC)                                                            swam-strac-j9ssd-1039844017  36s       
+   | ├---[32m✔[0m run-STRAC-opcode (run-STRAC)                                                           swam-strac-j9ssd-661194682   22s       
+   | ├---[32m✔[0m run-STRAC-static (run-STRAC)                                                           swam-strac-j9ssd-231414503   19s       
+   | └---[32m✔[0m analyze-data (plot)                                                                    swam-strac-j9ssd-123174319   19s       
+   ├-[36m●[0m evaluate(13:Hilbert_curve) (evaluate)                                                                                             
+   | ├---[32m✔[0m organize (organize)                                                                    swam-strac-j9ssd-2678613421  21s       
+   | ├-·-[32m✔[0m eval(0:Hilbert_curve.wasm) (execute-swam)                                              swam-strac-j9ssd-2271477564  1m        
+   | | ├-[32m✔[0m eval(1:[1]Hilbert_curve[1].wasm) (execute-swam)                                        swam-strac-j9ssd-4183577531  1m        
+   | | ├-[32m✔[0m eval(2:[1]Hilbert_curve[1_2].wasm) (execute-swam)                                      swam-strac-j9ssd-3345315201  1m        
+   | | ├-[32m✔[0m eval(3:[1]Hilbert_curve[0].wasm) (execute-swam)                                        swam-strac-j9ssd-4060612908  1m        
+   | | ├-[32m✔[0m eval(4:[1]Hilbert_curve[2].wasm) (execute-swam)                                        swam-strac-j9ssd-1219245611  1m        
+   | | ├-[32m✔[0m eval(5:[1]Hilbert_curve[0_1].wasm) (execute-swam)                                      swam-strac-j9ssd-311971050   1m        
+   | | ├-[32m✔[0m eval(6:[1]Hilbert_curve[0_2].wasm) (execute-swam)                                      swam-strac-j9ssd-1405378132  1m        
+   | | └-[32m✔[0m eval(7:[1]Hilbert_curve[0_1_2].wasm) (execute-swam)                                    swam-strac-j9ssd-2461025651  1m        
+   | ├---[32m✔[0m collect-traces (collect-traces)                                                        swam-strac-j9ssd-2612632541  24s       
+   | └---[36m●[0m run-STRAC-mem (run-STRAC)                                                              swam-strac-j9ssd-4103802844  55m       
+   ├-[36m●[0m evaluate(14:Continued_fraction) (evaluate)                                                                                        
+   | ├---[32m✔[0m organize (organize)                                                                    swam-strac-j9ssd-3547707178  9s        
+   | ├-·-[32m✔[0m eval(0:[14]Continued_fraction[0_3_4_7].wasm) (execute-swam)                            swam-strac-j9ssd-2271518757  1m        
+   | | └-[32m✔[0m eval(1:Continued_fraction.wasm) (execute-swam)                                         swam-strac-j9ssd-3705537190  1m        
+   | ├---[32m✔[0m collect-traces (collect-traces)                                                        swam-strac-j9ssd-671461182   21s       
+   | ├---[32m✔[0m run-STRAC-mem (run-STRAC)                                                              swam-strac-j9ssd-474021553   32s       
+   | └---[36m●[0m run-STRAC-stack (run-STRAC)                                                            swam-strac-j9ssd-2247612275  57m       
+   ├-[32m✔[0m evaluate(15:Burrows–Wheeler_transform) (evaluate)                                                                                 
+   | ├---[32m✔[0m organize (organize)                                                                    swam-strac-j9ssd-1709426515  10s       
+   | ├-·-[32m✔[0m eval(0:[14]Burrows–Wheeler_transform[0_5_7_10_13_16].wasm) (execute-swam)              swam-strac-j9ssd-2991491886  1m        
+   | | ├-[31m✖[0m eval(1:[14]Burrows–Wheeler_transform[0_2_4_8_10_11_17].wasm) (execute-swam)            swam-strac-j9ssd-1680073481  28s       failed with exit code 134
+   | | ├-[31m✖[0m eval(2:[14]Burrows–Wheeler_transform[1_6_7_9_12_17].wasm) (execute-swam)               swam-strac-j9ssd-1197818610  42s       failed with exit code 134
+   | | └-[32m✔[0m eval(3:Burrows–Wheeler_transform.wasm) (execute-swam)                                  swam-strac-j9ssd-388479183   1m        
+   | ├---[32m✔[0m collect-traces (collect-traces)                                                        swam-strac-j9ssd-3670038947  14s       
+   | ├---[32m✔[0m run-STRAC-mem (run-STRAC)                                                              swam-strac-j9ssd-530737138   26s       
+   | ├---[32m✔[0m run-STRAC-stack (run-STRAC)                                                            swam-strac-j9ssd-3318144472  1m        
+   | ├---[32m✔[0m run-STRAC-opcode (run-STRAC)                                                           swam-strac-j9ssd-2986556689  54s       
+   | ├---[32m✔[0m run-STRAC-static (run-STRAC)                                                           swam-strac-j9ssd-4018425992  1m        
+   | └---[32m✔[0m analyze-data (plot)                                                                    swam-strac-j9ssd-3289541172  1m        
+   ├-[32m✔[0m evaluate(16:Evaluate_binomial_coefficients) (evaluate)                                                                            
+   | ├---[32m✔[0m organize (organize)                                                                    swam-strac-j9ssd-2845642678  18s       
+   | ├-·-[32m✔[0m eval(0:[1]Evaluate_binomial_coefficients[0_1].wasm) (execute-swam)                     swam-strac-j9ssd-1170094862  1m        
+   | | ├-[32m✔[0m eval(1:[1]Evaluate_binomial_coefficients[0].wasm) (execute-swam)                       swam-strac-j9ssd-2613850147  2m        
+   | | ├-[32m✔[0m eval(2:Evaluate_binomial_coefficients.wasm) (execute-swam)                             swam-strac-j9ssd-3370819939  2m        
+   | | └-[32m✔[0m eval(3:[1]Evaluate_binomial_coefficients[1].wasm) (execute-swam)                       swam-strac-j9ssd-3602706756  1m        
+   | ├---[32m✔[0m collect-traces (collect-traces)                                                        swam-strac-j9ssd-3187159466  28s       
+   | ├---[32m✔[0m run-STRAC-mem (run-STRAC)                                                              swam-strac-j9ssd-452341733   37s       
+   | ├---[32m✔[0m run-STRAC-stack (run-STRAC)                                                            swam-strac-j9ssd-1684358671  1m        
+   | ├---[32m✔[0m run-STRAC-opcode (run-STRAC)                                                           swam-strac-j9ssd-3675433364  1m        
+   | ├---[32m✔[0m run-STRAC-static (run-STRAC)                                                           swam-strac-j9ssd-2672979305  57s       
+   | └---[32m✔[0m analyze-data (plot)                                                                    swam-strac-j9ssd-4151354125  51s       
+   ├-[32m✔[0m evaluate(17:Longest_increasing_subsequence) (evaluate)                                                                            
+   | ├---[32m✔[0m organize (organize)                                                                    swam-strac-j9ssd-3773154041  27s       
+   | ├-·-[32m✔[0m eval(0:Longest_increasing_subsequence.wasm) (execute-swam)                             swam-strac-j9ssd-736055968   2m        
+   | | └-[31m✖[0m eval(1:[14]Longest_increasing_subsequence[1].wasm) (execute-swam)                      swam-strac-j9ssd-2662700419  2m        failed with exit code 134
+   | ├---[32m✔[0m collect-traces (collect-traces)                                                        swam-strac-j9ssd-408750985   19s       
+   | ├---[32m✔[0m run-STRAC-mem (run-STRAC)                                                              swam-strac-j9ssd-3027086480  1m        
+   | ├---[32m✔[0m run-STRAC-stack (run-STRAC)                                                            swam-strac-j9ssd-3599243294  1m        
+   | ├---[32m✔[0m run-STRAC-opcode (run-STRAC)                                                           swam-strac-j9ssd-3678439331  1m        
+   | ├---[32m✔[0m run-STRAC-static (run-STRAC)                                                           swam-strac-j9ssd-4284000410  54s       
+   | └---[32m✔[0m analyze-data (plot)                                                                    swam-strac-j9ssd-1847803778  1m        
+   ├-[32m✔[0m evaluate(18:99_Bottles_of_Beer) (evaluate)                                                                                        
+   | ├---[32m✔[0m organize (organize)                                                                    swam-strac-j9ssd-2957711461  25s       
+   | ├-·-[32m✔[0m eval(0:[14]99_Bottles_of_Beer[0].wasm) (execute-swam)                                  swam-strac-j9ssd-2250761044  2m        
+   | | ├-[32m✔[0m eval(1:99_Bottles_of_Beer.wasm) (execute-swam)                                         swam-strac-j9ssd-1062537574  2m        
+   | | └-[32m✔[0m eval(2:[14]99_Bottles_of_Beer[0_1].wasm) (execute-swam)                                swam-strac-j9ssd-3603645490  2m        
+   | ├---[32m✔[0m collect-traces (collect-traces)                                                        swam-strac-j9ssd-3628330453  15s       
+   | ├---[32m✔[0m run-STRAC-mem (run-STRAC)                                                              swam-strac-j9ssd-3967043476  2m        
+   | ├---[32m✔[0m run-STRAC-stack (run-STRAC)                                                            swam-strac-j9ssd-1598774298  2m        
+   | ├---[32m✔[0m run-STRAC-opcode (run-STRAC)                                                           swam-strac-j9ssd-3344317343  1m        
+   | ├---[32m✔[0m run-STRAC-static (run-STRAC)                                                           swam-strac-j9ssd-33012534    1m        
+   | └---[32m✔[0m analyze-data (plot)                                                                    swam-strac-j9ssd-1003556166  1m        
+   └-[36m●[0m evaluate(19:Mian-Chowla_sequence) (evaluate)                                                                                      
+     ├---[32m✔[0m organize (organize)                                                                    swam-strac-j9ssd-2297129285  22s       
+     └-·-[36m●[0m eval(0:[14]Mian-Chowla_sequence[1_6_11].wasm) (execute-swam)                           swam-strac-j9ssd-1995838310  21m       
+       ├-[36m●[0m eval(1:[14]Mian-Chowla_sequence[3_7_10_11_15_16].wasm) (execute-swam)                  swam-strac-j9ssd-3439430069  21m       
+       └-[36m●[0m eval(2:[14]Mian-Chowla_sequence[3_10_12_14_16_17].wasm) (execute-swam)                 swam-strac-j9ssd-4096088465  21m       
