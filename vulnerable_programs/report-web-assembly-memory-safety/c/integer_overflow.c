@@ -8,7 +8,7 @@
 /*
  integer overflow vulnerability that allows a malicious user to leak memory from adjacent variables (vulnerability bolded):
 */
-void EMSCRIPTEN_KEEPALIVE buffer_overread(int start_pos, int end_pos) {
+void buffer_overread(int start_pos, int end_pos) {
  char buf[200];
  char secret_password[256] = "S3cr3tP@ssw0rd";
  char msg[256] = "This is a very innocent message.";

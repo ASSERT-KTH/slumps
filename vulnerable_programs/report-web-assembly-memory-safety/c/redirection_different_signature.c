@@ -32,21 +32,21 @@ typedef struct car_info {
  char brand1[10];
 } car_info;
 
-void EMSCRIPTEN_KEEPALIVE print_person_info(void *person_info_ptr) {
+void print_person_info(void *person_info_ptr) {
  struct person_info *info = (struct person_info *) person_info_ptr;
  printf("In print_person_info\n");
  printf("Person name: %s, person age: %d\n",info->name,info->age);
  emscripten_cancel_main_loop();
 }
 
-void EMSCRIPTEN_KEEPALIVE print_car_info(void *car_info_ptr) {
+void print_car_info(void *car_info_ptr) {
  car_info *info = (car_info *) car_info_ptr;
  printf("In print_car_info\n");
  printf("Number of cars: %d, first brand: %s\n",info->nbr_cars,info->brand1);
  emscripten_cancel_main_loop();
 }
 
-void EMSCRIPTEN_KEEPALIVE get_func_pointer(char *name, void **func_ptr) {
+void get_func_pointer(char *name, void **func_ptr) {
  if (strcmp(name,"S3cr3tP@ssw0rd") == 0) {
     *func_ptr = print_car_info;
  } else {
@@ -54,7 +54,7 @@ void EMSCRIPTEN_KEEPALIVE get_func_pointer(char *name, void **func_ptr) {
  }
 }
 
-void EMSCRIPTEN_KEEPALIVE func_ptr_overwrite2(char *name, char *age) {
+void func_ptr_overwrite2(char *name, char *age) {
  void *func_ptr;
  struct person_info info;
  char buf[50];

@@ -13,7 +13,7 @@ appear to be possible to get arbitrary code execution, but information disclosur
 Below we have a very simple function that has a vulnerable call to the printf() function (marked in
 bold). By entering a suitable input, we can leak out the value of the variable ‘secret_password’:
 */
-void EMSCRIPTEN_KEEPALIVE format_string_bug(char *str) {
+void format_string_bug(char *str) {
  char secret_password[] = "MyP@ssw0rd!!";
  printf("you entered = ");
  printf(str);

@@ -14,7 +14,7 @@ spec:
           storage: 1000Gi
   templates:
   - name: multiple-runs
-    parallelism: 2
+    parallelism: 1
     steps:
     - - name: download
         template: donwload-all
@@ -48,7 +48,7 @@ spec:
     inputs:
       parameters:
         - name: namespace
-    parallelism: 10
+    parallelism: 100
     steps: 
     - - name: organize
         template: organize
@@ -171,7 +171,6 @@ spec:
       volumeMounts:
         - name: result-directory
           mountPath: /programs
-    activeDeadlineSeconds: 3600 # Adding timeout for swam interpreter
   - name: collect-traces
     inputs:
       parameters:
@@ -216,12 +215,14 @@ spec:
       artifacts:
         - name: results
           path: "/programs/results"
+        - name: logs
+          path: "/programs/traces"
   - name: merge
     script:
       image: continuumio/anaconda3
       command: ["bash"] 
       source: |
-        wget https://raw.githubusercontent.com/KTH/slumps/master/kubernetes/scripts/merge.py && ls && python3 merge.py
+        wget https://raw.githubusercontent.com/KTH/slumps/master/kubernetes/scripts/common.py && wget https://raw.githubusercontent.com/KTH/slumps/master/kubernetes/scripts/merge.py && ls && python3 merge.py
       volumeMounts:
         - name: result-directory
           mountPath: /programs
