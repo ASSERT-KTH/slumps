@@ -57,6 +57,12 @@ Examples
 
 ```
 
+## Dashboard for kubernetes:
+ - ```kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.0.0-beta8/aio/deploy/recommended.yaml ```
+ - ```kubectl proxy``` To access the dashboard in localhost
+ - ```az aks get-credentials --admin``` To be able of monitoring the kubernetes cluster
+
+
 
 ## [Local deployment with minikube](https://kubernetes.io/docs/setup/learning-environment/minikube/)
 

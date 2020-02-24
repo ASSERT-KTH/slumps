@@ -13,13 +13,13 @@ and types of arguments to the function. This means that an exploit cannot transf
 function having the wrong signature.
 */
 
-void EMSCRIPTEN_KEEPALIVE default_func() {
+void default_func() {
  printf("Pointer overwrite failed\n");
 }
-void EMSCRIPTEN_KEEPALIVE hijacked_func() {
+void hijacked_func() {
  printf("Pointer overwrite SUCCEEDED!\n");
 }
-void EMSCRIPTEN_KEEPALIVE func_ptr_overwrite(char *str) {
+void func_ptr_overwrite(char *str) {
  void *func_ptr;
  char buf[50];
  func_ptr = default_func;
