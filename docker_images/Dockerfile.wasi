@@ -1,5 +1,7 @@
 FROM jacarte/slumps:deps.2
 
+WORKDIR /
+
 env DEBIAN_FRONTEND=noninteractive
 run apt-get update -qq \
     && apt-get dist-upgrade -qq \
@@ -25,3 +27,10 @@ add https://get.wasmer.io wasmer.sh
 run sh wasmer.sh
 
 
+env PATH "/opt/lucet/bin:$PATH"
+env PATH "/slumps/souper/third_party/llvm/Release/bin:$PATH"
+
+run echo $PATH
+run git clone https://github.com/WebAssembly/wasi-libc \
+    && cd wasi-libc \
+    && make install INSTALL_DIR=/tmp/wasi-libc
