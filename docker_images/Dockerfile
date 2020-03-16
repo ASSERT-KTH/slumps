@@ -3,7 +3,7 @@ FROM ubuntu:18.04
 # souper:deps
 
 RUN apt-get update \
-    && apt-get -y install cmake re2c doxygen golang-go python python3 llvm git subversion curl build-essential lld-9 gcc-multilib redis-server emscripten \
+    && apt-get -y install cmake re2c doxygen golang-go python python3 llvm git subversion curl build-essential gcc-multilib redis-server \
     && go get github.com/gomodule/redigo/redis
 
 RUN mkdir slumps

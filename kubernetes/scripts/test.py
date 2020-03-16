@@ -9,4 +9,4 @@ from merge import process
 #plt.show()
 
 
-process("/Users/javierca/Downloads/results 9")
+process("/Users/javierca/Documents/overall", "/Users/javierca/Documents/Develop/CROW-paper/plots")
