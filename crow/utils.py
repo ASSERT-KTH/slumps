@@ -25,7 +25,7 @@ RUNTIME_CONFIG = dict(USE_REDIS=False)
 
 
 def getlogfilename(program_name):
-    return "%s/src/logs/%s.slumps.log" % (config["DEFAULT"]["slumpspath"], program_name)
+    return "%s/crow/logs/%s.slumps.log" % (config["DEFAULT"]["slumpspath"], program_name)
 
 
 class ContentToTmpFile(object):

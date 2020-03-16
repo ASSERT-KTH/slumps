@@ -6,12 +6,12 @@ RUN apt-get update \
 
 RUN python3.7 -m pip install pip
 
-COPY . /slumps/src
-COPY start_docker.sh /slumps/src
+COPY . /slumps/crow
+COPY start_docker.sh /slumps/crow
 
 
 
-WORKDIR /slumps/src
+WORKDIR /slumps/crow
 
 RUN python3.7 -m pip install -r requirements.txt
 RUN rm settings/.slumps

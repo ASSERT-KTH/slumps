@@ -69,8 +69,8 @@ apiVersion: argoproj.io/v1alpha1
             shutil.copy("%s/%s" % (folder, file), "%s/job%s/%s" % (out, i, file))
 
         # Generate the script
-        shStrip.write("docker run --name {job} -d -e TIMEOUT={timeout} {extra} -v $(pwd)/{job}:/input -v $(pwd)/{job}/out:/slumps/src/out -v "
-                      "$(pwd)/{job}/logs/:/slumps/src/logs jacarte/slumps:app \n".format(timeout=timeout, job=jobFolder, extra=extra))
+        shStrip.write("docker run --name {job} -d -e TIMEOUT={timeout} {extra} -v $(pwd)/{job}:/input -v $(pwd)/{job}/out:/slumps/crow/out -v "
+                      "$(pwd)/{job}/logs/:/slumps/crow/logs jacarte/slumps:app \n".format(timeout=timeout, job=jobFolder, extra=extra))
         mpiScript.write(
 """          - { job_folder: %s }\n"""%jobFolder)
 

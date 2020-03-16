@@ -177,7 +177,8 @@ class ObjtoWASM(ExternalStage):
 
     def __call__(self, args=[], std=None):  # f -> inputs
 
-        new_inputs = (config["wasm-ld"]["command"] % ("%s %s" % (args[0], args[1]),)).split(" ")
+        linkOptions = config["wasm-ld"]["wasi-header"] if config["DEFAULT"].getboolean("link-wasi") else "--allow-undefined"
+        new_inputs = (config["wasm-ld"]["command"] % (linkOptions, "%s %s" % (args[0], args[1]),)).split(" ")
         return super(ObjtoWASM, self).__call__(new_inputs, std)
 
     def processInner(self, std, err):
