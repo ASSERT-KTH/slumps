@@ -1,4 +1,4 @@
-FROM jacarte/slumps:deps.2
+FROM jacarte/slumps:wasi
 
 
 RUN apt-get update \
@@ -21,15 +21,5 @@ RUN rm -rf .idea
 RUN rm -rf tests
 RUN rm -rf .pytest_cache
 
-EXPOSE 6379
-ENV TIMEOUT 1800
-
-ENV TOUSER 1800
-ENV GUSER 1800
-ENV GPASS 1800
-
-ENV GITHUB_USER 1800
-ENV GITHUB_TOKEN 1800
-ENV REPO_NAME 1800
 
 ENTRYPOINT ["./start_docker.sh"]

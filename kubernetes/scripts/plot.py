@@ -8,7 +8,7 @@ def plot(meta, namespace, name, out):
     NAMES = meta["fileMap"]
 
     NAMES = [NAMES[k].split(".")[0] for k in NAMES.keys()]
-    fig, ax = plt.subplots(figsize=(7 + 0.5*len(NAMES),7 + 0.5*len(NAMES)))
+    #fig, ax = plt.subplots(figsize=(7 + 0.5*len(NAMES),7 + 0.01*len(NAMES)))
 
     DTW_VALUES = meta["functionMap"]
 
@@ -25,21 +25,21 @@ def plot(meta, namespace, name, out):
             vals[i][j] = val
             vals[j][i] = val
 
-    im = ax.imshow(vals)
-    ax.set_xticks(np.arange(len(NAMES)))
-    ax.set_yticks(np.arange(len(NAMES)))
+    #im = ax.imshow(vals)
+    #ax.set_xticks(np.arange(len(NAMES)))
+    #ax.set_yticks(np.arange(len(NAMES)))
     
-    for edge, spine in ax.spines.items():
-        spine.set_visible(False)
+    #for edge, spine in ax.spines.items():
+    #    spine.set_visible(False)
 
-    ax.set_ylim(-0.8, len(NAMES) + 1)
-    ax.set_xticklabels(NAMES)
-    ax.set_yticklabels(NAMES)
-    plt.setp(ax.get_xticklabels(), rotation=45, ha="right", rotation_mode="anchor")
+    #ax.set_ylim(-0.8, len(NAMES) + 1)
+    #ax.set_xticklabels(NAMES)
+    #ax.set_yticklabels(NAMES)
+    #plt.setp(ax.get_xticklabels(), rotation=45, ha="right", rotation_mode="anchor")
 
-    for i in range(len(NAMES)):
-        for j in range(len(NAMES)):
-            text = ax.text(j, i, vals[i][j], ha="center", va="center", color="r", fontsize=40/len(NAMES))
+    #for i in range(len(NAMES)):
+    #    for j in range(len(NAMES)):
+    #        text = ax.text(j, i, vals[i][j], ha="center", va="center", color="r", fontsize=40/len(NAMES))
 
 
     analysis_output["DTWS"] = [[d for d in a] for a in vals]
@@ -47,8 +47,8 @@ def plot(meta, namespace, name, out):
     analysis_output["NAMES"] = NAMES
     analysis_output["NORMALIZED"] = [[d for d in a ] for a in vals/np.max(vals)]
 
-    print(analysis_output)
-    fig.tight_layout()
+    #print(analysis_output)
+    #fig.tight_layout()
 
     return analysis_output
 
@@ -61,7 +61,7 @@ def processSTRACResult(F, namespace, name, out):
     meta = json.loads(open(F, 'r').read())
     
     analysis_output = plot(meta, namespace, name, out)
-    plt.savefig("%s/%s_%s.pdf"%(out, namespace, name))
+    #plt.savefig("%s/%s_%s.pdf"%(out, namespace, name))
     open("%s/%s_%s.json"%(out, namespace, name), 'w').write(json.dumps(analysis_output))
 
 if __name__ == "__main__":
