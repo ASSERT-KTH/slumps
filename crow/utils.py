@@ -77,7 +77,6 @@ def updatesettings(argvs):
         bins = check_output('compgen -c', shell=True, executable='/bin/bash').splitlines()
 
         wasm_bins = list(filter(lambda x: x.startswith("wasm-ld"), map(lambda x: x.decode("utf-8"), bins)))
-        emcc = list(filter(lambda x: x.startswith("emcc"), map(lambda x: x.decode("utf-8"), bins)))
 
         if len(wasm_bins) == 0:
             raise Exception("WASM linker not found. Please install it (apt-get install lld-<version> for ubuntu)")
@@ -93,30 +92,6 @@ def updatesettings(argvs):
             wasm_ld = wasm_bins[option - 1]
 
         config["wasm-ld"]["path"] = wasm_ld
-
-        if len(emcc) == 0:
-            print("No Emscripten bins found. This can be harmful for SLUMPs")
-        else:
-            with ContentToTmpFile(name="setting.c", content=b'int main(){return 0;}') as tmpC:
-
-                # launch twice in case of first initialization
-                emcc = Popen(('emcc -v %s -o -' % tmpC.file).split(" "), stdout=PIPE, stderr=PIPE, stdin=PIPE)
-                emcc, err = emcc.communicate()
-
-                # real call
-                emcc = Popen(('emcc -v %s -o -' % tmpC.file).split(" "), stdout=PIPE, stderr=PIPE, stdin=PIPE)
-                emcc, err = emcc.communicate()
-
-                words = err.decode("utf-8").split(" ")
-
-                print(words)
-
-                includes = []
-                for w in words:
-                    if w.startswith("-isystem"):
-                        includes.append(w)
-
-                config["clang"]["includes"] = " ".join(includes)
 
         with open("settings/config.ini", 'w') as configFile:
             config.write(configFile)
