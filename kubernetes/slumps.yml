@@ -1,10 +1,10 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Workflow
 metadata:
-  generateName: slumps-distributed-
+  generateName: slumps-distributed-wasi-
 spec:
   entrypoint: slumps-distributed
-  parallelism: 1
+  parallelism: 60
   arguments:
     parameters:
     - name: repo
@@ -43,13 +43,13 @@ spec:
     outputs:
       artifacts:
       - name: slumps
-        path: /slumps/src/out
+        path: /slumps/crow/out
       - name: logs
-        path: /slumps/src/logs
+        path: /slumps/crow/logs
     container:
       image: "jacarte/slumps:app"
       command: [/bin/bash]
-      args: [start_docker.sh,"{{workflow.parameters.raw}}/{{inputs.parameters.program}}", "-DEFAULT.timeout", "144000", ]
+      args: [start_docker.sh,"{{workflow.parameters.raw}}/{{inputs.parameters.program}}", "-DEFAULT.timeout", "36000","-DEFAULT.link-wasi", "True", ]
     #  resources:
     #    requests:
     #      memory: 2.5G
