@@ -21,18 +21,21 @@ def process(meta):
     marginTop = 0.05
     plt.tight_layout(rect=(0 + marginLeft,marginBottom,1 - marginRight,1 - marginTop), w_pad=1.0)
     
-    ind = range(len(model))
+    pad = 1.4
+    ind = [2*p + pad*p for p in list(range(len(model)))]
+    ind2 = [(2*p + 1) + pad*p for p in list(range(0,len(model)))]
+
+    print(ind, ind2)
 
     total = [s[1] for s in model]
     diff = [s[2] for s in model]
 
-    width = 2
+    width = 1
     padding = 0.1
 
-    p1 = ax.bar(ind, total)
-    p2 = ax.bar(ind, diff)
-
-    plt.legend((p1[0], p2[0]), ('Program variant', 'Different program variants'))
+    p1 = ax.bar(ind, total, width=width)
+    p2 = ax.bar(ind2, diff, width=width)
+    plt.legend((p1[0], p2[0]), ('Program variants count', 'Unique variants count $|U(P)|$'), loc='best', bbox_to_anchor=(0.5,1.1))
 
     ax.set_yscale('log')
 
@@ -43,7 +46,7 @@ def process(meta):
     #plt.yticks(np.arange(0, 81, 10))
 
     #plt.show()
-    plt.savefig("stage1.pdf")
+    plt.savefig("/Users/javierca/Documents/Develop/CROW-paper/plots/stage1.pdf")
 
 
 if __name__ == "__main__":

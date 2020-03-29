@@ -34,6 +34,7 @@ class Pipeline(object):
 
         program_name = file.split("/")[-1].split(".")[0]
         OUT_FOLDER = "%s/%s" % (config["DEFAULT"]["outfolder"], program_name)
+        onlybc = config["DEFAULT"].getboolean("generate-bc-only")
 
         if not os.path.exists(OUT_FOLDER):
             os.mkdir(OUT_FOLDER)
@@ -60,7 +61,7 @@ class Pipeline(object):
         meta = dict()
         sizes = {}
 
-        originalSha, originalSize, originalWasmName, _ = self.generateWasm(program_name, bc, OUT_FOLDER, program_name)
+        originalSha, originalSize, originalWasmName, _ = self.generateWasm(program_name, bc, OUT_FOLDER, program_name, generateOnlyBc=onlybc)
         sha.add(originalSha)
         sizes[originalSha] = [originalSize, []]
 
@@ -114,12 +115,14 @@ class Pipeline(object):
 
                                         bsOpt = open(tmpOut, 'rb').read()
 
+                                        # Generate wasm
+
                                         hex, size, wasmFile, watFile = self.generateWasm(program_name, bsOpt,
                                                                                          OUT_FOLDER,
                                                                                          "[%s]%s[%s]" % (level,
                                                                                                          program_name,
                                                                                                          sanitized_set_name),
-                                                                                         debug=True)
+                                                                                         debug=True, generateOnlyBc=onlybc)
 
                                         printProgressBar(current, total,
                                                          suffix="Completed %s[%s] %s" % (
@@ -183,32 +186,38 @@ class Pipeline(object):
 
         return dict(programs=meta, count=len(meta.keys()))
 
-    def generateWasm(self, namespace, bc, OUT_FOLDER, fileName, debug=True):
+    def generateWasm(self, namespace, bc, OUT_FOLDER, fileName, debug=True, generateOnlyBc = False):
         llFileName = "%s/%s" % (OUT_FOLDER, fileName)
 
-        with ContentToTmpFile(content=bc, ext=".bc") as TMP_WASM:
+        
+        with ContentToTmpFile(name="%s.bc"%llFileName, content=bc, ext=".bc", persist=generateOnlyBc) as TMP_WASM:
+            
+            if not generateOnlyBc:
+                tmpWasm = TMP_WASM.file
 
-            tmpWasm = TMP_WASM.file
+                finalObjCreator = ObjtoWASM(namespace, debug=debug)
+                finalObjCreator(args=[
+                    "%s.wasm" % (llFileName,),
+                    tmpWasm
+                ], std=None)
 
-            finalObjCreator = ObjtoWASM(namespace, debug=debug)
-            finalObjCreator(args=[
-                "%s.wasm" % (llFileName,),
-                tmpWasm
-            ], std=None)
+                wat = WASM2WAT(namespace, debug=debug)
+                wat(std=None, args=[
+                    "%s.wasm" % (llFileName,),
+                    "%s.wat" % (llFileName,)]
+                    )
 
-            wat = WASM2WAT(namespace, debug=debug)
-            wat(std=None, args=[
-                "%s.wasm" % (llFileName,),
-                "%s.wat" % (llFileName,)]
-                )
+                finalStream = open("%s.wasm" % (llFileName,), 'rb').read()
+                if debug:
+                    LOGGER.warning(namespace, "%s: WASM SIZE %s" % (namespace, len(finalStream),))
+                hashvalue = hashlib.sha256(finalStream)
+                if debug:
+                    LOGGER.warning(namespace, "%s: WASM SHA %s" % (namespace, hashvalue.hexdigest(),))
+                return hashvalue.hexdigest(), len(finalStream), "%s.wasm" % (llFileName,), "%s.wat" % (llFileName,)
+            else:
+                hashvalue = hashlib.sha256(bc)
+                return hashvalue.hexdigest(), len(bc), "%s.bc" % (fileName,), "%s.bc" % (fileName,)
 
-            finalStream = open("%s.wasm" % (llFileName,), 'rb').read()
-            if debug:
-                LOGGER.warning(namespace, "%s: WASM SIZE %s" % (namespace, len(finalStream),))
-            hashvalue = hashlib.sha256(finalStream)
-            if debug:
-                LOGGER.warning(namespace, "%s: WASM SHA %s" % (namespace, hashvalue.hexdigest(),))
-            return hashvalue.hexdigest(), len(finalStream), "%s.wasm" % (llFileName,), "%s.wat" % (llFileName,)
 
 
 

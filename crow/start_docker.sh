@@ -1,5 +1,5 @@
 #!/bin/bash
-rm -rf /slumps/crow/out
+# rm -rf /slumps/crow/out
 nohup redis-server &
 wget $1
 name=${1##*/}

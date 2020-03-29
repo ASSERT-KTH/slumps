@@ -30,7 +30,7 @@ def getlogfilename(program_name):
 
 class ContentToTmpFile(object):
 
-    def __init__(self, content=None, name=None, ext=None):
+    def __init__(self, content=None, name=None, ext=None, persist=False):
 
         tmp = createTmpFile(ext) if not name else name
 
@@ -42,6 +42,7 @@ class ContentToTmpFile(object):
             self.tmpF = open(tmp, 'wb')
 
         self.file = tmp
+        self.persist = persist
 
     def __enter__(self):
         return self
@@ -50,7 +51,8 @@ class ContentToTmpFile(object):
         try:
             if self.tmpF:
                 self.tmpF.close()
-            os.remove(self.file)
+            if not self.persist:
+                os.remove(self.file)
         except Exception as e:
             print(e)
             pass
