@@ -4,3 +4,5 @@ out
 *.slumps.log
 
 .DS_Store
+
+crow_out
