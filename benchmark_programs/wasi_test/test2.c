@@ -10,7 +10,7 @@ int main () {
         printf("%d%s", a[i], i == n - 1 ? "\n" : " ");
 
     for (i = 0; i < n; i++)
-        printf("%d%s", a[i], i == n - 1 ? "\n" : " ");
+        printf("%d%s", 1, i == n - 1 ? "\n" : " ");
 
     for (i = 0; i < n; i++)
         printf("%d%s", a[i], i == n - 1 ? "\n" : " ");

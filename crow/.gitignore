@@ -21,3 +21,4 @@ results
 .coverage*
 
 meta.json
+venv

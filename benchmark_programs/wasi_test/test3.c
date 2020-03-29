@@ -2,8 +2,11 @@
 #include <stdlib.h>
 
 
-int main (int argc, char **argv) {
+int main () {
    
-    printf("%d", argc);
+    printf("%d\n", 1);
+    printf("%d\n", 2);
+    printf("%d\n", 3);
+    printf("%d\n", 4);
     return 0;
 }

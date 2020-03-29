@@ -3,11 +3,6 @@
     "title": "All programs",
     "color": "green",
     "children": {
-        "fail_to_compile": {
-            "count": 187,
-            "title": "Fail to port to WASM",
-            "color": "red"
-        },
         "compiled": {
             "count": 601,
             "title": "Successful compilation to WASM",
@@ -18,18 +13,18 @@
                     "children": {
                         "timeout": {
                             "count": 339,
-                            "title": "Timeout in superoptimization stage",
+                            "title": "Timeout in randomization stage",
                             "color": "orange"
                         },
                         "no_subexpression": {
                             "count": 83,
-                            "title": "No subexpresssion no optimize",
-                            "color": "orange"
+                            "title": "No subexpresssion to replace",
+                            "color": "wheat"
                         },
                         "fail_optimize": {
                             "count": 119,
-                            "title": "LLVM opt error",
-                            "color": "red"
+                            "title": "Replacement fail in final program",
+                            "color": "indianred"
                         }
                     }
                 },
@@ -399,7 +394,7 @@
                     ],
                     "meta": [],
                     "title": "Programs with multiple variants",
-                    "color": "green"
+                    "color": "mediumseagreen"
                 }
             }
         }

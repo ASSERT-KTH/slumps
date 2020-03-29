@@ -8,6 +8,7 @@ RUN python3.7 -m pip install pip
 
 COPY . /slumps/crow
 COPY start_docker.sh /slumps/crow
+COPY start_docker_no_wget.sh /slumps/crow
 
 
 

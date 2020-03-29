@@ -111,7 +111,7 @@ def plotFullPie(leafs):
 
     recipe = ["%s \\textbf{%s}"%(p["title"], p["count"]) for p in leafs]
 
-    data = [p["count"] for p in leafs]
+    data = [p["count"] for p in leafs if p["title"]]
     explode = [0.02 for _ in leafs]
     wedges, texts = ax.pie(data, wedgeprops=dict(width=0.5), startangle=-40, explode = explode, colors=[p["color"] for p in leafs])
 

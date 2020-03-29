@@ -56,9 +56,18 @@ def process(folder, out):
             print(namespace)
             names.append(namespace)
             #DTW_static = json.loads(open("%s/%s/%s_static_DTW.json"%(folder, namespace, namespace), 'r').read())           
-            #DTW_mem = json.loads(open("%s/%s/%s_mem_DTW.json"%(folder, namespace, namespace), 'r').read())
+            try:
+                DTW_mem = json.loads(open("%s/%s/%s_mem_DTW.json"%(folder, namespace, namespace), 'r').read())
+                mem_matrices.append(DTW_mem["DTWS"])
+            except:
+                mem_matrices.append([[]])
+            
+            try:
             #DTW_stack = json.loads(open("%s/%s/%s_stack_DTW.json"%(folder, namespace, namespace), 'r').read())
-            DTW_opcode = json.loads(open("%s/%s/%s_opcode_DTW.json"%(folder, namespace, namespace), 'r').read())
+                DTW_opcode = json.loads(open("%s/%s/%s_stack_DTW.json"%(folder, namespace, namespace), 'r').read())
+                opcode_matrices.append(DTW_opcode["DTWS"])
+            except:
+                opcode_matrices.append([[]])
 
             names_matrices.append(DTW_opcode["NAMES"])
 
@@ -67,7 +76,6 @@ def process(folder, out):
             #mem = getDifferentComparisons(DTW_mem["DTWS"])
             #opcode = getDifferentComparisons(DTW_opcode["DTWS"])
 
-            opcode_matrices.append(DTW_opcode["DTWS"])
             #mem_matrices.append(DTW_mem["DTWS"])
 
             #values_mem.append(mem)
@@ -83,14 +91,14 @@ def process(folder, out):
     #print(pearsonr(flat(values_opcode), flat(values_stack)))
 
     #plt.legend(ps, names)
-    latexify(fig_width=9, fig_height=6, font_size=14, tick_size=14)
+    latexify(fig_width=9, fig_height=6, font_size=10, tick_size=10)
 
-    marginLeft=0.2
-    marginRight=0.2
+    marginLeft=0.02
+    marginRight=0.02
     marginBottom = 0.10
     marginTop = 0.2
-    plt.tight_layout(rect=(0 + marginLeft,marginBottom,1 - marginRight,1 - marginTop), w_pad=1.0)
-    
+    #plt.tight_layout(rect=(0 + marginLeft,marginBottom,1 - marginRight,1 - marginTop), w_pad=1.0)
+    #plt.subplots_adjust(0.5, 0.1, 0.9, 0.9, 0.1, 0.1)
     def plot_distribution():
 
         fix, axs = plt.subplots(ncols=3)
@@ -130,29 +138,127 @@ def process(folder, out):
             format_axes(ax, hide=['top', 'right'], show=['bottom', 'left'])
 
         def plotSimple(ax, values, label=""):
-            ax.set_yscale('log')
+            #ax.set_yscale('log')
 
+            nm = list(sorted(enumerate(names), key = lambda x: len(values[x[0]]), reverse=True))
             values = list(sorted(values, key = lambda x: len(x), reverse=True))
-            limits = [min(flat(values)), max(flat(values)) + 1000] # + padding
+            limits = [min(flat(values)), max(flat(values)) + [1000]] # + padding
 
             for index, l in enumerate(values):
                 #print(index, min(l), max(l))
                 ax.axvline(index, linewidth = 2, color=(0.2,0.2,0.2,0.05))
-                ax.scatter([index]*len(l), l, color='orange')
+                #print(len(l), len([index for _ in range(len(l))]))
+                ax.plot([index for _ in l], l, 'o', color='orange')
                 #ax.axvline(index, min(l)/limits[1], max(l)/limits[1])
 
-            #ax.set_xticks(range(len(values)))
-            ax.set_xticks([])
-            ax.set_ylim(*limits)
+            #ax.set_xticks(np.arange(len(names)), )
+            ax.set_xticklabels([n[1] for n in nm], rotation=45)
+            ax.set_xticks(range(len(values)))
+            #ax.set_xticks([])
+            #
 
             ax.set_xlabel(label)
 
-        plotSimple(ax1, values_opcode, "Opcode")
+        plotSimple(ax1, opcode_matrices, "Stack")
         #plotSimple(ax2, values_stack, "Stack")
-        plotSimple(ax2, values_mem, "Memory")
-        plt.show()
-        #plt.savefig("%s/variance.pdf"%out)
-    
+        #plotSimple(ax2, opcode_matrices, "Memory")
+        #plt.show()
+        plt.savefig("%s/variance.pdf"%out)
+    def plot_horizontal(names, valuesStack, valuesMem):
+        
+        # Sorting values
+        names = list(sorted(enumerate(names), key= lambda x: len(valuesStack[x[0]])))
+        valuesStack = list(sorted(valuesStack, key = lambda x: len(x)))
+        valuesMem = list(sorted(valuesMem, key = lambda x: len(x)))
+        names = [n[1] for n in names]
+
+        # flatten and removing redundant comparisons
+        valuesStack = [getDifferentComparisons(v) for v in valuesStack]
+        valuesMem = [getDifferentComparisons(v) for v in valuesMem]
+
+        fig, axs = plt.subplots(ncols=2, sharey=True)
+
+        ax1, ax2 = axs
+        for ax in axs:
+            format_axes(ax, hide=['top', 'right'], show=['bottom', 'left'])
+
+        legends = [None, None]
+        limx = -0.1
+        limX = 2
+        for i,v in enumerate(valuesStack):
+            mx = max(v + [1])
+            normalized = [x/mx for x in v]
+            std = np.std(normalized)
+            mean = np.mean(normalized)
+            xmin = mean-std
+            xmax = mean+std
+            
+            if xmin <= limx:
+                limx = xmin
+            if xmax >= limX:
+                limX = xmax
+            if xmin != xmax:
+                p2 = ax1.plot([xmin, xmax], [i, i], color='orange', linewidth=1)
+                legends[1] = p2[0]
+            p1 = ax1.scatter(mean, i, color='red', s=1.5 + 2*math.log(len(normalized) + 1))
+            
+            legends[0] = p1
+
+            print(names[i], mean, std)
+        ax1.grid(True, linestyle='--', alpha=0.4)
+        print(legends)
+        limx1 = -0.1
+        limX1 = 2
+        for i,v in enumerate(valuesMem):
+            mx = max(v + [1])
+            normalized = [x/mx for x in v]
+            std = np.std(normalized)
+            mean = np.mean(normalized)
+            xmin = mean-std
+            xmax = mean+std
+            
+            if xmin <= limx1:
+                limx1 = xmin
+            if xmax >= limX1:
+                limX1 = xmax
+
+            if xmin != xmax:
+                ax2.plot([xmin, xmax], [i, i], color='orange', linewidth=1)
+
+            ax2.scatter(mean, i, color='red', s=1.5 + 2*math.log(len(normalized) + 1))
+        
+        ax2.grid(True, linestyle='--', alpha=0.4)
+        ax1.set_yticklabels( [n.replace("_", " ").replace("Mt", "Multiplication tables") for n in names])
+        ax1.set_yticks(range(len(names)))
+        ax2.set_yticks(range(len(names)))
+        ax2.axes.get_yaxis().set_visible(False)
+        #ax3.axes.get_yaxis().set_visible(False)
+        # Limits
+        ax1.set_xlim(limx - 0.1, limX + 0.2)
+        ax2.set_xlim(limx1 - 0.1, limX1 + 0.2)
+        
+        ax1.set_ylabel('Program name')
+        ax1.set_xlabel('Stack')
+        ax2.set_xlabel('Memory')
+        #ax3.set_xlabel('$\delta$')
+
+        top = 0.04
+        ax1.legend(legends, ('Mean value', 'Standard deviation interval'),loc='best', bbox_to_anchor=(0,1.1))
+
+        box1 = ax1.get_position()
+        box2 = ax2.get_position()
+       # box3 = ax2.get_position()
+        pos = 0.2
+        pos2 = 0.1
+        pos3 = 0.1
+        pos4 = 0.2
+        ax1.set_position([box1.x0 + pos, box1.y0, box1.width - pos2, box1.height - top])
+        ax2.set_position([box2.x0 + pos3, box2.y0, box2.width - pos3, box2.height - top])
+        #ax3.set_position([box3.x0 + pos3 + pos, box3.y0, box3.width - pos4, box3.height - top])
+        #
+        #plt.show()
+        #plt.subplots_adjust(hspace=0.05) s
+        plt.savefig("%s/variance.pdf"%out)
     def plot_manifold():
 
         for i,namespace in enumerate(opcode_matrices):
@@ -186,7 +292,8 @@ def process(folder, out):
 
     #plot_distribution()
     #plot_custom()
-    plot_manifold()
+    # plot_manifold()
+    plot_horizontal(names, opcode_matrices, mem_matrices)
     
 
             
