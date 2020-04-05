@@ -55,3 +55,9 @@ cd ../..
 
 Python >= 3.6
 LLVM >= 8.0
+
+### To use pipeline.sh
+
+- Build souper
+- export ROOT variable with the absolute path to slumps project. For example ```export ROOT=/Users/javierca/Documents/Develop/slumps```
+- Run pipeline
