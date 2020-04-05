@@ -7,10 +7,28 @@
 name=$(echo $1 | sed 's/\.[^.]*$//')
 ext=$(echo $1 | sed 's/^.*\.//')
 
+  # Change this to your project root
+
+cloWASI(){
+    
+    echo "linking WASI"
+
+    if [[ ! -d /tmp/wasi-libc ]]
+    then
+        echo "WASI does not exists on your filesystem."
+        git clone https://github.com/WebAssembly/wasi-libc 
+        cd wasi-libc 
+        make install INSTALL_DIR=/tmp/wasi-libc
+    fi
+    
+
+    $ROOT/souper/third_party/llvm/Release/bin/clang -O3 -emit-llvm -o $2 --target=wasm32-wasi -S --sysroot=/tmp/wasi-libc  $1
+}
+
 clo(){
    echo "CLO on $1 $2"
 
-   clang   -cc1 -triple=wasm32-unknown-unknown-wasm  -S -O3 -emit-llvm  -main-file-name $1 -mrelocation-model static -mthread-model posix -mdisable-fp-elim -no-integrated-as -mconstructor-aliases -fuse-init-array -nostdsysteminc -nobuiltininc -resource-dir /slumps/souper/third_party/llvm/Release/lib/clang/9.0.0/   -U __native_client__ -U __pnacl__ -U __ELF__ -D __IEEE_LITTLE_ENDIAN -Werror=implicit-function-declaration -fno-dwarf-directory-asm -fno-math-builtin -fobjc-runtime=gcc  -nobuiltininc -nostdsysteminc -isystem/usr/share/emscripten/system/local/include -isystem/usr/share/emscripten/system/include/compat -isystem/usr/share/emscripten/system/include -isystem/usr/share/emscripten/system/include/emscripten -isystem/usr/share/emscripten/system/include/libc -isystem/usr/share/emscripten/system/lib/libc/musl/arch/js -isystem/usr/share/emscripten/system/include/gfx -isystem/usr/share/emscripten/system/include/SDL -isystem/usr/share/emscripten/system/include/libcxx -o $2 -x c $1
+   $ROOT/souper/third_party/llvm/Release/bin/clang  -cc1 -triple=wasm32-unknown-unknown-wasm  -S -O3 -emit-llvm  -main-file-name $1 -mrelocation-model static -mthread-model posix -mdisable-fp-elim -no-integrated-as -mconstructor-aliases -fuse-init-array -nostdsysteminc -nobuiltininc -resource-dir /slumps/souper/third_party/llvm/Release/lib/clang/9.0.0/   -U __native_client__ -U __pnacl__ -U __ELF__ -D __IEEE_LITTLE_ENDIAN -Werror=implicit-function-declaration -fno-dwarf-directory-asm -fno-math-builtin -fobjc-runtime=gcc  -nobuiltininc -nostdsysteminc -isystem/usr/share/emscripten/system/local/include -isystem/usr/share/emscripten/system/include/compat -isystem/usr/share/emscripten/system/include -isystem/usr/share/emscripten/system/include/emscripten -isystem/usr/share/emscripten/system/include/libc -isystem/usr/share/emscripten/system/lib/libc/musl/arch/js -isystem/usr/share/emscripten/system/include/gfx -isystem/usr/share/emscripten/system/include/SDL -isystem/usr/share/emscripten/system/include/libcxx -o $2 -x c $1
 }
 
 
@@ -18,18 +36,18 @@ clo(){
 # alias
 shopt -s expand_aliases
 #alias clang='~/slumps/souper/third_party/llvm/Release/bin/clang'
-alias llc='/slumps/souper/third_party/llvm/Release/bin/llc'
-alias llvm-as='/slumps/souper/third_party/llvm/Release/bin/llvm-as'
-alias llvm-opt='/slumps/souper/third_party/llvm/Release/bin/opt'
-alias souper='/slumps/souper/build/souper'
-alias souper-check='~/slumps/souper/build/souper-check'
-alias wasm2c='/slumps/wabt/bin/wasm2c'
-alias wasm2wat='/slumps/wabt/bin/wasm2wat'
+alias llc='$ROOT/souper/third_party/llvm/Release/bin/llc'
+alias llvm-as='$ROOT/souper/third_party/llvm/Release/bin/llvm-as'
+alias llvm-opt='$ROOT/souper/third_party/llvm/Release/bin/opt'
+alias souper='$ROOT/souper/build/souper'
+alias souper-check='$ROOT/souper/build/souper-check'
+alias wasm2c='$ROOT/wabt/bin/wasm2c'
+alias wasm2wat='$ROOT/wabt/bin/wasm2wat'
 alias wasm-ld='/usr/bin/wasm-ld-9'
 
 # vars
-z3='/slumps/souper/third_party/z3/build/z3'
-libsouperPass='/slumps/souper/build/libsouperPass.so'
+z3='$ROOT/souper/third_party/z3/build/z3'
+libsouperPass='$ROOT/souper/build/libsouperPass.so'
 
 RED='\033[0;31m'
 NC='\033[0m' # No Color
@@ -38,7 +56,7 @@ start=$(date)
 
 if [ "${ext}" == "c" ]; then
 #  clang --target=wasm32-unknown-unknown -O3 $1 -S -emit-llvm -o  $name.ll
- clo $1 $name.ll 
+ cloWASI $1 $name.ll 
  echo "CLO exit"
  llvm-as -o $name.bc $name.ll
 fi
@@ -49,11 +67,6 @@ wasm2wat -o $name.wat $name.wasm
 #llvm-as $name.reg.ll -o $name.bc
 echo "Souperifying ${name}..."
 
-# "-souper-enumerative-synthesis", "-souper-enumerative-synthesis-num-instructions=%s"%(self.MAX_INST,) souper-infer-inst
-#llvm-opt -load ${libsouperPass} -souper -souper-enumerative-synthesis -souper-enumerative-synthesis-num-instructions=3 -solver-timeout=20   -z3-path=${z3} -souper-debug-level=4 -o $name.opt.bc $name.bc
-#llvm-opt -load ${libsouperPass}  -souper -souper-enumerative-synthesis -souper-infer-inst -souper-use-alive -souper-synthesis-const-with-cegis -souper-synthesis-comps=mul,select,const,const,shl,lshr,ashr,and,or,xor,add,sub,slt,ult,sle,ule,eq,ne -solver-timeout=40  -z3-path=${z3} -souper-debug-level=0 -o $name.opt.bc $name.bc
-#llvm-opt -load ${libsouperPass} -souper -souper-infer-inst -solver-timeout=3600 -souper-external-cache -z3-path=${z3} -souper-debug-level=4 -o $name.opt.bc $name.bc 
-    
     if [ "$2" = "1" ]; 
     then
        echo "option 1"
