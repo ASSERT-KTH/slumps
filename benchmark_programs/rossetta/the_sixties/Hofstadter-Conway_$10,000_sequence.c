@@ -27,3 +27,9 @@ int doSqnc( int m)
     }
     return 1;
 }
+
+int main(){
+
+    doSqnc(100);
+    return 0;
+}

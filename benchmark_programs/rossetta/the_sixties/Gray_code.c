@@ -1,5 +1,12 @@
 #include <stdio.h>
  
+
+int gray_decode(int n) {
+    int p = n;
+    while (n >>= 1) p ^= n;
+    return p;
+}
+
 /* Simple bool formatter, only good on range 0..31 */
 void fmtbool(int n, char *buf) {
     char *b = buf + 5;

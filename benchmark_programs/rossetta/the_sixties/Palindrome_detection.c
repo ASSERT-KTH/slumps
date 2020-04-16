@@ -10,3 +10,10 @@ int palindrome(const char *s)
    }
    return 1;
 }
+
+
+int main(int argc, char **argv) {
+    
+    printf("%d\n", palindrome("abababa"));
+    return 0;
+}
