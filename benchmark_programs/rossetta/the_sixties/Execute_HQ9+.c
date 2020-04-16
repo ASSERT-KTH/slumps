@@ -32,4 +32,11 @@ void runCode(const char *code)
                 break;
         }
     }
-};
+}
+
+
+int main(){
+
+    runCode("Hello world");
+    return 0;
+}
