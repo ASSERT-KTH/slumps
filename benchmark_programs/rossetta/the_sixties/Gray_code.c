@@ -1,5 +1,8 @@
 #include <stdio.h>
  
+int gray_encode(int n) {
+    return n ^ (n >> 1);
+}
 
 int gray_decode(int n) {
     int p = n;
