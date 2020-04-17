@@ -1,13 +1,13 @@
 name: CROW on file
-
-push:
-    branches:
-      - master
-    tags:
-      - v1
-    # file paths to consider in the event. Optional; defaults to all.
-    paths:
-      - 'benchmark_programs/*/**'
+on:
+  push:
+      branches:
+        - master
+      tags:
+        - v1
+      # file paths to consider in the event. Optional; defaults to all.
+      paths:
+        - 'benchmark_programs/*/**'
 
 jobs:
   build:
