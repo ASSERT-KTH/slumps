@@ -7,6 +7,8 @@ from collections import defaultdict
 from glob import glob
 from subprocess import check_output, run
 
+CC = os.environ.get("CC", "clang-10")
+
 if len(sys.argv) > 1:
     inputs = sys.argv[1:]
 else:
@@ -17,7 +19,7 @@ results = defaultdict(list)
 for inp in inputs:
     for fname in glob("*.bc"):
         executable = "./" + os.path.splitext(fname)[0]
-        run(["clang", fname, "-o", executable], check=True)
+        run([CC, fname, "-o", executable], check=True)
         output = check_output([executable, inp]).decode()
         results[output].append(fname)
 
