@@ -18,7 +18,7 @@ results = defaultdict(list)
 
 for inp in inputs:
     for fname in glob("*.bc"):
-        executable = "./" + os.path.splitext(fname)[0]
+        executable = "./" + os.path.splitext(fname)[0] + ".out"
         run([CC, fname, "-o", executable], check=True)
         output = check_output([executable, inp]).decode()
         results[output].append(fname)
