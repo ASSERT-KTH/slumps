@@ -75,7 +75,9 @@ class Pipeline(object):
         try:
 
             futures = []
-            for level in range(1, 19):
+            order = list(map(lambda x: int(x),  config["DEFAULT"]["order"].split(",")))
+            LOGGER.info("ORDER", order)
+            for level in order:
                 job = levelPool.submit(self.processLevel,level, program_name, bc, OUT_FOLDER, onlybc, meta, outResult)
                 # job.result()
 
@@ -141,7 +143,7 @@ class Pipeline(object):
 
             if RUNTIME_CONFIG["USE_REDIS"]:
                 import redis
-                r = redis.Redis(host="localhost", port=6379, db=0)
+                r = redis.Redis(host="localhost", port=6379, db=level)
 
                 result = r.flushdb()
                 LOGGER.success(program_name, "Flushing redis DB: result(%s)" % result)
