@@ -141,7 +141,7 @@ def getIteratorByName(name: str):
 
 
 def createTmpFile(ext=""):
-    return "%s/%s%s" % (OUT_FOLDER, uuid.uuid4(), ext)
+    return "%s/%s%s" % (OUT_FOLDER, uuid.uuid4(), ext if ext else "")
 
 
 def globalCounter():
