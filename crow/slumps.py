@@ -14,7 +14,7 @@ from concurrent.futures import ThreadPoolExecutor, wait, ALL_COMPLETED
 import multiprocessing
 import time
 
-pool = ThreadPoolExecutor(max_workers=config["DEFAULT"].getint("workers"))
+levelPool = ThreadPoolExecutor(max_workers=config["DEFAULT"].getint("level-workers"))
 
 class Pipeline(object):
 
@@ -74,55 +74,14 @@ class Pipeline(object):
 
         try:
 
+            futures = []
             for level in range(1, 19):
+                job = levelPool.submit(self.processLevel,level, program_name, bc, OUT_FOLDER, onlybc, meta, outResult)
+                # job.result()
 
-                LOGGER.success(program_name,
-                               "%s: Searching level (increasing execution time) %s: %s..." % (program_name,
-                                                                                              level, config["souper"][
-                                                                                                  "souper-level-%s" % level]))
-                try:
-                    bctocand = BCCountCandidates(program_name, level=level)
-                except Exception as e:
-                    LOGGER.error(program_name, e)
-                    continue
-                with ContentToTmpFile(content=bc) as TMP_BC:
-                    try:
-                        cand = bctocand(args=[TMP_BC.file], std=None)
-                    except Exception as e:
-                        LOGGER.error(program_name, e)
-                        continue
-                    # Saving candidate
-                    canCount = len(cand[0])
-                    LOGGER.success(program_name, "%s: Found %s arithmetic expression candidates. %s Can be replaced" % (
-                        program_name, cand[1], canCount))
+                futures.append(job)
+            wait(futures, return_when=ALL_COMPLETED)
 
-                    # Test set the second candidate for optimization
-
-                    # BC to tmpfile
-                    with ContentToTmpFile(content=bc) as BCIN:
-                        tmpIn = BCIN.file
-
-                        total = 2 ** (canCount)  # tentative, TODO change to the iterator
-                        current = 1
-                        pruned = 0
-                        futures =  []
-                        for s in getIteratorByName(config["DEFAULT"]["generator-method"])(cand[0]):
-
-                            job = pool.submit(self.processSingle, s, level, tmpIn, program_name, OUT_FOLDER, onlybc, meta, outResult)
-                            #job.result()
-
-
-                            futures.append(job)
-                        wait(futures, return_when=ALL_COMPLETED)
-
-
-                    if RUNTIME_CONFIG["USE_REDIS"]:
-                        import redis
-                        r = redis.Redis(host="localhost", port=6379, db=0)
-
-                        result = r.flushdb()
-                        LOGGER.success(program_name, "Flushing redis DB: result(%s)" % result)
-                        r.close()
 
         except BreakException:
             pass
@@ -140,6 +99,53 @@ class Pipeline(object):
         return dict(programs=meta, count=len(meta.keys()))
 
 
+    def processLevel(self, level,program_name, bc, OUT_FOLDER, onlybc, meta, outResult):
+
+        pool = ThreadPoolExecutor(max_workers=config["DEFAULT"].getint("workers"))
+
+        LOGGER.success(program_name,
+                       "%s: Searching level (increasing execution time) %s: %s..." % (program_name,
+                                                                                      level, config["souper"][
+                                                                                          "souper-level-%s" % level]))
+        try:
+            bctocand = BCCountCandidates(program_name, level=level)
+        except Exception as e:
+            LOGGER.error(program_name, e)
+            return
+        with ContentToTmpFile(content=bc) as TMP_BC:
+            try:
+                cand = bctocand(args=[TMP_BC.file], std=None)
+            except Exception as e:
+                LOGGER.error(program_name, e)
+                return
+            # Saving candidate
+            canCount = len(cand[0])
+            LOGGER.success(program_name, "%s: Found %s arithmetic expression candidates. %s Can be replaced" % (
+                program_name, cand[1], canCount))
+
+            # Test set the second candidate for optimization
+
+            # BC to tmpfile
+            with ContentToTmpFile(content=bc) as BCIN:
+                tmpIn = BCIN.file
+
+
+                futures = []
+                for s in getIteratorByName(config["DEFAULT"]["generator-method"])(cand[0]):
+                    job = pool.submit(self.processSingle, s, level, tmpIn, program_name, OUT_FOLDER, onlybc, meta,
+                                      outResult)
+                    # job.result()
+
+                    futures.append(job)
+                wait(futures, return_when=ALL_COMPLETED)
+
+            if RUNTIME_CONFIG["USE_REDIS"]:
+                import redis
+                r = redis.Redis(host="localhost", port=6379, db=0)
+
+                result = r.flushdb()
+                LOGGER.success(program_name, "Flushing redis DB: result(%s)" % result)
+                r.close()
     def processSingle(self, s, level, tmpIn, program_name, OUT_FOLDER, onlybc, meta, outResult):
         with ContentToTmpFile() as BCOUT:
             tmpOut = BCOUT.file
@@ -161,8 +167,8 @@ class Pipeline(object):
                                                                     debug=True, generateOnlyBc=onlybc)
 
             
-                meta[wasmFile.split("/")[-1]] = dict(size=size, sha=hex)
-                outResult["candidates"].append(dict(size=size, sha=hex, name=wasmFile))
+                #meta[wasmFile.split("/")[-1]] = dict(size=size, sha=hex)
+                #outResult["candidates"].append(dict(size=size, sha=hex, name=wasmFile))
 
                 #sizes[hex] = [size, list(s)]
 
