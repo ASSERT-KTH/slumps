@@ -7,10 +7,14 @@ from utils import printProgressBar, config, createTmpFile, getIteratorByName, \
     ContentToTmpFile, BreakException, RUNTIME_CONFIG, updatesettings, sendReportEmail, make_github_issue, getlogfilename
 from logger import LOGGER
 import hashlib
-import multiprocessing
 import json
 import copy
+from concurrent.futures import ThreadPoolExecutor, wait, ALL_COMPLETED
 
+import multiprocessing
+import time
+
+pool = ThreadPoolExecutor(max_workers=config["DEFAULT"].getint("workers"))
 
 class Pipeline(object):
 
@@ -78,7 +82,7 @@ class Pipeline(object):
                                                                                                   "souper-level-%s" % level]))
                 try:
                     bctocand = BCCountCandidates(program_name, level=level)
-                except Expception as e:
+                except Exception as e:
                     LOGGER.error(program_name, e)
                     continue
                 with ContentToTmpFile(content=bc) as TMP_BC:
@@ -96,73 +100,22 @@ class Pipeline(object):
 
                     # BC to tmpfile
                     with ContentToTmpFile(content=bc) as BCIN:
-                        with ContentToTmpFile() as BCOUT:
-                            tmpIn = BCIN.file
-                            tmpOut = BCOUT.file
+                        tmpIn = BCIN.file
 
-                            total = 2 ** (canCount)  # tentative, TODO change to the iterator
-                            current = 1
-                            pruned = 0
+                        total = 2 ** (canCount)  # tentative, TODO change to the iterator
+                        current = 1
+                        pruned = 0
+                        futures =  []
+                        for s in getIteratorByName(config["DEFAULT"]["generator-method"])(cand[0]):
 
-                            if canCount > 0 and canCount >= config["DEFAULT"].getint("candidates-threshold"):
-                                for s in getIteratorByName(config["DEFAULT"]["generator-method"])(cand[0]):
-
-                                    try:
-                                        sanitized_set_name = "_".join(list(map(lambda x: x.__str__(), s)))
-
-                                        optBc = BCToSouper(program_name, candidates=list(s), level=level, debug=True)
-                                        optBc(args=[tmpIn, tmpOut], std=None)
-
-                                        bsOpt = open(tmpOut, 'rb').read()
-
-                                        # Generate wasm
-
-                                        hex, size, wasmFile, watFile = self.generateWasm(program_name, bsOpt,
-                                                                                         OUT_FOLDER,
-                                                                                         "[%s]%s[%s]" % (level,
-                                                                                                         program_name,
-                                                                                                         sanitized_set_name),
-                                                                                         debug=True, generateOnlyBc=onlybc)
-
-                                        printProgressBar(current, total,
-                                                         suffix="Completed %s[%s] %s" % (
-                                                             program_name, sanitized_set_name, hex),
-                                                         length=50)
-
-                                        current += 1
-                                        if config["DEFAULT"].getboolean("prune-equal"):
-                                            if hex in sha:
-                                                os.remove(wasmFile)
-                                                os.remove(watFile)
-                                                pruned += 1
-                                                continue
-                                        else:
-                                            meta[wasmFile.split("/")[-1]] = dict(size=size, sha=hex)
-                                            outResult["candidates"].append(dict(size=size, sha=hex, name=wasmFile))
-
-                                        sizes[hex] = [size, list(s)]
-
-                                        sha.add(hex)
-
-                                    except Exception as e:
-                                        if config["DEFAULT"].getboolean("fail-silently"):
-                                            LOGGER.error(program_name, e)
-                                        else:
-                                            raise e
-
-                                printProgressBar(current, total,
-                                                 suffix="Total number of programs %s. Different sha count %s. Pruned count %s      %s" % (
-                                                     current, len(sha), pruned, " " * 100), length=50)
+                            job = pool.submit(self.processSingle, s, level, tmpIn, program_name, OUT_FOLDER, onlybc, meta, outResult)
+                            #job.result()
 
 
-                                if config["DEFAULT"].getboolean("exit-on-find"):
-                                    raise BreakException()
+                            futures.append(job)
+                        wait(futures, return_when=ALL_COMPLETED)
 
-                            else:
-                                LOGGER.error(program_name,
-                                             "%s: No succesfull replacements. Total number of subexpressions  %s. Souper level %s" % (
-                                                 program_name,
-                                                 cand[1], level))
+
                     if RUNTIME_CONFIG["USE_REDIS"]:
                         import redis
                         r = redis.Redis(host="localhost", port=6379, db=0)
@@ -185,6 +138,45 @@ class Pipeline(object):
         metaF.close()
 
         return dict(programs=meta, count=len(meta.keys()))
+
+
+    def processSingle(self, s, level, tmpIn, program_name, OUT_FOLDER, onlybc, meta, outResult):
+        with ContentToTmpFile() as BCOUT:
+            tmpOut = BCOUT.file
+            try:
+                sanitized_set_name = "_".join(list(map(lambda x: x.__str__(), s)))
+
+                optBc = BCToSouper(program_name, candidates=list(s), level=level, debug=True)
+                optBc(args=[tmpIn, tmpOut], std=None)
+
+                bsOpt = open(tmpOut, 'rb').read()
+
+                # Generate wasm
+
+                hex, size, wasmFile, watFile = self.generateWasm(program_name, bsOpt,
+                                                                    OUT_FOLDER,
+                                                                    "[%s]%s[%s]" % (level,
+                                                                                    program_name,
+                                                                                    sanitized_set_name),
+                                                                    debug=True, generateOnlyBc=onlybc)
+
+            
+                meta[wasmFile.split("/")[-1]] = dict(size=size, sha=hex)
+                outResult["candidates"].append(dict(size=size, sha=hex, name=wasmFile))
+
+                #sizes[hex] = [size, list(s)]
+
+                #sha.add(hex)
+                LOGGER.info(program_name, size)
+
+            except Exception as e:
+                if config["DEFAULT"].getboolean("fail-silently"):
+                    LOGGER.error(program_name, e)
+                else:
+                    raise e
+            
+
+
 
     def generateWasm(self, namespace, bc, OUT_FOLDER, fileName, debug=True, generateOnlyBc = False):
         llFileName = "%s/%s" % (OUT_FOLDER, fileName)
