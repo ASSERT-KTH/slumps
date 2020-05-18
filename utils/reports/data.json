@@ -1,65 +1,75 @@
 {
-    "count": 788,
+    "count": 60,
     "title": "All programs",
     "color": "green",
     "children": {
+        "fail_to_compile": {
+            "count": 3,
+            "title": "Fail to port to WASM",
+            "color": "red"
+        },
         "compiled": {
-            "count": 601,
+            "count": 57,
             "title": "Successful compilation to WASM",
             "color": "green",
             "children": {
                 "only_original": {
-                    "count": 541,
+                    "count": 3,
                     "children": {
                         "timeout": {
-                            "count": 339,
-                            "title": "Timeout in randomization stage",
-                            "color": "orange"
+                            "count": 2,
+                            "title": "Timeout in superoptimization stage",
+                            "color": "red"
                         },
                         "no_subexpression": {
-                            "count": 83,
-                            "title": "No subexpresssion to replace",
-                            "color": "wheat"
+                            "count": 0,
+                            "title": "No subexpresssion no optimize",
+                            "color": "orange"
                         },
                         "fail_optimize": {
-                            "count": 119,
-                            "title": "Replacement fail in final program",
-                            "color": "indianred"
+                            "count": 1,
+                            "title": "LLVM opt error",
+                            "color": "orange"
+                        },
+                        "other": {
+                            "count": 0,
+                            "title": "Other reason",
+                            "color": "orange"
                         }
                     }
                 },
                 "with_variants": {
-                    "count": 60,
+                    "count": 54,
                     "variants": [
                         [
-                            26069,
-                            3224,
+                            12993,
+                            2691,
                             25,
                             "Multiplication_tables"
                         ],
                         [
-                            82283,
-                            2103,
+                            25919,
+                            1026,
                             158,
                             "Law_of_cosines_-_triples"
                         ],
                         [
-                            32,
-                            16,
+                            62,
+                            46,
                             63,
                             "URL_decoding"
+                        ],
+                        [
+                            29111,
+                            16,
+                            91,
+                            "Mian-Chowla_sequence"
                         ],
                         [
                             129,
                             16,
                             19,
                             "Roots_of_unity"
-                        ],
-                        [
-                            44688,
-                            16,
-                            91,
-                            "Mian-Chowla_sequence"
                         ],
                         [
                             17,
@@ -74,34 +84,46 @@
                             "100_doors"
                         ],
                         [
-                            65,
-                            8,
-                            59,
-                            "N'th"
-                        ],
-                        [
                             9,
                             8,
                             154,
                             "Hilbert_curve"
                         ],
                         [
-                            11,
+                            65,
+                            8,
+                            59,
+                            "N'th"
+                        ],
+                        [
+                            16,
+                            6,
+                            59,
+                            "Permutations-Rank_of_a_permutation"
+                        ],
+                        [
+                            59,
+                            4,
                             7,
-                            84,
-                            "Tokenize_a_string_with_escaping"
+                            "Babbage_problem"
                         ],
                         [
                             5,
                             4,
-                            27,
-                            "Middle_three_digits"
+                            107,
+                            "Best_shuffle"
                         ],
                         [
-                            33,
+                            43628,
                             4,
-                            8,
-                            "Show_Ascii_table"
+                            58,
+                            "Burrows\u2013Wheeler_transform"
+                        ],
+                        [
+                            26398,
+                            4,
+                            80,
+                            "Cartesian_product_of_two_or_more_lists"
                         ],
                         [
                             5,
@@ -116,52 +138,28 @@
                             "Evaluate_binomial_coefficients"
                         ],
                         [
-                            5,
-                            4,
-                            326,
-                            "Sailors,_coconuts_and_a_monkey_problem"
-                        ],
-                        [
-                            9,
-                            4,
-                            59,
-                            "Permutations-Rank_of_a_permutation"
-                        ],
-                        [
-                            45,
-                            4,
-                            7,
-                            "Babbage_problem"
-                        ],
-                        [
                             9,
                             4,
                             6,
                             "Fibonacci_sequence"
                         ],
                         [
-                            37544,
+                            5,
                             4,
-                            58,
-                            "Burrows\u2013Wheeler_transform"
+                            326,
+                            "Sailors,_coconuts_and_a_monkey_problem"
                         ],
                         [
-                            54632,
+                            33,
                             4,
-                            80,
-                            "Cartesian_product_of_two_or_more_lists"
+                            8,
+                            "Show_Ascii_table"
                         ],
                         [
-                            192,
-                            3,
-                            24,
-                            "Sierpinski_triangle"
-                        ],
-                        [
-                            9,
-                            3,
-                            173,
-                            "Magic_squares_of_singly_even_order"
+                            17,
+                            4,
+                            84,
+                            "Tokenize_a_string_with_escaping"
                         ],
                         [
                             5,
@@ -170,28 +168,16 @@
                             "99_Bottles_of_Beer"
                         ],
                         [
-                            4,
-                            2,
-                            29,
-                            "Largest_number_divisible_by_its_digits"
+                            9,
+                            3,
+                            173,
+                            "Magic_squares_of_singly_even_order"
                         ],
                         [
                             3,
                             2,
-                            21,
-                            "Thiele's_interpolation_formula"
-                        ],
-                        [
-                            3,
-                            2,
-                            10,
-                            "Knuth_shuffle"
-                        ],
-                        [
-                            3,
-                            2,
-                            -1,
-                            "Best_shuffle"
+                            103,
+                            "Catalan_numbers"
                         ],
                         [
                             65,
@@ -200,118 +186,10 @@
                             "Chebyshev_coefficients"
                         ],
                         [
-                            17,
-                            2,
-                            17,
-                            "Hofstadter-Conway_$10,000_sequence"
-                        ],
-                        [
-                            3,
-                            2,
-                            132,
-                            "Vampire_number"
-                        ],
-                        [
-                            5,
-                            2,
-                            51,
-                            "Remove_duplicate_elements"
-                        ],
-                        [
-                            3,
-                            2,
-                            97,
-                            "Zeckendorf_number_representation"
-                        ],
-                        [
-                            5,
-                            2,
-                            32,
-                            "Day_of_the_week"
-                        ],
-                        [
-                            3,
-                            2,
-                            7,
-                            "Gray_code"
-                        ],
-                        [
-                            3,
-                            2,
-                            89,
-                            "Sort_numbers_lexicographically"
-                        ],
-                        [
                             9,
                             2,
                             12,
                             "Compare_a_list_of_strings"
-                        ],
-                        [
-                            5,
-                            2,
-                            6,
-                            "Sorting_algorithms-Sleep_sort"
-                        ],
-                        [
-                            68,
-                            2,
-                            27,
-                            "Total_circles_area"
-                        ],
-                        [
-                            33,
-                            2,
-                            89,
-                            "Ramsey's_theorem"
-                        ],
-                        [
-                            4097,
-                            2,
-                            47,
-                            "Quickselect_algorithm"
-                        ],
-                        [
-                            129,
-                            2,
-                            40,
-                            "Sorting_algorithms-Bubble_sort"
-                        ],
-                        [
-                            33,
-                            2,
-                            26,
-                            "Longest_increasing_subsequence"
-                        ],
-                        [
-                            3,
-                            2,
-                            48,
-                            "Fast_Fourier_transform"
-                        ],
-                        [
-                            9,
-                            2,
-                            10,
-                            "Sorting_algorithms-Gnome_sort"
-                        ],
-                        [
-                            65,
-                            2,
-                            16,
-                            "Forward_difference"
-                        ],
-                        [
-                            3,
-                            2,
-                            12,
-                            "Palindrome_detection"
-                        ],
-                        [
-                            5,
-                            2,
-                            4,
-                            "Horner's_rule_for_polynomial_evaluation"
                         ],
                         [
                             257,
@@ -320,61 +198,19 @@
                             "Continued_fraction"
                         ],
                         [
-                            17,
-                            2,
-                            21,
-                            "Look-and-say_sequence"
-                        ],
-                        [
-                            513,
-                            2,
-                            22,
-                            "Sparkline_in_unicode"
-                        ],
-                        [
-                            6,
-                            2,
-                            40,
-                            "Image_noise"
-                        ],
-                        [
-                            136,
-                            2,
-                            24,
-                            "Nth_root"
-                        ],
-                        [
-                            17,
-                            2,
-                            13,
-                            "Price_fraction"
-                        ],
-                        [
-                            8193,
-                            2,
-                            5,
-                            "Flatten_a_list"
-                        ],
-                        [
                             3,
                             2,
                             93,
                             "Cycle_detection"
                         ],
                         [
-                            16385,
+                            5,
                             2,
-                            54,
-                            "Sorting_algorithms-Merge_sort"
+                            32,
+                            "Day_of_the_week"
                         ],
                         [
-                            3,
-                            2,
-                            36,
-                            "Feigenbaum_constant_calculation"
-                        ],
-                        [
-                            3,
+                            6,
                             2,
                             68,
                             "Deconvolution-1D"
@@ -386,15 +222,153 @@
                             "Execute_HQ9+"
                         ],
                         [
+                            4,
+                            2,
+                            48,
+                            "Fast_Fourier_transform"
+                        ],
+                        [
+                            4,
+                            2,
+                            36,
+                            "Feigenbaum_constant_calculation"
+                        ],
+                        [
+                            8193,
+                            2,
+                            5,
+                            "Flatten_a_list"
+                        ],
+                        [
+                            17,
+                            2,
+                            17,
+                            "Hofstadter-Conway_$10,000_sequence"
+                        ],
+                        [
+                            5,
+                            2,
+                            4,
+                            "Horner's_rule_for_polynomial_evaluation"
+                        ],
+                        [
+                            6,
+                            2,
+                            29,
+                            "Largest_number_divisible_by_its_digits"
+                        ],
+                        [
+                            33,
+                            2,
+                            26,
+                            "Longest_increasing_subsequence"
+                        ],
+                        [
+                            17,
+                            2,
+                            21,
+                            "Look-and-say_sequence"
+                        ],
+                        [
+                            136,
+                            2,
+                            24,
+                            "Nth_root"
+                        ],
+                        [
+                            5,
+                            2,
+                            12,
+                            "Palindrome_detection"
+                        ],
+                        [
+                            17,
+                            2,
+                            13,
+                            "Price_fraction"
+                        ],
+                        [
+                            4097,
+                            2,
+                            47,
+                            "Quickselect_algorithm"
+                        ],
+                        [
+                            33,
+                            2,
+                            89,
+                            "Ramsey's_theorem"
+                        ],
+                        [
+                            5,
+                            2,
+                            51,
+                            "Remove_duplicate_elements"
+                        ],
+                        [
+                            33,
+                            2,
+                            14,
+                            "Sierpinski_triangle"
+                        ],
+                        [
                             3,
                             2,
-                            103,
-                            "Catalan_numbers"
+                            89,
+                            "Sort_numbers_lexicographically"
+                        ],
+                        [
+                            129,
+                            2,
+                            40,
+                            "Sorting_algorithms-Bubble_sort"
+                        ],
+                        [
+                            9,
+                            2,
+                            10,
+                            "Sorting_algorithms-Gnome_sort"
+                        ],
+                        [
+                            3139,
+                            2,
+                            54,
+                            "Sorting_algorithms-Merge_sort"
+                        ],
+                        [
+                            513,
+                            2,
+                            22,
+                            "Sparkline_in_unicode"
+                        ],
+                        [
+                            3,
+                            2,
+                            21,
+                            "Thiele's_interpolation_formula"
+                        ],
+                        [
+                            68,
+                            2,
+                            28,
+                            "Total_circles_area"
+                        ],
+                        [
+                            3,
+                            2,
+                            132,
+                            "Vampire_number"
+                        ],
+                        [
+                            3,
+                            2,
+                            97,
+                            "Zeckendorf_number_representation"
                         ]
                     ],
                     "meta": [],
                     "title": "Programs with multiple variants",
-                    "color": "mediumseagreen"
+                    "color": "green"
                 }
             }
         }

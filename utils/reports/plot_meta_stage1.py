@@ -9,9 +9,9 @@ def process(meta):
     
 
 
-    latexify(fig_width=9, fig_height=4, font_size=13, tick_size=9)
+    # latexify(fig_width=9, fig_height=4, font_size=13, tick_size=9)
 
-    fix, ax = plt.subplots()
+    fix, ax = plt.subplots(figsize=(15, 40))
     
     format_axes(ax, hide=['top', 'right'], show=['bottom', 'left'])
 
@@ -46,7 +46,8 @@ def process(meta):
     #plt.yticks(np.arange(0, 81, 10))
 
     #plt.show()
-    plt.savefig("/Users/javierca/Documents/Develop/CROW-paper/plots/stage1.pdf")
+    #plt.savefig("/Users/javierca/Documents/Develop/CROW-paper/plots/stage1.pdf")\
+    plt.savefig("stage1.png", dpi=600)
 
 
 if __name__ == "__main__":

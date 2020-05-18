@@ -4,7 +4,7 @@ metadata:
   generateName: slumps-distributed-wasi-
 spec:
   entrypoint: slumps-distributed
-  parallelism: 60
+  parallelism: 10
   arguments:
     parameters:
     - name: repo
@@ -47,13 +47,13 @@ spec:
       - name: logs
         path: /slumps/crow/logs
     container:
-      image: "jacarte/slumps:app"
+      image: "jacarte/slumps:crow"
       command: [/bin/bash]
-      args: [start_docker.sh,"{{workflow.parameters.raw}}/{{inputs.parameters.program}}", "-DEFAULT.timeout", "36000","-DEFAULT.link-wasi", "True", ]
-    #  resources:
-    #    requests:
-    #      memory: 2.5G
-    #      cpu: 0.5
-    #    limits:
-    #      memory: 4G
-    #      cpu: 2
+      args: [start_docker.sh,"{{workflow.parameters.raw}}/{{inputs.parameters.program}}", "-DEFAULT.timeout", "3600","-DEFAULT.link-wasi", "True", ]
+      resources:
+        requests:
+          memory: 1.5G
+          cpu: 1
+        limits:
+          memory: 4G
+          cpu: 2

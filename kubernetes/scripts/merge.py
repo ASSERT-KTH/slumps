@@ -5,7 +5,7 @@ from sklearn.decomposition import PCA
 from scipy.stats import pearsonr
 import matplotlib.pyplot as plt
 import math
-
+from scipy.interpolate import interp1d
 import csv
 from sklearn import manifold
 
@@ -91,7 +91,7 @@ def process(folder, out):
     #print(pearsonr(flat(values_opcode), flat(values_stack)))
 
     #plt.legend(ps, names)
-    latexify(fig_width=9, fig_height=6, font_size=10, tick_size=10)
+    latexify(fig_width=9, fig_height=8, font_size=10, tick_size=10)
 
     marginLeft=0.02
     marginRight=0.02
@@ -183,59 +183,84 @@ def process(folder, out):
             format_axes(ax, hide=['top', 'right'], show=['bottom', 'left'])
 
         legends = [None, None]
-        limx = -0.1
-        limX = 2
-        for i,v in enumerate(valuesStack):
+
+        def plotSimple(index, ax, v):
             mx = max(v + [1])
+
             normalized = [x/mx for x in v]
-            std = np.std(normalized)
-            mean = np.mean(normalized)
-            xmin = mean-std
-            xmax = mean+std
-            
-            if xmin <= limx:
-                limx = xmin
-            if xmax >= limX:
-                limX = xmax
-            if xmin != xmax:
-                p2 = ax1.plot([xmin, xmax], [i, i], color='orange', linewidth=1)
-                legends[1] = p2[0]
-            p1 = ax1.scatter(mean, i, color='red', s=1.5 + 2*math.log(len(normalized) + 1))
-            
-            legends[0] = p1
 
-            print(names[i], mean, std)
-        ax1.grid(True, linestyle='--', alpha=0.4)
-        print(legends)
-        limx1 = -0.1
-        limX1 = 2
-        for i,v in enumerate(valuesMem):
-            mx = max(v + [1])
-            normalized = [x/mx for x in v]
-            std = np.std(normalized)
-            mean = np.mean(normalized)
-            xmin = mean-std
-            xmax = mean+std
+            bins, edges = np.histogram(normalized, 200)
+            mx = max(bins)
+
+            print(names[index])
+            print(bins, edges)
+            center = (edges[:-1] + edges[1:]) / 2
+            #X = np.array([left,right]).T.flatten()
+            #Y = np.array([bins,bins]).T.flatten()
+            #std = np.std(normalized)
+            #mean = np.mean(normalized)
             
-            if xmin <= limx1:
-                limx1 = xmin
-            if xmax >= limX1:
-                limX1 = xmax
+            #f2 = interp1d(center, [h/mx for h in hist])
 
-            if xmin != xmax:
-                ax2.plot([xmin, xmax], [i, i], color='orange', linewidth=1)
+            #
+            i = index - 1
+            #dots = zip(center, [e/mx + i for e in bins])
+            #dots = list(filter(lambda x: x[1] > i, dots))
+            #ax.plot(center, [e/mx + i for e in bins],'-', linewidth=1, color='royalblue')
 
-            ax2.scatter(mean, i, color='red', s=1.5 + 2*math.log(len(normalized) + 1))
+            #ax.scatter([d[0] for d in dots],[d[1] + 0.1 for d in dots], s=3, color='royalblue')
+            #ax1.fill_between(center, index, [e/mx for e in bins])
+        #for i,v in enumerate(valuesStack):
+            #plotSimple(i, ax1, v)
+            #p1 = ax1.fill_between(center, i, f2(center), color='royalblue')
+            #p1 = ax1.scatter(mean, i, color='red', s=1.5 + 2*math.log(len(normalized) + 1))
+            
+            #legends[0] = p1
+
+        valuesMem[0] = [1]
+        for i, v in enumerate(valuesStack):
+            
+            ax2.scatter(valuesMem[i], [i]*len(valuesMem[i]), alpha=0.1, color='orange', s=1)
+            ax1.scatter(v, [i]*len(v), alpha=0.1, color='orange', s=1)
+            #print(heatmap)
+        #ax1.violinplot(valuesStack, range(len(names)), vert=False, widths=1.5, points=1000)
         
+        #for pc in partsS1["bodies"]:
+        #    pc.set_linestyle("--")
+        #    pc.set_linewidth(0.6)
+            
+        
+        ax1.grid(True, alpha=0.4)
+
+        print(legends)
+
+        #for i,v in enumerate(valuesMem):
+            #plotSimple(i, ax2, v)
+
+            #ax1.plot(newBins, f2(newBins), color='blue', linewidth=1)
+            #p1 = ax2.fill_between(newBins, i, f2(newBins), color='royalblue')
+        
+        # HACK
+        #ax2.violinplot(valuesMem, range(len(names)), vert=False, widths=1.5)
+
+
+        #for pc in partsS1["bodies"]:
+        #    pc.set_linestyle("--")
+        #    pc.set_linewidth(0.6)
+
         ax2.grid(True, linestyle='--', alpha=0.4)
-        ax1.set_yticklabels( [n.replace("_", " ").replace("Mt", "Multiplication tables") for n in names])
+        
+        tuple_names = ["%s (%s CMPs)"%(n.replace("_", " ").replace("Mt", "Multiplication tables"), len(valuesStack[i])) for i, n in enumerate(names)]
+
+        ax1.set_yticklabels(tuple_names)
         ax1.set_yticks(range(len(names)))
         ax2.set_yticks(range(len(names)))
         ax2.axes.get_yaxis().set_visible(False)
         #ax3.axes.get_yaxis().set_visible(False)
         # Limits
-        ax1.set_xlim(limx - 0.1, limX + 0.2)
-        ax2.set_xlim(limx1 - 0.1, limX1 + 0.2)
+        ax1.set_xlim(0)
+        ax2.set_xlim(0)
+        #ax2.set_xlim(limx1 - 0.1, limX1 + 0.2)
         
         ax1.set_ylabel('Program name')
         ax1.set_xlabel('Stack')
@@ -243,14 +268,14 @@ def process(folder, out):
         #ax3.set_xlabel('$\delta$')
 
         top = 0.04
-        ax1.legend(legends, ('Mean value', 'Standard deviation interval'),loc='best', bbox_to_anchor=(0,1.1))
+       # ax1.legend(legends, ('Mean value', 'Standard deviation interval'),loc='best', bbox_to_anchor=(0,1.1))
 
         box1 = ax1.get_position()
         box2 = ax2.get_position()
        # box3 = ax2.get_position()
         pos = 0.2
         pos2 = 0.1
-        pos3 = 0.1
+        pos3 = 0.07
         pos4 = 0.2
         ax1.set_position([box1.x0 + pos, box1.y0, box1.width - pos2, box1.height - top])
         ax2.set_position([box2.x0 + pos3, box2.y0, box2.width - pos3, box2.height - top])
@@ -258,7 +283,8 @@ def process(folder, out):
         #
         #plt.show()
         #plt.subplots_adjust(hspace=0.05) s
-        plt.savefig("%s/variance.pdf"%out)
+        #plt.savefig("%s/variance_distribution.pdf"%out)
+        plt.savefig("variance.png")
     def plot_manifold():
 
         for i,namespace in enumerate(opcode_matrices):

@@ -269,6 +269,8 @@ if __name__ == "__main__":
                     fail_to_job += 1
                     
 
+                print(baseline)
+
                 for wa in os.listdir("out/%s"%l): # sanitizing
                         
                     if wa.endswith(".wasm"):
