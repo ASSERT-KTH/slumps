@@ -1,0 +1,94 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Workflow
+metadata:
+  generateName: slumps-distributed-wasi-
+spec:
+  entrypoint: slumps-distributed
+  volumeClaimTemplates:
+  - metadata:
+      name: workdir
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      resources:
+        requests:
+          storage: 5Gi
+  - metadata:
+      name: logs
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      resources:
+        requests:
+          storage: 5Gi
+  parallelism: 3
+  arguments:
+    parameters:
+    - name: repo
+    - name: folder
+    - name: raw
+  templates:
+  - name: slumps-distributed
+    steps:
+    - - name: download-programs
+        template: download-template
+    - - name: slumpsfy
+        template: slumps-template
+        arguments:
+          parameters:
+          - name: program
+            value: "{{item}}"
+        withParam: "{{steps.download-programs.outputs.parameters.programs}}"
+        continueOn:
+          failed: true
+    - - name: merge
+        template: merge-template
+  - name: download-template
+    script:
+      image: madshansen/docker-git-ftp
+      command: [bash]
+      source: |
+        apt-get update && apt-get install -y python && git clone "{{workflow.parameters.repo}}" && ls -l "{{workflow.parameters.folder}}" | wc -l && python -c "import json,os;  print(json.dumps(os.listdir('{{workflow.parameters.folder}}')))" > /out.txt && cat /out.txt
+    outputs:
+      parameters:
+        - name: programs
+          valueFrom: 
+            path: "/out.txt"
+  - name: merge-template
+    container:
+      image: docker/whalesay:latest
+      command: [sh, -c]
+      args: ["ls /results"]
+      volumeMounts:
+      - name: workdir
+        mountPath: /results
+      - name: logs
+        mountPath: /logs
+    outputs:
+      artifacts:
+      - name: results
+        path: /results
+      - name: logs
+        path: /logs
+
+  - name: slumps-template
+    retryStrategy: 
+      limit: 5
+    inputs:
+      parameters:
+      - name: program
+    
+    container:
+      image: "jacarte/slumps:crow"
+      command: [/bin/bash]
+      args: [start_docker.sh,"{{workflow.parameters.raw}}/{{inputs.parameters.program}}", "-DEFAULT.timeout", "3600","-DEFAULT.link-wasi", "True", ]
+      volumeMounts:
+      - name: workdir
+        mountPath: /slumps/crow/out
+      - name: logs
+        mountPath: /slumps/crow/logs
+      #resources:
+      #  requests:
+      #    memory: 2G
+      #    cpu: 1
+      #  limits:
+      #    memory: 4G
+      #    cpu: 2

@@ -1,0 +1,94 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Workflow
+metadata:
+  generateName: slumps-distributed-wasi-
+spec:
+  entrypoint: slumps-distributed
+  parallelism: 9
+  arguments:
+    parameters:
+    - name: repo
+    - name: folder
+    - name: raw
+  templates:
+  - name: slumps-distributed
+    steps:
+    - - name: download-programs
+        template: download-template
+    - - name: explore
+        template: explore-template
+        arguments:
+          parameters:
+          - name: program
+            value: "{{item}}"
+        withParam: "{{steps.download-programs.outputs.parameters.programs}}"
+        continueOn:
+          failed: true
+  - name: download-template
+    script:
+      image: madshansen/docker-git-ftp
+      command: [bash]
+      source: |
+        apt-get update && apt-get install -y python && git clone "{{workflow.parameters.repo}}" && ls -l "{{workflow.parameters.folder}}" | wc -l && python -c "import json,os;  print(json.dumps(os.listdir('{{workflow.parameters.folder}}')))" > /out.txt && cat /out.txt
+    outputs:
+      parameters:
+        - name: programs
+          valueFrom: 
+            path: "/out.txt"
+
+  - name: explore-template
+    inputs:
+      parameters:
+        - name: program
+    steps:
+    - - name: slumpsfy
+        template: slumps-template
+        arguments:
+          parameters:
+          - name: program
+            value: "{{item.program}}"
+          - name: order
+            value: "{{item.order}}"
+        withItems: 
+          - { program: "{{inputs.parameters.program}}", order: "17" }
+          - { program: "{{inputs.parameters.program}}", order: "12" }
+          - { program: "{{inputs.parameters.program}}", order: "13" }
+          - { program: "{{inputs.parameters.program}}", order: "14" }
+          - { program: "{{inputs.parameters.program}}", order: "11" }
+          - { program: "{{inputs.parameters.program}}", order: "1" }
+          - { program: "{{inputs.parameters.program}}", order: "2" }
+          - { program: "{{inputs.parameters.program}}", order: "3" }
+          - { program: "{{inputs.parameters.program}}", order: "4" }
+          - { program: "{{inputs.parameters.program}}", order: "5" }
+          - { program: "{{inputs.parameters.program}}", order: "6" }
+          - { program: "{{inputs.parameters.program}}", order: "7" }
+          - { program: "{{inputs.parameters.program}}", order: "8" }
+          - { program: "{{inputs.parameters.program}}", order: "9" }
+          - { program: "{{inputs.parameters.program}}", order: "10" }
+          - { program: "{{inputs.parameters.program}}", order: "15" }
+          - { program: "{{inputs.parameters.program}}", order: "16" }
+        continueOn:
+          failed: true
+  - name: slumps-template
+    retryStrategy: {}
+    inputs:
+      parameters:
+      - name: program
+      - name: order
+    outputs:
+      artifacts:
+      - name: slumps
+        path: /slumps/crow/out
+      - name: logs
+        path: /slumps/crow/logs
+    container:
+      image: "jacarte/slumps:crow1"
+      command: [/bin/bash]
+      args: [start_docker.sh,"{{workflow.parameters.raw}}/{{inputs.parameters.program}}","-DEFAULT.order", "{{inputs.parameters.order}}", "-DEFAULT.timeout", "25200","-DEFAULT.link-wasi", "True", ]
+      #resources:
+      #  requests:
+      #    memory: 1.5G
+      #    cpu: 1
+      #  limits:
+      #    memory: 4G
+      #    cpu: 2

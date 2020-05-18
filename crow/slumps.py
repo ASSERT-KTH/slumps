@@ -34,32 +34,7 @@ class Pipeline(object):
 
         return False
 
-    def process(self, file, outResult=None):
-
-        program_name = file.split("/")[-1].split(".")[0]
-        OUT_FOLDER = "%s/%s" % (config["DEFAULT"]["outfolder"], program_name)
-        onlybc = config["DEFAULT"].getboolean("generate-bc-only")
-
-        if not os.path.exists(OUT_FOLDER):
-            os.mkdir(OUT_FOLDER)
-
-        if not self.check_file(file):
-            LOGGER.error(program_name, "Invalid file %s" % (file,))
-            return
-
-        if not os.path.exists(OUT_FOLDER):
-            os.mkdir(OUT_FOLDER)
-
-        ll1 = b''
-
-        if file.endswith(".c") or file.endswith(".cpp"):
-            ctoll = CToLLStage(program_name)
-            ll1 = ctoll(file)
-        if file.endswith(".ll"):
-            ll1 = open(file, 'rb')
-
-        lltobc = LLToBC(program_name, debug=False)
-        bc = lltobc(std=ll1)
+    def processBitcode(self,bc, outResult, program_name, OUT_FOLDER, onlybc):
 
         sha = set()
         meta = dict()
@@ -93,13 +68,35 @@ class Pipeline(object):
             for s in sha:
                 LOGGER.warning(program_name, "WASM SHA256 %s. Size %s. Combination %s" % (s, sizes[s][0], sizes[s][1]))
 
-        print("Saving metadata...")
-        metaF = open("%s/%s" % (OUT_FOLDER, "meta.json"), 'w')
-        metaF.write(json.dumps(meta, indent=4))
-        metaF.close()
 
         return dict(programs=meta, count=len(meta.keys()))
 
+
+    def process(self, file, OUT_FOLDER, program_name, onlybc, outResult=None):
+
+
+        if not os.path.exists(OUT_FOLDER):
+            os.mkdir(OUT_FOLDER)
+
+        if not self.check_file(file):
+            LOGGER.error(program_name, "Invalid file %s" % (file,))
+            return
+
+        if not os.path.exists(OUT_FOLDER):
+            os.mkdir(OUT_FOLDER)
+
+        ll1 = b''
+
+        if file.endswith(".c") or file.endswith(".cpp"):
+            ctoll = CToLLStage(program_name)
+            ll1 = ctoll(file)
+        if file.endswith(".ll"):
+            ll1 = open(file, 'rb')
+
+        lltobc = LLToBC(program_name, debug=False)
+        bc = lltobc(std=ll1)
+
+        self.processBitcode(bc, outResult, program_name, OUT_FOLDER, onlybc)
 
     def processLevel(self, level,program_name, bc, OUT_FOLDER, onlybc, meta, outResult):
 
@@ -221,7 +218,41 @@ class Pipeline(object):
 
 
 
-def process(f):
+def getFileMeta( file, outResult=None):
+
+    program_name = file.split("/")[-1].split(".")[0]
+    OUT_FOLDER = "%s/%s" % (config["DEFAULT"]["outfolder"], program_name)
+    onlybc = config["DEFAULT"].getboolean("generate-bc-only")
+
+    return (program_name, OUT_FOLDER, onlybc)
+
+def removeDuplicate(program_name, folder, filt = "*.wasm", remove=False):
+    
+    LOGGER.warning(program_name,"Removing duplicated variants")
+
+    l = [f for f in os.listdir(folder) if f.endswith(filt)]
+    LOGGER.info(program_name,"Total candidates: %s"%(len(l), ))
+
+    st = set()
+
+    for f in l:
+        realPath = f"{folder}/{f}"
+        content = open(realPath, 'rb').read()
+        hashvalue = hashlib.sha256(content).hexdigest()
+
+        if hashvalue in st:
+            if remove:
+                os.remove(realPath)
+        else:
+            st.add(hashvalue)
+    LOGGER.info(program_name,"Unique: %s"%(len(st), ))
+
+
+
+
+
+
+def process(f, OUT_FOLDER, onlybc, program_name, isBc = False):
     MANAGER = multiprocessing.Manager()
     pipeline = Pipeline()
 
@@ -231,9 +262,21 @@ def process(f):
         result[file] = MANAGER.dict()
         result[file]["candidates"] = MANAGER.list()
         try:
-            pipeline.process(file, outResult=result[file])
+            if not isBc:
+                pipeline.process(file, OUT_FOLDER, program_name, onlybc, outResult=result[file])
+            else:
+                
+                bc = open(file, 'rb').read()
+                
+                if not os.path.exists(f"{OUT_FOLDER}"):
+                    os.mkdir(f"{OUT_FOLDER}")
+
+                tmp = open(f"{OUT_FOLDER}/{program_name}.bc", 'wb')
+                tmp.write(bc)
+                tmp.close()
+
+                pipeline.processBitcode(bc, result[file], program_name, OUT_FOLDER, onlybc)
         except Exception as e:
-            print(e)
             result[file]["error"] = e.__str__()
 
     th = multiprocessing.Process(target=launch, args=(f, result_overall,))
@@ -255,6 +298,13 @@ def process(f):
     result_overall[f] = result_overall[f].copy()
     result_overall = result_overall.copy()
 
+    # clean OUT_FOLDER
+
+    remove_duplicate = config["DEFAULT"].getboolean("prune-equal")
+    filt = ".bc" if onlybc else ".wasm"
+
+    removeDuplicate(program_name,OUT_FOLDER, filt, remove_duplicate)
+
     return result_overall
 
 
@@ -272,32 +322,32 @@ def main(f):
     program_name = f.split("/")[-1].split(".")[0]
 
     if os.path.isfile(f):
-        try:
-            r = process(f)
-        except Exception as e:
-            print(e)
+        program_name, OUT_FOLDER, onlybc = getFileMeta(f)
 
+        if f.endswith(".c") or f.endswith(".cpp") or f.endswith(".bc"):
+            try:
+                r = process(f, OUT_FOLDER, onlybc, program_name, isBc=f.endswith(".bc"))
+            except Exception as e:
+                print(e)
     else:
         LOGGER.info(program_name, "Pool size: %s" % config["DEFAULT"].getint("thread-pool-size"))
 
         result = dict(namespace=program_name, programs=[])
         attach = []
         for final in ["%s/%s" % (f, i) for i in os.listdir(f)]:
-            try:
-                r = process(final)
-                result["programs"].append(r)
-                attach.append(getlogfilename(final.split("/")[-1].replace(".c", "")))
-            except Exception as e:
-                print(e)
+            program_name, OUT_FOLDER, onlybc = getFileMeta(final)
+            if final.endswith(".bc") or final.endswith(".c") or final.endswith(".cpp"):
+                try:
+                    r = process(final, OUT_FOLDER, onlybc, program_name, isBc=final.endswith(".bc"))
+                    result["programs"].append(r)
+                    attach.append(getlogfilename(final.split("/")[-1].replace(".c", "")))
+                except Exception as e:
+                    print(e)
 
         OUT_FOLDER = "%s" % config["DEFAULT"]["outfolder"]
 
         if not os.path.exists(OUT_FOLDER):
             os.mkdir(OUT_FOLDER)
-
-        metaF = open("%s/%s" % (OUT_FOLDER, "meta.json"), 'w')
-        metaF.write(json.dumps(result, indent=4))
-        metaF.close()
 
         print(json.dumps(result, indent=4))
 

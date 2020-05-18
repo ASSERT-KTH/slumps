@@ -12,6 +12,6 @@ WORKDIR /slumps/souper/build
 
 
 RUN cmake ../
-RUN make -j8
+RUN make -j 8
 
 

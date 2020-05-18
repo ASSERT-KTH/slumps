@@ -5,7 +5,7 @@ For more information about Argo workflows and experiments parallelization, go to
 ### Settings:
 - If its an Azure Cluster: ```az aks get-credentials --resource-group myResourceGroup --name myAKSCluster```
 - Create argo namespace: ```kubectl create ns argo```
-- Install argo in the cluster: ```kubectl apply -n argo -f https://raw.githubusercontent.com/argoproj/argo/v2.3.0/manifests/install.yaml```
+- Install argo in the cluster: ```kubectl apply -n argo -f https://raw.githubusercontent.com/argoproj/argo/stable/manifests/install.yaml```
   - Forward argo ui: ```kubectl port-forward -n argo service/argo-ui 8001:80```
 - Create admin role: ```kubectl create rolebinding default-admin --clusterrole=admin --serviceaccount=default:default```
 - Ensure you have the minIO service deployed to collect the outputs: ```kubectl create ns minio```
@@ -57,12 +57,28 @@ Examples
 
 ```
 
+```bash
+  argo submit slumps.yml --watch -p repo="https://github.com/KTH/slumps.git" -p folder="/slumps/benchmark_programs/rossetta/the_sixties" -p raw="https://raw.githubusercontent.com/KTH/slumps/master/benchmark_programs/rossetta/the_sixties"
+
+```
+
+
+```bash
+argo submit --watch slumps_pararallel_exploration.yml  -p repo="https://github.com/kth-tcs/verificatum-vjsc.git" -p raw="https://raw.githubusercontent.com/kth-tcs/verificatum-vjsc/master/src/wasm" -p folder="verificatum-vjsc/src/wasm"
+```
 ## Dashboard for kubernetes:
  - ```kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.0.0-beta8/aio/deploy/recommended.yaml ```
  - ```kubectl proxy``` To access the dashboard in localhost
- - ```az aks get-credentials --admin``` To be able of monitoring the kubernetes cluster
+ - ```az aks get-credentials --admin -g tcs -n slumps-WASI``` To be able of monitoring the kubernetes cluster
 
 
 
 ## [Local deployment with minikube](https://kubernetes.io/docs/setup/learning-environment/minikube/)
 
+
+## Useful scripts:
+
+- get kubernetes token ```kubectl -n kubernetes-dashboard describe secret $(kubectl -n kubernetes-dashboard get secret | grep admin-user | grep token | awk '{print $1}')```
+- List and copy speciic files ```find . -name \*.wasm -exec cp {} <directory> \;```
+- Create execytion pattern ```find . -name \*.wasm -exec echo mill cli.run  \$pw/{}  \;```
+- Extract all tgz from folder ```find . -type f -name "*.tgz" -exec tar -xf {}  \;```

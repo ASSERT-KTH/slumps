@@ -1,0 +1,51 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Workflow
+metadata:
+  generateName: slumps-simple-program-wasi-
+spec:
+  entrypoint: slumps-distributed
+  parallelism: 1
+  arguments:
+    parameters:
+    - name: repo
+    - name: folder
+    - name: raw
+    - name: program
+  templates:
+  - name: slumps-distributed
+    steps:
+    steps:
+    - - name: slumpsfy
+        template: slumps-template
+        arguments:
+          parameters:
+          - name: program
+            value: "{{workflow.parameters.program}}"
+          - name: order
+            value: "{{item.order}}"
+        withItems: 
+          - { order: "24" }
+          - { order: "23" }
+          - { order: "22" }
+          - { order: "18" }
+          - { order: "19" }
+          - { order: "20" }
+        continueOn:
+          failed: true
+  - name: slumps-template
+    retryStrategy: {}
+    inputs:
+      parameters:
+      - name: program
+      - name: order
+    outputs:
+      artifacts:
+      - name: slumps
+        path: /slumps/crow/out
+      - name: logs
+        path: /slumps/crow/logs
+    container:
+      image: "jacarte/slumps:crow2"
+      command: [/bin/bash]
+      args: [start_docker.sh,"{{workflow.parameters.raw}}/{{inputs.parameters.program}}","-DEFAULT.order", "{{inputs.parameters.order}}", "-DEFAULT.timeout", "25200","-DEFAULT.link-wasi", "True", ]
+      
