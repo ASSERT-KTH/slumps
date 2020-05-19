@@ -30,15 +30,17 @@ def parse_args(args):
         action="store_true",
         help=f"Build libsodium. Needed if you don't have the libsodium/{RELINK_CMD_FNAME} file.",
     )
-    # TODO: --check
-    parser.parse_args(args)
+    parser.add_argument(
+        "--check", action="store_true", help="Run test suite (make check)"
+    )
+    return parser.parse_args(args)
 
 
 def main(args):
     # Build from scratch & find command used to link
     os.chdir("libsodium")
     if args.build:
-        relink_cmd, relink_cwd = update_relink_cmd()
+        relink_cmd, relink_cwd = update_relink_cmd(check=args.check)
     else:
         relink_cmd, relink_cwd = load_relink_cmd()
     os.chdir("..")
@@ -62,6 +64,8 @@ def main(args):
         os.chdir("libsodium")
         update_targets(combination_abs)
         run(relink_cmd, cwd=relink_cwd, check=True)
+        if args.check:
+            run(["make", "check"], check=True)
         os.chdir("..")
 
         shutil.copy(
@@ -73,14 +77,16 @@ def main(args):
             print(combination, file=f)
 
 
-def update_relink_cmd():
+def update_relink_cmd(*, check=False):
     _run("git clean -fdx . && autoreconf -fi && ./configure")
     _run(
         """export INTERCEPT_BUILD_TARGET_DIR="$(pwd)/.ear"
 mkdir -p "$INTERCEPT_BUILD_TARGET_DIR"
 export LD_PRELOAD=/usr/lib/x86_64-linux-gnu/bear/libear.so
-make -j$(nproc)
-"""
+make -j$(nproc)"""
+        + " check\n"
+        if check
+        else "\n"
     )
 
     for fname in glob(".ear/execution*"):
