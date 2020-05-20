@@ -31,9 +31,19 @@ def parse_args(args):
         help=f"Build libsodium. Needed if you don't have the libsodium/{RELINK_CMD_FNAME} file.",
     )
     parser.add_argument(
+        "--only-build",
+        action="store_true",
+        help="Like --build but stop after build is done.",
+    )
+    parser.add_argument(
         "--check", action="store_true", help="Run test suite (make check)"
     )
-    return parser.parse_args(args)
+
+    args = parser.parse_args(args)
+    if args.only_build:
+        args.build = True
+
+    return args
 
 
 def main(args):
@@ -44,6 +54,9 @@ def main(args):
     else:
         relink_cmd, relink_cwd = load_relink_cmd()
     os.chdir("..")
+
+    if args.only_build:
+        return
 
     # Backup original build & restore it at the end
     _cp_r("libsodium", "libsodium.original")
