@@ -38,6 +38,7 @@ def parse_args(args):
     parser.add_argument(
         "--check", action="store_true", help="Run test suite (make check)"
     )
+    parser.add_argument("--reps", type=int, help="How many combinations to try")
 
     args = parser.parse_args(args)
     if args.only_build:
@@ -68,7 +69,7 @@ def main(args):
     )
 
     for idx, combination in enumerate(
-        tqdm(islice(randcartesian("crow_out/libsodium"), 1024), total=1024)
+        tqdm(islice(randcartesian("crow_out/libsodium"), args.reps), total=args.reps)
     ):
         # Refer to generated object files with their absolute path because we are going
         # to change directory
