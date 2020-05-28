@@ -11,7 +11,7 @@ RUN mkdir build
 WORKDIR /slumps/souper/build
 
 RUN cmake ../
-RUN make -j
+RUN make
 
 
 
