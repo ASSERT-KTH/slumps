@@ -3,7 +3,8 @@ on:
   push:
       branches:
         - master
-     
+      tags:        
+        - v* # on tag set
 
 jobs:
   build:
