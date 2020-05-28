@@ -10,8 +10,7 @@ RUN rm -rf build
 RUN mkdir build
 WORKDIR /slumps/souper/build
 
-
 RUN cmake ../
-RUN make -j 8
+RUN make -j
 
 
