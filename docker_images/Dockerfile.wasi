@@ -1,18 +1,19 @@
-FROM jacarte/slumps:deps.2
+# image name jacarte/slumps:wasi
+FROM jacarte/slumps:souper
 
 WORKDIR /
 
 env DEBIAN_FRONTEND=noninteractive
 run apt-get update -qq \
     && apt-get dist-upgrade -qq \
-    && apt-get install -qq \
+    && apt-get install -qq && rm -rf /var/lib/apt/lists/* \
     # Essentials:
     wget git build-essential software-properties-common automake clang
 
 # Lucet: https://bytecodealliance.github.io/lucet/Compiling-on-Linux.html
 add https://sh.rustup.rs rustup.sh
 env PATH=/root/.cargo/bin:$PATH
-run apt-get install -qq curl ca-certificates cmake \
+run apt-get install -qq curl ca-certificates cmake &&  rm -rf /var/lib/apt/lists/* \
     && curl -sS -L -O https://github.com/CraneStation/wasi-sdk/releases/download/wasi-sdk-8/wasi-sdk_8.0_amd64.deb \
     && dpkg -i wasi-sdk_8.0_amd64.deb && rm -f wasi-sdk_8.0_amd64.deb \
     && chmod +x rustup.sh && ./rustup.sh -y \

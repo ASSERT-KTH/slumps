@@ -1,4 +1,4 @@
-# slumps backend
+# image name jacarte/slumps:souper
 FROM jacarte/slumps:backend
 
 
