@@ -14,13 +14,13 @@ jobs:
         uses: actions/checkout@v2 # checkout latest version of the repo
       - name: Install dependencies
         run: |
-          sudo apt-get update && sudo apt-get install -y docker.io tree && sudo systemctl enable docker && docker --version
+          sudo apt-get update && docker --version
       - name: Build souper image
         run: |
           cd docker_images && sudo docker build -t jacarte/slumps:souper -f test.Dockerfile .
       - name: Push souper image
         run: |
-          sudo docker login -u="$user" -p="$pass"
+          docker login -u="$user" -p="$pass" && docker push jacarte/slumps:souper
         env:
           user: ${{secrets.DOCKER_USER}}
           pass: ${{secrets.DOCKER_PASS}}
