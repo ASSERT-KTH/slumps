@@ -42,13 +42,5 @@ jobs:
         env:
           user: ${{secrets.DOCKER_USER}}
           pass: ${{secrets.DOCKER_PASS}}
-      - name: Build crow  image
-        run: |
-          cd crow && sudo docker build -t jacarte/slumps:crow -f Dockerfile .
-      - name: Push souper image
-        run: |
-          docker login -u="$user" -p="$pass" && docker push jacarte/slumps:crow
-        env:
-          user: ${{secrets.DOCKER_USER}}
-          pass: ${{secrets.DOCKER_PASS}}
+      
      
