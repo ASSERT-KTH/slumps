@@ -3,7 +3,6 @@ on:
   push:
       branches:
         - master
-
 jobs:
   build:
     name: CROW
@@ -11,9 +10,16 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2 # checkout latest version of the repo
+      - name: Print name
+        run: |
+          echo $(git log --oneline --format=%B -n 1 HEAD)
+      - name: Create out folder
+        run: |
+          mkdir -p crow/crow_out
       - name: Process path
         run: |
           python get_payload.py '$(git log --oneline --format=%B -n 1 HEAD)' && cd crow && ./run.sh $(python get_payload.py '$(git log --oneline --format=%B -n 1 HEAD)')
+      
       - name: Archive crow results
         uses: actions/upload-artifact@v1
         with:
