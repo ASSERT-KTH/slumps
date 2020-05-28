@@ -1,4 +1,4 @@
-FROM jacarte/slumps:wasi
+FROM jacarte/slumps:wasi AS multistage
 
 
 RUN apt-get update \
@@ -21,6 +21,6 @@ RUN rm -rf logs && mkdir logs
 RUN rm -rf .idea
 RUN rm -rf tests
 RUN rm -rf .pytest_cache
-
+RUN rm -rf /var/lib/apt/lists/*
 
 ENTRYPOINT ["./start_docker.sh"]

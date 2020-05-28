@@ -307,17 +307,6 @@ def process(f, OUT_FOLDER, onlybc, program_name, isBc = False):
 
     return result_overall
 
-
-def augmentMetadataResult(result):
-    pass
-
-def createIssueContent(result):
-    return """
-```json
-{json}
-```
-        """.format(json=json.dumps(result, indent=4))
-
 def main(f):
     program_name = f.split("/")[-1].split(".")[0]
 
