@@ -1,0 +1,29 @@
+name: Build docker wasi
+on:
+  push:
+    branches:
+    - master
+    paths:
+    - 'docker_images/Dockerfile.wasi'
+
+jobs:
+  build:
+    name: Build docker stack
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2 # checkout latest version of the repo
+      - name: Install dependencies
+        run: |
+          sudo apt-get update && docker --version
+      - name: Build wasi support image
+        run: |
+          cd docker_images && sudo docker build -t jacarte/slumps:wasi -f Dockerfile.wasi .
+      - name: Push wasi image
+        run: |
+          docker login -u="$user" -p="$pass" && docker push jacarte/slumps:wasi
+        env:
+          user: ${{secrets.DOCKER_USER}}
+          pass: ${{secrets.DOCKER_PASS}}
+      
+     
