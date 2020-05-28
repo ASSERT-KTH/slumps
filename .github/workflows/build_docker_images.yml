@@ -15,14 +15,40 @@ jobs:
       - name: Install dependencies
         run: |
           sudo apt-get update && docker --version
+      - name: Build backend image
+        run: |
+          cd docker_images && sudo docker build -t jacarte/slumps:backend -f Dockerfile .
+      - name: Push images
+        run: |
+          docker login -u="$user" -p="$pass" && docker push jacarte/slumps:backend
+        env:
+          user: ${{secrets.DOCKER_USER}}
+          pass: ${{secrets.DOCKER_PASS}}
       - name: Build souper image
         run: |
-          cd docker_images && sudo docker build -t jacarte/slumps:souper -f test.Dockerfile .
+          cd docker_images && sudo docker build -t jacarte/slumps:souper -f Dockerfile.dep .
       - name: Push souper image
         run: |
           docker login -u="$user" -p="$pass" && docker push jacarte/slumps:souper
         env:
           user: ${{secrets.DOCKER_USER}}
           pass: ${{secrets.DOCKER_PASS}}
-        
+      - name: Build wasi support image
+        run: |
+          cd docker_images && sudo docker build -t jacarte/slumps:wasi -f Dockerfile.wasi .
+      - name: Push wasi image
+        run: |
+          docker login -u="$user" -p="$pass" && docker push jacarte/slumps:wasi
+        env:
+          user: ${{secrets.DOCKER_USER}}
+          pass: ${{secrets.DOCKER_PASS}}
+      - name: Build crow  image
+        run: |
+          cd crow && sudo docker build -t jacarte/slumps:crow -f Dockerfile .
+      - name: Push souper image
+        run: |
+          docker login -u="$user" -p="$pass" && docker push jacarte/slumps:crow
+        env:
+          user: ${{secrets.DOCKER_USER}}
+          pass: ${{secrets.DOCKER_PASS}}
      
