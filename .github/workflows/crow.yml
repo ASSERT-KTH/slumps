@@ -18,7 +18,7 @@ jobs:
         uses: actions/checkout@v2 # checkout latest version of the repo
       - name: Process path
         run: |
-          python3 python3 get_payload.py $(git log --oneline --format=%B -n 1 HEAD) && cd crow && ./run.sh $(python3 get_payload.py $(git log --oneline --format=%B -n 1 HEAD)) || true
+          python3 python3 get_payload.py '$(git log --oneline --format=%B -n 1 HEAD)' && cd crow && ./run.sh $(python3 get_payload.py '$(git log --oneline --format=%B -n 1 HEAD)') || true
       - name: Archive crow results
         uses: actions/upload-artifact@v1
         with:
