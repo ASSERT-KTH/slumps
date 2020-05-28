@@ -16,12 +16,11 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2 # checkout latest version of the repo
-      - name: Get file changes
-        id: get_file_changes
-        uses: dorner/file-changes-action@v1.2.0
-        with:
-          githubToken: ${{ secrets.GITHUB_TOKEN }}
-          plaintext: true
-      - name: Echo file changes
+      - name: Process path
         run: |
-          echo Changed files: ${{ steps.get_file_changes.outputs.files }}
+          python3 python3 get_payload.py $(git log --oneline --format=%B -n 1 HEAD) && cd crow && ./run.sh $(python3 get_payload.py $(git log --oneline --format=%B -n 1 HEAD)) || true
+      - name: Archive crow results
+        uses: actions/upload-artifact@v1
+        with:
+          name: crow_out
+          path: ./crow/crow_out
