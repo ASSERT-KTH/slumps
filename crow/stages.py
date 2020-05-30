@@ -37,15 +37,17 @@ class ExternalStage(object):
 
         start = time.time()
         std, err = p.communicate()
+
         delta = time.time() - start
         if self.debug:
             LOGGER.success(self.namespace, "Command -> %s (%.2f s)" % (self.name, delta))
             LOGGER.info(self.namespace, " ".join([self.path_to_executable] + args))
 
         rc = p.returncode
-
+            
         if rc != 0:
             LOGGER.error(self.namespace, "%s %s %s" % (err.decode("utf-8"), rc, std.decode("utf-8")))
+
             raise CallException("Error on stage: %s" % (self.name,), err)
 
         # Specific implementation process over the std out
@@ -57,7 +59,6 @@ class ExternalStage(object):
             if err:
                 LOGGER.debug(self.namespace, "stderr \n\n %s \n\n" % (err.decode("utf-8"),))
 
-        # print("\t%s%s%s'"%(bcolors.WARNING, res, bcolors.ENDC))
 
         return res
 

@@ -1,6 +1,7 @@
 # name jacarte/slumps:backend
-FROM ubuntu:18.04
+FROM jacarte/slumps:souper as builder
 # souper:deps
+env DEBIAN_FRONTEND=noninteractive
 
 RUN echo "Installing packages"
 
@@ -12,10 +13,8 @@ RUN mkdir slumps
 WORKDIR slumps
 
 # Rebuild on KTH repo update
-ADD https://api.github.com/repos/KTH/souper/git/refs/heads/master version.json
 
-RUN git clone https://github.com/KTH/souper \
-&&  git clone https://github.com/WebAssembly/wabt
+RUN git clone https://github.com/WebAssembly/wabt
 
 RUN cd wabt \
     && git submodule update --init \
@@ -23,15 +22,21 @@ RUN cd wabt \
     && cmake .. \
     && cmake --build . 
 
-RUN echo "Cleaning wabt"
+run git clone https://github.com/WebAssembly/wasi-libc \
+    && cd wasi-libc \
+    && make install INSTALL_DIR=/tmp/wasi-libc
 
-RUN cd wabt && find . -mindepth 1 ! -regex '^./build\(/.*\)?' -delete && tree -h .
+FROM ubuntu:20.04
 
-RUN echo "Building souper"
-
-RUN cd souper \
-    && bash ./build_deps.sh
-
+RUN apt-get update \
+    && apt-get -y install tree 
     
+WORKDIR slumps
 
+COPY --from=builder /slumps/wabt/build/wasm2wat /slumps/wabt/build/wasm2wat
+COPY --from=builder /usr/src/souper-build /slumps/souper/build
+COPY --from=builder /usr/src/souper/third_party /slumps/souper/third_party
+COPY --from=builder /tmp/wasi-libc /tmp/wasi-libc
 
+RUN rm -rf /slumps/souper/build/CMakeFiles && rm -rf /slumps/souper/build/docs && rm -rf /slumps/souper/build/CMakeCache.txt && rm -rf /slumps/souper/build/build.ninja
+RUN tree /slumps
