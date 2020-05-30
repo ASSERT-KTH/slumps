@@ -186,7 +186,9 @@ class Pipeline(object):
                     raise e
             
 
+    import threading
 
+    global_lock = threading.Lock()
 
     def generateWasm(self, namespace, bc, OUT_FOLDER, fileName, debug=True, generateOnlyBc = False):
         llFileName = "%s/%s" % (OUT_FOLDER, fileName)
@@ -195,8 +197,7 @@ class Pipeline(object):
             
             if not generateOnlyBc:
                 tmpWasm = TMP_WASM.file
-
-
+            
                 try:
                     finalObjCreator = ObjtoWASM(namespace, debug=debug)
                     finalObjCreator(args=[
@@ -220,6 +221,7 @@ class Pipeline(object):
                     LOGGER.error(namespace, traceback.format_exc())
             else:
                 hashvalue = hashlib.sha256(bc)
+                self.global_lock.release()
                 return hashvalue.hexdigest(), len(bc), "%s.bc" % (fileName,), "%s.bc" % (fileName,)
 
 

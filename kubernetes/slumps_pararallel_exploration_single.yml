@@ -4,12 +4,9 @@ metadata:
   generateName: slumps-simple-program-wasi-
 spec:
   entrypoint: slumps-distributed
-  parallelism: 1
+  parallelism: 5
   arguments:
     parameters:
-    - name: repo
-    - name: folder
-    - name: raw
     - name: program
   templates:
   - name: slumps-distributed
@@ -30,6 +27,24 @@ spec:
           - { order: "18" }
           - { order: "19" }
           - { order: "20" }
+          - { order: "18" }
+          - { order: "17" }
+          - { order: "16" }
+          - { order: "15" }
+          - { order: "14" }
+          - { order: "13" }
+          - { order: "12" }
+          - { order: "11" }
+          - { order: "10" }
+          - { order: "9" }
+          - { order: "8" }
+          - { order: "7" }
+          - { order: "6" }
+          - { order: "5" }
+          - { order: "4" }
+          - { order: "3" }
+          - { order: "2" }
+          - { order: "1" }
         continueOn:
           failed: true
   - name: slumps-template
@@ -45,7 +60,7 @@ spec:
       - name: logs
         path: /slumps/crow/logs
     container:
-      image: "jacarte/slumps:crow2"
+      image: "jacarte/slumps:crow"
       command: [/bin/bash]
-      args: [start_docker.sh,"{{workflow.parameters.raw}}/{{inputs.parameters.program}}","-DEFAULT.order", "{{inputs.parameters.order}}", "-DEFAULT.timeout", "25200","-DEFAULT.link-wasi", "True", ]
+      args: [start_docker.sh,"{{inputs.parameters.program}}","-DEFAULT.order", "{{inputs.parameters.order}}", "-DEFAULT.timeout", "25200","-DEFAULT.link-wasi", "False", "-DEFAULT.generate-bc-only", "True" ]
       
