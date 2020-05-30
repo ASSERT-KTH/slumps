@@ -17,6 +17,7 @@ import json
 import requests
 import threading
 import re
+import traceback
 
 BASE_DIR = os.path.dirname(__file__)
 
@@ -35,7 +36,7 @@ class ContentToTmpFile(object):
     def __init__(self, content=None, name=None, ext=None, persist=False):
 
         tmp = createTmpFile(ext) if not name else name
-
+        tmp = ''.join([c for c in tmp])
         if content:
             self.tmpF = open(tmp, "wb")
             self.tmpF.write(content)
@@ -57,7 +58,7 @@ class ContentToTmpFile(object):
             if not self.persist:
                 os.remove(self.file)
         except Exception as e:
-            print(f"{e} in Temp file")
+            LOGGER.error(self.tmpF, traceback.format_exc())
             pass
 
 
@@ -83,9 +84,9 @@ def updatesettings(argvs):
 
         wasm_bins = list(filter(lambda x: x.startswith("wasm-ld"), map(lambda x: x.decode("utf-8"), bins)))
 
-        if len(wasm_bins) == 0 and not config["DEFAULT"].getboolean("generate-bc-only"):
+        if len(wasm_bins) == 0:
             raise Exception("WASM linker not found. Please install it (apt-get install lld-<version> for ubuntu)")
-
+        
         wasm_ld = wasm_bins[0] if len(wasm_bins) > 0 else None
         if len(wasm_bins) > 1:
             print("Multiple WASM linkers. Choose one, take into account the version of llvm built with Souper:")

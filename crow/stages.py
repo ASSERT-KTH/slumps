@@ -180,10 +180,12 @@ class ObjtoWASM(ExternalStage):
 
         linkOptions = config["wasm-ld"]["wasi-header"] if config["DEFAULT"].getboolean("link-wasi") else "--allow-undefined"
         new_inputs = (config["wasm-ld"]["command"] % (linkOptions, "%s %s" % (args[0], args[1]),)).split(" ")
+        
         return super(ObjtoWASM, self).__call__(new_inputs, std)
 
     def processInner(self, std, err):
         # return the std output optimized LLVM IR
+        print(std, err)
         return std
 
 
