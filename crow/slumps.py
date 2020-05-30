@@ -10,6 +10,7 @@ import hashlib
 import json
 import copy
 from concurrent.futures import ThreadPoolExecutor, wait, ALL_COMPLETED
+import traceback
 
 import multiprocessing
 import time
@@ -46,6 +47,7 @@ class Pipeline(object):
 
         meta[originalWasmName.split("/")[-1]] = dict(size=originalSize, sha=originalSha)
         outResult["candidates"].append(dict(size=originalSize, sha=originalSha, name=originalWasmName.split("/")[-1]))
+
 
         try:
 
@@ -95,7 +97,6 @@ class Pipeline(object):
 
         lltobc = LLToBC(program_name, debug=False)
         bc = lltobc(std=ll1)
-
         self.processBitcode(bc, outResult, program_name, OUT_FOLDER, onlybc)
 
     def processLevel(self, level,program_name, bc, OUT_FOLDER, onlybc, meta, outResult):
@@ -109,6 +110,7 @@ class Pipeline(object):
         try:
             bctocand = BCCountCandidates(program_name, level=level)
         except Exception as e:
+            raise e
             LOGGER.error(program_name, e)
             return
         with ContentToTmpFile(content=bc) as TMP_BC:
@@ -121,30 +123,32 @@ class Pipeline(object):
             canCount = len(cand[0])
             LOGGER.success(program_name, "%s: Found %s arithmetic expression candidates. %s Can be replaced" % (
                 program_name, cand[1], canCount))
-
+            
             # Test set the second candidate for optimization
 
             # BC to tmpfile
-            with ContentToTmpFile(content=bc) as BCIN:
-                tmpIn = BCIN.file
+            if len(cand[0]) > 0:
+                with ContentToTmpFile(content=bc) as BCIN:
+                    tmpIn = BCIN.file
 
+                    futures = []
+                    for s in getIteratorByName(config["DEFAULT"]["generator-method"])(cand[0]):
+                        job = pool.submit(self.processSingle, s, level, tmpIn, program_name, OUT_FOLDER, onlybc, meta,
+                                        outResult)
+                        # job.result()
 
-                futures = []
-                for s in getIteratorByName(config["DEFAULT"]["generator-method"])(cand[0]):
-                    job = pool.submit(self.processSingle, s, level, tmpIn, program_name, OUT_FOLDER, onlybc, meta,
-                                      outResult)
-                    # job.result()
-
-                    futures.append(job)
-                wait(futures, return_when=ALL_COMPLETED)
-
-            if RUNTIME_CONFIG["USE_REDIS"]:
+                        futures.append(job)
+                    r = wait(futures, return_when=ALL_COMPLETED)
+            try:
                 import redis
-                r = redis.Redis(host="localhost", port=6379, db=level)
+                LOGGER.info(program_name, "Cleaning cache...")
+                r = redis.Redis(host="localhost", port=6379)
 
                 result = r.flushdb()
                 LOGGER.success(program_name, "Flushing redis DB: result(%s)" % result)
                 r.close()
+            except Exception as e:
+                LOGGER.error(program_name, e)
     def processSingle(self, s, level, tmpIn, program_name, OUT_FOLDER, onlybc, meta, outResult):
         with ContentToTmpFile() as BCOUT:
             tmpOut = BCOUT.file
@@ -175,6 +179,7 @@ class Pipeline(object):
                 LOGGER.info(program_name, size)
 
             except Exception as e:
+                raise e
                 if config["DEFAULT"].getboolean("fail-silently"):
                     LOGGER.error(program_name, e)
                 else:
@@ -186,31 +191,33 @@ class Pipeline(object):
     def generateWasm(self, namespace, bc, OUT_FOLDER, fileName, debug=True, generateOnlyBc = False):
         llFileName = "%s/%s" % (OUT_FOLDER, fileName)
 
-        
         with ContentToTmpFile(name="%s.bc"%llFileName, content=bc, ext=".bc", persist=generateOnlyBc) as TMP_WASM:
             
             if not generateOnlyBc:
                 tmpWasm = TMP_WASM.file
 
-                finalObjCreator = ObjtoWASM(namespace, debug=debug)
-                finalObjCreator(args=[
-                    "%s.wasm" % (llFileName,),
-                    tmpWasm
-                ], std=None)
 
-                wat = WASM2WAT(namespace, debug=debug)
-                wat(std=None, args=[
-                    "%s.wasm" % (llFileName,),
-                    "%s.wat" % (llFileName,)]
-                    )
+                try:
+                    finalObjCreator = ObjtoWASM(namespace, debug=debug)
+                    finalObjCreator(args=[
+                        "%s.wasm" % (llFileName,),
+                        tmpWasm
+                    ], std=None)
 
-                finalStream = open("%s.wasm" % (llFileName,), 'rb').read()
-                if debug:
-                    LOGGER.warning(namespace, "%s: WASM SIZE %s" % (namespace, len(finalStream),))
-                hashvalue = hashlib.sha256(finalStream)
-                if debug:
-                    LOGGER.warning(namespace, "%s: WASM SHA %s" % (namespace, hashvalue.hexdigest(),))
-                return hashvalue.hexdigest(), len(finalStream), "%s.wasm" % (llFileName,), "%s.wat" % (llFileName,)
+                    wat = WASM2WAT(namespace, debug=debug)
+                    wat(std=None, args=[
+                        "%s.wasm" % (llFileName,),
+                        "%s.wat" % (llFileName,)]
+                        )
+                    finalStream = open("%s.wasm" % (llFileName,), 'rb').read()
+                    if debug:
+                        LOGGER.warning(namespace, "%s: WASM SIZE %s" % (namespace, len(finalStream),))
+                    hashvalue = hashlib.sha256(finalStream)
+                    if debug:
+                        LOGGER.warning(namespace, "%s: WASM SHA %s" % (namespace, hashvalue.hexdigest(),))
+                    return hashvalue.hexdigest(), len(finalStream), "%s.wasm" % (llFileName,), "%s.wat" % (llFileName,)
+                except Exception as e:
+                    LOGGER.error(namespace, traceback.format_exc())
             else:
                 hashvalue = hashlib.sha256(bc)
                 return hashvalue.hexdigest(), len(bc), "%s.bc" % (fileName,), "%s.bc" % (fileName,)
@@ -323,6 +330,7 @@ def main(f):
 
         result = dict(namespace=program_name, programs=[])
         attach = []
+        print(os.listdir(f))
         for final in ["%s/%s" % (f, i) for i in os.listdir(f)]:
             program_name, OUT_FOLDER, onlybc = getFileMeta(final)
             if final.endswith(".bc") or final.endswith(".c") or final.endswith(".cpp"):

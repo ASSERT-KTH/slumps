@@ -4,7 +4,7 @@ on:
     branches:
     - master
     paths:
-    - 'docker_images/Dockerfile.dep'
+    - 'docker_images/Dockerfile'
 
 jobs:
   build:
@@ -19,7 +19,7 @@ jobs:
       
       - name: Build souper image
         run: |
-          cd docker_images && sudo docker build -t jacarte/slumps:souper -f Dockerfile.dep .
+          cd docker_images && sudo docker build -t jacarte/slumps:backend -f Dockerfile .
       - name: Push souper image
         run: |
           docker login -u="$user" -p="$pass" && docker push jacarte/slumps:souper

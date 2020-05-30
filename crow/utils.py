@@ -18,8 +18,10 @@ import requests
 import threading
 import re
 
+BASE_DIR = os.path.dirname(__file__)
+
 config = configparser.ConfigParser(interpolation=configparser.ExtendedInterpolation())
-config.read("settings/config.ini")
+config.read(f"{BASE_DIR}/settings/config.ini")
 
 RUNTIME_CONFIG = dict(USE_REDIS=False)
 
@@ -44,6 +46,7 @@ class ContentToTmpFile(object):
         self.file = tmp
         self.persist = persist
 
+
     def __enter__(self):
         return self
 
@@ -54,15 +57,15 @@ class ContentToTmpFile(object):
             if not self.persist:
                 os.remove(self.file)
         except Exception as e:
-            print(e)
+            print(f"{e} in Temp file")
             pass
 
 
 def updatesettings(argvs):
     
-    if not os.path.exists("settings/.slumps"):
+    if not os.path.exists(f"{BASE_DIR}/settings/.slumps"):
         print("Setting up slumps for the first time...")
-        open("settings/.slumps", 'w').write("SLUMPs them all!")
+        open(f"{BASE_DIR}/settings/.slumps", 'w').write("SLUMPs them all!")
 
         SLUMPS_DIR = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
 
@@ -80,10 +83,10 @@ def updatesettings(argvs):
 
         wasm_bins = list(filter(lambda x: x.startswith("wasm-ld"), map(lambda x: x.decode("utf-8"), bins)))
 
-        if len(wasm_bins) == 0:
+        if len(wasm_bins) == 0 and not config["DEFAULT"].getboolean("generate-bc-only"):
             raise Exception("WASM linker not found. Please install it (apt-get install lld-<version> for ubuntu)")
 
-        wasm_ld = wasm_bins[0]
+        wasm_ld = wasm_bins[0] if len(wasm_bins) > 0 else None
         if len(wasm_bins) > 1:
             print("Multiple WASM linkers. Choose one, take into account the version of llvm built with Souper:")
 
@@ -93,9 +96,9 @@ def updatesettings(argvs):
             option = int(input("Option: "))
             wasm_ld = wasm_bins[option - 1]
 
-        config["wasm-ld"]["path"] = wasm_ld
+        config["wasm-ld"]["path"] = wasm_ld.__str__()
 
-        with open("settings/config.ini", 'w') as configFile:
+        with open(f"{BASE_DIR}/settings/config.ini", 'w') as configFile:
             config.write(configFile)
     pairs = []
     for index, a in enumerate(argvs):
@@ -108,7 +111,7 @@ def updatesettings(argvs):
     for pair in pairs:
         processOptionValuePair(pair)
     
-    with open("settings/config.ini", 'w') as configFile:
+    with open(f"{BASE_DIR}/settings/config.ini", 'w') as configFile:
         config.write(configFile)
 
 def processOptionValuePair(pair):
@@ -132,9 +135,8 @@ def processOptionValuePair(pair):
     print(namespace, key, value)
 
 
-
 OUT_FOLDER = config["DEFAULT"]["outfolder"]
-
+    
 
 def getIteratorByName(name: str):
     return getattr(iterators, name)
@@ -152,7 +154,7 @@ def globalCounter():
 globalCounter.counter = 0
 
 private = configparser.ConfigParser(interpolation=configparser.ExtendedInterpolation())
-private.read("settings/private.ini")
+private.read(f"{BASE_DIR}/settings/private.ini")
 
 
 
@@ -314,10 +316,10 @@ class Alias:
 def processCandidatesMetaOutput(output):
     meta = re.compile(r'\[(.*)/(\d+)\]')
     setRe = re.compile(r"\[SLUMPS-META replacement idx (\d+)\]\n")
-
     match = meta.search(output)
-    
+
     total = int(match.group(2))
+
     # process set 
     try:
         resultSet = [ int(r) for r in setRe.findall(output) ]
