@@ -1,9 +1,12 @@
 # ![Logo](https://en.gravatar.com/userimage/133494879/d7a324075159773e826a7eb397da07d7.png?size=80) SLUMPs 
 
-*Research on randomization and superoptimization for WebAssembly WASM*
+Research repository on randomization and superoptimization for WebAssembly/WASM. Corresponding papers:
 
-Given a C program, SLUMPs repurposes a superoptimizer ([Souper](https://github.com/google/souper)) to output several equivalent WASM programs.
-For each optimization candidate from Souper, we generate a new WASM program, as we show in the image below.
+* [Superoptimization of WebAssembly Bytecode (MoreVM 2020)](http://arxiv.org/pdf/2002.10213)
+
+## Intro to superoptimization
+
+Given a C program compiled to WASM, SLUMPs generates a new WASM program which is smaller in size, and potentially faster, as we show in the image below.
 
 ![pass](docs/pass.png)
 
