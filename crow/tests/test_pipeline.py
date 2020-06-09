@@ -1,3 +1,4 @@
+# This requires Souper and wabt to be built locally and 
 
 import os
 os.chdir("..")

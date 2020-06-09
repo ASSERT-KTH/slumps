@@ -15,7 +15,9 @@ import traceback
 import multiprocessing
 import time
 
-levelPool = ThreadPoolExecutor(max_workers=config["DEFAULT"].getint("level-workers"))
+levelPool = ThreadPoolExecutor(
+    max_workers=config["DEFAULT"].getint("level-workers"))
+
 
 class Pipeline(object):
 
@@ -28,39 +30,43 @@ class Pipeline(object):
         if file.endswith(".ll"):
             # Check triple
             if not open(file, 'r').read().find('triple = "wasm32-unknown-unknown"'):
-                LOGGER.warning(program_name, "LL file triple is not targeting wasm32-unknown-unknown")
+                LOGGER.warning(
+                    program_name, "LL file triple is not targeting wasm32-unknown-unknown")
                 return False
 
             return True
 
         return False
 
-    def processBitcode(self,bc, outResult, program_name, OUT_FOLDER, onlybc):
+    def processBitcode(self, bc, outResult, program_name, OUT_FOLDER, onlybc):
 
         sha = set()
         meta = dict()
         sizes = {}
 
-        originalSha, originalSize, originalWasmName, _ = self.generateWasm(program_name, bc, OUT_FOLDER, program_name, generateOnlyBc=onlybc)
+        originalSha, originalSize, originalWasmName, _ = self.generateWasm(
+            program_name, bc, OUT_FOLDER, program_name, generateOnlyBc=onlybc)
         sha.add(originalSha)
         sizes[originalSha] = [originalSize, []]
 
-        meta[originalWasmName.split("/")[-1]] = dict(size=originalSize, sha=originalSha)
-        outResult["candidates"].append(dict(size=originalSize, sha=originalSha, name=originalWasmName.split("/")[-1]))
-
+        meta[originalWasmName.split(
+            "/")[-1]] = dict(size=originalSize, sha=originalSha)
+        outResult["candidates"].append(
+            dict(size=originalSize, sha=originalSha, name=originalWasmName.split("/")[-1]))
 
         try:
 
             futures = []
-            order = list(map(lambda x: int(x),  config["DEFAULT"]["order"].split(",")))
+            order = list(
+                map(lambda x: int(x),  config["DEFAULT"]["order"].split(",")))
             LOGGER.info("ORDER", order)
             for level in order:
-                job = levelPool.submit(self.processLevel,level, program_name, bc, OUT_FOLDER, onlybc, meta, outResult)
+                job = levelPool.submit(
+                    self.processLevel, level, program_name, bc, OUT_FOLDER, onlybc, meta, outResult)
                 # job.result()
 
                 futures.append(job)
             wait(futures, return_when=ALL_COMPLETED)
-
 
         except BreakException:
             pass
@@ -68,14 +74,12 @@ class Pipeline(object):
         if config["DEFAULT"].getboolean("print-sha"):
             LOGGER.warning(program_name, "Summary %s:" % program_name)
             for s in sha:
-                LOGGER.warning(program_name, "WASM SHA256 %s. Size %s. Combination %s" % (s, sizes[s][0], sizes[s][1]))
-
+                LOGGER.warning(program_name, "WASM SHA256 %s. Size %s. Combination %s" % (
+                    s, sizes[s][0], sizes[s][1]))
 
         return dict(programs=meta, count=len(meta.keys()))
 
-
     def process(self, file, OUT_FOLDER, program_name, onlybc, outResult=None):
-
 
         if not os.path.exists(OUT_FOLDER):
             os.mkdir(OUT_FOLDER)
@@ -99,9 +103,10 @@ class Pipeline(object):
         bc = lltobc(std=ll1)
         self.processBitcode(bc, outResult, program_name, OUT_FOLDER, onlybc)
 
-    def processLevel(self, level,program_name, bc, OUT_FOLDER, onlybc, meta, outResult):
+    def processLevel(self, level, program_name, bc, OUT_FOLDER, onlybc, meta, outResult):
 
-        pool = ThreadPoolExecutor(max_workers=config["DEFAULT"].getint("workers"))
+        pool = ThreadPoolExecutor(
+            max_workers=config["DEFAULT"].getint("workers"))
 
         LOGGER.success(program_name,
                        "%s: Searching level (increasing execution time) %s: %s..." % (program_name,
@@ -123,7 +128,7 @@ class Pipeline(object):
             canCount = len(cand[0])
             LOGGER.success(program_name, "%s: Found %s arithmetic expression candidates. %s Can be replaced" % (
                 program_name, cand[1], canCount))
-            
+
             # Test set the second candidate for optimization
 
             # BC to tmpfile
@@ -134,7 +139,7 @@ class Pipeline(object):
                     futures = []
                     for s in getIteratorByName(config["DEFAULT"]["generator-method"])(cand[0]):
                         job = pool.submit(self.processSingle, s, level, tmpIn, program_name, OUT_FOLDER, onlybc, meta,
-                                        outResult)
+                                          outResult)
                         # job.result()
 
                         futures.append(job)
@@ -145,17 +150,21 @@ class Pipeline(object):
                 r = redis.Redis(host="localhost", port=6379)
 
                 result = r.flushdb()
-                LOGGER.success(program_name, "Flushing redis DB: result(%s)" % result)
+                LOGGER.success(
+                    program_name, "Flushing redis DB: result(%s)" % result)
                 r.close()
             except Exception as e:
                 LOGGER.error(program_name, e)
+
     def processSingle(self, s, level, tmpIn, program_name, OUT_FOLDER, onlybc, meta, outResult):
         with ContentToTmpFile() as BCOUT:
             tmpOut = BCOUT.file
             try:
-                sanitized_set_name = "_".join(list(map(lambda x: x.__str__(), s)))
+                sanitized_set_name = "_".join(
+                    list(map(lambda x: x.__str__(), s)))
 
-                optBc = BCToSouper(program_name, candidates=list(s), level=level, debug=True)
+                optBc = BCToSouper(program_name, candidates=list(
+                    s), level=level, debug=True)
                 optBc(args=[tmpIn, tmpOut], std=None)
 
                 bsOpt = open(tmpOut, 'rb').read()
@@ -163,19 +172,18 @@ class Pipeline(object):
                 # Generate wasm
 
                 hex, size, wasmFile, watFile = self.generateWasm(program_name, bsOpt,
-                                                                    OUT_FOLDER,
-                                                                    "[%s]%s[%s]" % (level,
-                                                                                    program_name,
-                                                                                    sanitized_set_name),
-                                                                    debug=True, generateOnlyBc=onlybc)
+                                                                 OUT_FOLDER,
+                                                                 "[%s]%s[%s]" % (level,
+                                                                                 program_name,
+                                                                                 sanitized_set_name),
+                                                                 debug=True, generateOnlyBc=onlybc)
 
-            
                 #meta[wasmFile.split("/")[-1]] = dict(size=size, sha=hex)
                 #outResult["candidates"].append(dict(size=size, sha=hex, name=wasmFile))
 
                 #sizes[hex] = [size, list(s)]
 
-                #sha.add(hex)
+                # sha.add(hex)
                 LOGGER.info(program_name, size)
 
             except Exception as e:
@@ -184,20 +192,19 @@ class Pipeline(object):
                     LOGGER.error(program_name, e)
                 else:
                     raise e
-            
 
     import threading
 
     global_lock = threading.Lock()
 
-    def generateWasm(self, namespace, bc, OUT_FOLDER, fileName, debug=True, generateOnlyBc = False):
+    def generateWasm(self, namespace, bc, OUT_FOLDER, fileName, debug=True, generateOnlyBc=False):
         llFileName = "%s/%s" % (OUT_FOLDER, fileName)
 
-        with ContentToTmpFile(name="%s.bc"%llFileName, content=bc, ext=".bc", persist=generateOnlyBc) as TMP_WASM:
-            
+        with ContentToTmpFile(name="%s.bc" % llFileName, content=bc, ext=".bc", persist=generateOnlyBc) as TMP_WASM:
+
             if not generateOnlyBc:
                 tmpWasm = TMP_WASM.file
-            
+
                 try:
                     finalObjCreator = ObjtoWASM(namespace, debug=debug)
                     finalObjCreator(args=[
@@ -212,10 +219,12 @@ class Pipeline(object):
                         )
                     finalStream = open("%s.wasm" % (llFileName,), 'rb').read()
                     if debug:
-                        LOGGER.warning(namespace, "%s: WASM SIZE %s" % (namespace, len(finalStream),))
+                        LOGGER.warning(namespace, "%s: WASM SIZE %s" %
+                                       (namespace, len(finalStream),))
                     hashvalue = hashlib.sha256(finalStream)
                     if debug:
-                        LOGGER.warning(namespace, "%s: WASM SHA %s" % (namespace, hashvalue.hexdigest(),))
+                        LOGGER.warning(namespace, "%s: WASM SHA %s" %
+                                       (namespace, hashvalue.hexdigest(),))
                     return hashvalue.hexdigest(), len(finalStream), "%s.wasm" % (llFileName,), "%s.wat" % (llFileName,)
                 except Exception as e:
                     LOGGER.error(namespace, traceback.format_exc())
@@ -224,10 +233,7 @@ class Pipeline(object):
                 self.global_lock.release()
                 return hashvalue.hexdigest(), len(bc), "%s.bc" % (fileName,), "%s.bc" % (fileName,)
 
-
-
-
-def getFileMeta( file, outResult=None):
+def getFileMeta(file, outResult=None):
 
     program_name = file.split("/")[-1].split(".")[0]
     OUT_FOLDER = "%s/%s" % (config["DEFAULT"]["outfolder"], program_name)
@@ -235,12 +241,13 @@ def getFileMeta( file, outResult=None):
 
     return (program_name, OUT_FOLDER, onlybc)
 
-def removeDuplicate(program_name, folder, filt = "*.wasm", remove=False):
-    
-    LOGGER.warning(program_name,"Removing duplicated variants")
+
+def removeDuplicate(program_name, folder, filt="*.wasm", remove=False):
+
+    LOGGER.warning(program_name, "Removing duplicated variants")
 
     l = [f for f in os.listdir(folder) if f.endswith(filt)]
-    LOGGER.info(program_name,"Total candidates: %s"%(len(l), ))
+    LOGGER.info(program_name, "Total candidates: %s" % (len(l), ))
 
     st = set()
 
@@ -254,14 +261,10 @@ def removeDuplicate(program_name, folder, filt = "*.wasm", remove=False):
                 os.remove(realPath)
         else:
             st.add(hashvalue)
-    LOGGER.info(program_name,"Unique: %s"%(len(st), ))
+    LOGGER.info(program_name, "Unique: %s" % (len(st), ))
 
 
-
-
-
-
-def process(f, OUT_FOLDER, onlybc, program_name, isBc = False):
+def process(f, OUT_FOLDER, onlybc, program_name, isBc=False):
     MANAGER = multiprocessing.Manager()
     pipeline = Pipeline()
 
@@ -272,11 +275,12 @@ def process(f, OUT_FOLDER, onlybc, program_name, isBc = False):
         result[file]["candidates"] = MANAGER.list()
         try:
             if not isBc:
-                pipeline.process(file, OUT_FOLDER, program_name, onlybc, outResult=result[file])
+                pipeline.process(file, OUT_FOLDER, program_name,
+                                 onlybc, outResult=result[file])
             else:
-                
+
                 bc = open(file, 'rb').read()
-                
+
                 if not os.path.exists(f"{OUT_FOLDER}"):
                     os.mkdir(f"{OUT_FOLDER}")
 
@@ -284,7 +288,8 @@ def process(f, OUT_FOLDER, onlybc, program_name, isBc = False):
                 tmp.write(bc)
                 tmp.close()
 
-                pipeline.processBitcode(bc, result[file], program_name, OUT_FOLDER, onlybc)
+                pipeline.processBitcode(
+                    bc, result[file], program_name, OUT_FOLDER, onlybc)
         except Exception as e:
             result[file]["error"] = e.__str__()
 
@@ -292,7 +297,7 @@ def process(f, OUT_FOLDER, onlybc, program_name, isBc = False):
     th.start()
 
     timeout = config["DEFAULT"].getint("timeout")
-    
+
     print("Timeout ... %s s" % timeout)
 
     th.join(timeout=timeout)
@@ -303,7 +308,8 @@ def process(f, OUT_FOLDER, onlybc, program_name, isBc = False):
         LOGGER.error(program_name, "Exiting %s due to timeout" % f)
         result_overall[f]["error"] = "Timeout %s" % timeout
 
-    result_overall[f]["candidates"] = result_overall[f]["candidates"].__deepcopy__({})
+    result_overall[f]["candidates"] = result_overall[f]["candidates"].__deepcopy__({
+    })
     result_overall[f] = result_overall[f].copy()
     result_overall = result_overall.copy()
 
@@ -312,9 +318,10 @@ def process(f, OUT_FOLDER, onlybc, program_name, isBc = False):
     remove_duplicate = config["DEFAULT"].getboolean("prune-equal")
     filt = ".bc" if onlybc else ".wasm"
 
-    removeDuplicate(program_name,OUT_FOLDER, filt, remove_duplicate)
+    removeDuplicate(program_name, OUT_FOLDER, filt, remove_duplicate)
 
     return result_overall
+
 
 def main(f):
     program_name = f.split("/")[-1].split(".")[0]
@@ -324,11 +331,13 @@ def main(f):
 
         if f.endswith(".c") or f.endswith(".cpp") or f.endswith(".bc"):
             try:
-                r = process(f, OUT_FOLDER, onlybc, program_name, isBc=f.endswith(".bc"))
+                r = process(f, OUT_FOLDER, onlybc, program_name,
+                            isBc=f.endswith(".bc"))
             except Exception as e:
                 print(e)
     else:
-        LOGGER.info(program_name, "Pool size: %s" % config["DEFAULT"].getint("thread-pool-size"))
+        LOGGER.info(program_name, "Pool size: %s" %
+                    config["DEFAULT"].getint("thread-pool-size"))
 
         result = dict(namespace=program_name, programs=[])
         attach = []
@@ -337,9 +346,11 @@ def main(f):
             program_name, OUT_FOLDER, onlybc = getFileMeta(final)
             if final.endswith(".bc") or final.endswith(".c") or final.endswith(".cpp"):
                 try:
-                    r = process(final, OUT_FOLDER, onlybc, program_name, isBc=final.endswith(".bc"))
+                    r = process(final, OUT_FOLDER, onlybc,
+                                program_name, isBc=final.endswith(".bc"))
                     result["programs"].append(r)
-                    attach.append(getlogfilename(final.split("/")[-1].replace(".c", "")))
+                    attach.append(getlogfilename(
+                        final.split("/")[-1].replace(".c", "")))
                 except Exception as e:
                     print(e)
 
@@ -349,6 +360,7 @@ def main(f):
             os.mkdir(OUT_FOLDER)
 
         print(json.dumps(result, indent=4))
+
 
 if __name__ == "__main__":
 
