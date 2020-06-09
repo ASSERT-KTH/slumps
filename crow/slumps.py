@@ -6,8 +6,10 @@ from stages import CToLLStage, LLToBC, BCToSouper, ObjtoWASM, WASM2WAT, BCCountC
 from utils import printProgressBar, config, createTmpFile, getIteratorByName, \
     ContentToTmpFile, BreakException, RUNTIME_CONFIG, updatesettings, sendReportEmail, make_github_issue, getlogfilename
 from logger import LOGGER
+import threading
 import hashlib
 import json
+import redis
 import copy
 from concurrent.futures import ThreadPoolExecutor, wait, ALL_COMPLETED
 import traceback
@@ -20,6 +22,8 @@ levelPool = ThreadPoolExecutor(
 
 
 class Pipeline(object):
+
+    global_lock = threading.Lock()
 
     def check_file(self, file: str):
         program_name = file.split("/")[-1].split(".")[0]
@@ -115,9 +119,9 @@ class Pipeline(object):
         try:
             bctocand = BCCountCandidates(program_name, level=level)
         except Exception as e:
-            raise e
             LOGGER.error(program_name, e)
             return
+
         with ContentToTmpFile(content=bc) as TMP_BC:
             try:
                 cand = bctocand(args=[TMP_BC.file], std=None)
@@ -145,13 +149,12 @@ class Pipeline(object):
                         futures.append(job)
                     r = wait(futures, return_when=ALL_COMPLETED)
             try:
-                import redis
                 LOGGER.info(program_name, "Cleaning cache...")
                 r = redis.Redis(host="localhost", port=6379)
 
                 result = r.flushdb()
                 LOGGER.success(
-                    program_name, "Flushing redis DB: result(%s)" % result)
+                    program_name, f"Flushing redis DB: result({result})")
                 r.close()
             except Exception as e:
                 LOGGER.error(program_name, e)
@@ -193,45 +196,42 @@ class Pipeline(object):
                 else:
                     raise e
 
-    import threading
-
-    global_lock = threading.Lock()
-
     def generateWasm(self, namespace, bc, OUT_FOLDER, fileName, debug=True, generateOnlyBc=False):
         llFileName = "%s/%s" % (OUT_FOLDER, fileName)
 
+        if generateOnlyBc:
+            hashvalue = hashlib.sha256(bc)
+            self.global_lock.release()  # Where is this acquired?
+            return hashvalue.hexdigest(), len(bc), "%s.bc" % (fileName,), "%s.bc" % (fileName,)
+
         with ContentToTmpFile(name="%s.bc" % llFileName, content=bc, ext=".bc", persist=generateOnlyBc) as TMP_WASM:
 
-            if not generateOnlyBc:
-                tmpWasm = TMP_WASM.file
+            tmpWasm = TMP_WASM.file
 
-                try:
-                    finalObjCreator = ObjtoWASM(namespace, debug=debug)
-                    finalObjCreator(args=[
-                        "%s.wasm" % (llFileName,),
-                        tmpWasm
-                    ], std=None)
+            try:
+                finalObjCreator = ObjtoWASM(namespace, debug=debug)
+                finalObjCreator(args=[
+                    "%s.wasm" % (llFileName,),
+                    tmpWasm
+                ], std=None)
 
-                    wat = WASM2WAT(namespace, debug=debug)
-                    wat(std=None, args=[
-                        "%s.wasm" % (llFileName,),
-                        "%s.wat" % (llFileName,)]
-                        )
-                    finalStream = open("%s.wasm" % (llFileName,), 'rb').read()
-                    if debug:
-                        LOGGER.warning(namespace, "%s: WASM SIZE %s" %
-                                       (namespace, len(finalStream),))
-                    hashvalue = hashlib.sha256(finalStream)
-                    if debug:
-                        LOGGER.warning(namespace, "%s: WASM SHA %s" %
-                                       (namespace, hashvalue.hexdigest(),))
-                    return hashvalue.hexdigest(), len(finalStream), "%s.wasm" % (llFileName,), "%s.wat" % (llFileName,)
-                except Exception as e:
-                    LOGGER.error(namespace, traceback.format_exc())
-            else:
-                hashvalue = hashlib.sha256(bc)
-                self.global_lock.release()
-                return hashvalue.hexdigest(), len(bc), "%s.bc" % (fileName,), "%s.bc" % (fileName,)
+                wat = WASM2WAT(namespace, debug=debug)
+                wat(std=None, args=[
+                    "%s.wasm" % (llFileName,),
+                    "%s.wat" % (llFileName,)]
+                    )
+                finalStream = open("%s.wasm" % (llFileName,), 'rb').read()
+                if debug:
+                    LOGGER.warning(namespace, "%s: WASM SIZE %s" %
+                                   (namespace, len(finalStream),))
+                hashvalue = hashlib.sha256(finalStream)
+                if debug:
+                    LOGGER.warning(namespace, "%s: WASM SHA %s" %
+                                   (namespace, hashvalue.hexdigest(),))
+                return hashvalue.hexdigest(), len(finalStream), "%s.wasm" % (llFileName,), "%s.wat" % (llFileName,)
+            except Exception as e:
+                LOGGER.error(namespace, traceback.format_exc())
+
 
 def getFileMeta(file, outResult=None):
 
@@ -277,19 +277,20 @@ def process(f, OUT_FOLDER, onlybc, program_name, isBc=False):
             if not isBc:
                 pipeline.process(file, OUT_FOLDER, program_name,
                                  onlybc, outResult=result[file])
-            else:
+                return
 
-                bc = open(file, 'rb').read()
+            bc = open(file, 'rb').read()
 
-                if not os.path.exists(f"{OUT_FOLDER}"):
-                    os.mkdir(f"{OUT_FOLDER}")
+            if not os.path.exists(f"{OUT_FOLDER}"):
+                os.mkdir(f"{OUT_FOLDER}")
 
-                tmp = open(f"{OUT_FOLDER}/{program_name}.bc", 'wb')
-                tmp.write(bc)
-                tmp.close()
+            tmp = open(f"{OUT_FOLDER}/{program_name}.bc", 'wb')
+            tmp.write(bc)
+            tmp.close()
 
-                pipeline.processBitcode(
-                    bc, result[file], program_name, OUT_FOLDER, onlybc)
+            pipeline.processBitcode(
+                bc, result[file], program_name, OUT_FOLDER, onlybc)
+
         except Exception as e:
             result[file]["error"] = e.__str__()
 
@@ -327,39 +328,41 @@ def main(f):
     program_name = f.split("/")[-1].split(".")[0]
 
     if os.path.isfile(f):
+        if not f.endswith(".c") and not f.endswith(".cpp") and not f.endswith(".bc"):
+            return
+
         program_name, OUT_FOLDER, onlybc = getFileMeta(f)
+        r = process(f, OUT_FOLDER, onlybc, program_name,
+                    isBc=f.endswith(".bc"))
 
-        if f.endswith(".c") or f.endswith(".cpp") or f.endswith(".bc"):
-            try:
-                r = process(f, OUT_FOLDER, onlybc, program_name,
-                            isBc=f.endswith(".bc"))
-            except Exception as e:
-                print(e)
-    else:
-        LOGGER.info(program_name, "Pool size: %s" %
-                    config["DEFAULT"].getint("thread-pool-size"))
+    LOGGER.info(program_name, "Pool size: %s" %
+                config["DEFAULT"].getint("thread-pool-size"))
 
-        result = dict(namespace=program_name, programs=[])
-        attach = []
-        print(os.listdir(f))
-        for final in ["%s/%s" % (f, i) for i in os.listdir(f)]:
-            program_name, OUT_FOLDER, onlybc = getFileMeta(final)
-            if final.endswith(".bc") or final.endswith(".c") or final.endswith(".cpp"):
-                try:
-                    r = process(final, OUT_FOLDER, onlybc,
-                                program_name, isBc=final.endswith(".bc"))
-                    result["programs"].append(r)
-                    attach.append(getlogfilename(
-                        final.split("/")[-1].replace(".c", "")))
-                except Exception as e:
-                    print(e)
+    result = dict(namespace=program_name, programs=[])
+    attach = []
+    print(os.listdir(f))
+    for final in ["%s/%s" % (f, i) for i in os.listdir(f)]:
 
-        OUT_FOLDER = "%s" % config["DEFAULT"]["outfolder"]
+        program_name, OUT_FOLDER, onlybc = getFileMeta(final)
 
-        if not os.path.exists(OUT_FOLDER):
-            os.mkdir(OUT_FOLDER)
+        if not final.endswith(".bc") and not final.endswith(".c") and not final.endswith(".cpp"):
+            continue
 
-        print(json.dumps(result, indent=4))
+        try:
+            r = process(final, OUT_FOLDER, onlybc,
+                        program_name, isBc=final.endswith(".bc"))
+            result["programs"].append(r)
+            attach.append(getlogfilename(
+                final.split("/")[-1].replace(".c", "")))
+        except Exception as e:
+            print(e)
+
+    OUT_FOLDER = "%s" % config["DEFAULT"]["outfolder"]
+
+    if not os.path.exists(OUT_FOLDER):
+        os.mkdir(OUT_FOLDER)
+
+    print(json.dumps(result, indent=4))
 
 
 if __name__ == "__main__":
