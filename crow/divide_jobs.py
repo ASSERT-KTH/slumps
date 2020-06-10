@@ -3,10 +3,12 @@ import os
 import sys
 import shutil
 
+
 def divide_jobs(programs_dir, max_programs_per_job, out_dir, timeout, extra=""):
 
     if os.path.exists(out_dir):
-        raise Exception(f"Remove output directory first before executing: {out_dir}")
+        raise Exception(
+            f"Remove output directory first before executing: {out_dir}")
         shutil.rmtree(out_dir)  # Not running this on my machine
 
     os.mkdir(out_dir)
@@ -20,11 +22,11 @@ def divide_jobs(programs_dir, max_programs_per_job, out_dir, timeout, extra=""):
         currentJob.append(file)
     jobs.append(currentJob)
 
-    shStrip = open(f"{out_dir}/command.sh", 'w')    
+    shStrip = open(f"{out_dir}/command.sh", 'w')
     mpiScript = open(f"{out_dir}/deploy_argo.yml", 'w')
 
     mpiScript.write(
-"""
+        """
 apiVersion: argoproj.io/v1alpha1
   kind: Workflow
   metadata:
@@ -50,16 +52,17 @@ apiVersion: argoproj.io/v1alpha1
         os.mkdir(jobName)
 
         for file in job:
-            shutil.copy(f"{programs_dir}/{file}", f"{out_dir}/job{counter}/{file}")
+            shutil.copy(f"{programs_dir}/{file}",
+                        f"{out_dir}/job{counter}/{file}")
 
         # Generate the script
         shStrip.write(f"docker run --name {jobFolder} -d -e TIMEOUT={timeout} {extra} -v $(pwd)/{jobFolder}:/input -v $(pwd)/{jobFolder}/out:/slumps/crow/out -v "
                       "$(pwd)/{jobFolder}/logs/:/slumps/crow/logs jacarte/slumps:app \n")
         mpiScript.write(
-"""          - { job_folder: %s }\n"""%jobFolder)
+            """          - { job_folder: %s }\n""" % jobFolder)
 
     mpiScript.write(
-"""
+        """
     - name: slumps-template
     inputs:
       parameters:
@@ -84,4 +87,5 @@ if __name__ == '__main__':
     if len(sys.argv) > 5:
         extra = " ".join(sys.argv[5:])
 
-    divide_jobs(programs_dir, max_programs_per_job, out_dir, timeout_per_program, extra)
+    divide_jobs(programs_dir, max_programs_per_job,
+                out_dir, timeout_per_program, extra)
