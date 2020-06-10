@@ -4,7 +4,19 @@ import sys
 import shutil
 
 
-def divide_jobs(programs_dir, max_programs_per_job, out_dir, timeout, extra=""):
+def divide_jobs(programs_dir, max_programs_per_job):
+    all_jobs = []
+    single_job = []
+    for file in os.listdir(programs_dir):
+        if len(single_job) < max_programs_per_job:
+            single_job.append(file)
+        else:
+            all_jobs.append(single_job)
+            single_job = []
+    return all_jobs
+
+
+def write_scripts(programs_dir, max_programs_per_job, out_dir, timeout, extra=""):
 
     if os.path.exists(out_dir):
         raise Exception(
@@ -13,16 +25,9 @@ def divide_jobs(programs_dir, max_programs_per_job, out_dir, timeout, extra=""):
 
     os.mkdir(out_dir)
 
-    jobs = []
-    currentJob = []
-    for i, file in enumerate(os.listdir(programs_dir)):
-        if i % max_programs_per_job == 0 and len(currentJob) > 0:
-            jobs.append(currentJob)
-            currentJob = []
-        currentJob.append(file)
-    jobs.append(currentJob)
+    all_jobs = divide_jobs(programs_dir, max_programs_per_job)
 
-    shStrip = open(f"{out_dir}/command.sh", 'w')
+    shScript = open(f"{out_dir}/command.sh", 'w')
     mpiScript = open(f"{out_dir}/deploy_argo.yml", 'w')
 
     mpiScript.write(
@@ -43,9 +48,9 @@ apiVersion: argoproj.io/v1alpha1
             - name: job_folder
               value: "{{item.job_folder}}"
           withItems:
-""")
+""")  # TODO: Where does item come from?
 
-    for counter, job in enumerate(jobs):
+    for counter, job in enumerate(all_jobs):
         jobName = f"{out_dir}/job{counter}"
         jobFolder = f"job{counter}"
 
@@ -56,7 +61,7 @@ apiVersion: argoproj.io/v1alpha1
                         f"{out_dir}/job{counter}/{file}")
 
         # Generate the script
-        shStrip.write(f"docker run --name {jobFolder} -d -e TIMEOUT={timeout} {extra} -v $(pwd)/{jobFolder}:/input -v $(pwd)/{jobFolder}/out:/slumps/crow/out -v "
+        shScript.write(f"docker run --name {jobFolder} -d -e TIMEOUT={timeout} {extra} -v $(pwd)/{jobFolder}:/input -v $(pwd)/{jobFolder}/out:/slumps/crow/out -v "
                       "$(pwd)/{jobFolder}/logs/:/slumps/crow/logs jacarte/slumps:app \n")
         mpiScript.write(
             """          - { job_folder: %s }\n""" % jobFolder)
@@ -73,7 +78,7 @@ apiVersion: argoproj.io/v1alpha1
       args: [-version] 
 """)
 
-    shStrip.close()
+    shScript.close()
     mpiScript.close()
 
 
@@ -87,5 +92,5 @@ if __name__ == '__main__':
     if len(sys.argv) > 5:
         extra = " ".join(sys.argv[5:])
 
-    divide_jobs(programs_dir, max_programs_per_job,
-                out_dir, timeout_per_program, extra)
+    write_scripts(programs_dir, max_programs_per_job,
+                  out_dir, timeout_per_program, extra)
