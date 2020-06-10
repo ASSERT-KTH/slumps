@@ -92,15 +92,12 @@ class Pipeline(object):
             LOGGER.error(program_name, "Invalid file %s" % (file,))
             return
 
-        if not os.path.exists(OUT_FOLDER):
-            os.mkdir(OUT_FOLDER)
-
         ll1 = b''
 
         if file.endswith(".c") or file.endswith(".cpp"):
             ctoll = CToLLStage(program_name)
             ll1 = ctoll(file)
-        if file.endswith(".ll"):
+        elif file.endswith(".ll"):
             ll1 = open(file, 'rb')
 
         lltobc = LLToBC(program_name, debug=False)
@@ -221,11 +218,10 @@ class Pipeline(object):
                     "%s.wat" % (llFileName,)]
                     )
                 finalStream = open("%s.wasm" % (llFileName,), 'rb').read()
+                hashvalue = hashlib.sha256(finalStream)
                 if debug:
                     LOGGER.warning(namespace, "%s: WASM SIZE %s" %
                                    (namespace, len(finalStream),))
-                hashvalue = hashlib.sha256(finalStream)
-                if debug:
                     LOGGER.warning(namespace, "%s: WASM SHA %s" %
                                    (namespace, hashvalue.hexdigest(),))
                 return hashvalue.hexdigest(), len(finalStream), "%s.wasm" % (llFileName,), "%s.wat" % (llFileName,)
@@ -325,7 +321,6 @@ def process(f, OUT_FOLDER, onlybc, program_name, isBc=False):
 
 
 def main(f):
-    program_name = f.split("/")[-1].split(".")[0]
 
     if os.path.isfile(f):
         if not f.endswith(".c") and not f.endswith(".cpp") and not f.endswith(".bc"):
@@ -334,6 +329,9 @@ def main(f):
         program_name, OUT_FOLDER, onlybc = getFileMeta(f)
         r = process(f, OUT_FOLDER, onlybc, program_name,
                     isBc=f.endswith(".bc"))
+        return
+
+    program_name = f.split("/")[-1].split(".")[0]
 
     LOGGER.info(program_name, "Pool size: %s" %
                 config["DEFAULT"].getint("thread-pool-size"))
