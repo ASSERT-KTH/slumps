@@ -1,10 +1,16 @@
-out
-.idea
-
-*.slumps.log
-
+### OSX ###
 .DS_Store
 
-crow_out
+### Intellij ###
+.idea
 
+### Python ###
+venv
+*.pyc
+__pycache__
+
+### Other ###
+out
 *bck
+*.slumps.log
+crow_out
