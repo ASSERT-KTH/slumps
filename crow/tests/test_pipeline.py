@@ -1,9 +1,10 @@
-# This requires Souper and wabt to be built locally and
+# This requires Souper and wabt to be built locally
 
-import utils
 from multiprocessing.pool import Pool
-import slumps
-import stages
+import crow.slumps as slumps
+import crow.stages as stages
+from crow.utils import RUNTIME_CONFIG
+from crow.settings import config
 import os
 os.chdir("..")
 
@@ -61,27 +62,27 @@ def test_WASM2WAT():
     wasm2wat = stages.WASM2WAT("test")
     # Send llvm IR to std
     wasm2wat(args=[f"{BASEDIR}/results/babbage_problem.wasm",
-                   f"{BASEDIR}/results/babbage_problem.wat"])  
+                   f"{BASEDIR}/results/babbage_problem.wat"])
 
 
 def test_pipeline():
     # Receive a LLVM IR in the std
-    utils.RUNTIME_CONFIG["USE_REDIS"] = False
-    utils.config["DEFAULT"]["candidates-threshold"] = "1"
-    utils.config["DEFAULT"]["timeout"] = "100"
+    RUNTIME_CONFIG["USE_REDIS"] = False
+    config["DEFAULT"]["candidates-threshold"] = "1"
+    config["DEFAULT"]["timeout"] = "100"
     slumps.main(f"{BASEDIR}/benchmarks/babbage_problem.c")
 
 
 def test_pipeline2():
     # Receive a LLVM IR in the std
-    utils.RUNTIME_CONFIG["USE_REDIS"] = False
-    utils.config["DEFAULT"]["candidates-threshold"] = "1"
-    utils.config["DEFAULT"]["timeout"] = "3600"
+    RUNTIME_CONFIG["USE_REDIS"] = False
+    config["DEFAULT"]["candidates-threshold"] = "1"
+    config["DEFAULT"]["timeout"] = "3600"
     slumps.main(f"{BASEDIR}/benchmarks/nautic.c")
 
 
 def test_multi_thread():
     # Receive a LLVM IR in the std
-    utils.config["DEFAULT"]["candidates-threshold"] = "1"
-    utils.config["DEFAULT"]["timeout"] = "1"
+    config["DEFAULT"]["candidates-threshold"] = "1"
+    config["DEFAULT"]["timeout"] = "1"
     slumps.main(f"{BASEDIR}/multi")

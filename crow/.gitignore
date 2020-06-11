@@ -8,3 +8,4 @@ results
 .coverage*
 meta.json
 dump.rdb
+private.ini
