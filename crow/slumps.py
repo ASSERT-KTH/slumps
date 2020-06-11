@@ -2,8 +2,9 @@
 
 import os
 import sys
+from crow.settings import config
 from stages import CToLLStage, LLToBC, BCToSouper, ObjtoWASM, WASM2WAT, BCCountCandidates
-from utils import printProgressBar, config, createTmpFile, getIteratorByName, \
+from utils import printProgressBar, createTmpFile, getIteratorByName, \
     ContentToTmpFile, BreakException, RUNTIME_CONFIG, updatesettings, sendReportEmail, make_github_issue, getlogfilename
 from logger import LOGGER
 import threading

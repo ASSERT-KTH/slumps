@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 
 from subprocess import Popen, PIPE
-from utils import bcolors, Alias, config, createTmpFile, RUNTIME_CONFIG,processCandidatesMetaOutput
+from crow.settings import config
+from utils import bcolors, Alias, createTmpFile, RUNTIME_CONFIG,processCandidatesMetaOutput
 from logger import LOGGER
 import re
 import time
