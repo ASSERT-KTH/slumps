@@ -1,31 +1,34 @@
-# This requires Souper and wabt to be built locally and 
+# This requires Souper and wabt to be built locally and
 
+import utils
+from multiprocessing.pool import Pool
+import slumps
+import stages
 import os
 os.chdir("..")
 
-import stages
-import slumps
-from multiprocessing.pool import Pool
-import utils
 
 BASEDIR = os.path.dirname(__file__)
+
 
 def test_ctoll():
     ctoll = stages.CToLLStage("test")
 
-    result = ctoll("%s/benchmarks/babbage_problem.c"%(BASEDIR, )) # Send llvm IR to std
+    result = ctoll("%s/benchmarks/babbage_problem.c" %
+                   (BASEDIR, ))  # Send llvm IR to std
 
-    open("%s/results/babbage_problem.ll"%(BASEDIR,), 'wb').write(result)
-
+    open("%s/results/babbage_problem.ll" % (BASEDIR,), 'wb').write(result)
 
 
 def test_lltobc():
     # Receive a LLVM IR in the std
     lltobc = stages.LLToBC("test")
 
-    result = lltobc(std=open("%s/results/babbage_problem.ll"%(BASEDIR,), 'rb').read()) # Send llvm IR to std
+    result = lltobc(std=open("%s/results/babbage_problem.ll" %
+                             (BASEDIR,), 'rb').read())  # Send llvm IR to std
 
-    open("%s/results/babbage_problem.bc"%(BASEDIR,), 'wb').write(result)
+    open("%s/results/babbage_problem.bc" % (BASEDIR,), 'wb').write(result)
+
 
 def test_bctoSouperCandidates():
     # Receive a LLVM IR in the std
@@ -40,10 +43,11 @@ def test_bctoSouperCandidates():
 
 def test_BCSouperPass():
     # Receive a LLVM IR in the std
-    bctoSouper = stages.BCToSouper("test",candidates=[1,3])
-    content = open("%s/results/babbage_problem.bc"%(BASEDIR,), 'rb').read()
+    bctoSouper = stages.BCToSouper("test", candidates=[1, 3])
+    content = open("%s/results/babbage_problem.bc" % (BASEDIR,), 'rb').read()
 
-    bctoSouper(args=["%s/results/babbage_problem.bc"%(BASEDIR,), "%s/results/babbage_problem.opt.bc"%(BASEDIR,)], std=None) # Send llvm IR to std
+    bctoSouper(args=["%s/results/babbage_problem.bc" % (BASEDIR,),
+                     "%s/results/babbage_problem.opt.bc" % (BASEDIR,)], std=None)  # Send llvm IR to std
 
     # open("%s/results/babbage_problem.opt.bc"%(BASEDIR,), 'wb').write(opt)
 
@@ -52,20 +56,16 @@ def test_bctoWasm():
     # Receive a LLVM IR in the std
     bt2wasm = stages.ObjtoWASM("test")
 
-    bt2wasm( args=["%s/results/babbage_problem.wasm"%(BASEDIR,),
-                      "%s/results/babbage_problem.bc"%(BASEDIR,)]) # Send llvm IR to std
-
+    bt2wasm(args=["%s/results/babbage_problem.wasm" % (BASEDIR,),
+                  "%s/results/babbage_problem.bc" % (BASEDIR,)])  # Send llvm IR to std
 
 
 def test_WASM2WAT():
     # Receive a LLVM IR in the std
     wasm2wat = stages.WASM2WAT("test")
 
-    wasm2wat( args=["%s/results/babbage_problem.wasm"%(BASEDIR,),
-                      "%s/results/babbage_problem.wat"%(BASEDIR,)]) # Send llvm IR to std
-
-
-
+    wasm2wat(args=["%s/results/babbage_problem.wasm" % (BASEDIR,),
+                   "%s/results/babbage_problem.wat" % (BASEDIR,)])  # Send llvm IR to std
 
 
 
@@ -76,8 +76,7 @@ def test_pipeline():
     utils.config["DEFAULT"]["timeout"] = "100"
 
     import slumps
-    slumps.main("%s/benchmarks/babbage_problem.c"%(BASEDIR, ))
-
+    slumps.main("%s/benchmarks/babbage_problem.c" % (BASEDIR, ))
 
 
 def test_pipeline2():
@@ -87,8 +86,7 @@ def test_pipeline2():
     utils.config["DEFAULT"]["timeout"] = "3600"
 
     import slumps
-    slumps.main("%s/benchmarks/nautic.c"%(BASEDIR, ))
-
+    slumps.main("%s/benchmarks/nautic.c" % (BASEDIR, ))
 
 
 def test_multi_thread():
@@ -98,6 +96,4 @@ def test_multi_thread():
 
     import slumps
     slumps.main("%s/multi" % BASEDIR)
-
-
 
