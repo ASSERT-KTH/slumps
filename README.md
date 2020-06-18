@@ -6,7 +6,7 @@ This is still in a prototyping stage. There are still many assumptions made on h
 
 ## Introduction
 
-This plugin aims to act as an interface between SWAM and AFLplusplus. Since AFL is built to fuzz C++ programs, but nonetheless provides a generic algorithm, which is not only bound to this language, we aim to provide spin-off that applies AFL to WASM binaries.
+This plugin aims to act as an interface between SWAM and AFLplusplus. Since AFL is built to fuzz C++ programs, but nonetheless provides a generic algorithm, which is not only bound to this language, we aim to provide a spin-off that applies AFL to WASM binaries.
 
 The interface.cpp file fakes the behaviour of the instrumented binary and instead forwards the fuzzed inputs given by AFL to the SWAM engine, which in turn forwards it to the WASM binary.
 
