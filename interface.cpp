@@ -74,7 +74,7 @@ void execute_swam(char *fuzzed_input)
 void pass_data_to_afl(uint8_t *execution_data, uint8_t *trace_bits)
 {
 
-    // Dummy:
+    // Dummy with random coverage:
     srand(time(NULL));
     for (int i = 0; i < 10; i++)
     {
@@ -96,20 +96,50 @@ void pass_data_to_afl(uint8_t *execution_data, uint8_t *trace_bits)
     */
 }
 
+void test_nested_if(char *fuzzed_input, uint8_t *trace_bits)
+{
+    // Function to test how AFL reacts to code coverage. Runs
+    // code execution and feeds data to AFL in one go.
+
+    std::vector<std::string> vector = readFileToVector(fuzzed_input);
+
+    if (vector[0].rfind("one", 0) == 0)
+    {
+        trace_bits[1] += 1;
+        if (vector[0].rfind("oneone", 0) == 0)
+        {
+            trace_bits[2] += 1;
+            if (vector[0].rfind("oneoneone", 0) == 0)
+            {
+                trace_bits[3] += 1;
+
+                if (vector[0].rfind("oneoneonetwo", 0) == 0)
+                {
+                    trace_bits[4] += 1;
+                    if (vector[0].rfind("oneoneonetwotwo", 0) == 0)
+                    {
+                        trace_bits[5] += 1;
+                        exit(1);
+                    }
+                }
+            }
+        }
+    }
+}
+
 void main_fuzz(char *fuzzed_input, uint8_t *trace_bits)
 {
     log_file(fuzzed_input);
 
+    // Real application
     execute_swam(fuzzed_input);
-
-    // Read "shared memory" over TCP
     uint8_t *execution_data = (uint8_t *)malloc(AFL_SHM_SIZE);
-
-    // TODO: Read path coverage from file
-
+    // TODO: Read path coverage from file into execution_data
     pass_data_to_afl(execution_data, trace_bits);
-
     free(execution_data);
+
+    // Test application
+    // test_nested_if(fuzzed_input, trace_bits);
 }
 
 void fork_server(char *fuzzed_input, uint8_t *trace_bits)
@@ -135,6 +165,8 @@ void fork_server(char *fuzzed_input, uint8_t *trace_bits)
         exit(1);
     }
 
+    // The parent process that continuously runs through this while-loop
+    // and is creating forks of itself is called the "fork server".
     while (true)
     {
         LOG("##### NEW FORK RUN #####");
@@ -148,7 +180,7 @@ void fork_server(char *fuzzed_input, uint8_t *trace_bits)
             close(199);
             exit(1);
         }
-        LOG("Status: " + std::to_string(status));
+        LOG("Read status: " + std::to_string(status));
 
         /*
     Programm runs concurrently in two forks from here
@@ -184,16 +216,27 @@ void fork_server(char *fuzzed_input, uint8_t *trace_bits)
     */
 
         LOG("Waiting for child...");
-        if (waitpid(pid, &status, 0) <= 0)
+        if (waitpid(pid, &status, 0) <= 0) // Technically only fails at -1; 0 means still running
         {
-            LOG("Child fork crashed");
+            LOG("waitpid() failed.");
             close(198);
             close(199);
             exit(1);
         }
 
-        LOG("Status: " + std::to_string(status));
-        write(199, &status, 4);
+        if (!WIFEXITED(status))
+        { // Not sure how this could happen
+            LOG("WIFEXITED(status): " + std::to_string(WIFEXITED(status)));
+            close(198);
+            close(199);
+            exit(1);
+        }
+
+        // Need to translate return value of waitpid to exit code
+        int exit_status = WEXITSTATUS(status);
+        LOG("Exit code status: " + std::to_string(exit_status));
+
+        write(199, &exit_status, 4);
     }
 }
 
@@ -214,6 +257,10 @@ int main(int argc, char *argv[])
     trace_bits[0]++;
 
     log_args(argc, argv);
+
+    // Since it is not entirely clear how AFL modifies the args in the middle of
+    // the function call, we can do a test.
+    // TODO: Copy args, modify slightly (avoid compiler optimization) and use for fork_server input
 
     fork_server(argv[1], trace_bits);
 
