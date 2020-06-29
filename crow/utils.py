@@ -1,12 +1,13 @@
 # -*- coding: utf-8 -*-
 
 import os
-import configparser
+
 import uuid
 import iterators
 import sys
 from subprocess import check_output
 from subprocess import Popen, PIPE
+from crow.settings import config, private
 
 import smtplib
 from email.mime.multipart import MIMEMultipart
@@ -19,11 +20,8 @@ import threading
 import re
 import traceback
 
+
 BASE_DIR = os.path.dirname(__file__)
-
-config = configparser.ConfigParser(interpolation=configparser.ExtendedInterpolation())
-config.read(f"{BASE_DIR}/settings/config.ini")
-
 RUNTIME_CONFIG = dict(USE_REDIS=False)
 
 
@@ -47,7 +45,6 @@ class ContentToTmpFile(object):
         self.file = tmp
         self.persist = persist
 
-
     def __enter__(self):
         return self
 
@@ -63,33 +60,39 @@ class ContentToTmpFile(object):
 
 
 def updatesettings(argvs):
-    
+
     if not os.path.exists(f"{BASE_DIR}/settings/.slumps"):
         print("Setting up slumps for the first time...")
         open(f"{BASE_DIR}/settings/.slumps", 'w').write("SLUMPs them all!")
 
-        SLUMPS_DIR = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
+        SLUMPS_DIR = os.path.abspath(
+            os.path.dirname(os.path.dirname(__file__)))
 
         print("Slumps dir...%s" % SLUMPS_DIR)
         config["DEFAULT"]["slumpspath"] = SLUMPS_DIR
 
         platform = ".so" if sys.platform == 'linux' else '.dylib'  # dylib for MacOS
         print("OS...%s" % sys.platform)
-        config["souper"]["passName"] = config["souper"]["passName"].split(".")[0] + platform
+        config["souper"]["passName"] = config["souper"]["passName"].split(".")[
+            0] + platform
 
         # WAS-ld binary
 
         # Read available binaries
-        bins = check_output('compgen -c', shell=True, executable='/bin/bash').splitlines()
+        bins = check_output('compgen -c', shell=True,
+                            executable='/bin/bash').splitlines()
 
-        wasm_bins = list(filter(lambda x: x.startswith("wasm-ld"), map(lambda x: x.decode("utf-8"), bins)))
+        wasm_bins = list(filter(lambda x: x.startswith(
+            "wasm-ld"), map(lambda x: x.decode("utf-8"), bins)))
 
         if len(wasm_bins) == 0:
-            raise Exception("WASM linker not found. Please install it (apt-get install lld-<version> for ubuntu)")
-        print(wasm_bins)
+            raise Exception(
+                "WASM linker not found. Please install it (apt-get install lld-<version> for ubuntu)")
+
         wasm_ld = wasm_bins[0] if len(wasm_bins) > 0 else None
         if len(wasm_bins) > 1:
-            print("Multiple WASM linkers. Choose one, take into account the version of llvm built with Souper:")
+            print(
+                "Multiple WASM linkers. Choose one, take into account the version of llvm built with Souper:")
 
             for i, b in enumerate(wasm_bins):
                 print("%s -  %s" % (i + 1, b))
@@ -106,37 +109,39 @@ def updatesettings(argvs):
             if index + 1 < len(argvs) and not argvs[index + 1].startswith("-"):
                 pairs.append([a, argvs[index + 1]])
             else:
-                raise Exception("Invalid option %s. Full options line %s"%(a, " ".join(argvs)))
+                raise Exception(
+                    "Invalid option %s. Full options line %s" % (a, " ".join(argvs)))
 
     for pair in pairs:
         processOptionValuePair(pair)
-    
+
     with open(f"{BASE_DIR}/settings/config.ini", 'w') as configFile:
         config.write(configFile)
 
+
 def processOptionValuePair(pair):
     option, value = pair
-    option = option[1:] # Remove the firsst dash
-    namespace, key = option.split(".") # Getting namespace and key
+    option = option[1:]  # Remove the firsst dash
+    namespace, key = option.split(".")  # Getting namespace and key
 
     if not namespace in config:
         print("Available namespace for configuration:")
         for k in config.keys():
-            print("\t%s"%k)
-        raise Exception("%s namespace not found"%namespace)
-    
+            print("\t%s" % k)
+        raise Exception("%s namespace not found" % namespace)
+
     if not key in config[namespace]:
-        print("Available keys for namespace %s:"%namespace)
+        print("Available keys for namespace %s:" % namespace)
         for k in config[namespace].keys():
-            print("\t%s: %s"%(k, config[namespace][k]))
-        raise Exception("%s key not found"%key)
+            print("\t%s: %s" % (k, config[namespace][k]))
+        raise Exception("%s key not found" % key)
 
     config[namespace][key] = value
     print(namespace, key, value)
 
 
 OUT_FOLDER = config["DEFAULT"]["outfolder"]
-    
+
 
 def getIteratorByName(name: str):
     return getattr(iterators, name)
@@ -153,16 +158,15 @@ def globalCounter():
 
 globalCounter.counter = 0
 
-private = configparser.ConfigParser(interpolation=configparser.ExtendedInterpolation())
-private.read(f"{BASE_DIR}/settings/private.ini")
 
+def make_github_issue(title, body=None, assignee=None, milestone=None, closed=None, labels=None):
 
-
-def make_github_issue(title, body=None, assignee=None, milestone=None,closed=None, labels=None):
-
-    USERNAME = os.environ.get('GITHUB_USER', private["github"].get("user", None))
-    TOKEN = os.environ.get('GITHUB_TOKEN', private["github"].get("token", None))
-    REPO_NAME = os.environ.get('REPO_NAME', private["github"].get("repo_name", None))
+    USERNAME = os.environ.get(
+        'GITHUB_USER', private["github"].get("user", None))
+    TOKEN = os.environ.get(
+        'GITHUB_TOKEN', private["github"].get("token", None))
+    REPO_NAME = os.environ.get(
+        'REPO_NAME', private["github"].get("repo_name", None))
 
     if USERNAME is None or TOKEN is None or REPO_NAME is None:
         return
@@ -173,7 +177,8 @@ def make_github_issue(title, body=None, assignee=None, milestone=None,closed=Non
     # Create an issue on github.com using the given parameters
     # Url to create issues via POST
 
-    url = 'https://api.github.com/repos/%s/%s/import/issues' % (REPO_OWNER, REPO_NAME)
+    url = 'https://api.github.com/repos/%s/%s/import/issues' % (
+        REPO_OWNER, REPO_NAME)
 
     # Headers
     headers = {
@@ -198,11 +203,9 @@ def make_github_issue(title, body=None, assignee=None, milestone=None,closed=Non
         print('Response:', response.content)
 
 
-
-def sendReportEmail(subject, content, attachments = []):
+def sendReportEmail(subject, content, attachments=[]):
     # Send using gmail
-    #try:
-
+    # try:
 
     server = smtplib.SMTP_SSL('smtp.gmail.com', 465)
     server.ehlo()
@@ -256,9 +259,9 @@ def sendReportEmail(subject, content, attachments = []):
 
     server.sendmail(sent_from, to, msg.as_string())
     server.close()
-    #except Exception as e:
+    # except Exception as e:
 
-        #print("Error", e.__str__())
+    #print("Error", e.__str__())
 
 
 def printProgressBar(iteration, total, prefix='', suffix='', decimals=1, length=100, fill='█', printEnd="\r"):
@@ -274,7 +277,8 @@ def printProgressBar(iteration, total, prefix='', suffix='', decimals=1, length=
         fill        - Optional  : bar fill character (Str)
         printEnd    - Optional  : end character (e.g. "\r", "\r\n") (Str)
     """
-    percent = ("{0:." + str(decimals) + "f}").format(100 * (iteration / float(total)))
+    percent = ("{0:." + str(decimals) + "f}").format(100 *
+                                                     (iteration / float(total)))
     filledLength = int(length * iteration // total)
     bar = fill * filledLength + '-' * (length - filledLength)
     print('\r%s |%s| %s%% %s' % (prefix, bar, percent, suffix), end=printEnd)
@@ -313,6 +317,7 @@ class Alias:
     # libsouperPass_so = "../../souper/build/libsouperPass.so"
     # z3 = "%s/souper/third_party/z3/build/z3"%(BASE_DIR,)
 
+
 def processCandidatesMetaOutput(output):
     meta = re.compile(r'\[(.*)/(\d+)\]')
     setRe = re.compile(r"\[SLUMPS-META replacement idx (\d+)\]\n")
@@ -320,14 +325,14 @@ def processCandidatesMetaOutput(output):
 
     total = int(match.group(2))
 
-    # process set 
+    # process set
     try:
-        resultSet = [ int(r) for r in setRe.findall(output) ]
+        resultSet = [int(r) for r in setRe.findall(output)]
 
         return [resultSet, total]
     except Exception as e:
         return [[], total]
 
+
 class BreakException(Exception):
     pass
-
