@@ -38,6 +38,7 @@ class ExternalStage(object):
         start = time.time()
         std, err = p.communicate()
 
+
         delta = time.time() - start
         if self.debug:
             LOGGER.success(self.namespace, "Command -> %s (%.2f s)" % (self.name, delta))
@@ -113,6 +114,24 @@ class LLToBC(ExternalStage):
         return std
 
 
+class BCMem2Reg(ExternalStage):
+
+    def __init__(self, namespace, debug=True):
+        self.path_to_executable = Alias.opt
+        self.name = "Bitcode mem2reg"
+        self.debug = debug
+
+        self.namespace = namespace
+
+    def __call__(self, args=[], std=None):  # f -> inputs
+
+        new_inputs = ("- -o -").split(" ")
+        return super(BCMem2Reg, self).__call__(new_inputs, std)
+
+    def processInner(self, std, err):
+        return std
+
+
 class BCCountCandidates(ExternalStage):
 
     def __init__(self, namespace, level=1):
@@ -137,6 +156,7 @@ class BCCountCandidates(ExternalStage):
 
     def processInner(self, std, err):
         return processCandidatesMetaOutput(err.decode("utf-8"))
+    
 
 
 

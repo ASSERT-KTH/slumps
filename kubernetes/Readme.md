@@ -15,23 +15,23 @@ For more information about Argo workflows and experiments parallelization, go to
   - Append the following:
   ```
   data:
-  config: |
-    artifactRepository:
-      s3:
-        bucket: my-bucket
-        endpoint: minio-service.minio:9000
-        insecure: true
-        # accessKeySecret and secretKeySecret are secret selectors.
-        # It references the k8s secret named 'argo-artifacts'
-        # which was created during the minio helm install. The keys,
-        # 'accesskey' and 'secretkey', inside that secret are where the
-        # actual minio credentials are stored.
-        accessKeySecret:
-          name: argo-artifacts
-          key: accesskey
-        secretKeySecret:
-          name: argo-artifacts
-          key: secretkey
+    config: |
+      artifactRepository:
+        s3:
+          bucket: my-bucket
+          endpoint: minio-service.minio:9000
+          insecure: true
+          # accessKeySecret and secretKeySecret are secret selectors.
+          # It references the k8s secret named 'argo-artifacts'
+          # which was created during the minio helm install. The keys,
+          # 'accesskey' and 'secretkey', inside that secret are where the
+          # actual minio credentials are stored.
+          accessKeySecret:
+            name: argo-artifacts
+            key: accesskey
+          secretKeySecret:
+            name: argo-artifacts
+            key: secretkey
   ```
 - Create the secret: ```kubectl create secret generic argo-artifacts --from-literal=accesskey="minio" --from-literal=secretkey="minio123"```
 - Forward minio service to download and manage artifacts: ```kubectl port-forward -n minio service/minio-service 9000```
@@ -65,6 +65,16 @@ Examples
 
 ```bash
 argo submit --watch slumps_pararallel_exploration.yml  -p repo="https://github.com/kth-tcs/verificatum-vjsc.git" -p raw="https://raw.githubusercontent.com/kth-tcs/verificatum-vjsc/master/src/wasm" -p folder="verificatum-vjsc/src/wasm"
+```
+
+
+```bash
+argo submit -p program=https://github.com/KTH/slumps/raw/master/benchmark_programs/yazec/main.bc slumps_pararallel_exploration_single.yml
+```
+
+
+```bash
+argo submit -p program=https://raw.githubusercontent.com/KTH/slumps/master/benchmark_programs/rossetta/the_sixties/100_doors.c slumps_pararallel_exploration_single.yml
 ```
 ## Dashboard for kubernetes:
  - ```kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.0.0-beta8/aio/deploy/recommended.yaml ```
