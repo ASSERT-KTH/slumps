@@ -4,13 +4,12 @@ metadata:
   generateName: slumps-simple-program-wasi-
 spec:
   entrypoint: slumps-distributed
-  parallelism: 5
+  parallelism: 12
   arguments:
     parameters:
     - name: program
   templates:
   - name: slumps-distributed
-    steps:
     steps:
     - - name: slumpsfy
         template: slumps-template
@@ -62,10 +61,10 @@ spec:
     container:
       image: "jacarte/slumps:crow"
       command: [/bin/bash]
-      args: [start_docker.sh,"{{inputs.parameters.program}}","-DEFAULT.order", "{{inputs.parameters.order}}", "-DEFAULT.timeout", "25200","-DEFAULT.link-wasi", "False", "-DEFAULT.generate-bc-only", "True" ]
+      args: [start_docker.sh,"{{inputs.parameters.program}}","-DEFAULT.order", "{{inputs.parameters.order}}", "-DEFAULT.timeout", "36000","-DEFAULT.link-wasi", "True", "-DEFAULT.generate-bc-only", "False" ]
       resources:
         requests:
-          memory: 2.0G
+          memory: 1.5G
           cpu: 1
         limits:
           memory: 4G

@@ -2,7 +2,7 @@
 
 import os
 import sys
-from stages import CToLLStage, LLToBC, BCToSouper, ObjtoWASM, WASM2WAT, BCCountCandidates
+from stages import CToLLStage, LLToBC, BCToSouper, ObjtoWASM, WASM2WAT, BCCountCandidates,BCMem2Reg
 from utils import printProgressBar, config, createTmpFile, getIteratorByName, \
     ContentToTmpFile, BreakException, RUNTIME_CONFIG, updatesettings, sendReportEmail, make_github_issue, getlogfilename
 from logger import LOGGER
@@ -36,6 +36,10 @@ class Pipeline(object):
         return False
 
     def processBitcode(self,bc, outResult, program_name, OUT_FOLDER, onlybc):
+
+        # mem2reg
+        #mem2reg = BCMem2Reg(program_name, debug=True)
+
 
         sha = set()
         meta = dict()
@@ -188,16 +192,15 @@ class Pipeline(object):
 
     import threading
 
-    global_lock = threading.Lock()
 
     def generateWasm(self, namespace, bc, OUT_FOLDER, fileName, debug=True, generateOnlyBc = False):
         llFileName = "%s/%s" % (OUT_FOLDER, fileName)
 
-        with ContentToTmpFile(name="%s.bc"%llFileName, content=bc, ext=".bc", persist=generateOnlyBc) as TMP_WASM:
+        with ContentToTmpFile(name="%s.bc"%llFileName, content=bc, ext=".bc", persist=True) as TMP_WASM:
             
             if not generateOnlyBc:
                 tmpWasm = TMP_WASM.file
-            
+
                 try:
                     finalObjCreator = ObjtoWASM(namespace, debug=debug)
                     finalObjCreator(args=[
@@ -221,7 +224,7 @@ class Pipeline(object):
                     LOGGER.error(namespace, traceback.format_exc())
             else:
                 hashvalue = hashlib.sha256(bc)
-                self.global_lock.release()
+                print(hashvalue)
                 return hashvalue.hexdigest(), len(bc), "%s.bc" % (fileName,), "%s.bc" % (fileName,)
 
 
@@ -357,7 +360,10 @@ if __name__ == "__main__":
     if not os.path.exists("out"):
         os.mkdir("out")
 
+
+
     RUNTIME_CONFIG["USE_REDIS"] = True
 
     f = sys.argv[-1]
+    LOGGER.success("general", "STARTING")
     main(f)

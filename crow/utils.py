@@ -86,7 +86,7 @@ def updatesettings(argvs):
 
         if len(wasm_bins) == 0:
             raise Exception("WASM linker not found. Please install it (apt-get install lld-<version> for ubuntu)")
-        
+        print(wasm_bins)
         wasm_ld = wasm_bins[0] if len(wasm_bins) > 0 else None
         if len(wasm_bins) > 1:
             print("Multiple WASM linkers. Choose one, take into account the version of llvm built with Souper:")
@@ -94,8 +94,7 @@ def updatesettings(argvs):
             for i, b in enumerate(wasm_bins):
                 print("%s -  %s" % (i + 1, b))
 
-            option = int(input("Option: "))
-            wasm_ld = wasm_bins[option - 1]
+            wasm_ld = wasm_bins[0]
 
         config["wasm-ld"]["path"] = wasm_ld.__str__()
 
