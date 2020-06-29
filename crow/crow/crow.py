@@ -18,10 +18,10 @@ import traceback
 
 import multiprocessing
 import time
+import re
 
 
-levelPool = ThreadPoolExecutor(
-    max_workers=config["DEFAULT"].getint("level-workers"))
+levelPool = None
 
 
 class Pipeline(object):
@@ -43,7 +43,18 @@ class Pipeline(object):
 
         return False
 
-    def processBitcode(self, bc, outResult, program_name, OUT_FOLDER, onlybc):
+    def chunkIt(self, s, num):
+        avg = len(s) / float(num)
+        out = []
+        last = 0.0
+
+        while last < len(s):
+            out.append(s[int(last):int(last + avg)])
+            last += avg
+
+        return out
+
+    def processBitcode(self, bc, outResult, program_name, redisports, OUT_FOLDER, onlybc):
 
         # mem2reg
         #mem2reg = BCMem2Reg(program_name, debug=True)
@@ -69,9 +80,13 @@ class Pipeline(object):
             order = list(
                 map(lambda x: int(x),  config["DEFAULT"]["order"].split(",")))
             LOGGER.info("ORDER", order)
-            for level in order:
+            # split levels by redis interface
+
+            works = self.chunkIt(order, len(redisports))
+
+            for i,port in enumerate(redisports):
                 job = levelPool.submit(
-                    self.processLevel, level, program_name, bc, OUT_FOLDER, onlybc, meta, outResult)
+                    self.processLevel, works[i], program_name, port, bc, OUT_FOLDER, onlybc, meta, outResult)
                 # job.result()
 
                 futures.append(job)
@@ -88,7 +103,7 @@ class Pipeline(object):
 
         return dict(programs=meta, count=len(meta.keys()))
 
-    def process(self, file, OUT_FOLDER, program_name, onlybc, outResult=None):
+    def process(self, file, OUT_FOLDER, program_name, redisports, onlybc, outResult=None):
 
         if not os.path.exists(OUT_FOLDER):
             os.mkdir(OUT_FOLDER)
@@ -107,58 +122,60 @@ class Pipeline(object):
 
         lltobc = LLToBC(program_name, debug=False)
         bc = lltobc(std=ll1)
-        self.processBitcode(bc, outResult, program_name, OUT_FOLDER, onlybc)
+        self.processBitcode(bc, outResult, program_name,redisports, OUT_FOLDER, onlybc)
 
-    def processLevel(self, level, program_name, bc, OUT_FOLDER, onlybc, meta, outResult):
+    def processLevel(self, levels, program_name, port, bc, OUT_FOLDER, onlybc, meta, outResult):
 
         pool = ThreadPoolExecutor(
             max_workers=config["DEFAULT"].getint("workers"))
 
-        LOGGER.success(program_name,
-                       "%s: Searching level (increasing execution time) %s: %s..." % (program_name,
-                                                                                      level, config["souper"][
-                                                                                          "souper-level-%s" % level]))
+        for level in levels:
 
-        try:
-            bctocand = BCCountCandidates(program_name, level=level)
-        except Exception as e:
-            LOGGER.error(program_name,  traceback.format_exc())
-            return
-        with ContentToTmpFile(content=bc) as TMP_BC:
-            cand = bctocand(args=[TMP_BC.file], std=None)
+            LOGGER.success(program_name,
+                        "%s: Searching level (increasing execution time) %s: %s..." % (program_name,
+                                                                                        level, config["souper"][
+                                                                                            "souper-level-%s" % level]))
 
-            # Saving candidate
-            canCount = len(cand[0])
-            LOGGER.success(program_name, "%s: Found %s arithmetic expression candidates. %s Can be replaced" % (
-                program_name, cand[1], canCount))
-
-            # Test set the second candidate for optimization
-
-            # BC to tmpfile
-            if len(cand[0]) > 0:
-                with ContentToTmpFile(content=bc) as BCIN:
-                    tmpIn = BCIN.file
-
-                    futures = []
-                    for s in getIteratorByName(config["DEFAULT"]["generator-method"])(cand[0]):
-                        job = pool.submit(self.processSingle, s, level, tmpIn, program_name, OUT_FOLDER, onlybc, meta,
-                                          outResult)
-                        # job.result()
-
-                        futures.append(job)
-                    r = wait(futures, return_when=ALL_COMPLETED)
             try:
-                LOGGER.info(program_name, "Cleaning cache...")
-                r = redis.Redis(host="localhost", port=6379)
-
-                result = r.flushdb()
-                LOGGER.success(
-                    program_name, f"Flushing redis DB: result({result})")
-                r.close()
+                bctocand = BCCountCandidates(program_name, level=level, redisport=port)
             except Exception as e:
-                LOGGER.error(program_name, traceback.format_exc())
+                LOGGER.error(program_name,  traceback.format_exc())
+                return
+            with ContentToTmpFile(content=bc) as TMP_BC:
+                cand = bctocand(args=[TMP_BC.file], std=None)
 
-    def processSingle(self, s, level, tmpIn, program_name, OUT_FOLDER, onlybc, meta, outResult):
+                # Saving candidate
+                canCount = len(cand[0])
+                LOGGER.success(program_name, "%s: Found %s arithmetic expression candidates. %s Can be replaced" % (
+                    program_name, cand[1], canCount))
+
+                # Test set the second candidate for optimization
+
+                # BC to tmpfile
+                if len(cand[0]) > 0:
+                    with ContentToTmpFile(content=bc) as BCIN:
+                        tmpIn = BCIN.file
+
+                        futures = []
+                        for s in getIteratorByName(config["DEFAULT"]["generator-method"])(cand[0]):
+                            job = pool.submit(self.processSingle, s, level, tmpIn, program_name, port, OUT_FOLDER, onlybc, meta,
+                                            outResult)
+                            # job.result()
+
+                            futures.append(job)
+                        r = wait(futures, return_when=ALL_COMPLETED)
+                try:
+                    LOGGER.info(program_name, "Cleaning cache...")
+                    r = redis.Redis(host="localhost", port=port)
+
+                    result = r.flushdb()
+                    LOGGER.success(
+                        program_name, f"Flushing redis DB: result({result})")
+                    r.close()
+                except Exception as e:
+                    LOGGER.error(program_name, traceback.format_exc())
+
+    def processSingle(self, s, level, tmpIn, program_name, port, OUT_FOLDER, onlybc, meta, outResult):
         with ContentToTmpFile() as BCOUT:
             tmpOut = BCOUT.file
             try:
@@ -166,7 +183,7 @@ class Pipeline(object):
                     list(map(lambda x: x.__str__(), s)))
 
                 optBc = BCToSouper(program_name, candidates=list(
-                    s), level=level, debug=True)
+                    s), level=level, debug=True, redisport=port)
                 optBc(args=[tmpIn, tmpOut], std=None)
 
                 bsOpt = open(tmpOut, 'rb').read()
@@ -264,7 +281,7 @@ def removeDuplicate(program_name, folder, filt="*.wasm", remove=False):
     LOGGER.info(program_name, "Unique: %s" % (len(st), ))
 
 
-def process(f, OUT_FOLDER, onlybc, program_name, isBc=False):
+def process(f, OUT_FOLDER, onlybc, program_name, redisports, isBc=False):
     MANAGER = multiprocessing.Manager()
     pipeline = Pipeline()
 
@@ -275,7 +292,7 @@ def process(f, OUT_FOLDER, onlybc, program_name, isBc=False):
         result[file]["candidates"] = MANAGER.list()
         try:
             if not isBc:
-                pipeline.process(file, OUT_FOLDER, program_name,
+                pipeline.process(file, OUT_FOLDER, program_name, redisports,
                                  onlybc, outResult=result[file])
                 return
 
@@ -289,7 +306,7 @@ def process(f, OUT_FOLDER, onlybc, program_name, isBc=False):
             tmp.close()
 
             pipeline.processBitcode(
-                bc, result[file], program_name, OUT_FOLDER, onlybc)
+                bc, result[file], program_name, redisports, OUT_FOLDER, onlybc)
 
         except Exception as e:
             LOGGER.error(file, traceback.format_exc())
@@ -324,22 +341,20 @@ def process(f, OUT_FOLDER, onlybc, program_name, isBc=False):
     return result_overall
 
 
-def main(f):
+def main(f, redisports):
 
     if os.path.isfile(f):
         if not f.endswith(".c") and not f.endswith(".cpp") and not f.endswith(".bc"):
             return
 
         program_name, OUT_FOLDER, onlybc = getFileMeta(f)
-        r = process(f, OUT_FOLDER, onlybc, program_name,
+        r = process(f, OUT_FOLDER, onlybc, program_name,redisports,
                     isBc=f.endswith(".bc"))
         return
 
     program_name = f.split("/")[-1].split(".")[0]
 
-    print(2)
-    LOGGER.info(program_name, "Pool size: %s" %
-                config["DEFAULT"].getint("thread-pool-size"))
+    LOGGER.info(program_name, "Pool size: %s" % len(redisports))
 
     result = dict(namespace=program_name, programs=[])
     attach = []
@@ -353,7 +368,7 @@ def main(f):
 
         try:
             r = process(final, OUT_FOLDER, onlybc,
-                        program_name, isBc=final.endswith(".bc"))
+                        program_name, redisports, isBc=final.endswith(".bc"))
             result["programs"].append(r)
             attach.append(getlogfilename(
                 final.split("/")[-1].replace(".c", "")))
@@ -370,7 +385,20 @@ def main(f):
 
 if __name__ == "__main__":
 
-    updatesettings(sys.argv[1:-1])
+    redis_interfaces = sys.argv[1]
+    redisports = [6379]
+    
+    if re.compile(r"(,\d+)+").match(redis_interfaces):
+        max_workers = len(redis_interfaces.split(",")) - 1
+        redisports = [int(t) for t in redis_interfaces.split(",")[1:]]
+    else:
+        max_workers = 1
+
+
+    levelPool = ThreadPoolExecutor(
+    max_workers=max_workers)
+
+    updatesettings(sys.argv[2:-1])
 
     if not os.path.exists("out"):
         os.mkdir("out")
@@ -381,4 +409,4 @@ if __name__ == "__main__":
 
     f = sys.argv[-1]
     LOGGER.success("general", "STARTING")
-    main(f)
+    main(f, redisports)
