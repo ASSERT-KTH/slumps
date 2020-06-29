@@ -7,4 +7,4 @@ export PATH=/inputs:$PATH
 ls /inputs
 
 nohup redis-server &
-python3.8 slumps.py $@
+python3.8 crow/crow.py $@

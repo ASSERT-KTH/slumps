@@ -1,10 +1,10 @@
 # This requires Souper and wabt to be built locally
 
 from multiprocessing.pool import Pool
-import crow.slumps as slumps
-import crow.stages as stages
-from crow.utils import RUNTIME_CONFIG
-from crow.settings import config
+import crow as slumps
+import stages as stages
+from utils import RUNTIME_CONFIG
+from settings import config
 import os
 os.chdir("..")
 

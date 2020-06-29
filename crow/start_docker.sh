@@ -8,6 +8,6 @@ export PATH=/inputs:$PATH
 wget $1
 name=${1##*/}
 shift;
-python3.8 slumps.py $@ $name
+python3.8 crow/crow.py $@ $name
 
 
