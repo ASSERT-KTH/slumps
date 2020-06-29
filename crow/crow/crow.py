@@ -132,9 +132,9 @@ class Pipeline(object):
         for level in levels:
 
             LOGGER.success(program_name,
-                        "%s: Searching level (increasing execution time) %s: %s..." % (program_name,
+                        "%s: Searching level (increasing execution time) %s: %s redis:%s..." % (program_name,
                                                                                         level, config["souper"][
-                                                                                            "souper-level-%s" % level]))
+                                                                                            "souper-level-%s" % level], port))
 
             try:
                 bctocand = BCCountCandidates(program_name, level=level, redisport=port)
