@@ -1,12 +1,13 @@
 # -*- coding: utf-8 -*-
 
 import os
-import sys
-from crow.settings import config
+import sys,traceback
+from settings import config
 from stages import CToLLStage, LLToBC, BCToSouper, ObjtoWASM, WASM2WAT, BCCountCandidates
 from utils import printProgressBar, createTmpFile, getIteratorByName, \
-    ContentToTmpFile, BreakException, RUNTIME_CONFIG, updatesettings, sendReportEmail, make_github_issue, getlogfilename
-from logger import LOGGER
+    ContentToTmpFile, BreakException, RUNTIME_CONFIG, updatesettings, sendReportEmail, make_github_issue
+
+from logger import LOGGER, getlogfilename
 import threading
 import hashlib
 import json
@@ -17,6 +18,7 @@ import traceback
 
 import multiprocessing
 import time
+
 
 levelPool = ThreadPoolExecutor(
     max_workers=config["DEFAULT"].getint("level-workers"))
@@ -116,18 +118,15 @@ class Pipeline(object):
                        "%s: Searching level (increasing execution time) %s: %s..." % (program_name,
                                                                                       level, config["souper"][
                                                                                           "souper-level-%s" % level]))
+
         try:
             bctocand = BCCountCandidates(program_name, level=level)
         except Exception as e:
-            LOGGER.error(program_name, e)
+            LOGGER.error(program_name,  traceback.format_exc())
             return
-
         with ContentToTmpFile(content=bc) as TMP_BC:
-            try:
-                cand = bctocand(args=[TMP_BC.file], std=None)
-            except Exception as e:
-                LOGGER.error(program_name, e)
-                return
+            cand = bctocand(args=[TMP_BC.file], std=None)
+
             # Saving candidate
             canCount = len(cand[0])
             LOGGER.success(program_name, "%s: Found %s arithmetic expression candidates. %s Can be replaced" % (
@@ -157,7 +156,7 @@ class Pipeline(object):
                     program_name, f"Flushing redis DB: result({result})")
                 r.close()
             except Exception as e:
-                LOGGER.error(program_name, e)
+                LOGGER.error(program_name, traceback.format_exc())
 
     def processSingle(self, s, level, tmpIn, program_name, OUT_FOLDER, onlybc, meta, outResult):
         with ContentToTmpFile() as BCOUT:
@@ -192,7 +191,7 @@ class Pipeline(object):
             except Exception as e:
                 raise e
                 if config["DEFAULT"].getboolean("fail-silently"):
-                    LOGGER.error(program_name, e)
+                    LOGGER.error(program_name, traceback.format_exc())
                 else:
                     raise e
 
@@ -242,6 +241,9 @@ def getFileMeta(file, outResult=None):
 
 def removeDuplicate(program_name, folder, filt="*.wasm", remove=False):
 
+    if not os.path.exists(f"{folder}"):
+        return
+
     LOGGER.warning(program_name, "Removing duplicated variants")
 
     l = [f for f in os.listdir(folder) if f.endswith(filt)]
@@ -290,7 +292,7 @@ def process(f, OUT_FOLDER, onlybc, program_name, isBc=False):
                 bc, result[file], program_name, OUT_FOLDER, onlybc)
 
         except Exception as e:
-            result[file]["error"] = e.__str__()
+            LOGGER.error(file, traceback.format_exc())
 
     th = multiprocessing.Process(target=launch, args=(f, result_overall,))
     th.start()
@@ -335,6 +337,7 @@ def main(f):
 
     program_name = f.split("/")[-1].split(".")[0]
 
+    print(2)
     LOGGER.info(program_name, "Pool size: %s" %
                 config["DEFAULT"].getint("thread-pool-size"))
 
@@ -355,7 +358,7 @@ def main(f):
             attach.append(getlogfilename(
                 final.split("/")[-1].replace(".c", "")))
         except Exception as e:
-            print(e)
+            LOGGER.error(program_name,  traceback.format_exc())
 
     OUT_FOLDER = "%s" % config["DEFAULT"]["outfolder"]
 

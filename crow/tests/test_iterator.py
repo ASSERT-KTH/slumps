@@ -1,6 +1,6 @@
-import iterators
-from crow.settings import config
-from crow.utils import getIteratorByName
+import iterators as iterarators
+from settings import config
+from utils import getIteratorByName
 
 
 

@@ -106,5 +106,6 @@
         "cuchar": "cpp",
         "memory_resource": "cpp",
         "filesystem": "cpp"
-    }
+    },
+    "python.pythonPath": "/usr/local/bin/python3"
 }

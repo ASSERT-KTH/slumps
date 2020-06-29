@@ -3,12 +3,14 @@
 import os
 
 import uuid
-import iterators
 import sys
 from subprocess import check_output
 from subprocess import Popen, PIPE
-from crow.settings import config, private
+from settings import config, private
 
+import iterators
+
+from logger import LOGGER
 import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
@@ -25,25 +27,22 @@ BASE_DIR = os.path.dirname(__file__)
 RUNTIME_CONFIG = dict(USE_REDIS=False)
 
 
-def getlogfilename(program_name):
-    return "%s/crow/logs/%s.slumps.log" % (config["DEFAULT"]["slumpspath"], program_name)
-
-
 class ContentToTmpFile(object):
 
     def __init__(self, content=None, name=None, ext=None, persist=False):
-
         tmp = createTmpFile(ext) if not name else name
+
         tmp = ''.join([c for c in tmp])
+
         if content:
             self.tmpF = open(tmp, "wb")
             self.tmpF.write(content)
             self.tmpF.close()
         else:
             self.tmpF = open(tmp, 'wb')
-
         self.file = tmp
         self.persist = persist
+
 
     def __enter__(self):
         return self
@@ -56,20 +55,24 @@ class ContentToTmpFile(object):
                 os.remove(self.file)
         except Exception as e:
             LOGGER.error(self.tmpF, traceback.format_exc())
-            pass
+            raise e
 
 
 def updatesettings(argvs):
 
+    SLUMPS_DIR = os.path.dirname(os.path.abspath(
+        os.path.dirname(os.path.dirname(__file__))))
+
+    print("Slumps dir...%s" % SLUMPS_DIR)
+    config["DEFAULT"]["slumpspath"] = SLUMPS_DIR
+
+    with open(f"{BASE_DIR}/settings/config.ini", 'w') as configFile:
+        config.write(configFile)
+        
     if not os.path.exists(f"{BASE_DIR}/settings/.slumps"):
         print("Setting up slumps for the first time...")
         open(f"{BASE_DIR}/settings/.slumps", 'w').write("SLUMPs them all!")
 
-        SLUMPS_DIR = os.path.abspath(
-            os.path.dirname(os.path.dirname(__file__)))
-
-        print("Slumps dir...%s" % SLUMPS_DIR)
-        config["DEFAULT"]["slumpspath"] = SLUMPS_DIR
 
         platform = ".so" if sys.platform == 'linux' else '.dylib'  # dylib for MacOS
         print("OS...%s" % sys.platform)
@@ -81,6 +84,8 @@ def updatesettings(argvs):
         # Read available binaries
         bins = check_output('compgen -c', shell=True,
                             executable='/bin/bash').splitlines()
+
+        print(bins)
 
         wasm_bins = list(filter(lambda x: x.startswith(
             "wasm-ld"), map(lambda x: x.decode("utf-8"), bins)))
@@ -148,7 +153,9 @@ def getIteratorByName(name: str):
 
 
 def createTmpFile(ext=""):
-    return "%s/%s%s" % (OUT_FOLDER, uuid.uuid4(), ext if ext else "")
+    r = "%s/%s%s" % (OUT_FOLDER, uuid.uuid4(), ext if ext else "")
+
+    return r
 
 
 def globalCounter():
@@ -287,35 +294,18 @@ def printProgressBar(iteration, total, prefix='', suffix='', decimals=1, length=
         print()
 
 
-class bcolors:
-    HEADER = '\033[95m'
-    OKBLUE = '\033[94m'
-    OKGREEN = '\033[92m'
-    WARNING = '\u001b[36;1m'
-    FAIL = '\033[91m'
-    ENDC = '\033[0m'
-    BOLD = '\033[1m'
-    UNDERLINE = '\033[4m'
-
-
 class Alias:
+
+    
     clang = config["clang"]["path"]
     opt = config["opt"]["path"]
 
-    # llc = "%s/souper/third_party/llvm/Release/bin/llc"%(BASE_DIR,)
-    # lli = "%s/souper/third_party/llvm/Release/bin/lli"%(BASE_DIR,)
     llvm_as = config["llvm-as"]["path"]
-    # "%s/souper/third_party/llvm/Release/bin/llvm-as"%(BASE_DIR,)
-    # llc = "/usr/local/opt/llvm/bin/llc" #"%s/souper/third_party/llvm/Release/bin/llc"%(BASE_DIR,) # /usr/local/opt/llvm/bin/wasm-ld
 
-    wasm_ld = config["wasm-ld"][
-        "path"]  # os.environ.get("WASM_LD", "/usr/local/opt/llvm/bin/wasm-ld")  #"/usr/bin/wasm-ld-8" # /usr/local/opt/llvm/bin/wasm-ld
+    wasm_ld = config["wasm-ld"]["path"] 
     souper = config["souper"]["souper"]
     souper_check = config["souper"]["check"]
-    # souper2llvm = "%s/souper/build/souper2llvm"%(BASE_DIR,)
     wasm2wat = config["wabt"]["wasm2wat"]
-    # libsouperPass_so = "../../souper/build/libsouperPass.so"
-    # z3 = "%s/souper/third_party/z3/build/z3"%(BASE_DIR,)
 
 
 def processCandidatesMetaOutput(output):

@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
 from subprocess import Popen, PIPE
-from crow.settings import config
-from utils import bcolors, Alias, createTmpFile, RUNTIME_CONFIG,processCandidatesMetaOutput
+from settings import config
+from utils import  Alias, createTmpFile, RUNTIME_CONFIG,processCandidatesMetaOutput
 from logger import LOGGER
 import re
 import time
@@ -33,12 +33,12 @@ class ExternalStage(object):
         args = list(filter(lambda x: x != "", args))
         p = Popen([self.path_to_executable] + args, stdout=PIPE, stderr=PIPE, stdin=PIPE)
 
+
         if stdin is not None:
             p.stdin.write(stdin)
 
         start = time.time()
         std, err = p.communicate()
-
 
         delta = time.time() - start
         if self.debug:
@@ -164,16 +164,18 @@ class BCCountCandidates(ExternalStage):
 class BCToSouper(ExternalStage):
 
     def __init__(self, namespace, candidates=[], debug=False, level=1):
+
         self.path_to_executable = Alias.opt
         self.name = "LLVM BC supertoptimization pass"
         self.debug = debug
         self.candidates = candidates
         self.level = level
 
+
+
         self.namespace = namespace
 
     def __call__(self, args=[], std=None):  # f -> inputs
-
         extra_commands = "-souper-subset=%s %s -o %s" % (
         ",".join(map(lambda x: x.__str__(), self.candidates)), args[0], args[1])
 
