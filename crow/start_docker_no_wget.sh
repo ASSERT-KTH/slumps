@@ -4,7 +4,16 @@ export LD_LIBRARY_PATH=/slumps/souper/third_party/alive2/build/:/slumps/souper/b
 export PATH=/slumps/souper/third_party/llvm/Release/bin:$PATH
 export PATH=/inputs:$PATH
 
-ls /inputs
+MAX=$1
+PORTS=''
 
-nohup redis-server &
-python3.8 crow/crow.py $@
+for port in $(seq 1 1 $MAX)
+do
+	nohup redis-server --port $((6379 + $port)) &
+	PORTS=$PORTS","$((6379 + $port))
+done
+
+echo "Opening redis servers in" $PORTS
+# launch x redis servers
+
+python3.8 crow/crow.py $PORTS $@
