@@ -13,10 +13,10 @@ jobs:
         with: 
           submodules: true
       - name: Set up
-        run: brew install llvm
+        run: brew install llvm re2c subversion go && go get github.com/gomodule/redigo/redis
         
       - name: Build deps
-        run: cd souper && /bin/bash build_deps.sh
+        run: cd souper && /bin/bash build_deps.sh Release
       - name: Build project
         run: cd souper && mkdir build && cd build && cmake -DCMAKE_BUILD_TYPE=Release ../ && make
       - name: Zip folder
