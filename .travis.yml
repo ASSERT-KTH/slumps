@@ -1,0 +1,6 @@
+language: cpp
+os: osx
+
+jobs:
+  include:
+    - script: echo 'Test'
