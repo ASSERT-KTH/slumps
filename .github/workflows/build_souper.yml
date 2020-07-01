@@ -13,7 +13,7 @@ jobs:
         with: 
           submodules: true
       - name: Set up
-        run: brew install llvm re2c subversion go && go get github.com/gomodule/redigo/redis
+        run: brew install llvm re2c subversion go z3 ninja
         
       - name: Install redis go
         run: go get github.com/gomodule/redigo/redis
