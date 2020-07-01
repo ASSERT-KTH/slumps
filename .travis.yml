@@ -1,6 +1,10 @@
 language: cpp
 os: osx
 
+git:
+  submodules: true
+
 jobs:
   include:
-    - script: echo 'Test'
+    - script: cd souper && /bin/bash build_deps.sh
+    - script: mkdir build && cd build && cmake -DCMAKE_BUILD_TYPE=Release ../ && make
