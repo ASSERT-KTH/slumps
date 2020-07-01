@@ -10,12 +10,14 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
+        with: 
+          submodules: true
       - name: Set up
         run: brew install llvm
         
       - name: Build deps
-        run: /bin/bash build_deps.sh
+        run: cd souper && /bin/bash build_deps.sh
       - name: Build project
-        run: mkdir build && cd build && cmake -DCMAKE_BUILD_TYPE=Release ../ && make
+        run: cd souper && mkdir build && cd build && cmake -DCMAKE_BUILD_TYPE=Release ../ && make
       - name: Zip folder
-        run: tar -zcvf souper-mac.tar.gz build && ls -la | grep  -i souper-mac.tar.gz
+        run: cd souper && tar -zcvf souper-mac.tar.gz build && ls -la | grep  -i souper-mac.tar.gz
