@@ -5,3 +5,4 @@
 [submodule "wabt"]
 	path = wabt
 	url = git://github.com/WebAssembly/wabt.git
+	branch = master
