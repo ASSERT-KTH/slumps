@@ -20,9 +20,11 @@ COPY start_docker_no_wget.sh /slumps/crow
 WORKDIR /slumps/crow
 
 RUN python3 -m pip install -r requirements.txt
-RUN rm settings/.slumps
-RUN rm -rf out && mkdir out
-RUN rm -rf logs && mkdir logs
+RUN rm crow/settings/.slumps
+RUN rm -rf crow/out && mkdir crow/out
+RUN rm -rf crow/logs && mkdir crow/logs
+RUN rm -rf /slumps/crow/dump.rdb
+RUN rm -rf /slumps/crow/nohup.out
 RUN rm -rf .idea
 RUN rm -rf tests
 RUN rm -rf .pytest_cache
