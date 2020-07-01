@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from settings import config, private
-import os
+import os, sys
 
 
 def getlogfilename(program_name):
@@ -59,26 +59,31 @@ class Logger(object):
                 f.write(std.__str__())
         else:
             print("%s%s%s%s" % (self.getIndent(), bcolors.UNDERLINE, message, bcolors.ENDC))
+            sys.stdout.flush()
 
     def error(self,file,  message):
         f = open(getlogfilename(file), 'a+')
         f.write(message.__str__() + "\n")
         print("%s%s%s%s" % (self.getIndent(), bcolors.FAIL, message, bcolors.ENDC))
+        sys.stdout.flush()
 
     def warning(self,file, message):
         f = open(getlogfilename(file), 'a+')
         f.write(message.__str__() + "\n")
         print("%s%s%s%s" % (self.getIndent(), bcolors.WARNING, message, bcolors.ENDC))
+        sys.stdout.flush()
 
     def info(self,file,  message):
         f = open(getlogfilename(file), 'a+')
         f.write(message.__str__() + "\n")
         print("%s%s%s%s" % (self.getIndent(), bcolors.OKBLUE, message, bcolors.ENDC))
+        sys.stdout.flush()
 
     def success(self,file,  message):
         f = open(getlogfilename(file), 'a+')
         f.write(message.__str__() + "\n")
         print("%s%s%s%s" % (self.getIndent(), bcolors.OKGREEN, message, bcolors.ENDC))
+        sys.stdout.flush()
 
 
 LOGGER = Logger(True)  # Output debug calls to debug.slumps.log file

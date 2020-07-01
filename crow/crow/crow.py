@@ -164,16 +164,7 @@ class Pipeline(object):
 
                             futures.append(job)
                         r = wait(futures, return_when=ALL_COMPLETED)
-                try:
-                    LOGGER.info(program_name, "Cleaning cache...")
-                    r = redis.Redis(host="localhost", port=port)
-
-                    result = r.flushdb()
-                    LOGGER.success(
-                        program_name, f"Flushing redis DB: result({result})")
-                    r.close()
-                except Exception as e:
-                    LOGGER.error(program_name, traceback.format_exc())
+                
 
     def processSingle(self, s, level, tmpIn, program_name, port, OUT_FOLDER, onlybc, meta, outResult):
         with ContentToTmpFile() as BCOUT:
@@ -211,6 +202,16 @@ class Pipeline(object):
                     LOGGER.error(program_name, traceback.format_exc())
                 else:
                     raise e
+        try:
+            LOGGER.info(program_name, "Cleaning cache...")
+            r = redis.Redis(host="localhost", port=port)
+
+            result = r.flushdb()
+            LOGGER.success(
+                program_name, f"Flushing redis DB: result({result})")
+            r.close()
+        except Exception as e:
+            LOGGER.error(program_name, traceback.format_exc())
 
     def generateWasm(self, namespace, bc, OUT_FOLDER, fileName, debug=True, generateOnlyBc=False):
         llFileName = "%s/%s" % (OUT_FOLDER, fileName)
@@ -219,7 +220,7 @@ class Pipeline(object):
             hashvalue = hashlib.sha256(bc)
             return hashvalue.hexdigest(), len(bc), "%s.bc" % (fileName,), "%s.bc" % (fileName,)
 
-        with ContentToTmpFile(name="%s.bc" % llFileName, content=bc, ext=".bc", persist=generateOnlyBc) as TMP_WASM:
+        with ContentToTmpFile(name="%s.bc" % llFileName, content=bc, ext=".bc", persist=True) as TMP_WASM:
 
             tmpWasm = TMP_WASM.file
 
