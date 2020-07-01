@@ -15,6 +15,9 @@ jobs:
       - name: Set up
         run: brew install llvm re2c subversion go && go get github.com/gomodule/redigo/redis
         
+      - name: Install redis go
+        run: go get github.com/gomodule/redigo/redis
+        
       - name: Build deps
         run: cd souper && /bin/bash build_deps.sh Release
       - name: Build project
