@@ -18,23 +18,23 @@ AFL communicates with the target binary with a shared memory by default. Since S
 
 1. Run AFL with Docker
 
-```bash
-docker pull aflplusplus/aflplusplus
-docker run -ti -v <path_to_repo>/fuzzer:/src aflplusplus/aflplusplus
-```
+    ```bash
+    docker pull aflplusplus/aflplusplus
+    docker run -ti -v <path_to_repo>/fuzzer:/src aflplusplus/aflplusplus
+    ```
 
 1. Compile
 
-```bash
-cd /src
-g++ interface.cpp
-```
+    ```bash
+    cd /src
+    g++ interface.cpp
+    ```
 
 1. Run AFL
 
-```bash
-afl-fuzz -i /src/in -o out -m none -d -- /src/a.out @@
-```
+    ```bash
+    afl-fuzz -i /src/in -o out -m none -d -- /src/a.out @@
+    ```
 
 1. View /src/interface.log for custom logs and /src/out/ for AFL output
 
