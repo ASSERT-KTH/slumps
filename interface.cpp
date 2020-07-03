@@ -82,8 +82,6 @@ void pass_data_to_afl(uint8_t *execution_data, uint8_t *trace_bits)
         trace_bits[random_branch] += 1;
     }
 
-    // TODO: Read an actual file with branch coverage
-
     /*
     for (int i = 0; i < AFL_SHM_SIZE; i++)
     {
@@ -109,6 +107,7 @@ void test_nested_if(char *fuzzed_input, uint8_t *trace_bits)
         if (vector[0].rfind("oneone", 0) == 0)
         {
             trace_bits[2] += 1;
+            exit(1);
             if (vector[0].rfind("oneoneone", 0) == 0)
             {
                 trace_bits[3] += 1;
@@ -132,14 +131,14 @@ void main_fuzz(char *fuzzed_input, uint8_t *trace_bits)
     log_file(fuzzed_input);
 
     // Real application
-    execute_swam(fuzzed_input);
-    uint8_t *execution_data = (uint8_t *)malloc(AFL_SHM_SIZE);
-    // TODO: Read path coverage from file into execution_data
-    pass_data_to_afl(execution_data, trace_bits);
-    free(execution_data);
+    // execute_swam(fuzzed_input);
+    // uint8_t *execution_data = (uint8_t *)malloc(AFL_SHM_SIZE);
+    // // TODO: Read path coverage from file into execution_data
+    // pass_data_to_afl(execution_data, trace_bits);
+    // free(execution_data);
 
     // Test application
-    // test_nested_if(fuzzed_input, trace_bits);
+    test_nested_if(fuzzed_input, trace_bits);
 }
 
 void fork_server(char *fuzzed_input, uint8_t *trace_bits)
@@ -224,19 +223,29 @@ void fork_server(char *fuzzed_input, uint8_t *trace_bits)
             exit(1);
         }
 
-        if (!WIFEXITED(status))
-        { // Not sure how this could happen
-            LOG("WIFEXITED(status): " + std::to_string(WIFEXITED(status)));
+        LOG("Waitpid status: " + std::to_string(status));
+
+        if (WIFEXITED(status))
+        {
+            // Need to translate return value of waitpid to exit code (e.g. 256 translates to 1)
+            int exit_status = WEXITSTATUS(status);
+            LOG("exit_status: " + std::to_string(exit_status));
+            write(199, &exit_status, 4);
+        }
+        else if (WIFSIGNALED(status)) // Process was stopped/terminated by signal;
+        {  // TODO: Find out why this branch gets triggered
+            LOG("Signal status: " + std::to_string(status));
+            LOG("WTERMSIG(status): " + std::to_string(WTERMSIG(status)));
+            LOG("WSTOPSIG(status): " + std::to_string(WSTOPSIG(status)));
+            write(199, &status, 4);
+        }
+        else
+        {
+            LOG("Weird status: " + std::to_string(status));
             close(198);
             close(199);
             exit(1);
         }
-
-        // Need to translate return value of waitpid to exit code
-        int exit_status = WEXITSTATUS(status);
-        LOG("Exit code status: " + std::to_string(exit_status));
-
-        write(199, &exit_status, 4);
     }
 }
 
