@@ -1,3 +1,5 @@
+#include <socket_client.h>
+
 #include <iostream>
 #include <cstdlib>
 #include <string>
@@ -66,23 +68,17 @@ void log_file(char *filename)
     }
 }
 
-void execute_swam(char *fuzzed_input)
-{
-    // TODO: Do something proper here...
-}
-
 void pass_data_to_afl(uint8_t *execution_data, uint8_t *trace_bits)
 {
 
     // Dummy with random coverage:
-    srand(time(NULL));
-    for (int i = 0; i < 10; i++)
-    {
-        int random_branch = rand() % AFL_SHM_SIZE;
-        trace_bits[random_branch] += 1;
-    }
+    // srand(time(NULL));
+    // for (int i = 0; i < 10; i++)
+    // {
+    //     int random_branch = rand() % AFL_SHM_SIZE;
+    //     trace_bits[random_branch] += 1;
+    // }
 
-    /*
     for (int i = 0; i < AFL_SHM_SIZE; i++)
     {
         if (execution_data[i] != 0)
@@ -91,7 +87,6 @@ void pass_data_to_afl(uint8_t *execution_data, uint8_t *trace_bits)
             trace_bits[i] += execution_data[i];
         }
     }
-    */
 }
 
 void test_nested_if(char *fuzzed_input, uint8_t *trace_bits)
@@ -126,19 +121,32 @@ void test_nested_if(char *fuzzed_input, uint8_t *trace_bits)
     }
 }
 
-void main_fuzz(char *fuzzed_input, uint8_t *trace_bits)
+void main_fuzz(
+    char *fuzzed_input,
+    uint8_t *trace_bits,
+    int requiredBytes)
 {
     log_file(fuzzed_input);
 
-    // Real application
-    // execute_swam(fuzzed_input);
-    // uint8_t *execution_data = (uint8_t *)malloc(AFL_SHM_SIZE);
-    // // TODO: Read path coverage from file into execution_data
-    // pass_data_to_afl(execution_data, trace_bits);
-    // free(execution_data);
+    // ######## Real application ########
 
-    // Test application
-    test_nested_if(fuzzed_input, trace_bits);
+    char sendBuffer[requiredBytes];
+    char readBuffer[4096];
+    int sockfd = connectToServer();
+    // TODO: Fill buffer with fuzzed_input & new line (using requiredBytes)
+    clientWrite(sockfd, sendBuffer);
+    clientRead(sockfd, readBuffer);
+    close(sockfd);
+
+    uint8_t *execution_data = (uint8_t *)malloc(AFL_SHM_SIZE);
+    // TODO: Read path coverage from readBuffer into execution_data
+
+    pass_data_to_afl(execution_data, trace_bits);
+    free(execution_data);
+
+    // ######## Test application ########
+
+    // test_nested_if(fuzzed_input, trace_bits);
 }
 
 void fork_server(char *fuzzed_input, uint8_t *trace_bits)
@@ -163,6 +171,9 @@ void fork_server(char *fuzzed_input, uint8_t *trace_bits)
         close(199);
         exit(1);
     }
+
+    int requiredBytes = sizeof(fuzzed_input) + 1;
+    // int requiredBytes = getRequiredBytes(inputFilePath);
 
     // The parent process that continuously runs through this while-loop
     // and is creating forks of itself is called the "fork server".
@@ -199,7 +210,7 @@ void fork_server(char *fuzzed_input, uint8_t *trace_bits)
             LOG("This is the child process.");
             close(198);
             close(199);
-            main_fuzz(fuzzed_input, trace_bits);
+            main_fuzz(fuzzed_input, trace_bits, requiredBytes);
             exit(0);
         }
 
@@ -233,7 +244,8 @@ void fork_server(char *fuzzed_input, uint8_t *trace_bits)
             write(199, &exit_status, 4);
         }
         else if (WIFSIGNALED(status)) // Process was stopped/terminated by signal;
-        {  // TODO: Find out why this branch gets triggered
+        {
+            // TODO: Find out why this branch gets triggered
             LOG("Signal status: " + std::to_string(status));
             LOG("WTERMSIG(status): " + std::to_string(WTERMSIG(status)));
             LOG("WSTOPSIG(status): " + std::to_string(WSTOPSIG(status)));
@@ -260,16 +272,13 @@ void log_args(int argc, char *argv[])
 int main(int argc, char *argv[])
 {
     LOG("########## NEW MAIN ##########");
+
     uint8_t *trace_bits = get_shm();
 
     // Mark a location to show we are instrumented
     trace_bits[0]++;
 
     log_args(argc, argv);
-
-    // Since it is not entirely clear how AFL modifies the args in the middle of
-    // the function call, we can do a test.
-    // TODO: Copy args, modify slightly (avoid compiler optimization) and use for fork_server input
 
     fork_server(argv[1], trace_bits);
 
