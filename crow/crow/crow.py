@@ -90,7 +90,12 @@ class Pipeline(object):
                 # job.result()
 
                 futures.append(job)
-            wait(futures, return_when=ALL_COMPLETED)
+            done, fail = wait(futures, return_when=ALL_COMPLETED)
+            print(done)
+            for f in done:
+                r=f.result()
+                for k,v in r.items():
+                    print(f"{k} -> {v}")
 
         except BreakException:
             pass
@@ -129,8 +134,13 @@ class Pipeline(object):
         pool = ThreadPoolExecutor(
             max_workers=config["DEFAULT"].getint("workers"))
 
+        results = {
+
+        }
+
         for level in levels:
 
+            results[level] = {}
             LOGGER.success(program_name,
                         "%s: Searching level (increasing execution time) %s: %s redis:%s..." % (program_name,
                                                                                         level, config["souper"][
@@ -152,28 +162,30 @@ class Pipeline(object):
                 # Test set the second candidate for optimization
 
                 # BC to tmpfile
-                if len(cand[0]) > 0:
-                    with ContentToTmpFile(content=bc) as BCIN:
-                        tmpIn = BCIN.file
-
-                        futures = []
-                        for s in getIteratorByName(config["DEFAULT"]["generator-method"])(cand[0]):
-                            job = pool.submit(self.processSingle, s, level, tmpIn, program_name, port, OUT_FOLDER, onlybc, meta,
-                                            outResult)
-                            # job.result()
-
-                            futures.append(job)
-                        r = wait(futures, return_when=ALL_COMPLETED)
-                try:
-                    LOGGER.info(program_name, "Cleaning cache...")
+                
+                try: # Saving cache results
                     r = redis.Redis(host="localhost", port=port)
+                    LOGGER.info(program_name, "Saving cache...")
+                    
+                    try:
+                        keys = r.keys("*")
 
-                    result = r.flushdb()
-                    LOGGER.success(
-                        program_name, f"Flushing redis DB: result({result})")
-                    r.close()
+                        for k in keys:
+                            t = r.type(k)
+                            if t == b'hash':
+                                vals = r.hgetall(k)
+                                results[level][k] = vals.get(b'result', k).split(b'\n##\n')
+                    finally:
+
+                        LOGGER.info(program_name, "Cleaning cache...")
+                        
+                        result = r.flushdb()
+                        LOGGER.success(
+                            program_name, f"Flushing redis DB: result({result})")
+                        r.close()
                 except Exception as e:
                     LOGGER.error(program_name, traceback.format_exc())
+        return results
 
     def processSingle(self, s, level, tmpIn, program_name, port, OUT_FOLDER, onlybc, meta, outResult):
         with ContentToTmpFile() as BCOUT:
