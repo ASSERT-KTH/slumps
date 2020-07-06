@@ -69,45 +69,14 @@ def updatesettings(argvs):
     with open(f"{BASE_DIR}/settings/config.ini", 'w') as configFile:
         config.write(configFile)
         
-    if not os.path.exists(f"{BASE_DIR}/settings/.slumps"):
-        print("Setting up slumps for the first time...")
-        open(f"{BASE_DIR}/settings/.slumps", 'w').write("SLUMPs them all!")
+    
+    platform = ".so" if sys.platform == 'linux' else '.dylib'  # dylib for MacOS
 
+    print("OS...%s" % sys.platform)
+    config["souper"]["passName"] = config["souper"]["passName"].split(".")[
+        0] + platform
 
-        platform = ".so" if sys.platform == 'linux' else '.dylib'  # dylib for MacOS
-        print("OS...%s" % sys.platform)
-        config["souper"]["passName"] = config["souper"]["passName"].split(".")[
-            0] + platform
-
-        # WAS-ld binary
-
-        # Read available binaries
-        bins = check_output('compgen -c', shell=True,
-                            executable='/bin/bash').splitlines()
-
-        print(bins)
-
-        wasm_bins = list(filter(lambda x: x.startswith(
-            "wasm-ld"), map(lambda x: x.decode("utf-8"), bins)))
-
-        if len(wasm_bins) == 0:
-            raise Exception(
-                "WASM linker not found. Please install it (apt-get install lld-<version> for ubuntu)")
-
-        wasm_ld = wasm_bins[0] if len(wasm_bins) > 0 else None
-        if len(wasm_bins) > 1:
-            print(
-                "Multiple WASM linkers. Choose one, take into account the version of llvm built with Souper:")
-
-            for i, b in enumerate(wasm_bins):
-                print("%s -  %s" % (i + 1, b))
-
-            wasm_ld = wasm_bins[0]
-
-        config["wasm-ld"]["path"] = wasm_ld.__str__()
-
-        with open(f"{BASE_DIR}/settings/config.ini", 'w') as configFile:
-            config.write(configFile)
+        
     pairs = []
     for index, a in enumerate(argvs):
         if a.startswith("-"):

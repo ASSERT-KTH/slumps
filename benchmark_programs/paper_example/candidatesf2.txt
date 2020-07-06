@@ -1,0 +1,25 @@
+
+; Function: f
+;[ORIGIN]   %0 = load i32, i32* %x.addr, align 4
+%0:i32 = var
+infer %0
+
+; Function: f
+;[ORIGIN]   %1 = load i32, i32* %x.addr, align 4
+%0:i32 = var
+infer %0
+
+; Function: f
+;[ORIGIN]   %mul = mul nsw i32 %0, %1
+%0:i32 = var
+%1:i32 = var
+%2:i32 = mulnsw %0, %1
+infer %2
+
+; Function: f
+;[ORIGIN]   %sub = sub nsw i32 %mul, 53
+%0:i32 = var
+%1:i32 = var
+%2:i32 = mulnsw %0, %1
+%3:i32 = subnsw %2, 53:i32
+infer %3
