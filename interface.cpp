@@ -172,8 +172,9 @@ void fork_server(char *fuzzed_input, uint8_t *trace_bits)
         exit(1);
     }
 
+    // At the very beginning the fuzzed_input should have the correct number
+    // of bytes.
     int requiredBytes = sizeof(fuzzed_input) + 1;
-    // int requiredBytes = getRequiredBytes(inputFilePath);
 
     // The parent process that continuously runs through this while-loop
     // and is creating forks of itself is called the "fork server".
