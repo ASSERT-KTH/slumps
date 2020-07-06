@@ -164,11 +164,21 @@ class Pipeline(object):
 
                             futures.append(job)
                         r = wait(futures, return_when=ALL_COMPLETED)
-                
+                try:
+                    LOGGER.info(program_name, "Cleaning cache...")
+                    r = redis.Redis(host="localhost", port=port)
+
+                    result = r.flushdb()
+                    LOGGER.success(
+                        program_name, f"Flushing redis DB: result({result})")
+                    r.close()
+                except Exception as e:
+                    LOGGER.error(program_name, traceback.format_exc())
 
     def processSingle(self, s, level, tmpIn, program_name, port, OUT_FOLDER, onlybc, meta, outResult):
         with ContentToTmpFile() as BCOUT:
             tmpOut = BCOUT.file
+            
             try:
                 sanitized_set_name = "_".join(
                     list(map(lambda x: x.__str__(), s)))
@@ -182,11 +192,11 @@ class Pipeline(object):
                 # Generate wasm
 
                 hex, size, wasmFile, watFile = self.generateWasm(program_name, bsOpt,
-                                                                 OUT_FOLDER,
-                                                                 "[%s]%s[%s]" % (level,
-                                                                                 program_name,
-                                                                                 sanitized_set_name),
-                                                                 debug=True, generateOnlyBc=onlybc)
+                                                                OUT_FOLDER,
+                                                                "[%s]%s[%s]" % (level,
+                                                                                program_name,
+                                                                                sanitized_set_name),
+                                                                debug=True, generateOnlyBc=onlybc)
 
                 #meta[wasmFile.split("/")[-1]] = dict(size=size, sha=hex)
                 #outResult["candidates"].append(dict(size=size, sha=hex, name=wasmFile))
@@ -197,21 +207,9 @@ class Pipeline(object):
                 LOGGER.info(program_name, size)
 
             except Exception as e:
-                raise e
+                print(e)
                 if config["DEFAULT"].getboolean("fail-silently"):
                     LOGGER.error(program_name, traceback.format_exc())
-                else:
-                    raise e
-        try:
-            LOGGER.info(program_name, "Cleaning cache...")
-            r = redis.Redis(host="localhost", port=port)
-
-            result = r.flushdb()
-            LOGGER.success(
-                program_name, f"Flushing redis DB: result({result})")
-            r.close()
-        except Exception as e:
-            LOGGER.error(program_name, traceback.format_exc())
 
     def generateWasm(self, namespace, bc, OUT_FOLDER, fileName, debug=True, generateOnlyBc=False):
         llFileName = "%s/%s" % (OUT_FOLDER, fileName)

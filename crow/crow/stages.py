@@ -150,7 +150,7 @@ class BCCountCandidates(ExternalStage):
         
 
         if RUNTIME_CONFIG["USE_REDIS"]:
-            extra_commands += " -souper-external-cache -souper-redis-port=%s"%(self.redisport, )
+            extra_commands += " --souper-external-cache --souper-redis-port=%s"%(self.redisport, )
 
         new_inputs = (config["souper"]["list-candidates"] % (
         config["souper"]["souper-level-%s" % self.level], extra_commands)).split(" ")
@@ -178,11 +178,11 @@ class BCToSouper(ExternalStage):
         self.namespace = namespace
 
     def __call__(self, args=[], std=None):  # f -> inputs
-        extra_commands = "-souper-subset=%s %s -o %s" % (
+        extra_commands = "--souper-subset=%s %s -o %s" % (
         ",".join(map(lambda x: x.__str__(), self.candidates)), args[0], args[1])
 
         if RUNTIME_CONFIG["USE_REDIS"]:
-            extra_commands += " -souper-external-cache -souper-redis-port=%s"%(self.redisport, )
+            extra_commands += " --souper-external-cache --souper-redis-port=%s"%(self.redisport, )
 
         new_inputs = (config["souper"]["super-opt-pass"] % (
         config["souper"]["souper-level-%s" % self.level], extra_commands)).split(" ")
