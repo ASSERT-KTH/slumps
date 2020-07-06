@@ -175,6 +175,8 @@ class Pipeline(object):
                             if t == b'hash':
                                 vals = r.hgetall(k)
                                 results[level][k] = vals.get(b'result', k).split(b'\n##\n')
+
+                        # set the redis cache and call Souper
                     finally:
 
                         LOGGER.info(program_name, "Cleaning cache...")
