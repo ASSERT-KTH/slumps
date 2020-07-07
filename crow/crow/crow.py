@@ -92,7 +92,9 @@ class Pipeline(object):
                 # job.result()
 
                 futures.append(job)
-            done, fail = wait(futures, timeout=100, return_when=ALL_COMPLETED)
+            
+            timeout = config["DEFAULT"].getint("exploration-timeout")
+            done, fail = wait(futures, timeout=timeout, return_when=ALL_COMPLETED)
             
             LOGGER.success(program_name, f"{len(done)} explorations done")
             LOGGER.error(program_name, f"{len(fail)} explorations failed")
@@ -143,7 +145,7 @@ class Pipeline(object):
                 variants += f.result()
 
             LOGGER.info(program_name, f"Saving metadata...")
-            variantsFile = open(f"{program_name}.variants.json", 'w')
+            variantsFile = open(f"{OUT_FOLDER}/{program_name}.variants.json", 'w')
             variantsFile.write(json.dumps({
                 "variants": variants,
                 "unique": len(set([v[0] for v in variants])),
@@ -151,7 +153,7 @@ class Pipeline(object):
             }, indent=4))
             variantsFile.close()
 
-            variantsFile = open(f"{program_name}.exploration.json", 'w')
+            variantsFile = open(f"{OUT_FOLDER}/{program_name}.exploration.json", 'w')
             variantsFile.write(json.dumps([[k.decode("utf-8"), [v1.decode("utf-8") for v1 in v if v1 is not None] ] for k, v in merging.items()],indent=4))
             variantsFile.close()
         except BreakException:
