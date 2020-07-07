@@ -144,7 +144,11 @@ class Pipeline(object):
 
             LOGGER.info(program_name, f"Saving metadata...")
             variantsFile = open(f"{program_name}.variants.json", 'w')
-            variantsFile.write(json.dumps(variants, indent=4))
+            variantsFile.write(json.dumps({
+                "variants": variants,
+                "unique": len(set([v[0] for v in variants])),
+                "total": len([v[0] for v in variants])
+            }, indent=4))
             variantsFile.close()
 
             variantsFile = open(f"{program_name}.exploration.json", 'w')
@@ -173,9 +177,14 @@ class Pipeline(object):
 
             # Set keys
 
+            
+            name = ""
+
             try:
+               keys = list(merging.keys())
                for k, v in j.items():
                    if v is not None:
+                       name +=  "[%s-%s]"%(keys.index(k), merging[k].index(v))
                        r.hset(k, "result", v)
                    else:
                        # search for infer word
@@ -190,7 +199,7 @@ class Pipeline(object):
                        tmpOut = BCOUT.file
                        
                        try:
-                           sanitized_set_name = uuid.uuid4().hex
+                           sanitized_set_name = name
 
                            optBc = BCToSouper(program_name, level=1, debug=True, redisport=port)
                            optBc(args=[tmpIn, tmpOut], std=None)
@@ -198,13 +207,13 @@ class Pipeline(object):
                            bsOpt = open(tmpOut, 'rb').read()
 
                            # Generate wasm
-                           name = "[%s]%s[%s]" % (0,program_name,sanitized_set_name)
+                           n = "[%s]%s[%s]" % (0,program_name,sanitized_set_name)
                            hex, size, wasmFile, watFile = self.generateWasm(program_name, bsOpt,
                                                                            OUT_FOLDER,
                                                                            name,
                                                                            debug=True, generateOnlyBc=onlybc)
 
-                           variants.append([hex, name, [[k.decode("utf-8"), v.decode("utf-8") if v is not None else "No replace"] for k,v in j.items()]])
+                           variants.append([hex, n, [[k.decode("utf-8"), v.decode("utf-8") if v is not None else "No replace"] for k,v in j.items()]])
                        except Exception as e:
                            LOGGER.error(program_name, traceback.format_exc())
                            raise e
