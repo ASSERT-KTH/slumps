@@ -14,8 +14,6 @@ long getFileSize(std::string);
 void readBinaryToBuffer(char *, int, std::string);
 void extendBufferNewLine(int, char *, char *);
 
-void fillDummyBuffer(char *, int);
-
 std::string parseEnvVariables(char *);
 std::vector<std::string> split(const std::string &, char);
 

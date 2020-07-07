@@ -86,13 +86,6 @@ int main(int argc, char *argv[])
     char sendBuffer[fileSize + 1];
     extendBufferNewLine(sizeof(tempBuffer), tempBuffer, sendBuffer);
 
-    // ## For Testing:
-    // int requiredBytes = 12
-    // char tempBuffer[requiredBytes];
-    // char sendBuffer[requiredBytes + 1];
-    // fillDummyBuffer(tempBuffer, sizeof(tempBuffer));
-    // extendBufferNewLine(sizeof(tempBuffer), tempBuffer, sendBuffer);
-
     runClient(sizeof(sendBuffer), sendBuffer, sizeof(readBuffer), readBuffer);
     exit(0);
 };

@@ -52,19 +52,6 @@ void extendBufferNewLine(int sizeInitialBuffer, char *buffer, char *extendedBuff
     extendedBuffer[sizeInitialBuffer] = newLine;
 }
 
-// This function aims to write a basic integer to a buffer.
-void fillDummyBuffer(char *buffer, int bufferSize)
-{
-    int64_t fiboNumber = 20;
-    int8_t newLine = 10; // New line
-
-    for (int i = 0; i < bufferSize; i++)
-    {
-        buffer[(sizeof(buffer) - 2) - i] = fiboNumber & 0xFF;
-        fiboNumber = fiboNumber >> 8;
-    }
-};
-
 std::string parseEnvVariables(char *envName)
 {
     char *envChar = std::getenv(envName);
