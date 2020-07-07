@@ -41,17 +41,6 @@ void readBinaryToBuffer(char *buffer, int fileSize, std::string pathToInput)
     }
 }
 
-void extendBufferNewLine(int sizeInitialBuffer, char *buffer, char *extendedBuffer)
-{
-    int8_t newLine = 10; // New line
-
-    for (int i = 0; i < sizeInitialBuffer; i++)
-    {
-        extendedBuffer[i] = buffer[i];
-    }
-    extendedBuffer[sizeInitialBuffer] = newLine;
-}
-
 std::string parseEnvVariables(char *envName)
 {
     char *envChar = std::getenv(envName);

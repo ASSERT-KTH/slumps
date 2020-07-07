@@ -52,25 +52,19 @@ void log_file(char *filename)
     }
 }
 
-void pass_data_to_afl(uint8_t *execution_data, uint8_t *trace_bits)
+void pass_data_to_afl(int sizeReadBuffer, char *readBuffer, uint8_t *trace_bits)
 {
+    // TODO: Read path coverage from readBuffer into trace_bits
+    // TODO: Read exit code from readBuffer and exit with same code
 
     // Dummy with random coverage:
-    // srand(time(NULL));
-    // for (int i = 0; i < 10; i++)
-    // {
-    //     int random_branch = rand() % AFL_SHM_SIZE;
-    //     trace_bits[random_branch] += 1;
-    // }
-
-    for (int i = 0; i < AFL_SHM_SIZE; i++)
+    srand(time(NULL));
+    for (int i = 0; i < 10; i++)
     {
-        if (execution_data[i] != 0)
-        {
-            LOG(i + " -> " + execution_data[i]);
-            trace_bits[i] += execution_data[i];
-        }
+        int random_branch = rand() % AFL_SHM_SIZE;
+        trace_bits[random_branch] += 1;
     }
+
 }
 
 void test_nested_if(char *fuzzed_input, uint8_t *trace_bits)
@@ -116,11 +110,9 @@ void main_fuzz(
 
     int sockfd = connectToServer();
 
-    char tempBuffer[requiredBytes];
-    std::memcpy(tempBuffer, fuzzed_input, sizeof(tempBuffer));  // Read first x bytes of fuzzed_input into tempBuffer
-    std::reverse(tempBuffer, &tempBuffer[sizeof(tempBuffer)]); // Reverse order of tempBuffer
-    char sendBuffer[requiredBytes + 1];
-    extendBufferNewLine(sizeof(tempBuffer), tempBuffer, sendBuffer);
+    char sendBuffer[requiredBytes];
+    std::memcpy(sendBuffer, fuzzed_input, sizeof(sendBuffer));  // Read first x bytes of fuzzed_input into tempBuffer
+    std::reverse(sendBuffer, &sendBuffer[sizeof(sendBuffer)]); // Reverse order of tempBuffer
     clientWrite(sockfd, sendBuffer, sizeof(sendBuffer));
 
     char readBuffer[4096];
@@ -128,11 +120,7 @@ void main_fuzz(
 
     close(sockfd);
 
-    uint8_t *execution_data = (uint8_t *)malloc(AFL_SHM_SIZE);
-    // TODO: Read path coverage from readBuffer into execution_data
-
-    pass_data_to_afl(execution_data, trace_bits);
-    free(execution_data);
+    pass_data_to_afl(sizeof(readBuffer), readBuffer, trace_bits);
 
     // ######## Test application ########
 

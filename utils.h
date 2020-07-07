@@ -12,7 +12,6 @@ void printBuffer(int, char *);
 long getFileSize(std::string);
 
 void readBinaryToBuffer(char *, int, std::string);
-void extendBufferNewLine(int, char *, char *);
 
 std::string parseEnvVariables(char *);
 std::vector<std::string> split(const std::string &, char);

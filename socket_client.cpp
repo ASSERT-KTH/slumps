@@ -80,11 +80,9 @@ int main(int argc, char *argv[])
     char readBuffer[4096];
 
     int fileSize = (int)getFileSize("./prepared_input.dat");
-    char tempBuffer[fileSize];
-    readBinaryToBuffer(tempBuffer, fileSize, "./prepared_input.dat");
-    std::reverse(tempBuffer, &tempBuffer[sizeof(tempBuffer)]); // Reverse order of tempBuffer
-    char sendBuffer[fileSize + 1];
-    extendBufferNewLine(sizeof(tempBuffer), tempBuffer, sendBuffer);
+    char sendBuffer[fileSize];
+    readBinaryToBuffer(sendBuffer, fileSize, "./prepared_input.dat");
+    std::reverse(sendBuffer, &sendBuffer[sizeof(sendBuffer)]); // Reverse order of sendBuffer
 
     runClient(sizeof(sendBuffer), sendBuffer, sizeof(readBuffer), readBuffer);
     exit(0);

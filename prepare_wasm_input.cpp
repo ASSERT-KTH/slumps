@@ -40,24 +40,28 @@ void translateArg(std::string arg, std::string argType, std::string pathName)
     case Int32:
     {
         int intNumber = std::round(doubleNumber);
+        printf("Resulting int: %i\n", intNumber);
         writeNumberToFile(intNumber, pathName);
         break;
     }
     case Int64:
     {
         long longNumber = lround(doubleNumber);
+        printf("Resulting long: %li\n", longNumber);
         writeNumberToFile(longNumber, pathName);
         break;
     }
     case Float32:
     {
         float floatNumber = (float)doubleNumber;
+        printf("Resulting float: %f\n", floatNumber);
         writeNumberToFile(floatNumber, pathName);
         break;
     }
     case Float64:
     {
         writeNumberToFile(doubleNumber, pathName);
+        printf("Resulting double: %f\n", doubleNumber);
         break;
     }
     default:
