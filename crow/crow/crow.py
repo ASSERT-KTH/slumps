@@ -125,6 +125,7 @@ class Pipeline(object):
             LOGGER.info(program_name,f"Generating jobs for {len(redisports)} REDIS instances...")
             subsets = getIteratorByName("keysSubset")(merging)
 
+            LOGGER.info(program_name,f"{len(subsets)} combinations...")
             works = self.chunkIt(subsets, len(redisports))
 
             futures = []
@@ -135,7 +136,20 @@ class Pipeline(object):
 
                 futures.append(job)
             done, fail = wait(futures, return_when=ALL_COMPLETED)
+            # Save metadata
 
+            variants = []
+            for f in done:
+                variants += f.result()
+
+            LOGGER.info(program_name, f"Saving metadata...")
+            variantsFile = open(f"{program_name}.variants.json", 'w')
+            variantsFile.write(json.dumps(variants, indent=4))
+            variantsFile.close()
+
+            variantsFile = open(f"{program_name}.exploration.json", 'w')
+            variantsFile.write(json.dumps([[k.decode("utf-8"), [v1.decode("utf-8") for v1 in v if v1 is not None] ] for k, v in merging.items()],indent=4))
+            variantsFile.close()
         except BreakException:
             pass
 
@@ -144,10 +158,12 @@ class Pipeline(object):
 
     def generateVariant(self,job,program_name, merging, port,bc, OUT_FOLDER, onlybc, meta, outResult):
         
+        variants = []
+        LOGGER.info(program_name,f"Generating {len(job)} variants...")
         for j in job:
             LOGGER.info(program_name, f"Applying replacement set...")
             r = redis.Redis(host="localhost", port=port)
-            LOGGER.info(program_name, f"Cleaning previous cache...{port}")
+            LOGGER.info(program_name, f"Cleaning previous cache for variant generation...{port}")
             try:
                 result = r.flushdb()
                 LOGGER.success(
@@ -158,11 +174,16 @@ class Pipeline(object):
             # Set keys
 
             try:
-               print(j)
                for k, v in j.items():
                    if v is not None:
                        r.hset(k, "result", v)
-               print(bc)
+                   else:
+                       # search for infer word
+                       rer = re.compile(r"infer %(\d+)")
+                       kl = k.decode("utf-8")
+                       if rer.search(kl):
+                           r.hset(k, "result", ("result %%%s\n"%(rer.search(kl).group(1),)).encode("utf-8"))
+                       LOGGER.info(program_name, f"Replacing redundant key-value pair...")
                with ContentToTmpFile(content=bc) as BCIN:
                    tmpIn = BCIN.file
                    with ContentToTmpFile() as BCOUT:
@@ -177,38 +198,28 @@ class Pipeline(object):
                            bsOpt = open(tmpOut, 'rb').read()
 
                            # Generate wasm
-
+                           name = "[%s]%s[%s]" % (0,program_name,sanitized_set_name)
                            hex, size, wasmFile, watFile = self.generateWasm(program_name, bsOpt,
                                                                            OUT_FOLDER,
-                                                                           "[%s]%s[%s]" % (0,
-                                                                                           program_name,
-                                                                                           sanitized_set_name),
+                                                                           name,
                                                                            debug=True, generateOnlyBc=onlybc)
 
-                           #meta[wasmFile.split("/")[-1]] = dict(size=size, sha=hex)
-                           #outResult["candidates"].append(dict(size=size, sha=hex, name=wasmFile))
-
-                           #sizes[hex] = [size, list(s)]
-
-                           # sha.add(hex)
-                           #LOGGER.info(program_name, size)
-
+                           variants.append([hex, name, [[k.decode("utf-8"), v.decode("utf-8") if v is not None else "No replace"] for k,v in j.items()]])
                        except Exception as e:
-                           print(e)
-                           if config["DEFAULT"].getboolean("fail-silently"):
-                               LOGGER.error(program_name, traceback.format_exc())
+                           LOGGER.error(program_name, traceback.format_exc())
+                           raise e
                # call Souper and the linker again
             except Exception as e:
                 LOGGER.error(program_name, traceback.format_exc())
             finally:
 
-                LOGGER.info(program_name, "Cleaning cache...")
+                LOGGER.info(program_name, "Cleaning cache from variant generation...")
                 
                 result = r.flushdb()
                 LOGGER.success(
                     program_name, f"Flushing redis DB: result({result})")
                 r.close()
-
+        return variants
 
     def process(self, file, OUT_FOLDER, program_name, redisports, onlybc, outResult=None):
 
@@ -302,42 +313,7 @@ class Pipeline(object):
                     LOGGER.error(program_name, traceback.format_exc())
         return results
 
-    def processSingle(self, s, level, tmpIn, program_name, port, OUT_FOLDER, onlybc, meta, outResult):
-        with ContentToTmpFile() as BCOUT:
-            tmpOut = BCOUT.file
-            
-            try:
-                sanitized_set_name = "_".join(
-                    list(map(lambda x: x.__str__(), s)))
-
-                optBc = BCToSouper(program_name, candidates=list(
-                    s), level=level, debug=True, redisport=port)
-                optBc(args=[tmpIn, tmpOut], std=None)
-
-                bsOpt = open(tmpOut, 'rb').read()
-
-                # Generate wasm
-
-                hex, size, wasmFile, watFile = self.generateWasm(program_name, bsOpt,
-                                                                OUT_FOLDER,
-                                                                "[%s]%s[%s]" % (level,
-                                                                                program_name,
-                                                                                sanitized_set_name),
-                                                                debug=True, generateOnlyBc=onlybc)
-
-                #meta[wasmFile.split("/")[-1]] = dict(size=size, sha=hex)
-                #outResult["candidates"].append(dict(size=size, sha=hex, name=wasmFile))
-
-                #sizes[hex] = [size, list(s)]
-
-                # sha.add(hex)
-                LOGGER.info(program_name, size)
-
-            except Exception as e:
-                print(e)
-                if config["DEFAULT"].getboolean("fail-silently"):
-                    LOGGER.error(program_name, traceback.format_exc())
-
+    
     def generateWasm(self, namespace, bc, OUT_FOLDER, fileName, debug=True, generateOnlyBc=False):
         llFileName = "%s/%s" % (OUT_FOLDER, fileName)
 
