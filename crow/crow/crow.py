@@ -19,12 +19,14 @@ import traceback
 import multiprocessing
 import time
 import re
+import uuid
 
 
 levelPool = None
 
 
 class Pipeline(object):
+    PROGRAM_COUNTER = 0
 
     def check_file(self, file: str):
         program_name = file.split("/")[-1].split(".")[0]
@@ -90,23 +92,123 @@ class Pipeline(object):
                 # job.result()
 
                 futures.append(job)
-            done, fail = wait(futures, return_when=ALL_COMPLETED)
-            print(done)
+            done, fail = wait(futures, timeout=100, return_when=ALL_COMPLETED)
+            
+            LOGGER.success(program_name, f"{len(done)} explorations done")
+            LOGGER.error(program_name, f"{len(fail)} explorations failed")
+
+            #Merging results
+
+            LOGGER.info(program_name, "Merging exploration results...")
+
+            merging = {}
+
+            codeCount = -1
             for f in done:
                 r=f.result()
                 for k,v in r.items():
-                    print(f"{k} -> {v}")
+                    LOGGER.info(program_name, f"[{k}] {len(v)} code blocks")
+                    if len(v) != codeCount and codeCount != -1:
+                        LOGGER.warning(program_name, f"Sanity check warning, different exploration stage with different code blocks")
+                    codeCount = len(v)
+                    for k1, v1 in v.items():
+                        vSet = set(v1)
+                        if k1 not in merging:
+                            merging[k1] = []
+                        merging[k1] += vSet
+                        merging[k1] = list(set(merging[k1]))
+                        LOGGER.info(program_name, f"\t[{k1}] {len(merging[k1])} replacements")
+            
+            # Call the generation stage
+            # Split jobs
+            #for k in merging.keys():
+            LOGGER.info(program_name,f"Generating jobs for {len(redisports)} REDIS instances...")
+            subsets = getIteratorByName("keysSubset")(merging)
+
+            works = self.chunkIt(subsets, len(redisports))
+
+            futures = []
+            for i,port in enumerate(redisports):
+                job = levelPool.submit(
+                    self.generateVariant, works[i], program_name, merging, port, bc, OUT_FOLDER, onlybc, meta, outResult)
+                # job.result()
+
+                futures.append(job)
+            done, fail = wait(futures, return_when=ALL_COMPLETED)
 
         except BreakException:
             pass
 
-        if config["DEFAULT"].getboolean("print-sha"):
-            LOGGER.warning(program_name, "Summary %s:" % program_name)
-            for s in sha:
-                LOGGER.warning(program_name, "WASM SHA256 %s. Size %s. Combination %s" % (
-                    s, sizes[s][0], sizes[s][1]))
 
         return dict(programs=meta, count=len(meta.keys()))
+
+    def generateVariant(self,job,program_name, merging, port,bc, OUT_FOLDER, onlybc, meta, outResult):
+        
+        for j in job:
+            LOGGER.info(program_name, f"Applying replacement set...")
+            r = redis.Redis(host="localhost", port=port)
+            LOGGER.info(program_name, f"Cleaning previous cache...{port}")
+            try:
+                result = r.flushdb()
+                LOGGER.success(
+                    program_name, f"Flushing redis DB: result({result})")
+            except Exception as e:
+                LOGGER.error(program_name, traceback.format_exc())
+
+            # Set keys
+
+            try:
+               print(j)
+               for k, v in j.items():
+                   if v is not None:
+                       r.hset(k, "result", v)
+               print(bc)
+               with ContentToTmpFile(content=bc) as BCIN:
+                   tmpIn = BCIN.file
+                   with ContentToTmpFile() as BCOUT:
+                       tmpOut = BCOUT.file
+                       
+                       try:
+                           sanitized_set_name = uuid.uuid4().hex
+
+                           optBc = BCToSouper(program_name, level=1, debug=True, redisport=port)
+                           optBc(args=[tmpIn, tmpOut], std=None)
+
+                           bsOpt = open(tmpOut, 'rb').read()
+
+                           # Generate wasm
+
+                           hex, size, wasmFile, watFile = self.generateWasm(program_name, bsOpt,
+                                                                           OUT_FOLDER,
+                                                                           "[%s]%s[%s]" % (0,
+                                                                                           program_name,
+                                                                                           sanitized_set_name),
+                                                                           debug=True, generateOnlyBc=onlybc)
+
+                           #meta[wasmFile.split("/")[-1]] = dict(size=size, sha=hex)
+                           #outResult["candidates"].append(dict(size=size, sha=hex, name=wasmFile))
+
+                           #sizes[hex] = [size, list(s)]
+
+                           # sha.add(hex)
+                           #LOGGER.info(program_name, size)
+
+                       except Exception as e:
+                           print(e)
+                           if config["DEFAULT"].getboolean("fail-silently"):
+                               LOGGER.error(program_name, traceback.format_exc())
+               # call Souper and the linker again
+            except Exception as e:
+                LOGGER.error(program_name, traceback.format_exc())
+            finally:
+
+                LOGGER.info(program_name, "Cleaning cache...")
+                
+                result = r.flushdb()
+                LOGGER.success(
+                    program_name, f"Flushing redis DB: result({result})")
+                r.close()
+
 
     def process(self, file, OUT_FOLDER, program_name, redisports, onlybc, outResult=None):
 
@@ -152,6 +254,18 @@ class Pipeline(object):
                 LOGGER.error(program_name,  traceback.format_exc())
                 return
             with ContentToTmpFile(content=bc) as TMP_BC:
+
+                r = redis.Redis(host="localhost", port=port)
+
+                # Clean cache
+                LOGGER.info(program_name, f"Cleaning previous cache...{port}")
+                try:
+                    result = r.flushdb()
+                    LOGGER.success(
+                        program_name, f"Flushing redis DB: result({result})")
+                except Exception as e:
+                    LOGGER.error(program_name, traceback.format_exc())
+
                 cand = bctocand(args=[TMP_BC.file], std=None)
 
                 # Saving candidate
@@ -164,7 +278,6 @@ class Pipeline(object):
                 # BC to tmpfile
                 
                 try: # Saving cache results
-                    r = redis.Redis(host="localhost", port=port)
                     LOGGER.info(program_name, "Saving cache...")
                     
                     try:
