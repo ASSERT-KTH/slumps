@@ -1,14 +1,4 @@
-#include <socket_client.h>
-
-#include <iostream>
-#include <cstdlib>
-#include <string>
-#include <fstream>
-#include <vector>
-#include <sys/shm.h>
-#include <unistd.h>
-#include <sys/wait.h>
-#include <stdlib.h>
+#include "interface.h"
 
 #define AFL_SHM_SIZE 65536
 #define SHM_ENV_VAR "__AFL_SHM_ID"
@@ -36,19 +26,13 @@ std::vector<std::string> readFileToVector(const std::string &filename)
     return lines;
 }
 
-uint8_t *get_shm()
+uint8_t *getShm()
 {
-    // putenv((char *)"SHM_ENV_VAR=5");
+    std::string shmStr = parseEnvVariables((char *)SHM_ENV_VAR);
+    LOG("shmStr: " + std::string(shmStr));
 
-    char *shm_name = std::getenv(SHM_ENV_VAR);
-    if (!shm_name)
-    {
-        LOG("SHM_ENV_VAR not found!");
-        exit(1);
-    }
+    key_t key = std::stoi(shmStr);
 
-    LOG("shm_name: " + std::string(shm_name));
-    key_t key = atoi(shm_name);
     uint8_t *trace_bits = (uint8_t *)shmat(key, 0, 0);
     if (trace_bits == (uint8_t *)-1)
     {
@@ -130,12 +114,18 @@ void main_fuzz(
 
     // ######## Real application ########
 
-    char sendBuffer[requiredBytes];
-    char readBuffer[4096];
     int sockfd = connectToServer();
-    // TODO: Fill buffer with fuzzed_input & new line (using requiredBytes)
-    clientWrite(sockfd, sendBuffer);
-    clientRead(sockfd, readBuffer);
+
+    char tempBuffer[requiredBytes];
+    std::memcpy(tempBuffer, fuzzed_input, sizeof(tempBuffer));  // Read first x bytes of fuzzed_input into tempBuffer
+    std::reverse(tempBuffer, &tempBuffer[sizeof(tempBuffer)]); // Reverse order of tempBuffer
+    char sendBuffer[requiredBytes + 1];
+    extendBufferNewLine(sizeof(tempBuffer), tempBuffer, sendBuffer);
+    clientWrite(sockfd, sendBuffer, sizeof(sendBuffer));
+
+    char readBuffer[4096];
+    clientRead(sockfd, readBuffer, sizeof(readBuffer));
+
     close(sockfd);
 
     uint8_t *execution_data = (uint8_t *)malloc(AFL_SHM_SIZE);
@@ -149,7 +139,7 @@ void main_fuzz(
     // test_nested_if(fuzzed_input, trace_bits);
 }
 
-void fork_server(char *fuzzed_input, uint8_t *trace_bits)
+void fork_server(char *fuzzed_input, uint8_t *trace_bits, int requiredBytes)
 {
     // The Fork server (Prototype of this code in Assembly):
     // https://lcamtuf.blogspot.com/2014/10/fuzzing-binaries-without-execve.html
@@ -171,10 +161,6 @@ void fork_server(char *fuzzed_input, uint8_t *trace_bits)
         close(199);
         exit(1);
     }
-
-    // At the very beginning the fuzzed_input should have the correct number
-    // of bytes.
-    int requiredBytes = sizeof(fuzzed_input) + 1;
 
     // The parent process that continuously runs through this while-loop
     // and is creating forks of itself is called the "fork server".
@@ -274,14 +260,17 @@ int main(int argc, char *argv[])
 {
     LOG("########## NEW MAIN ##########");
 
-    uint8_t *trace_bits = get_shm();
+    uint8_t *trace_bits = getShm();
 
     // Mark a location to show we are instrumented
     trace_bits[0]++;
 
     log_args(argc, argv);
 
-    fork_server(argv[1], trace_bits);
+    // TODO: Make sure requiredBytes is passed along; sizeof(fuzzed_input) will not work as it's a char *.
+    int requiredBytes = (int) argv[2];
+
+    fork_server(argv[1], trace_bits, requiredBytes);
 
     return 0;
 }
