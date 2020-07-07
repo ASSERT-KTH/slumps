@@ -178,14 +178,12 @@ class BCToSouper(ExternalStage):
         self.namespace = namespace
 
     def __call__(self, args=[], std=None):  # f -> inputs
-        extra_commands = "--souper-subset=%s %s -o %s" % (
-        ",".join(map(lambda x: x.__str__(), self.candidates)), args[0], args[1])
+        extra_commands = "%s -o %s" % (args[0], args[1])
 
         if RUNTIME_CONFIG["USE_REDIS"]:
             extra_commands += " --souper-external-cache --souper-redis-port=%s"%(self.redisport, )
 
-        new_inputs = (config["souper"]["super-opt-pass"] % (
-        config["souper"]["souper-level-%s" % self.level], extra_commands)).split(" ")
+        new_inputs = (config["souper"]["super-opt-pass"] % ("", extra_commands)).split(" ")
         return super(BCToSouper, self).__call__(new_inputs, std)
 
     def processInner(self, std, err):
