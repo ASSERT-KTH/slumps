@@ -86,7 +86,7 @@ void printResult(std::string filepath)
 
 int main(int argc, char *argv[])
 {
-    // TODO: Parse input file from args (./prepared_input.dat)
+    std::string filePath = (std::string) argv[1];
 
     std::string WASM_ARG_TYPES_LIST = parseEnvVariables((char *)"WASM_ARG_TYPES_LIST");
     std::string WASM_ARG_LIST = parseEnvVariables((char *)"WASM_ARG_LIST");
@@ -100,13 +100,12 @@ int main(int argc, char *argv[])
         exit(1);
     }
 
-    int totalBytes = 0;
     for (int i = 0; i < typeArray.size(); ++i)
     {
-        translateArg(argArray[i], typeArray[i], "./prepared_input.dat");
+        translateArg(argArray[i], typeArray[i], filePath);
     }
 
-    printResult("./prepared_input.dat");
+    printResult(filePath);
 
     exit(0);
 };
