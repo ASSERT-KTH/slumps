@@ -38,7 +38,7 @@ class ExternalStage(object):
         args = list(filter(lambda x: x != "", args))
 
         if self.DEBUG_LEVEL > 0 and self.timeout > -1:
-            LOGGER.info(self.namespace, f"Setting timeout {self.timeout}")
+            LOGGER.info(self.namespace, f"Setting timeout {self.timeout} {self.path_to_executable} ")
 
         cmd = ["timeout", f"{self.timeout}"] + [self.path_to_executable] if self.timeout > -1 else [self.path_to_executable]
         p = Popen(cmd + args, stdout=PIPE, stderr=PIPE, stdin=PIPE)

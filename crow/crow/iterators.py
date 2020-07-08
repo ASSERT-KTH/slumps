@@ -5,6 +5,9 @@ import collections
 
 def keysSubset(S):
 
+    if len(S) == 0:
+        return {}
+
     for k in S:
         S[k].append(None)
 
