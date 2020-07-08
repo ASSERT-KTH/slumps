@@ -29,6 +29,8 @@ RUNTIME_CONFIG = dict(USE_REDIS=False)
 
 class ContentToTmpFile(object):
 
+    LOG_LEVEL = 0
+
     def __init__(self, content=None, name=None, ext=None, persist=False):
         tmp = createTmpFile(ext) if not name else name
 
@@ -54,8 +56,8 @@ class ContentToTmpFile(object):
             if not self.persist:
                 os.remove(self.file)
         except Exception as e:
-            LOGGER.error(self.tmpF, traceback.format_exc())
-            raise e
+            if self.LOG_LEVEL > 1:
+                LOGGER.error(self.tmpF, traceback.format_exc())
 
 
 def updatesettings(argvs):

@@ -3,7 +3,7 @@
 import os
 import sys,traceback
 from settings import config
-from stages import CToLLStage, LLToBC, BCToSouper, ObjtoWASM, WASM2WAT, BCCountCandidates
+from stages import CToLLStage, LLToBC, BCToSouper, ObjtoWASM, WASM2WAT, BCCountCandidates, TimeoutException
 from utils import printProgressBar, createTmpFile, getIteratorByName, \
     ContentToTmpFile, BreakException, RUNTIME_CONFIG, updatesettings, sendReportEmail, make_github_issue
 
@@ -27,6 +27,10 @@ levelPool = None
 
 class Pipeline(object):
     PROGRAM_COUNTER = 0
+    
+
+    def __init__(self):
+        self.LOG_LEVEL = 3
 
     def check_file(self, file: str):
         program_name = file.split("/")[-1].split(".")[0]
@@ -96,9 +100,6 @@ class Pipeline(object):
             timeout = config["DEFAULT"].getint("exploration-timeout")
             done, fail = wait(futures, timeout=timeout, return_when=ALL_COMPLETED)
             
-            LOGGER.success(program_name, f"{len(done)} explorations done")
-            LOGGER.error(program_name, f"{len(fail)} explorations failed")
-
             #Merging results
 
             LOGGER.info(program_name, "Merging exploration results...")
@@ -139,6 +140,7 @@ class Pipeline(object):
                 futures.append(job)
             done, fail = wait(futures, return_when=ALL_COMPLETED)
             # Save metadata
+
 
             variants = []
             for f in done:
@@ -209,7 +211,7 @@ class Pipeline(object):
                            bsOpt = open(tmpOut, 'rb').read()
 
                            # Generate wasm
-                           n = "[%s]%s[%s]" % (0,program_name,sanitized_set_name)
+                           n = "%s[%s]" % (program_name,sanitized_set_name)
                            hex, size, wasmFile, watFile = self.generateWasm(program_name, bsOpt,
                                                                            OUT_FOLDER,
                                                                            name,
@@ -271,7 +273,7 @@ class Pipeline(object):
                                                                                             "souper-level-%s" % level], port))
 
             try:
-                bctocand = BCCountCandidates(program_name, level=level, redisport=port)
+                bctocand = BCCountCandidates(program_name, level=level, redisport=port, timeout=config["DEFAULT"].getint("exploration-timeout"))
             except Exception as e:
                 LOGGER.error(program_name,  traceback.format_exc())
                 return
@@ -288,19 +290,19 @@ class Pipeline(object):
                 except Exception as e:
                     LOGGER.error(program_name, traceback.format_exc())
 
-                cand = bctocand(args=[TMP_BC.file], std=None)
+                try:
 
-                # Saving candidate
-                canCount = len(cand[0])
-                LOGGER.success(program_name, "%s: Found %s arithmetic expression candidates. %s Can be replaced" % (
-                    program_name, cand[1], canCount))
-
-                # Test set the second candidate for optimization
-
-                # BC to tmpfile
+                    cand = bctocand(args=[TMP_BC.file], std=None)
+                except TimeoutException:
+                    if self.LOG_LEVEL > 2:
+                        LOGGER.warning(program_name, f"Timeout reached")
+                except Exception as e:
+                    LOGGER.error(program_name, traceback.format_exc())
+                    raise e
                 
                 try: # Saving cache results
-                    LOGGER.info(program_name, "Saving cache...")
+                    if self.LOG_LEVEL >= 1:
+                        LOGGER.info(program_name, "Saving cache...")
                     
                     try:
                         keys = r.keys("*")
@@ -309,12 +311,18 @@ class Pipeline(object):
                             t = r.type(k)
                             if t == b'hash':
                                 vals = r.hgetall(k)
-                                results[level][k] = vals.get(b'result', k).split(b'\n##\n')
+                                if self.LOG_LEVEL > 2:
+                                    LOGGER.info(program_name, f"{k} {vals}")
+                                if b'result' in vals and vals[b'result'] != b'':
+                                    results[level][k] = vals[b'result'].split(b'\n##\n')
+                                else:
+                                    results[level][k] = []
 
                         # set the redis cache and call Souper
                     finally:
 
-                        LOGGER.info(program_name, "Cleaning cache...")
+                        if self.LOG_LEVEL >= 1:
+                            LOGGER.info(program_name, "Cleaning cache...")
                         
                         result = r.flushdb()
                         LOGGER.success(
