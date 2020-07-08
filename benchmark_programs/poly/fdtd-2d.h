@@ -7,58 +7,52 @@
  *
  * Web address: http://polybench.sourceforge.net
  */
-#ifndef _2MM_H
-# define _2MM_H
+#ifndef _FDTD_2D_H
+# define _FDTD_2D_H
 
 /* Default to LARGE_DATASET. */
 # if !defined(MINI_DATASET) && !defined(SMALL_DATASET) && !defined(MEDIUM_DATASET) && !defined(LARGE_DATASET) && !defined(EXTRALARGE_DATASET)
 #  define MINI_DATASET
 # endif
 
-# if !defined(NI) && !defined(NJ) && !defined(NK) && !defined(NL)
+# if !defined(TMAX) && !defined(NX) && !defined(NY)
 /* Define sample dataset sizes. */
 #  ifdef MINI_DATASET
-#   define NI 16
-#   define NJ 18
-#   define NK 22
-#   define NL 24
+#   define TMAX 20
+#   define NX 20
+#   define NY 30
 #  endif
 
 #  ifdef SMALL_DATASET
-#   define NI 40
-#   define NJ 50
-#   define NK 70
-#   define NL 80
+#   define TMAX 40
+#   define NX 60
+#   define NY 80
 #  endif
 
 #  ifdef MEDIUM_DATASET
-#   define NI 180
-#   define NJ 190
-#   define NK 210
-#   define NL 220
+#   define TMAX 100
+#   define NX 200
+#   define NY 240
 #  endif
 
 #  ifdef LARGE_DATASET
-#   define NI 800
-#   define NJ 900
-#   define NK 1100
-#   define NL 1200
+#   define TMAX 500
+#   define NX 1000
+#   define NY 1200
 #  endif
 
 #  ifdef EXTRALARGE_DATASET
-#   define NI 1600
-#   define NJ 1800
-#   define NK 2200
-#   define NL 2400
+#   define TMAX 1000
+#   define NX 2000
+#   define NY 2600
 #  endif
 
 
-#endif /* !(NI NJ NK NL) */
+#endif /* !(TMAX NX NY) */
 
-# define _PB_NI POLYBENCH_LOOP_BOUND(NI,ni)
-# define _PB_NJ POLYBENCH_LOOP_BOUND(NJ,nj)
-# define _PB_NK POLYBENCH_LOOP_BOUND(NK,nk)
-# define _PB_NL POLYBENCH_LOOP_BOUND(NL,nl)
+# define _PB_TMAX POLYBENCH_LOOP_BOUND(TMAX,tmax)
+# define _PB_NX POLYBENCH_LOOP_BOUND(NX,nx)
+# define _PB_NY POLYBENCH_LOOP_BOUND(NY,ny)
 
 
 /* Default data type */
@@ -89,4 +83,4 @@
 #  define POW_FUN(x,y) pow(x,y)
 # endif
 
-#endif /* !_2MM_H */
+#endif /* !_FDTD_2D_H */

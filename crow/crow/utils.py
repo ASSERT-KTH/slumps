@@ -62,8 +62,7 @@ class ContentToTmpFile(object):
 
 def updatesettings(argvs):
 
-    SLUMPS_DIR = os.path.dirname(os.path.abspath(
-        os.path.dirname(os.path.dirname(__file__))))
+    SLUMPS_DIR = os.path.dirname(os.path.dirname(__file__))
 
     print("Slumps dir...%s" % SLUMPS_DIR)
     config["DEFAULT"]["slumpspath"] = SLUMPS_DIR
@@ -81,8 +80,8 @@ def updatesettings(argvs):
         
     pairs = []
     for index, a in enumerate(argvs):
-        if a.startswith("-"):
-            if index + 1 < len(argvs) and not argvs[index + 1].startswith("-"):
+        if a.startswith("%"):
+            if index + 1 < len(argvs) and not argvs[index + 1].startswith("%"):
                 pairs.append([a, argvs[index + 1]])
             else:
                 raise Exception(
