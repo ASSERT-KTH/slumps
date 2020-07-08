@@ -49,10 +49,9 @@ int connectToServer()
 void clientWrite(int sockfd, char *sendBuffer, int sizeBuffer)
 {
     int n = write(sockfd, sendBuffer, sizeBuffer);
-    std::cout << "Wrote to server!" << std::endl;
     if (n < 0)
         error("ERROR writing to socket");
-    bzero(sendBuffer, sizeBuffer);
+    printf("Wrote to server!\n");
 }
 
 void clientRead(int sockfd, char *readBuffer, int sizeBuffer)
@@ -60,30 +59,13 @@ void clientRead(int sockfd, char *readBuffer, int sizeBuffer)
     int n = read(sockfd, readBuffer, sizeBuffer);
     if (n < 0)
         error("ERROR reading from socket");
-    printf("Message received: %s\n", readBuffer);
-    bzero(readBuffer, sizeBuffer);
+    printf("Received message!\n");
 }
 
-int runClient(int sizeSendBuffer, char *sendBuffer, int sizeReadBuffer, char *readBuffer)
+void runClient(int sizeSendBuffer, char *sendBuffer, int sizeReadBuffer, char *readBuffer)
 {
     int sockfd = connectToServer();
     clientWrite(sockfd, sendBuffer, sizeSendBuffer);
     clientRead(sockfd, readBuffer, sizeReadBuffer);
     close(sockfd);
-    return 0;
-};
-
-int main(int argc, char *argv[])
-{
-    // TODO: Parse input file from args (./prepared_input.dat)
-
-    char readBuffer[4096];
-
-    int fileSize = (int)getFileSize("./prepared_input.dat");
-    char sendBuffer[fileSize];
-    readBinaryToBuffer(sendBuffer, fileSize, "./prepared_input.dat");
-    std::reverse(sendBuffer, &sendBuffer[sizeof(sendBuffer)]); // Reverse order of sendBuffer
-
-    runClient(sizeof(sendBuffer), sendBuffer, sizeof(readBuffer), readBuffer);
-    exit(0);
 };

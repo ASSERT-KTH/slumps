@@ -9,8 +9,8 @@
 export WASM_ARG_TYPES_LIST=Int64
 export WASM_ARG_LIST=15
 
-g++ -o prepare_wasm_input.out prepare_wasm_input.cpp utils.cpp
-./prepare_wasm_input.out
+g++ -o ./prepare_wasm_input.out ./prepare_wasm_input.cpp ./utils.cpp
+g++ -o ./run_client.out ./run_client.cpp ./socket_client.cpp ./utils.cpp
 
-g++ -o socket_client.out socket_client.cpp utils.cpp
-./socket_client.out
+./prepare_wasm_input.out "./prepared_input.dat"
+./run_client.out "./prepared_input.dat"
