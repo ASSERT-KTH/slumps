@@ -129,35 +129,40 @@ class Pipeline(object):
             subsets = getIteratorByName("keysSubset")(merging)
 
             LOGGER.info(program_name,f"{len(subsets)} combinations...")
-            works = self.chunkIt(subsets, len(redisports))
 
-            futures = []
-            for i,port in enumerate(redisports):
-                job = levelPool.submit(
-                    self.generateVariant, works[i], program_name, merging, port, bc, OUT_FOLDER, onlybc, meta, outResult)
-                # job.result()
+            if len(subsets) != 0:
+                works = self.chunkIt(subsets, len(redisports))
 
-                futures.append(job)
-            done, fail = wait(futures, return_when=ALL_COMPLETED)
-            # Save metadata
+                futures = []
+                for i,port in enumerate(redisports):
+                    job = levelPool.submit(
+                        self.generateVariant, works[i], program_name, merging, port, bc, OUT_FOLDER, onlybc, meta, outResult)
+                    # job.result()
+
+                    futures.append(job)
+                done, fail = wait(futures, return_when=ALL_COMPLETED)
+                # Save metadata
 
 
-            variants = []
-            for f in done:
-                variants += f.result()
+                variants = []
+                for f in done:
+                    variants += f.result()
 
-            LOGGER.info(program_name, f"Saving metadata...")
-            variantsFile = open(f"{OUT_FOLDER}/{program_name}.variants.json", 'w')
-            variantsFile.write(json.dumps({
-                "variants": variants,
-                "unique": len(set([v[0] for v in variants])),
-                "total": len([v[0] for v in variants])
-            }, indent=4))
-            variantsFile.close()
+                LOGGER.info(program_name, f"Saving metadata...")
+                variantsFile = open(f"{OUT_FOLDER}/{program_name}.variants.json", 'w')
+                variantsFile.write(json.dumps({
+                    "variants": variants,
+                    "unique": len(set([v[0] for v in variants])),
+                    "total": len([v[0] for v in variants])
+                }, indent=4))
+                variantsFile.close()
 
-            variantsFile = open(f"{OUT_FOLDER}/{program_name}.exploration.json", 'w')
-            variantsFile.write(json.dumps([[k.decode("utf-8"), [v1.decode("utf-8") for v1 in v if v1 is not None] ] for k, v in merging.items()],indent=4))
-            variantsFile.close()
+                variantsFile = open(f"{OUT_FOLDER}/{program_name}.exploration.json", 'w')
+                variantsFile.write(json.dumps([[k.decode("utf-8"), [v1.decode("utf-8") for v1 in v if v1 is not None] ] for k, v in merging.items()],indent=4))
+                variantsFile.close()
+            else:
+                if self.LOG_LEVEL > 0:
+                    LOGGER.error(program_name, f"No replacements neaither code blocks detected... Probably due to timeout")
         except BreakException:
             pass
 
@@ -312,7 +317,7 @@ class Pipeline(object):
                             if t == b'hash':
                                 vals = r.hgetall(k)
                                 if self.LOG_LEVEL > 2:
-                                    LOGGER.info(program_name, f"{k} {vals}")
+                                    LOGGER.info(program_name, f"\t{k} {vals}")
                                 if b'result' in vals and vals[b'result'] != b'':
                                     results[level][k] = vals[b'result'].split(b'\n##\n')
                                 else:
