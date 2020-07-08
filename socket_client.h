@@ -18,6 +18,6 @@ void error(const char *);
 int connectToServer();
 void clientWrite(int, char*, int);
 void clientRead(int, char*, int);
-int runClient(int, char*, int, char*);
+void runClient(int, char*, int, char*);
 
 #endif

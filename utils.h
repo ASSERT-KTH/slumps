@@ -8,6 +8,7 @@
 #include <sstream>
 #include <vector>
 
+void log(std::string, std::string);
 void printBuffer(int, char *);
 long getFileSize(std::string);
 

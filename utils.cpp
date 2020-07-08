@@ -7,6 +7,14 @@
 #include <sstream>
 #include <vector>
 
+void log(std::string filename, std::string some_string)
+{
+    std::ofstream logfile;
+    logfile.open(filename, std::ios_base::app);
+    logfile << some_string + "\n";
+    logfile.close();
+}
+
 void printBuffer(int sizeBuffer, char *buffer)
 {
     for (int i = 0; i < sizeBuffer; i++)

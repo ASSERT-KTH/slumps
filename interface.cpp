@@ -2,15 +2,10 @@
 
 #define AFL_SHM_SIZE 65536
 #define SHM_ENV_VAR "__AFL_SHM_ID"
-#define LOGFILE "interface.log"
 
-int LOG(std::string some_string)
+void LOG(std::string some_string)
 {
-    std::ofstream logfile;
-    logfile.open(LOGFILE, std::ios_base::app);
-    logfile << some_string + "\n";
-    logfile.close();
-    return 0;
+    log("interface.log", some_string);
 }
 
 std::vector<std::string> readFileToVector(const std::string &filename)
@@ -29,7 +24,7 @@ std::vector<std::string> readFileToVector(const std::string &filename)
 uint8_t *getShm()
 {
     std::string shmStr = parseEnvVariables((char *)SHM_ENV_VAR);
-    LOG("shmStr: " + std::string(shmStr));
+    LOG("shmStr: " + shmStr);
 
     key_t key = std::stoi(shmStr);
 
@@ -52,52 +47,24 @@ void log_file(char *filename)
     }
 }
 
-void pass_data_to_afl(int sizeReadBuffer, char *readBuffer, uint8_t *trace_bits)
-{
-    // TODO: Read path coverage from readBuffer into trace_bits
-    // TODO: Read exit code from readBuffer and exit with same code
-
-    // Dummy with random coverage:
+void fillTraceDummyData(uint8_t *trace_bits) {
     srand(time(NULL));
     for (int i = 0; i < 10; i++)
     {
         int random_branch = rand() % AFL_SHM_SIZE;
         trace_bits[random_branch] += 1;
     }
-
 }
 
-void test_nested_if(char *fuzzed_input, uint8_t *trace_bits)
+void pass_data_to_afl(int sizeReadBuffer, char *readBuffer, uint8_t *trace_bits)
 {
-    // Function to test how AFL reacts to code coverage. Runs
-    // code execution and feeds data to AFL in one go.
-
-    std::vector<std::string> vector = readFileToVector(fuzzed_input);
-
-    if (vector[0].rfind("one", 0) == 0)
+    // Read path coverage from readBuffer into trace_bits
+    for (int i = 1; i < sizeReadBuffer; i++)
     {
-        trace_bits[1] += 1;
-        if (vector[0].rfind("oneone", 0) == 0)
-        {
-            trace_bits[2] += 1;
-            exit(1);
-            if (vector[0].rfind("oneoneone", 0) == 0)
-            {
-                trace_bits[3] += 1;
-
-                if (vector[0].rfind("oneoneonetwo", 0) == 0)
-                {
-                    trace_bits[4] += 1;
-                    if (vector[0].rfind("oneoneonetwotwo", 0) == 0)
-                    {
-                        trace_bits[5] += 1;
-                        exit(1);
-                    }
-                }
-            }
-        }
+        trace_bits[i-1] += readBuffer[i];
     }
 }
+
 
 void main_fuzz(
     char *fuzzed_input,
@@ -106,25 +73,18 @@ void main_fuzz(
 {
     log_file(fuzzed_input);
 
-    // ######## Real application ########
-
-    int sockfd = connectToServer();
-
     char sendBuffer[requiredBytes];
     std::memcpy(sendBuffer, fuzzed_input, sizeof(sendBuffer));  // Read first x bytes of fuzzed_input into tempBuffer
     std::reverse(sendBuffer, &sendBuffer[sizeof(sendBuffer)]); // Reverse order of tempBuffer
-    clientWrite(sockfd, sendBuffer, sizeof(sendBuffer));
+    char readBuffer[AFL_SHM_SIZE + 1]; // + 1 for exit code
 
-    char readBuffer[4096];
-    clientRead(sockfd, readBuffer, sizeof(readBuffer));
-
-    close(sockfd);
+    runClient(sizeof(sendBuffer), sendBuffer, sizeof(readBuffer), readBuffer);
 
     pass_data_to_afl(sizeof(readBuffer), readBuffer, trace_bits);
 
-    // ######## Test application ########
+    // Read exit code from readBuffer and exit with same code
+    exit(readBuffer[0]);
 
-    // test_nested_if(fuzzed_input, trace_bits);
 }
 
 void fork_server(char *fuzzed_input, uint8_t *trace_bits, int requiredBytes)
@@ -248,17 +208,15 @@ int main(int argc, char *argv[])
 {
     LOG("########## NEW MAIN ##########");
 
-    uint8_t *trace_bits = getShm();
-
-    // Mark a location to show we are instrumented
-    trace_bits[0]++;
-
     log_args(argc, argv);
+    
+    char *fuzzed_input = argv[1];
+    int requiredBytes = atoi(argv[2]);
 
-    // TODO: Make sure requiredBytes is passed along; sizeof(fuzzed_input) will not work as it's a char *.
-    int requiredBytes = (int) argv[2];
+    uint8_t *trace_bits = getShm();
+    trace_bits[0]++;  // Mark a location to show we are instrumented
 
-    fork_server(argv[1], trace_bits, requiredBytes);
+    fork_server(fuzzed_input, trace_bits, requiredBytes);
 
     return 0;
 }
