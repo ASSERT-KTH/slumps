@@ -23,7 +23,7 @@ import uuid
 
 
 levelPool = None
-
+generationPool = None
 
 class Pipeline(object):
     PROGRAM_COUNTER = 0
@@ -99,7 +99,7 @@ class Pipeline(object):
             
             timeout = config["DEFAULT"].getint("exploration-timeout")
             done, fail = wait(futures, timeout=timeout, return_when=ALL_COMPLETED)
-            
+            levelPool.shutdown(False)
             #Merging results
 
             LOGGER.info(program_name, "Merging exploration results...")
@@ -120,49 +120,50 @@ class Pipeline(object):
                             merging[k1] = []
                         merging[k1] += vSet
                         merging[k1] = list(set(merging[k1]))
-                        LOGGER.info(program_name, f"\t[{k1}] {len(merging[k1])} replacements")
+                        LOGGER.info(program_name, f"\t - {len(merging[k1])} replacements")
             
             # Call the generation stage
             # Split jobs
             #for k in merging.keys():
             LOGGER.info(program_name,f"Generating jobs for {len(redisports)} REDIS instances...")
-            subsets = getIteratorByName("keysSubset")(merging)
 
-            LOGGER.info(program_name,f"{len(subsets)} combinations...")
+            generationcount = 0
+            futures = []
+            variants = []
 
-            if len(subsets) != 0:
-                works = self.chunkIt(subsets, len(redisports))
+            for subset in getIteratorByName("keysSubset")(merging):
 
-                futures = []
-                for i,port in enumerate(redisports):
-                    job = levelPool.submit(
-                        self.generateVariant, works[i], program_name, merging, port, bc, OUT_FOLDER, onlybc, meta, outResult)
+                job = generationPool.submit(
+                    self.generateVariant, [subset], program_name, merging, redisports[generationcount
+                    %len(redisports)], bc, OUT_FOLDER, onlybc, meta, outResult)
                     # job.result()
 
-                    futures.append(job)
-                done, fail = wait(futures, return_when=ALL_COMPLETED)
+                futures.append(job)
+                generationcount += 1
+
+                if generationcount % len(redisports) == 0:
+                    ## WAIT for it
+                    done, fail = wait(futures, return_when=ALL_COMPLETED)
+                    futures = []
+
+                    for f in done:
+                        variants += f.result()
                 # Save metadata
 
 
-                variants = []
-                for f in done:
-                    variants += f.result()
 
-                LOGGER.info(program_name, f"Saving metadata...")
-                variantsFile = open(f"{OUT_FOLDER}/{program_name}.variants.json", 'w')
-                variantsFile.write(json.dumps({
-                    "variants": variants,
-                    "unique": len(set([v[0] for v in variants])),
-                    "total": len([v[0] for v in variants])
-                }, indent=4))
-                variantsFile.close()
+            LOGGER.info(program_name, f"Saving metadata...")
+            variantsFile = open(f"{OUT_FOLDER}/{program_name}.variants.json", 'w')
+            variantsFile.write(json.dumps({
+                "variants": variants,
+                "unique": len(set([v[0] for v in variants])),
+                "total": len([v[0] for v in variants])
+            }, indent=4))
+            variantsFile.close()
 
-                variantsFile = open(f"{OUT_FOLDER}/{program_name}.exploration.json", 'w')
-                variantsFile.write(json.dumps([[k.decode("utf-8"), [v1.decode("utf-8") for v1 in v if v1 is not None] ] for k, v in merging.items()],indent=4))
-                variantsFile.close()
-            else:
-                if self.LOG_LEVEL > 0:
-                    LOGGER.error(program_name, f"No replacements neaither code blocks detected... Probably due to timeout")
+            variantsFile = open(f"{OUT_FOLDER}/{program_name}.exploration.json", 'w')
+            variantsFile.write(json.dumps([[k.decode("utf-8"), [v1.decode("utf-8") for v1 in v if v1 is not None] ] for k, v in merging.items()],indent=4))
+            variantsFile.close()
         except BreakException:
             pass
 
@@ -172,15 +173,15 @@ class Pipeline(object):
     def generateVariant(self,job,program_name, merging, port,bc, OUT_FOLDER, onlybc, meta, outResult):
         
         variants = []
-        LOGGER.info(program_name,f"Generating {len(job)} variants...")
+        #LOGGER.info(program_name,f"Generating {len(job)} variants...")
         for j in job:
-            LOGGER.info(program_name, f"Applying replacement set...")
+            #LOGGER.info(program_name, f"Applying replacement set...")
             r = redis.Redis(host="localhost", port=port)
-            LOGGER.info(program_name, f"Cleaning previous cache for variant generation...{port}")
+            #LOGGER.info(program_name, f"Cleaning previous cache for variant generation...{port}")
             try:
                 result = r.flushdb()
-                LOGGER.success(
-                    program_name, f"Flushing redis DB: result({result})")
+                #LOGGER.success(
+                #    program_name, f"Flushing redis DB: result({result})")
             except Exception as e:
                 LOGGER.error(program_name, traceback.format_exc())
 
@@ -201,7 +202,7 @@ class Pipeline(object):
                        kl = k.decode("utf-8")
                        if rer.search(kl):
                            r.hset(k, "result", ("result %%%s\n"%(rer.search(kl).group(1),)).encode("utf-8"))
-                       LOGGER.info(program_name, f"Replacing redundant key-value pair...")
+                       #LOGGER.info(program_name, f"Replacing redundant key-value pair...")
                with ContentToTmpFile(content=bc) as BCIN:
                    tmpIn = BCIN.file
                    with ContentToTmpFile() as BCOUT:
@@ -522,6 +523,9 @@ if __name__ == "__main__":
 
 
     levelPool = ThreadPoolExecutor(
+    max_workers=max_workers)
+
+    generationPool = ThreadPoolExecutor(
     max_workers=max_workers)
 
     updatesettings(sys.argv[2:-1])
