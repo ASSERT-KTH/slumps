@@ -14,29 +14,42 @@ Therefore, instead of using the C++-compiler provided by AFLplusplus (afl-clang-
 
 AFL communicates with the target binary with a shared memory by default. Since Scala does not seem suitable for such low-level operations, we have instead created a low-level wrapper for SWAM, interface.cpp. Whilst the code coverage plugin for SWAM writes it's results to a fixed file, our interface wrapper reads from this file and then feeds the content into the shared memory used by AFL.
 
-## Run
+## Test socket connection + SWAM with sample input (for fibo.wat)
+
+1. Start the SWAM socket server
+
+    ```bash
+    mill -i cli.run run_server --wat --argType Int64 --main naive --out ./ <path_to_repo>/examples/docs/fibo.wat
+    ```
+
+1. Start socket client and communicate input/output with server
+
+    ```bash
+    ./run_test.sh
+    ```
+
+## Run AFL on example ./examples/docs/fibo.wat
+
+**Disclaimer - this does not work yet, since the hosts & ports are not adjusted yet! Will be done in a later implementation using docker-compose.**
+
+1. Start the SWAM Socket Server
+
+    ```bash
+    mill -i cli.run run_server --wat --argType Int64 --main naive --out ./ <path_to_repo>/examples/docs/fibo.wat
+    ```
 
 1. Run AFL with Docker
 
     ```bash
     docker pull aflplusplus/aflplusplus
-    docker run -ti -v <path_to_repo>/fuzzer:/src aflplusplus/aflplusplus
+    docker run
+        --volume <path_to_repo>/fuzzer:/src aflplusplus/aflplusplus
+        --entrypoint="/src/entrypoint_afl.sh"
+        -e "WASM_ARG_TYPES_LIST=Int64"
+        -e "WASM_ARG_LIST=15"
     ```
 
-1. Compile
-
-    ```bash
-    cd /src
-    g++ interface.cpp
-    ```
-
-1. Run AFL
-
-    ```bash
-    afl-fuzz -i /src/in -o out -m none -d -- /src/a.out @@
-    ```
-
-1. View /src/interface.log for custom logs and /src/out/ for AFL output
+1. View ./interface.log for logs and ./out/ for AFL output
 
 ## Credits
 
