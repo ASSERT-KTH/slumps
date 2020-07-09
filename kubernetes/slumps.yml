@@ -49,11 +49,11 @@ spec:
     container:
       image: "jacarte/slumps:crow"
       command: [/bin/bash]
-      args: [start_docker.sh,"{{workflow.parameters.raw}}/{{inputs.parameters.program}}", "-DEFAULT.timeout", "3600","-DEFAULT.link-wasi", "True", ]
-      resources:
-        requests:
-          memory: 1.5G
-          cpu: 1
-        limits:
-          memory: 4G
-          cpu: 2
+      args: [start_docker.sh,"{{workflow.parameters.raw}}/{{inputs.parameters.program}}", "%DEFAULT.timeout", "3600","%DEFAULT.link-wasi", "True","%DEFAULT.exploration-timeout", "2", "%DEFAULT.outfolder", "/slumps/crow/out" ]
+      #resources:
+      #  requests:
+      #    memory: 2G
+      #    cpu: 2
+      #  limits:
+      #    memory: 4G
+      #    cpu: 4

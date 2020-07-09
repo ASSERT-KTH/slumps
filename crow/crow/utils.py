@@ -26,6 +26,7 @@ import traceback
 BASE_DIR = os.path.dirname(__file__)
 RUNTIME_CONFIG = dict(USE_REDIS=False)
 
+OUT_FOLDER = config["DEFAULT"]["outfolder"]
 
 class ContentToTmpFile(object):
 
@@ -92,7 +93,8 @@ def updatesettings(argvs):
 
     with open(f"{BASE_DIR}/settings/config.ini", 'w') as configFile:
         config.write(configFile)
-
+        
+    OUT_FOLDER = config["DEFAULT"]["outfolder"]
 
 def processOptionValuePair(pair):
     option, value = pair
@@ -115,7 +117,6 @@ def processOptionValuePair(pair):
     print(namespace, key, value)
 
 
-OUT_FOLDER = config["DEFAULT"]["outfolder"]
 
 
 def getIteratorByName(name: str):

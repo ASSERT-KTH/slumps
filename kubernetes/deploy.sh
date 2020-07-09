@@ -5,7 +5,10 @@ kubectl create rolebinding default-admin --clusterrole=admin --serviceaccount=de
 
 kubectl create ns minio
 kubectl apply -n minio -f minio.yml 
-kubectl edit cm -n argo workflow-controller-configmap
 
+kubectl patch cm -n argo workflow-controller-configmap --type merge --patch "$(cat config.yml)"
 
 kubectl create secret generic argo-artifacts --from-literal=accesskey="minio" --from-literal=secretkey="minio123"
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.0.0-beta8/aio/deploy/recommended.yaml
+
+kubectl port-forward -n minio service/minio-service 9000
