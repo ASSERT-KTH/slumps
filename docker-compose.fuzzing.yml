@@ -1,0 +1,26 @@
+# 1. Configure ./.env file
+# 2. docker-compose -f docker-compose.fuzzing.yml up --build
+
+version: '3.7'
+
+services:
+  swam_server:
+    build: ../
+    entrypoint: ${REPO_PATH_DOCKER}/fuzzer/entrypoint_mill_server.sh
+    env_file:
+      - ./.env
+    volumes:
+      - ${WASM_PATH_LOCAL}:${WASM_PATH_DOCKER}
+      - ${SWAM_OUTPUT_LOCAL}:${SWAM_OUTPUT_DOCKER}
+    expose:
+      - 9999  # TODO: Pass this to afl_interface
+
+  afl_interface:
+    build: ./
+    entrypoint: /src/entrypoint_afl.sh
+    env_file:
+      - ./.env
+    volumes:
+      - ${AFL_OUTPUT_LOCAL}:${AFL_OUTPUT_DOCKER}
+    depends_on:
+      - swam_server

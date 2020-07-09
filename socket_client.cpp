@@ -11,6 +11,7 @@ void error(const char *msg)
     exit(0);
 }
 
+// TODO: Use input parameters (port & host) here
 int connectToServer()
 {
     int sockfd;
