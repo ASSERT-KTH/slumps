@@ -108,19 +108,22 @@ class Pipeline(object):
 
             codeCount = -1
             for f in done:
-                r=f.result()
-                for k,v in r.items():
-                    LOGGER.info(program_name, f"[{k}] {len(v)} code blocks")
-                    if len(v) != codeCount and codeCount != -1:
-                        LOGGER.warning(program_name, f"Sanity check warning, different exploration stage with different code blocks")
-                    codeCount = len(v)
-                    for k1, v1 in v.items():
-                        vSet = set(v1)
-                        if k1 not in merging:
-                            merging[k1] = []
-                        merging[k1] += vSet
-                        merging[k1] = list(set(merging[k1]))
-                        LOGGER.info(program_name, f"\t - {len(merging[k1])} replacements")
+                try:
+                    r=f.result()
+                    for k,v in r.items():
+                        LOGGER.info(program_name, f"[{k}] {len(v)} code blocks")
+                        if len(v) != codeCount and codeCount != -1:
+                            LOGGER.warning(program_name, f"Sanity check warning, different exploration stage with different code blocks")
+                        codeCount = len(v)
+                        for k1, v1 in v.items():
+                            vSet = set(v1)
+                            if k1 not in merging:
+                                merging[k1] = []
+                            merging[k1] += vSet
+                            merging[k1] = list(set(merging[k1]))
+                            LOGGER.info(program_name, f"\t - {len(merging[k1])} replacements")
+                except Exception as e:
+                    LOGGER.error(program_name, traceback.format_exc())
             
             # Call the generation stage
             # Split jobs
