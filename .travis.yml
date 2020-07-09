@@ -1,6 +1,12 @@
 language: cpp
 os: osx
 
+compiler:
+  - clang
+
+before-install:
+  - brew install subversion re2c
+
 git:
   submodules: true
 
@@ -8,3 +14,4 @@ jobs:
   include:
     - script: cd souper && /bin/bash build_deps.sh
     - script: mkdir build && cd build && cmake -DCMAKE_BUILD_TYPE=Release ../ && make
+    - script: tar -zcvf souper-mac.tar.gz build && ls -la | grep  -i souper-mac.tar.gz

@@ -1,0 +1,33 @@
+-fdiscard-value-names, -fno-discard-value-names
+Discard value names in LLVM IR
+
+-finline-functions, -fno-inline-functions
+Inline suitable functions
+
+-fassociative-math, -fno-associative-math
+-fassume-sane-operator-new, -fno-assume-sane-operator-new
+
+-fbuiltin, -fno-builtin
+-ffast-math, -fno-fast-math
+Allow aggressive, lossy floating-point optimizations
+
+-ffinite-math-only, -fno-finite-math-only
+
+-ffunction-sections, -fno-function-sections
+Place each function in its own section (ELF Only)
+
+-fmerge-all-constants, -fno-merge-all-constants
+Allow merging of constants
+-fno-builtin-<arg>
+Disable implicit builtin knowledge of a specific function
+
+-frewrite-imports, -fno-rewrite-imports
+-frewrite-includes, -fno-rewrite-includes
+-ftrapping-math, -fno-trapping-math
+
+-ftrigraphs, -fno-trigraphs, -trigraphs, --trigraphs
+Process trigraph sequences
+
+-fconstexpr-backtrace-limit=<arg>
+-fconstexpr-depth=<arg>
+-fconstexpr-steps=<arg>¶

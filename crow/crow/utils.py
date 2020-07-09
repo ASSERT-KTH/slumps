@@ -26,8 +26,11 @@ import traceback
 BASE_DIR = os.path.dirname(__file__)
 RUNTIME_CONFIG = dict(USE_REDIS=False)
 
+OUT_FOLDER = config["DEFAULT"]["outfolder"]
 
 class ContentToTmpFile(object):
+
+    LOG_LEVEL = 0
 
     def __init__(self, content=None, name=None, ext=None, persist=False):
         tmp = createTmpFile(ext) if not name else name
@@ -54,14 +57,13 @@ class ContentToTmpFile(object):
             if not self.persist:
                 os.remove(self.file)
         except Exception as e:
-            LOGGER.error(self.tmpF, traceback.format_exc())
-            raise e
+            if self.LOG_LEVEL > 1:
+                LOGGER.error(self.tmpF, traceback.format_exc())
 
 
 def updatesettings(argvs):
 
-    SLUMPS_DIR = os.path.dirname(os.path.abspath(
-        os.path.dirname(os.path.dirname(__file__))))
+    SLUMPS_DIR = os.path.dirname(os.path.dirname(__file__))
 
     print("Slumps dir...%s" % SLUMPS_DIR)
     config["DEFAULT"]["slumpspath"] = SLUMPS_DIR
@@ -69,49 +71,18 @@ def updatesettings(argvs):
     with open(f"{BASE_DIR}/settings/config.ini", 'w') as configFile:
         config.write(configFile)
         
-    if not os.path.exists(f"{BASE_DIR}/settings/.slumps"):
-        print("Setting up slumps for the first time...")
-        open(f"{BASE_DIR}/settings/.slumps", 'w').write("SLUMPs them all!")
+    
+    platform = ".so" if sys.platform == 'linux' else '.dylib'  # dylib for MacOS
 
+    print("OS...%s" % sys.platform)
+    config["souper"]["passName"] = config["souper"]["passName"].split(".")[
+        0] + platform
 
-        platform = ".so" if sys.platform == 'linux' else '.dylib'  # dylib for MacOS
-        print("OS...%s" % sys.platform)
-        config["souper"]["passName"] = config["souper"]["passName"].split(".")[
-            0] + platform
-
-        # WAS-ld binary
-
-        # Read available binaries
-        bins = check_output('compgen -c', shell=True,
-                            executable='/bin/bash').splitlines()
-
-        print(bins)
-
-        wasm_bins = list(filter(lambda x: x.startswith(
-            "wasm-ld"), map(lambda x: x.decode("utf-8"), bins)))
-
-        if len(wasm_bins) == 0:
-            raise Exception(
-                "WASM linker not found. Please install it (apt-get install lld-<version> for ubuntu)")
-
-        wasm_ld = wasm_bins[0] if len(wasm_bins) > 0 else None
-        if len(wasm_bins) > 1:
-            print(
-                "Multiple WASM linkers. Choose one, take into account the version of llvm built with Souper:")
-
-            for i, b in enumerate(wasm_bins):
-                print("%s -  %s" % (i + 1, b))
-
-            wasm_ld = wasm_bins[0]
-
-        config["wasm-ld"]["path"] = wasm_ld.__str__()
-
-        with open(f"{BASE_DIR}/settings/config.ini", 'w') as configFile:
-            config.write(configFile)
+        
     pairs = []
     for index, a in enumerate(argvs):
-        if a.startswith("-"):
-            if index + 1 < len(argvs) and not argvs[index + 1].startswith("-"):
+        if a.startswith("%"):
+            if index + 1 < len(argvs) and not argvs[index + 1].startswith("%"):
                 pairs.append([a, argvs[index + 1]])
             else:
                 raise Exception(
@@ -122,7 +93,8 @@ def updatesettings(argvs):
 
     with open(f"{BASE_DIR}/settings/config.ini", 'w') as configFile:
         config.write(configFile)
-
+        
+    OUT_FOLDER = config["DEFAULT"]["outfolder"]
 
 def processOptionValuePair(pair):
     option, value = pair
@@ -145,7 +117,6 @@ def processOptionValuePair(pair):
     print(namespace, key, value)
 
 
-OUT_FOLDER = config["DEFAULT"]["outfolder"]
 
 
 def getIteratorByName(name: str):
