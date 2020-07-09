@@ -3,7 +3,7 @@
 import os
 import sys,traceback
 from settings import config
-from stages import CToLLStage, LLToBC, BCToSouper, ObjtoWASM, WASM2WAT, BCCountCandidates
+from stages import CToLLStage, LLToBC, BCToSouper, ObjtoWASM, WASM2WAT, BCCountCandidates, TimeoutException
 from utils import printProgressBar, createTmpFile, getIteratorByName, \
     ContentToTmpFile, BreakException, RUNTIME_CONFIG, updatesettings, sendReportEmail, make_github_issue
 
@@ -19,12 +19,18 @@ import traceback
 import multiprocessing
 import time
 import re
+import uuid
 
 
 levelPool = None
-
+generationPool = None
 
 class Pipeline(object):
+    PROGRAM_COUNTER = 0
+    
+
+    def __init__(self):
+        self.LOG_LEVEL = 3
 
     def check_file(self, file: str):
         program_name = file.split("/")[-1].split(".")[0]
@@ -90,18 +96,152 @@ class Pipeline(object):
                 # job.result()
 
                 futures.append(job)
-            wait(futures, return_when=ALL_COMPLETED)
+            
+            timeout = config["DEFAULT"].getint("exploration-timeout")
+            done, fail = wait(futures, timeout=timeout, return_when=ALL_COMPLETED)
+            levelPool.shutdown(False)
+            #Merging results
 
+            LOGGER.info(program_name, "Merging exploration results...")
+
+            merging = {}
+
+            codeCount = -1
+            for f in done:
+                try:
+                    r=f.result()
+                    for k,v in r.items():
+                        LOGGER.info(program_name, f"[{k}] {len(v)} code blocks")
+                        if len(v) != codeCount and codeCount != -1:
+                            LOGGER.warning(program_name, f"Sanity check warning, different exploration stage with different code blocks")
+                        codeCount = len(v)
+                        for k1, v1 in v.items():
+                            vSet = set(v1)
+                            if k1 not in merging:
+                                merging[k1] = []
+                            merging[k1] += vSet
+                            merging[k1] = list(set(merging[k1]))
+                            LOGGER.info(program_name, f"\t - {len(merging[k1])} replacements")
+                except Exception as e:
+                    LOGGER.error(program_name, traceback.format_exc())
+            
+            # Call the generation stage
+            # Split jobs
+            #for k in merging.keys():
+            LOGGER.info(program_name,f"Generating jobs for {len(redisports)} REDIS instances...")
+
+            generationcount = 0
+            futures = []
+            variants = []
+
+            for subset in getIteratorByName("keysSubset")(merging):
+
+                job = generationPool.submit(
+                    self.generateVariant, [subset], program_name, merging, redisports[generationcount
+                    %len(redisports)], bc, OUT_FOLDER, onlybc, meta, outResult)
+                    # job.result()
+
+                futures.append(job)
+                generationcount += 1
+
+                if generationcount % len(redisports) == 0:
+                    ## WAIT for it
+                    done, fail = wait(futures, return_when=ALL_COMPLETED)
+                    futures = []
+
+                    for f in done:
+                        variants += f.result()
+                # Save metadata
+
+
+
+            LOGGER.info(program_name, f"Saving metadata...")
+            variantsFile = open(f"{OUT_FOLDER}/{program_name}.variants.json", 'w')
+            variantsFile.write(json.dumps({
+                "variants": variants,
+                "unique": len(set([v[0] for v in variants])),
+                "total": len([v[0] for v in variants])
+            }, indent=4))
+            variantsFile.close()
+
+            variantsFile = open(f"{OUT_FOLDER}/{program_name}.exploration.json", 'w')
+            variantsFile.write(json.dumps([[k.decode("utf-8"), [v1.decode("utf-8") for v1 in v if v1 is not None] ] for k, v in merging.items()],indent=4))
+            variantsFile.close()
         except BreakException:
             pass
 
-        if config["DEFAULT"].getboolean("print-sha"):
-            LOGGER.warning(program_name, "Summary %s:" % program_name)
-            for s in sha:
-                LOGGER.warning(program_name, "WASM SHA256 %s. Size %s. Combination %s" % (
-                    s, sizes[s][0], sizes[s][1]))
 
         return dict(programs=meta, count=len(meta.keys()))
+
+    def generateVariant(self,job,program_name, merging, port,bc, OUT_FOLDER, onlybc, meta, outResult):
+        
+        variants = []
+        #LOGGER.info(program_name,f"Generating {len(job)} variants...")
+        for j in job:
+            #LOGGER.info(program_name, f"Applying replacement set...")
+            r = redis.Redis(host="localhost", port=port)
+            #LOGGER.info(program_name, f"Cleaning previous cache for variant generation...{port}")
+            try:
+                result = r.flushdb()
+                #LOGGER.success(
+                #    program_name, f"Flushing redis DB: result({result})")
+            except Exception as e:
+                LOGGER.error(program_name, traceback.format_exc())
+
+            # Set keys
+
+            
+            name = ""
+
+            try:
+               keys = list(merging.keys())
+               for k, v in j.items():
+                   if v is not None:
+                       name +=  "[%s-%s]"%(keys.index(k), merging[k].index(v))
+                       r.hset(k, "result", v)
+                   else:
+                       # search for infer word
+                       rer = re.compile(r"infer %(\d+)")
+                       kl = k.decode("utf-8")
+                       if rer.search(kl):
+                           r.hset(k, "result", ("result %%%s\n"%(rer.search(kl).group(1),)).encode("utf-8"))
+                       #LOGGER.info(program_name, f"Replacing redundant key-value pair...")
+               with ContentToTmpFile(content=bc) as BCIN:
+                   tmpIn = BCIN.file
+                   with ContentToTmpFile() as BCOUT:
+                       tmpOut = BCOUT.file
+                       
+                       try:
+                           sanitized_set_name = name
+
+                           optBc = BCToSouper(program_name, level=1, debug=True, redisport=port)
+                           optBc(args=[tmpIn, tmpOut], std=None)
+
+                           bsOpt = open(tmpOut, 'rb').read()
+
+                           # Generate wasm
+                           n = "%s[%s]" % (program_name,sanitized_set_name)
+                           hex, size, wasmFile, watFile = self.generateWasm(program_name, bsOpt,
+                                                                           OUT_FOLDER,
+                                                                           name,
+                                                                           debug=True, generateOnlyBc=onlybc)
+
+                           variants.append([hex, n, [[k.decode("utf-8"), v.decode("utf-8") if v is not None else "No replace"] for k,v in j.items()]])
+                       except Exception as e:
+                           LOGGER.error(program_name, traceback.format_exc())
+                           raise e
+               # call Souper and the linker again
+            except Exception as e:
+                LOGGER.error(program_name, traceback.format_exc())
+            finally:
+
+                LOGGER.info(program_name, "Cleaning cache from variant generation...")
+                
+                result = r.flushdb()
+                LOGGER.success(
+                    program_name, f"Flushing redis DB: result({result})")
+                r.close()
+        return variants
 
     def process(self, file, OUT_FOLDER, program_name, redisports, onlybc, outResult=None):
 
@@ -129,90 +269,79 @@ class Pipeline(object):
         pool = ThreadPoolExecutor(
             max_workers=config["DEFAULT"].getint("workers"))
 
+        results = {
+
+        }
+
         for level in levels:
 
+            results[level] = {}
             LOGGER.success(program_name,
                         "%s: Searching level (increasing execution time) %s: %s redis:%s..." % (program_name,
                                                                                         level, config["souper"][
                                                                                             "souper-level-%s" % level], port))
 
             try:
-                bctocand = BCCountCandidates(program_name, level=level, redisport=port)
+                bctocand = BCCountCandidates(program_name, level=level, redisport=port, timeout=config["DEFAULT"].getint("exploration-timeout"))
             except Exception as e:
                 LOGGER.error(program_name,  traceback.format_exc())
                 return
             with ContentToTmpFile(content=bc) as TMP_BC:
-                cand = bctocand(args=[TMP_BC.file], std=None)
 
-                # Saving candidate
-                canCount = len(cand[0])
-                LOGGER.success(program_name, "%s: Found %s arithmetic expression candidates. %s Can be replaced" % (
-                    program_name, cand[1], canCount))
+                r = redis.Redis(host="localhost", port=port)
 
-                # Test set the second candidate for optimization
-
-                # BC to tmpfile
-                if len(cand[0]) > 0:
-                    with ContentToTmpFile(content=bc) as BCIN:
-                        tmpIn = BCIN.file
-
-                        futures = []
-                        for s in getIteratorByName(config["DEFAULT"]["generator-method"])(cand[0]):
-                            job = pool.submit(self.processSingle, s, level, tmpIn, program_name, port, OUT_FOLDER, onlybc, meta,
-                                            outResult)
-                            # job.result()
-
-                            futures.append(job)
-                        r = wait(futures, return_when=ALL_COMPLETED)
-                
-
-    def processSingle(self, s, level, tmpIn, program_name, port, OUT_FOLDER, onlybc, meta, outResult):
-        with ContentToTmpFile() as BCOUT:
-            tmpOut = BCOUT.file
-            try:
-                sanitized_set_name = "_".join(
-                    list(map(lambda x: x.__str__(), s)))
-
-                optBc = BCToSouper(program_name, candidates=list(
-                    s), level=level, debug=True, redisport=port)
-                optBc(args=[tmpIn, tmpOut], std=None)
-
-                bsOpt = open(tmpOut, 'rb').read()
-
-                # Generate wasm
-
-                hex, size, wasmFile, watFile = self.generateWasm(program_name, bsOpt,
-                                                                 OUT_FOLDER,
-                                                                 "[%s]%s[%s]" % (level,
-                                                                                 program_name,
-                                                                                 sanitized_set_name),
-                                                                 debug=True, generateOnlyBc=onlybc)
-
-                #meta[wasmFile.split("/")[-1]] = dict(size=size, sha=hex)
-                #outResult["candidates"].append(dict(size=size, sha=hex, name=wasmFile))
-
-                #sizes[hex] = [size, list(s)]
-
-                # sha.add(hex)
-                LOGGER.info(program_name, size)
-
-            except Exception as e:
-                raise e
-                if config["DEFAULT"].getboolean("fail-silently"):
+                # Clean cache
+                LOGGER.info(program_name, f"Cleaning previous cache...{port}")
+                try:
+                    result = r.flushdb()
+                    LOGGER.success(
+                        program_name, f"Flushing redis DB: result({result})")
+                except Exception as e:
                     LOGGER.error(program_name, traceback.format_exc())
-                else:
+
+                try:
+
+                    cand = bctocand(args=[TMP_BC.file], std=None)
+                except TimeoutException:
+                    if self.LOG_LEVEL > 2:
+                        LOGGER.warning(program_name, f"Timeout reached")
+                except Exception as e:
+                    LOGGER.error(program_name, traceback.format_exc())
                     raise e
-        try:
-            LOGGER.info(program_name, "Cleaning cache...")
-            r = redis.Redis(host="localhost", port=port)
+                
+                try: # Saving cache results
+                    if self.LOG_LEVEL >= 1:
+                        LOGGER.info(program_name, "Saving cache...")
+                    
+                    try:
+                        keys = r.keys("*")
 
-            result = r.flushdb()
-            LOGGER.success(
-                program_name, f"Flushing redis DB: result({result})")
-            r.close()
-        except Exception as e:
-            LOGGER.error(program_name, traceback.format_exc())
+                        for k in keys:
+                            t = r.type(k)
+                            if t == b'hash':
+                                vals = r.hgetall(k)
+                                if self.LOG_LEVEL > 2:
+                                    LOGGER.info(program_name, f"\t{k} {vals}")
+                                if b'result' in vals and vals[b'result'] != b'':
+                                    results[level][k] = vals[b'result'].split(b'\n##\n')
+                                else:
+                                    results[level][k] = []
 
+                        # set the redis cache and call Souper
+                    finally:
+
+                        if self.LOG_LEVEL >= 1:
+                            LOGGER.info(program_name, "Cleaning cache...")
+                        
+                        result = r.flushdb()
+                        LOGGER.success(
+                            program_name, f"Flushing redis DB: result({result})")
+                        r.close()
+                except Exception as e:
+                    LOGGER.error(program_name, traceback.format_exc())
+        return results
+
+    
     def generateWasm(self, namespace, bc, OUT_FOLDER, fileName, debug=True, generateOnlyBc=False):
         llFileName = "%s/%s" % (OUT_FOLDER, fileName)
 
@@ -397,6 +526,9 @@ if __name__ == "__main__":
 
 
     levelPool = ThreadPoolExecutor(
+    max_workers=max_workers)
+
+    generationPool = ThreadPoolExecutor(
     max_workers=max_workers)
 
     updatesettings(sys.argv[2:-1])

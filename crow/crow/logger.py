@@ -9,9 +9,9 @@ def getlogfilename(program_name):
     program_name = os.path.basename(program_name)
     
     if not os.path.exists("%s/crow/logs" % (config["DEFAULT"]["slumpspath"],)):
-        os.mkdir("%s/crow/crow/logs" % (config["DEFAULT"]["slumpspath"],))
+        os.mkdir("%s/crow/logs" % (config["DEFAULT"]["slumpspath"],))
     
-    return "%s/crow/crow/logs/%s.slumps.log" % (config["DEFAULT"]["slumpspath"], program_name)
+    return "%s/crow/logs/%s.slumps.log" % (config["DEFAULT"]["slumpspath"], program_name)
 
 
 class bcolors:

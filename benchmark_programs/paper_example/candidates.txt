@@ -1,0 +1,93 @@
+
+; Function: f
+;[ORIGIN]   %0 = load i32, i32* %cond.addr, align 4
+%0:i32 = var
+infer %0
+
+; Function: f
+;[ORIGIN]   %tobool = icmp ne i32 %0, 0
+%0:i32 = var
+%1:i1 = ne 0:i32, %0
+infer %1
+
+; Function: f
+;[ORIGIN]   %1 = load i32, i32* %z.addr, align 4
+%0:i32 = var
+infer %0
+
+; Function: f
+;[ORIGIN]   %mul = mul nsw i32 2, %1
+%0:i32 = var
+%1:i32 = mulnsw 2:i32, %0
+infer %1
+
+; Function: f
+;[ORIGIN]   %2 = load i32, i32* %z.addr, align 4
+%0:i32 = var
+infer %0
+
+; Function: f
+;[ORIGIN]   %3 = load i32, i32* %x, align 4
+%0:i32 = var
+infer %0
+
+; Function: f
+;[ORIGIN]   %add = add nsw i32 %3, %2
+%0:i32 = var
+%1:i32 = var
+%2:i32 = addnsw %0, %1
+infer %2
+
+; Function: f
+;[ORIGIN]   %4 = load i32, i32* %z.addr, align 4
+%0:i32 = var
+infer %0
+
+; Function: f
+;[ORIGIN]   %5 = load i32, i32* %z.addr, align 4
+%0:i32 = var
+infer %0
+
+; Function: f
+;[ORIGIN]   %mul1 = mul nsw i32 2, %5
+%0:i32 = var
+%1:i32 = mulnsw 2:i32, %0
+infer %1
+
+; Function: f
+;[ORIGIN]   %6 = load i32, i32* %z.addr, align 4
+%0:i32 = var
+infer %0
+
+; Function: f
+;[ORIGIN]   %mul2 = mul nsw i32 2, %6
+%0:i32 = var
+%1:i32 = mulnsw 2:i32, %0
+infer %1
+
+; Function: f
+;[ORIGIN]   %7 = load i32, i32* %x, align 4
+%0:i32 = var
+infer %0
+
+; Function: f
+;[ORIGIN]   %8 = load i32, i32* %k, align 4
+%0:i32 = var
+infer %0
+
+; Function: f
+;[ORIGIN]   %9 = load i32, i32* %y, align 4
+%0:i32 = var
+infer %0
+
+; Function: f
+;[ORIGIN]   %add3 = add nsw i32 %8, %9
+%0:i32 = var
+%1:i32 = var
+%2:i32 = addnsw %0, %1
+infer %2
+
+; Function: f
+;[ORIGIN]   %10 = load i32, i32* %k, align 4
+%0:i32 = var
+infer %0
