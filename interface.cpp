@@ -5,7 +5,8 @@
 
 void LOG(std::string some_string)
 {
-    log("interface.log", some_string);
+    std::string LOGS_DOCKER = parseEnvVariables((char *)"LOGS_DOCKER");
+    log(LOGS_DOCKER + "/interface.log", some_string);
 }
 
 std::vector<std::string> readFileToVector(const std::string &filename)
@@ -47,7 +48,8 @@ void log_file(char *filename)
     }
 }
 
-void fillTraceDummyData(uint8_t *trace_bits) {
+void fillTraceDummyData(uint8_t *trace_bits)
+{
     srand(time(NULL));
     for (int i = 0; i < 10; i++)
     {
@@ -61,10 +63,9 @@ void pass_data_to_afl(int sizeReadBuffer, char *readBuffer, uint8_t *trace_bits)
     // Read path coverage from readBuffer into trace_bits
     for (int i = 1; i < sizeReadBuffer; i++)
     {
-        trace_bits[i-1] += readBuffer[i];
+        trace_bits[i - 1] += readBuffer[i];
     }
 }
-
 
 void main_fuzz(
     char *fuzzed_input,
@@ -74,17 +75,19 @@ void main_fuzz(
     log_file(fuzzed_input);
 
     char sendBuffer[requiredBytes];
-    std::memcpy(sendBuffer, fuzzed_input, sizeof(sendBuffer));  // Read first x bytes of fuzzed_input into tempBuffer
+    memcpy(sendBuffer, fuzzed_input, sizeof(sendBuffer));      // Read first x bytes of fuzzed_input into tempBuffer
     std::reverse(sendBuffer, &sendBuffer[sizeof(sendBuffer)]); // Reverse order of tempBuffer
-    char readBuffer[AFL_SHM_SIZE + 1]; // + 1 for exit code
+    char readBuffer[AFL_SHM_SIZE + 1];                         // + 1 for exit code
 
-    runClient(sizeof(sendBuffer), sendBuffer, sizeof(readBuffer), readBuffer);
+    std::string SWAM_CONTAINER = parseEnvVariables((char *)"SWAM_CONTAINER");
+    std::string SWAM_SOCKET_PORT = parseEnvVariables((char *)"SWAM_SOCKET_PORT");
+
+    runClient(sizeof(sendBuffer), sendBuffer, sizeof(readBuffer), readBuffer, &SWAM_CONTAINER[0], std::stoi(SWAM_SOCKET_PORT));
 
     pass_data_to_afl(sizeof(readBuffer), readBuffer, trace_bits);
 
     // Read exit code from readBuffer and exit with same code
     exit(readBuffer[0]);
-
 }
 
 void fork_server(char *fuzzed_input, uint8_t *trace_bits, int requiredBytes)
@@ -204,17 +207,39 @@ void log_args(int argc, char *argv[])
     }
 }
 
+void wait_for_swam_socket()
+{
+    std::string SWAM_CONTAINER = parseEnvVariables((char *)"SWAM_CONTAINER");
+    std::string SWAM_SOCKET_PORT = parseEnvVariables((char *)"SWAM_SOCKET_PORT");
+    LOG("SWAM_CONTAINER: " + SWAM_CONTAINER);
+    LOG("SWAM_SOCKET_PORT: " + SWAM_SOCKET_PORT);
+
+    LOG("Waiting for Swam server...");
+    while (true) {
+        try {
+            int sockfd = connectToServer(&SWAM_CONTAINER[0], std::stoi(SWAM_SOCKET_PORT));
+            close(sockfd);
+            break;
+        } catch (...) {
+            std::this_thread::sleep_for(std::chrono::milliseconds(2000));
+        }
+    }
+    LOG("Swam is online!");
+}
+
 int main(int argc, char *argv[])
 {
     LOG("########## NEW MAIN ##########");
 
     log_args(argc, argv);
-    
+
     char *fuzzed_input = argv[1];
     int requiredBytes = atoi(argv[2]);
 
     uint8_t *trace_bits = getShm();
-    trace_bits[0]++;  // Mark a location to show we are instrumented
+    trace_bits[0]++; // Mark a location to show we are instrumented
+
+    void wait_for_swam_socket();
 
     fork_server(fuzzed_input, trace_bits, requiredBytes);
 

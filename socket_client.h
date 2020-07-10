@@ -13,11 +13,12 @@
 #include <netinet/in.h>
 #include <netdb.h>
 #include <fstream>
+#include <algorithm>
 
 void error(const char *);
-int connectToServer();
+int connectToServer(char *, int);
 void clientWrite(int, char*, int);
 void clientRead(int, char*, int);
-void runClient(int, char*, int, char*);
+void runClient(int, char*, int, char*, char *, int);
 
 #endif

@@ -12,6 +12,6 @@ int main(int argc, char *argv[])
     readBinaryToBuffer(sendBuffer, fileSize, inputFile);
     std::reverse(sendBuffer, &sendBuffer[sizeof(sendBuffer)]); // Reverse order of sendBuffer
 
-    runClient(sizeof(sendBuffer), sendBuffer, sizeof(readBuffer), readBuffer);
+    runClient(sizeof(sendBuffer), sendBuffer, sizeof(readBuffer), readBuffer, "localhost", 9999);
     exit(0);
 };

@@ -1,7 +1,5 @@
 #include "socket_client.h"
 
-#define SOCKET_PORT 9999
-#define SOCKET_HOST "localhost"
 
 // Most code based on: https://www.bogotobogo.com/cplusplus/sockets_server_client.php
 
@@ -11,8 +9,7 @@ void error(const char *msg)
     exit(0);
 }
 
-// TODO: Use input parameters (port & host) here
-int connectToServer()
+int connectToServer(char *socket_hostname, int socket_port)
 {
     int sockfd;
     struct hostent *server;
@@ -23,7 +20,7 @@ int connectToServer()
     if (sockfd < 0)
         error("ERROR opening socket");
 
-    server = gethostbyname(SOCKET_HOST);
+    server = gethostbyname(socket_hostname);
 
     if (server == NULL)
     {
@@ -39,7 +36,7 @@ int connectToServer()
           (char *)&serv_addr.sin_addr.s_addr,
           server->h_length);
 
-    serv_addr.sin_port = htons(SOCKET_PORT);
+    serv_addr.sin_port = htons(socket_port);
 
     if (connect(sockfd, (struct sockaddr *)&serv_addr, sizeof(serv_addr)) < 0)
         error("ERROR connecting");
@@ -63,9 +60,15 @@ void clientRead(int sockfd, char *readBuffer, int sizeBuffer)
     printf("Received message!\n");
 }
 
-void runClient(int sizeSendBuffer, char *sendBuffer, int sizeReadBuffer, char *readBuffer)
+void runClient(
+    int sizeSendBuffer,
+    char *sendBuffer,
+    int sizeReadBuffer,
+    char *readBuffer,
+    char *socket_hostname,
+    int socket_port)
 {
-    int sockfd = connectToServer();
+    int sockfd = connectToServer(socket_hostname, socket_port);
     clientWrite(sockfd, sendBuffer, sizeSendBuffer);
     clientRead(sockfd, readBuffer, sizeReadBuffer);
     close(sockfd);
