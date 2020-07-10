@@ -6,21 +6,29 @@ version: '3.7'
 services:
   swam_server:
     build: ../
-    entrypoint: ${REPO_PATH_DOCKER}/fuzzer/entrypoint_mill_server.sh
+    entrypoint: /home/swam/fuzzer/entrypoint_mill_server.sh
     env_file:
       - ./.env
     volumes:
-      - ${WASM_PATH_LOCAL}:${WASM_PATH_DOCKER}
-      - ${SWAM_OUTPUT_LOCAL}:${SWAM_OUTPUT_DOCKER}
+      - ${WASM_PATH_LOCAL}:/home/wasm/
+      - compiled_sources:/home/swam/out/
+      - maven_data:/root/.cache/coursier/v1/https/repo1.maven.org/maven2
     expose:
-      - 9999  # TODO: Pass this to afl_interface
+      - ${SWAM_SOCKET_PORT}
 
   afl_interface:
     build: ./
-    entrypoint: /src/entrypoint_afl.sh
+    entrypoint: /home/interface/entrypoint_afl.sh
     env_file:
       - ./.env
+    environment:
+      SWAM_CONTAINER: swam_server
     volumes:
-      - ${AFL_OUTPUT_LOCAL}:${AFL_OUTPUT_DOCKER}
+      - ${AFL_OUTPUT_LOCAL}:/home/out/
+      - ${LOGS_LOCAL}:/home/logs/
     depends_on:
       - swam_server
+
+volumes:
+  compiled_sources:
+  maven_data:
