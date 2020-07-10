@@ -1,16 +1,12 @@
 #!/bin/bash
 
-# REPO_PATH_DOCKER=/home/swam/
-# SWAM_OUTPUT_DOCKER=/home/out/
-# WASM_PATH_DOCKER=/home/wasm
-
 # Get first wasm/wat from $WASM_PATH_DOCKER directory
 WASM_OR_WAT_FILE=""
 if [ $WAT == "True" ]; then
-    wat_files=( ${WASM_PATH_DOCKER}*.wat )
+    wat_files=( ${WASM_PATH_DOCKER}/*.wat )
     WASM_OR_WAT_FILE=${wat_files[0]}
 else
-    wasm_files=( ${WASM_PATH_DOCKER}*.wasm )
+    wasm_files=( ${WASM_PATH_DOCKER}/*.wasm )
     WASM_OR_WAT_FILE=${wasm_files[0]}
 fi
 echo "WASM_OR_WAT_FILE: $WASM_OR_WAT_FILE"
@@ -29,4 +25,4 @@ if [ $WASI == "True" ]; then WASI_ARG="--wasi"; fi
 
 cd $REPO_PATH_DOCKER
 
-mill -i cli.run run_server $WAT_ARG $WASI_ARG $ALL_ARG_TYPES --main $TARGET_FUNCTION --out $SWAM_OUTPUT_DOCKER $WASM_OR_WAT_FILE'
+mill -i cli.run run_server $WAT_ARG $WASI_ARG $ALL_ARG_TYPES --main $TARGET_FUNCTION --out $SWAM_OUTPUT_DOCKER $WASM_OR_WAT_FILE
