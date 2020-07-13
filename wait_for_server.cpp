@@ -22,11 +22,10 @@ int main(int argc, char *argv[])
     while (true) {
         try {
             sockfd = connectToServer(&SWAM_CONTAINER[0], std::stoi(SWAM_SOCKET_PORT));
-            LOG("sockfd: " + std::to_string(sockfd));
             close(sockfd);
             break;
         } catch (...) {
-            std::this_thread::sleep_for(std::chrono::milliseconds(2000));
+            std::this_thread::sleep_for(std::chrono::milliseconds(4000));
         }
     }
     LOG("Swam is online!");

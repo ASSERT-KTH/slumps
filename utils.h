@@ -10,6 +10,7 @@
 
 void log(std::string, std::string);
 void printBuffer(int, char *);
+void logBuffer(std::string, int, char *);
 long getFileSize(std::string);
 
 void readBinaryToBuffer(char *, int, std::string);

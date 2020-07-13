@@ -23,6 +23,14 @@ void printBuffer(int sizeBuffer, char *buffer)
     }
 }
 
+void logBuffer(std::string filename, int sizeBuffer, char *buffer)
+{
+    for (int i = 0; i < sizeBuffer; i++)
+    {
+        log(filename, "buffer " + std::to_string(i) + ": " + buffer[i]);
+    }
+}
+
 long getFileSize(std::string filename)
 {
     struct stat stat_buf;
