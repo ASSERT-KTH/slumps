@@ -21,6 +21,15 @@ std::vector<std::string> readFileToVector(const std::string &filename)
     return lines;
 }
 
+void log_file(char *filename)
+{
+    std::vector<std::string> vector = readFileToVector(filename);
+    for (int i = 0; i < vector.size(); ++i)
+    {
+        LOG(vector[i]);
+    }
+}
+
 uint8_t *getShm()
 {
     std::string shmStr = parseEnvVariables((char *)"__AFL_SHM_ID");
@@ -34,17 +43,8 @@ uint8_t *getShm()
         LOG("Failed to access shared memory");
         exit(1);
     }
-    LOG("Shared memory attached. Value at loc 3 = " + trace_bits[3]);
+    LOG("Shared memory attached.");
     return trace_bits;
-}
-
-void log_file(char *filename)
-{
-    std::vector<std::string> vector = readFileToVector(filename);
-    for (int i = 0; i < vector.size(); ++i)
-    {
-        LOG(vector[i]);
-    }
 }
 
 void fillTraceDummyData(uint8_t *trace_bits)
@@ -71,21 +71,21 @@ void main_fuzz(
     uint8_t *trace_bits,
     int requiredBytes)
 {
-    log_file(fuzzed_input);
-
-    char sendBuffer[requiredBytes];
-    memcpy(sendBuffer, fuzzed_input, sizeof(sendBuffer));      // Read first x bytes of fuzzed_input into tempBuffer
-    std::reverse(sendBuffer, &sendBuffer[sizeof(sendBuffer)]); // Reverse order of tempBuffer
-    char readBuffer[AFL_SHM_SIZE + 1];                         // + 1 for exit code
-
-    std::string SWAM_CONTAINER = parseEnvVariables((char *)"SWAM_CONTAINER");
-    std::string SWAM_SOCKET_PORT = parseEnvVariables((char *)"SWAM_SOCKET_PORT");
 
     std::string DUMMY_TESTING_AFL = parseEnvVariables((char *)"DUMMY_TESTING_AFL");
     if (DUMMY_TESTING_AFL == "True") {
         fillTraceDummyData(trace_bits);
         exit(0);
     }
+
+    char sendBuffer[requiredBytes];
+    readBinaryToBuffer(sendBuffer, sizeof(sendBuffer), (std::string)fuzzed_input);
+    std::reverse(sendBuffer, &sendBuffer[sizeof(sendBuffer)]); // Reverse order of tempBuffer
+
+    char readBuffer[AFL_SHM_SIZE + 1];                         // + 1 for exit code
+
+    std::string SWAM_CONTAINER = parseEnvVariables((char *)"SWAM_CONTAINER");
+    std::string SWAM_SOCKET_PORT = parseEnvVariables((char *)"SWAM_SOCKET_PORT");
     
     runClient(sizeof(sendBuffer), sendBuffer, sizeof(readBuffer), readBuffer, &SWAM_CONTAINER[0], std::stoi(SWAM_SOCKET_PORT));
 
