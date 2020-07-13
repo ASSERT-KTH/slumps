@@ -1,14 +1,14 @@
 FROM aflplusplus/aflplusplus
 
 ENV INTERFACE_PATH=/home/interface
-ENV AFL_INPUT_DOCKER=/home/in
-ENV AFL_OUTPUT_DOCKER=/home/out
+ENV INPUT_DOCKER_AFL=/home/in
+ENV OUTPUT_DOCKER_AFL=/home/out
 ENV LOGS_DOCKER=/home/logs
 
 # Create the appropriate directories
 RUN mkdir -p $INTERFACE_PATH
-RUN mkdir -p $AFL_INPUT_DOCKER
-RUN mkdir -p $AFL_OUTPUT_DOCKER
+RUN mkdir -p $INPUT_DOCKER_AFL
+RUN mkdir -p $OUTPUT_DOCKER_AFL
 RUN mkdir -p $LOGS_DOCKER
 WORKDIR $INTERFACE_PATH
 

@@ -24,7 +24,7 @@ services:
     environment:
       SWAM_CONTAINER: swam_server
     volumes:
-      - ${AFL_OUTPUT_LOCAL}:/home/out/
+      - ${OUTPUT_LOCAL_AFL}:/home/out/
       - ${LOGS_LOCAL}:/home/logs/
     depends_on:
       - swam_server

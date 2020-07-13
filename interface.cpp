@@ -1,7 +1,6 @@
 #include "interface.h"
 
 #define AFL_SHM_SIZE 65536
-#define SHM_ENV_VAR "__AFL_SHM_ID"
 
 void LOG(std::string some_string)
 {
@@ -24,7 +23,7 @@ std::vector<std::string> readFileToVector(const std::string &filename)
 
 uint8_t *getShm()
 {
-    std::string shmStr = parseEnvVariables((char *)SHM_ENV_VAR);
+    std::string shmStr = parseEnvVariables((char *)"__AFL_SHM_ID");
     LOG("shmStr: " + shmStr);
 
     key_t key = std::stoi(shmStr);
@@ -239,7 +238,7 @@ int main(int argc, char *argv[])
     uint8_t *trace_bits = getShm();
     trace_bits[0]++; // Mark a location to show we are instrumented
 
-    void wait_for_swam_socket();
+    wait_for_swam_socket();
 
     fork_server(fuzzed_input, trace_bits, requiredBytes);
 

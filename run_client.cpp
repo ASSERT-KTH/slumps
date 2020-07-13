@@ -1,6 +1,8 @@
 #include "socket_client.h"
 #define AFL_SHM_SIZE 65536
 
+// This is to test whether the SWAM Server is able to receive and read
+// data sent by the client properly
 int main(int argc, char *argv[])
 {
     std::string inputFile = (std::string) argv[1];
