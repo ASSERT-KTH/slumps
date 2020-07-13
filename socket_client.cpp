@@ -50,7 +50,6 @@ void clientWrite(int sockfd, char *sendBuffer, int sizeBuffer)
     int n = write(sockfd, sendBuffer, sizeBuffer);
     if (n < 0)
         error("ERROR writing to socket");
-    printf("Wrote to server!\n");
 }
 
 void clientRead(int sockfd, char *readBuffer, int sizeBuffer)
@@ -58,7 +57,6 @@ void clientRead(int sockfd, char *readBuffer, int sizeBuffer)
     int n = read(sockfd, readBuffer, sizeBuffer);
     if (n < 0)
         error("ERROR reading from socket");
-    printf("Received message!\n");
 }
 
 void runClient(
