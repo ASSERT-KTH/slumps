@@ -6,7 +6,8 @@
 void error(const char *msg)
 {
     perror(msg);
-    exit(0);
+    // exit(0);
+    throw std::runtime_error(msg);
 }
 
 int connectToServer(char *socket_hostname, int socket_port)

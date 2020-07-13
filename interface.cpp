@@ -81,6 +81,12 @@ void main_fuzz(
     std::string SWAM_CONTAINER = parseEnvVariables((char *)"SWAM_CONTAINER");
     std::string SWAM_SOCKET_PORT = parseEnvVariables((char *)"SWAM_SOCKET_PORT");
 
+    std::string DUMMY_TESTING_AFL = parseEnvVariables((char *)"DUMMY_TESTING_AFL");
+    if (DUMMY_TESTING_AFL == "True") {
+        fillTraceDummyData(trace_bits);
+        exit(0);
+    }
+    
     runClient(sizeof(sendBuffer), sendBuffer, sizeof(readBuffer), readBuffer, &SWAM_CONTAINER[0], std::stoi(SWAM_SOCKET_PORT));
 
     pass_data_to_afl(sizeof(readBuffer), readBuffer, trace_bits);
@@ -206,26 +212,6 @@ void log_args(int argc, char *argv[])
     }
 }
 
-void wait_for_swam_socket()
-{
-    std::string SWAM_CONTAINER = parseEnvVariables((char *)"SWAM_CONTAINER");
-    std::string SWAM_SOCKET_PORT = parseEnvVariables((char *)"SWAM_SOCKET_PORT");
-    LOG("SWAM_CONTAINER: " + SWAM_CONTAINER);
-    LOG("SWAM_SOCKET_PORT: " + SWAM_SOCKET_PORT);
-
-    LOG("Waiting for Swam server...");
-    while (true) {
-        try {
-            int sockfd = connectToServer(&SWAM_CONTAINER[0], std::stoi(SWAM_SOCKET_PORT));
-            close(sockfd);
-            break;
-        } catch (...) {
-            std::this_thread::sleep_for(std::chrono::milliseconds(2000));
-        }
-    }
-    LOG("Swam is online!");
-}
-
 int main(int argc, char *argv[])
 {
     LOG("########## NEW MAIN ##########");
@@ -237,8 +223,6 @@ int main(int argc, char *argv[])
 
     uint8_t *trace_bits = getShm();
     trace_bits[0]++; // Mark a location to show we are instrumented
-
-    wait_for_swam_socket();
 
     fork_server(fuzzed_input, trace_bits, requiredBytes);
 

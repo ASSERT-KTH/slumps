@@ -14,7 +14,5 @@
 #include <sys/wait.h>
 #include <stdlib.h>
 #include <algorithm>
-#include <chrono>
-#include <thread>
 
 #endif
