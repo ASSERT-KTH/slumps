@@ -67,7 +67,7 @@ void pass_data_to_afl(int sizeReadBuffer, char *readBuffer, uint8_t *trace_bits)
 }
 
 void main_fuzz(
-    char *fuzzed_input,
+    char *fuzzed_input_path,
     uint8_t *trace_bits,
     int requiredBytes)
 {
@@ -79,7 +79,7 @@ void main_fuzz(
     }
 
     char sendBuffer[requiredBytes];
-    readBinaryToBuffer(sendBuffer, sizeof(sendBuffer), (std::string)fuzzed_input);
+    readBinaryToBuffer(sendBuffer, sizeof(sendBuffer), (std::string)fuzzed_input_path);
     std::reverse(sendBuffer, &sendBuffer[sizeof(sendBuffer)]); // Reverse order of tempBuffer
 
     char readBuffer[AFL_SHM_SIZE + 1];                         // + 1 for exit code
@@ -95,7 +95,7 @@ void main_fuzz(
     exit(readBuffer[0]);
 }
 
-void fork_server(char *fuzzed_input, uint8_t *trace_bits, int requiredBytes)
+void fork_server(char *fuzzed_input_path, uint8_t *trace_bits, int requiredBytes)
 {
     // The Fork server (Prototype of this code in Assembly):
     // https://lcamtuf.blogspot.com/2014/10/fuzzing-binaries-without-execve.html
@@ -153,7 +153,7 @@ void fork_server(char *fuzzed_input, uint8_t *trace_bits, int requiredBytes)
             LOG("This is the child process.");
             close(198);
             close(199);
-            main_fuzz(fuzzed_input, trace_bits, requiredBytes);
+            main_fuzz(fuzzed_input_path, trace_bits, requiredBytes);
             exit(0);
         }
 
@@ -218,13 +218,13 @@ int main(int argc, char *argv[])
 
     log_args(argc, argv);
 
-    char *fuzzed_input = argv[1];
+    char *fuzzed_input_path = argv[1];
     int requiredBytes = atoi(argv[2]);
 
     uint8_t *trace_bits = getShm();
     trace_bits[0]++; // Mark a location to show we are instrumented
 
-    fork_server(fuzzed_input, trace_bits, requiredBytes);
+    fork_server(fuzzed_input_path, trace_bits, requiredBytes);
 
     return 0;
 }
