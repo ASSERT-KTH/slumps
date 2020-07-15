@@ -6,9 +6,9 @@ This is still in a prototyping stage. There are still many assumptions made on h
 
 ## Introduction
 
-This plugin aims to act as an interface between SWAM and AFLplusplus. Since AFL is built to fuzz C++ programs, but nonetheless provides a generic algorithm, which is not only bound to this language, we aim to provide a spin-off that applies AFL to WASM binaries.
+This plugin aims to act as an interface between SWAM and [AFLplusplus](https://github.com/AFLplusplus/AFLplusplus). Since AFL is built to fuzz C++ programs, but nonetheless provides a generic algorithm, which is not only bound to this language, we aim to provide a spin-off that applies AFL to WASM binaries.
 
-In the standard AFL setup, C++ source code is compiled using the C++-compiler provided by AFLplusplus (afl-clang-fast++), which "instruments" the code to do additional operations during run-time. The instrumentation that AFL's compiler usually injects into the target source code includes accessing a shared memory, which serves as a communication channel between AFL and the resulting binary. This channel is used to report the coverage data of each execution to AFL, so that AFL can make smarter decisions on the upcoming input parameters.
+In the standard AFL setup, C++ source code is compiled using the C++ compiler provided by AFLplusplus (afl-clang-fast++), which "instruments" the code to do additional operations during run-time. The instrumentation that AFL's compiler usually injects into the target source code includes accessing a shared memory, which serves as a communication channel between AFL and the resulting binary. This channel is used to report the coverage data of each execution to AFL, so that AFL can make smarter decisions on the upcoming input parameters.
 
 In our case, we are given a WASM binary and an interpreter built with Scala - in other words, no code that we can instrument with afl-clang-fast++. The workaround we provide to deal with this problem, is that we have built an interface (interface.cpp), which fakes the behaviour of the instrumented binary and instead forwards the fuzzed inputs given by AFL to the SWAM engine via a socket. The SWAM engine then in turn forwards it to the instantiated WASM function. By hard-coding the instrumentation into the interface, we can use the "standard" g++ compiler to compile it.
 
@@ -22,23 +22,27 @@ To do this, we explicitly specify what argument types are required by the WASM f
 
 Since the argument types for the WASM function are written as environmental variables, we can also parse them before initialising the SWAM socket server. The server then also knows exactly how to interpret the incoming bytes and how to feed them to the instantiated WASM function.
 
-## Optimisations
-
-### Done
-
-1. **#SPEED**: SWAM is continuously running. It is not required to re-boot the JVM for every socket message it receives.
-
-1. **#SPEED**: The SWAM socket server only instantiates the given WASM file/function once. Executing the instantiated function when receiving a message through the socket is equivalent to executing a fixed Scala function in the source code.
-
-1. **#PORTABILITY**: Both the SWAM engine and AFLplusplus are dockerized in two separate containers and are given a corresponding docker-compose.fuzzing.yml setup. All required configuration is to be found in fuzzing/.env.
-
-### To Do
-
-1. **#SPEED**: Currently, the socket server is working synchronously and is incapable of handling multiple requests at the same time. There is also no setup built yet for multiple AFL instances to share the same output and work concurrently either.
-
 ## Requirements
 
 To be able to run this on your machine, only Docker is required. If you want to test SWAM's socket server without AFL, see the main page of this repository on how to set up SWAM.
+
+## Running with docker-compose
+
+1. Configure ./.env file
+
+2. Execute docker-compose configuration
+
+    ```bash
+    docker-compose -f docker-compose.fuzzing.yml up --build
+    ```
+
+3. View ./logs/ for own logs and ./out/ for AFL output
+
+## Running without Docker
+
+If you wish to run this plugin without using Docker, you will be required to install [AFLplusplus](https://github.com/AFLplusplus/AFLplusplus) and build SWAM with mill (see README of the root of this repository). Concerning AFLplusplus, running `make source-only` on the cloned repository along with installing the dependencies should suffice.
+
+All other setup steps are best documented in the Dockerfile in the root of this repository, the Dockerfile in this folder and in entrypoint_afl.sh + entrypoint_mill_server.sh.
 
 ## Test SWAM's socket server with sample input (for fibo.wat)
 
@@ -54,17 +58,19 @@ To be able to run this on your machine, only Docker is required. If you want to 
     ./run_test.sh
     ```
 
-## Run
+## Optimisations
 
-1. Configure ./.env file
+### Done
 
-2. Execute docker-compose configuration
+1. **#SPEED**: SWAM is continuously running. It is not required to re-boot the JVM for every socket message it receives.
 
-    ```bash
-    docker-compose -f docker-compose.fuzzing.yml up --build
-    ```
+1. **#SPEED**: The SWAM socket server only instantiates the given WASM file/function once. Executing the instantiated function when receiving a message through the socket is equivalent to executing a fixed Scala function in the source code.
 
-3. View ./logs/ for own logs and ./out/ for AFL output
+1. **#PORTABILITY**: Both the SWAM engine and AFLplusplus are dockerized in two separate containers and are given a corresponding docker-compose.fuzzing.yml setup. All required configuration is to be found in fuzzing/.env.
+
+### To Do
+
+1. **#SPEED**: Currently, the socket server is working synchronously and is incapable of handling multiple requests at the same time. There is also no setup built yet for multiple AFL instances to share the same output and work concurrently either.
 
 ## Example logs for fibo.wat with docker-compose configuration
 
