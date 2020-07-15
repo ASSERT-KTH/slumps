@@ -66,6 +66,24 @@ To be able to run this on your machine, only Docker is required. If you want to 
 
 3. View ./logs/ for own logs and ./out/ for AFL output
 
+## Example logs for fibo.wat with docker-compose configuration
+
+The following the Docker logs of the SWAM server
+
+1. receiving and parsing a message
+
+2. calculating the instantiated WASM function (clever fibonacci) with the received inputs
+
+3. gathering the coverage of the execution (currently still entirely random)
+
+4. sending back the coverage along with the exit code
+
+Fibonacci working           |  Fibonacci failing (number too high)
+:-------------------------:|:-------------------------:
+![pass](./docs/fibo_log_working.png) | ![pass](./docs/fibo_log_failing.png)
+
+In the case of running fibo.wat, a lot of crashes are registered by AFL, since essentially any "high" number causes the call stack to exhaust, which is not accounted for by the function in fibo.wat.
+
 ## Credits
 
 - Initial idea and implementation (for Java): [Kelinci](https://github.com/isstac/kelinci)
