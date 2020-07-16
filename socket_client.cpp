@@ -27,7 +27,7 @@ int connectToServer(char *socket_hostname, int socket_port)
     {
         // fprintf(stderr, "Error, no such host\n");
         perror("Error, no such host");
-        exit(0);
+        exit(1);
     }
 
     bzero((char *)&serv_addr, sizeof(serv_addr)); // Maybe use memset
