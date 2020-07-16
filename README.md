@@ -28,7 +28,7 @@ To be able to run this on your machine, only Docker is required. If you want to 
 
 ## Running with docker-compose
 
-1. Configure ./.env file
+1. Configure ./.env file. Do not rename it or reference a different *.env file in docker-compose.fuzzing.yml!
 
 2. Execute docker-compose configuration
 
