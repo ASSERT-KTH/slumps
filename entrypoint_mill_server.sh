@@ -1,14 +1,7 @@
 #!/bin/bash
 
-# Get first wasm/wat from $WASM_PATH_DOCKER directory
-WASM_OR_WAT_FILE=""
-if [ $WAT == "True" ]; then
-    wat_files=( ${WASM_PATH_DOCKER}/*.wat )
-    WASM_OR_WAT_FILE=${wat_files[0]}
-else
-    wasm_files=( ${WASM_PATH_DOCKER}/*.wasm )
-    WASM_OR_WAT_FILE=${wasm_files[0]}
-fi
+# Get wasm/wat from $WASM_PATH_DOCKER directory
+WASM_OR_WAT_FILE=${WASM_PATH_DOCKER}/${WASM_EXECUTABLE}
 echo "WASM_OR_WAT_FILE: $WASM_OR_WAT_FILE"
 
 # Parse WASM_ARG_TYPES_LIST: "Int64,Int32" to "--argType Int64 --argType Int32"
