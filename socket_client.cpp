@@ -5,8 +5,8 @@
 
 void error(const char *msg)
 {
+    // fprintf("Socket: %s\n", msg);
     perror(msg);
-    // exit(0);
     throw std::runtime_error(msg);
 }
 
@@ -19,13 +19,14 @@ int connectToServer(char *socket_hostname, int socket_port)
     sockfd = socket(AF_INET, SOCK_STREAM, 0);
 
     if (sockfd < 0)
-        error("ERROR opening socket");
+        error("Error opening socket");
 
     server = gethostbyname(socket_hostname);
 
     if (server == NULL)
     {
-        fprintf(stderr, "ERROR, no such host\n");
+        // fprintf(stderr, "Error, no such host\n");
+        perror("Error, no such host");
         exit(0);
     }
 
@@ -40,7 +41,7 @@ int connectToServer(char *socket_hostname, int socket_port)
     serv_addr.sin_port = htons(socket_port);
 
     if (connect(sockfd, (struct sockaddr *)&serv_addr, sizeof(serv_addr)) < 0)
-        error("ERROR connecting");
+        error("Error connecting");
 
     return sockfd;
 }
@@ -49,14 +50,14 @@ void clientWrite(int sockfd, char *sendBuffer, int sizeBuffer)
 {
     int n = write(sockfd, sendBuffer, sizeBuffer);
     if (n < 0)
-        error("ERROR writing to socket");
+        error("Error writing to socket");
 }
 
 void clientRead(int sockfd, char *readBuffer, int sizeBuffer)
 {
     int n = read(sockfd, readBuffer, sizeBuffer);
     if (n < 0)
-        error("ERROR reading from socket");
+        error("Error reading from socket");
 }
 
 void runClient(
