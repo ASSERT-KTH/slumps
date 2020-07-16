@@ -1,3 +1,7 @@
+# WARNING: 
+# The env variables used in this file (e.g. WASM_PATH_LOCAL) can only 
+# be read by a file named ".env". This is standard Docker behaviour.
+
 # 1. Configure ./.env file
 # 2. docker-compose -f docker-compose.fuzzing.yml up --build
 
@@ -10,11 +14,11 @@ services:
     env_file:
       - ./.env
     volumes:
-      - ${WASM_PATH_LOCAL}:/home/wasm/
+      - ${WASM_PATH_LOCAL:?err}:/home/wasm/
       - compiled_sources:/home/swam/out/
       - maven_data:/root/.cache/coursier/v1/https/repo1.maven.org/maven2
     expose:
-      - ${SWAM_SOCKET_PORT}
+      - ${SWAM_SOCKET_PORT:?err}
 
   afl_interface:
     build: ./
@@ -24,8 +28,8 @@ services:
     environment:
       SWAM_CONTAINER: swam_server
     volumes:
-      - ${OUTPUT_LOCAL_AFL}:/home/out/
-      - ${LOGS_LOCAL}:/home/logs/
+      - ${OUTPUT_LOCAL_AFL:?err}:/home/out/
+      - ${LOGS_LOCAL:?err}:/home/logs/
     depends_on:
       - swam_server
 
