@@ -4,20 +4,14 @@
 #include <chrono>
 #include <thread>
 
-void LOG(std::string some_string)
-{
-    std::string LOGS_DOCKER = parseEnvVariables((char *)"LOGS_DOCKER");
-    log(LOGS_DOCKER + "/wait_for_server.log", some_string);
-}
 
 int main(int argc, char *argv[])
 {
+    setbuf(stdout, NULL);  // For some reason stdout gets buffered until exit otherwise
     std::string SWAM_CONTAINER = parseEnvVariables((char *)"SWAM_CONTAINER");
     std::string SWAM_SOCKET_PORT = parseEnvVariables((char *)"SWAM_SOCKET_PORT");
-    LOG("SWAM_CONTAINER: " + SWAM_CONTAINER);
-    LOG("SWAM_SOCKET_PORT: " + SWAM_SOCKET_PORT);
 
-    LOG("Waiting for Swam server...");
+    printf("Waiting for Swam server...\n");
     int sockfd;
     while (true) {
         try {
@@ -25,9 +19,10 @@ int main(int argc, char *argv[])
             close(sockfd);
             break;
         } catch (...) {
+            printf("Trying to connect again in 4 seconds...\n");
             std::this_thread::sleep_for(std::chrono::milliseconds(4000));
         }
     }
-    LOG("Swam is online!");
+    printf("Can connect to Swam!\n");
     exit(0);
 }
