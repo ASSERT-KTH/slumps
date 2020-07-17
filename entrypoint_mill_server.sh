@@ -18,5 +18,6 @@ if [[ $WASI == "True" ]]; then WASI_ARG="--wasi"; fi
 
 cd $REPO_PATH_DOCKER
 
+# This also compiles the cli package in case source code / dependencies have changed: 
 echo "mill -i cli.run run_server $WAT_ARG $WASI_ARG $ALL_ARG_TYPES --main $TARGET_FUNCTION --out $SWAM_OUTPUT_DOCKER $WASM_OR_WAT_FILE"
 mill -i cli.run run_server $WAT_ARG $WASI_ARG $ALL_ARG_TYPES --main $TARGET_FUNCTION --out $SWAM_OUTPUT_DOCKER $WASM_OR_WAT_FILE
