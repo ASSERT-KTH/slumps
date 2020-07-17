@@ -26,19 +26,39 @@ Since the argument types for the WASM function are written as environmental vari
 
 To be able to run this on your machine, only Docker is required. If you want to test SWAM's socket server without AFL, see the main page of this repository on how to set up SWAM.
 
+## Building with docker-compose
+
+This tool creates two Docker containers, as specified in the docker-compose.fuzzing.yml file - one for the SWAM socket server (Dockerfile in the root of this repository) and one for the AFL socket client (Dockerfile in this directory). The only configuration parameters to building this are currently the SCALA_VERSION and the MILL_VERSION in SWAM's Dockerfile. Nonetheless, it should not be required to change these parameters as they are fitted to the code of this repostory.
+
+How to build:
+
+```bash
+docker-compose -f docker-compose.fuzzing.yml build
+```
+
+### Mechanics of SWAM's Dockerfile
+
+We are not using the standard base image for the Scala Mill Build Tool [(nightscape/scala-mill)](https://hub.docker.com/r/nightscape/scala-mill/dockerfile), since it uses an older version of Scala and Mill. Our Dockerfile is however strongly based on theirs.
+
+Mill currently does not provide any command to [simply install dependencies without compiling the source code](https://stackoverflow.com/questions/62834693/mill-build-tool-install-dependencies-without-compiling-source-code). Compiling the source code is done with `mill <package_name>.compile` and the reason why this is not included in the Dockerfile is to avoid the overhead of downloading all the same dependencies everytime source code is altered. The current workaround is to store the compiled sources along with the dependencies in volumes, which can be accessed during runtime and are specified in the docker-compose.fuzzing.yml file ("compiled_sources" & "maven_data").
+
+### Mechanics of AFL's Dockerfile
+
+This image uses the [official image of AFLplusplus](https://hub.docker.com/r/aflplusplus/aflplusplus/) as a base, which contains the full configuration of AFL pre-installed. It then builds the C++ files of this folder with the standard Ubuntu g++ compiler (not the one provided by AFL). The C++ files are therefore not instrumented. The resulting executables are later accessed during run-time.
+
 ## Running with docker-compose
 
-1. Configure ./.env file. Do not rename it or reference a different *.env file in docker-compose.fuzzing.yml!
+1. Configure ./.env file. This is where you specify which .wasm/.wat file & function you want to fuzzing and of what types it's input parameters are. Furthermore, it requires to provide a set of working input parameters, which are used in AFL test-runs and can be regarded as AFL's "seed" to random input. *WARNING: Do not rename this file or reference a different \*.env file in docker-compose.fuzzing.yml!*
 
 2. Execute docker-compose configuration
 
     ```bash
-    docker-compose -f docker-compose.fuzzing.yml up --build
+    docker-compose -f docker-compose.fuzzing.yml up
     ```
 
-3. View ./logs/ for own logs and ./out/ for AFL output
+3. View AFL's results and own logs in the folders which were specified in the .env file.
 
-## Running without Docker
+## Building & running without Docker
 
 If you wish to run this plugin without using Docker, you will be required to install [AFLplusplus](https://github.com/AFLplusplus/AFLplusplus) and build SWAM with mill (see README of the root of this repository). Concerning AFLplusplus, running `make source-only` on the cloned repository along with installing the dependencies should suffice.
 
@@ -84,9 +104,9 @@ The following the Docker logs of the SWAM server
 
 4. sending back the coverage along with the exit code
 
-Fibonacci working           |  Fibonacci failing (number too high)
-:-------------------------:|:-------------------------:
-![pass](./docs/fibo_log_working.png) | ![pass](./docs/fibo_log_failing.png)
+|          Fibonacci working           | Fibonacci failing (number too high)  |
+| :----------------------------------: | :----------------------------------: |
+| ![pass](./docs/fibo_log_working.png) | ![pass](./docs/fibo_log_failing.png) |
 
 In the case of running fibo.wat, a lot of crashes are registered by AFL, since essentially any "high" number causes the call stack to exhaust, which is not accounted for by the function in fibo.wat.
 
