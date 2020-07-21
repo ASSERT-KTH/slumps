@@ -98,9 +98,7 @@ def update_relink_cmd(*, check=False):
 mkdir -p "$INTERCEPT_BUILD_TARGET_DIR"
 export LD_PRELOAD=/usr/lib/x86_64-linux-gnu/bear/libear.so
 make -j$(nproc)"""
-        + " check\n"
-        if check
-        else "\n"
+        + (" check\n" if check else "\n")
     )
 
     for fname in glob(".ear/execution*"):
