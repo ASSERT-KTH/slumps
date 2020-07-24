@@ -109,8 +109,9 @@ void fork_server(char *fuzzed_input_path, uint8_t *trace_bits, int requiredBytes
 
     int status = 0;
 
-    LOG("Starting the 'Fork server handshake'.");
-    LOG("Phone home and tell AFL that we're OK.");
+    // Starting the 'Fork server handshake'
+
+    // Phone home and tell AFL that we're OK
     if (write(199, &status, 4) != 4)
     {
         LOG("Write failed");
@@ -122,10 +123,8 @@ void fork_server(char *fuzzed_input_path, uint8_t *trace_bits, int requiredBytes
     // and is creating forks of itself is called the "fork server".
     while (true)
     {
-        LOG("##### NEW FORK RUN #####");
-
+        // Wait for AFL by reading from the pipe.
         // This will block until AFL sends us something. Abort if read fails.
-        LOG("Wait for AFL by reading from the pipe.");
         if (read(198, &status, 4) != 4)
         {
             LOG("Read failed");
@@ -133,7 +132,6 @@ void fork_server(char *fuzzed_input_path, uint8_t *trace_bits, int requiredBytes
             close(199);
             exit(1);
         }
-        LOG("Read status: " + std::to_string(status));
 
         /*
     Programm runs concurrently in two forks from here
@@ -150,14 +148,14 @@ void fork_server(char *fuzzed_input_path, uint8_t *trace_bits, int requiredBytes
         }
         else if (pid == 0)
         {
-            LOG("This is the child process.");
+            // This is the child process
             close(198);
             close(199);
             main_fuzz(fuzzed_input_path, trace_bits, requiredBytes);
             exit(0);
         }
 
-        LOG("Writing child pid to parent: " + std::to_string(pid));
+        // Writing child pid to parent
         write(199, &pid, 4);
 
         /* 
@@ -168,7 +166,7 @@ void fork_server(char *fuzzed_input_path, uint8_t *trace_bits, int requiredBytes
     the waiting, then send the status code to the fuzzer.
     */
 
-        LOG("Waiting for child...");
+        // Waiting for child
         if (waitpid(pid, &status, 0) <= 0) // Technically only fails at -1; 0 means still running
         {
             LOG("waitpid() failed.");
@@ -214,8 +212,6 @@ void log_args(int argc, char *argv[])
 
 int main(int argc, char *argv[])
 {
-    LOG("########## NEW MAIN ##########");
-
     log_args(argc, argv);
 
     char *fuzzed_input_path = argv[1];
