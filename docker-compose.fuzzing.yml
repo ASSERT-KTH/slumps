@@ -32,6 +32,7 @@ services:
       - ${LOGS_LOCAL:?err}:/home/logs/
     depends_on:
       - swam_server
+    # tty: true
 
 volumes:
   compiled_sources:
