@@ -1,6 +1,5 @@
 #include "socket_client.h"
 
-
 // Most code based on: https://www.bogotobogo.com/cplusplus/sockets_server_client.php
 
 void error(const char *msg)
@@ -16,6 +15,12 @@ int connectToServer(char *socket_hostname, int socket_port)
     struct hostent *server;
     struct sockaddr_in serv_addr;
 
+    /* 
+        SOCK_STREAM: TCP (reliable, connection oriented)
+        SOCK_DGRAM: UDP (unreliable, connectionless)
+        AF_INET: IPv4 protocol
+        AF_INET6: IPv6 protocol 
+    */
     sockfd = socket(AF_INET, SOCK_STREAM, 0);
 
     if (sockfd < 0)
@@ -55,9 +60,17 @@ void clientWrite(int sockfd, char *sendBuffer, int sizeBuffer)
 
 void clientRead(int sockfd, char *readBuffer, int sizeBuffer)
 {
-    int n = read(sockfd, readBuffer, sizeBuffer);
-    if (n < 0)
-        error("Error reading from socket");
+    int n = 0;
+    while (n < sizeBuffer)
+    {
+        // Occasionally, read() finishes reading before all the data has
+        // been written to the socket by the SWAM server. Therefore, this
+        // is in a loop.
+        int nNew = read(sockfd, readBuffer + n, sizeBuffer - n);
+        if (nNew < 0)
+            error("Error reading from socket");
+        n = n + nNew;
+    }
 }
 
 void runClient(
