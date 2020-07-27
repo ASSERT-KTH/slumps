@@ -33,7 +33,7 @@ This tool creates two Docker containers, as specified in the docker-compose.fuzz
 How to build:
 
 ```bash
-docker-compose -f docker-compose.fuzzing.yml build
+docker-compose -f docker-compose.base.yml -f docker-compose.yml build
 ```
 
 ### Mechanics of SWAM's Dockerfile
@@ -53,7 +53,7 @@ This image uses the [official image of AFLplusplus](https://hub.docker.com/r/afl
 2. Execute docker-compose configuration
 
     ```bash
-    docker-compose -f docker-compose.fuzzing.yml up
+    docker-compose -f docker-compose.base.yml -f docker-compose.yml up
     ```
 
 3. View AFL's results and own logs in the folders which were specified in the .env file.
