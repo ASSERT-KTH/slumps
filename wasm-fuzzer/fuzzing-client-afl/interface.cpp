@@ -85,10 +85,10 @@ void main_fuzz(
 
     char readBuffer[AFL_SHM_SIZE + 1]; // + 1 for exit code
 
-    std::string SWAM_CONTAINER = parseEnvVariables((char *)"SWAM_CONTAINER");
+    std::string SWAM_SOCKET_HOST = parseEnvVariables((char *)"SWAM_SOCKET_HOST");
     std::string SWAM_SOCKET_PORT = parseEnvVariables((char *)"SWAM_SOCKET_PORT");
 
-    runClient(sizeof(sendBuffer), sendBuffer, sizeof(readBuffer), readBuffer, &SWAM_CONTAINER[0], std::stoi(SWAM_SOCKET_PORT));
+    runClient(sizeof(sendBuffer), sendBuffer, sizeof(readBuffer), readBuffer, &SWAM_SOCKET_HOST[0], std::stoi(SWAM_SOCKET_PORT));
 
     pass_data_to_afl(sizeof(readBuffer), readBuffer, trace_bits);
 
