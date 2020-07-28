@@ -1,0 +1,29 @@
+# This file does not work by itself
+
+version: '3.7'
+
+services:
+  swam_server:
+    entrypoint: /home/swam/fuzzer/entrypoint_mill_server.sh
+    env_file:
+      - ./.env
+    volumes:
+      - ${WASM_PATH_LOCAL:?err}:/home/wasm/
+      - compiled_sources:/home/swam/out/
+      - maven_data:/root/.cache/coursier/v1/https/repo1.maven.org/maven2
+
+  afl_interface:
+    entrypoint: /home/interface/entrypoint_afl.sh
+    env_file:
+      - ./.env
+    environment:
+      SWAM_CONTAINER: swam_server
+    volumes:
+      - ${OUTPUT_LOCAL_AFL:?err}:/home/out/
+      - ${LOGS_LOCAL:?err}:/home/logs/
+    depends_on:
+      - swam_server
+
+volumes:
+  compiled_sources:
+  maven_data:
