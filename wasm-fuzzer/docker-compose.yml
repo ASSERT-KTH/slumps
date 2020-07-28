@@ -1,5 +1,5 @@
 # WARNING: 
-# The env variables used in this file (e.g. WASM_PATH_LOCAL) can only 
+# The env variables used in this file (e.g. LOCAL_WASM) can only 
 # be read by a file named ".env". This is standard Docker behaviour.
 
 # 1. Configure ./.env file
