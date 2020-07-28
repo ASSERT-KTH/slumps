@@ -22,4 +22,4 @@ dist
 ### Wasm-Fuzzer ###
 wasm-fuzzer/fuzzing-client-afl/afl_out
 wasm-fuzzer/fuzzing-client-afl/cpp_out
-wasm-fuzzer/fuzzing-client-afl/logs/*
+wasm-fuzzer/logs/*
