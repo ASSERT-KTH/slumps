@@ -1,0 +1,7 @@
+
+fuzzer-client-afl/*.log
+fuzzer-client-afl/*.dat
+**/fuzzer-client-afl/in
+**/fuzzer-client-afl/afl_out
+**/fuzzer-client-afl/cpp_out
+**/fuzzer-client-afl/logs/*
