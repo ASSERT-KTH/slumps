@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# Initial script: https://docs.docker.com/config/containers/multi-service_container/
+
 # Start the first process
 $DOCKER_SWAM_SRC/entrypoint_mill_server.sh -D
 status=$?

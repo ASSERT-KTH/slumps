@@ -17,7 +17,7 @@ services:
     env_file:
       - ./.env
     environment:
-      SWAM_CONTAINER: swam_server
+      SWAM_SOCKET_HOST: swam_server
     volumes:
       - ${LOCAL_AFL_OUTPUT:?err}:/home/out/
       - ${LOCAL_LOGS:?err}:/home/logs/
