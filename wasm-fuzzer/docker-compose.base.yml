@@ -4,7 +4,7 @@ version: '3.7'
 
 services:
   swam_server:
-    entrypoint: /home/swam/fuzzer/entrypoint_mill_server.sh
+    entrypoint: /home/swam/entrypoint_mill_server.sh
     env_file:
       - ./.env
     volumes:
