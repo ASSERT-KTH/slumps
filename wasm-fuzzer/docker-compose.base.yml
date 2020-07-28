@@ -8,7 +8,7 @@ services:
     env_file:
       - ./.env
     volumes:
-      - ${WASM_PATH_LOCAL:?err}:/home/wasm/
+      - ${LOCAL_WASM:?err}:/home/wasm/
       - compiled_sources:/home/swam/out/
       - maven_data:/root/.cache/coursier/v1/https/repo1.maven.org/maven2
 
@@ -19,8 +19,8 @@ services:
     environment:
       SWAM_CONTAINER: swam_server
     volumes:
-      - ${OUTPUT_LOCAL_AFL:?err}:/home/out/
-      - ${LOGS_LOCAL:?err}:/home/logs/
+      - ${LOCAL_AFL_OUTPUT:?err}:/home/out/
+      - ${LOCAL_LOGS:?err}:/home/logs/
     depends_on:
       - swam_server
 

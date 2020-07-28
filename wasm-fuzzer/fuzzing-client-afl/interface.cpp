@@ -4,8 +4,8 @@
 
 void LOG(std::string some_string)
 {
-    std::string LOGS_DOCKER = parseEnvVariables((char *)"LOGS_DOCKER");
-    log(LOGS_DOCKER + "/interface.log", some_string);
+    std::string DOCKER_LOGS = parseEnvVariables((char *)"DOCKER_LOGS");
+    log(DOCKER_LOGS + "/interface.log", some_string);
 }
 
 std::vector<std::string> readFileToVector(const std::string &filename)

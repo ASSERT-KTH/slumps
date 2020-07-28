@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Start the first process
-$REPO_PATH_DOCKER/entrypoint_mill_server.sh -D
+$DOCKER_SWAM_SRC/entrypoint_mill_server.sh -D
 status=$?
 if [ $status -ne 0 ]; then
   echo "Failed to start my_first_process: $status"
@@ -9,7 +9,7 @@ if [ $status -ne 0 ]; then
 fi
 
 # Start the second process
-$INTERFACE_PATH/entrypoint_afl.sh -D
+$DOCKER_INTERFACE_SRC/entrypoint_afl.sh -D
 status=$?
 if [ $status -ne 0 ]; then
   echo "Failed to start my_second_process: $status"
