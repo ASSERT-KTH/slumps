@@ -16,8 +16,6 @@ RUN yes | add-apt-repository ppa:openjdk-r/ppa
 RUN apt-get update
 RUN yes | apt-get install openjdk-12-jdk-headless
 
-# RUN yes | apt-get install openjdk-12-jdk-headless
-
 # Env variables
 ENV SCALA_VERSION 2.13.2
 ENV MILL_VERSION 0.7.0
