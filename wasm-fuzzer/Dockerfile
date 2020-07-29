@@ -60,6 +60,11 @@ ADD ./fuzzing-server $DOCKER_SWAM_SRC
 
 RUN chmod +x $DOCKER_SWAM_SRC/entrypoint_mill_server.sh
 
+# For maven data:
+VOLUME /root/.cache/coursier/v1/https/repo1.maven.org/maven2
+# For compiled sources:
+VOLUME $DOCKER_SWAM_SRC/out/
+
 #############################
 #### fuzzing-client-afl #####
 #############################

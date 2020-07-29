@@ -9,8 +9,6 @@ services:
       - ./.env
     volumes:
       - ${LOCAL_WASM:?err}:/home/wasm/
-      - compiled_sources:/home/swam/out/
-      - maven_data:/root/.cache/coursier/v1/https/repo1.maven.org/maven2
 
   afl_interface:
     entrypoint: /home/interface/entrypoint_afl.sh
@@ -23,7 +21,3 @@ services:
       - ${LOCAL_LOGS:?err}:/home/logs/
     depends_on:
       - swam_server
-
-volumes:
-  compiled_sources:
-  maven_data:
