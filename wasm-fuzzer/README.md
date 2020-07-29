@@ -28,7 +28,7 @@ To be able to run this on your machine, only Docker is required. If you want to 
 
 ## Configuration
 
-All configuration options are to visible in the .env file. This is where you specify which .wasm/.wat file & function you want to fuzzing and of what types it's input parameters are. Furthermore, it requires to provide a set of working input parameters, which are used in AFL test-runs and can be regarded as AFL's "seed" to random input.
+All configuration options are visible in the .env file. This is where you specify which .wasm/.wat file & function you want to be fuzzing and of what types it's input parameters are. Furthermore, it requires to provide a set of working input parameters, which are used in AFL test-runs and can be regarded as AFL's "seed" to random input.
 
 ## Using docker-compose
 
@@ -54,7 +54,7 @@ This image uses the [official image of AFLplusplus](https://hub.docker.com/r/afl
 
 ### Running
 
-1. Configure the ./.env file. See [Configuration](#Configuration) for details. *WARNING: Do not rename this file or reference a different \*.env file in docker-compose.base.yml! The docker-compose files use [variable substitution](https://docs.docker.com/compose/compose-file/#variable-substitution), which by default only read from ".env".*
+1. Configure the ./.env file. See [Configuration](#Configuration) for details. *WARNING: Do not rename this file or reference a different \*.env file in docker-compose.base.yml! The docker-compose files use [variable substitution](https://docs.docker.com/compose/compose-file/#variable-substitution), which by default only reads from ".env".*
 
 2. Execute docker-compose configuration
 
