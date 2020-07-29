@@ -2,19 +2,22 @@
 
 FROM aflplusplus/aflplusplus
 
+################
+##### JVM ######
+################
+
 RUN yes | apt-get install curl
 RUN apt-get update
-
-#########################
-##### Scala & Mill ######
-#########################
-
 RUN DEBIAN_FRONTEND="noninteractive" apt-get -y install tzdata
 RUN yes | apt-get install software-properties-common
 RUN apt-get update
 RUN yes | add-apt-repository ppa:openjdk-r/ppa
 RUN apt-get update
 RUN yes | apt-get install openjdk-12-jdk-headless
+
+#########################
+##### Scala & Mill ######
+#########################
 
 # Env variables
 ENV SCALA_VERSION 2.13.2
