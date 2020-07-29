@@ -4,6 +4,9 @@
 ### Intellij ###
 .idea
 
+### VSCode ###
+.metals
+
 ### Python ###
 venv
 *.pyc
@@ -18,3 +21,8 @@ crow_out
 
 dist
 *egg-info
+
+### Wasm-Fuzzer ###
+wasm-fuzzer/fuzzing-client-afl/afl_out
+wasm-fuzzer/fuzzing-client-afl/cpp_out
+wasm-fuzzer/logs/*
