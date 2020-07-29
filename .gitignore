@@ -4,6 +4,9 @@
 ### Intellij ###
 .idea
 
+### VSCode ###
+.metals
+
 ### Python ###
 venv
 *.pyc
