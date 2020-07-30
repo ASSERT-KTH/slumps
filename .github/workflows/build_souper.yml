@@ -2,7 +2,11 @@ name: Build souper
 
 on: 
   push:
+    paths-ignore: 
+      - 'wasm-fuzzer/**'
   pull_request:
+    paths-ignore: 
+      - 'wasm-fuzzer/**'
 
 jobs:
   build-macos:
