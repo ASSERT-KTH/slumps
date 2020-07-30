@@ -105,7 +105,6 @@ docker build -t wafl .
     ```bash
     docker run --env-file=./.env \
         -e SWAM_SOCKET_HOST=localhost \
-        -e MASTER_AFL_NODE=True \
         -v maven_data:/root/.cache/coursier/v1/https/repo1.maven.org/maven2 \
         -v compiled_sources:/home/server/src/out/ \
         -v ${LOCAL_WASM:?err}:/home/server/wasm/ \
@@ -113,6 +112,15 @@ docker build -t wafl .
         -v ${LOCAL_LOGS:?err}:/home/shared/logs/ \
         wafl:latest
     ```
+
+### Multi-processing
+
+AFLplusplus is encouraged to be run with multiple instances if multiple cores are available. More information is available [here](https://github.com/mirrorer/afl/blob/master/docs/parallel_fuzzing.txt). To automatically run multiple instances in their master/secondary configuration, you can run the following command. Do not forget to build the image first!
+
+```bash
+# 3 for the number of AFL instances.
+./multi-processing.sh 3
+```
 
 ## Building & running without Docker
 
