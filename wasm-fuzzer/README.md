@@ -105,6 +105,9 @@ docker build -t wafl .
     ```bash
     docker run --env-file=./.env \
         -e SWAM_SOCKET_HOST=localhost \
+        -e MASTER_AFL_NODE=True \
+        -v maven_data:/root/.cache/coursier/v1/https/repo1.maven.org/maven2 \
+        -v compiled_sources:/home/server/src/out/ \
         -v ${LOCAL_WASM:?err}:/home/server/wasm/ \
         -v ${LOCAL_AFL_OUTPUT:?err}:/home/client/out/ \
         -v ${LOCAL_LOGS:?err}:/home/shared/logs/ \
