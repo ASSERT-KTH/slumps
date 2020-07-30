@@ -8,6 +8,8 @@ services:
     env_file:
       - ./.env
     volumes:
+      - maven_data:/root/.cache/coursier/v1/https/repo1.maven.org/maven2
+      - compiled_sources:/home/server/src/out/
       - ${LOCAL_WASM:?err}:/home/wasm/
 
   afl_interface:
@@ -21,3 +23,7 @@ services:
       - ${LOCAL_LOGS:?err}:/home/logs/
     depends_on:
       - swam_server
+
+volumes:
+  maven_data:
+  compiled_sources:
