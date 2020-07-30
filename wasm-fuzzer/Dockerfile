@@ -15,6 +15,12 @@ RUN yes | add-apt-repository ppa:openjdk-r/ppa
 RUN apt-get update
 RUN yes | apt-get install openjdk-12-jdk-headless
 
+#######################
+##### Supervisor ######
+#######################
+
+RUN apt-get install -y supervisor
+
 #########################
 ##### Scala & Mill ######
 #########################
@@ -90,13 +96,11 @@ RUN chmod +x $DOCKER_INTERFACE_SRC/entrypoint_afl.sh
 ######## Shared #########
 #########################
 
+ADD supervisord.conf /etc/supervisor/conf.d/supervisord.conf 
+
 ENV DOCKER_SHARED=/home/shared
 ENV DOCKER_LOGS=$DOCKER_SHARED/logs
 
 RUN mkdir -p $DOCKER_LOGS
 
-ADD ./entrypoint.sh $DOCKER_SHARED
-
-RUN chmod +x $DOCKER_SHARED/entrypoint.sh
-
-ENTRYPOINT $DOCKER_SHARED/entrypoint.sh
+ENTRYPOINT ["/usr/bin/supervisord"]
