@@ -1,0 +1,250 @@
+; entering Souper's runOnFunction() for crypto_core_ristretto255_scalar_complement()
+
+; ModuleID = './core_ristretto255.c.bc'
+source_filename = "crypto_core/ed25519/core_ristretto255.c"
+target datalayout = "e-m:e-p:32:32-i64:64-n32:64-S128"
+target triple = "wasm32-unknown-wasi"
+
+%struct.ge25519_p3 = type { [10 x i32], [10 x i32], [10 x i32], [10 x i32] }
+%struct.ge25519_p1p1 = type { [10 x i32], [10 x i32], [10 x i32], [10 x i32] }
+%struct.ge25519_cached = type { [10 x i32], [10 x i32], [10 x i32], [10 x i32] }
+
+; Function Attrs: nounwind
+define i32 @crypto_core_ristretto255_is_valid_point(i8* nonnull %0) local_unnamed_addr #0 {
+  %2 = alloca %struct.ge25519_p3, align 4
+  %3 = bitcast %struct.ge25519_p3* %2 to i8*
+  call void @llvm.lifetime.start.p0i8(i64 160, i8* nonnull %3) #4
+  %4 = call i32 @ristretto255_frombytes(%struct.ge25519_p3* nonnull %2, i8* nonnull %0) #4
+  %5 = icmp eq i32 %4, 0
+  %6 = zext i1 %5 to i32
+  call void @llvm.lifetime.end.p0i8(i64 160, i8* nonnull %3) #4
+  ret i32 %6
+}
+
+; Function Attrs: argmemonly nounwind willreturn
+declare void @llvm.lifetime.start.p0i8(i64 immarg %0, i8* nocapture %1) #1
+
+declare i32 @ristretto255_frombytes(%struct.ge25519_p3* %0, i8* %1) local_unnamed_addr #2
+
+; Function Attrs: argmemonly nounwind willreturn
+declare void @llvm.lifetime.end.p0i8(i64 immarg %0, i8* nocapture %1) #1
+
+; Function Attrs: nounwind
+define i32 @crypto_core_ristretto255_add(i8* nonnull %0, i8* nonnull %1, i8* nonnull %2) local_unnamed_addr #0 {
+  %4 = alloca %struct.ge25519_p3, align 4
+  %5 = alloca %struct.ge25519_p3, align 4
+  %6 = alloca %struct.ge25519_p3, align 4
+  %7 = alloca %struct.ge25519_p1p1, align 4
+  %8 = alloca %struct.ge25519_cached, align 4
+  %9 = bitcast %struct.ge25519_p3* %4 to i8*
+  call void @llvm.lifetime.start.p0i8(i64 160, i8* nonnull %9) #4
+  %10 = bitcast %struct.ge25519_p3* %5 to i8*
+  call void @llvm.lifetime.start.p0i8(i64 160, i8* nonnull %10) #4
+  %11 = bitcast %struct.ge25519_p3* %6 to i8*
+  call void @llvm.lifetime.start.p0i8(i64 160, i8* nonnull %11) #4
+  %12 = bitcast %struct.ge25519_p1p1* %7 to i8*
+  call void @llvm.lifetime.start.p0i8(i64 160, i8* nonnull %12) #4
+  %13 = bitcast %struct.ge25519_cached* %8 to i8*
+  call void @llvm.lifetime.start.p0i8(i64 160, i8* nonnull %13) #4
+  %14 = call i32 @ristretto255_frombytes(%struct.ge25519_p3* nonnull %4, i8* nonnull %1) #4
+  %15 = icmp eq i32 %14, 0
+  br i1 %15, label %16, label %20
+
+16:                                               ; preds = %3
+  %17 = call i32 @ristretto255_frombytes(%struct.ge25519_p3* nonnull %5, i8* nonnull %2) #4
+  %18 = icmp eq i32 %17, 0
+  br i1 %18, label %19, label %20
+
+19:                                               ; preds = %16
+  call void @ge25519_p3_to_cached(%struct.ge25519_cached* nonnull %8, %struct.ge25519_p3* nonnull %5) #4
+  call void @ge25519_add(%struct.ge25519_p1p1* nonnull %7, %struct.ge25519_p3* nonnull %4, %struct.ge25519_cached* nonnull %8) #4
+  call void @ge25519_p1p1_to_p3(%struct.ge25519_p3* nonnull %6, %struct.ge25519_p1p1* nonnull %7) #4
+  call void @ristretto255_p3_tobytes(i8* nonnull %0, %struct.ge25519_p3* nonnull %6) #4
+  br label %20
+
+20:                                               ; preds = %3, %16, %19
+  %21 = phi i32 [ 0, %19 ], [ -1, %16 ], [ -1, %3 ]
+  call void @llvm.lifetime.end.p0i8(i64 160, i8* nonnull %13) #4
+  call void @llvm.lifetime.end.p0i8(i64 160, i8* nonnull %12) #4
+  call void @llvm.lifetime.end.p0i8(i64 160, i8* nonnull %11) #4
+  call void @llvm.lifetime.end.p0i8(i64 160, i8* nonnull %10) #4
+  call void @llvm.lifetime.end.p0i8(i64 160, i8* nonnull %9) #4
+  ret i32 %21
+}
+
+declare void @ge25519_p3_to_cached(%struct.ge25519_cached* %0, %struct.ge25519_p3* %1) local_unnamed_addr #2
+
+declare void @ge25519_add(%struct.ge25519_p1p1* %0, %struct.ge25519_p3* %1, %struct.ge25519_cached* %2) local_unnamed_addr #2
+
+declare void @ge25519_p1p1_to_p3(%struct.ge25519_p3* %0, %struct.ge25519_p1p1* %1) local_unnamed_addr #2
+
+declare void @ristretto255_p3_tobytes(i8* %0, %struct.ge25519_p3* %1) local_unnamed_addr #2
+
+; Function Attrs: nounwind
+define i32 @crypto_core_ristretto255_sub(i8* nonnull %0, i8* nonnull %1, i8* nonnull %2) local_unnamed_addr #0 {
+  %4 = alloca %struct.ge25519_p3, align 4
+  %5 = alloca %struct.ge25519_p3, align 4
+  %6 = alloca %struct.ge25519_p3, align 4
+  %7 = alloca %struct.ge25519_p1p1, align 4
+  %8 = alloca %struct.ge25519_cached, align 4
+  %9 = bitcast %struct.ge25519_p3* %4 to i8*
+  call void @llvm.lifetime.start.p0i8(i64 160, i8* nonnull %9) #4
+  %10 = bitcast %struct.ge25519_p3* %5 to i8*
+  call void @llvm.lifetime.start.p0i8(i64 160, i8* nonnull %10) #4
+  %11 = bitcast %struct.ge25519_p3* %6 to i8*
+  call void @llvm.lifetime.start.p0i8(i64 160, i8* nonnull %11) #4
+  %12 = bitcast %struct.ge25519_p1p1* %7 to i8*
+  call void @llvm.lifetime.start.p0i8(i64 160, i8* nonnull %12) #4
+  %13 = bitcast %struct.ge25519_cached* %8 to i8*
+  call void @llvm.lifetime.start.p0i8(i64 160, i8* nonnull %13) #4
+  %14 = call i32 @ristretto255_frombytes(%struct.ge25519_p3* nonnull %4, i8* nonnull %1) #4
+  %15 = icmp eq i32 %14, 0
+  br i1 %15, label %16, label %20
+
+16:                                               ; preds = %3
+  %17 = call i32 @ristretto255_frombytes(%struct.ge25519_p3* nonnull %5, i8* nonnull %2) #4
+  %18 = icmp eq i32 %17, 0
+  br i1 %18, label %19, label %20
+
+19:                                               ; preds = %16
+  call void @ge25519_p3_to_cached(%struct.ge25519_cached* nonnull %8, %struct.ge25519_p3* nonnull %5) #4
+  call void @ge25519_sub(%struct.ge25519_p1p1* nonnull %7, %struct.ge25519_p3* nonnull %4, %struct.ge25519_cached* nonnull %8) #4
+  call void @ge25519_p1p1_to_p3(%struct.ge25519_p3* nonnull %6, %struct.ge25519_p1p1* nonnull %7) #4
+  call void @ristretto255_p3_tobytes(i8* nonnull %0, %struct.ge25519_p3* nonnull %6) #4
+  br label %20
+
+20:                                               ; preds = %3, %16, %19
+  %21 = phi i32 [ 0, %19 ], [ -1, %16 ], [ -1, %3 ]
+  call void @llvm.lifetime.end.p0i8(i64 160, i8* nonnull %13) #4
+  call void @llvm.lifetime.end.p0i8(i64 160, i8* nonnull %12) #4
+  call void @llvm.lifetime.end.p0i8(i64 160, i8* nonnull %11) #4
+  call void @llvm.lifetime.end.p0i8(i64 160, i8* nonnull %10) #4
+  call void @llvm.lifetime.end.p0i8(i64 160, i8* nonnull %9) #4
+  ret i32 %21
+}
+
+declare void @ge25519_sub(%struct.ge25519_p1p1* %0, %struct.ge25519_p3* %1, %struct.ge25519_cached* %2) local_unnamed_addr #2
+
+; Function Attrs: nounwind
+define i32 @crypto_core_ristretto255_from_hash(i8* nonnull %0, i8* nonnull %1) local_unnamed_addr #0 {
+  tail call void @ristretto255_from_hash(i8* nonnull %0, i8* nonnull %1) #4
+  ret i32 0
+}
+
+declare void @ristretto255_from_hash(i8* %0, i8* %1) local_unnamed_addr #2
+
+; Function Attrs: nounwind
+define void @crypto_core_ristretto255_random(i8* nonnull %0) local_unnamed_addr #0 {
+  %2 = alloca [64 x i8], align 16
+  %3 = getelementptr inbounds [64 x i8], [64 x i8]* %2, i32 0, i32 0
+  call void @llvm.lifetime.start.p0i8(i64 64, i8* nonnull %3) #4
+  call void @randombytes_buf(i8* nonnull %3, i32 64) #4
+  call void @ristretto255_from_hash(i8* nonnull %0, i8* nonnull %3) #4
+  call void @llvm.lifetime.end.p0i8(i64 64, i8* nonnull %3) #4
+  ret void
+}
+
+declare void @randombytes_buf(i8* %0, i32 %1) local_unnamed_addr #2
+
+; Function Attrs: nounwind
+define void @crypto_core_ristretto255_scalar_random(i8* nonnull %0) local_unnamed_addr #0 {
+  tail call void @crypto_core_ed25519_scalar_random(i8* nonnull %0) #4
+  ret void
+}
+
+declare void @crypto_core_ed25519_scalar_random(i8* %0) local_unnamed_addr #2
+
+; Function Attrs: nounwind
+define i32 @crypto_core_ristretto255_scalar_invert(i8* nonnull %0, i8* nonnull %1) local_unnamed_addr #0 {
+  %3 = tail call i32 @crypto_core_ed25519_scalar_invert(i8* nonnull %0, i8* nonnull %1) #4
+  ret i32 %3
+}
+
+declare i32 @crypto_core_ed25519_scalar_invert(i8* %0, i8* %1) local_unnamed_addr #2
+
+; Function Attrs: nounwind
+define void @crypto_core_ristretto255_scalar_negate(i8* nonnull %0, i8* nonnull %1) local_unnamed_addr #0 {
+  tail call void @crypto_core_ed25519_scalar_negate(i8* nonnull %0, i8* nonnull %1) #4
+  ret void
+}
+
+declare void @crypto_core_ed25519_scalar_negate(i8* %0, i8* %1) local_unnamed_addr #2
+
+; Function Attrs: nounwind
+define void @crypto_core_ristretto255_scalar_complement(i8* nonnull %0, i8* nonnull %1) local_unnamed_addr #0 {
+  tail call void @crypto_core_ed25519_scalar_complement(i8* nonnull %0, i8* nonnull %1) #4
+  ret void
+}
+
+declare void @crypto_core_ed25519_scalar_complement(i8* %0, i8* %1) local_unnamed_addr #2
+
+; Function Attrs: nounwind
+define void @crypto_core_ristretto255_scalar_add(i8* nonnull %0, i8* nonnull %1, i8* nonnull %2) local_unnamed_addr #0 {
+  tail call void @crypto_core_ed25519_scalar_add(i8* nonnull %0, i8* nonnull %1, i8* nonnull %2) #4
+  ret void
+}
+
+declare void @crypto_core_ed25519_scalar_add(i8* %0, i8* %1, i8* %2) local_unnamed_addr #2
+
+; Function Attrs: nounwind
+define void @crypto_core_ristretto255_scalar_sub(i8* nonnull %0, i8* nonnull %1, i8* nonnull %2) local_unnamed_addr #0 {
+  tail call void @crypto_core_ed25519_scalar_sub(i8* nonnull %0, i8* nonnull %1, i8* nonnull %2) #4
+  ret void
+}
+
+declare void @crypto_core_ed25519_scalar_sub(i8* %0, i8* %1, i8* %2) local_unnamed_addr #2
+
+; Function Attrs: nounwind
+define void @crypto_core_ristretto255_scalar_mul(i8* nonnull %0, i8* nonnull %1, i8* nonnull %2) local_unnamed_addr #0 {
+  tail call void @sc25519_mul(i8* nonnull %0, i8* nonnull %1, i8* nonnull %2) #4
+  ret void
+}
+
+declare void @sc25519_mul(i8* %0, i8* %1, i8* %2) local_unnamed_addr #2
+
+; Function Attrs: nounwind
+define void @crypto_core_ristretto255_scalar_reduce(i8* nonnull %0, i8* nonnull %1) local_unnamed_addr #0 {
+  tail call void @crypto_core_ed25519_scalar_reduce(i8* nonnull %0, i8* nonnull %1) #4
+  ret void
+}
+
+declare void @crypto_core_ed25519_scalar_reduce(i8* %0, i8* %1) local_unnamed_addr #2
+
+; Function Attrs: norecurse nounwind readnone
+define i32 @crypto_core_ristretto255_bytes() local_unnamed_addr #3 {
+  ret i32 32
+}
+
+; Function Attrs: norecurse nounwind readnone
+define i32 @crypto_core_ristretto255_nonreducedscalarbytes() local_unnamed_addr #3 {
+  ret i32 64
+}
+
+; Function Attrs: norecurse nounwind readnone
+define i32 @crypto_core_ristretto255_hashbytes() local_unnamed_addr #3 {
+  ret i32 64
+}
+
+; Function Attrs: norecurse nounwind readnone
+define i32 @crypto_core_ristretto255_scalarbytes() local_unnamed_addr #3 {
+  ret i32 32
+}
+
+attributes #0 = { nounwind "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "min-legal-vector-width"="0" "no-infs-fp-math"="false" "no-jump-tables"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="false" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #1 = { argmemonly nounwind willreturn }
+attributes #2 = { "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="false" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #3 = { norecurse nounwind readnone "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "min-legal-vector-width"="0" "no-infs-fp-math"="false" "no-jump-tables"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="false" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #4 = { nounwind }
+
+!llvm.module.flags = !{!0, !1, !2}
+!llvm.ident = !{!3}
+
+!0 = !{i32 1, !"wchar_size", i32 4}
+!1 = !{i32 7, !"PIC Level", i32 2}
+!2 = !{i32 7, !"PIE Level", i32 2}
+!3 = !{!"clang version 10.0.0 (https://github.com/llvm/llvm-project d32170dbd5b0d54436537b6b75beaf44324e0c28)"}
+
+; extracted candidates
+#########################################################
+; exiting Souper's runOnFunction() for crypto_core_ristretto255_scalar_complement()
+

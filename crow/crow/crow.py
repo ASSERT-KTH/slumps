@@ -112,8 +112,8 @@ class Pipeline(object):
                     r=f.result()
                     for k,v in r.items():
                         LOGGER.info(program_name, f"[{k}] {len(v)} code blocks")
-                        if len(v) != codeCount and codeCount != -1:
-                            LOGGER.warning(program_name, f"Sanity check warning, different exploration stage with different code blocks")
+                        #if len(v) != codeCount and codeCount != -1:
+                        #    LOGGER.warning(program_name, f"Sanity check warning, different exploration stage with different code blocks")
                         codeCount = len(v)
                         for k1, v1 in v.items():
                             vSet = set(v1)
@@ -125,6 +125,9 @@ class Pipeline(object):
                 except Exception as e:
                     LOGGER.error(program_name, traceback.format_exc())
             
+            variantsFile = open(f"{OUT_FOLDER}/{program_name}.exploration.json", 'w')
+            variantsFile.write(json.dumps([[k.decode("utf-8"), [v1.decode("utf-8") for v1 in v if v1 is not None] ] for k, v in merging.items()],indent=4))
+            variantsFile.close()
             # Call the generation stage
             # Split jobs
             #for k in merging.keys():
@@ -164,9 +167,6 @@ class Pipeline(object):
             }, indent=4))
             variantsFile.close()
 
-            variantsFile = open(f"{OUT_FOLDER}/{program_name}.exploration.json", 'w')
-            variantsFile.write(json.dumps([[k.decode("utf-8"), [v1.decode("utf-8") for v1 in v if v1 is not None] ] for k, v in merging.items()],indent=4))
-            variantsFile.close()
         except BreakException:
             pass
 
@@ -294,8 +294,7 @@ class Pipeline(object):
                 LOGGER.info(program_name, f"Cleaning previous cache...{port}")
                 try:
                     result = r.flushdb()
-                    LOGGER.success(
-                        program_name, f"Flushing redis DB: result({result})")
+                    
                 except Exception as e:
                     LOGGER.error(program_name, traceback.format_exc())
 
@@ -320,8 +319,8 @@ class Pipeline(object):
                             t = r.type(k)
                             if t == b'hash':
                                 vals = r.hgetall(k)
-                                if self.LOG_LEVEL > 2:
-                                    LOGGER.info(program_name, f"\t{k} {vals}")
+                                #if self.LOG_LEVEL > 2:
+                                #    LOGGER.info(program_name, f"\t{k} {vals}")
                                 if b'result' in vals and vals[b'result'] != b'':
                                     results[level][k] = vals[b'result'].split(b'\n##\n')
                                 else:

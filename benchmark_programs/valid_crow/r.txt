@@ -1,0 +1,826 @@
+./String_append.c.cloc
+C                                1              5              3             17
+./Knights_tour.c.cloc
+C                                1             14              4             85
+./Bacon_cipher.c.cloc
+C                                1              9              2             99
+./Parsing-RPN_calculator_algorithm.c.cloc
+C                                1              9              0             53
+./Sorting_algorithms-Merge_sort.c.cloc
+C                                1              3              0             35
+./Literals-Integer.c.cloc
+C                                1              2              0              8
+./Nth_root.c.cloc
+C                                1              3              0             31
+./Vector.c.cloc
+C                                1             27              0             57
+./Power_set.c.cloc
+C                                1              4              0             27
+./Terminal_control-Preserve_screen.c.cloc
+C                                1              2              0             15
+./Catalan_numbers-Pascals_triangle.c.cloc
+C                                1             10             15             21
+./Faulhabers_formula.c.cloc
+C                                1             28              0            141
+./Huffman_coding.c.cloc
+C                                1             28              2            144
+./Execute_a_Markov_algorithm.c.cloc
+C                                1             34              6            163
+./Knapsack_problem-Continuous.c.cloc
+C                                1              5              0             32
+./Numerical_integration-Gauss-Legendre_Quadrature.c.cloc
+C                                1             12              2             70
+./Dijkstras_algorithm.c.cloc
+C                                1             13              0            167
+./Modular_arithmetic.c.cloc
+C                                1             11              0             41
+./Parsing-RPN_to_infix_conversion.c.cloc
+C                                1             31              0             95
+./Test_integerness.c.cloc
+C                                1              9              4             45
+./Sorting_algorithms-Heapsort.c.cloc
+C                                1              4              0             46
+./Emirp_primes.c.cloc
+C                                1              7              0             45
+./Deconvolution-1D.c.cloc
+C                                1             17              1             74
+./Sexy_primes.c.cloc
+C                                1             19              4            148
+./Longest_Common_Substring.c.cloc
+C                                1              8              0             34
+./Vigenère_cipher-Cryptanalysis.c.cloc
+C                                1             14              0             89
+./Man_or_boy_test.c.cloc
+C                                1              7              5             31
+./Sorting_algorithms-Permutation_sort.c.cloc
+C                                1              8              3             35
+./McNuggets_Problem.c.cloc
+C                                1              6              0             29
+./Range_extraction.c.cloc
+C                                1              5              0             31
+./AKS_test_for_primes.c.cloc
+C                                1             12              0             39
+./Shortest_common_supersequence.c.cloc
+C                                1              9              1             44
+./IBAN.c.cloc
+C                                1             18              7             72
+./Formatted_numeric_output.c.cloc
+C                                1              0              0             11
+./Set.c.cloc
+C                                1              9              0             36
+./Yin_and_yang.c.cloc
+C                                1              2              0             28
+./Chebyshev_coefficients.c.cloc
+C                                1             12              5             50
+./Van_der_Corput_sequence.c.cloc
+C                                1              6              0             29
+./Increment_a_numerical_string.c.cloc
+C                                1             10             10             50
+./Maximum_triangle_path_sum.c.cloc
+C                                1              6              0             40
+./Best_shuffle.c.cloc
+C                                1             16              8             87
+./Display_a_linear_combination.c.cloc
+C                                1             14              0             53
+./Deconvolution-2D+.c.cloc
+C                                1             28             40            150
+./Cantor_set.c.cloc
+C                                1              6              0             32
+./Terminal_control-Inverse_video.c.cloc
+C                                1              2              0              6
+./Middle_three_digits.c.cloc
+C                                1              4              1             28
+./Validate_International_Securities_Identification_Number.c.cloc
+C                                1              8              1             37
+./Search_a_list_of_records.c.cloc
+C                                1             18              3             85
+./4-rings_or_4-squares_puzzle.c.cloc
+C                                1             13              0             71
+./99_Bottles_of_Beer.c.cloc
+C                                1              7              3             18
+./Calendar.c.cloc
+C                                1             16              0            109
+./Array_length.c.cloc
+C                                1              7              7              8
+./Accumulator_factory.c.cloc
+C                                1              0              2             16
+./JortSort.c.cloc
+C                                1             19              0             37
+./Stack.c.cloc
+C                                1              8              2             52
+./Regular_expressions.c.cloc
+C                                1              3              2             38
+./Draw_a_cuboid.c.cloc
+C                                1             20              0            117
+./Babbage_problem.c.cloc
+C                                1              6              5             15
+./Five_weekends.c.cloc
+C                                1              2              0             28
+./Van_Eck_sequence.c.cloc
+C                                1              3              0             20
+./URL_encoding.c.cloc
+C                                1              6              1             27
+./ABC_Problem.c.cloc
+C                                1              9              0             32
+./Dice_game_probabilities.c.cloc
+C                                1             10              0             45
+./Delete_a_file.c.cloc
+C                                1              1              0              8
+./Reduced_row_echelon_form.c.cloc
+C                                1             15              6            135
+./Matrix_transposition.c.cloc
+C                                1              3              0             22
+./Pascals_triangle.c.cloc
+C                                1              3              0             19
+./Binary_digits.c.cloc
+C                                1              3              0             24
+./Knapsack_problem-Unbounded.c.cloc
+C                                1              5              0             53
+./Sparkline_in_unicode.c.cloc
+C                                1              6              0             42
+./Loops-N_plus_one_half.c.cloc
+C                                1              1              0             10
+./Old_Russian_measure_of_length.c.cloc
+C                                1              8              0             30
+./Old_lady_swallowed_a_fly.c.cloc
+C                                1              2              0             34
+./Substring-Top_and_tail.c.cloc
+C                                1              6              0             19
+./Negative_base_numbers.c.cloc
+C                                1             16              8             79
+./Welchs_t-test.c.cloc
+C                                1             36             44            187
+./Thue-Morse.c.cloc
+C                                1              3              0             16
+./Mutual_recursion.c.cloc
+C                                1              4              3             23
+./Zero_to_the_zero_power.c.cloc
+C                                1              1              0             10
+./Balanced_brackets.c.cloc
+C                                1              5              0             38
+./Check_output_device_is_a_terminal.c.cloc
+C                                1              1              0              9
+./Sorting_algorithms-Quicksort.c.cloc
+C                                1             13              0             32
+./Cholesky_decomposition.c.cloc
+C                                1              7              0             44
+./Law_of_cosines_-_triples.c.cloc
+C                                1              5             10             28
+./Type_detection.c.cloc
+C                                1              4              0             29
+./Binary_search.c.cloc
+C                                1              3              0             43
+./Deepcopy.c.cloc
+C                                1             12              0             36
+./Numeric_separator_syntax.c.cloc
+C                                1              5              0              9
+./Peaceful_chess_queen_armies.c.cloc
+C                                1             53              2            218
+./Tokenize_a_string_with_escaping.c.cloc
+C                                1             21             23             57
+./Continued_fraction-Arithmetic-Construct_from_rational_number.c.cloc
+C                                1             23              0             48
+./Factors_of_an_integer.c.cloc
+C                                1              6              0             62
+./Hofstadter_Figure-Figure_sequences.c.cloc
+C                                1             18              2             64
+./Sorting_algorithms-Patience_sort.c.cloc
+C                                1             15              0             51
+./Sum_of_squares.c.cloc
+C                                1              3              1             15
+./Sum_of_a_series.c.cloc
+C                                1              5              0             14
+./Idiomatically_determine_all_the_lowercase_and_uppercase_letters.c.cloc
+C                                1              1              0              8
+./Nth.c.cloc
+C                                1              8              0             44
+./Text_processing-2.c.cloc
+C                                1             11              0             73
+./Two_Sum.c.cloc
+C                                1              5              0             17
+./Smith_numbers.c.cloc
+C                                1              7              0             72
+./Strip_control_codes_and_extended_characters_from_a_string.c.cloc
+C                                1             40             16             71
+./Integer_roots.c.cloc
+C                                1              9              0             28
+./S-Expressions.c.cloc
+C                                1             27              0            199
+./Multisplit.c.cloc
+C                                1              3              0             21
+./Sorting_algorithms-Strand_sort.c.cloc
+C                                1             16              2             60
+./Filter.c.cloc
+C                                1             11              1             31
+./Generate_lower_case_ASCII_alphabet.c.cloc
+C                                1              4              0              9
+./Weird_numbers.c.cloc
+C                                1             16              0             97
+./Kahan_summation.c.cloc
+C                                1              6              0             33
+./Carmichael_3_strong_pseudoprimes.c.cloc
+C                                1              6              2             41
+./Chinese_remainder_theorem.c.cloc
+C                                1              7              1             31
+./Record_sound.c.cloc
+C                                1              3              0             27
+./Loops-Increment_loop_index_within_loop_body.c.cloc
+C                                1              3              0             27
+./100_doors.c.cloc
+C                                1              4              2             12
+./Square_but_not_cube.c.cloc
+C                                1              1              0             17
+./Command-line_arguments.c.cloc
+C                                1              1              0             10
+./UTF-8_encode_and_decode.c.cloc
+C                                1             17              2             92
+./Sum_data_type.c.cloc
+C                                1              6              0             17
+./Determinant_and_permanent.c.cloc
+C                                1             15              0             61
+./Sudoku.c.cloc
+C                                1             12              0             55
+./Largest_number_divisible_by_its_digits.c.cloc
+C                                1              5              0             22
+./Almost_prime.c.cloc
+C                                1              7              0             23
+./Holidays_related_to_Easter.c.cloc
+C                                1             17             15             90
+./Sorting_algorithms-Cocktail_sort.c.cloc
+C                                1              3              2             34
+./Elementary_cellular_automaton-Random_Number_Generator.c.cloc
+C                                1              5              0             26
+./Forward_difference.c.cloc
+C                                1              8              2             29
+./Cheryls_Birthday.c.cloc
+C                                1             17              6            103
+./Unbias_a_random_generator.c.cloc
+C                                1              4              1             27
+./Permutations.c.cloc
+C                                1              2              5             48
+./Least_common_multiple.c.cloc
+C                                1              3              0             16
+./Stem-and-leaf_plot.c.cloc
+C                                1              7              0             32
+./Determine_if_a_string_has_all_unique_characters.c.cloc
+C                                1             32              0             97
+./Continued_fraction.c.cloc
+C                                1             15              7             49
+./Strip_a_set_of_characters_from_a_string.c.cloc
+C                                1              5              1             23
+./Terminal_control-Display_an_extended_character.c.cloc
+C                                1              1              0              8
+./Semiprime.c.cloc
+C                                1              4              0             17
+./Spiral_matrix.c.cloc
+C                                1              8              1             26
+./Quine.c.cloc
+C                                1              3              0              7
+./Totient_function.c.cloc
+C                                1             16              1             38
+./Averages-Arithmetic_mean.c.cloc
+C                                1              3              0             21
+./Rename_a_file.c.cloc
+C                                1              1              0              9
+./Fivenum.c.cloc
+C                                1              9              0             63
+./Damm_algorithm.c.cloc
+C                                1              3              0             27
+./Terminal_control-Coloured_text.c.cloc
+C                                1              3              0             27
+./Evaluate_binomial_coefficients.c.cloc
+C                                1              4              1             38
+./Topological_sort.c.cloc
+C                                1             22              1             99
+./Factors_of_a_Mersenne_number.c.cloc
+C                                1              1              0             23
+./Random_numbers.c.cloc
+C                                1              1              0             21
+./Fast_Fourier_transform.c.cloc
+C                                1             13              0             40
+./Repeat_a_string.c.cloc
+C                                1              3              0             19
+./String_concatenation.c.cloc
+C                                1              4              1             20
+./String_prepend.c.cloc
+C                                1              1              0             13
+./Polymorphic_copy.c.cloc
+C                                1             34              6            162
+./Non-decimal_radices-Convert.c.cloc
+C                                1              7              4             37
+./Hash_from_two_arrays.c.cloc
+C                                1             16              2             97
+./The_ISAAC_Cipher.c.cloc
+C                                1             28             39            165
+./List_comprehensions.c.cloc
+C                                1             13              0             66
+./String_length.c.cloc
+C                                1              2              0              7
+./Set_of_real_numbers.c.cloc
+C                                1             29              0            144
+./Kolakoski_sequence.c.cloc
+C                                1              7              1             80
+./Chinese_zodiac.c.cloc
+C                                1              7              1             27
+./Playing_cards.c.cloc
+C                                1             15              7             72
+./Cartesian_product_of_two_or_more_lists.c.cloc
+C                                1             29              0             88
+./Non-decimal_radices-Output.c.cloc
+C                                1              3              0              8
+./Sorting_algorithms-Bead_sort.c.cloc
+C                                1              9              3             35
+./Multifactorial.c.cloc
+C                                1              4              4             23
+./Dinesmans_multiple-dwelling_problem.c.cloc
+C                                1             13              3             65
+./Host_introspection.c.cloc
+C                                1              3              7             12
+./Search_a_list.c.cloc
+C                                1              4              0             36
+./Averages-Pythagorean_means.c.cloc
+C                                1              3              1             19
+./Ternary_logic.c.cloc
+C                                1             15              6             50
+./Knapsack_problem-Bounded.c.cloc
+C                                1              5              0             79
+./Linear_congruential_generator.c.cloc
+C                                1             11              1             29
+./Caesar_cipher.c.cloc
+C                                1              8              0             32
+./Here_document.c.cloc
+C                                1              3              0             12
+./Pernicious_numbers.c.cloc
+C                                1              4              0             21
+./CSV_to_HTML_translation.c.cloc
+C                                1              3              0             26
+./Named_parameters.c.cloc
+C                                1             17              6             25
+./Null_object.c.cloc
+C                                1              2              0              9
+./Sorting_algorithms-Shell_sort.c.cloc
+C                                1              2              0             24
+./Reverse_a_string.c.cloc
+C                                1              8              0             59
+./Case-sensitivity_of_identifiers.c.cloc
+C                                1              2              0              9
+./Binary_strings.c.cloc
+C                                1             18              0            120
+./Ethiopian_multiplication.c.cloc
+C                                1              5              0             27
+./Approximate_Equality.c.cloc
+C                                1              3              0             21
+./Sorting_algorithms-Selection_sort.c.cloc
+C                                1              2              0             25
+./Magic_squares_of_singly_even_order.c.cloc
+C                                1             23              0             95
+./Dot_product.c.cloc
+C                                1              7              0             21
+./Tree_traversal.c.cloc
+C                                1             20              1            125
+./Calculating_the_value_of_e.c.cloc
+C                                1              2              0             16
+./LU_decomposition.c.cloc
+C                                1             23              0            106
+./Permutation_test.c.cloc
+C                                1              6              0             23
+./A*_search_algorithm.c.cloc
+C                                1             30              8            213
+./Orbital_elements.c.cloc
+C                                1             11              0             65
+./Box_the_compass.c.cloc
+C                                1              4              0             49
+./List_rooted_trees.c.cloc
+C                                1             14              9             61
+./Zeckendorf_number_representation.c.cloc
+C                                1             12              0             46
+./Problem_of_Apollonius.c.cloc
+C                                1             22             10             78
+./Pangram_checker.c.cloc
+C                                1              5              0             18
+./Symmetric_difference.c.cloc
+C                                1              8              3             41
+./Character_codes.c.cloc
+C                                1              1              0              6
+./Date_manipulation.c.cloc
+C                                1              3              2             14
+./Top_rank_per_group.c.cloc
+C                                1              7              0             48
+./Sort_an_integer_array.c.cloc
+C                                1              2              0             15
+./First-class_functions.c.cloc
+C                                1             13              7             52
+./Evolutionary_algorithm.c.cloc
+C                                1             12              5             50
+./Sum_digits_of_an_integer.c.cloc
+C                                1              2              0             16
+./Floyds_triangle.c.cloc
+C                                1             14              2             46
+./Loops-Wrong_ranges.c.cloc
+C                                1              5              0             38
+./Fibonacci_n-step_number_sequences.c.cloc
+C                                1              9              2             32
+./Day_of_the_week.c.cloc
+C                                1              5              1             18
+./Diversity_prediction_theorem.c.cloc
+C                                1             20              0             51
+./Show_the_epoch.c.cloc
+C                                1              1              0              7
+./Sort_disjoint_sublist.c.cloc
+C                                1              6              1             26
+./Run-length_encoding.c.cloc
+C                                1             15             17            115
+./Runge-Kutta_method.c.cloc
+C                                1              6              0             31
+./Water_collected_between_towers.c.cloc
+C                                1             22              0             50
+./Jensens_Device.c.cloc
+C                                1              3              0             13
+./Determine_if_a_string_has_all_the_same_characters.c.cloc
+C                                1              9              0             25
+./Digital_root-Multiplicative_digital_root.c.cloc
+C                                1              9              4             46
+./Knapsack_problem-0-1.c.cloc
+C                                1              4              0             74
+./Sorting_algorithms-Stooge_sort.c.cloc
+C                                1              7              0             24
+./Amicable_pairs.c.cloc
+C                                1              8              8             40
+./Integer_overflow.c.cloc
+C                                1              1              0             27
+./Largest_int_from_concatenated_ints.c.cloc
+C                                1              5              0             26
+./Repeat.c.cloc
+C                                1              3              0             12
+./Terminal_control-Unicode_output.c.cloc
+C                                1              5              0             22
+./Imaginary_base_numbers.c.cloc
+C                                1             38              5            226
+./Feigenbaum_constant_calculation.c.cloc
+C                                1              2              0             27
+./Roots_of_a_function.c.cloc
+C                                1              6              0             54
+./Hello_world-Text.c.cloc
+C                                1              1              0              7
+./Chaocipher.c.cloc
+C                                1             10              2             60
+./Gaussian_elimination.c.cloc
+C                                1             12              0             61
+./Inverted_syntax.c.cloc
+C                                1              5              0             12
+./Sequence:_smallest_number_with_exactly_n_divisors.c.cloc
+C                                1              3              0             29
+./Move-to-front_algorithm.c.cloc
+C                                1             10              1             77
+./Non-continuous_subsequences.c.cloc
+C                                1              4              0             21
+./Exponentiation_operator.c.cloc
+C                                1              5              0             38
+./P-value_correction.c.cloc
+C                                1             25             57            466
+./Zebra_puzzle.c.cloc
+C                                1             38             18            182
+./Circles_of_given_radius_through_two_points.c.cloc
+C                                1             13              0             50
+./Maze_generation.c.cloc
+C                                1             31              4            111
+./Sum_multiples_of_3_and_5.c.cloc
+C                                1              4              0             20
+./Roman_numerals-Encode.c.cloc
+C                                1              6              8             45
+./Show_Ascii_table.c.cloc
+C                                1              1              0             17
+./String_matching.c.cloc
+C                                1              5              0             27
+./Josephus_problem.c.cloc
+C                                1             12              2             32
+./Permutations-Derangements.c.cloc
+C                                1             11              0             46
+./Remove_duplicate_elements.c.cloc
+C                                1              5              0             28
+./Create_an_HTML_table.c.cloc
+C                                1              2              0             14
+./Priority_queue.c.cloc
+C                                1              8              0             63
+./Convert_decimal_number_to_rational.c.cloc
+C                                1             12             11             50
+./Infinity.c.cloc
+C                                1              2              0              9
+./Poker_hand_analyser.c.cloc
+C                                1             12              0            117
+./Hello_world-Standard_error.c.cloc
+C                                1              2              0              7
+./Department_Numbers.c.cloc
+C                                1              5              0             17
+./Vector_products.c.cloc
+C                                1             10              0             37
+./Magic_squares_of_doubly_even_order.c.cloc
+C                                1             14              0             49
+./Horners_rule_for_polynomial_evaluation.c.cloc
+C                                1              5              0             17
+./Lucas-Lehmer_test.c.cloc
+C                                1              5              0             40
+./Faulhabers_triangle.c.cloc
+C                                1             34              0            124
+./Hello_world-Newline_omission.c.cloc
+C                                1              1              0              6
+./Fibonacci_word-fractal.c.cloc
+C                                1              4              0             13
+./Variable-length_quantity.c.cloc
+C                                1              9              0             34
+./Elliptic_curve_arithmetic.c.cloc
+C                                1             16              1             57
+./Combinations.c.cloc
+C                                1              5              2             20
+./Balanced_ternary.c.cloc
+C                                1             31              0            171
+./Y_combinator.c.cloc
+C                                1             12              3             55
+./Vogels_approximation_method.c.cloc
+C                                1             14              0             94
+./QR_decomposition.c.cloc
+C                                1             23              6            163
+./Munchausen_numbers.c.cloc
+C                                1              1              7             15
+./String_case.c.cloc
+C                                1              4              5             27
+./Cycle_detection.c.cloc
+C                                1             14              0             65
+./Split_a_character_string_based_on_change_of_character.c.cloc
+C                                1              0              0             24
+./Sort_numbers_lexicographically.c.cloc
+C                                1              3              0             48
+./Rep-string.c.cloc
+C                                1              7              0             28
+./Extract_file_extension.c.cloc
+C                                1              6              2             37
+./Extreme_floating_point_values.c.cloc
+C                                1              4              0             27
+./Write_language_name_in_3D_ASCII.c.cloc
+C                                1              0              0              3
+./Multiplication_tables.c.cloc
+C                                1              4              0             13
+./Iterated_digits_squaring.c.cloc
+C                                1             10              1             36
+./Environment_variables.c.cloc
+C                                1              1              0              6
+./Paraffins.c.cloc
+C                                1             21             51             43
+./Zeckendorf_arithmetic.c.cloc
+C                                1             24              0            165
+./Egyptian_division.c.cloc
+C                                1             10              4             35
+./Longest_increasing_subsequence.c.cloc
+C                                1              8              2             34
+./Copy_a_string.c.cloc
+C                                1              9             19             32
+./Sorting_Algorithms-Circle_Sort.c.cloc
+C                                1              7              3             24
+./Sequence:_smallest_number_greater_than_previous_term_with_exactly_n_divisors.c.cloc
+C                                1              3              0             26
+./Jewels_and_Stones.c.cloc
+C                                1              2              0             12
+./The_Twelve_Days_of_Christmas.c.cloc
+C                                1              7              0             44
+./Sort_using_a_custom_comparator.c.cloc
+C                                1              4              0             18
+./Averages-Mode.c.cloc
+C                                1             15              5             39
+./Optional_parameters.c.cloc
+C                                1             17             11            139
+./Cramers_rule.c.cloc
+C                                1             22              0             90
+./Stern-Brocot_sequence.c.cloc
+C                                1              8              1             29
+./Trigonometric_functions.c.cloc
+C                                1              2              7             18
+./Anti-primes.c.cloc
+C                                1              2              0             24
+./Natural_sorting.c.cloc
+C                                1             28              2            227
+./Convex_hull.c.cloc
+C                                1             28              2            127
+./Tokenize_a_string.c.cloc
+C                                1              6              0             16
+./Eulers_identity.c.cloc
+C                                1              1              0             13
+./Find_the_intersection_of_two_lines.c.cloc
+C                                1             19              0             72
+./Currying.c.cloc
+C                                1              9              0             23
+./Visualize_a_tree.c.cloc
+C                                1             12              0             33
+./Levenshtein_distance-Alignment.c.cloc
+C                                1             12              0             77
+./Terminal_control-Ringing_the_terminal_bell.c.cloc
+C                                1              0              0              5
+./Ordered_Partitions.c.cloc
+C                                1              9              0             42
+./Luhn_test_of_credit_card_numbers.c.cloc
+C                                1              6              0             26
+./Hamming_numbers.c.cloc
+C                                1             10              4             42
+./Pascals_triangle-Puzzle.c.cloc
+C                                1              4             12             24
+./Ramseys_theorem.c.cloc
+C                                1             10              3             49
+./Deal_cards_for_FreeCell.c.cloc
+C                                1              9              0             37
+./Towers_of_Hanoi.c.cloc
+C                                1              1              0             16
+./Gapful_numbers.c.cloc
+C                                1              8              0             28
+./Averages-Root_mean_square.c.cloc
+C                                1              2              0             16
+./Long_multiplication.c.cloc
+C                                1              9              5             41
+./One-dimensional_cellular_automata.c.cloc
+C                                1              6              1             21
+./Probabilistic_choice.c.cloc
+C                                1              5              3             26
+./Memory_allocation.c.cloc
+C                                1              2              5             11
+./Reverse_words_in_a_string.c.cloc
+C                                1              3              0             32
+./Quickselect_algorithm.c.cloc
+C                                1              7              0             28
+./Data_Encryption_Standard.c.cloc
+C                                1             58            100            343
+./Strip_whitespace_from_a_string-Top_and_tail.c.cloc
+C                                1              7              0             39
+./Check_input_device_is_a_terminal.c.cloc
+C                                1              1              0              9
+./Catamorphism.c.cloc
+C                                1              4              0             20
+./Sorting_algorithms-Cycle_sort.c.cloc
+C                                1             15             10             73
+./Short-circuit_evaluation.c.cloc
+C                                1              6              0             26
+./Greatest_subsequential_sum.c.cloc
+C                                1              7              0             41
+./Combinations_with_repetitions.c.cloc
+C                                1              5              0             27
+./Comma_quibbling.c.cloc
+C                                1              7              0             46
+./Attractive_numbers.c.cloc
+C                                1              5              0             46
+./Hilbert_curve.c.cloc
+C                                1              5              0             66
+./Digital_root.c.cloc
+C                                1              5              0             21
+./Haversine_formula.c.cloc
+C                                1              4              1             21
+./Matrix_chain_multiplication.c.cloc
+C                                1              6              0             66
+./Soundex.c.cloc
+C                                1             11              4             82
+./Averages-Mean_angle.c.cloc
+C                                1              5              0             25
+./Doubly-linked_list-Traversal.c.cloc
+C                                1             12              2            114
+./Hofstadter_Q_sequence.c.cloc
+C                                1              7              0             17
+./Harshad_or_Niven_series.c.cloc
+C                                1              4              0             18
+./Subtractive_generator.c.cloc
+C                                1              9              0             34
+./Map_range.c.cloc
+C                                1              4              0             15
+./Create_an_object_at_a_given_address.c.cloc
+C                                1              2              2             15
+./Pascal_matrix_generation.c.cloc
+C                                1             14              3             57
+./Population_count.c.cloc
+C                                1              3              3             33
+./Sequence_of_non-squares.c.cloc
+C                                1              4              3             17
+./Sort_an_array_of_composite_structures.c.cloc
+C                                1              9              0             89
+./Jaro_distance.c.cloc
+C                                1             15             22             53
+./Delegates.c.cloc
+C                                1             13              6             67
+./Truncatable_primes.c.cloc
+C                                1             10              0             37
+./Thieles_interpolation_formula.c.cloc
+C                                1             10             10             44
+./Perfect_shuffle.c.cloc
+C                                1             25              4             81
+./Permutations_by_swapping.c.cloc
+C                                1             15              0             53
+./Determine_if_two_triangles_overlap.c.cloc
+C                                1             23             12            109
+./Find_the_intersection_of_a_line_with_a_plane.c.cloc
+C                                1             14              0             39
+./Price_fraction.c.cloc
+C                                1              5              0             23
+./Roots_of_unity.c.cloc
+C                                1              4              0             20
+./Permutations-Rank_of_a_permutation.c.cloc
+C                                1             12              6             50
+./Burrows–Wheeler_transform.c.cloc
+C                                1              6              0             93
+./Numerical_integration-Adaptive_Simpsons_method.c.cloc
+C                                1              5              5             30
+./Four_bit_adder.c.cloc
+C                                1             14              3             53
+./Base64_decode_data.c.cloc
+C                                1             15              0             64
+./Unicode_strings.c.cloc
+C                                1              3              6             21
+./Bell_numbers.c.cloc
+C                                1             10              1             46
+./N-queens_problem.c.cloc
+C                                1              6              0             32
+./Return_multiple_values.c.cloc
+C                                1              6              0             19
+./Inverted_index.c.cloc
+C                                1             20             12            119
+./Ray-casting_algorithm.c.cloc
+C                                1             26             19             96
+./Sierpinski_triangle.c.cloc
+C                                1              1              0             12
+./Heronian_triangles.c.cloc
+C                                1             21              0            100
+./Roman_numerals-Decode.c.cloc
+C                                1              9              7             31
+./State_name_puzzle.c.cloc
+C                                1             17              0             89
+./Numeric_error_propagation.c.cloc
+C                                1             13              0             63
+./Sorting_algorithms-Bogosort.c.cloc
+C                                1              5              0             32
+./Stable_marriage_problem.c.cloc
+C                                1             16              4            114
+./Sorting_algorithms-Bubble_sort.c.cloc
+C                                1              2              0             27
+./Euler_method.c.cloc
+C                                1              8              0             36
+./Unicode_variable_names.c.cloc
+C                                1              5              0              7
+./Exceptions-Catch_an_exception_thrown_in_a_nested_call.c.cloc
+C                                1             21              2             98
+./Function_composition.c.cloc
+C                                1             16              7             41
+./ISBN13_check_digit.c.cloc
+C                                1              2              2             28
+./Modular_inverse.c.cloc
+C                                1              2              0             18
+./Taxicab_numbers.c.cloc
+C                                1             14              2             68
+./The_Name_Game.c.cloc
+C                                1              6              1             32
+./Set_consolidation.c.cloc
+C                                1              7              0             30
+./Range_expansion.c.cloc
+C                                1             13              8             57
+./General_FizzBuzz.c.cloc
+C                                1             11              3             40
+./Parametric_polymorphism.c.cloc
+C                                1              7              0             40
+./Number_names.c.cloc
+C                                1             18              2            117
+./Universal_Turing_machine.c.cloc
+C                                1             11              0            220
+./Leap_year.c.cloc
+C                                1              2              0             13
+./Find_the_missing_permutation.c.cloc
+C                                1              9              2             22
+./Temperature_conversion.c.cloc
+C                                1              4              0             25
+./Check_that_file_exists.c.cloc
+C                                1              3              2             23
+./Print_debugging_statement.c.cloc
+C                                1              3              0             14
+./Empty_program.c.cloc
+C                                1              0              0              4
+./Program_name.c.cloc
+C                                1              2              0              5
+./Phrase_reversals.c.cloc
+C                                1             14              7             50
+./Equilibrium_index.c.cloc
+C                                1              9              5             30
+./Resistor_mesh.c.cloc
+C                                1             10              0             55
+./Loop_over_multiple_arrays_simultaneously.c.cloc
+C                                1              2              0              9
+./Formal_power_series.c.cloc
+C                                1             23             10            109
+./Substring.c.cloc
+C                                1              6             20             30
+./Undefined_values.c.cloc
+C                                1              3              2             11
+./Knuth_shuffle.c.cloc
+C                                1              6             11             35
+./Count_occurrences_of_a_substring.c.cloc
+C                                1              3              1             18
+./Non-decimal_radices-Input.c.cloc
+C                                1              6              1             12
+./Start_from_a_main_routine.c.cloc
+C                                1              3              0              7
+./Sum_to_100.c.cloc
+C                                1             17             12            107
+./Sorting_algorithms-Insertion_sort.c.cloc
+C                                1              2              0             23
+./Exponentiation_order.c.cloc
+C                                1              3              0              8

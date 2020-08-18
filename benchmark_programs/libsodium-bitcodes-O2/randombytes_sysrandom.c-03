@@ -1,0 +1,60 @@
+; entering Souper's runOnFunction() for ./randombytes_sysrandom.c.bc:randombytes_sysrandom_stir()
+
+; ModuleID = './randombytes_sysrandom.c.bc'
+source_filename = "randombytes/sysrandom/randombytes_sysrandom.c"
+target datalayout = "e-m:e-p:32:32-i64:64-n32:64-S128"
+target triple = "wasm32-unknown-wasi"
+
+%struct.randombytes_implementation = type { i8* ()*, i32 ()*, void ()*, i32 (i32)*, void (i8*, i32)*, i32 ()* }
+
+@randombytes_sysrandom_implementation = local_unnamed_addr global %struct.randombytes_implementation { i8* ()* @randombytes_sysrandom_implementation_name, i32 ()* @randombytes_sysrandom, void ()* @randombytes_sysrandom_stir, i32 (i32)* null, void (i8*, i32)* @randombytes_sysrandom_buf, i32 ()* @randombytes_sysrandom_close }, align 4
+@.str = private unnamed_addr constant [10 x i8] c"sysrandom\00", align 1
+
+; Function Attrs: norecurse nounwind readnone
+define internal i8* @randombytes_sysrandom_implementation_name() #0 {
+  ret i8* getelementptr inbounds ([10 x i8], [10 x i8]* @.str, i32 0, i32 0)
+}
+
+; Function Attrs: nounwind
+define internal i32 @randombytes_sysrandom() #1 {
+  %1 = tail call i32 @arc4random() #3
+  ret i32 %1
+}
+
+; Function Attrs: norecurse nounwind readnone
+define internal void @randombytes_sysrandom_stir() #0 {
+  ret void
+}
+
+; Function Attrs: nounwind
+define internal void @randombytes_sysrandom_buf(i8* %0, i32 %1) #1 {
+  tail call void @arc4random_buf(i8* %0, i32 %1) #3
+  ret void
+}
+
+; Function Attrs: norecurse nounwind readnone
+define internal i32 @randombytes_sysrandom_close() #0 {
+  ret i32 0
+}
+
+declare i32 @arc4random() local_unnamed_addr #2
+
+declare void @arc4random_buf(i8* %0, i32 %1) local_unnamed_addr #2
+
+attributes #0 = { norecurse nounwind readnone "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "min-legal-vector-width"="0" "no-infs-fp-math"="false" "no-jump-tables"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="false" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #1 = { nounwind "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "min-legal-vector-width"="0" "no-infs-fp-math"="false" "no-jump-tables"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="false" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #2 = { "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="false" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #3 = { nounwind }
+
+!llvm.module.flags = !{!0, !1, !2}
+!llvm.ident = !{!3}
+
+!0 = !{i32 1, !"wchar_size", i32 4}
+!1 = !{i32 7, !"PIC Level", i32 2}
+!2 = !{i32 7, !"PIE Level", i32 2}
+!3 = !{!"clang version 10.0.0 (https://github.com/llvm/llvm-project d32170dbd5b0d54436537b6b75beaf44324e0c28)"}
+
+; extracted candidates
+#########################################################
+; exiting Souper's runOnFunction() for ./randombytes_sysrandom.c.bc:randombytes_sysrandom_stir()
+

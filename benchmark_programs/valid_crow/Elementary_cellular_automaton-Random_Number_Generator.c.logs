@@ -1,0 +1,2041 @@
+
+Entering the Souper pass's runOnModule()
+
+
+; entering Souper's runOnFunction() for evolve()
+
+; ModuleID = './Elementary_cellular_automaton-Random_Number_Generator.c.bc'
+source_filename = "./Elementary_cellular_automaton-Random_Number_Generator.c"
+target datalayout = "e-m:e-p:32:32-i64:64-n32:64-S128"
+target triple = "wasm32-unknown-wasi"
+
+@.str = private unnamed_addr constant [4 x i8] c" %d\00", align 1
+@llvm.used = appending global [1 x i8*] [i8* bitcast (i32 ()* @__main_void to i8*)], section "llvm.metadata"
+
+@__main_void = alias i32 (), i32 ()* @main
+
+; Function Attrs: noinline nounwind optnone
+define hidden void @evolve(i64 %state, i32 %rule) #0 {
+entry:
+  %state.addr = alloca i64, align 8
+  %rule.addr = alloca i32, align 4
+  %i = alloca i32, align 4
+  %p = alloca i32, align 4
+  %q = alloca i32, align 4
+  %b = alloca i32, align 4
+  %st = alloca i64, align 8
+  store i64 %state, i64* %state.addr, align 8
+  store i32 %rule, i32* %rule.addr, align 4
+  store i32 0, i32* %p, align 4
+  br label %for.cond
+
+for.cond:                                         ; preds = %for.inc22, %entry
+  %0 = load i32, i32* %p, align 4
+  %cmp = icmp slt i32 %0, 10
+  br i1 %cmp, label %for.body, label %for.end24
+
+for.body:                                         ; preds = %for.cond
+  store i32 0, i32* %b, align 4
+  store i32 8, i32* %q, align 4
+  br label %for.cond1
+
+for.cond1:                                        ; preds = %for.end, %for.body
+  %1 = load i32, i32* %q, align 4
+  %dec = add nsw i32 %1, -1
+  store i32 %dec, i32* %q, align 4
+  %tobool = icmp ne i32 %1, 0
+  br i1 %tobool, label %for.body2, label %for.end21
+
+for.body2:                                        ; preds = %for.cond1
+  %2 = load i64, i64* %state.addr, align 8
+  store i64 %2, i64* %st, align 8
+  %3 = load i64, i64* %st, align 8
+  %and = and i64 %3, 1
+  %4 = load i32, i32* %q, align 4
+  %sh_prom = zext i32 %4 to i64
+  %shl = shl i64 %and, %sh_prom
+  %5 = load i32, i32* %b, align 4
+  %conv = sext i32 %5 to i64
+  %or = or i64 %conv, %shl
+  %conv3 = trunc i64 %or to i32
+  store i32 %conv3, i32* %b, align 4
+  store i32 0, i32* %i, align 4
+  store i64 0, i64* %state.addr, align 8
+  br label %for.cond4
+
+for.cond4:                                        ; preds = %for.inc, %for.body2
+  %6 = load i32, i32* %i, align 4
+  %cmp5 = icmp ult i32 %6, 64
+  br i1 %cmp5, label %for.body7, label %for.end
+
+for.body7:                                        ; preds = %for.cond4
+  %7 = load i32, i32* %rule.addr, align 4
+  %conv8 = sext i32 %7 to i64
+  %8 = load i64, i64* %st, align 8
+  %9 = load i32, i32* %i, align 4
+  %sub = sub nsw i32 %9, 1
+  %sh_prom9 = zext i32 %sub to i64
+  %shr = lshr i64 %8, %sh_prom9
+  %10 = load i64, i64* %st, align 8
+  %11 = load i32, i32* %i, align 4
+  %sub10 = sub i32 65, %11
+  %sh_prom11 = zext i32 %sub10 to i64
+  %shl12 = shl i64 %10, %sh_prom11
+  %or13 = or i64 %shr, %shl12
+  %and14 = and i64 7, %or13
+  %shl15 = shl i64 1, %and14
+  %and16 = and i64 %conv8, %shl15
+  %tobool17 = icmp ne i64 %and16, 0
+  br i1 %tobool17, label %if.then, label %if.end
+
+if.then:                                          ; preds = %for.body7
+  %12 = load i32, i32* %i, align 4
+  %sh_prom18 = zext i32 %12 to i64
+  %shl19 = shl i64 1, %sh_prom18
+  %13 = load i64, i64* %state.addr, align 8
+  %or20 = or i64 %13, %shl19
+  store i64 %or20, i64* %state.addr, align 8
+  br label %if.end
+
+if.end:                                           ; preds = %if.then, %for.body7
+  br label %for.inc
+
+for.inc:                                          ; preds = %if.end
+  %14 = load i32, i32* %i, align 4
+  %inc = add nsw i32 %14, 1
+  store i32 %inc, i32* %i, align 4
+  br label %for.cond4
+
+for.end:                                          ; preds = %for.cond4
+  br label %for.cond1
+
+for.end21:                                        ; preds = %for.cond1
+  %15 = load i32, i32* %b, align 4
+  %call = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([4 x i8], [4 x i8]* @.str, i32 0, i32 0), i32 %15)
+  br label %for.inc22
+
+for.inc22:                                        ; preds = %for.end21
+  %16 = load i32, i32* %p, align 4
+  %inc23 = add nsw i32 %16, 1
+  store i32 %inc23, i32* %p, align 4
+  br label %for.cond
+
+for.end24:                                        ; preds = %for.cond
+  %call25 = call i32 @putchar(i32 10)
+  ret void
+}
+
+declare i32 @printf(i8* %0, ...) #1
+
+declare i32 @putchar(i32 %0) #1
+
+; Function Attrs: noinline nounwind optnone
+define hidden i32 @main() #0 {
+entry:
+  %retval = alloca i32, align 4
+  store i32 0, i32* %retval, align 4
+  call void @evolve(i64 1, i32 30)
+  ret i32 0
+}
+
+attributes #0 = { noinline nounwind optnone "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "min-legal-vector-width"="0" "no-infs-fp-math"="false" "no-jump-tables"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #1 = { "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+
+!llvm.module.flags = !{!0}
+!llvm.ident = !{!1}
+
+!0 = !{i32 1, !"wchar_size", i32 4}
+!1 = !{!"clang version 11.0.0 (https://github.com/Jacarte/llvm-project.git 0f6dea67136cc1e0b3d200eb2bb165628970c44b)"}
+
+; extracted candidates
+
+; *****
+; For LLVM instruction:
+;  %0 = load i32, i32* %p, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %cmp = icmp slt i32 %0, 10
+; Looking for a replacement for:
+%0:i32 = var
+%1:i1 = slt %0, 10:i32
+infer %1
+
+; *****
+; For LLVM instruction:
+;  %1 = load i32, i32* %q, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %dec = add nsw i32 %1, -1
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = addnsw 4294967295:i32, %0
+infer %1
+
+; *****
+; For LLVM instruction:
+;  %tobool = icmp ne i32 %1, 0
+; Looking for a replacement for:
+%0:i32 = var
+%1:i1 = ne 0:i32, %0
+infer %1
+
+; *****
+; For LLVM instruction:
+;  %2 = load i64, i64* %state.addr, align 8
+; Looking for a replacement for:
+%0:i64 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %3 = load i64, i64* %st, align 8
+; Looking for a replacement for:
+%0:i64 = var
+infer %0 (demandedBits=0000000000000000000000000000000000000000000000000000000000000001)
+
+; *****
+; For LLVM instruction:
+;  %and = and i64 %3, 1
+; Looking for a replacement for:
+%0:i64 = var
+%1:i64 = and 1:i64, %0
+infer %1
+
+; *****
+; For LLVM instruction:
+;  %4 = load i32, i32* %q, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %sh_prom = zext i32 %4 to i64
+; Looking for a replacement for:
+%0:i32 = var
+%1:i64 = zext %0
+infer %1
+
+; *****
+; For LLVM instruction:
+;  %shl = shl i64 %and, %sh_prom
+; Looking for a replacement for:
+%0:i64 = var
+%1:i64 = and 1:i64, %0
+%2:i32 = var
+%3:i64 = zext %2
+%4:i64 = shl %1, %3
+infer %4 (demandedBits=0000000000000000000000000000000011111111111111111111111111111111)
+
+; *****
+; For LLVM instruction:
+;  %5 = load i32, i32* %b, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %conv = sext i32 %5 to i64
+; Looking for a replacement for:
+%0:i32 = var
+%1:i64 = sext %0
+infer %1 (demandedBits=0000000000000000000000000000000011111111111111111111111111111111)
+
+; *****
+; For LLVM instruction:
+;  %or = or i64 %conv, %shl
+; Looking for a replacement for:
+%0:i64 = var
+%1:i64 = and 1:i64, %0
+%2:i32 = var
+%3:i64 = zext %2
+%4:i64 = shl %1, %3
+%5:i32 = var
+%6:i64 = sext %5
+%7:i64 = or %4, %6
+infer %7 (demandedBits=0000000000000000000000000000000011111111111111111111111111111111)
+
+; *****
+; For LLVM instruction:
+;  %conv3 = trunc i64 %or to i32
+; Looking for a replacement for:
+%0:i64 = var
+%1:i64 = and 1:i64, %0
+%2:i32 = var
+%3:i64 = zext %2
+%4:i64 = shl %1, %3
+%5:i32 = var
+%6:i64 = sext %5
+%7:i64 = or %4, %6
+%8:i32 = trunc %7
+infer %8
+
+; *****
+; For LLVM instruction:
+;  %6 = load i32, i32* %i, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %cmp5 = icmp ult i32 %6, 64
+; Looking for a replacement for:
+%0:i32 = var
+%1:i1 = ult %0, 64:i32
+infer %1
+
+; *****
+; For LLVM instruction:
+;  %7 = load i32, i32* %rule.addr, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0 (demandedBits=00000000000000000000000011111111)
+
+; *****
+; For LLVM instruction:
+;  %conv8 = sext i32 %7 to i64
+; Looking for a replacement for:
+%0:i32 = var
+%1:i64 = sext %0
+infer %1 (demandedBits=0000000000000000000000000000000000000000000000000000000011111111)
+
+; *****
+; For LLVM instruction:
+;  %8 = load i64, i64* %st, align 8
+; Looking for a replacement for:
+%0:i64 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %9 = load i32, i32* %i, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %sub = sub nsw i32 %9, 1
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = subnsw %0, 1:i32
+infer %1
+
+; *****
+; For LLVM instruction:
+;  %sh_prom9 = zext i32 %sub to i64
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = subnsw %0, 1:i32
+%2:i64 = zext %1
+infer %2
+
+; *****
+; For LLVM instruction:
+;  %shr = lshr i64 %8, %sh_prom9
+; Looking for a replacement for:
+%0:i64 = var
+%1:i32 = var
+%2:i32 = subnsw %1, 1:i32
+%3:i64 = zext %2
+%4:i64 = lshr %0, %3
+infer %4 (demandedBits=0000000000000000000000000000000000000000000000000000000000000111)
+
+; *****
+; For LLVM instruction:
+;  %10 = load i64, i64* %st, align 8
+; Looking for a replacement for:
+%0:i64 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %11 = load i32, i32* %i, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %sub10 = sub i32 65, %11
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = sub 65:i32, %0
+infer %1
+
+; *****
+; For LLVM instruction:
+;  %sh_prom11 = zext i32 %sub10 to i64
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = sub 65:i32, %0
+%2:i64 = zext %1
+infer %2
+
+; *****
+; For LLVM instruction:
+;  %shl12 = shl i64 %10, %sh_prom11
+; Looking for a replacement for:
+%0:i64 = var
+%1:i32 = var
+%2:i32 = sub 65:i32, %1
+%3:i64 = zext %2
+%4:i64 = shl %0, %3
+infer %4 (demandedBits=0000000000000000000000000000000000000000000000000000000000000111)
+
+; *****
+; For LLVM instruction:
+;  %or13 = or i64 %shr, %shl12
+; Looking for a replacement for:
+%0:i64 = var
+%1:i32 = var
+%2:i32 = sub 65:i32, %1
+%3:i64 = zext %2
+%4:i64 = shl %0, %3
+%5:i64 = var
+%6:i32 = var
+%7:i32 = subnsw %6, 1:i32
+%8:i64 = zext %7
+%9:i64 = lshr %5, %8
+%10:i64 = or %4, %9
+infer %10 (demandedBits=0000000000000000000000000000000000000000000000000000000000000111)
+
+; *****
+; For LLVM instruction:
+;  %and14 = and i64 7, %or13
+; Looking for a replacement for:
+%0:i64 = var
+%1:i32 = var
+%2:i32 = sub 65:i32, %1
+%3:i64 = zext %2
+%4:i64 = shl %0, %3
+%5:i64 = var
+%6:i32 = var
+%7:i32 = subnsw %6, 1:i32
+%8:i64 = zext %7
+%9:i64 = lshr %5, %8
+%10:i64 = or %4, %9
+%11:i64 = and 7:i64, %10
+infer %11
+
+; *****
+; For LLVM instruction:
+;  %shl15 = shl i64 1, %and14
+; Looking for a replacement for:
+%0:i64 = var
+%1:i32 = var
+%2:i32 = sub 65:i32, %1
+%3:i64 = zext %2
+%4:i64 = shl %0, %3
+%5:i64 = var
+%6:i32 = var
+%7:i32 = subnsw %6, 1:i32
+%8:i64 = zext %7
+%9:i64 = lshr %5, %8
+%10:i64 = or %4, %9
+%11:i64 = and 7:i64, %10
+%12:i64 = shl 1:i64, %11
+infer %12
+
+; *****
+; For LLVM instruction:
+;  %and16 = and i64 %conv8, %shl15
+; Looking for a replacement for:
+%0:i64 = var
+%1:i32 = var
+%2:i32 = sub 65:i32, %1
+%3:i64 = zext %2
+%4:i64 = shl %0, %3
+%5:i64 = var
+%6:i32 = var
+%7:i32 = subnsw %6, 1:i32
+%8:i64 = zext %7
+%9:i64 = lshr %5, %8
+%10:i64 = or %4, %9
+%11:i64 = and 7:i64, %10
+%12:i64 = shl 1:i64, %11
+%13:i32 = var
+%14:i64 = sext %13
+%15:i64 = and %12, %14
+infer %15
+
+; *****
+; For LLVM instruction:
+;  %tobool17 = icmp ne i64 %and16, 0
+; Looking for a replacement for:
+%0:i64 = var
+%1:i32 = var
+%2:i32 = sub 65:i32, %1
+%3:i64 = zext %2
+%4:i64 = shl %0, %3
+%5:i64 = var
+%6:i32 = var
+%7:i32 = subnsw %6, 1:i32
+%8:i64 = zext %7
+%9:i64 = lshr %5, %8
+%10:i64 = or %4, %9
+%11:i64 = and 7:i64, %10
+%12:i64 = shl 1:i64, %11
+%13:i32 = var
+%14:i64 = sext %13
+%15:i64 = and %12, %14
+%16:i1 = ne 0:i64, %15
+infer %16
+
+; *****
+; For LLVM instruction:
+;  %12 = load i32, i32* %i, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %sh_prom18 = zext i32 %12 to i64
+; Looking for a replacement for:
+%0:i32 = var
+%1:i64 = zext %0
+infer %1
+
+; *****
+; For LLVM instruction:
+;  %shl19 = shl i64 1, %sh_prom18
+; Looking for a replacement for:
+%0:i32 = var
+%1:i64 = zext %0
+%2:i64 = shl 1:i64, %1
+infer %2
+
+; *****
+; For LLVM instruction:
+;  %13 = load i64, i64* %state.addr, align 8
+; Looking for a replacement for:
+%0:i64 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %or20 = or i64 %13, %shl19
+; Looking for a replacement for:
+%0:i64 = var
+%1:i32 = var
+%2:i64 = zext %1
+%3:i64 = shl 1:i64, %2
+%4:i64 = or %0, %3
+infer %4
+
+; *****
+; For LLVM instruction:
+;  %14 = load i32, i32* %i, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %inc = add nsw i32 %14, 1
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = addnsw 1:i32, %0
+infer %1
+
+; *****
+; For LLVM instruction:
+;  %15 = load i32, i32* %b, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %16 = load i32, i32* %p, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %inc23 = add nsw i32 %16, 1
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = addnsw 1:i32, %0
+infer %1
+got 1 candidates from LHS
+
+-------------------------------------------------
+%0:i32 = var
+infer %0
+
+
+--------------------------------
+guess 0
+
+%0:i32 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: -1
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+Dataflow Pruned 0/0
+There are 1 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 2 candidates from LHS
+
+-------------------------------------------------
+%0:i32 = var
+%1:i1 = slt %0, 10:i32
+infer %1
+
+
+--------------------------------
+guess 0
+
+%0:i1 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: -1
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: 0
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+Dataflow Pruned 0/0
+There are 1 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 2 candidates from LHS
+
+-------------------------------------------------
+%0:i32 = var
+%1:i32 = addnsw 4294967295:i32, %0
+infer %1
+
+
+--------------------------------
+guess 0
+
+%0:i32 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: -1
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: 536870911
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+
+--------------------------------
+guess 1
+
+%0:i32 = var
+
+Cost = 0
+second query is SAT-- constant doesn't work
+Dataflow Pruned 0/0
+There are 2 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 2 candidates from LHS
+
+-------------------------------------------------
+%0:i32 = var
+%1:i1 = ne 0:i32, %0
+infer %1
+
+
+--------------------------------
+guess 0
+
+%0:i1 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: -1
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+Dataflow Pruned 0/0
+There are 1 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 1 candidates from LHS
+
+-------------------------------------------------
+%0:i64 = var
+infer %0
+
+
+--------------------------------
+guess 0
+
+%0:i64 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: -1
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+Dataflow Pruned 0/0
+There are 1 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 1 candidates from LHS
+
+-------------------------------------------------
+%0:i64 = var
+infer %0 (demandedBits=0000000000000000000000000000000000000000000000000000000000000001)
+
+
+--------------------------------
+guess 0
+
+%0:i64 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: 1
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+Dataflow Pruned 0/0
+There are 1 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 2 candidates from LHS
+
+-------------------------------------------------
+%0:i64 = var
+%1:i64 = and 1:i64, %0
+infer %1
+
+
+--------------------------------
+guess 0
+
+%0:i64 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: 1
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+
+--------------------------------
+guess 1
+
+%0:i64 = var
+
+Cost = 0
+second query is SAT-- constant doesn't work
+Dataflow Pruned 0/0
+There are 2 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 2 candidates from LHS
+
+-------------------------------------------------
+%0:i32 = var
+%1:i64 = zext %0
+infer %1
+
+
+--------------------------------
+guess 0
+
+%0:i64 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: 4294967295
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+Dataflow Pruned 0/0
+There are 1 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 5 candidates from LHS
+
+-------------------------------------------------
+%0:i64 = var
+%1:i64 = and 1:i64, %0
+%2:i32 = var
+%3:i64 = zext %2
+%4:i64 = shl %1, %3
+infer %4 (demandedBits=0000000000000000000000000000000011111111111111111111111111111111)
+
+
+--------------------------------
+guess 0
+
+%0:i64 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: 64
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+
+--------------------------------
+guess 1
+
+%0:i64 = var
+
+Cost = 0
+second query is SAT-- constant doesn't work
+
+--------------------------------
+guess 2
+
+%0:i64 = var
+%1:i64 = and 1:i64, %0
+
+Cost = 1
+second query is SAT-- constant doesn't work
+
+--------------------------------
+guess 3
+
+%0:i32 = var
+%1:i64 = zext %0
+
+Cost = 1
+second query is SAT-- constant doesn't work
+Dataflow Pruned 0/0
+There are 4 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 2 candidates from LHS
+
+-------------------------------------------------
+%0:i32 = var
+%1:i64 = sext %0
+infer %1 (demandedBits=0000000000000000000000000000000011111111111111111111111111111111)
+
+
+--------------------------------
+guess 0
+
+%0:i64 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: -1
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+Dataflow Pruned 0/0
+There are 1 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 8 candidates from LHS
+
+-------------------------------------------------
+%0:i64 = var
+%1:i64 = and 1:i64, %0
+%2:i32 = var
+%3:i64 = zext %2
+%4:i64 = shl %1, %3
+%5:i32 = var
+%6:i64 = sext %5
+%7:i64 = or %4, %6
+infer %7 (demandedBits=0000000000000000000000000000000011111111111111111111111111111111)
+
+
+--------------------------------
+guess 0
+
+%0:i64 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: 8
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+
+--------------------------------
+guess 1
+
+%0:i64 = var
+
+Cost = 0
+second query is SAT-- constant doesn't work
+
+--------------------------------
+guess 2
+
+%0:i32 = var
+%1:i64 = sext %0
+
+Cost = 1
+second query is SAT-- constant doesn't work
+
+--------------------------------
+guess 3
+
+%0:i64 = var
+%1:i64 = and 1:i64, %0
+
+Cost = 1
+second query is SAT-- constant doesn't work
+
+--------------------------------
+guess 4
+
+%0:i32 = var
+%1:i64 = zext %0
+
+Cost = 1
+second query is SAT-- constant doesn't work
+
+--------------------------------
+guess 5
+
+%0:i64 = var
+%1:i64 = and 1:i64, %0
+%2:i32 = var
+%3:i64 = zext %2
+%4:i64 = shl %1, %3
+
+Cost = 3
+second query is SAT-- constant doesn't work
+Dataflow Pruned 0/0
+There are 6 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 8 candidates from LHS
+
+-------------------------------------------------
+%0:i64 = var
+%1:i64 = and 1:i64, %0
+%2:i32 = var
+%3:i64 = zext %2
+%4:i64 = shl %1, %3
+%5:i32 = var
+%6:i64 = sext %5
+%7:i64 = or %4, %6
+%8:i32 = trunc %7
+infer %8
+
+
+--------------------------------
+guess 0
+
+%0:i32 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: 268435456
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+
+--------------------------------
+guess 1
+
+%0:i32 = var
+
+Cost = 0
+second query is SAT-- constant doesn't work
+Dataflow Pruned 0/0
+There are 2 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 2 candidates from LHS
+
+-------------------------------------------------
+%0:i32 = var
+%1:i1 = ult %0, 64:i32
+infer %1
+
+
+--------------------------------
+guess 0
+
+%0:i1 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: -1
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: 0
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+Dataflow Pruned 0/0
+There are 1 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 1 candidates from LHS
+
+-------------------------------------------------
+%0:i32 = var
+infer %0 (demandedBits=00000000000000000000000011111111)
+
+
+--------------------------------
+guess 0
+
+%0:i32 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: 255
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+Dataflow Pruned 0/0
+There are 1 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 2 candidates from LHS
+
+-------------------------------------------------
+%0:i32 = var
+%1:i64 = sext %0
+infer %1 (demandedBits=0000000000000000000000000000000000000000000000000000000011111111)
+
+
+--------------------------------
+guess 0
+
+%0:i64 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: 255
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+Dataflow Pruned 0/0
+There are 1 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 2 candidates from LHS
+
+-------------------------------------------------
+%0:i32 = var
+%1:i32 = subnsw %0, 1:i32
+infer %1
+
+
+--------------------------------
+guess 0
+
+%0:i32 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: -1
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: 536870911
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+
+--------------------------------
+guess 1
+
+%0:i32 = var
+
+Cost = 0
+second query is SAT-- constant doesn't work
+Dataflow Pruned 0/0
+There are 2 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 3 candidates from LHS
+
+-------------------------------------------------
+%0:i32 = var
+%1:i32 = subnsw %0, 1:i32
+%2:i64 = zext %1
+infer %2
+
+
+--------------------------------
+guess 0
+
+%0:i64 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 4294967295
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: 536870911
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+Dataflow Pruned 0/0
+There are 1 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 5 candidates from LHS
+
+-------------------------------------------------
+%0:i64 = var
+%1:i32 = var
+%2:i32 = subnsw %1, 1:i32
+%3:i64 = zext %2
+%4:i64 = lshr %0, %3
+infer %4 (demandedBits=0000000000000000000000000000000000000000000000000000000000000111)
+
+
+--------------------------------
+guess 0
+
+%0:i64 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: 1
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+
+--------------------------------
+guess 1
+
+%0:i64 = var
+
+Cost = 0
+second query is SAT-- constant doesn't work
+
+--------------------------------
+guess 2
+
+%0:i32 = var
+%1:i32 = subnsw %0, 1:i32
+%2:i64 = zext %1
+
+Cost = 2
+second query is SAT-- constant doesn't work
+Dataflow Pruned 0/0
+There are 3 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 2 candidates from LHS
+
+-------------------------------------------------
+%0:i32 = var
+%1:i32 = sub 65:i32, %0
+infer %1
+
+
+--------------------------------
+guess 0
+
+%0:i32 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 65
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: 66
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+
+--------------------------------
+guess 1
+
+%0:i32 = var
+
+Cost = 0
+second query is SAT-- constant doesn't work
+Dataflow Pruned 0/0
+There are 2 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 3 candidates from LHS
+
+-------------------------------------------------
+%0:i32 = var
+%1:i32 = sub 65:i32, %0
+%2:i64 = zext %1
+infer %2
+
+
+--------------------------------
+guess 0
+
+%0:i64 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 65
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: 66
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+Dataflow Pruned 0/0
+There are 1 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 5 candidates from LHS
+
+-------------------------------------------------
+%0:i64 = var
+%1:i32 = var
+%2:i32 = sub 65:i32, %1
+%3:i64 = zext %2
+%4:i64 = shl %0, %3
+infer %4 (demandedBits=0000000000000000000000000000000000000000000000000000000000000111)
+
+
+--------------------------------
+guess 0
+
+%0:i64 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: 4
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+
+--------------------------------
+guess 1
+
+%0:i64 = var
+
+Cost = 0
+second query is SAT-- constant doesn't work
+
+--------------------------------
+guess 2
+
+%0:i32 = var
+%1:i32 = sub 65:i32, %0
+%2:i64 = zext %1
+
+Cost = 2
+second query is SAT-- constant doesn't work
+Dataflow Pruned 0/0
+There are 3 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 8 candidates from LHS
+
+-------------------------------------------------
+%0:i64 = var
+%1:i32 = var
+%2:i32 = sub 65:i32, %1
+%3:i64 = zext %2
+%4:i64 = shl %0, %3
+%5:i64 = var
+%6:i32 = var
+%7:i32 = subnsw %6, 1:i32
+%8:i64 = zext %7
+%9:i64 = lshr %5, %8
+%10:i64 = or %4, %9
+infer %10 (demandedBits=0000000000000000000000000000000000000000000000000000000000000111)
+
+
+--------------------------------
+guess 0
+
+%0:i64 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: 15
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+
+--------------------------------
+guess 1
+
+%0:i64 = var
+
+Cost = 0
+second query is SAT-- constant doesn't work
+
+--------------------------------
+guess 2
+
+%0:i64 = var
+
+Cost = 0
+second query is SAT-- constant doesn't work
+
+--------------------------------
+guess 3
+
+%0:i32 = var
+%1:i32 = subnsw %0, 1:i32
+%2:i64 = zext %1
+
+Cost = 2
+second query is SAT-- constant doesn't work
+
+--------------------------------
+guess 4
+
+%0:i32 = var
+%1:i32 = sub 65:i32, %0
+%2:i64 = zext %1
+
+Cost = 2
+second query is SAT-- constant doesn't work
+
+--------------------------------
+guess 5
+
+%0:i64 = var
+%1:i32 = var
+%2:i32 = subnsw %1, 1:i32
+%3:i64 = zext %2
+%4:i64 = lshr %0, %3
+
+Cost = 3
+second query is SAT-- constant doesn't work
+
+--------------------------------
+guess 6
+
+%0:i64 = var
+%1:i32 = var
+%2:i32 = sub 65:i32, %1
+%3:i64 = zext %2
+%4:i64 = shl %0, %3
+
+Cost = 3
+second query is SAT-- constant doesn't work
+Dataflow Pruned 0/0
+There are 7 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 8 candidates from LHS
+
+-------------------------------------------------
+%0:i64 = var
+%1:i32 = var
+%2:i32 = sub 65:i32, %1
+%3:i64 = zext %2
+%4:i64 = shl %0, %3
+%5:i64 = var
+%6:i32 = var
+%7:i32 = subnsw %6, 1:i32
+%8:i64 = zext %7
+%9:i64 = lshr %5, %8
+%10:i64 = or %4, %9
+%11:i64 = and 7:i64, %10
+infer %11
+
+
+--------------------------------
+guess 0
+
+%0:i64 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: 7
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+
+--------------------------------
+guess 1
+
+%0:i64 = var
+
+Cost = 0
+second query is SAT-- constant doesn't work
+
+--------------------------------
+guess 2
+
+%0:i64 = var
+
+Cost = 0
+second query is SAT-- constant doesn't work
+
+--------------------------------
+guess 3
+
+%0:i32 = var
+%1:i32 = subnsw %0, 1:i32
+%2:i64 = zext %1
+
+Cost = 2
+second query is SAT-- constant doesn't work
+
+--------------------------------
+guess 4
+
+%0:i32 = var
+%1:i32 = sub 65:i32, %0
+%2:i64 = zext %1
+
+Cost = 2
+second query is SAT-- constant doesn't work
+
+--------------------------------
+guess 5
+
+%0:i64 = var
+%1:i32 = var
+%2:i32 = subnsw %1, 1:i32
+%3:i64 = zext %2
+%4:i64 = lshr %0, %3
+
+Cost = 3
+second query is SAT-- constant doesn't work
+
+--------------------------------
+guess 6
+
+%0:i64 = var
+%1:i32 = var
+%2:i32 = sub 65:i32, %1
+%3:i64 = zext %2
+%4:i64 = shl %0, %3
+
+Cost = 3
+second query is SAT-- constant doesn't work
+
+--------------------------------
+guess 7
+
+%0:i64 = var
+%1:i32 = var
+%2:i32 = sub 65:i32, %1
+%3:i64 = zext %2
+%4:i64 = shl %0, %3
+%5:i64 = var
+%6:i32 = var
+%7:i32 = subnsw %6, 1:i32
+%8:i64 = zext %7
+%9:i64 = lshr %5, %8
+%10:i64 = or %4, %9
+
+Cost = 7
+second query is SAT-- constant doesn't work
+Dataflow Pruned 0/0
+There are 8 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 8 candidates from LHS
+
+-------------------------------------------------
+%0:i64 = var
+%1:i32 = var
+%2:i32 = sub 65:i32, %1
+%3:i64 = zext %2
+%4:i64 = shl %0, %3
+%5:i64 = var
+%6:i32 = var
+%7:i32 = subnsw %6, 1:i32
+%8:i64 = zext %7
+%9:i64 = lshr %5, %8
+%10:i64 = or %4, %9
+%11:i64 = and 7:i64, %10
+%12:i64 = shl 1:i64, %11
+infer %12
+
+
+--------------------------------
+guess 0
+
+%0:i64 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 1
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: 128
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+
+--------------------------------
+guess 1
+
+%0:i64 = var
+
+Cost = 0
+second query is SAT-- constant doesn't work
+
+--------------------------------
+guess 2
+
+%0:i64 = var
+
+Cost = 0
+second query is SAT-- constant doesn't work
+
+--------------------------------
+guess 3
+
+%0:i32 = var
+%1:i32 = subnsw %0, 1:i32
+%2:i64 = zext %1
+
+Cost = 2
+second query is SAT-- constant doesn't work
+
+--------------------------------
+guess 4
+
+%0:i64 = var
+%1:i32 = var
+%2:i32 = subnsw %1, 1:i32
+%3:i64 = zext %2
+%4:i64 = lshr %0, %3
+
+Cost = 3
+second query is SAT-- constant doesn't work
+
+--------------------------------
+guess 5
+
+%0:i64 = var
+%1:i32 = var
+%2:i32 = sub 65:i32, %1
+%3:i64 = zext %2
+%4:i64 = shl %0, %3
+
+Cost = 3
+second query is SAT-- constant doesn't work
+
+--------------------------------
+guess 6
+
+%0:i64 = var
+%1:i32 = var
+%2:i32 = sub 65:i32, %1
+%3:i64 = zext %2
+%4:i64 = shl %0, %3
+%5:i64 = var
+%6:i32 = var
+%7:i32 = subnsw %6, 1:i32
+%8:i64 = zext %7
+%9:i64 = lshr %5, %8
+%10:i64 = or %4, %9
+
+Cost = 7
+second query is SAT-- constant doesn't work
+
+--------------------------------
+guess 7
+
+%0:i64 = var
+%1:i32 = var
+%2:i32 = sub 65:i32, %1
+%3:i64 = zext %2
+%4:i64 = shl %0, %3
+%5:i64 = var
+%6:i32 = var
+%7:i32 = subnsw %6, 1:i32
+%8:i64 = zext %7
+%9:i64 = lshr %5, %8
+%10:i64 = or %4, %9
+%11:i64 = and 7:i64, %10
+
+Cost = 8
+second query is SAT-- constant doesn't work
+Dataflow Pruned 0/0
+There are 8 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 8 candidates from LHS
+
+-------------------------------------------------
+%0:i64 = var
+%1:i32 = var
+%2:i32 = sub 65:i32, %1
+%3:i64 = zext %2
+%4:i64 = shl %0, %3
+%5:i64 = var
+%6:i32 = var
+%7:i32 = subnsw %6, 1:i32
+%8:i64 = zext %7
+%9:i64 = lshr %5, %8
+%10:i64 = or %4, %9
+%11:i64 = and 7:i64, %10
+%12:i64 = shl 1:i64, %11
+%13:i32 = var
+%14:i64 = sext %13
+%15:i64 = and %12, %14
+infer %15
+
+
+--------------------------------
+guess 0
+
+%0:i64 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: 8
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+
+--------------------------------
+guess 1
+
+%0:i32 = var
+%1:i64 = sext %0
+
+Cost = 1
+second query is SAT-- constant doesn't work
+
+--------------------------------
+guess 2
+
+%0:i64 = var
+%1:i32 = var
+%2:i32 = subnsw %1, 1:i32
+%3:i64 = zext %2
+%4:i64 = lshr %0, %3
+
+Cost = 3
+second query is SAT-- constant doesn't work
+
+--------------------------------
+guess 3
+
+%0:i64 = var
+%1:i32 = var
+%2:i32 = sub 65:i32, %1
+%3:i64 = zext %2
+%4:i64 = shl %0, %3
+
+Cost = 3
+second query is SAT-- constant doesn't work
+
+--------------------------------
+guess 4
+
+%0:i64 = var
+%1:i32 = var
+%2:i32 = sub 65:i32, %1
+%3:i64 = zext %2
+%4:i64 = shl %0, %3
+%5:i64 = var
+%6:i32 = var
+%7:i32 = subnsw %6, 1:i32
+%8:i64 = zext %7
+%9:i64 = lshr %5, %8
+%10:i64 = or %4, %9
+
+Cost = 7
+second query is SAT-- constant doesn't work
+
+--------------------------------
+guess 5
+
+%0:i64 = var
+%1:i32 = var
+%2:i32 = sub 65:i32, %1
+%3:i64 = zext %2
+%4:i64 = shl %0, %3
+%5:i64 = var
+%6:i32 = var
+%7:i32 = subnsw %6, 1:i32
+%8:i64 = zext %7
+%9:i64 = lshr %5, %8
+%10:i64 = or %4, %9
+%11:i64 = and 7:i64, %10
+
+Cost = 8
+second query is SAT-- constant doesn't work
+
+--------------------------------
+guess 6
+
+%0:i64 = var
+%1:i32 = var
+%2:i32 = sub 65:i32, %1
+%3:i64 = zext %2
+%4:i64 = shl %0, %3
+%5:i64 = var
+%6:i32 = var
+%7:i32 = subnsw %6, 1:i32
+%8:i64 = zext %7
+%9:i64 = lshr %5, %8
+%10:i64 = or %4, %9
+%11:i64 = and 7:i64, %10
+%12:i64 = shl 1:i64, %11
+
+Cost = 9
+second query is SAT-- constant doesn't work
+Dataflow Pruned 0/0
+There are 7 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 8 candidates from LHS
+
+-------------------------------------------------
+%0:i64 = var
+%1:i32 = var
+%2:i32 = sub 65:i32, %1
+%3:i64 = zext %2
+%4:i64 = shl %0, %3
+%5:i64 = var
+%6:i32 = var
+%7:i32 = subnsw %6, 1:i32
+%8:i64 = zext %7
+%9:i64 = lshr %5, %8
+%10:i64 = or %4, %9
+%11:i64 = and 7:i64, %10
+%12:i64 = shl 1:i64, %11
+%13:i32 = var
+%14:i64 = sext %13
+%15:i64 = and %12, %14
+%16:i1 = ne 0:i64, %15
+infer %16
+
+
+--------------------------------
+guess 0
+
+%0:i1 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: -1
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+Dataflow Pruned 0/0
+There are 1 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 3 candidates from LHS
+
+-------------------------------------------------
+%0:i32 = var
+%1:i64 = zext %0
+%2:i64 = shl 1:i64, %1
+infer %2
+
+
+--------------------------------
+guess 0
+
+%0:i64 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 1
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: 256
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+
+--------------------------------
+guess 1
+
+%0:i32 = var
+%1:i64 = zext %0
+
+Cost = 1
+second query is SAT-- constant doesn't work
+Dataflow Pruned 0/0
+There are 2 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 5 candidates from LHS
+
+-------------------------------------------------
+%0:i64 = var
+%1:i32 = var
+%2:i64 = zext %1
+%3:i64 = shl 1:i64, %2
+%4:i64 = or %0, %3
+infer %4
+
+
+--------------------------------
+guess 0
+
+%0:i64 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 1
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: 1024
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+
+--------------------------------
+guess 1
+
+%0:i64 = var
+
+Cost = 0
+second query is SAT-- constant doesn't work
+
+--------------------------------
+guess 2
+
+%0:i32 = var
+%1:i64 = zext %0
+
+Cost = 1
+second query is SAT-- constant doesn't work
+
+--------------------------------
+guess 3
+
+%0:i32 = var
+%1:i64 = zext %0
+%2:i64 = shl 1:i64, %1
+
+Cost = 2
+second query is SAT-- constant doesn't work
+Dataflow Pruned 0/0
+There are 4 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 2 candidates from LHS
+
+-------------------------------------------------
+%0:i32 = var
+%1:i32 = addnsw 1:i32, %0
+infer %1
+
+
+--------------------------------
+guess 0
+
+%0:i32 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 1
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: 268435457
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+
+--------------------------------
+guess 1
+
+%0:i32 = var
+
+Cost = 0
+second query is SAT-- constant doesn't work
+Dataflow Pruned 0/0
+There are 2 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+#########################################################
+; exiting Souper's runOnFunction() for evolve()
+
+; entering Souper's runOnFunction() for main()
+
+; ModuleID = './Elementary_cellular_automaton-Random_Number_Generator.c.bc'
+source_filename = "./Elementary_cellular_automaton-Random_Number_Generator.c"
+target datalayout = "e-m:e-p:32:32-i64:64-n32:64-S128"
+target triple = "wasm32-unknown-wasi"
+
+@.str = private unnamed_addr constant [4 x i8] c" %d\00", align 1
+@llvm.used = appending global [1 x i8*] [i8* bitcast (i32 ()* @__main_void to i8*)], section "llvm.metadata"
+
+@__main_void = alias i32 (), i32 ()* @main
+
+; Function Attrs: noinline nounwind optnone
+define hidden void @evolve(i64 %state, i32 %rule) #0 {
+entry:
+  %state.addr = alloca i64, align 8
+  %rule.addr = alloca i32, align 4
+  %i = alloca i32, align 4
+  %p = alloca i32, align 4
+  %q = alloca i32, align 4
+  %b = alloca i32, align 4
+  %st = alloca i64, align 8
+  store i64 %state, i64* %state.addr, align 8
+  store i32 %rule, i32* %rule.addr, align 4
+  store i32 0, i32* %p, align 4
+  br label %for.cond
+
+for.cond:                                         ; preds = %for.inc22, %entry
+  %0 = load i32, i32* %p, align 4
+  %cmp = icmp slt i32 %0, 10
+  br i1 %cmp, label %for.body, label %for.end24
+
+for.body:                                         ; preds = %for.cond
+  store i32 0, i32* %b, align 4
+  store i32 8, i32* %q, align 4
+  br label %for.cond1
+
+for.cond1:                                        ; preds = %for.end, %for.body
+  %1 = load i32, i32* %q, align 4
+  %dec = add nsw i32 %1, -1
+  store i32 %dec, i32* %q, align 4
+  %tobool = icmp ne i32 %1, 0
+  br i1 %tobool, label %for.body2, label %for.end21
+
+for.body2:                                        ; preds = %for.cond1
+  %2 = load i64, i64* %state.addr, align 8
+  store i64 %2, i64* %st, align 8
+  %3 = load i64, i64* %st, align 8
+  %and = and i64 %3, 1
+  %4 = load i32, i32* %q, align 4
+  %sh_prom = zext i32 %4 to i64
+  %shl = shl i64 %and, %sh_prom
+  %5 = load i32, i32* %b, align 4
+  %conv = sext i32 %5 to i64
+  %or = or i64 %conv, %shl
+  %conv3 = trunc i64 %or to i32
+  store i32 %conv3, i32* %b, align 4
+  store i32 0, i32* %i, align 4
+  store i64 0, i64* %state.addr, align 8
+  br label %for.cond4
+
+for.cond4:                                        ; preds = %for.inc, %for.body2
+  %6 = load i32, i32* %i, align 4
+  %cmp5 = icmp ult i32 %6, 64
+  br i1 %cmp5, label %for.body7, label %for.end
+
+for.body7:                                        ; preds = %for.cond4
+  %7 = load i32, i32* %rule.addr, align 4
+  %conv8 = sext i32 %7 to i64
+  %8 = load i64, i64* %st, align 8
+  %9 = load i32, i32* %i, align 4
+  %sub = sub nsw i32 %9, 1
+  %sh_prom9 = zext i32 %sub to i64
+  %shr = lshr i64 %8, %sh_prom9
+  %10 = load i64, i64* %st, align 8
+  %11 = load i32, i32* %i, align 4
+  %sub10 = sub i32 65, %11
+  %sh_prom11 = zext i32 %sub10 to i64
+  %shl12 = shl i64 %10, %sh_prom11
+  %or13 = or i64 %shr, %shl12
+  %and14 = and i64 7, %or13
+  %shl15 = shl i64 1, %and14
+  %and16 = and i64 %conv8, %shl15
+  %tobool17 = icmp ne i64 %and16, 0
+  br i1 %tobool17, label %if.then, label %if.end
+
+if.then:                                          ; preds = %for.body7
+  %12 = load i32, i32* %i, align 4
+  %sh_prom18 = zext i32 %12 to i64
+  %shl19 = shl i64 1, %sh_prom18
+  %13 = load i64, i64* %state.addr, align 8
+  %or20 = or i64 %13, %shl19
+  store i64 %or20, i64* %state.addr, align 8
+  br label %if.end
+
+if.end:                                           ; preds = %if.then, %for.body7
+  br label %for.inc
+
+for.inc:                                          ; preds = %if.end
+  %14 = load i32, i32* %i, align 4
+  %inc = add nsw i32 %14, 1
+  store i32 %inc, i32* %i, align 4
+  br label %for.cond4
+
+for.end:                                          ; preds = %for.cond4
+  br label %for.cond1
+
+for.end21:                                        ; preds = %for.cond1
+  %15 = load i32, i32* %b, align 4
+  %call = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([4 x i8], [4 x i8]* @.str, i32 0, i32 0), i32 %15)
+  br label %for.inc22
+
+for.inc22:                                        ; preds = %for.end21
+  %16 = load i32, i32* %p, align 4
+  %inc23 = add nsw i32 %16, 1
+  store i32 %inc23, i32* %p, align 4
+  br label %for.cond
+
+for.end24:                                        ; preds = %for.cond
+  %call25 = call i32 @putchar(i32 10)
+  ret void
+}
+
+declare i32 @printf(i8* %0, ...) #1
+
+declare i32 @putchar(i32 %0) #1
+
+; Function Attrs: noinline nounwind optnone
+define hidden i32 @main() #0 {
+entry:
+  %retval = alloca i32, align 4
+  store i32 0, i32* %retval, align 4
+  call void @evolve(i64 1, i32 30)
+  ret i32 0
+}
+
+attributes #0 = { noinline nounwind optnone "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "min-legal-vector-width"="0" "no-infs-fp-math"="false" "no-jump-tables"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #1 = { "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+
+!llvm.module.flags = !{!0}
+!llvm.ident = !{!1}
+
+!0 = !{i32 1, !"wchar_size", i32 4}
+!1 = !{!"clang version 11.0.0 (https://github.com/Jacarte/llvm-project.git 0f6dea67136cc1e0b3d200eb2bb165628970c44b)"}
+
+; extracted candidates
+#########################################################
+; exiting Souper's runOnFunction() for main()
+Total of 0 replacements done on this module
+Total of 0 replacements candidates on this module
