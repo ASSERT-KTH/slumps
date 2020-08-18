@@ -10,3 +10,6 @@
 	path = llvm
 	url = https://github.com/Jacarte/llvm-project.git
 	branch = master
+[submodule "wasm-fuzzer/fuzzing-server"]
+	path = wasm-fuzzer/fuzzing-server
+	url = https://github.com/olapiv/swam.git
