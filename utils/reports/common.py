@@ -33,26 +33,32 @@ def latexify(fig_width=None, fig_height=None, columns=1, font_size=8, tick_size=
         golden_mean = (sqrt(5)-1.0)/2.0    # Aesthetic ratio
         fig_height = fig_width*golden_mean + 1.2 # height in inches
 
-    MAX_HEIGHT_INCHES = 8.0
+    MAX_HEIGHT_INCHES = 18.0
     if fig_height > MAX_HEIGHT_INCHES:
         print("WARNING: fig_height too large:" + fig_height + 
               "so will reduce to" + MAX_HEIGHT_INCHES + "inches.")
         fig_height = MAX_HEIGHT_INCHES
     #print(matplotlib.rcParams.keys())
-    params = {'backend': 'ps',
-              #'text.latex.preamble': ['\usepackage{gensymb}'],
-              'axes.labelsize': font_size, # fontsize for x and y labels (was 10)
-              'axes.titlesize': title_size,
-              'font.size': font_size, # was 10
-              'legend.fontsize': font_size, # was 10
-              'xtick.labelsize': tick_size,
-              'ytick.labelsize': tick_size,
-              'text.usetex': True,
-              'figure.figsize': [fig_width,fig_height],
-              'font.family': 'serif'
-    }
+    pgf_with_latex = {                      # setup matplotlib to use latex for output
+        "pgf.texsystem": "pdflatex",        # change this if using xetex or lautex
+        "text.usetex": True,                # use LaTeX to write all text
+        "font.family": "serif",
+        "font.serif": [],                   # blank entries should cause plots 
+        "font.monospace": [],
+        "axes.labelsize": font_size,               # LaTeX default is 10pt font.
+        "font.size": font_size,
+        "legend.fontsize": font_size,               # Make the legend/label fonts 
+        "xtick.labelsize": tick_size,               # a little smaller
+        "ytick.labelsize": tick_size,
+        "figure.figsize": [fig_width, fig_height],     # default fig size of 0.9 textwidth
+        "pgf.preamble": [
+            r"\\usepackage[utf8x]{inputenc}",    # use utf8 fonts 
+            r"\\usepackage[T1]{fontenc}",        # plots will be generated
+            r"\\usepackage[detect-all,locale=DE]{siunitx}",
+            ]                                   # using this preamble
+        }
 
-    matplotlib.rcParams.update(params)
+    matplotlib.rcParams.update(pgf_with_latex)
 
 
 def format_axes(ax, hide = ['top', 'right'], show= ['left', 'bottom']):

@@ -1,0 +1,1313 @@
+; entering Souper's runOnFunction() for ./poly1305_donna.c.bc:crypto_onetimeauth_poly1305_donna()
+
+; ModuleID = './poly1305_donna.c.bc'
+source_filename = "crypto_onetimeauth/poly1305/donna/poly1305_donna.c"
+target datalayout = "e-m:e-p:32:32-i64:64-n32:64-S128"
+target triple = "wasm32-unknown-wasi"
+
+%struct.crypto_onetimeauth_poly1305_implementation = type { i32 (i8*, i8*, i64, i8*)*, i32 (i8*, i8*, i64, i8*)*, i32 (%struct.crypto_onetimeauth_poly1305_state*, i8*)*, i32 (%struct.crypto_onetimeauth_poly1305_state*, i8*, i64)*, i32 (%struct.crypto_onetimeauth_poly1305_state*, i8*)* }
+%struct.crypto_onetimeauth_poly1305_state = type { [256 x i8] }
+%struct.poly1305_state_internal_t = type { [5 x i32], [5 x i32], [4 x i32], i64, [16 x i8], i8 }
+
+@crypto_onetimeauth_poly1305_donna_implementation = hidden local_unnamed_addr global %struct.crypto_onetimeauth_poly1305_implementation { i32 (i8*, i8*, i64, i8*)* @crypto_onetimeauth_poly1305_donna, i32 (i8*, i8*, i64, i8*)* @crypto_onetimeauth_poly1305_donna_verify, i32 (%struct.crypto_onetimeauth_poly1305_state*, i8*)* @crypto_onetimeauth_poly1305_donna_init, i32 (%struct.crypto_onetimeauth_poly1305_state*, i8*, i64)* @crypto_onetimeauth_poly1305_donna_update, i32 (%struct.crypto_onetimeauth_poly1305_state*, i8*)* @crypto_onetimeauth_poly1305_donna_final }, align 4
+
+; Function Attrs: nounwind
+define internal i32 @crypto_onetimeauth_poly1305_donna(i8* nocapture %0, i8* nocapture readonly %1, i64 %2, i8* nocapture readonly %3) #0 {
+  %5 = alloca %struct.poly1305_state_internal_t, align 64
+  %6 = bitcast %struct.poly1305_state_internal_t* %5 to i8*
+  call void @llvm.lifetime.start.p0i8(i64 88, i8* nonnull %6) #6
+  %7 = bitcast i8* %3 to i32*
+  %8 = load i32, i32* %7, align 1
+  %9 = and i32 %8, 67108863
+  %10 = getelementptr inbounds %struct.poly1305_state_internal_t, %struct.poly1305_state_internal_t* %5, i32 0, i32 0, i32 0
+  store i32 %9, i32* %10, align 64
+  %11 = getelementptr i8, i8* %3, i32 3
+  %12 = bitcast i8* %11 to i32*
+  %13 = load i32, i32* %12, align 1
+  %14 = lshr i32 %13, 2
+  %15 = and i32 %14, 67108611
+  %16 = getelementptr inbounds %struct.poly1305_state_internal_t, %struct.poly1305_state_internal_t* %5, i32 0, i32 0, i32 1
+  store i32 %15, i32* %16, align 4
+  %17 = getelementptr i8, i8* %3, i32 6
+  %18 = bitcast i8* %17 to i32*
+  %19 = load i32, i32* %18, align 1
+  %20 = lshr i32 %19, 4
+  %21 = and i32 %20, 67092735
+  %22 = getelementptr inbounds %struct.poly1305_state_internal_t, %struct.poly1305_state_internal_t* %5, i32 0, i32 0, i32 2
+  store i32 %21, i32* %22, align 8
+  %23 = getelementptr i8, i8* %3, i32 9
+  %24 = bitcast i8* %23 to i32*
+  %25 = load i32, i32* %24, align 1
+  %26 = lshr i32 %25, 6
+  %27 = and i32 %26, 66076671
+  %28 = getelementptr inbounds %struct.poly1305_state_internal_t, %struct.poly1305_state_internal_t* %5, i32 0, i32 0, i32 3
+  store i32 %27, i32* %28, align 4
+  %29 = getelementptr i8, i8* %3, i32 12
+  %30 = bitcast i8* %29 to i32*
+  %31 = load i32, i32* %30, align 1
+  %32 = lshr i32 %31, 8
+  %33 = and i32 %32, 1048575
+  %34 = getelementptr inbounds %struct.poly1305_state_internal_t, %struct.poly1305_state_internal_t* %5, i32 0, i32 0, i32 4
+  store i32 %33, i32* %34, align 16
+  %35 = getelementptr inbounds %struct.poly1305_state_internal_t, %struct.poly1305_state_internal_t* %5, i32 0, i32 1, i32 0
+  %36 = getelementptr i8, i8* %3, i32 16
+  %37 = bitcast i8* %36 to i32*
+  %38 = bitcast i32* %35 to i8*
+  call void @llvm.memset.p0i8.i64(i8* nonnull align 4 dereferenceable(20) %38, i8 0, i64 20, i1 false) #6
+  %39 = load i32, i32* %37, align 1
+  %40 = getelementptr inbounds %struct.poly1305_state_internal_t, %struct.poly1305_state_internal_t* %5, i32 0, i32 2, i32 0
+  store i32 %39, i32* %40, align 8
+  %41 = getelementptr i8, i8* %3, i32 20
+  %42 = bitcast i8* %41 to i32*
+  %43 = load i32, i32* %42, align 1
+  %44 = getelementptr inbounds %struct.poly1305_state_internal_t, %struct.poly1305_state_internal_t* %5, i32 0, i32 2, i32 1
+  store i32 %43, i32* %44, align 4
+  %45 = getelementptr i8, i8* %3, i32 24
+  %46 = bitcast i8* %45 to i32*
+  %47 = load i32, i32* %46, align 1
+  %48 = getelementptr inbounds %struct.poly1305_state_internal_t, %struct.poly1305_state_internal_t* %5, i32 0, i32 2, i32 2
+  store i32 %47, i32* %48, align 8
+  %49 = getelementptr i8, i8* %3, i32 28
+  %50 = bitcast i8* %49 to i32*
+  %51 = load i32, i32* %50, align 1
+  %52 = getelementptr inbounds %struct.poly1305_state_internal_t, %struct.poly1305_state_internal_t* %5, i32 0, i32 2, i32 3
+  store i32 %51, i32* %52, align 4
+  %53 = getelementptr inbounds %struct.poly1305_state_internal_t, %struct.poly1305_state_internal_t* %5, i32 0, i32 3
+  store i64 0, i64* %53, align 8
+  %54 = getelementptr inbounds %struct.poly1305_state_internal_t, %struct.poly1305_state_internal_t* %5, i32 0, i32 5
+  store i8 0, i8* %54, align 16
+  call fastcc void @poly1305_update(%struct.poly1305_state_internal_t* nonnull %5, i8* %1, i64 %2)
+  call fastcc void @poly1305_finish(%struct.poly1305_state_internal_t* nonnull %5, i8* %0)
+  call void @llvm.lifetime.end.p0i8(i64 88, i8* nonnull %6) #6
+  ret i32 0
+}
+
+; Function Attrs: nounwind
+define internal i32 @crypto_onetimeauth_poly1305_donna_verify(i8* %0, i8* nocapture readonly %1, i64 %2, i8* nocapture readonly %3) #0 {
+  %5 = alloca %struct.poly1305_state_internal_t, align 64
+  %6 = alloca [16 x i8], align 16
+  %7 = getelementptr inbounds [16 x i8], [16 x i8]* %6, i32 0, i32 0
+  call void @llvm.lifetime.start.p0i8(i64 16, i8* nonnull %7) #6
+  %8 = bitcast %struct.poly1305_state_internal_t* %5 to i8*
+  call void @llvm.lifetime.start.p0i8(i64 88, i8* nonnull %8) #6
+  %9 = bitcast i8* %3 to i32*
+  %10 = load i32, i32* %9, align 1
+  %11 = and i32 %10, 67108863
+  %12 = getelementptr inbounds %struct.poly1305_state_internal_t, %struct.poly1305_state_internal_t* %5, i32 0, i32 0, i32 0
+  store i32 %11, i32* %12, align 64
+  %13 = getelementptr i8, i8* %3, i32 3
+  %14 = bitcast i8* %13 to i32*
+  %15 = load i32, i32* %14, align 1
+  %16 = lshr i32 %15, 2
+  %17 = and i32 %16, 67108611
+  %18 = getelementptr inbounds %struct.poly1305_state_internal_t, %struct.poly1305_state_internal_t* %5, i32 0, i32 0, i32 1
+  store i32 %17, i32* %18, align 4
+  %19 = getelementptr i8, i8* %3, i32 6
+  %20 = bitcast i8* %19 to i32*
+  %21 = load i32, i32* %20, align 1
+  %22 = lshr i32 %21, 4
+  %23 = and i32 %22, 67092735
+  %24 = getelementptr inbounds %struct.poly1305_state_internal_t, %struct.poly1305_state_internal_t* %5, i32 0, i32 0, i32 2
+  store i32 %23, i32* %24, align 8
+  %25 = getelementptr i8, i8* %3, i32 9
+  %26 = bitcast i8* %25 to i32*
+  %27 = load i32, i32* %26, align 1
+  %28 = lshr i32 %27, 6
+  %29 = and i32 %28, 66076671
+  %30 = getelementptr inbounds %struct.poly1305_state_internal_t, %struct.poly1305_state_internal_t* %5, i32 0, i32 0, i32 3
+  store i32 %29, i32* %30, align 4
+  %31 = getelementptr i8, i8* %3, i32 12
+  %32 = bitcast i8* %31 to i32*
+  %33 = load i32, i32* %32, align 1
+  %34 = lshr i32 %33, 8
+  %35 = and i32 %34, 1048575
+  %36 = getelementptr inbounds %struct.poly1305_state_internal_t, %struct.poly1305_state_internal_t* %5, i32 0, i32 0, i32 4
+  store i32 %35, i32* %36, align 16
+  %37 = getelementptr inbounds %struct.poly1305_state_internal_t, %struct.poly1305_state_internal_t* %5, i32 0, i32 1, i32 0
+  %38 = getelementptr i8, i8* %3, i32 16
+  %39 = bitcast i8* %38 to i32*
+  %40 = bitcast i32* %37 to i8*
+  call void @llvm.memset.p0i8.i64(i8* nonnull align 4 dereferenceable(20) %40, i8 0, i64 20, i1 false) #6
+  %41 = load i32, i32* %39, align 1
+  %42 = getelementptr inbounds %struct.poly1305_state_internal_t, %struct.poly1305_state_internal_t* %5, i32 0, i32 2, i32 0
+  store i32 %41, i32* %42, align 8
+  %43 = getelementptr i8, i8* %3, i32 20
+  %44 = bitcast i8* %43 to i32*
+  %45 = load i32, i32* %44, align 1
+  %46 = getelementptr inbounds %struct.poly1305_state_internal_t, %struct.poly1305_state_internal_t* %5, i32 0, i32 2, i32 1
+  store i32 %45, i32* %46, align 4
+  %47 = getelementptr i8, i8* %3, i32 24
+  %48 = bitcast i8* %47 to i32*
+  %49 = load i32, i32* %48, align 1
+  %50 = getelementptr inbounds %struct.poly1305_state_internal_t, %struct.poly1305_state_internal_t* %5, i32 0, i32 2, i32 2
+  store i32 %49, i32* %50, align 8
+  %51 = getelementptr i8, i8* %3, i32 28
+  %52 = bitcast i8* %51 to i32*
+  %53 = load i32, i32* %52, align 1
+  %54 = getelementptr inbounds %struct.poly1305_state_internal_t, %struct.poly1305_state_internal_t* %5, i32 0, i32 2, i32 3
+  store i32 %53, i32* %54, align 4
+  %55 = getelementptr inbounds %struct.poly1305_state_internal_t, %struct.poly1305_state_internal_t* %5, i32 0, i32 3
+  store i64 0, i64* %55, align 8
+  %56 = getelementptr inbounds %struct.poly1305_state_internal_t, %struct.poly1305_state_internal_t* %5, i32 0, i32 5
+  store i8 0, i8* %56, align 16
+  call fastcc void @poly1305_update(%struct.poly1305_state_internal_t* nonnull %5, i8* %1, i64 %2) #6
+  call fastcc void @poly1305_finish(%struct.poly1305_state_internal_t* nonnull %5, i8* nonnull %7) #6
+  call void @llvm.lifetime.end.p0i8(i64 88, i8* nonnull %8) #6
+  %57 = call i32 @crypto_verify_16(i8* %0, i8* nonnull %7) #6
+  call void @llvm.lifetime.end.p0i8(i64 16, i8* nonnull %7) #6
+  ret i32 %57
+}
+
+; Function Attrs: nounwind
+define internal i32 @crypto_onetimeauth_poly1305_donna_init(%struct.crypto_onetimeauth_poly1305_state* nocapture %0, i8* nocapture readonly %1) #0 {
+  %3 = bitcast i8* %1 to i32*
+  %4 = load i32, i32* %3, align 1
+  %5 = and i32 %4, 67108863
+  %6 = bitcast %struct.crypto_onetimeauth_poly1305_state* %0 to i32*
+  store i32 %5, i32* %6, align 8
+  %7 = getelementptr i8, i8* %1, i32 3
+  %8 = bitcast i8* %7 to i32*
+  %9 = load i32, i32* %8, align 1
+  %10 = lshr i32 %9, 2
+  %11 = and i32 %10, 67108611
+  %12 = getelementptr %struct.crypto_onetimeauth_poly1305_state, %struct.crypto_onetimeauth_poly1305_state* %0, i32 0, i32 0, i32 4
+  %13 = bitcast i8* %12 to i32*
+  store i32 %11, i32* %13, align 4
+  %14 = getelementptr i8, i8* %1, i32 6
+  %15 = bitcast i8* %14 to i32*
+  %16 = load i32, i32* %15, align 1
+  %17 = lshr i32 %16, 4
+  %18 = and i32 %17, 67092735
+  %19 = getelementptr %struct.crypto_onetimeauth_poly1305_state, %struct.crypto_onetimeauth_poly1305_state* %0, i32 0, i32 0, i32 8
+  %20 = bitcast i8* %19 to i32*
+  store i32 %18, i32* %20, align 8
+  %21 = getelementptr i8, i8* %1, i32 9
+  %22 = bitcast i8* %21 to i32*
+  %23 = load i32, i32* %22, align 1
+  %24 = lshr i32 %23, 6
+  %25 = and i32 %24, 66076671
+  %26 = getelementptr %struct.crypto_onetimeauth_poly1305_state, %struct.crypto_onetimeauth_poly1305_state* %0, i32 0, i32 0, i32 12
+  %27 = bitcast i8* %26 to i32*
+  store i32 %25, i32* %27, align 4
+  %28 = getelementptr i8, i8* %1, i32 12
+  %29 = bitcast i8* %28 to i32*
+  %30 = load i32, i32* %29, align 1
+  %31 = lshr i32 %30, 8
+  %32 = and i32 %31, 1048575
+  %33 = getelementptr %struct.crypto_onetimeauth_poly1305_state, %struct.crypto_onetimeauth_poly1305_state* %0, i32 0, i32 0, i32 16
+  %34 = bitcast i8* %33 to i32*
+  store i32 %32, i32* %34, align 8
+  %35 = getelementptr inbounds %struct.crypto_onetimeauth_poly1305_state, %struct.crypto_onetimeauth_poly1305_state* %0, i32 0, i32 0, i32 20
+  %36 = getelementptr i8, i8* %1, i32 16
+  %37 = bitcast i8* %36 to i32*
+  tail call void @llvm.memset.p0i8.i64(i8* nonnull align 4 dereferenceable(20) %35, i8 0, i64 20, i1 false) #6
+  %38 = load i32, i32* %37, align 1
+  %39 = getelementptr inbounds %struct.crypto_onetimeauth_poly1305_state, %struct.crypto_onetimeauth_poly1305_state* %0, i32 0, i32 0, i32 40
+  %40 = bitcast i8* %39 to i32*
+  store i32 %38, i32* %40, align 8
+  %41 = getelementptr i8, i8* %1, i32 20
+  %42 = bitcast i8* %41 to i32*
+  %43 = load i32, i32* %42, align 1
+  %44 = getelementptr %struct.crypto_onetimeauth_poly1305_state, %struct.crypto_onetimeauth_poly1305_state* %0, i32 0, i32 0, i32 44
+  %45 = bitcast i8* %44 to i32*
+  store i32 %43, i32* %45, align 4
+  %46 = getelementptr i8, i8* %1, i32 24
+  %47 = bitcast i8* %46 to i32*
+  %48 = load i32, i32* %47, align 1
+  %49 = getelementptr %struct.crypto_onetimeauth_poly1305_state, %struct.crypto_onetimeauth_poly1305_state* %0, i32 0, i32 0, i32 48
+  %50 = bitcast i8* %49 to i32*
+  store i32 %48, i32* %50, align 8
+  %51 = getelementptr i8, i8* %1, i32 28
+  %52 = bitcast i8* %51 to i32*
+  %53 = load i32, i32* %52, align 1
+  %54 = getelementptr %struct.crypto_onetimeauth_poly1305_state, %struct.crypto_onetimeauth_poly1305_state* %0, i32 0, i32 0, i32 52
+  %55 = bitcast i8* %54 to i32*
+  store i32 %53, i32* %55, align 4
+  %56 = getelementptr inbounds %struct.crypto_onetimeauth_poly1305_state, %struct.crypto_onetimeauth_poly1305_state* %0, i32 0, i32 0, i32 56
+  %57 = bitcast i8* %56 to i64*
+  store i64 0, i64* %57, align 8
+  %58 = getelementptr inbounds %struct.crypto_onetimeauth_poly1305_state, %struct.crypto_onetimeauth_poly1305_state* %0, i32 0, i32 0, i32 80
+  store i8 0, i8* %58, align 8
+  ret i32 0
+}
+
+; Function Attrs: nofree norecurse nounwind
+define internal i32 @crypto_onetimeauth_poly1305_donna_update(%struct.crypto_onetimeauth_poly1305_state* nocapture %0, i8* nocapture readonly %1, i64 %2) #1 {
+  %4 = bitcast %struct.crypto_onetimeauth_poly1305_state* %0 to %struct.poly1305_state_internal_t*
+  tail call fastcc void @poly1305_update(%struct.poly1305_state_internal_t* %4, i8* %1, i64 %2)
+  ret i32 0
+}
+
+; Function Attrs: nounwind
+define internal i32 @crypto_onetimeauth_poly1305_donna_final(%struct.crypto_onetimeauth_poly1305_state* %0, i8* nocapture %1) #0 {
+  %3 = bitcast %struct.crypto_onetimeauth_poly1305_state* %0 to %struct.poly1305_state_internal_t*
+  tail call fastcc void @poly1305_finish(%struct.poly1305_state_internal_t* %3, i8* %1)
+  ret i32 0
+}
+
+; Function Attrs: argmemonly nounwind willreturn
+declare void @llvm.lifetime.start.p0i8(i64 immarg %0, i8* nocapture %1) #2
+
+; Function Attrs: nofree norecurse nounwind
+define internal fastcc void @poly1305_update(%struct.poly1305_state_internal_t* nocapture %0, i8* nocapture readonly %1, i64 %2) unnamed_addr #1 {
+  %4 = getelementptr inbounds %struct.poly1305_state_internal_t, %struct.poly1305_state_internal_t* %0, i32 0, i32 3
+  %5 = load i64, i64* %4, align 8
+  %6 = icmp eq i64 %5, 0
+  br i1 %6, label %33, label %7
+
+7:                                                ; preds = %3
+  %8 = sub i64 16, %5
+  %9 = icmp ugt i64 %8, %2
+  %10 = select i1 %9, i64 %2, i64 %8
+  %11 = icmp eq i64 %10, 0
+  br i1 %11, label %24, label %12
+
+12:                                               ; preds = %7, %12
+  %13 = phi i64 [ %23, %12 ], [ %5, %7 ]
+  %14 = phi i64 [ %21, %12 ], [ 0, %7 ]
+  %15 = trunc i64 %14 to i32
+  %16 = getelementptr i8, i8* %1, i32 %15
+  %17 = load i8, i8* %16, align 1
+  %18 = add i64 %13, %14
+  %19 = trunc i64 %18 to i32
+  %20 = getelementptr %struct.poly1305_state_internal_t, %struct.poly1305_state_internal_t* %0, i32 0, i32 4, i32 %19
+  store i8 %17, i8* %20, align 1
+  %21 = add nuw i64 %14, 1
+  %22 = icmp ult i64 %21, %10
+  %23 = load i64, i64* %4, align 8
+  br i1 %22, label %12, label %24
+
+24:                                               ; preds = %12, %7
+  %25 = phi i64 [ %5, %7 ], [ %23, %12 ]
+  %26 = add i64 %25, %10
+  store i64 %26, i64* %4, align 8
+  %27 = icmp ult i64 %26, 16
+  br i1 %27, label %60, label %28
+
+28:                                               ; preds = %24
+  %29 = trunc i64 %10 to i32
+  %30 = getelementptr i8, i8* %1, i32 %29
+  %31 = sub i64 %2, %10
+  %32 = getelementptr inbounds %struct.poly1305_state_internal_t, %struct.poly1305_state_internal_t* %0, i32 0, i32 4, i32 0
+  tail call fastcc void @poly1305_blocks(%struct.poly1305_state_internal_t* nonnull %0, i8* nonnull %32, i64 16)
+  store i64 0, i64* %4, align 8
+  br label %33
+
+33:                                               ; preds = %28, %3
+  %34 = phi i64 [ %2, %3 ], [ %31, %28 ]
+  %35 = phi i8* [ %1, %3 ], [ %30, %28 ]
+  %36 = icmp ugt i64 %34, 15
+  br i1 %36, label %37, label %42
+
+37:                                               ; preds = %33
+  %38 = and i64 %34, -16
+  tail call fastcc void @poly1305_blocks(%struct.poly1305_state_internal_t* nonnull %0, i8* %35, i64 %38)
+  %39 = trunc i64 %38 to i32
+  %40 = getelementptr i8, i8* %35, i32 %39
+  %41 = sub i64 %34, %38
+  br label %42
+
+42:                                               ; preds = %37, %33
+  %43 = phi i64 [ %41, %37 ], [ %34, %33 ]
+  %44 = phi i8* [ %40, %37 ], [ %35, %33 ]
+  %45 = icmp eq i64 %43, 0
+  br i1 %45, label %60, label %46
+
+46:                                               ; preds = %42, %46
+  %47 = phi i64 [ %55, %46 ], [ 0, %42 ]
+  %48 = trunc i64 %47 to i32
+  %49 = getelementptr i8, i8* %44, i32 %48
+  %50 = load i8, i8* %49, align 1
+  %51 = load i64, i64* %4, align 8
+  %52 = add i64 %51, %47
+  %53 = trunc i64 %52 to i32
+  %54 = getelementptr %struct.poly1305_state_internal_t, %struct.poly1305_state_internal_t* %0, i32 0, i32 4, i32 %53
+  store i8 %50, i8* %54, align 1
+  %55 = add nuw i64 %47, 1
+  %56 = icmp eq i64 %55, %43
+  br i1 %56, label %57, label %46
+
+57:                                               ; preds = %46
+  %58 = load i64, i64* %4, align 8
+  %59 = add i64 %58, %43
+  store i64 %59, i64* %4, align 8
+  br label %60
+
+60:                                               ; preds = %57, %42, %24
+  ret void
+}
+
+; Function Attrs: noinline nounwind
+define internal fastcc void @poly1305_finish(%struct.poly1305_state_internal_t* %0, i8* nocapture %1) unnamed_addr #3 {
+  %3 = getelementptr inbounds %struct.poly1305_state_internal_t, %struct.poly1305_state_internal_t* %0, i32 0, i32 3
+  %4 = load i64, i64* %3, align 8
+  %5 = icmp eq i64 %4, 0
+  br i1 %5, label %20, label %6
+
+6:                                                ; preds = %2
+  %7 = trunc i64 %4 to i32
+  %8 = getelementptr %struct.poly1305_state_internal_t, %struct.poly1305_state_internal_t* %0, i32 0, i32 4, i32 %7
+  store i8 1, i8* %8, align 1
+  %9 = add i64 %4, 1
+  %10 = icmp ult i64 %9, 16
+  br i1 %10, label %11, label %17
+
+11:                                               ; preds = %6
+  %12 = getelementptr %struct.poly1305_state_internal_t, %struct.poly1305_state_internal_t* %0, i32 0, i32 0, i32 16
+  %13 = bitcast i32* %12 to i8*
+  %14 = add i32 %7, 1
+  %15 = getelementptr i8, i8* %13, i32 %14
+  %16 = sub i32 15, %7
+  call void @llvm.memset.p0i8.i32(i8* align 1 %15, i8 0, i32 %16, i1 false)
+  br label %17
+
+17:                                               ; preds = %11, %6
+  %18 = getelementptr inbounds %struct.poly1305_state_internal_t, %struct.poly1305_state_internal_t* %0, i32 0, i32 5
+  store i8 1, i8* %18, align 8
+  %19 = getelementptr inbounds %struct.poly1305_state_internal_t, %struct.poly1305_state_internal_t* %0, i32 0, i32 4, i32 0
+  tail call fastcc void @poly1305_blocks(%struct.poly1305_state_internal_t* nonnull %0, i8* nonnull %19, i64 16)
+  br label %20
+
+20:                                               ; preds = %2, %17
+  %21 = getelementptr inbounds %struct.poly1305_state_internal_t, %struct.poly1305_state_internal_t* %0, i32 0, i32 1, i32 0
+  %22 = load i32, i32* %21, align 4
+  %23 = getelementptr %struct.poly1305_state_internal_t, %struct.poly1305_state_internal_t* %0, i32 0, i32 1, i32 1
+  %24 = load i32, i32* %23, align 4
+  %25 = getelementptr %struct.poly1305_state_internal_t, %struct.poly1305_state_internal_t* %0, i32 0, i32 1, i32 2
+  %26 = load i32, i32* %25, align 4
+  %27 = getelementptr %struct.poly1305_state_internal_t, %struct.poly1305_state_internal_t* %0, i32 0, i32 1, i32 3
+  %28 = load i32, i32* %27, align 4
+  %29 = getelementptr %struct.poly1305_state_internal_t, %struct.poly1305_state_internal_t* %0, i32 0, i32 1, i32 4
+  %30 = load i32, i32* %29, align 4
+  %31 = lshr i32 %24, 26
+  %32 = and i32 %24, 67108863
+  %33 = add i32 %26, %31
+  %34 = lshr i32 %33, 26
+  %35 = and i32 %33, 67108863
+  %36 = add i32 %34, %28
+  %37 = lshr i32 %36, 26
+  %38 = and i32 %36, 67108863
+  %39 = add i32 %37, %30
+  %40 = lshr i32 %39, 26
+  %41 = mul nuw nsw i32 %40, 5
+  %42 = add i32 %41, %22
+  %43 = lshr i32 %42, 26
+  %44 = and i32 %42, 67108863
+  %45 = add nuw nsw i32 %43, %32
+  %46 = add nuw nsw i32 %44, 5
+  %47 = lshr i32 %46, 26
+  %48 = add nuw nsw i32 %47, %45
+  %49 = lshr i32 %48, 26
+  %50 = add nuw nsw i32 %49, %35
+  %51 = lshr i32 %50, 26
+  %52 = add nuw nsw i32 %51, %38
+  %53 = lshr i32 %52, 26
+  %54 = or i32 %39, -67108864
+  %55 = add nsw i32 %54, %53
+  %56 = lshr i32 %55, 31
+  %57 = add nsw i32 %56, -1
+  %58 = and i32 %57, 67108863
+  %59 = and i32 %58, %46
+  %60 = and i32 %58, %48
+  %61 = and i32 %58, %50
+  %62 = and i32 %58, %52
+  %63 = and i32 %57, %55
+  %64 = ashr i32 %55, 31
+  %65 = and i32 %64, %44
+  %66 = or i32 %65, %59
+  %67 = and i32 %64, %45
+  %68 = or i32 %67, %60
+  %69 = and i32 %64, %35
+  %70 = or i32 %69, %61
+  %71 = and i32 %64, %38
+  %72 = or i32 %71, %62
+  %73 = and i32 %64, %39
+  %74 = or i32 %63, %73
+  %75 = shl i32 %68, 26
+  %76 = or i32 %66, %75
+  %77 = lshr i32 %68, 6
+  %78 = shl i32 %70, 20
+  %79 = or i32 %77, %78
+  %80 = lshr i32 %70, 12
+  %81 = shl i32 %72, 14
+  %82 = or i32 %80, %81
+  %83 = lshr i32 %72, 18
+  %84 = shl i32 %74, 8
+  %85 = or i32 %84, %83
+  %86 = zext i32 %76 to i64
+  %87 = getelementptr inbounds %struct.poly1305_state_internal_t, %struct.poly1305_state_internal_t* %0, i32 0, i32 2, i32 0
+  %88 = load i32, i32* %87, align 8
+  %89 = zext i32 %88 to i64
+  %90 = add nuw nsw i64 %86, %89
+  %91 = trunc i64 %90 to i32
+  %92 = zext i32 %79 to i64
+  %93 = getelementptr %struct.poly1305_state_internal_t, %struct.poly1305_state_internal_t* %0, i32 0, i32 2, i32 1
+  %94 = load i32, i32* %93, align 4
+  %95 = zext i32 %94 to i64
+  %96 = add nuw nsw i64 %92, %95
+  %97 = lshr i64 %90, 32
+  %98 = add nuw nsw i64 %96, %97
+  %99 = trunc i64 %98 to i32
+  %100 = zext i32 %82 to i64
+  %101 = getelementptr %struct.poly1305_state_internal_t, %struct.poly1305_state_internal_t* %0, i32 0, i32 2, i32 2
+  %102 = load i32, i32* %101, align 8
+  %103 = zext i32 %102 to i64
+  %104 = add nuw nsw i64 %100, %103
+  %105 = lshr i64 %98, 32
+  %106 = add nuw nsw i64 %104, %105
+  %107 = trunc i64 %106 to i32
+  %108 = zext i32 %85 to i64
+  %109 = getelementptr %struct.poly1305_state_internal_t, %struct.poly1305_state_internal_t* %0, i32 0, i32 2, i32 3
+  %110 = load i32, i32* %109, align 4
+  %111 = zext i32 %110 to i64
+  %112 = add nuw nsw i64 %108, %111
+  %113 = lshr i64 %106, 32
+  %114 = add nuw nsw i64 %112, %113
+  %115 = trunc i64 %114 to i32
+  %116 = bitcast i8* %1 to i32*
+  store i32 %91, i32* %116, align 1
+  %117 = getelementptr i8, i8* %1, i32 4
+  %118 = bitcast i8* %117 to i32*
+  store i32 %99, i32* %118, align 1
+  %119 = getelementptr i8, i8* %1, i32 8
+  %120 = bitcast i8* %119 to i32*
+  store i32 %107, i32* %120, align 1
+  %121 = getelementptr i8, i8* %1, i32 12
+  %122 = bitcast i8* %121 to i32*
+  store i32 %115, i32* %122, align 1
+  %123 = bitcast %struct.poly1305_state_internal_t* %0 to i8*
+  tail call void @sodium_memzero(i8* %123, i32 88) #6
+  ret void
+}
+
+; Function Attrs: argmemonly nounwind willreturn
+declare void @llvm.lifetime.end.p0i8(i64 immarg %0, i8* nocapture %1) #2
+
+; Function Attrs: nofree norecurse nounwind
+define internal fastcc void @poly1305_blocks(%struct.poly1305_state_internal_t* nocapture %0, i8* nocapture readonly %1, i64 %2) unnamed_addr #1 {
+  %4 = getelementptr inbounds %struct.poly1305_state_internal_t, %struct.poly1305_state_internal_t* %0, i32 0, i32 5
+  %5 = load i8, i8* %4, align 8
+  %6 = icmp eq i8 %5, 0
+  %7 = select i1 %6, i32 16777216, i32 0
+  %8 = getelementptr %struct.poly1305_state_internal_t, %struct.poly1305_state_internal_t* %0, i32 0, i32 0, i32 1
+  %9 = load i32, i32* %8, align 4
+  %10 = getelementptr %struct.poly1305_state_internal_t, %struct.poly1305_state_internal_t* %0, i32 0, i32 0, i32 2
+  %11 = load i32, i32* %10, align 8
+  %12 = getelementptr %struct.poly1305_state_internal_t, %struct.poly1305_state_internal_t* %0, i32 0, i32 0, i32 3
+  %13 = load i32, i32* %12, align 4
+  %14 = getelementptr %struct.poly1305_state_internal_t, %struct.poly1305_state_internal_t* %0, i32 0, i32 0, i32 4
+  %15 = load i32, i32* %14, align 8
+  %16 = getelementptr inbounds %struct.poly1305_state_internal_t, %struct.poly1305_state_internal_t* %0, i32 0, i32 1, i32 0
+  %17 = load i32, i32* %16, align 4
+  %18 = getelementptr %struct.poly1305_state_internal_t, %struct.poly1305_state_internal_t* %0, i32 0, i32 1, i32 1
+  %19 = load i32, i32* %18, align 4
+  %20 = getelementptr %struct.poly1305_state_internal_t, %struct.poly1305_state_internal_t* %0, i32 0, i32 1, i32 2
+  %21 = load i32, i32* %20, align 4
+  %22 = getelementptr %struct.poly1305_state_internal_t, %struct.poly1305_state_internal_t* %0, i32 0, i32 1, i32 3
+  %23 = load i32, i32* %22, align 4
+  %24 = getelementptr %struct.poly1305_state_internal_t, %struct.poly1305_state_internal_t* %0, i32 0, i32 1, i32 4
+  %25 = load i32, i32* %24, align 4
+  %26 = icmp ugt i64 %2, 15
+  br i1 %26, label %27, label %160
+
+27:                                               ; preds = %3
+  %28 = mul i32 %15, 5
+  %29 = mul i32 %13, 5
+  %30 = mul i32 %11, 5
+  %31 = mul i32 %9, 5
+  %32 = getelementptr inbounds %struct.poly1305_state_internal_t, %struct.poly1305_state_internal_t* %0, i32 0, i32 0, i32 0
+  %33 = load i32, i32* %32, align 8
+  %34 = zext i32 %33 to i64
+  %35 = zext i32 %28 to i64
+  %36 = zext i32 %29 to i64
+  %37 = zext i32 %30 to i64
+  %38 = zext i32 %31 to i64
+  %39 = zext i32 %9 to i64
+  %40 = zext i32 %11 to i64
+  %41 = zext i32 %13 to i64
+  %42 = zext i32 %15 to i64
+  br label %43
+
+43:                                               ; preds = %27, %43
+  %44 = phi i8* [ %1, %27 ], [ %157, %43 ]
+  %45 = phi i64 [ %2, %27 ], [ %158, %43 ]
+  %46 = phi i32 [ %17, %27 ], [ %155, %43 ]
+  %47 = phi i32 [ %19, %27 ], [ %156, %43 ]
+  %48 = phi i32 [ %21, %27 ], [ %140, %43 ]
+  %49 = phi i32 [ %23, %27 ], [ %145, %43 ]
+  %50 = phi i32 [ %25, %27 ], [ %151, %43 ]
+  %51 = bitcast i8* %44 to i32*
+  %52 = load i32, i32* %51, align 1
+  %53 = and i32 %52, 67108863
+  %54 = add i32 %53, %46
+  %55 = getelementptr i8, i8* %44, i32 3
+  %56 = bitcast i8* %55 to i32*
+  %57 = load i32, i32* %56, align 1
+  %58 = lshr i32 %57, 2
+  %59 = and i32 %58, 67108863
+  %60 = add i32 %59, %47
+  %61 = getelementptr i8, i8* %44, i32 6
+  %62 = bitcast i8* %61 to i32*
+  %63 = load i32, i32* %62, align 1
+  %64 = lshr i32 %63, 4
+  %65 = and i32 %64, 67108863
+  %66 = add i32 %65, %48
+  %67 = getelementptr i8, i8* %44, i32 9
+  %68 = bitcast i8* %67 to i32*
+  %69 = load i32, i32* %68, align 1
+  %70 = lshr i32 %69, 6
+  %71 = add i32 %70, %49
+  %72 = getelementptr i8, i8* %44, i32 12
+  %73 = bitcast i8* %72 to i32*
+  %74 = load i32, i32* %73, align 1
+  %75 = lshr i32 %74, 8
+  %76 = or i32 %75, %7
+  %77 = add i32 %76, %50
+  %78 = zext i32 %54 to i64
+  %79 = mul nuw i64 %78, %34
+  %80 = zext i32 %60 to i64
+  %81 = mul nuw i64 %80, %35
+  %82 = add i64 %81, %79
+  %83 = zext i32 %66 to i64
+  %84 = mul nuw i64 %83, %36
+  %85 = add i64 %82, %84
+  %86 = zext i32 %71 to i64
+  %87 = mul nuw i64 %86, %37
+  %88 = add i64 %85, %87
+  %89 = zext i32 %77 to i64
+  %90 = mul nuw i64 %89, %38
+  %91 = add i64 %88, %90
+  %92 = mul nuw i64 %78, %39
+  %93 = mul nuw i64 %80, %34
+  %94 = add i64 %93, %92
+  %95 = mul nuw i64 %83, %35
+  %96 = add i64 %94, %95
+  %97 = mul nuw i64 %86, %36
+  %98 = add i64 %96, %97
+  %99 = mul nuw i64 %89, %37
+  %100 = add i64 %98, %99
+  %101 = mul nuw i64 %78, %40
+  %102 = mul nuw i64 %80, %39
+  %103 = add i64 %102, %101
+  %104 = mul nuw i64 %83, %34
+  %105 = add i64 %103, %104
+  %106 = mul nuw i64 %86, %35
+  %107 = add i64 %105, %106
+  %108 = mul nuw i64 %89, %36
+  %109 = add i64 %107, %108
+  %110 = mul nuw i64 %78, %41
+  %111 = mul nuw i64 %80, %40
+  %112 = add i64 %111, %110
+  %113 = mul nuw i64 %83, %39
+  %114 = add i64 %112, %113
+  %115 = mul nuw i64 %86, %34
+  %116 = add i64 %114, %115
+  %117 = mul nuw i64 %89, %35
+  %118 = add i64 %116, %117
+  %119 = mul nuw i64 %78, %42
+  %120 = mul nuw i64 %80, %41
+  %121 = add i64 %120, %119
+  %122 = mul nuw i64 %83, %40
+  %123 = add i64 %121, %122
+  %124 = mul nuw i64 %86, %39
+  %125 = add i64 %123, %124
+  %126 = mul nuw i64 %89, %34
+  %127 = add i64 %125, %126
+  %128 = lshr i64 %91, 26
+  %129 = trunc i64 %91 to i32
+  %130 = and i32 %129, 67108863
+  %131 = and i64 %128, 4294967295
+  %132 = add i64 %100, %131
+  %133 = lshr i64 %132, 26
+  %134 = trunc i64 %132 to i32
+  %135 = and i32 %134, 67108863
+  %136 = and i64 %133, 4294967295
+  %137 = add i64 %109, %136
+  %138 = lshr i64 %137, 26
+  %139 = trunc i64 %137 to i32
+  %140 = and i32 %139, 67108863
+  %141 = and i64 %138, 4294967295
+  %142 = add i64 %118, %141
+  %143 = lshr i64 %142, 26
+  %144 = trunc i64 %142 to i32
+  %145 = and i32 %144, 67108863
+  %146 = and i64 %143, 4294967295
+  %147 = add i64 %127, %146
+  %148 = lshr i64 %147, 26
+  %149 = trunc i64 %148 to i32
+  %150 = trunc i64 %147 to i32
+  %151 = and i32 %150, 67108863
+  %152 = mul i32 %149, 5
+  %153 = add i32 %152, %130
+  %154 = lshr i32 %153, 26
+  %155 = and i32 %153, 67108863
+  %156 = add nuw nsw i32 %154, %135
+  %157 = getelementptr i8, i8* %44, i32 16
+  %158 = add i64 %45, -16
+  %159 = icmp ugt i64 %158, 15
+  br i1 %159, label %43, label %160
+
+160:                                              ; preds = %43, %3
+  %161 = phi i32 [ %25, %3 ], [ %151, %43 ]
+  %162 = phi i32 [ %23, %3 ], [ %145, %43 ]
+  %163 = phi i32 [ %21, %3 ], [ %140, %43 ]
+  %164 = phi i32 [ %19, %3 ], [ %156, %43 ]
+  %165 = phi i32 [ %17, %3 ], [ %155, %43 ]
+  store i32 %165, i32* %16, align 4
+  store i32 %164, i32* %18, align 4
+  store i32 %163, i32* %20, align 4
+  store i32 %162, i32* %22, align 4
+  store i32 %161, i32* %24, align 4
+  ret void
+}
+
+declare void @sodium_memzero(i8* %0, i32 %1) local_unnamed_addr #4
+
+declare i32 @crypto_verify_16(i8* %0, i8* %1) local_unnamed_addr #4
+
+; Function Attrs: argmemonly nounwind willreturn writeonly
+declare void @llvm.memset.p0i8.i64(i8* nocapture writeonly %0, i8 %1, i64 %2, i1 immarg %3) #5
+
+; Function Attrs: argmemonly nounwind willreturn writeonly
+declare void @llvm.memset.p0i8.i32(i8* nocapture writeonly %0, i8 %1, i32 %2, i1 immarg %3) #5
+
+attributes #0 = { nounwind "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "min-legal-vector-width"="0" "no-infs-fp-math"="false" "no-jump-tables"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="false" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #1 = { nofree norecurse nounwind "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "min-legal-vector-width"="0" "no-infs-fp-math"="false" "no-jump-tables"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="false" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #2 = { argmemonly nounwind willreturn }
+attributes #3 = { noinline nounwind "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "min-legal-vector-width"="0" "no-infs-fp-math"="false" "no-jump-tables"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="false" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #4 = { "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="false" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #5 = { argmemonly nounwind willreturn writeonly }
+attributes #6 = { nounwind }
+
+!llvm.module.flags = !{!0, !1, !2}
+!llvm.ident = !{!3}
+
+!0 = !{i32 1, !"wchar_size", i32 4}
+!1 = !{i32 7, !"PIC Level", i32 2}
+!2 = !{i32 7, !"PIE Level", i32 2}
+!3 = !{!"clang version 10.0.0 (https://github.com/llvm/llvm-project d32170dbd5b0d54436537b6b75beaf44324e0c28)"}
+
+; extracted candidates
+
+; *****
+; For LLVM instruction:
+;  %8 = load i32, i32* %7, align 1
+; Looking for a replacement for:
+%0:i32 = var
+infer %0 (demandedBits=00000011111111111111111111111111)
+
+; *****
+; For LLVM instruction:
+;  %9 = and i32 %8, 67108863
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = and 67108863:i32, %0
+infer %1
+
+; *****
+; For LLVM instruction:
+;  %13 = load i32, i32* %12, align 1
+; Looking for a replacement for:
+%0:i32 = var
+infer %0 (demandedBits=00001111111111111111110000001100)
+
+; *****
+; For LLVM instruction:
+;  %14 = lshr i32 %13, 2
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = lshr %0, 2:i32
+infer %1 (demandedBits=00000011111111111111111100000011)
+
+; *****
+; For LLVM instruction:
+;  %15 = and i32 %14, 67108611
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = lshr %0, 2:i32
+%2:i32 = and 67108611:i32, %1
+infer %2
+
+; *****
+; For LLVM instruction:
+;  %19 = load i32, i32* %18, align 1
+; Looking for a replacement for:
+%0:i32 = var
+infer %0 (demandedBits=00111111111111000000111111110000)
+
+; *****
+; For LLVM instruction:
+;  %20 = lshr i32 %19, 4
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = lshr %0, 4:i32
+infer %1 (demandedBits=00000011111111111100000011111111)
+
+; *****
+; For LLVM instruction:
+;  %21 = and i32 %20, 67092735
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = lshr %0, 4:i32
+%2:i32 = and 67092735:i32, %1
+infer %2
+
+; *****
+; For LLVM instruction:
+;  %25 = load i32, i32* %24, align 1
+; Looking for a replacement for:
+%0:i32 = var
+infer %0 (demandedBits=11111100000011111111111111000000)
+
+; *****
+; For LLVM instruction:
+;  %26 = lshr i32 %25, 6
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = lshr %0, 6:i32
+infer %1 (demandedBits=00000011111100000011111111111111)
+
+; *****
+; For LLVM instruction:
+;  %27 = and i32 %26, 66076671
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = lshr %0, 6:i32
+%2:i32 = and 66076671:i32, %1
+infer %2
+
+; *****
+; For LLVM instruction:
+;  %31 = load i32, i32* %30, align 1
+; Looking for a replacement for:
+%0:i32 = var
+infer %0 (demandedBits=00001111111111111111111100000000)
+
+; *****
+; For LLVM instruction:
+;  %32 = lshr i32 %31, 8
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = lshr %0, 8:i32
+infer %1 (demandedBits=00000000000011111111111111111111)
+
+; *****
+; For LLVM instruction:
+;  %33 = and i32 %32, 1048575
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = lshr %0, 8:i32
+%2:i32 = and 1048575:i32, %1
+infer %2
+
+; *****
+; For LLVM instruction:
+;  %39 = load i32, i32* %37, align 1
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %43 = load i32, i32* %42, align 1
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %47 = load i32, i32* %46, align 1
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %51 = load i32, i32* %50, align 1
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+got 1 candidates from LHS
+
+-------------------------------------------------
+%0:i32 = var
+infer %0 (demandedBits=00000011111111111111111111111111)
+
+
+--------------------------------
+guess 0
+
+%0:i32 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: 67108863
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+Dataflow Pruned 0/0
+There are 1 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 2 candidates from LHS
+
+-------------------------------------------------
+%0:i32 = var
+%1:i32 = and 67108863:i32, %0
+infer %1
+
+
+--------------------------------
+guess 0
+
+%0:i32 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: 67108863
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+
+--------------------------------
+guess 1
+
+%0:i32 = var
+
+Cost = 0
+second query is SAT-- constant doesn't work
+Dataflow Pruned 0/0
+There are 2 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 1 candidates from LHS
+
+-------------------------------------------------
+%0:i32 = var
+infer %0 (demandedBits=00001111111111111111110000001100)
+
+
+--------------------------------
+guess 0
+
+%0:i32 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: 268426252
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+Dataflow Pruned 0/0
+There are 1 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 2 candidates from LHS
+
+-------------------------------------------------
+%0:i32 = var
+%1:i32 = lshr %0, 2:i32
+infer %1 (demandedBits=00000011111111111111111100000011)
+
+
+--------------------------------
+guess 0
+
+%0:i32 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: 67106563
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+
+--------------------------------
+guess 1
+
+%0:i32 = var
+
+Cost = 0
+second query is SAT-- constant doesn't work
+Dataflow Pruned 0/0
+There are 2 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 3 candidates from LHS
+
+-------------------------------------------------
+%0:i32 = var
+%1:i32 = lshr %0, 2:i32
+%2:i32 = and 67108611:i32, %1
+infer %2
+
+
+--------------------------------
+guess 0
+
+%0:i32 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: 67106563
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+
+--------------------------------
+guess 1
+
+%0:i32 = var
+
+Cost = 0
+second query is SAT-- constant doesn't work
+
+--------------------------------
+guess 2
+
+%0:i32 = var
+%1:i32 = lshr %0, 2:i32
+
+Cost = 1
+second query is SAT-- constant doesn't work
+Dataflow Pruned 0/0
+There are 3 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 1 candidates from LHS
+
+-------------------------------------------------
+%0:i32 = var
+infer %0 (demandedBits=00111111111111000000111111110000)
+
+
+--------------------------------
+guess 0
+
+%0:i32 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: 1073483248
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+Dataflow Pruned 0/0
+There are 1 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 2 candidates from LHS
+
+-------------------------------------------------
+%0:i32 = var
+%1:i32 = lshr %0, 4:i32
+infer %1 (demandedBits=00000011111111111100000011111111)
+
+
+--------------------------------
+guess 0
+
+%0:i32 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: 67092703
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+
+--------------------------------
+guess 1
+
+%0:i32 = var
+
+Cost = 0
+second query is SAT-- constant doesn't work
+Dataflow Pruned 0/0
+There are 2 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 3 candidates from LHS
+
+-------------------------------------------------
+%0:i32 = var
+%1:i32 = lshr %0, 4:i32
+%2:i32 = and 67092735:i32, %1
+infer %2
+
+
+--------------------------------
+guess 0
+
+%0:i32 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: 67092703
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+
+--------------------------------
+guess 1
+
+%0:i32 = var
+
+Cost = 0
+second query is SAT-- constant doesn't work
+
+--------------------------------
+guess 2
+
+%0:i32 = var
+%1:i32 = lshr %0, 4:i32
+
+Cost = 1
+second query is SAT-- constant doesn't work
+Dataflow Pruned 0/0
+There are 3 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 1 candidates from LHS
+
+-------------------------------------------------
+%0:i32 = var
+infer %0 (demandedBits=11111100000011111111111111000000)
+
+
+--------------------------------
+guess 0
+
+%0:i32 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: -66062400
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+Dataflow Pruned 0/0
+There are 1 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 2 candidates from LHS
+
+-------------------------------------------------
+%0:i32 = var
+%1:i32 = lshr %0, 6:i32
+infer %1 (demandedBits=00000011111100000011111111111111)
+
+
+--------------------------------
+guess 0
+
+%0:i32 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: 66076639
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+
+--------------------------------
+guess 1
+
+%0:i32 = var
+
+Cost = 0
+second query is SAT-- constant doesn't work
+Dataflow Pruned 0/0
+There are 2 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 3 candidates from LHS
+
+-------------------------------------------------
+%0:i32 = var
+%1:i32 = lshr %0, 6:i32
+%2:i32 = and 66076671:i32, %1
+infer %2
+
+
+--------------------------------
+guess 0
+
+%0:i32 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: 66076639
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+
+--------------------------------
+guess 1
+
+%0:i32 = var
+
+Cost = 0
+second query is SAT-- constant doesn't work
+
+--------------------------------
+guess 2
+
+%0:i32 = var
+%1:i32 = lshr %0, 6:i32
+
+Cost = 1
+second query is SAT-- constant doesn't work
+Dataflow Pruned 0/0
+There are 3 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 1 candidates from LHS
+
+-------------------------------------------------
+%0:i32 = var
+infer %0 (demandedBits=00001111111111111111111100000000)
+
+
+--------------------------------
+guess 0
+
+%0:i32 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: 268435200
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+Dataflow Pruned 0/0
+There are 1 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 2 candidates from LHS
+
+-------------------------------------------------
+%0:i32 = var
+%1:i32 = lshr %0, 8:i32
+infer %1 (demandedBits=00000000000011111111111111111111)
+
+
+--------------------------------
+guess 0
+
+%0:i32 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: 1048575
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+
+--------------------------------
+guess 1
+
+%0:i32 = var
+
+Cost = 0
+second query is SAT-- constant doesn't work
+Dataflow Pruned 0/0
+There are 2 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 3 candidates from LHS
+
+-------------------------------------------------
+%0:i32 = var
+%1:i32 = lshr %0, 8:i32
+%2:i32 = and 1048575:i32, %1
+infer %2
+
+
+--------------------------------
+guess 0
+
+%0:i32 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: 1048575
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+
+--------------------------------
+guess 1
+
+%0:i32 = var
+
+Cost = 0
+second query is SAT-- constant doesn't work
+
+--------------------------------
+guess 2
+
+%0:i32 = var
+%1:i32 = lshr %0, 8:i32
+
+Cost = 1
+second query is SAT-- constant doesn't work
+Dataflow Pruned 0/0
+There are 3 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 1 candidates from LHS
+
+-------------------------------------------------
+%0:i32 = var
+infer %0
+
+
+--------------------------------
+guess 0
+
+%0:i32 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: -1
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+Dataflow Pruned 0/0
+There are 1 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+#########################################################
+; exiting Souper's runOnFunction() for ./poly1305_donna.c.bc:crypto_onetimeauth_poly1305_donna()
+

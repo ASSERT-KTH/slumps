@@ -1,0 +1,864 @@
+; entering Souper's runOnFunction() for ./randombytes_internal_random.c.bc:randombytes_internal_random_buf()
+
+; ModuleID = './randombytes_internal_random.c.bc'
+source_filename = "randombytes/internal/randombytes_internal_random.c"
+target datalayout = "e-m:e-p:32:32-i64:64-n32:64-S128"
+target triple = "wasm32-unknown-wasi"
+
+%struct.randombytes_implementation = type { i8* ()*, i32 ()*, void ()*, i32 (i32)*, void (i8*, i32)*, i32 ()* }
+%struct.InternalRandom_ = type { i32, i32, [32 x i8], [512 x i8], i64 }
+%struct.timeval = type { i64, i64 }
+
+@randombytes_internal_implementation = local_unnamed_addr global %struct.randombytes_implementation { i8* ()* @randombytes_internal_implementation_name, i32 ()* @randombytes_internal_random, void ()* @randombytes_internal_random_stir, i32 (i32)* null, void (i8*, i32)* @randombytes_internal_random_buf, i32 ()* @randombytes_internal_random_close }, align 4
+@.str = private unnamed_addr constant [9 x i8] c"internal\00", align 1
+@stream = internal global %struct.InternalRandom_ zeroinitializer, align 8
+@.str.1 = private unnamed_addr constant [9 x i8] c"ret == 0\00", align 1
+@.str.2 = private unnamed_addr constant [51 x i8] c"randombytes/internal/randombytes_internal_random.c\00", align 1
+@__func__.randombytes_internal_random = private unnamed_addr constant [28 x i8] c"randombytes_internal_random\00", align 1
+@.str.3 = private unnamed_addr constant [30 x i8] c"stream.nonce != (uint64_t) 0U\00", align 1
+@__func__.randombytes_internal_random_stir = private unnamed_addr constant [33 x i8] c"randombytes_internal_random_stir\00", align 1
+@errno = external thread_local local_unnamed_addr global i32, align 4
+@__func__.randombytes_internal_random_buf = private unnamed_addr constant [32 x i8] c"randombytes_internal_random_buf\00", align 1
+@global.0 = internal unnamed_addr global i1 false, align 4
+@global.2 = internal unnamed_addr global i1 false, align 4
+
+; Function Attrs: norecurse nounwind readnone
+define internal i8* @randombytes_internal_implementation_name() #0 {
+  ret i8* getelementptr inbounds ([9 x i8], [9 x i8]* @.str, i32 0, i32 0)
+}
+
+; Function Attrs: nounwind
+define internal i32 @randombytes_internal_random() #1 {
+  %1 = load i32, i32* getelementptr inbounds (%struct.InternalRandom_, %struct.InternalRandom_* @stream, i32 0, i32 1), align 4
+  %2 = icmp eq i32 %1, 0
+  br i1 %2, label %3, label %24
+
+3:                                                ; preds = %0
+  %4 = load i32, i32* getelementptr inbounds (%struct.InternalRandom_, %struct.InternalRandom_* @stream, i32 0, i32 0), align 8
+  %5 = icmp eq i32 %4, 0
+  br i1 %5, label %6, label %7
+
+6:                                                ; preds = %3
+  tail call void @randombytes_internal_random_stir() #7
+  br label %7
+
+7:                                                ; preds = %3, %6
+  %8 = tail call i32 @crypto_stream_chacha20(i8* getelementptr inbounds (%struct.InternalRandom_, %struct.InternalRandom_* @stream, i32 0, i32 3, i32 0), i64 512, i8* bitcast (i64* getelementptr inbounds (%struct.InternalRandom_, %struct.InternalRandom_* @stream, i32 0, i32 4) to i8*), i8* getelementptr inbounds (%struct.InternalRandom_, %struct.InternalRandom_* @stream, i32 0, i32 2, i32 0)) #7
+  %9 = icmp eq i32 %8, 0
+  br i1 %9, label %11, label %10
+
+10:                                               ; preds = %7
+  tail call void @__assert_fail(i8* getelementptr inbounds ([9 x i8], [9 x i8]* @.str.1, i32 0, i32 0), i8* getelementptr inbounds ([51 x i8], [51 x i8]* @.str.2, i32 0, i32 0), i32 604, i8* getelementptr inbounds ([28 x i8], [28 x i8]* @__func__.randombytes_internal_random, i32 0, i32 0)) #8
+  unreachable
+
+11:                                               ; preds = %7
+  store i32 480, i32* getelementptr inbounds (%struct.InternalRandom_, %struct.InternalRandom_* @stream, i32 0, i32 1), align 4
+  br label %12
+
+12:                                               ; preds = %12, %11
+  %13 = phi i32 [ 0, %11 ], [ %19, %12 ]
+  %14 = getelementptr i8, i8* getelementptr inbounds (%struct.InternalRandom_, %struct.InternalRandom_* @stream, i32 0, i32 3, i32 480), i32 %13
+  %15 = load i8, i8* %14, align 1
+  %16 = getelementptr %struct.InternalRandom_, %struct.InternalRandom_* @stream, i32 0, i32 2, i32 %13
+  %17 = load i8, i8* %16, align 1
+  %18 = xor i8 %17, %15
+  store i8 %18, i8* %16, align 1
+  %19 = add nuw nsw i32 %13, 1
+  %20 = icmp eq i32 %19, 32
+  br i1 %20, label %21, label %12
+
+21:                                               ; preds = %12
+  tail call void @llvm.memset.p0i8.i32(i8* nonnull align 8 dereferenceable(32) getelementptr inbounds (%struct.InternalRandom_, %struct.InternalRandom_* @stream, i32 0, i32 3, i32 480), i8 0, i32 32, i1 false)
+  %22 = load i64, i64* getelementptr inbounds (%struct.InternalRandom_, %struct.InternalRandom_* @stream, i32 0, i32 4), align 8
+  %23 = add i64 %22, 1
+  store i64 %23, i64* getelementptr inbounds (%struct.InternalRandom_, %struct.InternalRandom_* @stream, i32 0, i32 4), align 8
+  br label %24
+
+24:                                               ; preds = %21, %0
+  %25 = phi i32 [ 480, %21 ], [ %1, %0 ]
+  %26 = add i32 %25, -4
+  store i32 %26, i32* getelementptr inbounds (%struct.InternalRandom_, %struct.InternalRandom_* @stream, i32 0, i32 1), align 4
+  %27 = getelementptr %struct.InternalRandom_, %struct.InternalRandom_* @stream, i32 0, i32 3, i32 %26
+  %28 = bitcast i8* %27 to i32*
+  %29 = load i32, i32* %28, align 1
+  store i32 0, i32* %28, align 1
+  ret i32 %29
+}
+
+; Function Attrs: nounwind
+define internal void @randombytes_internal_random_stir() #1 {
+  %1 = alloca [16 x i8], align 16
+  %2 = alloca %struct.timeval, align 8
+  %3 = bitcast %struct.timeval* %2 to i8*
+  call void @llvm.lifetime.start.p0i8(i64 16, i8* nonnull %3) #7
+  %4 = call i32 @gettimeofday(%struct.timeval* nonnull %2, i8* null) #7
+  %5 = icmp eq i32 %4, 0
+  br i1 %5, label %7, label %6
+
+6:                                                ; preds = %0
+  tail call void @sodium_misuse() #8
+  unreachable
+
+7:                                                ; preds = %0
+  %8 = getelementptr inbounds %struct.timeval, %struct.timeval* %2, i32 0, i32 0
+  %9 = load i64, i64* %8, align 8
+  %10 = mul i64 %9, 1000000
+  %11 = getelementptr inbounds %struct.timeval, %struct.timeval* %2, i32 0, i32 1
+  %12 = load i64, i64* %11, align 8
+  %13 = add i64 %10, %12
+  call void @llvm.lifetime.end.p0i8(i64 16, i8* nonnull %3) #7
+  store i64 %13, i64* getelementptr inbounds (%struct.InternalRandom_, %struct.InternalRandom_* @stream, i32 0, i32 4), align 8
+  %14 = icmp eq i64 %13, 0
+  br i1 %14, label %15, label %16
+
+15:                                               ; preds = %7
+  tail call void @__assert_fail(i8* getelementptr inbounds ([30 x i8], [30 x i8]* @.str.3, i32 0, i32 0), i8* getelementptr inbounds ([51 x i8], [51 x i8]* @.str.2, i32 0, i32 0), i32 398, i8* getelementptr inbounds ([33 x i8], [33 x i8]* @__func__.randombytes_internal_random_stir, i32 0, i32 0)) #8
+  unreachable
+
+16:                                               ; preds = %7
+  tail call void @llvm.memset.p0i8.i32(i8* nonnull align 8 dereferenceable(512) getelementptr inbounds (%struct.InternalRandom_, %struct.InternalRandom_* @stream, i32 0, i32 3, i32 0), i8 0, i32 512, i1 false)
+  store i32 0, i32* getelementptr inbounds (%struct.InternalRandom_, %struct.InternalRandom_* @stream, i32 0, i32 1), align 4
+  %17 = load i1, i1* @global.0, align 4
+  br i1 %17, label %27, label %18
+
+18:                                               ; preds = %16
+  %19 = load i32, i32* @errno, align 4
+  %20 = tail call i32 @sodium_runtime_has_rdrand() #7
+  store i1 false, i1* @global.2, align 4
+  %21 = getelementptr inbounds [16 x i8], [16 x i8]* %1, i32 0, i32 0
+  call void @llvm.lifetime.start.p0i8(i64 16, i8* nonnull %21) #7
+  %22 = call i32 @getentropy(i8* nonnull %21, i32 16) #7
+  %23 = icmp eq i32 %22, 0
+  br i1 %23, label %24, label %25
+
+24:                                               ; preds = %18
+  store i1 true, i1* @global.2, align 4
+  store i32 %19, i32* @errno, align 4
+  call void @llvm.lifetime.end.p0i8(i64 16, i8* nonnull %21) #7
+  br label %26
+
+25:                                               ; preds = %18
+  call void @llvm.lifetime.end.p0i8(i64 16, i8* nonnull %21) #7
+  br label %26
+
+26:                                               ; preds = %24, %25
+  store i1 true, i1* @global.0, align 4
+  br label %27
+
+27:                                               ; preds = %16, %26
+  %28 = load i1, i1* @global.2, align 4
+  br i1 %28, label %29, label %33
+
+29:                                               ; preds = %27
+  %30 = call i32 @getentropy(i8* getelementptr inbounds (%struct.InternalRandom_, %struct.InternalRandom_* @stream, i32 0, i32 2, i32 0), i32 32) #7
+  %31 = icmp eq i32 %30, 0
+  br i1 %31, label %33, label %32
+
+32:                                               ; preds = %29
+  call void @sodium_misuse() #8
+  unreachable
+
+33:                                               ; preds = %29, %27
+  store i32 1, i32* getelementptr inbounds (%struct.InternalRandom_, %struct.InternalRandom_* @stream, i32 0, i32 0), align 8
+  ret void
+}
+
+; Function Attrs: nounwind
+define internal void @randombytes_internal_random_buf(i8* %0, i32 %1) #1 {
+  %3 = load i32, i32* getelementptr inbounds (%struct.InternalRandom_, %struct.InternalRandom_* @stream, i32 0, i32 0), align 8
+  %4 = icmp eq i32 %3, 0
+  %5 = trunc i32 %1 to i8
+  %6 = lshr i32 %1, 8
+  %7 = trunc i32 %6 to i8
+  %8 = lshr i32 %1, 16
+  %9 = trunc i32 %8 to i8
+  %10 = lshr i32 %1, 24
+  %11 = trunc i32 %10 to i8
+  br i1 %4, label %12, label %13
+
+12:                                               ; preds = %2
+  tail call void @randombytes_internal_random_stir() #7
+  br label %13
+
+13:                                               ; preds = %2, %12
+  %14 = zext i32 %1 to i64
+  %15 = tail call i32 @crypto_stream_chacha20(i8* %0, i64 %14, i8* bitcast (i64* getelementptr inbounds (%struct.InternalRandom_, %struct.InternalRandom_* @stream, i32 0, i32 4) to i8*), i8* getelementptr inbounds (%struct.InternalRandom_, %struct.InternalRandom_* @stream, i32 0, i32 2, i32 0)) #7
+  %16 = icmp eq i32 %15, 0
+  br i1 %16, label %17, label %29
+
+17:                                               ; preds = %13
+  %18 = load i8, i8* getelementptr inbounds (%struct.InternalRandom_, %struct.InternalRandom_* @stream, i32 0, i32 2, i32 0), align 8
+  %19 = xor i8 %18, %5
+  store i8 %19, i8* getelementptr inbounds (%struct.InternalRandom_, %struct.InternalRandom_* @stream, i32 0, i32 2, i32 0), align 8
+  %20 = load i8, i8* getelementptr inbounds (%struct.InternalRandom_, %struct.InternalRandom_* @stream, i32 0, i32 2, i32 1), align 1
+  %21 = xor i8 %20, %7
+  store i8 %21, i8* getelementptr inbounds (%struct.InternalRandom_, %struct.InternalRandom_* @stream, i32 0, i32 2, i32 1), align 1
+  %22 = load i8, i8* getelementptr inbounds (%struct.InternalRandom_, %struct.InternalRandom_* @stream, i32 0, i32 2, i32 2), align 2
+  %23 = xor i8 %22, %9
+  store i8 %23, i8* getelementptr inbounds (%struct.InternalRandom_, %struct.InternalRandom_* @stream, i32 0, i32 2, i32 2), align 2
+  %24 = load i8, i8* getelementptr inbounds (%struct.InternalRandom_, %struct.InternalRandom_* @stream, i32 0, i32 2, i32 3), align 1
+  %25 = xor i8 %24, %11
+  store i8 %25, i8* getelementptr inbounds (%struct.InternalRandom_, %struct.InternalRandom_* @stream, i32 0, i32 2, i32 3), align 1
+  %26 = load i64, i64* getelementptr inbounds (%struct.InternalRandom_, %struct.InternalRandom_* @stream, i32 0, i32 4), align 8
+  %27 = add i64 %26, 1
+  store i64 %27, i64* getelementptr inbounds (%struct.InternalRandom_, %struct.InternalRandom_* @stream, i32 0, i32 4), align 8
+  %28 = tail call i32 @crypto_stream_chacha20_xor(i8* getelementptr inbounds (%struct.InternalRandom_, %struct.InternalRandom_* @stream, i32 0, i32 2, i32 0), i8* getelementptr inbounds (%struct.InternalRandom_, %struct.InternalRandom_* @stream, i32 0, i32 2, i32 0), i64 32, i8* bitcast (i64* getelementptr inbounds (%struct.InternalRandom_, %struct.InternalRandom_* @stream, i32 0, i32 4) to i8*), i8* getelementptr inbounds (%struct.InternalRandom_, %struct.InternalRandom_* @stream, i32 0, i32 2, i32 0)) #7
+  ret void
+
+29:                                               ; preds = %13
+  tail call void @__assert_fail(i8* getelementptr inbounds ([9 x i8], [9 x i8]* @.str.1, i32 0, i32 0), i8* getelementptr inbounds ([51 x i8], [51 x i8]* @.str.2, i32 0, i32 0), i32 572, i8* getelementptr inbounds ([32 x i8], [32 x i8]* @__func__.randombytes_internal_random_buf, i32 0, i32 0)) #8
+  unreachable
+}
+
+; Function Attrs: nounwind
+define internal i32 @randombytes_internal_random_close() #1 {
+  %1 = load i1, i1* @global.2, align 4
+  %2 = xor i1 %1, true
+  %3 = sext i1 %2 to i32
+  tail call void @sodium_memzero(i8* bitcast (%struct.InternalRandom_* @stream to i8*), i32 560) #7
+  ret i32 %3
+}
+
+; Function Attrs: argmemonly nounwind willreturn
+declare void @llvm.lifetime.start.p0i8(i64 immarg %0, i8* nocapture %1) #2
+
+declare i32 @crypto_stream_chacha20(i8* %0, i64 %1, i8* %2, i8* %3) local_unnamed_addr #3
+
+; Function Attrs: noreturn
+declare void @__assert_fail(i8* %0, i8* %1, i32 %2, i8* %3) local_unnamed_addr #4
+
+; Function Attrs: argmemonly nounwind willreturn writeonly
+declare void @llvm.memset.p0i8.i32(i8* nocapture writeonly %0, i8 %1, i32 %2, i1 immarg %3) #5
+
+; Function Attrs: argmemonly nounwind willreturn
+declare void @llvm.lifetime.end.p0i8(i64 immarg %0, i8* nocapture %1) #2
+
+; Function Attrs: noreturn
+declare void @sodium_misuse() local_unnamed_addr #4
+
+; Function Attrs: nofree nounwind
+declare i32 @gettimeofday(%struct.timeval* nocapture %0, i8* nocapture %1) local_unnamed_addr #6
+
+declare i32 @sodium_runtime_has_rdrand() local_unnamed_addr #3
+
+declare i32 @getentropy(i8* %0, i32 %1) local_unnamed_addr #3
+
+declare i32 @crypto_stream_chacha20_xor(i8* %0, i8* %1, i64 %2, i8* %3, i8* %4) local_unnamed_addr #3
+
+declare void @sodium_memzero(i8* %0, i32 %1) local_unnamed_addr #3
+
+attributes #0 = { norecurse nounwind readnone "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "min-legal-vector-width"="0" "no-infs-fp-math"="false" "no-jump-tables"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="false" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #1 = { nounwind "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "min-legal-vector-width"="0" "no-infs-fp-math"="false" "no-jump-tables"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="false" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #2 = { argmemonly nounwind willreturn }
+attributes #3 = { "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="false" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #4 = { noreturn "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="false" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #5 = { argmemonly nounwind willreturn writeonly }
+attributes #6 = { nofree nounwind "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="false" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #7 = { nounwind }
+attributes #8 = { noreturn nounwind }
+
+!llvm.module.flags = !{!0, !1, !2}
+!llvm.ident = !{!3}
+
+!0 = !{i32 1, !"wchar_size", i32 4}
+!1 = !{i32 7, !"PIC Level", i32 2}
+!2 = !{i32 7, !"PIE Level", i32 2}
+!3 = !{!"clang version 10.0.0 (https://github.com/llvm/llvm-project d32170dbd5b0d54436537b6b75beaf44324e0c28)"}
+
+; extracted candidates
+
+; *****
+; For LLVM instruction:
+;  %3 = load i32, i32* getelementptr inbounds (%struct.InternalRandom_, %struct.InternalRandom_* @stream, i32 0, i32 0), align 8
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %4 = icmp eq i32 %3, 0
+; Looking for a replacement for:
+%0:i32 = var
+%1:i1 = eq 0:i32, %0
+infer %1
+
+; *****
+; For LLVM instruction:
+;  %5 = trunc i32 %1 to i8
+; Looking for a replacement for:
+%0:i32 = var
+%1:i8 = trunc %0
+infer %1
+
+; *****
+; For LLVM instruction:
+;  %6 = lshr i32 %1, 8
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = lshr %0, 8:i32
+infer %1 (demandedBits=00000000000000000000000011111111)
+
+; *****
+; For LLVM instruction:
+;  %7 = trunc i32 %6 to i8
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = lshr %0, 8:i32
+%2:i8 = trunc %1
+infer %2
+
+; *****
+; For LLVM instruction:
+;  %8 = lshr i32 %1, 16
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = lshr %0, 16:i32
+infer %1 (demandedBits=00000000000000000000000011111111)
+
+; *****
+; For LLVM instruction:
+;  %9 = trunc i32 %8 to i8
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = lshr %0, 16:i32
+%2:i8 = trunc %1
+infer %2
+
+; *****
+; For LLVM instruction:
+;  %10 = lshr i32 %1, 24
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = lshr %0, 24:i32
+infer %1 (demandedBits=00000000000000000000000011111111)
+
+; *****
+; For LLVM instruction:
+;  %11 = trunc i32 %10 to i8
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = lshr %0, 24:i32
+%2:i8 = trunc %1
+infer %2
+
+; *****
+; For LLVM instruction:
+;  %14 = zext i32 %1 to i64
+; Looking for a replacement for:
+%0:i32 = var
+%1:i64 = zext %0
+infer %1
+
+; *****
+; For LLVM instruction:
+;  %15 = tail call i32 @crypto_stream_chacha20(i8* %0, i64 %14, i8* bitcast (i64* getelementptr inbounds (%struct.InternalRandom_, %struct.InternalRandom_* @stream, i32 0, i32 4) to i8*), i8* getelementptr inbounds (%struct.InternalRandom_, %struct.InternalRandom_* @stream, i32 0, i32 2, i32 0)) #7
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %16 = icmp eq i32 %15, 0
+; Looking for a replacement for:
+%0:i32 = var
+%1:i1 = eq 0:i32, %0
+infer %1
+
+; *****
+; For LLVM instruction:
+;  %18 = load i8, i8* getelementptr inbounds (%struct.InternalRandom_, %struct.InternalRandom_* @stream, i32 0, i32 2, i32 0), align 8
+; Looking for a replacement for:
+%0:i8 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %19 = xor i8 %18, %5
+; Looking for a replacement for:
+%0:i8 = var
+%1:i32 = var
+%2:i8 = trunc %1
+%3:i8 = xor %0, %2
+infer %3
+
+; *****
+; For LLVM instruction:
+;  %20 = load i8, i8* getelementptr inbounds (%struct.InternalRandom_, %struct.InternalRandom_* @stream, i32 0, i32 2, i32 1), align 1
+; Looking for a replacement for:
+%0:i8 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %21 = xor i8 %20, %7
+; Looking for a replacement for:
+%0:i8 = var
+%1:i32 = var
+%2:i32 = lshr %1, 8:i32
+%3:i8 = trunc %2
+%4:i8 = xor %0, %3
+infer %4
+
+; *****
+; For LLVM instruction:
+;  %22 = load i8, i8* getelementptr inbounds (%struct.InternalRandom_, %struct.InternalRandom_* @stream, i32 0, i32 2, i32 2), align 2
+; Looking for a replacement for:
+%0:i8 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %23 = xor i8 %22, %9
+; Looking for a replacement for:
+%0:i8 = var
+%1:i32 = var
+%2:i32 = lshr %1, 16:i32
+%3:i8 = trunc %2
+%4:i8 = xor %0, %3
+infer %4
+
+; *****
+; For LLVM instruction:
+;  %24 = load i8, i8* getelementptr inbounds (%struct.InternalRandom_, %struct.InternalRandom_* @stream, i32 0, i32 2, i32 3), align 1
+; Looking for a replacement for:
+%0:i8 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %25 = xor i8 %24, %11
+; Looking for a replacement for:
+%0:i8 = var
+%1:i32 = var
+%2:i32 = lshr %1, 24:i32
+%3:i8 = trunc %2
+%4:i8 = xor %0, %3
+infer %4
+
+; *****
+; For LLVM instruction:
+;  %26 = load i64, i64* getelementptr inbounds (%struct.InternalRandom_, %struct.InternalRandom_* @stream, i32 0, i32 4), align 8
+; Looking for a replacement for:
+%0:i64 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %27 = add i64 %26, 1
+; Looking for a replacement for:
+%0:i64 = var
+%1:i64 = add 1:i64, %0
+infer %1
+got 2 candidates from LHS
+
+-------------------------------------------------
+%0:i32 = var
+%1:i8 = trunc %0
+infer %1
+
+
+--------------------------------
+guess 0
+
+%0:i8 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: -1
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+Dataflow Pruned 0/0
+There are 1 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 2 candidates from LHS
+
+-------------------------------------------------
+%0:i32 = var
+%1:i32 = lshr %0, 8:i32
+infer %1 (demandedBits=00000000000000000000000011111111)
+
+
+--------------------------------
+guess 0
+
+%0:i32 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: 255
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+
+--------------------------------
+guess 1
+
+%0:i32 = var
+
+Cost = 0
+second query is SAT-- constant doesn't work
+Dataflow Pruned 0/0
+There are 2 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 3 candidates from LHS
+
+-------------------------------------------------
+%0:i32 = var
+%1:i32 = lshr %0, 8:i32
+%2:i8 = trunc %1
+infer %2
+
+
+--------------------------------
+guess 0
+
+%0:i8 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: -1
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+Dataflow Pruned 0/0
+There are 1 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 2 candidates from LHS
+
+-------------------------------------------------
+%0:i32 = var
+%1:i32 = lshr %0, 16:i32
+infer %1 (demandedBits=00000000000000000000000011111111)
+
+
+--------------------------------
+guess 0
+
+%0:i32 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: 255
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+
+--------------------------------
+guess 1
+
+%0:i32 = var
+
+Cost = 0
+second query is SAT-- constant doesn't work
+Dataflow Pruned 0/0
+There are 2 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 3 candidates from LHS
+
+-------------------------------------------------
+%0:i32 = var
+%1:i32 = lshr %0, 16:i32
+%2:i8 = trunc %1
+infer %2
+
+
+--------------------------------
+guess 0
+
+%0:i8 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: -1
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+Dataflow Pruned 0/0
+There are 1 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 2 candidates from LHS
+
+-------------------------------------------------
+%0:i32 = var
+%1:i32 = lshr %0, 24:i32
+infer %1 (demandedBits=00000000000000000000000011111111)
+
+
+--------------------------------
+guess 0
+
+%0:i32 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: 255
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+
+--------------------------------
+guess 1
+
+%0:i32 = var
+
+Cost = 0
+second query is SAT-- constant doesn't work
+Dataflow Pruned 0/0
+There are 2 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 3 candidates from LHS
+
+-------------------------------------------------
+%0:i32 = var
+%1:i32 = lshr %0, 24:i32
+%2:i8 = trunc %1
+infer %2
+
+
+--------------------------------
+guess 0
+
+%0:i8 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: -1
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+Dataflow Pruned 0/0
+There are 1 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 2 candidates from LHS
+
+-------------------------------------------------
+%0:i32 = var
+%1:i64 = zext %0
+infer %1
+
+
+--------------------------------
+guess 0
+
+%0:i64 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: 4294967295
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+Dataflow Pruned 0/0
+There are 1 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 4 candidates from LHS
+
+-------------------------------------------------
+%0:i8 = var
+%1:i32 = var
+%2:i8 = trunc %1
+%3:i8 = xor %0, %2
+infer %3
+
+
+--------------------------------
+guess 0
+
+%0:i8 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: -128
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+
+--------------------------------
+guess 1
+
+%0:i8 = var
+
+Cost = 0
+second query is SAT-- constant doesn't work
+
+--------------------------------
+guess 2
+
+%0:i32 = var
+%1:i8 = trunc %0
+
+Cost = 1
+second query is SAT-- constant doesn't work
+Dataflow Pruned 0/0
+There are 3 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 5 candidates from LHS
+
+-------------------------------------------------
+%0:i8 = var
+%1:i32 = var
+%2:i32 = lshr %1, 8:i32
+%3:i8 = trunc %2
+%4:i8 = xor %0, %3
+infer %4
+
+
+--------------------------------
+guess 0
+
+%0:i8 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: -128
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+
+--------------------------------
+guess 1
+
+%0:i8 = var
+
+Cost = 0
+second query is SAT-- constant doesn't work
+
+--------------------------------
+guess 2
+
+%0:i32 = var
+%1:i32 = lshr %0, 8:i32
+%2:i8 = trunc %1
+
+Cost = 2
+second query is SAT-- constant doesn't work
+Dataflow Pruned 0/0
+There are 3 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 5 candidates from LHS
+
+-------------------------------------------------
+%0:i8 = var
+%1:i32 = var
+%2:i32 = lshr %1, 16:i32
+%3:i8 = trunc %2
+%4:i8 = xor %0, %3
+infer %4
+
+
+--------------------------------
+guess 0
+
+%0:i8 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: -128
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+
+--------------------------------
+guess 1
+
+%0:i8 = var
+
+Cost = 0
+second query is SAT-- constant doesn't work
+
+--------------------------------
+guess 2
+
+%0:i32 = var
+%1:i32 = lshr %0, 16:i32
+%2:i8 = trunc %1
+
+Cost = 2
+second query is SAT-- constant doesn't work
+Dataflow Pruned 0/0
+There are 3 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 5 candidates from LHS
+
+-------------------------------------------------
+%0:i8 = var
+%1:i32 = var
+%2:i32 = lshr %1, 24:i32
+%3:i8 = trunc %2
+%4:i8 = xor %0, %3
+infer %4
+
+
+--------------------------------
+guess 0
+
+%0:i8 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: -128
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+
+--------------------------------
+guess 1
+
+%0:i8 = var
+
+Cost = 0
+second query is SAT-- constant doesn't work
+
+--------------------------------
+guess 2
+
+%0:i32 = var
+%1:i32 = lshr %0, 24:i32
+%2:i8 = trunc %1
+
+Cost = 2
+second query is SAT-- constant doesn't work
+Dataflow Pruned 0/0
+There are 3 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+#########################################################
+; exiting Souper's runOnFunction() for ./randombytes_internal_random.c.bc:randombytes_internal_random_buf()
+
+; entering Souper's runOnFunction() for ./randombytes_internal_random.c.bc:randombytes_internal_random_close()

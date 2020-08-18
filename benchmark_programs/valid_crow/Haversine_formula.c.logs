@@ -1,0 +1,253 @@
+
+Entering the Souper pass's runOnModule()
+
+
+; entering Souper's runOnFunction() for dist()
+
+; ModuleID = './Haversine_formula.c.bc'
+source_filename = "./Haversine_formula.c"
+target datalayout = "e-m:e-p:32:32-i64:64-n32:64-S128"
+target triple = "wasm32-unknown-wasi"
+
+@.str = private unnamed_addr constant [26 x i8] c"dist: %.1f km (%.1f mi.)\0A\00", align 1
+@llvm.used = appending global [1 x i8*] [i8* bitcast (i32 ()* @__main_void to i8*)], section "llvm.metadata"
+
+@__main_void = alias i32 (), i32 ()* @main
+
+; Function Attrs: noinline nounwind optnone
+define hidden double @dist(double %th1, double %ph1, double %th2, double %ph2) #0 {
+entry:
+  %th1.addr = alloca double, align 8
+  %ph1.addr = alloca double, align 8
+  %th2.addr = alloca double, align 8
+  %ph2.addr = alloca double, align 8
+  %dx = alloca double, align 8
+  %dy = alloca double, align 8
+  %dz = alloca double, align 8
+  store double %th1, double* %th1.addr, align 8
+  store double %ph1, double* %ph1.addr, align 8
+  store double %th2, double* %th2.addr, align 8
+  store double %ph2, double* %ph2.addr, align 8
+  %0 = load double, double* %ph2.addr, align 8
+  %1 = load double, double* %ph1.addr, align 8
+  %sub = fsub double %1, %0
+  store double %sub, double* %ph1.addr, align 8
+  %2 = load double, double* %ph1.addr, align 8
+  %mul = fmul double %2, 0x3F91DF46A252DD11
+  store double %mul, double* %ph1.addr, align 8
+  %3 = load double, double* %th1.addr, align 8
+  %mul1 = fmul double %3, 0x3F91DF46A252DD11
+  store double %mul1, double* %th1.addr, align 8
+  %4 = load double, double* %th2.addr, align 8
+  %mul2 = fmul double %4, 0x3F91DF46A252DD11
+  store double %mul2, double* %th2.addr, align 8
+  %5 = load double, double* %th1.addr, align 8
+  %6 = call double @llvm.sin.f64(double %5)
+  %7 = load double, double* %th2.addr, align 8
+  %8 = call double @llvm.sin.f64(double %7)
+  %sub3 = fsub double %6, %8
+  store double %sub3, double* %dz, align 8
+  %9 = load double, double* %ph1.addr, align 8
+  %10 = call double @llvm.cos.f64(double %9)
+  %11 = load double, double* %th1.addr, align 8
+  %12 = call double @llvm.cos.f64(double %11)
+  %mul4 = fmul double %10, %12
+  %13 = load double, double* %th2.addr, align 8
+  %14 = call double @llvm.cos.f64(double %13)
+  %sub5 = fsub double %mul4, %14
+  store double %sub5, double* %dx, align 8
+  %15 = load double, double* %ph1.addr, align 8
+  %16 = call double @llvm.sin.f64(double %15)
+  %17 = load double, double* %th1.addr, align 8
+  %18 = call double @llvm.cos.f64(double %17)
+  %mul6 = fmul double %16, %18
+  store double %mul6, double* %dy, align 8
+  %19 = load double, double* %dx, align 8
+  %20 = load double, double* %dx, align 8
+  %mul7 = fmul double %19, %20
+  %21 = load double, double* %dy, align 8
+  %22 = load double, double* %dy, align 8
+  %mul8 = fmul double %21, %22
+  %add = fadd double %mul7, %mul8
+  %23 = load double, double* %dz, align 8
+  %24 = load double, double* %dz, align 8
+  %mul9 = fmul double %23, %24
+  %add10 = fadd double %add, %mul9
+  %25 = call double @llvm.sqrt.f64(double %add10)
+  %div = fdiv double %25, 2.000000e+00
+  %call = call double @asin(double %div) #4
+  %mul11 = fmul double %call, 2.000000e+00
+  %mul12 = fmul double %mul11, 6.371000e+03
+  ret double %mul12
+}
+
+; Function Attrs: nounwind readnone speculatable willreturn
+declare double @llvm.sin.f64(double %0) #1
+
+; Function Attrs: nounwind readnone speculatable willreturn
+declare double @llvm.cos.f64(double %0) #1
+
+; Function Attrs: nounwind readnone
+declare double @asin(double %0) #2
+
+; Function Attrs: nounwind readnone speculatable willreturn
+declare double @llvm.sqrt.f64(double %0) #1
+
+; Function Attrs: noinline nounwind optnone
+define hidden i32 @main() #0 {
+entry:
+  %retval = alloca i32, align 4
+  %d = alloca double, align 8
+  store i32 0, i32* %retval, align 4
+  %call = call double @dist(double 3.612000e+01, double -8.667000e+01, double 3.394000e+01, double -1.184000e+02)
+  store double %call, double* %d, align 8
+  %0 = load double, double* %d, align 8
+  %1 = load double, double* %d, align 8
+  %div = fdiv double %1, 0x3FF9BFDF7E8038A0
+  %call1 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([26 x i8], [26 x i8]* @.str, i32 0, i32 0), double %0, double %div)
+  ret i32 0
+}
+
+declare i32 @printf(i8* %0, ...) #3
+
+attributes #0 = { noinline nounwind optnone "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "min-legal-vector-width"="0" "no-infs-fp-math"="false" "no-jump-tables"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #1 = { nounwind readnone speculatable willreturn }
+attributes #2 = { nounwind readnone "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #3 = { "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #4 = { nounwind readnone }
+
+!llvm.module.flags = !{!0}
+!llvm.ident = !{!1}
+
+!0 = !{i32 1, !"wchar_size", i32 4}
+!1 = !{!"clang version 11.0.0 (https://github.com/Jacarte/llvm-project.git 0f6dea67136cc1e0b3d200eb2bb165628970c44b)"}
+
+; extracted candidates
+#########################################################
+; exiting Souper's runOnFunction() for dist()
+
+; entering Souper's runOnFunction() for main()
+
+; ModuleID = './Haversine_formula.c.bc'
+source_filename = "./Haversine_formula.c"
+target datalayout = "e-m:e-p:32:32-i64:64-n32:64-S128"
+target triple = "wasm32-unknown-wasi"
+
+@.str = private unnamed_addr constant [26 x i8] c"dist: %.1f km (%.1f mi.)\0A\00", align 1
+@llvm.used = appending global [1 x i8*] [i8* bitcast (i32 ()* @__main_void to i8*)], section "llvm.metadata"
+
+@__main_void = alias i32 (), i32 ()* @main
+
+; Function Attrs: noinline nounwind optnone
+define hidden double @dist(double %th1, double %ph1, double %th2, double %ph2) #0 {
+entry:
+  %th1.addr = alloca double, align 8
+  %ph1.addr = alloca double, align 8
+  %th2.addr = alloca double, align 8
+  %ph2.addr = alloca double, align 8
+  %dx = alloca double, align 8
+  %dy = alloca double, align 8
+  %dz = alloca double, align 8
+  store double %th1, double* %th1.addr, align 8
+  store double %ph1, double* %ph1.addr, align 8
+  store double %th2, double* %th2.addr, align 8
+  store double %ph2, double* %ph2.addr, align 8
+  %0 = load double, double* %ph2.addr, align 8
+  %1 = load double, double* %ph1.addr, align 8
+  %sub = fsub double %1, %0
+  store double %sub, double* %ph1.addr, align 8
+  %2 = load double, double* %ph1.addr, align 8
+  %mul = fmul double %2, 0x3F91DF46A252DD11
+  store double %mul, double* %ph1.addr, align 8
+  %3 = load double, double* %th1.addr, align 8
+  %mul1 = fmul double %3, 0x3F91DF46A252DD11
+  store double %mul1, double* %th1.addr, align 8
+  %4 = load double, double* %th2.addr, align 8
+  %mul2 = fmul double %4, 0x3F91DF46A252DD11
+  store double %mul2, double* %th2.addr, align 8
+  %5 = load double, double* %th1.addr, align 8
+  %6 = call double @llvm.sin.f64(double %5)
+  %7 = load double, double* %th2.addr, align 8
+  %8 = call double @llvm.sin.f64(double %7)
+  %sub3 = fsub double %6, %8
+  store double %sub3, double* %dz, align 8
+  %9 = load double, double* %ph1.addr, align 8
+  %10 = call double @llvm.cos.f64(double %9)
+  %11 = load double, double* %th1.addr, align 8
+  %12 = call double @llvm.cos.f64(double %11)
+  %mul4 = fmul double %10, %12
+  %13 = load double, double* %th2.addr, align 8
+  %14 = call double @llvm.cos.f64(double %13)
+  %sub5 = fsub double %mul4, %14
+  store double %sub5, double* %dx, align 8
+  %15 = load double, double* %ph1.addr, align 8
+  %16 = call double @llvm.sin.f64(double %15)
+  %17 = load double, double* %th1.addr, align 8
+  %18 = call double @llvm.cos.f64(double %17)
+  %mul6 = fmul double %16, %18
+  store double %mul6, double* %dy, align 8
+  %19 = load double, double* %dx, align 8
+  %20 = load double, double* %dx, align 8
+  %mul7 = fmul double %19, %20
+  %21 = load double, double* %dy, align 8
+  %22 = load double, double* %dy, align 8
+  %mul8 = fmul double %21, %22
+  %add = fadd double %mul7, %mul8
+  %23 = load double, double* %dz, align 8
+  %24 = load double, double* %dz, align 8
+  %mul9 = fmul double %23, %24
+  %add10 = fadd double %add, %mul9
+  %25 = call double @llvm.sqrt.f64(double %add10)
+  %div = fdiv double %25, 2.000000e+00
+  %call = call double @asin(double %div) #4
+  %mul11 = fmul double %call, 2.000000e+00
+  %mul12 = fmul double %mul11, 6.371000e+03
+  ret double %mul12
+}
+
+; Function Attrs: nounwind readnone speculatable willreturn
+declare double @llvm.sin.f64(double %0) #1
+
+; Function Attrs: nounwind readnone speculatable willreturn
+declare double @llvm.cos.f64(double %0) #1
+
+; Function Attrs: nounwind readnone
+declare double @asin(double %0) #2
+
+; Function Attrs: nounwind readnone speculatable willreturn
+declare double @llvm.sqrt.f64(double %0) #1
+
+; Function Attrs: noinline nounwind optnone
+define hidden i32 @main() #0 {
+entry:
+  %retval = alloca i32, align 4
+  %d = alloca double, align 8
+  store i32 0, i32* %retval, align 4
+  %call = call double @dist(double 3.612000e+01, double -8.667000e+01, double 3.394000e+01, double -1.184000e+02)
+  store double %call, double* %d, align 8
+  %0 = load double, double* %d, align 8
+  %1 = load double, double* %d, align 8
+  %div = fdiv double %1, 0x3FF9BFDF7E8038A0
+  %call1 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([26 x i8], [26 x i8]* @.str, i32 0, i32 0), double %0, double %div)
+  ret i32 0
+}
+
+declare i32 @printf(i8* %0, ...) #3
+
+attributes #0 = { noinline nounwind optnone "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "min-legal-vector-width"="0" "no-infs-fp-math"="false" "no-jump-tables"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #1 = { nounwind readnone speculatable willreturn }
+attributes #2 = { nounwind readnone "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #3 = { "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #4 = { nounwind readnone }
+
+!llvm.module.flags = !{!0}
+!llvm.ident = !{!1}
+
+!0 = !{i32 1, !"wchar_size", i32 4}
+!1 = !{!"clang version 11.0.0 (https://github.com/Jacarte/llvm-project.git 0f6dea67136cc1e0b3d200eb2bb165628970c44b)"}
+
+; extracted candidates
+#########################################################
+; exiting Souper's runOnFunction() for main()
+Total of 0 replacements done on this module
+Total of 0 replacements candidates on this module

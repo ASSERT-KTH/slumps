@@ -8,6 +8,14 @@ def keysSubset(S):
     if len(S) == 0:
         return {}
 
+    for k in S.keys():
+        for v in S[k]:
+            d = dict(zip(S.keys(), [None]*len(S.keys())))
+            d[k] = v
+            yield d
+
+    #print("Combinations")
+
     for k in S:
         S[k] = [None] + S[k]
 
@@ -42,10 +50,8 @@ def flatten(x):
         return [x]
 if __name__ == "__main__":
     for k in keysSubset({
-        "a": list(range(2000)),
-        "b": list(range(1000)),
-        "c": list(range(10)),
-        "d": list(range(46)),
-        "e": list(range(100))
+        "a": [0,1,7,8,9],
+        "b": [2,3],
+        "c": [4,5]
     }):
         print(k)

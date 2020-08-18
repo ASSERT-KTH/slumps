@@ -1,0 +1,119 @@
+
+Entering the Souper pass's runOnModule()
+
+
+; entering Souper's runOnFunction() for main()
+
+; ModuleID = './Eulers_identity.c.bc'
+source_filename = "./Eulers_identity.c"
+target datalayout = "e-m:e-p:32:32-i64:64-n32:64-S128"
+target triple = "wasm32-unknown-wasi"
+
+@.str = private unnamed_addr constant [1 x i8] zeroinitializer, align 1
+@.str.1 = private unnamed_addr constant [37 x i8] c"e ^ %lci + 1 = [%.16f, %.16f] %lc 0\0A\00", align 1
+@llvm.used = appending global [1 x i8*] [i8* bitcast (i32 ()* @__main_void to i8*)], section "llvm.metadata"
+
+@__main_void = alias i32 (), i32 ()* @main
+
+; Function Attrs: noinline nounwind optnone
+define hidden i32 @main() #0 {
+entry:
+  %retval = alloca i32, align 4
+  %pi = alloca i32, align 4
+  %ae = alloca i32, align 4
+  %e = alloca { double, double }, align 8
+  %tmp = alloca { double, double }, align 8
+  %indirect-arg-temp = alloca { double, double }, align 8
+  store i32 0, i32* %retval, align 4
+  store i32 960, i32* %pi, align 4
+  store i32 8773, i32* %ae, align 4
+  %indirect-arg-temp.realp = getelementptr inbounds { double, double }, { double, double }* %indirect-arg-temp, i32 0, i32 0
+  %indirect-arg-temp.imagp = getelementptr inbounds { double, double }, { double, double }* %indirect-arg-temp, i32 0, i32 1
+  store double 0.000000e+00, double* %indirect-arg-temp.realp, align 8
+  store double 0x400921FB54442D18, double* %indirect-arg-temp.imagp, align 8
+  call void @cexp({ double, double }* sret align 8 %tmp, { double, double }* byval({ double, double }) align 8 %indirect-arg-temp) #3
+  %tmp.realp = getelementptr inbounds { double, double }, { double, double }* %tmp, i32 0, i32 0
+  %tmp.real = load double, double* %tmp.realp, align 8
+  %tmp.imagp = getelementptr inbounds { double, double }, { double, double }* %tmp, i32 0, i32 1
+  %tmp.imag = load double, double* %tmp.imagp, align 8
+  %add.r = fadd double %tmp.real, 1.000000e+00
+  %e.realp = getelementptr inbounds { double, double }, { double, double }* %e, i32 0, i32 0
+  %e.imagp = getelementptr inbounds { double, double }, { double, double }* %e, i32 0, i32 1
+  store double %add.r, double* %e.realp, align 8
+  store double %tmp.imag, double* %e.imagp, align 8
+  %call = call i8* @setlocale(i32 0, i8* getelementptr inbounds ([1 x i8], [1 x i8]* @.str, i32 0, i32 0))
+  %0 = load i32, i32* %pi, align 4
+  %e.realp1 = getelementptr inbounds { double, double }, { double, double }* %e, i32 0, i32 0
+  %e.real = load double, double* %e.realp1, align 8
+  %e.imagp2 = getelementptr inbounds { double, double }, { double, double }* %e, i32 0, i32 1
+  %e.imag = load double, double* %e.imagp2, align 8
+  %e.realp3 = getelementptr inbounds { double, double }, { double, double }* %e, i32 0, i32 0
+  %e.real4 = load double, double* %e.realp3, align 8
+  %e.imagp5 = getelementptr inbounds { double, double }, { double, double }* %e, i32 0, i32 1
+  %e.imag6 = load double, double* %e.imagp5, align 8
+  %1 = load i32, i32* %ae, align 4
+  %call7 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([37 x i8], [37 x i8]* @.str.1, i32 0, i32 0), i32 %0, double %e.real, double %e.imag6, i32 %1)
+  ret i32 0
+}
+
+; Function Attrs: nounwind
+declare void @cexp({ double, double }* sret align 8 %0, { double, double }* byval({ double, double }) align 8 %1) #1
+
+declare i8* @setlocale(i32 %0, i8* %1) #2
+
+declare i32 @printf(i8* %0, ...) #2
+
+attributes #0 = { noinline nounwind optnone "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "min-legal-vector-width"="0" "no-infs-fp-math"="false" "no-jump-tables"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #1 = { nounwind "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #2 = { "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #3 = { nounwind }
+
+!llvm.module.flags = !{!0}
+!llvm.ident = !{!1}
+
+!0 = !{i32 1, !"wchar_size", i32 4}
+!1 = !{!"clang version 11.0.0 (https://github.com/Jacarte/llvm-project.git 0f6dea67136cc1e0b3d200eb2bb165628970c44b)"}
+
+; extracted candidates
+
+; *****
+; For LLVM instruction:
+;  %0 = load i32, i32* %pi, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %1 = load i32, i32* %ae, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+got 1 candidates from LHS
+
+-------------------------------------------------
+%0:i32 = var
+infer %0
+
+
+--------------------------------
+guess 0
+
+%0:i32 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: -1
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+Dataflow Pruned 0/0
+There are 1 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+#########################################################
+; exiting Souper's runOnFunction() for main()
+Total of 0 replacements done on this module
+Total of 0 replacements candidates on this module
