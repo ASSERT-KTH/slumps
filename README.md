@@ -6,5 +6,5 @@ Research repository on randomization, fuzzing and superoptimization for WebAssem
     - [Project](utils/pipeline)
 * [CROW: Code diversification for WebAssembly](http://arxiv.org/pdf/2008.07185)
     - [Project](crow)
-* [WAFL: AFL fuzzing bridge for WASM](/)
+* [WAFL: AFL fuzzing bridge for WASM](wasm-fuzzer)
 
