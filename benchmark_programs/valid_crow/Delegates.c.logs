@@ -1,0 +1,1583 @@
+
+Entering the Souper pass's runOnModule()
+
+
+; entering Souper's runOnFunction() for NewDelegate()
+
+; ModuleID = './Delegates.c.bc'
+source_filename = "./Delegates.c"
+target datalayout = "e-m:e-p:32:32-i64:64-n32:64-S128"
+target triple = "wasm32-unknown-wasi"
+
+%struct.sDelegate = type { i8* (i32)* }
+%struct.sDelegator = type { i32, i8*, %struct.sDelegate* }
+
+@.str = private unnamed_addr constant [23 x i8] c"default implementation\00", align 1
+@defaultDel = internal global %struct.sDelegate { i8* (i32)* @defaultResponse }, align 4
+@.str.1 = private unnamed_addr constant [4 x i8] c"%s\0A\00", align 1
+@.str.2 = private unnamed_addr constant [31 x i8] c"We're in thing1 with value %d\0A\00", align 1
+@.str.3 = private unnamed_addr constant [24 x i8] c"delegate implementation\00", align 1
+@.str.4 = private unnamed_addr constant [23 x i8] c"A stellar vista, Baby.\00", align 1
+@.str.5 = private unnamed_addr constant [23 x i8] c"Delegator returns %s\0A\0A\00", align 1
+@llvm.used = appending global [1 x i8*] [i8* bitcast (i32 ()* @__main_void to i8*)], section "llvm.metadata"
+
+@__main_void = alias i32 (), i32 ()* @main
+
+; Function Attrs: noinline nounwind optnone
+define hidden %struct.sDelegate* @NewDelegate(i8* (i32)* %rspndr) #0 {
+entry:
+  %rspndr.addr = alloca i8* (i32)*, align 4
+  %dl = alloca %struct.sDelegate*, align 4
+  store i8* (i32)* %rspndr, i8* (i32)** %rspndr.addr, align 4
+  %call = call noalias i8* @malloc(i32 4)
+  %0 = bitcast i8* %call to %struct.sDelegate*
+  store %struct.sDelegate* %0, %struct.sDelegate** %dl, align 4
+  %1 = load i8* (i32)*, i8* (i32)** %rspndr.addr, align 4
+  %2 = load %struct.sDelegate*, %struct.sDelegate** %dl, align 4
+  %operation = getelementptr inbounds %struct.sDelegate, %struct.sDelegate* %2, i32 0, i32 0
+  store i8* (i32)* %1, i8* (i32)** %operation, align 4
+  %3 = load %struct.sDelegate*, %struct.sDelegate** %dl, align 4
+  ret %struct.sDelegate* %3
+}
+
+declare noalias i8* @malloc(i32 %0) #1
+
+; Function Attrs: noinline nounwind optnone
+define hidden i8* @DelegateThing(%struct.sDelegate* %dl, i32 %p1) #0 {
+entry:
+  %dl.addr = alloca %struct.sDelegate*, align 4
+  %p1.addr = alloca i32, align 4
+  store %struct.sDelegate* %dl, %struct.sDelegate** %dl.addr, align 4
+  store i32 %p1, i32* %p1.addr, align 4
+  %0 = load %struct.sDelegate*, %struct.sDelegate** %dl.addr, align 4
+  %operation = getelementptr inbounds %struct.sDelegate, %struct.sDelegate* %0, i32 0, i32 0
+  %1 = load i8* (i32)*, i8* (i32)** %operation, align 4
+  %tobool = icmp ne i8* (i32)* %1, null
+  br i1 %tobool, label %cond.true, label %cond.false
+
+cond.true:                                        ; preds = %entry
+  %2 = load %struct.sDelegate*, %struct.sDelegate** %dl.addr, align 4
+  %operation1 = getelementptr inbounds %struct.sDelegate, %struct.sDelegate* %2, i32 0, i32 0
+  %3 = load i8* (i32)*, i8* (i32)** %operation1, align 4
+  %4 = load i32, i32* %p1.addr, align 4
+  %call = call i8* %3(i32 %4)
+  br label %cond.end
+
+cond.false:                                       ; preds = %entry
+  br label %cond.end
+
+cond.end:                                         ; preds = %cond.false, %cond.true
+  %cond = phi i8* [ %call, %cond.true ], [ null, %cond.false ]
+  ret i8* %cond
+}
+
+; Function Attrs: noinline nounwind optnone
+define hidden i8* @defaultResponse(i32 %p1) #0 {
+entry:
+  %p1.addr = alloca i32, align 4
+  store i32 %p1, i32* %p1.addr, align 4
+  ret i8* getelementptr inbounds ([23 x i8], [23 x i8]* @.str, i32 0, i32 0)
+}
+
+; Function Attrs: noinline nounwind optnone
+define hidden %struct.sDelegator* @NewDelegator(i32 %p, i8* %phrase) #0 {
+entry:
+  %p.addr = alloca i32, align 4
+  %phrase.addr = alloca i8*, align 4
+  %d = alloca %struct.sDelegator*, align 4
+  store i32 %p, i32* %p.addr, align 4
+  store i8* %phrase, i8** %phrase.addr, align 4
+  %call = call noalias i8* @malloc(i32 12)
+  %0 = bitcast i8* %call to %struct.sDelegator*
+  store %struct.sDelegator* %0, %struct.sDelegator** %d, align 4
+  %1 = load i32, i32* %p.addr, align 4
+  %2 = load %struct.sDelegator*, %struct.sDelegator** %d, align 4
+  %param = getelementptr inbounds %struct.sDelegator, %struct.sDelegator* %2, i32 0, i32 0
+  store i32 %1, i32* %param, align 4
+  %3 = load i8*, i8** %phrase.addr, align 4
+  %4 = load %struct.sDelegator*, %struct.sDelegator** %d, align 4
+  %phrase1 = getelementptr inbounds %struct.sDelegator, %struct.sDelegator* %4, i32 0, i32 1
+  store i8* %3, i8** %phrase1, align 4
+  %5 = load %struct.sDelegator*, %struct.sDelegator** %d, align 4
+  %delegate = getelementptr inbounds %struct.sDelegator, %struct.sDelegator* %5, i32 0, i32 2
+  store %struct.sDelegate* @defaultDel, %struct.sDelegate** %delegate, align 4
+  %6 = load %struct.sDelegator*, %struct.sDelegator** %d, align 4
+  ret %struct.sDelegator* %6
+}
+
+; Function Attrs: noinline nounwind optnone
+define hidden i8* @Delegator_Operation(%struct.sDelegator* %theDelegator, i32 %p1, %struct.sDelegate* %delroy) #0 {
+entry:
+  %theDelegator.addr = alloca %struct.sDelegator*, align 4
+  %p1.addr = alloca i32, align 4
+  %delroy.addr = alloca %struct.sDelegate*, align 4
+  %rtn = alloca i8*, align 4
+  store %struct.sDelegator* %theDelegator, %struct.sDelegator** %theDelegator.addr, align 4
+  store i32 %p1, i32* %p1.addr, align 4
+  store %struct.sDelegate* %delroy, %struct.sDelegate** %delroy.addr, align 4
+  %0 = load %struct.sDelegate*, %struct.sDelegate** %delroy.addr, align 4
+  %tobool = icmp ne %struct.sDelegate* %0, null
+  br i1 %tobool, label %if.then, label %if.else
+
+if.then:                                          ; preds = %entry
+  %1 = load %struct.sDelegate*, %struct.sDelegate** %delroy.addr, align 4
+  %2 = load i32, i32* %p1.addr, align 4
+  %call = call i8* @DelegateThing(%struct.sDelegate* %1, i32 %2)
+  store i8* %call, i8** %rtn, align 4
+  %3 = load i8*, i8** %rtn, align 4
+  %tobool1 = icmp ne i8* %3, null
+  br i1 %tobool1, label %if.end, label %if.then2
+
+if.then2:                                         ; preds = %if.then
+  %4 = load %struct.sDelegator*, %struct.sDelegator** %theDelegator.addr, align 4
+  %delegate = getelementptr inbounds %struct.sDelegator, %struct.sDelegator* %4, i32 0, i32 2
+  %5 = load %struct.sDelegate*, %struct.sDelegate** %delegate, align 4
+  %6 = load i32, i32* %p1.addr, align 4
+  %call3 = call i8* @DelegateThing(%struct.sDelegate* %5, i32 %6)
+  store i8* %call3, i8** %rtn, align 4
+  br label %if.end
+
+if.end:                                           ; preds = %if.then2, %if.then
+  br label %if.end6
+
+if.else:                                          ; preds = %entry
+  %7 = load %struct.sDelegator*, %struct.sDelegator** %theDelegator.addr, align 4
+  %delegate4 = getelementptr inbounds %struct.sDelegator, %struct.sDelegator* %7, i32 0, i32 2
+  %8 = load %struct.sDelegate*, %struct.sDelegate** %delegate4, align 4
+  %9 = load i32, i32* %p1.addr, align 4
+  %call5 = call i8* @DelegateThing(%struct.sDelegate* %8, i32 %9)
+  store i8* %call5, i8** %rtn, align 4
+  br label %if.end6
+
+if.end6:                                          ; preds = %if.else, %if.end
+  %10 = load %struct.sDelegator*, %struct.sDelegator** %theDelegator.addr, align 4
+  %phrase = getelementptr inbounds %struct.sDelegator, %struct.sDelegator* %10, i32 0, i32 1
+  %11 = load i8*, i8** %phrase, align 4
+  %call7 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([4 x i8], [4 x i8]* @.str.1, i32 0, i32 0), i8* %11)
+  %12 = load i8*, i8** %rtn, align 4
+  ret i8* %12
+}
+
+declare i32 @printf(i8* %0, ...) #1
+
+; Function Attrs: noinline nounwind optnone
+define hidden i8* @thing1(i32 %p1) #0 {
+entry:
+  %p1.addr = alloca i32, align 4
+  store i32 %p1, i32* %p1.addr, align 4
+  %0 = load i32, i32* %p1.addr, align 4
+  %call = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([31 x i8], [31 x i8]* @.str.2, i32 0, i32 0), i32 %0)
+  ret i8* getelementptr inbounds ([24 x i8], [24 x i8]* @.str.3, i32 0, i32 0)
+}
+
+; Function Attrs: noinline nounwind optnone
+define hidden i32 @main() #0 {
+entry:
+  %retval = alloca i32, align 4
+  %del1 = alloca %struct.sDelegate*, align 4
+  %del2 = alloca %struct.sDelegate*, align 4
+  %theDelegator = alloca %struct.sDelegator*, align 4
+  store i32 0, i32* %retval, align 4
+  %call = call %struct.sDelegate* @NewDelegate(i8* (i32)* @thing1)
+  store %struct.sDelegate* %call, %struct.sDelegate** %del1, align 4
+  %call1 = call %struct.sDelegate* @NewDelegate(i8* (i32)* null)
+  store %struct.sDelegate* %call1, %struct.sDelegate** %del2, align 4
+  %call2 = call %struct.sDelegator* @NewDelegator(i32 14, i8* getelementptr inbounds ([23 x i8], [23 x i8]* @.str.4, i32 0, i32 0))
+  store %struct.sDelegator* %call2, %struct.sDelegator** %theDelegator, align 4
+  %0 = load %struct.sDelegator*, %struct.sDelegator** %theDelegator, align 4
+  %call3 = call i8* @Delegator_Operation(%struct.sDelegator* %0, i32 3, %struct.sDelegate* null)
+  %call4 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([23 x i8], [23 x i8]* @.str.5, i32 0, i32 0), i8* %call3)
+  %1 = load %struct.sDelegator*, %struct.sDelegator** %theDelegator, align 4
+  %2 = load %struct.sDelegate*, %struct.sDelegate** %del1, align 4
+  %call5 = call i8* @Delegator_Operation(%struct.sDelegator* %1, i32 3, %struct.sDelegate* %2)
+  %call6 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([23 x i8], [23 x i8]* @.str.5, i32 0, i32 0), i8* %call5)
+  %3 = load %struct.sDelegator*, %struct.sDelegator** %theDelegator, align 4
+  %4 = load %struct.sDelegate*, %struct.sDelegate** %del2, align 4
+  %call7 = call i8* @Delegator_Operation(%struct.sDelegator* %3, i32 3, %struct.sDelegate* %4)
+  %call8 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([23 x i8], [23 x i8]* @.str.5, i32 0, i32 0), i8* %call7)
+  ret i32 0
+}
+
+attributes #0 = { noinline nounwind optnone "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "min-legal-vector-width"="0" "no-infs-fp-math"="false" "no-jump-tables"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #1 = { "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+
+!llvm.module.flags = !{!0}
+!llvm.ident = !{!1}
+
+!0 = !{i32 1, !"wchar_size", i32 4}
+!1 = !{!"clang version 11.0.0 (https://github.com/Jacarte/llvm-project.git 0f6dea67136cc1e0b3d200eb2bb165628970c44b)"}
+
+; extracted candidates
+#########################################################
+; exiting Souper's runOnFunction() for NewDelegate()
+
+; entering Souper's runOnFunction() for DelegateThing()
+
+; ModuleID = './Delegates.c.bc'
+source_filename = "./Delegates.c"
+target datalayout = "e-m:e-p:32:32-i64:64-n32:64-S128"
+target triple = "wasm32-unknown-wasi"
+
+%struct.sDelegate = type { i8* (i32)* }
+%struct.sDelegator = type { i32, i8*, %struct.sDelegate* }
+
+@.str = private unnamed_addr constant [23 x i8] c"default implementation\00", align 1
+@defaultDel = internal global %struct.sDelegate { i8* (i32)* @defaultResponse }, align 4
+@.str.1 = private unnamed_addr constant [4 x i8] c"%s\0A\00", align 1
+@.str.2 = private unnamed_addr constant [31 x i8] c"We're in thing1 with value %d\0A\00", align 1
+@.str.3 = private unnamed_addr constant [24 x i8] c"delegate implementation\00", align 1
+@.str.4 = private unnamed_addr constant [23 x i8] c"A stellar vista, Baby.\00", align 1
+@.str.5 = private unnamed_addr constant [23 x i8] c"Delegator returns %s\0A\0A\00", align 1
+@llvm.used = appending global [1 x i8*] [i8* bitcast (i32 ()* @__main_void to i8*)], section "llvm.metadata"
+
+@__main_void = alias i32 (), i32 ()* @main
+
+; Function Attrs: noinline nounwind optnone
+define hidden %struct.sDelegate* @NewDelegate(i8* (i32)* %rspndr) #0 {
+entry:
+  %rspndr.addr = alloca i8* (i32)*, align 4
+  %dl = alloca %struct.sDelegate*, align 4
+  store i8* (i32)* %rspndr, i8* (i32)** %rspndr.addr, align 4
+  %call = call noalias i8* @malloc(i32 4)
+  %0 = bitcast i8* %call to %struct.sDelegate*
+  store %struct.sDelegate* %0, %struct.sDelegate** %dl, align 4
+  %1 = load i8* (i32)*, i8* (i32)** %rspndr.addr, align 4
+  %2 = load %struct.sDelegate*, %struct.sDelegate** %dl, align 4
+  %operation = getelementptr inbounds %struct.sDelegate, %struct.sDelegate* %2, i32 0, i32 0
+  store i8* (i32)* %1, i8* (i32)** %operation, align 4
+  %3 = load %struct.sDelegate*, %struct.sDelegate** %dl, align 4
+  ret %struct.sDelegate* %3
+}
+
+declare noalias i8* @malloc(i32 %0) #1
+
+; Function Attrs: noinline nounwind optnone
+define hidden i8* @DelegateThing(%struct.sDelegate* %dl, i32 %p1) #0 {
+entry:
+  %dl.addr = alloca %struct.sDelegate*, align 4
+  %p1.addr = alloca i32, align 4
+  store %struct.sDelegate* %dl, %struct.sDelegate** %dl.addr, align 4
+  store i32 %p1, i32* %p1.addr, align 4
+  %0 = load %struct.sDelegate*, %struct.sDelegate** %dl.addr, align 4
+  %operation = getelementptr inbounds %struct.sDelegate, %struct.sDelegate* %0, i32 0, i32 0
+  %1 = load i8* (i32)*, i8* (i32)** %operation, align 4
+  %tobool = icmp ne i8* (i32)* %1, null
+  br i1 %tobool, label %cond.true, label %cond.false
+
+cond.true:                                        ; preds = %entry
+  %2 = load %struct.sDelegate*, %struct.sDelegate** %dl.addr, align 4
+  %operation1 = getelementptr inbounds %struct.sDelegate, %struct.sDelegate* %2, i32 0, i32 0
+  %3 = load i8* (i32)*, i8* (i32)** %operation1, align 4
+  %4 = load i32, i32* %p1.addr, align 4
+  %call = call i8* %3(i32 %4)
+  br label %cond.end
+
+cond.false:                                       ; preds = %entry
+  br label %cond.end
+
+cond.end:                                         ; preds = %cond.false, %cond.true
+  %cond = phi i8* [ %call, %cond.true ], [ null, %cond.false ]
+  ret i8* %cond
+}
+
+; Function Attrs: noinline nounwind optnone
+define hidden i8* @defaultResponse(i32 %p1) #0 {
+entry:
+  %p1.addr = alloca i32, align 4
+  store i32 %p1, i32* %p1.addr, align 4
+  ret i8* getelementptr inbounds ([23 x i8], [23 x i8]* @.str, i32 0, i32 0)
+}
+
+; Function Attrs: noinline nounwind optnone
+define hidden %struct.sDelegator* @NewDelegator(i32 %p, i8* %phrase) #0 {
+entry:
+  %p.addr = alloca i32, align 4
+  %phrase.addr = alloca i8*, align 4
+  %d = alloca %struct.sDelegator*, align 4
+  store i32 %p, i32* %p.addr, align 4
+  store i8* %phrase, i8** %phrase.addr, align 4
+  %call = call noalias i8* @malloc(i32 12)
+  %0 = bitcast i8* %call to %struct.sDelegator*
+  store %struct.sDelegator* %0, %struct.sDelegator** %d, align 4
+  %1 = load i32, i32* %p.addr, align 4
+  %2 = load %struct.sDelegator*, %struct.sDelegator** %d, align 4
+  %param = getelementptr inbounds %struct.sDelegator, %struct.sDelegator* %2, i32 0, i32 0
+  store i32 %1, i32* %param, align 4
+  %3 = load i8*, i8** %phrase.addr, align 4
+  %4 = load %struct.sDelegator*, %struct.sDelegator** %d, align 4
+  %phrase1 = getelementptr inbounds %struct.sDelegator, %struct.sDelegator* %4, i32 0, i32 1
+  store i8* %3, i8** %phrase1, align 4
+  %5 = load %struct.sDelegator*, %struct.sDelegator** %d, align 4
+  %delegate = getelementptr inbounds %struct.sDelegator, %struct.sDelegator* %5, i32 0, i32 2
+  store %struct.sDelegate* @defaultDel, %struct.sDelegate** %delegate, align 4
+  %6 = load %struct.sDelegator*, %struct.sDelegator** %d, align 4
+  ret %struct.sDelegator* %6
+}
+
+; Function Attrs: noinline nounwind optnone
+define hidden i8* @Delegator_Operation(%struct.sDelegator* %theDelegator, i32 %p1, %struct.sDelegate* %delroy) #0 {
+entry:
+  %theDelegator.addr = alloca %struct.sDelegator*, align 4
+  %p1.addr = alloca i32, align 4
+  %delroy.addr = alloca %struct.sDelegate*, align 4
+  %rtn = alloca i8*, align 4
+  store %struct.sDelegator* %theDelegator, %struct.sDelegator** %theDelegator.addr, align 4
+  store i32 %p1, i32* %p1.addr, align 4
+  store %struct.sDelegate* %delroy, %struct.sDelegate** %delroy.addr, align 4
+  %0 = load %struct.sDelegate*, %struct.sDelegate** %delroy.addr, align 4
+  %tobool = icmp ne %struct.sDelegate* %0, null
+  br i1 %tobool, label %if.then, label %if.else
+
+if.then:                                          ; preds = %entry
+  %1 = load %struct.sDelegate*, %struct.sDelegate** %delroy.addr, align 4
+  %2 = load i32, i32* %p1.addr, align 4
+  %call = call i8* @DelegateThing(%struct.sDelegate* %1, i32 %2)
+  store i8* %call, i8** %rtn, align 4
+  %3 = load i8*, i8** %rtn, align 4
+  %tobool1 = icmp ne i8* %3, null
+  br i1 %tobool1, label %if.end, label %if.then2
+
+if.then2:                                         ; preds = %if.then
+  %4 = load %struct.sDelegator*, %struct.sDelegator** %theDelegator.addr, align 4
+  %delegate = getelementptr inbounds %struct.sDelegator, %struct.sDelegator* %4, i32 0, i32 2
+  %5 = load %struct.sDelegate*, %struct.sDelegate** %delegate, align 4
+  %6 = load i32, i32* %p1.addr, align 4
+  %call3 = call i8* @DelegateThing(%struct.sDelegate* %5, i32 %6)
+  store i8* %call3, i8** %rtn, align 4
+  br label %if.end
+
+if.end:                                           ; preds = %if.then2, %if.then
+  br label %if.end6
+
+if.else:                                          ; preds = %entry
+  %7 = load %struct.sDelegator*, %struct.sDelegator** %theDelegator.addr, align 4
+  %delegate4 = getelementptr inbounds %struct.sDelegator, %struct.sDelegator* %7, i32 0, i32 2
+  %8 = load %struct.sDelegate*, %struct.sDelegate** %delegate4, align 4
+  %9 = load i32, i32* %p1.addr, align 4
+  %call5 = call i8* @DelegateThing(%struct.sDelegate* %8, i32 %9)
+  store i8* %call5, i8** %rtn, align 4
+  br label %if.end6
+
+if.end6:                                          ; preds = %if.else, %if.end
+  %10 = load %struct.sDelegator*, %struct.sDelegator** %theDelegator.addr, align 4
+  %phrase = getelementptr inbounds %struct.sDelegator, %struct.sDelegator* %10, i32 0, i32 1
+  %11 = load i8*, i8** %phrase, align 4
+  %call7 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([4 x i8], [4 x i8]* @.str.1, i32 0, i32 0), i8* %11)
+  %12 = load i8*, i8** %rtn, align 4
+  ret i8* %12
+}
+
+declare i32 @printf(i8* %0, ...) #1
+
+; Function Attrs: noinline nounwind optnone
+define hidden i8* @thing1(i32 %p1) #0 {
+entry:
+  %p1.addr = alloca i32, align 4
+  store i32 %p1, i32* %p1.addr, align 4
+  %0 = load i32, i32* %p1.addr, align 4
+  %call = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([31 x i8], [31 x i8]* @.str.2, i32 0, i32 0), i32 %0)
+  ret i8* getelementptr inbounds ([24 x i8], [24 x i8]* @.str.3, i32 0, i32 0)
+}
+
+; Function Attrs: noinline nounwind optnone
+define hidden i32 @main() #0 {
+entry:
+  %retval = alloca i32, align 4
+  %del1 = alloca %struct.sDelegate*, align 4
+  %del2 = alloca %struct.sDelegate*, align 4
+  %theDelegator = alloca %struct.sDelegator*, align 4
+  store i32 0, i32* %retval, align 4
+  %call = call %struct.sDelegate* @NewDelegate(i8* (i32)* @thing1)
+  store %struct.sDelegate* %call, %struct.sDelegate** %del1, align 4
+  %call1 = call %struct.sDelegate* @NewDelegate(i8* (i32)* null)
+  store %struct.sDelegate* %call1, %struct.sDelegate** %del2, align 4
+  %call2 = call %struct.sDelegator* @NewDelegator(i32 14, i8* getelementptr inbounds ([23 x i8], [23 x i8]* @.str.4, i32 0, i32 0))
+  store %struct.sDelegator* %call2, %struct.sDelegator** %theDelegator, align 4
+  %0 = load %struct.sDelegator*, %struct.sDelegator** %theDelegator, align 4
+  %call3 = call i8* @Delegator_Operation(%struct.sDelegator* %0, i32 3, %struct.sDelegate* null)
+  %call4 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([23 x i8], [23 x i8]* @.str.5, i32 0, i32 0), i8* %call3)
+  %1 = load %struct.sDelegator*, %struct.sDelegator** %theDelegator, align 4
+  %2 = load %struct.sDelegate*, %struct.sDelegate** %del1, align 4
+  %call5 = call i8* @Delegator_Operation(%struct.sDelegator* %1, i32 3, %struct.sDelegate* %2)
+  %call6 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([23 x i8], [23 x i8]* @.str.5, i32 0, i32 0), i8* %call5)
+  %3 = load %struct.sDelegator*, %struct.sDelegator** %theDelegator, align 4
+  %4 = load %struct.sDelegate*, %struct.sDelegate** %del2, align 4
+  %call7 = call i8* @Delegator_Operation(%struct.sDelegator* %3, i32 3, %struct.sDelegate* %4)
+  %call8 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([23 x i8], [23 x i8]* @.str.5, i32 0, i32 0), i8* %call7)
+  ret i32 0
+}
+
+attributes #0 = { noinline nounwind optnone "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "min-legal-vector-width"="0" "no-infs-fp-math"="false" "no-jump-tables"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #1 = { "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+
+!llvm.module.flags = !{!0}
+!llvm.ident = !{!1}
+
+!0 = !{i32 1, !"wchar_size", i32 4}
+!1 = !{!"clang version 11.0.0 (https://github.com/Jacarte/llvm-project.git 0f6dea67136cc1e0b3d200eb2bb165628970c44b)"}
+
+; extracted candidates
+
+; *****
+; For LLVM instruction:
+;  %tobool = icmp ne i8* (i32)* %1, null
+; Looking for a replacement for:
+%0:i32 = var
+%1:i1 = ne 0:i32, %0
+infer %1
+
+; *****
+; For LLVM instruction:
+;  %4 = load i32, i32* %p1.addr, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+got 2 candidates from LHS
+
+-------------------------------------------------
+%0:i32 = var
+%1:i1 = ne 0:i32, %0
+infer %1
+
+
+--------------------------------
+guess 0
+
+%0:i1 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: -1
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+Dataflow Pruned 0/0
+There are 1 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 1 candidates from LHS
+
+-------------------------------------------------
+%0:i32 = var
+infer %0
+
+
+--------------------------------
+guess 0
+
+%0:i32 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: -1
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+Dataflow Pruned 0/0
+There are 1 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+#########################################################
+; exiting Souper's runOnFunction() for DelegateThing()
+
+; entering Souper's runOnFunction() for defaultResponse()
+
+; ModuleID = './Delegates.c.bc'
+source_filename = "./Delegates.c"
+target datalayout = "e-m:e-p:32:32-i64:64-n32:64-S128"
+target triple = "wasm32-unknown-wasi"
+
+%struct.sDelegate = type { i8* (i32)* }
+%struct.sDelegator = type { i32, i8*, %struct.sDelegate* }
+
+@.str = private unnamed_addr constant [23 x i8] c"default implementation\00", align 1
+@defaultDel = internal global %struct.sDelegate { i8* (i32)* @defaultResponse }, align 4
+@.str.1 = private unnamed_addr constant [4 x i8] c"%s\0A\00", align 1
+@.str.2 = private unnamed_addr constant [31 x i8] c"We're in thing1 with value %d\0A\00", align 1
+@.str.3 = private unnamed_addr constant [24 x i8] c"delegate implementation\00", align 1
+@.str.4 = private unnamed_addr constant [23 x i8] c"A stellar vista, Baby.\00", align 1
+@.str.5 = private unnamed_addr constant [23 x i8] c"Delegator returns %s\0A\0A\00", align 1
+@llvm.used = appending global [1 x i8*] [i8* bitcast (i32 ()* @__main_void to i8*)], section "llvm.metadata"
+
+@__main_void = alias i32 (), i32 ()* @main
+
+; Function Attrs: noinline nounwind optnone
+define hidden %struct.sDelegate* @NewDelegate(i8* (i32)* %rspndr) #0 {
+entry:
+  %rspndr.addr = alloca i8* (i32)*, align 4
+  %dl = alloca %struct.sDelegate*, align 4
+  store i8* (i32)* %rspndr, i8* (i32)** %rspndr.addr, align 4
+  %call = call noalias i8* @malloc(i32 4)
+  %0 = bitcast i8* %call to %struct.sDelegate*
+  store %struct.sDelegate* %0, %struct.sDelegate** %dl, align 4
+  %1 = load i8* (i32)*, i8* (i32)** %rspndr.addr, align 4
+  %2 = load %struct.sDelegate*, %struct.sDelegate** %dl, align 4
+  %operation = getelementptr inbounds %struct.sDelegate, %struct.sDelegate* %2, i32 0, i32 0
+  store i8* (i32)* %1, i8* (i32)** %operation, align 4
+  %3 = load %struct.sDelegate*, %struct.sDelegate** %dl, align 4
+  ret %struct.sDelegate* %3
+}
+
+declare noalias i8* @malloc(i32 %0) #1
+
+; Function Attrs: noinline nounwind optnone
+define hidden i8* @DelegateThing(%struct.sDelegate* %dl, i32 %p1) #0 {
+entry:
+  %dl.addr = alloca %struct.sDelegate*, align 4
+  %p1.addr = alloca i32, align 4
+  store %struct.sDelegate* %dl, %struct.sDelegate** %dl.addr, align 4
+  store i32 %p1, i32* %p1.addr, align 4
+  %0 = load %struct.sDelegate*, %struct.sDelegate** %dl.addr, align 4
+  %operation = getelementptr inbounds %struct.sDelegate, %struct.sDelegate* %0, i32 0, i32 0
+  %1 = load i8* (i32)*, i8* (i32)** %operation, align 4
+  %tobool = icmp ne i8* (i32)* %1, null
+  br i1 %tobool, label %cond.true, label %cond.false
+
+cond.true:                                        ; preds = %entry
+  %2 = load %struct.sDelegate*, %struct.sDelegate** %dl.addr, align 4
+  %operation1 = getelementptr inbounds %struct.sDelegate, %struct.sDelegate* %2, i32 0, i32 0
+  %3 = load i8* (i32)*, i8* (i32)** %operation1, align 4
+  %4 = load i32, i32* %p1.addr, align 4
+  %call = call i8* %3(i32 %4)
+  br label %cond.end
+
+cond.false:                                       ; preds = %entry
+  br label %cond.end
+
+cond.end:                                         ; preds = %cond.false, %cond.true
+  %cond = phi i8* [ %call, %cond.true ], [ null, %cond.false ]
+  ret i8* %cond
+}
+
+; Function Attrs: noinline nounwind optnone
+define hidden i8* @defaultResponse(i32 %p1) #0 {
+entry:
+  %p1.addr = alloca i32, align 4
+  store i32 %p1, i32* %p1.addr, align 4
+  ret i8* getelementptr inbounds ([23 x i8], [23 x i8]* @.str, i32 0, i32 0)
+}
+
+; Function Attrs: noinline nounwind optnone
+define hidden %struct.sDelegator* @NewDelegator(i32 %p, i8* %phrase) #0 {
+entry:
+  %p.addr = alloca i32, align 4
+  %phrase.addr = alloca i8*, align 4
+  %d = alloca %struct.sDelegator*, align 4
+  store i32 %p, i32* %p.addr, align 4
+  store i8* %phrase, i8** %phrase.addr, align 4
+  %call = call noalias i8* @malloc(i32 12)
+  %0 = bitcast i8* %call to %struct.sDelegator*
+  store %struct.sDelegator* %0, %struct.sDelegator** %d, align 4
+  %1 = load i32, i32* %p.addr, align 4
+  %2 = load %struct.sDelegator*, %struct.sDelegator** %d, align 4
+  %param = getelementptr inbounds %struct.sDelegator, %struct.sDelegator* %2, i32 0, i32 0
+  store i32 %1, i32* %param, align 4
+  %3 = load i8*, i8** %phrase.addr, align 4
+  %4 = load %struct.sDelegator*, %struct.sDelegator** %d, align 4
+  %phrase1 = getelementptr inbounds %struct.sDelegator, %struct.sDelegator* %4, i32 0, i32 1
+  store i8* %3, i8** %phrase1, align 4
+  %5 = load %struct.sDelegator*, %struct.sDelegator** %d, align 4
+  %delegate = getelementptr inbounds %struct.sDelegator, %struct.sDelegator* %5, i32 0, i32 2
+  store %struct.sDelegate* @defaultDel, %struct.sDelegate** %delegate, align 4
+  %6 = load %struct.sDelegator*, %struct.sDelegator** %d, align 4
+  ret %struct.sDelegator* %6
+}
+
+; Function Attrs: noinline nounwind optnone
+define hidden i8* @Delegator_Operation(%struct.sDelegator* %theDelegator, i32 %p1, %struct.sDelegate* %delroy) #0 {
+entry:
+  %theDelegator.addr = alloca %struct.sDelegator*, align 4
+  %p1.addr = alloca i32, align 4
+  %delroy.addr = alloca %struct.sDelegate*, align 4
+  %rtn = alloca i8*, align 4
+  store %struct.sDelegator* %theDelegator, %struct.sDelegator** %theDelegator.addr, align 4
+  store i32 %p1, i32* %p1.addr, align 4
+  store %struct.sDelegate* %delroy, %struct.sDelegate** %delroy.addr, align 4
+  %0 = load %struct.sDelegate*, %struct.sDelegate** %delroy.addr, align 4
+  %tobool = icmp ne %struct.sDelegate* %0, null
+  br i1 %tobool, label %if.then, label %if.else
+
+if.then:                                          ; preds = %entry
+  %1 = load %struct.sDelegate*, %struct.sDelegate** %delroy.addr, align 4
+  %2 = load i32, i32* %p1.addr, align 4
+  %call = call i8* @DelegateThing(%struct.sDelegate* %1, i32 %2)
+  store i8* %call, i8** %rtn, align 4
+  %3 = load i8*, i8** %rtn, align 4
+  %tobool1 = icmp ne i8* %3, null
+  br i1 %tobool1, label %if.end, label %if.then2
+
+if.then2:                                         ; preds = %if.then
+  %4 = load %struct.sDelegator*, %struct.sDelegator** %theDelegator.addr, align 4
+  %delegate = getelementptr inbounds %struct.sDelegator, %struct.sDelegator* %4, i32 0, i32 2
+  %5 = load %struct.sDelegate*, %struct.sDelegate** %delegate, align 4
+  %6 = load i32, i32* %p1.addr, align 4
+  %call3 = call i8* @DelegateThing(%struct.sDelegate* %5, i32 %6)
+  store i8* %call3, i8** %rtn, align 4
+  br label %if.end
+
+if.end:                                           ; preds = %if.then2, %if.then
+  br label %if.end6
+
+if.else:                                          ; preds = %entry
+  %7 = load %struct.sDelegator*, %struct.sDelegator** %theDelegator.addr, align 4
+  %delegate4 = getelementptr inbounds %struct.sDelegator, %struct.sDelegator* %7, i32 0, i32 2
+  %8 = load %struct.sDelegate*, %struct.sDelegate** %delegate4, align 4
+  %9 = load i32, i32* %p1.addr, align 4
+  %call5 = call i8* @DelegateThing(%struct.sDelegate* %8, i32 %9)
+  store i8* %call5, i8** %rtn, align 4
+  br label %if.end6
+
+if.end6:                                          ; preds = %if.else, %if.end
+  %10 = load %struct.sDelegator*, %struct.sDelegator** %theDelegator.addr, align 4
+  %phrase = getelementptr inbounds %struct.sDelegator, %struct.sDelegator* %10, i32 0, i32 1
+  %11 = load i8*, i8** %phrase, align 4
+  %call7 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([4 x i8], [4 x i8]* @.str.1, i32 0, i32 0), i8* %11)
+  %12 = load i8*, i8** %rtn, align 4
+  ret i8* %12
+}
+
+declare i32 @printf(i8* %0, ...) #1
+
+; Function Attrs: noinline nounwind optnone
+define hidden i8* @thing1(i32 %p1) #0 {
+entry:
+  %p1.addr = alloca i32, align 4
+  store i32 %p1, i32* %p1.addr, align 4
+  %0 = load i32, i32* %p1.addr, align 4
+  %call = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([31 x i8], [31 x i8]* @.str.2, i32 0, i32 0), i32 %0)
+  ret i8* getelementptr inbounds ([24 x i8], [24 x i8]* @.str.3, i32 0, i32 0)
+}
+
+; Function Attrs: noinline nounwind optnone
+define hidden i32 @main() #0 {
+entry:
+  %retval = alloca i32, align 4
+  %del1 = alloca %struct.sDelegate*, align 4
+  %del2 = alloca %struct.sDelegate*, align 4
+  %theDelegator = alloca %struct.sDelegator*, align 4
+  store i32 0, i32* %retval, align 4
+  %call = call %struct.sDelegate* @NewDelegate(i8* (i32)* @thing1)
+  store %struct.sDelegate* %call, %struct.sDelegate** %del1, align 4
+  %call1 = call %struct.sDelegate* @NewDelegate(i8* (i32)* null)
+  store %struct.sDelegate* %call1, %struct.sDelegate** %del2, align 4
+  %call2 = call %struct.sDelegator* @NewDelegator(i32 14, i8* getelementptr inbounds ([23 x i8], [23 x i8]* @.str.4, i32 0, i32 0))
+  store %struct.sDelegator* %call2, %struct.sDelegator** %theDelegator, align 4
+  %0 = load %struct.sDelegator*, %struct.sDelegator** %theDelegator, align 4
+  %call3 = call i8* @Delegator_Operation(%struct.sDelegator* %0, i32 3, %struct.sDelegate* null)
+  %call4 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([23 x i8], [23 x i8]* @.str.5, i32 0, i32 0), i8* %call3)
+  %1 = load %struct.sDelegator*, %struct.sDelegator** %theDelegator, align 4
+  %2 = load %struct.sDelegate*, %struct.sDelegate** %del1, align 4
+  %call5 = call i8* @Delegator_Operation(%struct.sDelegator* %1, i32 3, %struct.sDelegate* %2)
+  %call6 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([23 x i8], [23 x i8]* @.str.5, i32 0, i32 0), i8* %call5)
+  %3 = load %struct.sDelegator*, %struct.sDelegator** %theDelegator, align 4
+  %4 = load %struct.sDelegate*, %struct.sDelegate** %del2, align 4
+  %call7 = call i8* @Delegator_Operation(%struct.sDelegator* %3, i32 3, %struct.sDelegate* %4)
+  %call8 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([23 x i8], [23 x i8]* @.str.5, i32 0, i32 0), i8* %call7)
+  ret i32 0
+}
+
+attributes #0 = { noinline nounwind optnone "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "min-legal-vector-width"="0" "no-infs-fp-math"="false" "no-jump-tables"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #1 = { "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+
+!llvm.module.flags = !{!0}
+!llvm.ident = !{!1}
+
+!0 = !{i32 1, !"wchar_size", i32 4}
+!1 = !{!"clang version 11.0.0 (https://github.com/Jacarte/llvm-project.git 0f6dea67136cc1e0b3d200eb2bb165628970c44b)"}
+
+; extracted candidates
+#########################################################
+; exiting Souper's runOnFunction() for defaultResponse()
+
+; entering Souper's runOnFunction() for NewDelegator()
+
+; ModuleID = './Delegates.c.bc'
+source_filename = "./Delegates.c"
+target datalayout = "e-m:e-p:32:32-i64:64-n32:64-S128"
+target triple = "wasm32-unknown-wasi"
+
+%struct.sDelegate = type { i8* (i32)* }
+%struct.sDelegator = type { i32, i8*, %struct.sDelegate* }
+
+@.str = private unnamed_addr constant [23 x i8] c"default implementation\00", align 1
+@defaultDel = internal global %struct.sDelegate { i8* (i32)* @defaultResponse }, align 4
+@.str.1 = private unnamed_addr constant [4 x i8] c"%s\0A\00", align 1
+@.str.2 = private unnamed_addr constant [31 x i8] c"We're in thing1 with value %d\0A\00", align 1
+@.str.3 = private unnamed_addr constant [24 x i8] c"delegate implementation\00", align 1
+@.str.4 = private unnamed_addr constant [23 x i8] c"A stellar vista, Baby.\00", align 1
+@.str.5 = private unnamed_addr constant [23 x i8] c"Delegator returns %s\0A\0A\00", align 1
+@llvm.used = appending global [1 x i8*] [i8* bitcast (i32 ()* @__main_void to i8*)], section "llvm.metadata"
+
+@__main_void = alias i32 (), i32 ()* @main
+
+; Function Attrs: noinline nounwind optnone
+define hidden %struct.sDelegate* @NewDelegate(i8* (i32)* %rspndr) #0 {
+entry:
+  %rspndr.addr = alloca i8* (i32)*, align 4
+  %dl = alloca %struct.sDelegate*, align 4
+  store i8* (i32)* %rspndr, i8* (i32)** %rspndr.addr, align 4
+  %call = call noalias i8* @malloc(i32 4)
+  %0 = bitcast i8* %call to %struct.sDelegate*
+  store %struct.sDelegate* %0, %struct.sDelegate** %dl, align 4
+  %1 = load i8* (i32)*, i8* (i32)** %rspndr.addr, align 4
+  %2 = load %struct.sDelegate*, %struct.sDelegate** %dl, align 4
+  %operation = getelementptr inbounds %struct.sDelegate, %struct.sDelegate* %2, i32 0, i32 0
+  store i8* (i32)* %1, i8* (i32)** %operation, align 4
+  %3 = load %struct.sDelegate*, %struct.sDelegate** %dl, align 4
+  ret %struct.sDelegate* %3
+}
+
+declare noalias i8* @malloc(i32 %0) #1
+
+; Function Attrs: noinline nounwind optnone
+define hidden i8* @DelegateThing(%struct.sDelegate* %dl, i32 %p1) #0 {
+entry:
+  %dl.addr = alloca %struct.sDelegate*, align 4
+  %p1.addr = alloca i32, align 4
+  store %struct.sDelegate* %dl, %struct.sDelegate** %dl.addr, align 4
+  store i32 %p1, i32* %p1.addr, align 4
+  %0 = load %struct.sDelegate*, %struct.sDelegate** %dl.addr, align 4
+  %operation = getelementptr inbounds %struct.sDelegate, %struct.sDelegate* %0, i32 0, i32 0
+  %1 = load i8* (i32)*, i8* (i32)** %operation, align 4
+  %tobool = icmp ne i8* (i32)* %1, null
+  br i1 %tobool, label %cond.true, label %cond.false
+
+cond.true:                                        ; preds = %entry
+  %2 = load %struct.sDelegate*, %struct.sDelegate** %dl.addr, align 4
+  %operation1 = getelementptr inbounds %struct.sDelegate, %struct.sDelegate* %2, i32 0, i32 0
+  %3 = load i8* (i32)*, i8* (i32)** %operation1, align 4
+  %4 = load i32, i32* %p1.addr, align 4
+  %call = call i8* %3(i32 %4)
+  br label %cond.end
+
+cond.false:                                       ; preds = %entry
+  br label %cond.end
+
+cond.end:                                         ; preds = %cond.false, %cond.true
+  %cond = phi i8* [ %call, %cond.true ], [ null, %cond.false ]
+  ret i8* %cond
+}
+
+; Function Attrs: noinline nounwind optnone
+define hidden i8* @defaultResponse(i32 %p1) #0 {
+entry:
+  %p1.addr = alloca i32, align 4
+  store i32 %p1, i32* %p1.addr, align 4
+  ret i8* getelementptr inbounds ([23 x i8], [23 x i8]* @.str, i32 0, i32 0)
+}
+
+; Function Attrs: noinline nounwind optnone
+define hidden %struct.sDelegator* @NewDelegator(i32 %p, i8* %phrase) #0 {
+entry:
+  %p.addr = alloca i32, align 4
+  %phrase.addr = alloca i8*, align 4
+  %d = alloca %struct.sDelegator*, align 4
+  store i32 %p, i32* %p.addr, align 4
+  store i8* %phrase, i8** %phrase.addr, align 4
+  %call = call noalias i8* @malloc(i32 12)
+  %0 = bitcast i8* %call to %struct.sDelegator*
+  store %struct.sDelegator* %0, %struct.sDelegator** %d, align 4
+  %1 = load i32, i32* %p.addr, align 4
+  %2 = load %struct.sDelegator*, %struct.sDelegator** %d, align 4
+  %param = getelementptr inbounds %struct.sDelegator, %struct.sDelegator* %2, i32 0, i32 0
+  store i32 %1, i32* %param, align 4
+  %3 = load i8*, i8** %phrase.addr, align 4
+  %4 = load %struct.sDelegator*, %struct.sDelegator** %d, align 4
+  %phrase1 = getelementptr inbounds %struct.sDelegator, %struct.sDelegator* %4, i32 0, i32 1
+  store i8* %3, i8** %phrase1, align 4
+  %5 = load %struct.sDelegator*, %struct.sDelegator** %d, align 4
+  %delegate = getelementptr inbounds %struct.sDelegator, %struct.sDelegator* %5, i32 0, i32 2
+  store %struct.sDelegate* @defaultDel, %struct.sDelegate** %delegate, align 4
+  %6 = load %struct.sDelegator*, %struct.sDelegator** %d, align 4
+  ret %struct.sDelegator* %6
+}
+
+; Function Attrs: noinline nounwind optnone
+define hidden i8* @Delegator_Operation(%struct.sDelegator* %theDelegator, i32 %p1, %struct.sDelegate* %delroy) #0 {
+entry:
+  %theDelegator.addr = alloca %struct.sDelegator*, align 4
+  %p1.addr = alloca i32, align 4
+  %delroy.addr = alloca %struct.sDelegate*, align 4
+  %rtn = alloca i8*, align 4
+  store %struct.sDelegator* %theDelegator, %struct.sDelegator** %theDelegator.addr, align 4
+  store i32 %p1, i32* %p1.addr, align 4
+  store %struct.sDelegate* %delroy, %struct.sDelegate** %delroy.addr, align 4
+  %0 = load %struct.sDelegate*, %struct.sDelegate** %delroy.addr, align 4
+  %tobool = icmp ne %struct.sDelegate* %0, null
+  br i1 %tobool, label %if.then, label %if.else
+
+if.then:                                          ; preds = %entry
+  %1 = load %struct.sDelegate*, %struct.sDelegate** %delroy.addr, align 4
+  %2 = load i32, i32* %p1.addr, align 4
+  %call = call i8* @DelegateThing(%struct.sDelegate* %1, i32 %2)
+  store i8* %call, i8** %rtn, align 4
+  %3 = load i8*, i8** %rtn, align 4
+  %tobool1 = icmp ne i8* %3, null
+  br i1 %tobool1, label %if.end, label %if.then2
+
+if.then2:                                         ; preds = %if.then
+  %4 = load %struct.sDelegator*, %struct.sDelegator** %theDelegator.addr, align 4
+  %delegate = getelementptr inbounds %struct.sDelegator, %struct.sDelegator* %4, i32 0, i32 2
+  %5 = load %struct.sDelegate*, %struct.sDelegate** %delegate, align 4
+  %6 = load i32, i32* %p1.addr, align 4
+  %call3 = call i8* @DelegateThing(%struct.sDelegate* %5, i32 %6)
+  store i8* %call3, i8** %rtn, align 4
+  br label %if.end
+
+if.end:                                           ; preds = %if.then2, %if.then
+  br label %if.end6
+
+if.else:                                          ; preds = %entry
+  %7 = load %struct.sDelegator*, %struct.sDelegator** %theDelegator.addr, align 4
+  %delegate4 = getelementptr inbounds %struct.sDelegator, %struct.sDelegator* %7, i32 0, i32 2
+  %8 = load %struct.sDelegate*, %struct.sDelegate** %delegate4, align 4
+  %9 = load i32, i32* %p1.addr, align 4
+  %call5 = call i8* @DelegateThing(%struct.sDelegate* %8, i32 %9)
+  store i8* %call5, i8** %rtn, align 4
+  br label %if.end6
+
+if.end6:                                          ; preds = %if.else, %if.end
+  %10 = load %struct.sDelegator*, %struct.sDelegator** %theDelegator.addr, align 4
+  %phrase = getelementptr inbounds %struct.sDelegator, %struct.sDelegator* %10, i32 0, i32 1
+  %11 = load i8*, i8** %phrase, align 4
+  %call7 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([4 x i8], [4 x i8]* @.str.1, i32 0, i32 0), i8* %11)
+  %12 = load i8*, i8** %rtn, align 4
+  ret i8* %12
+}
+
+declare i32 @printf(i8* %0, ...) #1
+
+; Function Attrs: noinline nounwind optnone
+define hidden i8* @thing1(i32 %p1) #0 {
+entry:
+  %p1.addr = alloca i32, align 4
+  store i32 %p1, i32* %p1.addr, align 4
+  %0 = load i32, i32* %p1.addr, align 4
+  %call = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([31 x i8], [31 x i8]* @.str.2, i32 0, i32 0), i32 %0)
+  ret i8* getelementptr inbounds ([24 x i8], [24 x i8]* @.str.3, i32 0, i32 0)
+}
+
+; Function Attrs: noinline nounwind optnone
+define hidden i32 @main() #0 {
+entry:
+  %retval = alloca i32, align 4
+  %del1 = alloca %struct.sDelegate*, align 4
+  %del2 = alloca %struct.sDelegate*, align 4
+  %theDelegator = alloca %struct.sDelegator*, align 4
+  store i32 0, i32* %retval, align 4
+  %call = call %struct.sDelegate* @NewDelegate(i8* (i32)* @thing1)
+  store %struct.sDelegate* %call, %struct.sDelegate** %del1, align 4
+  %call1 = call %struct.sDelegate* @NewDelegate(i8* (i32)* null)
+  store %struct.sDelegate* %call1, %struct.sDelegate** %del2, align 4
+  %call2 = call %struct.sDelegator* @NewDelegator(i32 14, i8* getelementptr inbounds ([23 x i8], [23 x i8]* @.str.4, i32 0, i32 0))
+  store %struct.sDelegator* %call2, %struct.sDelegator** %theDelegator, align 4
+  %0 = load %struct.sDelegator*, %struct.sDelegator** %theDelegator, align 4
+  %call3 = call i8* @Delegator_Operation(%struct.sDelegator* %0, i32 3, %struct.sDelegate* null)
+  %call4 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([23 x i8], [23 x i8]* @.str.5, i32 0, i32 0), i8* %call3)
+  %1 = load %struct.sDelegator*, %struct.sDelegator** %theDelegator, align 4
+  %2 = load %struct.sDelegate*, %struct.sDelegate** %del1, align 4
+  %call5 = call i8* @Delegator_Operation(%struct.sDelegator* %1, i32 3, %struct.sDelegate* %2)
+  %call6 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([23 x i8], [23 x i8]* @.str.5, i32 0, i32 0), i8* %call5)
+  %3 = load %struct.sDelegator*, %struct.sDelegator** %theDelegator, align 4
+  %4 = load %struct.sDelegate*, %struct.sDelegate** %del2, align 4
+  %call7 = call i8* @Delegator_Operation(%struct.sDelegator* %3, i32 3, %struct.sDelegate* %4)
+  %call8 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([23 x i8], [23 x i8]* @.str.5, i32 0, i32 0), i8* %call7)
+  ret i32 0
+}
+
+attributes #0 = { noinline nounwind optnone "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "min-legal-vector-width"="0" "no-infs-fp-math"="false" "no-jump-tables"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #1 = { "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+
+!llvm.module.flags = !{!0}
+!llvm.ident = !{!1}
+
+!0 = !{i32 1, !"wchar_size", i32 4}
+!1 = !{!"clang version 11.0.0 (https://github.com/Jacarte/llvm-project.git 0f6dea67136cc1e0b3d200eb2bb165628970c44b)"}
+
+; extracted candidates
+
+; *****
+; For LLVM instruction:
+;  %1 = load i32, i32* %p.addr, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+#########################################################
+; exiting Souper's runOnFunction() for NewDelegator()
+
+; entering Souper's runOnFunction() for Delegator_Operation()
+
+; ModuleID = './Delegates.c.bc'
+source_filename = "./Delegates.c"
+target datalayout = "e-m:e-p:32:32-i64:64-n32:64-S128"
+target triple = "wasm32-unknown-wasi"
+
+%struct.sDelegate = type { i8* (i32)* }
+%struct.sDelegator = type { i32, i8*, %struct.sDelegate* }
+
+@.str = private unnamed_addr constant [23 x i8] c"default implementation\00", align 1
+@defaultDel = internal global %struct.sDelegate { i8* (i32)* @defaultResponse }, align 4
+@.str.1 = private unnamed_addr constant [4 x i8] c"%s\0A\00", align 1
+@.str.2 = private unnamed_addr constant [31 x i8] c"We're in thing1 with value %d\0A\00", align 1
+@.str.3 = private unnamed_addr constant [24 x i8] c"delegate implementation\00", align 1
+@.str.4 = private unnamed_addr constant [23 x i8] c"A stellar vista, Baby.\00", align 1
+@.str.5 = private unnamed_addr constant [23 x i8] c"Delegator returns %s\0A\0A\00", align 1
+@llvm.used = appending global [1 x i8*] [i8* bitcast (i32 ()* @__main_void to i8*)], section "llvm.metadata"
+
+@__main_void = alias i32 (), i32 ()* @main
+
+; Function Attrs: noinline nounwind optnone
+define hidden %struct.sDelegate* @NewDelegate(i8* (i32)* %rspndr) #0 {
+entry:
+  %rspndr.addr = alloca i8* (i32)*, align 4
+  %dl = alloca %struct.sDelegate*, align 4
+  store i8* (i32)* %rspndr, i8* (i32)** %rspndr.addr, align 4
+  %call = call noalias i8* @malloc(i32 4)
+  %0 = bitcast i8* %call to %struct.sDelegate*
+  store %struct.sDelegate* %0, %struct.sDelegate** %dl, align 4
+  %1 = load i8* (i32)*, i8* (i32)** %rspndr.addr, align 4
+  %2 = load %struct.sDelegate*, %struct.sDelegate** %dl, align 4
+  %operation = getelementptr inbounds %struct.sDelegate, %struct.sDelegate* %2, i32 0, i32 0
+  store i8* (i32)* %1, i8* (i32)** %operation, align 4
+  %3 = load %struct.sDelegate*, %struct.sDelegate** %dl, align 4
+  ret %struct.sDelegate* %3
+}
+
+declare noalias i8* @malloc(i32 %0) #1
+
+; Function Attrs: noinline nounwind optnone
+define hidden i8* @DelegateThing(%struct.sDelegate* %dl, i32 %p1) #0 {
+entry:
+  %dl.addr = alloca %struct.sDelegate*, align 4
+  %p1.addr = alloca i32, align 4
+  store %struct.sDelegate* %dl, %struct.sDelegate** %dl.addr, align 4
+  store i32 %p1, i32* %p1.addr, align 4
+  %0 = load %struct.sDelegate*, %struct.sDelegate** %dl.addr, align 4
+  %operation = getelementptr inbounds %struct.sDelegate, %struct.sDelegate* %0, i32 0, i32 0
+  %1 = load i8* (i32)*, i8* (i32)** %operation, align 4
+  %tobool = icmp ne i8* (i32)* %1, null
+  br i1 %tobool, label %cond.true, label %cond.false
+
+cond.true:                                        ; preds = %entry
+  %2 = load %struct.sDelegate*, %struct.sDelegate** %dl.addr, align 4
+  %operation1 = getelementptr inbounds %struct.sDelegate, %struct.sDelegate* %2, i32 0, i32 0
+  %3 = load i8* (i32)*, i8* (i32)** %operation1, align 4
+  %4 = load i32, i32* %p1.addr, align 4
+  %call = call i8* %3(i32 %4)
+  br label %cond.end
+
+cond.false:                                       ; preds = %entry
+  br label %cond.end
+
+cond.end:                                         ; preds = %cond.false, %cond.true
+  %cond = phi i8* [ %call, %cond.true ], [ null, %cond.false ]
+  ret i8* %cond
+}
+
+; Function Attrs: noinline nounwind optnone
+define hidden i8* @defaultResponse(i32 %p1) #0 {
+entry:
+  %p1.addr = alloca i32, align 4
+  store i32 %p1, i32* %p1.addr, align 4
+  ret i8* getelementptr inbounds ([23 x i8], [23 x i8]* @.str, i32 0, i32 0)
+}
+
+; Function Attrs: noinline nounwind optnone
+define hidden %struct.sDelegator* @NewDelegator(i32 %p, i8* %phrase) #0 {
+entry:
+  %p.addr = alloca i32, align 4
+  %phrase.addr = alloca i8*, align 4
+  %d = alloca %struct.sDelegator*, align 4
+  store i32 %p, i32* %p.addr, align 4
+  store i8* %phrase, i8** %phrase.addr, align 4
+  %call = call noalias i8* @malloc(i32 12)
+  %0 = bitcast i8* %call to %struct.sDelegator*
+  store %struct.sDelegator* %0, %struct.sDelegator** %d, align 4
+  %1 = load i32, i32* %p.addr, align 4
+  %2 = load %struct.sDelegator*, %struct.sDelegator** %d, align 4
+  %param = getelementptr inbounds %struct.sDelegator, %struct.sDelegator* %2, i32 0, i32 0
+  store i32 %1, i32* %param, align 4
+  %3 = load i8*, i8** %phrase.addr, align 4
+  %4 = load %struct.sDelegator*, %struct.sDelegator** %d, align 4
+  %phrase1 = getelementptr inbounds %struct.sDelegator, %struct.sDelegator* %4, i32 0, i32 1
+  store i8* %3, i8** %phrase1, align 4
+  %5 = load %struct.sDelegator*, %struct.sDelegator** %d, align 4
+  %delegate = getelementptr inbounds %struct.sDelegator, %struct.sDelegator* %5, i32 0, i32 2
+  store %struct.sDelegate* @defaultDel, %struct.sDelegate** %delegate, align 4
+  %6 = load %struct.sDelegator*, %struct.sDelegator** %d, align 4
+  ret %struct.sDelegator* %6
+}
+
+; Function Attrs: noinline nounwind optnone
+define hidden i8* @Delegator_Operation(%struct.sDelegator* %theDelegator, i32 %p1, %struct.sDelegate* %delroy) #0 {
+entry:
+  %theDelegator.addr = alloca %struct.sDelegator*, align 4
+  %p1.addr = alloca i32, align 4
+  %delroy.addr = alloca %struct.sDelegate*, align 4
+  %rtn = alloca i8*, align 4
+  store %struct.sDelegator* %theDelegator, %struct.sDelegator** %theDelegator.addr, align 4
+  store i32 %p1, i32* %p1.addr, align 4
+  store %struct.sDelegate* %delroy, %struct.sDelegate** %delroy.addr, align 4
+  %0 = load %struct.sDelegate*, %struct.sDelegate** %delroy.addr, align 4
+  %tobool = icmp ne %struct.sDelegate* %0, null
+  br i1 %tobool, label %if.then, label %if.else
+
+if.then:                                          ; preds = %entry
+  %1 = load %struct.sDelegate*, %struct.sDelegate** %delroy.addr, align 4
+  %2 = load i32, i32* %p1.addr, align 4
+  %call = call i8* @DelegateThing(%struct.sDelegate* %1, i32 %2)
+  store i8* %call, i8** %rtn, align 4
+  %3 = load i8*, i8** %rtn, align 4
+  %tobool1 = icmp ne i8* %3, null
+  br i1 %tobool1, label %if.end, label %if.then2
+
+if.then2:                                         ; preds = %if.then
+  %4 = load %struct.sDelegator*, %struct.sDelegator** %theDelegator.addr, align 4
+  %delegate = getelementptr inbounds %struct.sDelegator, %struct.sDelegator* %4, i32 0, i32 2
+  %5 = load %struct.sDelegate*, %struct.sDelegate** %delegate, align 4
+  %6 = load i32, i32* %p1.addr, align 4
+  %call3 = call i8* @DelegateThing(%struct.sDelegate* %5, i32 %6)
+  store i8* %call3, i8** %rtn, align 4
+  br label %if.end
+
+if.end:                                           ; preds = %if.then2, %if.then
+  br label %if.end6
+
+if.else:                                          ; preds = %entry
+  %7 = load %struct.sDelegator*, %struct.sDelegator** %theDelegator.addr, align 4
+  %delegate4 = getelementptr inbounds %struct.sDelegator, %struct.sDelegator* %7, i32 0, i32 2
+  %8 = load %struct.sDelegate*, %struct.sDelegate** %delegate4, align 4
+  %9 = load i32, i32* %p1.addr, align 4
+  %call5 = call i8* @DelegateThing(%struct.sDelegate* %8, i32 %9)
+  store i8* %call5, i8** %rtn, align 4
+  br label %if.end6
+
+if.end6:                                          ; preds = %if.else, %if.end
+  %10 = load %struct.sDelegator*, %struct.sDelegator** %theDelegator.addr, align 4
+  %phrase = getelementptr inbounds %struct.sDelegator, %struct.sDelegator* %10, i32 0, i32 1
+  %11 = load i8*, i8** %phrase, align 4
+  %call7 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([4 x i8], [4 x i8]* @.str.1, i32 0, i32 0), i8* %11)
+  %12 = load i8*, i8** %rtn, align 4
+  ret i8* %12
+}
+
+declare i32 @printf(i8* %0, ...) #1
+
+; Function Attrs: noinline nounwind optnone
+define hidden i8* @thing1(i32 %p1) #0 {
+entry:
+  %p1.addr = alloca i32, align 4
+  store i32 %p1, i32* %p1.addr, align 4
+  %0 = load i32, i32* %p1.addr, align 4
+  %call = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([31 x i8], [31 x i8]* @.str.2, i32 0, i32 0), i32 %0)
+  ret i8* getelementptr inbounds ([24 x i8], [24 x i8]* @.str.3, i32 0, i32 0)
+}
+
+; Function Attrs: noinline nounwind optnone
+define hidden i32 @main() #0 {
+entry:
+  %retval = alloca i32, align 4
+  %del1 = alloca %struct.sDelegate*, align 4
+  %del2 = alloca %struct.sDelegate*, align 4
+  %theDelegator = alloca %struct.sDelegator*, align 4
+  store i32 0, i32* %retval, align 4
+  %call = call %struct.sDelegate* @NewDelegate(i8* (i32)* @thing1)
+  store %struct.sDelegate* %call, %struct.sDelegate** %del1, align 4
+  %call1 = call %struct.sDelegate* @NewDelegate(i8* (i32)* null)
+  store %struct.sDelegate* %call1, %struct.sDelegate** %del2, align 4
+  %call2 = call %struct.sDelegator* @NewDelegator(i32 14, i8* getelementptr inbounds ([23 x i8], [23 x i8]* @.str.4, i32 0, i32 0))
+  store %struct.sDelegator* %call2, %struct.sDelegator** %theDelegator, align 4
+  %0 = load %struct.sDelegator*, %struct.sDelegator** %theDelegator, align 4
+  %call3 = call i8* @Delegator_Operation(%struct.sDelegator* %0, i32 3, %struct.sDelegate* null)
+  %call4 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([23 x i8], [23 x i8]* @.str.5, i32 0, i32 0), i8* %call3)
+  %1 = load %struct.sDelegator*, %struct.sDelegator** %theDelegator, align 4
+  %2 = load %struct.sDelegate*, %struct.sDelegate** %del1, align 4
+  %call5 = call i8* @Delegator_Operation(%struct.sDelegator* %1, i32 3, %struct.sDelegate* %2)
+  %call6 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([23 x i8], [23 x i8]* @.str.5, i32 0, i32 0), i8* %call5)
+  %3 = load %struct.sDelegator*, %struct.sDelegator** %theDelegator, align 4
+  %4 = load %struct.sDelegate*, %struct.sDelegate** %del2, align 4
+  %call7 = call i8* @Delegator_Operation(%struct.sDelegator* %3, i32 3, %struct.sDelegate* %4)
+  %call8 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([23 x i8], [23 x i8]* @.str.5, i32 0, i32 0), i8* %call7)
+  ret i32 0
+}
+
+attributes #0 = { noinline nounwind optnone "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "min-legal-vector-width"="0" "no-infs-fp-math"="false" "no-jump-tables"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #1 = { "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+
+!llvm.module.flags = !{!0}
+!llvm.ident = !{!1}
+
+!0 = !{i32 1, !"wchar_size", i32 4}
+!1 = !{!"clang version 11.0.0 (https://github.com/Jacarte/llvm-project.git 0f6dea67136cc1e0b3d200eb2bb165628970c44b)"}
+
+; extracted candidates
+
+; *****
+; For LLVM instruction:
+;  %tobool = icmp ne %struct.sDelegate* %0, null
+; Looking for a replacement for:
+%0:i32 = var
+%1:i1 = ne 0:i32, %0
+infer %1
+
+; *****
+; For LLVM instruction:
+;  %2 = load i32, i32* %p1.addr, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %tobool1 = icmp ne i8* %3, null
+; Looking for a replacement for:
+%0:i32 = var
+%1:i1 = ne 0:i32, %0
+infer %1
+
+; *****
+; For LLVM instruction:
+;  %6 = load i32, i32* %p1.addr, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %9 = load i32, i32* %p1.addr, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+#########################################################
+; exiting Souper's runOnFunction() for Delegator_Operation()
+
+; entering Souper's runOnFunction() for thing1()
+
+; ModuleID = './Delegates.c.bc'
+source_filename = "./Delegates.c"
+target datalayout = "e-m:e-p:32:32-i64:64-n32:64-S128"
+target triple = "wasm32-unknown-wasi"
+
+%struct.sDelegate = type { i8* (i32)* }
+%struct.sDelegator = type { i32, i8*, %struct.sDelegate* }
+
+@.str = private unnamed_addr constant [23 x i8] c"default implementation\00", align 1
+@defaultDel = internal global %struct.sDelegate { i8* (i32)* @defaultResponse }, align 4
+@.str.1 = private unnamed_addr constant [4 x i8] c"%s\0A\00", align 1
+@.str.2 = private unnamed_addr constant [31 x i8] c"We're in thing1 with value %d\0A\00", align 1
+@.str.3 = private unnamed_addr constant [24 x i8] c"delegate implementation\00", align 1
+@.str.4 = private unnamed_addr constant [23 x i8] c"A stellar vista, Baby.\00", align 1
+@.str.5 = private unnamed_addr constant [23 x i8] c"Delegator returns %s\0A\0A\00", align 1
+@llvm.used = appending global [1 x i8*] [i8* bitcast (i32 ()* @__main_void to i8*)], section "llvm.metadata"
+
+@__main_void = alias i32 (), i32 ()* @main
+
+; Function Attrs: noinline nounwind optnone
+define hidden %struct.sDelegate* @NewDelegate(i8* (i32)* %rspndr) #0 {
+entry:
+  %rspndr.addr = alloca i8* (i32)*, align 4
+  %dl = alloca %struct.sDelegate*, align 4
+  store i8* (i32)* %rspndr, i8* (i32)** %rspndr.addr, align 4
+  %call = call noalias i8* @malloc(i32 4)
+  %0 = bitcast i8* %call to %struct.sDelegate*
+  store %struct.sDelegate* %0, %struct.sDelegate** %dl, align 4
+  %1 = load i8* (i32)*, i8* (i32)** %rspndr.addr, align 4
+  %2 = load %struct.sDelegate*, %struct.sDelegate** %dl, align 4
+  %operation = getelementptr inbounds %struct.sDelegate, %struct.sDelegate* %2, i32 0, i32 0
+  store i8* (i32)* %1, i8* (i32)** %operation, align 4
+  %3 = load %struct.sDelegate*, %struct.sDelegate** %dl, align 4
+  ret %struct.sDelegate* %3
+}
+
+declare noalias i8* @malloc(i32 %0) #1
+
+; Function Attrs: noinline nounwind optnone
+define hidden i8* @DelegateThing(%struct.sDelegate* %dl, i32 %p1) #0 {
+entry:
+  %dl.addr = alloca %struct.sDelegate*, align 4
+  %p1.addr = alloca i32, align 4
+  store %struct.sDelegate* %dl, %struct.sDelegate** %dl.addr, align 4
+  store i32 %p1, i32* %p1.addr, align 4
+  %0 = load %struct.sDelegate*, %struct.sDelegate** %dl.addr, align 4
+  %operation = getelementptr inbounds %struct.sDelegate, %struct.sDelegate* %0, i32 0, i32 0
+  %1 = load i8* (i32)*, i8* (i32)** %operation, align 4
+  %tobool = icmp ne i8* (i32)* %1, null
+  br i1 %tobool, label %cond.true, label %cond.false
+
+cond.true:                                        ; preds = %entry
+  %2 = load %struct.sDelegate*, %struct.sDelegate** %dl.addr, align 4
+  %operation1 = getelementptr inbounds %struct.sDelegate, %struct.sDelegate* %2, i32 0, i32 0
+  %3 = load i8* (i32)*, i8* (i32)** %operation1, align 4
+  %4 = load i32, i32* %p1.addr, align 4
+  %call = call i8* %3(i32 %4)
+  br label %cond.end
+
+cond.false:                                       ; preds = %entry
+  br label %cond.end
+
+cond.end:                                         ; preds = %cond.false, %cond.true
+  %cond = phi i8* [ %call, %cond.true ], [ null, %cond.false ]
+  ret i8* %cond
+}
+
+; Function Attrs: noinline nounwind optnone
+define hidden i8* @defaultResponse(i32 %p1) #0 {
+entry:
+  %p1.addr = alloca i32, align 4
+  store i32 %p1, i32* %p1.addr, align 4
+  ret i8* getelementptr inbounds ([23 x i8], [23 x i8]* @.str, i32 0, i32 0)
+}
+
+; Function Attrs: noinline nounwind optnone
+define hidden %struct.sDelegator* @NewDelegator(i32 %p, i8* %phrase) #0 {
+entry:
+  %p.addr = alloca i32, align 4
+  %phrase.addr = alloca i8*, align 4
+  %d = alloca %struct.sDelegator*, align 4
+  store i32 %p, i32* %p.addr, align 4
+  store i8* %phrase, i8** %phrase.addr, align 4
+  %call = call noalias i8* @malloc(i32 12)
+  %0 = bitcast i8* %call to %struct.sDelegator*
+  store %struct.sDelegator* %0, %struct.sDelegator** %d, align 4
+  %1 = load i32, i32* %p.addr, align 4
+  %2 = load %struct.sDelegator*, %struct.sDelegator** %d, align 4
+  %param = getelementptr inbounds %struct.sDelegator, %struct.sDelegator* %2, i32 0, i32 0
+  store i32 %1, i32* %param, align 4
+  %3 = load i8*, i8** %phrase.addr, align 4
+  %4 = load %struct.sDelegator*, %struct.sDelegator** %d, align 4
+  %phrase1 = getelementptr inbounds %struct.sDelegator, %struct.sDelegator* %4, i32 0, i32 1
+  store i8* %3, i8** %phrase1, align 4
+  %5 = load %struct.sDelegator*, %struct.sDelegator** %d, align 4
+  %delegate = getelementptr inbounds %struct.sDelegator, %struct.sDelegator* %5, i32 0, i32 2
+  store %struct.sDelegate* @defaultDel, %struct.sDelegate** %delegate, align 4
+  %6 = load %struct.sDelegator*, %struct.sDelegator** %d, align 4
+  ret %struct.sDelegator* %6
+}
+
+; Function Attrs: noinline nounwind optnone
+define hidden i8* @Delegator_Operation(%struct.sDelegator* %theDelegator, i32 %p1, %struct.sDelegate* %delroy) #0 {
+entry:
+  %theDelegator.addr = alloca %struct.sDelegator*, align 4
+  %p1.addr = alloca i32, align 4
+  %delroy.addr = alloca %struct.sDelegate*, align 4
+  %rtn = alloca i8*, align 4
+  store %struct.sDelegator* %theDelegator, %struct.sDelegator** %theDelegator.addr, align 4
+  store i32 %p1, i32* %p1.addr, align 4
+  store %struct.sDelegate* %delroy, %struct.sDelegate** %delroy.addr, align 4
+  %0 = load %struct.sDelegate*, %struct.sDelegate** %delroy.addr, align 4
+  %tobool = icmp ne %struct.sDelegate* %0, null
+  br i1 %tobool, label %if.then, label %if.else
+
+if.then:                                          ; preds = %entry
+  %1 = load %struct.sDelegate*, %struct.sDelegate** %delroy.addr, align 4
+  %2 = load i32, i32* %p1.addr, align 4
+  %call = call i8* @DelegateThing(%struct.sDelegate* %1, i32 %2)
+  store i8* %call, i8** %rtn, align 4
+  %3 = load i8*, i8** %rtn, align 4
+  %tobool1 = icmp ne i8* %3, null
+  br i1 %tobool1, label %if.end, label %if.then2
+
+if.then2:                                         ; preds = %if.then
+  %4 = load %struct.sDelegator*, %struct.sDelegator** %theDelegator.addr, align 4
+  %delegate = getelementptr inbounds %struct.sDelegator, %struct.sDelegator* %4, i32 0, i32 2
+  %5 = load %struct.sDelegate*, %struct.sDelegate** %delegate, align 4
+  %6 = load i32, i32* %p1.addr, align 4
+  %call3 = call i8* @DelegateThing(%struct.sDelegate* %5, i32 %6)
+  store i8* %call3, i8** %rtn, align 4
+  br label %if.end
+
+if.end:                                           ; preds = %if.then2, %if.then
+  br label %if.end6
+
+if.else:                                          ; preds = %entry
+  %7 = load %struct.sDelegator*, %struct.sDelegator** %theDelegator.addr, align 4
+  %delegate4 = getelementptr inbounds %struct.sDelegator, %struct.sDelegator* %7, i32 0, i32 2
+  %8 = load %struct.sDelegate*, %struct.sDelegate** %delegate4, align 4
+  %9 = load i32, i32* %p1.addr, align 4
+  %call5 = call i8* @DelegateThing(%struct.sDelegate* %8, i32 %9)
+  store i8* %call5, i8** %rtn, align 4
+  br label %if.end6
+
+if.end6:                                          ; preds = %if.else, %if.end
+  %10 = load %struct.sDelegator*, %struct.sDelegator** %theDelegator.addr, align 4
+  %phrase = getelementptr inbounds %struct.sDelegator, %struct.sDelegator* %10, i32 0, i32 1
+  %11 = load i8*, i8** %phrase, align 4
+  %call7 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([4 x i8], [4 x i8]* @.str.1, i32 0, i32 0), i8* %11)
+  %12 = load i8*, i8** %rtn, align 4
+  ret i8* %12
+}
+
+declare i32 @printf(i8* %0, ...) #1
+
+; Function Attrs: noinline nounwind optnone
+define hidden i8* @thing1(i32 %p1) #0 {
+entry:
+  %p1.addr = alloca i32, align 4
+  store i32 %p1, i32* %p1.addr, align 4
+  %0 = load i32, i32* %p1.addr, align 4
+  %call = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([31 x i8], [31 x i8]* @.str.2, i32 0, i32 0), i32 %0)
+  ret i8* getelementptr inbounds ([24 x i8], [24 x i8]* @.str.3, i32 0, i32 0)
+}
+
+; Function Attrs: noinline nounwind optnone
+define hidden i32 @main() #0 {
+entry:
+  %retval = alloca i32, align 4
+  %del1 = alloca %struct.sDelegate*, align 4
+  %del2 = alloca %struct.sDelegate*, align 4
+  %theDelegator = alloca %struct.sDelegator*, align 4
+  store i32 0, i32* %retval, align 4
+  %call = call %struct.sDelegate* @NewDelegate(i8* (i32)* @thing1)
+  store %struct.sDelegate* %call, %struct.sDelegate** %del1, align 4
+  %call1 = call %struct.sDelegate* @NewDelegate(i8* (i32)* null)
+  store %struct.sDelegate* %call1, %struct.sDelegate** %del2, align 4
+  %call2 = call %struct.sDelegator* @NewDelegator(i32 14, i8* getelementptr inbounds ([23 x i8], [23 x i8]* @.str.4, i32 0, i32 0))
+  store %struct.sDelegator* %call2, %struct.sDelegator** %theDelegator, align 4
+  %0 = load %struct.sDelegator*, %struct.sDelegator** %theDelegator, align 4
+  %call3 = call i8* @Delegator_Operation(%struct.sDelegator* %0, i32 3, %struct.sDelegate* null)
+  %call4 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([23 x i8], [23 x i8]* @.str.5, i32 0, i32 0), i8* %call3)
+  %1 = load %struct.sDelegator*, %struct.sDelegator** %theDelegator, align 4
+  %2 = load %struct.sDelegate*, %struct.sDelegate** %del1, align 4
+  %call5 = call i8* @Delegator_Operation(%struct.sDelegator* %1, i32 3, %struct.sDelegate* %2)
+  %call6 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([23 x i8], [23 x i8]* @.str.5, i32 0, i32 0), i8* %call5)
+  %3 = load %struct.sDelegator*, %struct.sDelegator** %theDelegator, align 4
+  %4 = load %struct.sDelegate*, %struct.sDelegate** %del2, align 4
+  %call7 = call i8* @Delegator_Operation(%struct.sDelegator* %3, i32 3, %struct.sDelegate* %4)
+  %call8 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([23 x i8], [23 x i8]* @.str.5, i32 0, i32 0), i8* %call7)
+  ret i32 0
+}
+
+attributes #0 = { noinline nounwind optnone "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "min-legal-vector-width"="0" "no-infs-fp-math"="false" "no-jump-tables"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #1 = { "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+
+!llvm.module.flags = !{!0}
+!llvm.ident = !{!1}
+
+!0 = !{i32 1, !"wchar_size", i32 4}
+!1 = !{!"clang version 11.0.0 (https://github.com/Jacarte/llvm-project.git 0f6dea67136cc1e0b3d200eb2bb165628970c44b)"}
+
+; extracted candidates
+
+; *****
+; For LLVM instruction:
+;  %0 = load i32, i32* %p1.addr, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+#########################################################
+; exiting Souper's runOnFunction() for thing1()
+
+; entering Souper's runOnFunction() for main()
+
+; ModuleID = './Delegates.c.bc'
+source_filename = "./Delegates.c"
+target datalayout = "e-m:e-p:32:32-i64:64-n32:64-S128"
+target triple = "wasm32-unknown-wasi"
+
+%struct.sDelegate = type { i8* (i32)* }
+%struct.sDelegator = type { i32, i8*, %struct.sDelegate* }
+
+@.str = private unnamed_addr constant [23 x i8] c"default implementation\00", align 1
+@defaultDel = internal global %struct.sDelegate { i8* (i32)* @defaultResponse }, align 4
+@.str.1 = private unnamed_addr constant [4 x i8] c"%s\0A\00", align 1
+@.str.2 = private unnamed_addr constant [31 x i8] c"We're in thing1 with value %d\0A\00", align 1
+@.str.3 = private unnamed_addr constant [24 x i8] c"delegate implementation\00", align 1
+@.str.4 = private unnamed_addr constant [23 x i8] c"A stellar vista, Baby.\00", align 1
+@.str.5 = private unnamed_addr constant [23 x i8] c"Delegator returns %s\0A\0A\00", align 1
+@llvm.used = appending global [1 x i8*] [i8* bitcast (i32 ()* @__main_void to i8*)], section "llvm.metadata"
+
+@__main_void = alias i32 (), i32 ()* @main
+
+; Function Attrs: noinline nounwind optnone
+define hidden %struct.sDelegate* @NewDelegate(i8* (i32)* %rspndr) #0 {
+entry:
+  %rspndr.addr = alloca i8* (i32)*, align 4
+  %dl = alloca %struct.sDelegate*, align 4
+  store i8* (i32)* %rspndr, i8* (i32)** %rspndr.addr, align 4
+  %call = call noalias i8* @malloc(i32 4)
+  %0 = bitcast i8* %call to %struct.sDelegate*
+  store %struct.sDelegate* %0, %struct.sDelegate** %dl, align 4
+  %1 = load i8* (i32)*, i8* (i32)** %rspndr.addr, align 4
+  %2 = load %struct.sDelegate*, %struct.sDelegate** %dl, align 4
+  %operation = getelementptr inbounds %struct.sDelegate, %struct.sDelegate* %2, i32 0, i32 0
+  store i8* (i32)* %1, i8* (i32)** %operation, align 4
+  %3 = load %struct.sDelegate*, %struct.sDelegate** %dl, align 4
+  ret %struct.sDelegate* %3
+}
+
+declare noalias i8* @malloc(i32 %0) #1
+
+; Function Attrs: noinline nounwind optnone
+define hidden i8* @DelegateThing(%struct.sDelegate* %dl, i32 %p1) #0 {
+entry:
+  %dl.addr = alloca %struct.sDelegate*, align 4
+  %p1.addr = alloca i32, align 4
+  store %struct.sDelegate* %dl, %struct.sDelegate** %dl.addr, align 4
+  store i32 %p1, i32* %p1.addr, align 4
+  %0 = load %struct.sDelegate*, %struct.sDelegate** %dl.addr, align 4
+  %operation = getelementptr inbounds %struct.sDelegate, %struct.sDelegate* %0, i32 0, i32 0
+  %1 = load i8* (i32)*, i8* (i32)** %operation, align 4
+  %tobool = icmp ne i8* (i32)* %1, null
+  br i1 %tobool, label %cond.true, label %cond.false
+
+cond.true:                                        ; preds = %entry
+  %2 = load %struct.sDelegate*, %struct.sDelegate** %dl.addr, align 4
+  %operation1 = getelementptr inbounds %struct.sDelegate, %struct.sDelegate* %2, i32 0, i32 0
+  %3 = load i8* (i32)*, i8* (i32)** %operation1, align 4
+  %4 = load i32, i32* %p1.addr, align 4
+  %call = call i8* %3(i32 %4)
+  br label %cond.end
+
+cond.false:                                       ; preds = %entry
+  br label %cond.end
+
+cond.end:                                         ; preds = %cond.false, %cond.true
+  %cond = phi i8* [ %call, %cond.true ], [ null, %cond.false ]
+  ret i8* %cond
+}
+
+; Function Attrs: noinline nounwind optnone
+define hidden i8* @defaultResponse(i32 %p1) #0 {
+entry:
+  %p1.addr = alloca i32, align 4
+  store i32 %p1, i32* %p1.addr, align 4
+  ret i8* getelementptr inbounds ([23 x i8], [23 x i8]* @.str, i32 0, i32 0)
+}
+
+; Function Attrs: noinline nounwind optnone
+define hidden %struct.sDelegator* @NewDelegator(i32 %p, i8* %phrase) #0 {
+entry:
+  %p.addr = alloca i32, align 4
+  %phrase.addr = alloca i8*, align 4
+  %d = alloca %struct.sDelegator*, align 4
+  store i32 %p, i32* %p.addr, align 4
+  store i8* %phrase, i8** %phrase.addr, align 4
+  %call = call noalias i8* @malloc(i32 12)
+  %0 = bitcast i8* %call to %struct.sDelegator*
+  store %struct.sDelegator* %0, %struct.sDelegator** %d, align 4
+  %1 = load i32, i32* %p.addr, align 4
+  %2 = load %struct.sDelegator*, %struct.sDelegator** %d, align 4
+  %param = getelementptr inbounds %struct.sDelegator, %struct.sDelegator* %2, i32 0, i32 0
+  store i32 %1, i32* %param, align 4
+  %3 = load i8*, i8** %phrase.addr, align 4
+  %4 = load %struct.sDelegator*, %struct.sDelegator** %d, align 4
+  %phrase1 = getelementptr inbounds %struct.sDelegator, %struct.sDelegator* %4, i32 0, i32 1
+  store i8* %3, i8** %phrase1, align 4
+  %5 = load %struct.sDelegator*, %struct.sDelegator** %d, align 4
+  %delegate = getelementptr inbounds %struct.sDelegator, %struct.sDelegator* %5, i32 0, i32 2
+  store %struct.sDelegate* @defaultDel, %struct.sDelegate** %delegate, align 4
+  %6 = load %struct.sDelegator*, %struct.sDelegator** %d, align 4
+  ret %struct.sDelegator* %6
+}
+
+; Function Attrs: noinline nounwind optnone
+define hidden i8* @Delegator_Operation(%struct.sDelegator* %theDelegator, i32 %p1, %struct.sDelegate* %delroy) #0 {
+entry:
+  %theDelegator.addr = alloca %struct.sDelegator*, align 4
+  %p1.addr = alloca i32, align 4
+  %delroy.addr = alloca %struct.sDelegate*, align 4
+  %rtn = alloca i8*, align 4
+  store %struct.sDelegator* %theDelegator, %struct.sDelegator** %theDelegator.addr, align 4
+  store i32 %p1, i32* %p1.addr, align 4
+  store %struct.sDelegate* %delroy, %struct.sDelegate** %delroy.addr, align 4
+  %0 = load %struct.sDelegate*, %struct.sDelegate** %delroy.addr, align 4
+  %tobool = icmp ne %struct.sDelegate* %0, null
+  br i1 %tobool, label %if.then, label %if.else
+
+if.then:                                          ; preds = %entry
+  %1 = load %struct.sDelegate*, %struct.sDelegate** %delroy.addr, align 4
+  %2 = load i32, i32* %p1.addr, align 4
+  %call = call i8* @DelegateThing(%struct.sDelegate* %1, i32 %2)
+  store i8* %call, i8** %rtn, align 4
+  %3 = load i8*, i8** %rtn, align 4
+  %tobool1 = icmp ne i8* %3, null
+  br i1 %tobool1, label %if.end, label %if.then2
+
+if.then2:                                         ; preds = %if.then
+  %4 = load %struct.sDelegator*, %struct.sDelegator** %theDelegator.addr, align 4
+  %delegate = getelementptr inbounds %struct.sDelegator, %struct.sDelegator* %4, i32 0, i32 2
+  %5 = load %struct.sDelegate*, %struct.sDelegate** %delegate, align 4
+  %6 = load i32, i32* %p1.addr, align 4
+  %call3 = call i8* @DelegateThing(%struct.sDelegate* %5, i32 %6)
+  store i8* %call3, i8** %rtn, align 4
+  br label %if.end
+
+if.end:                                           ; preds = %if.then2, %if.then
+  br label %if.end6
+
+if.else:                                          ; preds = %entry
+  %7 = load %struct.sDelegator*, %struct.sDelegator** %theDelegator.addr, align 4
+  %delegate4 = getelementptr inbounds %struct.sDelegator, %struct.sDelegator* %7, i32 0, i32 2
+  %8 = load %struct.sDelegate*, %struct.sDelegate** %delegate4, align 4
+  %9 = load i32, i32* %p1.addr, align 4
+  %call5 = call i8* @DelegateThing(%struct.sDelegate* %8, i32 %9)
+  store i8* %call5, i8** %rtn, align 4
+  br label %if.end6
+
+if.end6:                                          ; preds = %if.else, %if.end
+  %10 = load %struct.sDelegator*, %struct.sDelegator** %theDelegator.addr, align 4
+  %phrase = getelementptr inbounds %struct.sDelegator, %struct.sDelegator* %10, i32 0, i32 1
+  %11 = load i8*, i8** %phrase, align 4
+  %call7 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([4 x i8], [4 x i8]* @.str.1, i32 0, i32 0), i8* %11)
+  %12 = load i8*, i8** %rtn, align 4
+  ret i8* %12
+}
+
+declare i32 @printf(i8* %0, ...) #1
+
+; Function Attrs: noinline nounwind optnone
+define hidden i8* @thing1(i32 %p1) #0 {
+entry:
+  %p1.addr = alloca i32, align 4
+  store i32 %p1, i32* %p1.addr, align 4
+  %0 = load i32, i32* %p1.addr, align 4
+  %call = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([31 x i8], [31 x i8]* @.str.2, i32 0, i32 0), i32 %0)
+  ret i8* getelementptr inbounds ([24 x i8], [24 x i8]* @.str.3, i32 0, i32 0)
+}
+
+; Function Attrs: noinline nounwind optnone
+define hidden i32 @main() #0 {
+entry:
+  %retval = alloca i32, align 4
+  %del1 = alloca %struct.sDelegate*, align 4
+  %del2 = alloca %struct.sDelegate*, align 4
+  %theDelegator = alloca %struct.sDelegator*, align 4
+  store i32 0, i32* %retval, align 4
+  %call = call %struct.sDelegate* @NewDelegate(i8* (i32)* @thing1)
+  store %struct.sDelegate* %call, %struct.sDelegate** %del1, align 4
+  %call1 = call %struct.sDelegate* @NewDelegate(i8* (i32)* null)
+  store %struct.sDelegate* %call1, %struct.sDelegate** %del2, align 4
+  %call2 = call %struct.sDelegator* @NewDelegator(i32 14, i8* getelementptr inbounds ([23 x i8], [23 x i8]* @.str.4, i32 0, i32 0))
+  store %struct.sDelegator* %call2, %struct.sDelegator** %theDelegator, align 4
+  %0 = load %struct.sDelegator*, %struct.sDelegator** %theDelegator, align 4
+  %call3 = call i8* @Delegator_Operation(%struct.sDelegator* %0, i32 3, %struct.sDelegate* null)
+  %call4 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([23 x i8], [23 x i8]* @.str.5, i32 0, i32 0), i8* %call3)
+  %1 = load %struct.sDelegator*, %struct.sDelegator** %theDelegator, align 4
+  %2 = load %struct.sDelegate*, %struct.sDelegate** %del1, align 4
+  %call5 = call i8* @Delegator_Operation(%struct.sDelegator* %1, i32 3, %struct.sDelegate* %2)
+  %call6 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([23 x i8], [23 x i8]* @.str.5, i32 0, i32 0), i8* %call5)
+  %3 = load %struct.sDelegator*, %struct.sDelegator** %theDelegator, align 4
+  %4 = load %struct.sDelegate*, %struct.sDelegate** %del2, align 4
+  %call7 = call i8* @Delegator_Operation(%struct.sDelegator* %3, i32 3, %struct.sDelegate* %4)
+  %call8 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([23 x i8], [23 x i8]* @.str.5, i32 0, i32 0), i8* %call7)
+  ret i32 0
+}
+
+attributes #0 = { noinline nounwind optnone "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "min-legal-vector-width"="0" "no-infs-fp-math"="false" "no-jump-tables"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #1 = { "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+
+!llvm.module.flags = !{!0}
+!llvm.ident = !{!1}
+
+!0 = !{i32 1, !"wchar_size", i32 4}
+!1 = !{!"clang version 11.0.0 (https://github.com/Jacarte/llvm-project.git 0f6dea67136cc1e0b3d200eb2bb165628970c44b)"}
+
+; extracted candidates
+#########################################################
+; exiting Souper's runOnFunction() for main()
+Total of 0 replacements done on this module
+Total of 0 replacements candidates on this module

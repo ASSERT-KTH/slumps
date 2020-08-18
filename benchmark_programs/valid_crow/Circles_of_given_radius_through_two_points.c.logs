@@ -1,0 +1,2168 @@
+
+Entering the Souper pass's runOnModule()
+
+
+; entering Souper's runOnFunction() for distance()
+
+; ModuleID = './Circles_of_given_radius_through_two_points.c.bc'
+source_filename = "./Circles_of_given_radius_through_two_points.c"
+target datalayout = "e-m:e-p:32:32-i64:64-n32:64-S128"
+target triple = "wasm32-unknown-wasi"
+
+%struct.point = type { double, double }
+
+@.str = private unnamed_addr constant [45 x i8] c"\0ANo circles can be drawn through (%.4f,%.4f)\00", align 1
+@.str.1 = private unnamed_addr constant [58 x i8] c"\0AInfinitely many circles can be drawn through (%.4f,%.4f)\00", align 1
+@.str.2 = private unnamed_addr constant [100 x i8] c"\0AGiven points are opposite ends of a diameter of the circle with center (%.4f,%.4f) and radius %.4f\00", align 1
+@.str.3 = private unnamed_addr constant [92 x i8] c"\0AGiven points are farther away from each other than a diameter of a circle with radius %.4f\00", align 1
+@.str.4 = private unnamed_addr constant [27 x i8] c"\0ATwo circles are possible.\00", align 1
+@.str.5 = private unnamed_addr constant [99 x i8] c"\0ACircle C1 with center (%.4f,%.4f), radius %.4f and Circle C2 with center (%.4f,%.4f), radius %.4f\00", align 1
+@__const.main.cases = private unnamed_addr constant [10 x %struct.point] [%struct.point { double 1.234000e-01, double 9.876000e-01 }, %struct.point { double 8.765000e-01, double 2.345000e-01 }, %struct.point { double 0.000000e+00, double 2.000000e+00 }, %struct.point zeroinitializer, %struct.point { double 1.234000e-01, double 9.876000e-01 }, %struct.point { double 1.234000e-01, double 9.876000e-01 }, %struct.point { double 1.234000e-01, double 9.876000e-01 }, %struct.point { double 8.765000e-01, double 2.345000e-01 }, %struct.point { double 1.234000e-01, double 9.876000e-01 }, %struct.point { double 1.234000e-01, double 9.876000e-01 }], align 16
+@.str.6 = private unnamed_addr constant [10 x i8] c"\0ACase %d)\00", align 1
+@llvm.used = appending global [1 x i8*] [i8* bitcast (i32 ()* @__main_void to i8*)], section "llvm.metadata"
+
+@__main_void = alias i32 (), i32 ()* @main
+
+; Function Attrs: noinline nounwind optnone
+define hidden double @distance(%struct.point* byval(%struct.point) align 8 %p1, %struct.point* byval(%struct.point) align 8 %p2) #0 {
+entry:
+  %x = getelementptr inbounds %struct.point, %struct.point* %p1, i32 0, i32 0
+  %0 = load double, double* %x, align 8
+  %x1 = getelementptr inbounds %struct.point, %struct.point* %p2, i32 0, i32 0
+  %1 = load double, double* %x1, align 8
+  %sub = fsub double %0, %1
+  %x2 = getelementptr inbounds %struct.point, %struct.point* %p1, i32 0, i32 0
+  %2 = load double, double* %x2, align 8
+  %x3 = getelementptr inbounds %struct.point, %struct.point* %p2, i32 0, i32 0
+  %3 = load double, double* %x3, align 8
+  %sub4 = fsub double %2, %3
+  %mul = fmul double %sub, %sub4
+  %y = getelementptr inbounds %struct.point, %struct.point* %p1, i32 0, i32 1
+  %4 = load double, double* %y, align 8
+  %y5 = getelementptr inbounds %struct.point, %struct.point* %p2, i32 0, i32 1
+  %5 = load double, double* %y5, align 8
+  %sub6 = fsub double %4, %5
+  %y7 = getelementptr inbounds %struct.point, %struct.point* %p1, i32 0, i32 1
+  %6 = load double, double* %y7, align 8
+  %y8 = getelementptr inbounds %struct.point, %struct.point* %p2, i32 0, i32 1
+  %7 = load double, double* %y8, align 8
+  %sub9 = fsub double %6, %7
+  %mul10 = fmul double %sub6, %sub9
+  %add = fadd double %mul, %mul10
+  %8 = call double @llvm.sqrt.f64(double %add)
+  ret double %8
+}
+
+; Function Attrs: nounwind readnone speculatable willreturn
+declare double @llvm.sqrt.f64(double %0) #1
+
+; Function Attrs: noinline nounwind optnone
+define hidden void @findCircles(%struct.point* byval(%struct.point) align 8 %p1, %struct.point* byval(%struct.point) align 8 %p2, double %radius) #0 {
+entry:
+  %radius.addr = alloca double, align 8
+  %separation = alloca double, align 8
+  %mirrorDistance = alloca double, align 8
+  store double %radius, double* %radius.addr, align 8
+  %call = call double @distance(%struct.point* byval(%struct.point) align 8 %p1, %struct.point* byval(%struct.point) align 8 %p2)
+  store double %call, double* %separation, align 8
+  %0 = load double, double* %separation, align 8
+  %cmp = fcmp oeq double %0, 0.000000e+00
+  br i1 %cmp, label %if.then, label %if.else
+
+if.then:                                          ; preds = %entry
+  %1 = load double, double* %radius.addr, align 8
+  %cmp1 = fcmp oeq double %1, 0.000000e+00
+  br i1 %cmp1, label %cond.true, label %cond.false
+
+cond.true:                                        ; preds = %if.then
+  %x = getelementptr inbounds %struct.point, %struct.point* %p1, i32 0, i32 0
+  %2 = load double, double* %x, align 8
+  %y = getelementptr inbounds %struct.point, %struct.point* %p1, i32 0, i32 1
+  %3 = load double, double* %y, align 8
+  %call2 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([45 x i8], [45 x i8]* @.str, i32 0, i32 0), double %2, double %3)
+  br label %cond.end
+
+cond.false:                                       ; preds = %if.then
+  %x3 = getelementptr inbounds %struct.point, %struct.point* %p1, i32 0, i32 0
+  %4 = load double, double* %x3, align 8
+  %y4 = getelementptr inbounds %struct.point, %struct.point* %p1, i32 0, i32 1
+  %5 = load double, double* %y4, align 8
+  %call5 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([58 x i8], [58 x i8]* @.str.1, i32 0, i32 0), double %4, double %5)
+  br label %cond.end
+
+cond.end:                                         ; preds = %cond.false, %cond.true
+  %cond = phi i32 [ %call2, %cond.true ], [ %call5, %cond.false ]
+  br label %if.end65
+
+if.else:                                          ; preds = %entry
+  %6 = load double, double* %separation, align 8
+  %7 = load double, double* %radius.addr, align 8
+  %mul = fmul double 2.000000e+00, %7
+  %cmp6 = fcmp oeq double %6, %mul
+  br i1 %cmp6, label %if.then7, label %if.else15
+
+if.then7:                                         ; preds = %if.else
+  %x8 = getelementptr inbounds %struct.point, %struct.point* %p1, i32 0, i32 0
+  %8 = load double, double* %x8, align 8
+  %x9 = getelementptr inbounds %struct.point, %struct.point* %p2, i32 0, i32 0
+  %9 = load double, double* %x9, align 8
+  %add = fadd double %8, %9
+  %div = fdiv double %add, 2.000000e+00
+  %y10 = getelementptr inbounds %struct.point, %struct.point* %p1, i32 0, i32 1
+  %10 = load double, double* %y10, align 8
+  %y11 = getelementptr inbounds %struct.point, %struct.point* %p2, i32 0, i32 1
+  %11 = load double, double* %y11, align 8
+  %add12 = fadd double %10, %11
+  %div13 = fdiv double %add12, 2.000000e+00
+  %12 = load double, double* %radius.addr, align 8
+  %call14 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([100 x i8], [100 x i8]* @.str.2, i32 0, i32 0), double %div, double %div13, double %12)
+  br label %if.end64
+
+if.else15:                                        ; preds = %if.else
+  %13 = load double, double* %separation, align 8
+  %14 = load double, double* %radius.addr, align 8
+  %mul16 = fmul double 2.000000e+00, %14
+  %cmp17 = fcmp ogt double %13, %mul16
+  br i1 %cmp17, label %if.then18, label %if.else20
+
+if.then18:                                        ; preds = %if.else15
+  %15 = load double, double* %radius.addr, align 8
+  %call19 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([92 x i8], [92 x i8]* @.str.3, i32 0, i32 0), double %15)
+  br label %if.end
+
+if.else20:                                        ; preds = %if.else15
+  %16 = load double, double* %radius.addr, align 8
+  %17 = call double @llvm.pow.f64(double %16, double 2.000000e+00)
+  %18 = load double, double* %separation, align 8
+  %div21 = fdiv double %18, 2.000000e+00
+  %19 = call double @llvm.pow.f64(double %div21, double 2.000000e+00)
+  %sub = fsub double %17, %19
+  %20 = call double @llvm.sqrt.f64(double %sub)
+  store double %20, double* %mirrorDistance, align 8
+  %call22 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([27 x i8], [27 x i8]* @.str.4, i32 0, i32 0))
+  %x23 = getelementptr inbounds %struct.point, %struct.point* %p1, i32 0, i32 0
+  %21 = load double, double* %x23, align 8
+  %x24 = getelementptr inbounds %struct.point, %struct.point* %p2, i32 0, i32 0
+  %22 = load double, double* %x24, align 8
+  %add25 = fadd double %21, %22
+  %div26 = fdiv double %add25, 2.000000e+00
+  %23 = load double, double* %mirrorDistance, align 8
+  %y27 = getelementptr inbounds %struct.point, %struct.point* %p1, i32 0, i32 1
+  %24 = load double, double* %y27, align 8
+  %y28 = getelementptr inbounds %struct.point, %struct.point* %p2, i32 0, i32 1
+  %25 = load double, double* %y28, align 8
+  %sub29 = fsub double %24, %25
+  %mul30 = fmul double %23, %sub29
+  %26 = load double, double* %separation, align 8
+  %div31 = fdiv double %mul30, %26
+  %add32 = fadd double %div26, %div31
+  %y33 = getelementptr inbounds %struct.point, %struct.point* %p1, i32 0, i32 1
+  %27 = load double, double* %y33, align 8
+  %y34 = getelementptr inbounds %struct.point, %struct.point* %p2, i32 0, i32 1
+  %28 = load double, double* %y34, align 8
+  %add35 = fadd double %27, %28
+  %div36 = fdiv double %add35, 2.000000e+00
+  %29 = load double, double* %mirrorDistance, align 8
+  %x37 = getelementptr inbounds %struct.point, %struct.point* %p2, i32 0, i32 0
+  %30 = load double, double* %x37, align 8
+  %x38 = getelementptr inbounds %struct.point, %struct.point* %p1, i32 0, i32 0
+  %31 = load double, double* %x38, align 8
+  %sub39 = fsub double %30, %31
+  %mul40 = fmul double %29, %sub39
+  %32 = load double, double* %separation, align 8
+  %div41 = fdiv double %mul40, %32
+  %add42 = fadd double %div36, %div41
+  %33 = load double, double* %radius.addr, align 8
+  %x43 = getelementptr inbounds %struct.point, %struct.point* %p1, i32 0, i32 0
+  %34 = load double, double* %x43, align 8
+  %x44 = getelementptr inbounds %struct.point, %struct.point* %p2, i32 0, i32 0
+  %35 = load double, double* %x44, align 8
+  %add45 = fadd double %34, %35
+  %div46 = fdiv double %add45, 2.000000e+00
+  %36 = load double, double* %mirrorDistance, align 8
+  %y47 = getelementptr inbounds %struct.point, %struct.point* %p1, i32 0, i32 1
+  %37 = load double, double* %y47, align 8
+  %y48 = getelementptr inbounds %struct.point, %struct.point* %p2, i32 0, i32 1
+  %38 = load double, double* %y48, align 8
+  %sub49 = fsub double %37, %38
+  %mul50 = fmul double %36, %sub49
+  %39 = load double, double* %separation, align 8
+  %div51 = fdiv double %mul50, %39
+  %sub52 = fsub double %div46, %div51
+  %y53 = getelementptr inbounds %struct.point, %struct.point* %p1, i32 0, i32 1
+  %40 = load double, double* %y53, align 8
+  %y54 = getelementptr inbounds %struct.point, %struct.point* %p2, i32 0, i32 1
+  %41 = load double, double* %y54, align 8
+  %add55 = fadd double %40, %41
+  %div56 = fdiv double %add55, 2.000000e+00
+  %42 = load double, double* %mirrorDistance, align 8
+  %x57 = getelementptr inbounds %struct.point, %struct.point* %p2, i32 0, i32 0
+  %43 = load double, double* %x57, align 8
+  %x58 = getelementptr inbounds %struct.point, %struct.point* %p1, i32 0, i32 0
+  %44 = load double, double* %x58, align 8
+  %sub59 = fsub double %43, %44
+  %mul60 = fmul double %42, %sub59
+  %45 = load double, double* %separation, align 8
+  %div61 = fdiv double %mul60, %45
+  %sub62 = fsub double %div56, %div61
+  %46 = load double, double* %radius.addr, align 8
+  %call63 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([99 x i8], [99 x i8]* @.str.5, i32 0, i32 0), double %add32, double %add42, double %33, double %sub52, double %sub62, double %46)
+  br label %if.end
+
+if.end:                                           ; preds = %if.else20, %if.then18
+  br label %if.end64
+
+if.end64:                                         ; preds = %if.end, %if.then7
+  br label %if.end65
+
+if.end65:                                         ; preds = %if.end64, %cond.end
+  ret void
+}
+
+declare i32 @printf(i8* %0, ...) #2
+
+; Function Attrs: nounwind readnone speculatable willreturn
+declare double @llvm.pow.f64(double %0, double %1) #1
+
+; Function Attrs: noinline nounwind optnone
+define hidden i32 @main() #0 {
+entry:
+  %retval = alloca i32, align 4
+  %i = alloca i32, align 4
+  %cases = alloca [10 x %struct.point], align 16
+  %radii = alloca [5 x double], align 16
+  store i32 0, i32* %retval, align 4
+  %0 = bitcast [10 x %struct.point]* %cases to i8*
+  call void @llvm.memcpy.p0i8.p0i8.i32(i8* align 16 %0, i8* align 16 bitcast ([10 x %struct.point]* @__const.main.cases to i8*), i32 160, i1 false)
+  %1 = bitcast [5 x double]* %radii to i8*
+  call void @llvm.memset.p0i8.i32(i8* align 16 %1, i8 0, i32 40, i1 false)
+  %2 = bitcast i8* %1 to [5 x double]*
+  %3 = getelementptr inbounds [5 x double], [5 x double]* %2, i32 0, i32 0
+  store double 2.000000e+00, double* %3, align 16
+  %4 = getelementptr inbounds [5 x double], [5 x double]* %2, i32 0, i32 1
+  store double 1.000000e+00, double* %4, align 8
+  %5 = getelementptr inbounds [5 x double], [5 x double]* %2, i32 0, i32 2
+  store double 2.000000e+00, double* %5, align 16
+  %6 = getelementptr inbounds [5 x double], [5 x double]* %2, i32 0, i32 3
+  store double 5.000000e-01, double* %6, align 8
+  store i32 0, i32* %i, align 4
+  br label %for.cond
+
+for.cond:                                         ; preds = %for.inc, %entry
+  %7 = load i32, i32* %i, align 4
+  %cmp = icmp slt i32 %7, 5
+  br i1 %cmp, label %for.body, label %for.end
+
+for.body:                                         ; preds = %for.cond
+  %8 = load i32, i32* %i, align 4
+  %add = add nsw i32 %8, 1
+  %call = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([10 x i8], [10 x i8]* @.str.6, i32 0, i32 0), i32 %add)
+  %9 = load i32, i32* %i, align 4
+  %mul = mul nsw i32 2, %9
+  %arrayidx = getelementptr inbounds [10 x %struct.point], [10 x %struct.point]* %cases, i32 0, i32 %mul
+  %10 = load i32, i32* %i, align 4
+  %mul1 = mul nsw i32 2, %10
+  %add2 = add nsw i32 %mul1, 1
+  %arrayidx3 = getelementptr inbounds [10 x %struct.point], [10 x %struct.point]* %cases, i32 0, i32 %add2
+  %11 = load i32, i32* %i, align 4
+  %arrayidx4 = getelementptr inbounds [5 x double], [5 x double]* %radii, i32 0, i32 %11
+  %12 = load double, double* %arrayidx4, align 8
+  call void @findCircles(%struct.point* byval(%struct.point) align 8 %arrayidx, %struct.point* byval(%struct.point) align 8 %arrayidx3, double %12)
+  br label %for.inc
+
+for.inc:                                          ; preds = %for.body
+  %13 = load i32, i32* %i, align 4
+  %inc = add nsw i32 %13, 1
+  store i32 %inc, i32* %i, align 4
+  br label %for.cond
+
+for.end:                                          ; preds = %for.cond
+  ret i32 0
+}
+
+; Function Attrs: argmemonly nounwind willreturn
+declare void @llvm.memcpy.p0i8.p0i8.i32(i8* noalias nocapture writeonly %0, i8* noalias nocapture readonly %1, i32 %2, i1 immarg %3) #3
+
+; Function Attrs: argmemonly nounwind willreturn writeonly
+declare void @llvm.memset.p0i8.i32(i8* nocapture writeonly %0, i8 %1, i32 %2, i1 immarg %3) #4
+
+attributes #0 = { noinline nounwind optnone "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "min-legal-vector-width"="0" "no-infs-fp-math"="false" "no-jump-tables"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #1 = { nounwind readnone speculatable willreturn }
+attributes #2 = { "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #3 = { argmemonly nounwind willreturn }
+attributes #4 = { argmemonly nounwind willreturn writeonly }
+
+!llvm.module.flags = !{!0}
+!llvm.ident = !{!1}
+
+!0 = !{i32 1, !"wchar_size", i32 4}
+!1 = !{!"clang version 11.0.0 (https://github.com/Jacarte/llvm-project.git 0f6dea67136cc1e0b3d200eb2bb165628970c44b)"}
+
+; extracted candidates
+#########################################################
+; exiting Souper's runOnFunction() for distance()
+
+; entering Souper's runOnFunction() for findCircles()
+
+; ModuleID = './Circles_of_given_radius_through_two_points.c.bc'
+source_filename = "./Circles_of_given_radius_through_two_points.c"
+target datalayout = "e-m:e-p:32:32-i64:64-n32:64-S128"
+target triple = "wasm32-unknown-wasi"
+
+%struct.point = type { double, double }
+
+@.str = private unnamed_addr constant [45 x i8] c"\0ANo circles can be drawn through (%.4f,%.4f)\00", align 1
+@.str.1 = private unnamed_addr constant [58 x i8] c"\0AInfinitely many circles can be drawn through (%.4f,%.4f)\00", align 1
+@.str.2 = private unnamed_addr constant [100 x i8] c"\0AGiven points are opposite ends of a diameter of the circle with center (%.4f,%.4f) and radius %.4f\00", align 1
+@.str.3 = private unnamed_addr constant [92 x i8] c"\0AGiven points are farther away from each other than a diameter of a circle with radius %.4f\00", align 1
+@.str.4 = private unnamed_addr constant [27 x i8] c"\0ATwo circles are possible.\00", align 1
+@.str.5 = private unnamed_addr constant [99 x i8] c"\0ACircle C1 with center (%.4f,%.4f), radius %.4f and Circle C2 with center (%.4f,%.4f), radius %.4f\00", align 1
+@__const.main.cases = private unnamed_addr constant [10 x %struct.point] [%struct.point { double 1.234000e-01, double 9.876000e-01 }, %struct.point { double 8.765000e-01, double 2.345000e-01 }, %struct.point { double 0.000000e+00, double 2.000000e+00 }, %struct.point zeroinitializer, %struct.point { double 1.234000e-01, double 9.876000e-01 }, %struct.point { double 1.234000e-01, double 9.876000e-01 }, %struct.point { double 1.234000e-01, double 9.876000e-01 }, %struct.point { double 8.765000e-01, double 2.345000e-01 }, %struct.point { double 1.234000e-01, double 9.876000e-01 }, %struct.point { double 1.234000e-01, double 9.876000e-01 }], align 16
+@.str.6 = private unnamed_addr constant [10 x i8] c"\0ACase %d)\00", align 1
+@llvm.used = appending global [1 x i8*] [i8* bitcast (i32 ()* @__main_void to i8*)], section "llvm.metadata"
+
+@__main_void = alias i32 (), i32 ()* @main
+
+; Function Attrs: noinline nounwind optnone
+define hidden double @distance(%struct.point* byval(%struct.point) align 8 %p1, %struct.point* byval(%struct.point) align 8 %p2) #0 {
+entry:
+  %x = getelementptr inbounds %struct.point, %struct.point* %p1, i32 0, i32 0
+  %0 = load double, double* %x, align 8
+  %x1 = getelementptr inbounds %struct.point, %struct.point* %p2, i32 0, i32 0
+  %1 = load double, double* %x1, align 8
+  %sub = fsub double %0, %1
+  %x2 = getelementptr inbounds %struct.point, %struct.point* %p1, i32 0, i32 0
+  %2 = load double, double* %x2, align 8
+  %x3 = getelementptr inbounds %struct.point, %struct.point* %p2, i32 0, i32 0
+  %3 = load double, double* %x3, align 8
+  %sub4 = fsub double %2, %3
+  %mul = fmul double %sub, %sub4
+  %y = getelementptr inbounds %struct.point, %struct.point* %p1, i32 0, i32 1
+  %4 = load double, double* %y, align 8
+  %y5 = getelementptr inbounds %struct.point, %struct.point* %p2, i32 0, i32 1
+  %5 = load double, double* %y5, align 8
+  %sub6 = fsub double %4, %5
+  %y7 = getelementptr inbounds %struct.point, %struct.point* %p1, i32 0, i32 1
+  %6 = load double, double* %y7, align 8
+  %y8 = getelementptr inbounds %struct.point, %struct.point* %p2, i32 0, i32 1
+  %7 = load double, double* %y8, align 8
+  %sub9 = fsub double %6, %7
+  %mul10 = fmul double %sub6, %sub9
+  %add = fadd double %mul, %mul10
+  %8 = call double @llvm.sqrt.f64(double %add)
+  ret double %8
+}
+
+; Function Attrs: nounwind readnone speculatable willreturn
+declare double @llvm.sqrt.f64(double %0) #1
+
+; Function Attrs: noinline nounwind optnone
+define hidden void @findCircles(%struct.point* byval(%struct.point) align 8 %p1, %struct.point* byval(%struct.point) align 8 %p2, double %radius) #0 {
+entry:
+  %radius.addr = alloca double, align 8
+  %separation = alloca double, align 8
+  %mirrorDistance = alloca double, align 8
+  store double %radius, double* %radius.addr, align 8
+  %call = call double @distance(%struct.point* byval(%struct.point) align 8 %p1, %struct.point* byval(%struct.point) align 8 %p2)
+  store double %call, double* %separation, align 8
+  %0 = load double, double* %separation, align 8
+  %cmp = fcmp oeq double %0, 0.000000e+00
+  br i1 %cmp, label %if.then, label %if.else
+
+if.then:                                          ; preds = %entry
+  %1 = load double, double* %radius.addr, align 8
+  %cmp1 = fcmp oeq double %1, 0.000000e+00
+  br i1 %cmp1, label %cond.true, label %cond.false
+
+cond.true:                                        ; preds = %if.then
+  %x = getelementptr inbounds %struct.point, %struct.point* %p1, i32 0, i32 0
+  %2 = load double, double* %x, align 8
+  %y = getelementptr inbounds %struct.point, %struct.point* %p1, i32 0, i32 1
+  %3 = load double, double* %y, align 8
+  %call2 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([45 x i8], [45 x i8]* @.str, i32 0, i32 0), double %2, double %3)
+  br label %cond.end
+
+cond.false:                                       ; preds = %if.then
+  %x3 = getelementptr inbounds %struct.point, %struct.point* %p1, i32 0, i32 0
+  %4 = load double, double* %x3, align 8
+  %y4 = getelementptr inbounds %struct.point, %struct.point* %p1, i32 0, i32 1
+  %5 = load double, double* %y4, align 8
+  %call5 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([58 x i8], [58 x i8]* @.str.1, i32 0, i32 0), double %4, double %5)
+  br label %cond.end
+
+cond.end:                                         ; preds = %cond.false, %cond.true
+  %cond = phi i32 [ %call2, %cond.true ], [ %call5, %cond.false ]
+  br label %if.end65
+
+if.else:                                          ; preds = %entry
+  %6 = load double, double* %separation, align 8
+  %7 = load double, double* %radius.addr, align 8
+  %mul = fmul double 2.000000e+00, %7
+  %cmp6 = fcmp oeq double %6, %mul
+  br i1 %cmp6, label %if.then7, label %if.else15
+
+if.then7:                                         ; preds = %if.else
+  %x8 = getelementptr inbounds %struct.point, %struct.point* %p1, i32 0, i32 0
+  %8 = load double, double* %x8, align 8
+  %x9 = getelementptr inbounds %struct.point, %struct.point* %p2, i32 0, i32 0
+  %9 = load double, double* %x9, align 8
+  %add = fadd double %8, %9
+  %div = fdiv double %add, 2.000000e+00
+  %y10 = getelementptr inbounds %struct.point, %struct.point* %p1, i32 0, i32 1
+  %10 = load double, double* %y10, align 8
+  %y11 = getelementptr inbounds %struct.point, %struct.point* %p2, i32 0, i32 1
+  %11 = load double, double* %y11, align 8
+  %add12 = fadd double %10, %11
+  %div13 = fdiv double %add12, 2.000000e+00
+  %12 = load double, double* %radius.addr, align 8
+  %call14 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([100 x i8], [100 x i8]* @.str.2, i32 0, i32 0), double %div, double %div13, double %12)
+  br label %if.end64
+
+if.else15:                                        ; preds = %if.else
+  %13 = load double, double* %separation, align 8
+  %14 = load double, double* %radius.addr, align 8
+  %mul16 = fmul double 2.000000e+00, %14
+  %cmp17 = fcmp ogt double %13, %mul16
+  br i1 %cmp17, label %if.then18, label %if.else20
+
+if.then18:                                        ; preds = %if.else15
+  %15 = load double, double* %radius.addr, align 8
+  %call19 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([92 x i8], [92 x i8]* @.str.3, i32 0, i32 0), double %15)
+  br label %if.end
+
+if.else20:                                        ; preds = %if.else15
+  %16 = load double, double* %radius.addr, align 8
+  %17 = call double @llvm.pow.f64(double %16, double 2.000000e+00)
+  %18 = load double, double* %separation, align 8
+  %div21 = fdiv double %18, 2.000000e+00
+  %19 = call double @llvm.pow.f64(double %div21, double 2.000000e+00)
+  %sub = fsub double %17, %19
+  %20 = call double @llvm.sqrt.f64(double %sub)
+  store double %20, double* %mirrorDistance, align 8
+  %call22 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([27 x i8], [27 x i8]* @.str.4, i32 0, i32 0))
+  %x23 = getelementptr inbounds %struct.point, %struct.point* %p1, i32 0, i32 0
+  %21 = load double, double* %x23, align 8
+  %x24 = getelementptr inbounds %struct.point, %struct.point* %p2, i32 0, i32 0
+  %22 = load double, double* %x24, align 8
+  %add25 = fadd double %21, %22
+  %div26 = fdiv double %add25, 2.000000e+00
+  %23 = load double, double* %mirrorDistance, align 8
+  %y27 = getelementptr inbounds %struct.point, %struct.point* %p1, i32 0, i32 1
+  %24 = load double, double* %y27, align 8
+  %y28 = getelementptr inbounds %struct.point, %struct.point* %p2, i32 0, i32 1
+  %25 = load double, double* %y28, align 8
+  %sub29 = fsub double %24, %25
+  %mul30 = fmul double %23, %sub29
+  %26 = load double, double* %separation, align 8
+  %div31 = fdiv double %mul30, %26
+  %add32 = fadd double %div26, %div31
+  %y33 = getelementptr inbounds %struct.point, %struct.point* %p1, i32 0, i32 1
+  %27 = load double, double* %y33, align 8
+  %y34 = getelementptr inbounds %struct.point, %struct.point* %p2, i32 0, i32 1
+  %28 = load double, double* %y34, align 8
+  %add35 = fadd double %27, %28
+  %div36 = fdiv double %add35, 2.000000e+00
+  %29 = load double, double* %mirrorDistance, align 8
+  %x37 = getelementptr inbounds %struct.point, %struct.point* %p2, i32 0, i32 0
+  %30 = load double, double* %x37, align 8
+  %x38 = getelementptr inbounds %struct.point, %struct.point* %p1, i32 0, i32 0
+  %31 = load double, double* %x38, align 8
+  %sub39 = fsub double %30, %31
+  %mul40 = fmul double %29, %sub39
+  %32 = load double, double* %separation, align 8
+  %div41 = fdiv double %mul40, %32
+  %add42 = fadd double %div36, %div41
+  %33 = load double, double* %radius.addr, align 8
+  %x43 = getelementptr inbounds %struct.point, %struct.point* %p1, i32 0, i32 0
+  %34 = load double, double* %x43, align 8
+  %x44 = getelementptr inbounds %struct.point, %struct.point* %p2, i32 0, i32 0
+  %35 = load double, double* %x44, align 8
+  %add45 = fadd double %34, %35
+  %div46 = fdiv double %add45, 2.000000e+00
+  %36 = load double, double* %mirrorDistance, align 8
+  %y47 = getelementptr inbounds %struct.point, %struct.point* %p1, i32 0, i32 1
+  %37 = load double, double* %y47, align 8
+  %y48 = getelementptr inbounds %struct.point, %struct.point* %p2, i32 0, i32 1
+  %38 = load double, double* %y48, align 8
+  %sub49 = fsub double %37, %38
+  %mul50 = fmul double %36, %sub49
+  %39 = load double, double* %separation, align 8
+  %div51 = fdiv double %mul50, %39
+  %sub52 = fsub double %div46, %div51
+  %y53 = getelementptr inbounds %struct.point, %struct.point* %p1, i32 0, i32 1
+  %40 = load double, double* %y53, align 8
+  %y54 = getelementptr inbounds %struct.point, %struct.point* %p2, i32 0, i32 1
+  %41 = load double, double* %y54, align 8
+  %add55 = fadd double %40, %41
+  %div56 = fdiv double %add55, 2.000000e+00
+  %42 = load double, double* %mirrorDistance, align 8
+  %x57 = getelementptr inbounds %struct.point, %struct.point* %p2, i32 0, i32 0
+  %43 = load double, double* %x57, align 8
+  %x58 = getelementptr inbounds %struct.point, %struct.point* %p1, i32 0, i32 0
+  %44 = load double, double* %x58, align 8
+  %sub59 = fsub double %43, %44
+  %mul60 = fmul double %42, %sub59
+  %45 = load double, double* %separation, align 8
+  %div61 = fdiv double %mul60, %45
+  %sub62 = fsub double %div56, %div61
+  %46 = load double, double* %radius.addr, align 8
+  %call63 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([99 x i8], [99 x i8]* @.str.5, i32 0, i32 0), double %add32, double %add42, double %33, double %sub52, double %sub62, double %46)
+  br label %if.end
+
+if.end:                                           ; preds = %if.else20, %if.then18
+  br label %if.end64
+
+if.end64:                                         ; preds = %if.end, %if.then7
+  br label %if.end65
+
+if.end65:                                         ; preds = %if.end64, %cond.end
+  ret void
+}
+
+declare i32 @printf(i8* %0, ...) #2
+
+; Function Attrs: nounwind readnone speculatable willreturn
+declare double @llvm.pow.f64(double %0, double %1) #1
+
+; Function Attrs: noinline nounwind optnone
+define hidden i32 @main() #0 {
+entry:
+  %retval = alloca i32, align 4
+  %i = alloca i32, align 4
+  %cases = alloca [10 x %struct.point], align 16
+  %radii = alloca [5 x double], align 16
+  store i32 0, i32* %retval, align 4
+  %0 = bitcast [10 x %struct.point]* %cases to i8*
+  call void @llvm.memcpy.p0i8.p0i8.i32(i8* align 16 %0, i8* align 16 bitcast ([10 x %struct.point]* @__const.main.cases to i8*), i32 160, i1 false)
+  %1 = bitcast [5 x double]* %radii to i8*
+  call void @llvm.memset.p0i8.i32(i8* align 16 %1, i8 0, i32 40, i1 false)
+  %2 = bitcast i8* %1 to [5 x double]*
+  %3 = getelementptr inbounds [5 x double], [5 x double]* %2, i32 0, i32 0
+  store double 2.000000e+00, double* %3, align 16
+  %4 = getelementptr inbounds [5 x double], [5 x double]* %2, i32 0, i32 1
+  store double 1.000000e+00, double* %4, align 8
+  %5 = getelementptr inbounds [5 x double], [5 x double]* %2, i32 0, i32 2
+  store double 2.000000e+00, double* %5, align 16
+  %6 = getelementptr inbounds [5 x double], [5 x double]* %2, i32 0, i32 3
+  store double 5.000000e-01, double* %6, align 8
+  store i32 0, i32* %i, align 4
+  br label %for.cond
+
+for.cond:                                         ; preds = %for.inc, %entry
+  %7 = load i32, i32* %i, align 4
+  %cmp = icmp slt i32 %7, 5
+  br i1 %cmp, label %for.body, label %for.end
+
+for.body:                                         ; preds = %for.cond
+  %8 = load i32, i32* %i, align 4
+  %add = add nsw i32 %8, 1
+  %call = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([10 x i8], [10 x i8]* @.str.6, i32 0, i32 0), i32 %add)
+  %9 = load i32, i32* %i, align 4
+  %mul = mul nsw i32 2, %9
+  %arrayidx = getelementptr inbounds [10 x %struct.point], [10 x %struct.point]* %cases, i32 0, i32 %mul
+  %10 = load i32, i32* %i, align 4
+  %mul1 = mul nsw i32 2, %10
+  %add2 = add nsw i32 %mul1, 1
+  %arrayidx3 = getelementptr inbounds [10 x %struct.point], [10 x %struct.point]* %cases, i32 0, i32 %add2
+  %11 = load i32, i32* %i, align 4
+  %arrayidx4 = getelementptr inbounds [5 x double], [5 x double]* %radii, i32 0, i32 %11
+  %12 = load double, double* %arrayidx4, align 8
+  call void @findCircles(%struct.point* byval(%struct.point) align 8 %arrayidx, %struct.point* byval(%struct.point) align 8 %arrayidx3, double %12)
+  br label %for.inc
+
+for.inc:                                          ; preds = %for.body
+  %13 = load i32, i32* %i, align 4
+  %inc = add nsw i32 %13, 1
+  store i32 %inc, i32* %i, align 4
+  br label %for.cond
+
+for.end:                                          ; preds = %for.cond
+  ret i32 0
+}
+
+; Function Attrs: argmemonly nounwind willreturn
+declare void @llvm.memcpy.p0i8.p0i8.i32(i8* noalias nocapture writeonly %0, i8* noalias nocapture readonly %1, i32 %2, i1 immarg %3) #3
+
+; Function Attrs: argmemonly nounwind willreturn writeonly
+declare void @llvm.memset.p0i8.i32(i8* nocapture writeonly %0, i8 %1, i32 %2, i1 immarg %3) #4
+
+attributes #0 = { noinline nounwind optnone "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "min-legal-vector-width"="0" "no-infs-fp-math"="false" "no-jump-tables"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #1 = { nounwind readnone speculatable willreturn }
+attributes #2 = { "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #3 = { argmemonly nounwind willreturn }
+attributes #4 = { argmemonly nounwind willreturn writeonly }
+
+!llvm.module.flags = !{!0}
+!llvm.ident = !{!1}
+
+!0 = !{i32 1, !"wchar_size", i32 4}
+!1 = !{!"clang version 11.0.0 (https://github.com/Jacarte/llvm-project.git 0f6dea67136cc1e0b3d200eb2bb165628970c44b)"}
+
+; extracted candidates
+
+; *****
+; For LLVM instruction:
+;  %cmp = fcmp oeq double %0, 0.000000e+00
+; Looking for a replacement for:
+%0:i1 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %cmp1 = fcmp oeq double %1, 0.000000e+00
+; Looking for a replacement for:
+%0:i1 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %call2 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([45 x i8], [45 x i8]* @.str, i32 0, i32 0), double %2, double %3)
+; Looking for a replacement for:
+%0:i32 = var
+infer %0 (demandedBits=00000000000000000000000000000000)
+
+; *****
+; For LLVM instruction:
+;  %call5 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([58 x i8], [58 x i8]* @.str.1, i32 0, i32 0), double %4, double %5)
+; Looking for a replacement for:
+%0:i32 = var
+infer %0 (demandedBits=00000000000000000000000000000000)
+
+; *****
+; For LLVM instruction:
+;  %cmp6 = fcmp oeq double %6, %mul
+; Looking for a replacement for:
+%0:i1 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %cmp17 = fcmp ogt double %13, %mul16
+; Looking for a replacement for:
+%0:i1 = var
+infer %0
+got 1 candidates from LHS
+
+-------------------------------------------------
+%0:i1 = var
+infer %0
+
+
+--------------------------------
+guess 0
+
+%0:i1 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: -1
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+Dataflow Pruned 0/0
+There are 1 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 1 candidates from LHS
+
+-------------------------------------------------
+%0:i32 = var
+infer %0 (demandedBits=00000000000000000000000000000000)
+
+
+--------------------------------
+guess 0
+
+%0:i32 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+second query is UNSAT-- this guess works
+Dataflow Pruned 0/0
+There are 1 Guesses
+There are 1 RHSs before deduplication
+There are 1 RHSs after deduplication
+"
+; No valid RHS in the list
+#########################################################
+
+Module before replacement:
+; ModuleID = './Circles_of_given_radius_through_two_points.c.bc'
+source_filename = "./Circles_of_given_radius_through_two_points.c"
+target datalayout = "e-m:e-p:32:32-i64:64-n32:64-S128"
+target triple = "wasm32-unknown-wasi"
+
+%struct.point = type { double, double }
+
+@.str = private unnamed_addr constant [45 x i8] c"\0ANo circles can be drawn through (%.4f,%.4f)\00", align 1
+@.str.1 = private unnamed_addr constant [58 x i8] c"\0AInfinitely many circles can be drawn through (%.4f,%.4f)\00", align 1
+@.str.2 = private unnamed_addr constant [100 x i8] c"\0AGiven points are opposite ends of a diameter of the circle with center (%.4f,%.4f) and radius %.4f\00", align 1
+@.str.3 = private unnamed_addr constant [92 x i8] c"\0AGiven points are farther away from each other than a diameter of a circle with radius %.4f\00", align 1
+@.str.4 = private unnamed_addr constant [27 x i8] c"\0ATwo circles are possible.\00", align 1
+@.str.5 = private unnamed_addr constant [99 x i8] c"\0ACircle C1 with center (%.4f,%.4f), radius %.4f and Circle C2 with center (%.4f,%.4f), radius %.4f\00", align 1
+@__const.main.cases = private unnamed_addr constant [10 x %struct.point] [%struct.point { double 1.234000e-01, double 9.876000e-01 }, %struct.point { double 8.765000e-01, double 2.345000e-01 }, %struct.point { double 0.000000e+00, double 2.000000e+00 }, %struct.point zeroinitializer, %struct.point { double 1.234000e-01, double 9.876000e-01 }, %struct.point { double 1.234000e-01, double 9.876000e-01 }, %struct.point { double 1.234000e-01, double 9.876000e-01 }, %struct.point { double 8.765000e-01, double 2.345000e-01 }, %struct.point { double 1.234000e-01, double 9.876000e-01 }, %struct.point { double 1.234000e-01, double 9.876000e-01 }], align 16
+@.str.6 = private unnamed_addr constant [10 x i8] c"\0ACase %d)\00", align 1
+@llvm.used = appending global [1 x i8*] [i8* bitcast (i32 ()* @__main_void to i8*)], section "llvm.metadata"
+
+@__main_void = alias i32 (), i32 ()* @main
+
+; Function Attrs: noinline nounwind optnone
+define hidden double @distance(%struct.point* byval(%struct.point) align 8 %p1, %struct.point* byval(%struct.point) align 8 %p2) #0 {
+entry:
+  %x = getelementptr inbounds %struct.point, %struct.point* %p1, i32 0, i32 0
+  %0 = load double, double* %x, align 8
+  %x1 = getelementptr inbounds %struct.point, %struct.point* %p2, i32 0, i32 0
+  %1 = load double, double* %x1, align 8
+  %sub = fsub double %0, %1
+  %x2 = getelementptr inbounds %struct.point, %struct.point* %p1, i32 0, i32 0
+  %2 = load double, double* %x2, align 8
+  %x3 = getelementptr inbounds %struct.point, %struct.point* %p2, i32 0, i32 0
+  %3 = load double, double* %x3, align 8
+  %sub4 = fsub double %2, %3
+  %mul = fmul double %sub, %sub4
+  %y = getelementptr inbounds %struct.point, %struct.point* %p1, i32 0, i32 1
+  %4 = load double, double* %y, align 8
+  %y5 = getelementptr inbounds %struct.point, %struct.point* %p2, i32 0, i32 1
+  %5 = load double, double* %y5, align 8
+  %sub6 = fsub double %4, %5
+  %y7 = getelementptr inbounds %struct.point, %struct.point* %p1, i32 0, i32 1
+  %6 = load double, double* %y7, align 8
+  %y8 = getelementptr inbounds %struct.point, %struct.point* %p2, i32 0, i32 1
+  %7 = load double, double* %y8, align 8
+  %sub9 = fsub double %6, %7
+  %mul10 = fmul double %sub6, %sub9
+  %add = fadd double %mul, %mul10
+  %8 = call double @llvm.sqrt.f64(double %add)
+  ret double %8
+}
+
+; Function Attrs: nounwind readnone speculatable willreturn
+declare double @llvm.sqrt.f64(double %0) #1
+
+; Function Attrs: noinline nounwind optnone
+define hidden void @findCircles(%struct.point* byval(%struct.point) align 8 %p1, %struct.point* byval(%struct.point) align 8 %p2, double %radius) #0 {
+entry:
+  %radius.addr = alloca double, align 8
+  %separation = alloca double, align 8
+  %mirrorDistance = alloca double, align 8
+  store double %radius, double* %radius.addr, align 8
+  %call = call double @distance(%struct.point* byval(%struct.point) align 8 %p1, %struct.point* byval(%struct.point) align 8 %p2)
+  store double %call, double* %separation, align 8
+  %0 = load double, double* %separation, align 8
+  %cmp = fcmp oeq double %0, 0.000000e+00
+  br i1 %cmp, label %if.then, label %if.else
+
+if.then:                                          ; preds = %entry
+  %1 = load double, double* %radius.addr, align 8
+  %cmp1 = fcmp oeq double %1, 0.000000e+00
+  br i1 %cmp1, label %cond.true, label %cond.false
+
+cond.true:                                        ; preds = %if.then
+  %x = getelementptr inbounds %struct.point, %struct.point* %p1, i32 0, i32 0
+  %2 = load double, double* %x, align 8
+  %y = getelementptr inbounds %struct.point, %struct.point* %p1, i32 0, i32 1
+  %3 = load double, double* %y, align 8
+  %call2 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([45 x i8], [45 x i8]* @.str, i32 0, i32 0), double %2, double %3)
+  br label %cond.end
+
+cond.false:                                       ; preds = %if.then
+  %x3 = getelementptr inbounds %struct.point, %struct.point* %p1, i32 0, i32 0
+  %4 = load double, double* %x3, align 8
+  %y4 = getelementptr inbounds %struct.point, %struct.point* %p1, i32 0, i32 1
+  %5 = load double, double* %y4, align 8
+  %call5 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([58 x i8], [58 x i8]* @.str.1, i32 0, i32 0), double %4, double %5)
+  br label %cond.end
+
+cond.end:                                         ; preds = %cond.false, %cond.true
+  %cond = phi i32 [ %call2, %cond.true ], [ %call5, %cond.false ]
+  br label %if.end65
+
+if.else:                                          ; preds = %entry
+  %6 = load double, double* %separation, align 8
+  %7 = load double, double* %radius.addr, align 8
+  %mul = fmul double 2.000000e+00, %7
+  %cmp6 = fcmp oeq double %6, %mul
+  br i1 %cmp6, label %if.then7, label %if.else15
+
+if.then7:                                         ; preds = %if.else
+  %x8 = getelementptr inbounds %struct.point, %struct.point* %p1, i32 0, i32 0
+  %8 = load double, double* %x8, align 8
+  %x9 = getelementptr inbounds %struct.point, %struct.point* %p2, i32 0, i32 0
+  %9 = load double, double* %x9, align 8
+  %add = fadd double %8, %9
+  %div = fdiv double %add, 2.000000e+00
+  %y10 = getelementptr inbounds %struct.point, %struct.point* %p1, i32 0, i32 1
+  %10 = load double, double* %y10, align 8
+  %y11 = getelementptr inbounds %struct.point, %struct.point* %p2, i32 0, i32 1
+  %11 = load double, double* %y11, align 8
+  %add12 = fadd double %10, %11
+  %div13 = fdiv double %add12, 2.000000e+00
+  %12 = load double, double* %radius.addr, align 8
+  %call14 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([100 x i8], [100 x i8]* @.str.2, i32 0, i32 0), double %div, double %div13, double %12)
+  br label %if.end64
+
+if.else15:                                        ; preds = %if.else
+  %13 = load double, double* %separation, align 8
+  %14 = load double, double* %radius.addr, align 8
+  %mul16 = fmul double 2.000000e+00, %14
+  %cmp17 = fcmp ogt double %13, %mul16
+  br i1 %cmp17, label %if.then18, label %if.else20
+
+if.then18:                                        ; preds = %if.else15
+  %15 = load double, double* %radius.addr, align 8
+  %call19 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([92 x i8], [92 x i8]* @.str.3, i32 0, i32 0), double %15)
+  br label %if.end
+
+if.else20:                                        ; preds = %if.else15
+  %16 = load double, double* %radius.addr, align 8
+  %17 = call double @llvm.pow.f64(double %16, double 2.000000e+00)
+  %18 = load double, double* %separation, align 8
+  %div21 = fdiv double %18, 2.000000e+00
+  %19 = call double @llvm.pow.f64(double %div21, double 2.000000e+00)
+  %sub = fsub double %17, %19
+  %20 = call double @llvm.sqrt.f64(double %sub)
+  store double %20, double* %mirrorDistance, align 8
+  %call22 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([27 x i8], [27 x i8]* @.str.4, i32 0, i32 0))
+  %x23 = getelementptr inbounds %struct.point, %struct.point* %p1, i32 0, i32 0
+  %21 = load double, double* %x23, align 8
+  %x24 = getelementptr inbounds %struct.point, %struct.point* %p2, i32 0, i32 0
+  %22 = load double, double* %x24, align 8
+  %add25 = fadd double %21, %22
+  %div26 = fdiv double %add25, 2.000000e+00
+  %23 = load double, double* %mirrorDistance, align 8
+  %y27 = getelementptr inbounds %struct.point, %struct.point* %p1, i32 0, i32 1
+  %24 = load double, double* %y27, align 8
+  %y28 = getelementptr inbounds %struct.point, %struct.point* %p2, i32 0, i32 1
+  %25 = load double, double* %y28, align 8
+  %sub29 = fsub double %24, %25
+  %mul30 = fmul double %23, %sub29
+  %26 = load double, double* %separation, align 8
+  %div31 = fdiv double %mul30, %26
+  %add32 = fadd double %div26, %div31
+  %y33 = getelementptr inbounds %struct.point, %struct.point* %p1, i32 0, i32 1
+  %27 = load double, double* %y33, align 8
+  %y34 = getelementptr inbounds %struct.point, %struct.point* %p2, i32 0, i32 1
+  %28 = load double, double* %y34, align 8
+  %add35 = fadd double %27, %28
+  %div36 = fdiv double %add35, 2.000000e+00
+  %29 = load double, double* %mirrorDistance, align 8
+  %x37 = getelementptr inbounds %struct.point, %struct.point* %p2, i32 0, i32 0
+  %30 = load double, double* %x37, align 8
+  %x38 = getelementptr inbounds %struct.point, %struct.point* %p1, i32 0, i32 0
+  %31 = load double, double* %x38, align 8
+  %sub39 = fsub double %30, %31
+  %mul40 = fmul double %29, %sub39
+  %32 = load double, double* %separation, align 8
+  %div41 = fdiv double %mul40, %32
+  %add42 = fadd double %div36, %div41
+  %33 = load double, double* %radius.addr, align 8
+  %x43 = getelementptr inbounds %struct.point, %struct.point* %p1, i32 0, i32 0
+  %34 = load double, double* %x43, align 8
+  %x44 = getelementptr inbounds %struct.point, %struct.point* %p2, i32 0, i32 0
+  %35 = load double, double* %x44, align 8
+  %add45 = fadd double %34, %35
+  %div46 = fdiv double %add45, 2.000000e+00
+  %36 = load double, double* %mirrorDistance, align 8
+  %y47 = getelementptr inbounds %struct.point, %struct.point* %p1, i32 0, i32 1
+  %37 = load double, double* %y47, align 8
+  %y48 = getelementptr inbounds %struct.point, %struct.point* %p2, i32 0, i32 1
+  %38 = load double, double* %y48, align 8
+  %sub49 = fsub double %37, %38
+  %mul50 = fmul double %36, %sub49
+  %39 = load double, double* %separation, align 8
+  %div51 = fdiv double %mul50, %39
+  %sub52 = fsub double %div46, %div51
+  %y53 = getelementptr inbounds %struct.point, %struct.point* %p1, i32 0, i32 1
+  %40 = load double, double* %y53, align 8
+  %y54 = getelementptr inbounds %struct.point, %struct.point* %p2, i32 0, i32 1
+  %41 = load double, double* %y54, align 8
+  %add55 = fadd double %40, %41
+  %div56 = fdiv double %add55, 2.000000e+00
+  %42 = load double, double* %mirrorDistance, align 8
+  %x57 = getelementptr inbounds %struct.point, %struct.point* %p2, i32 0, i32 0
+  %43 = load double, double* %x57, align 8
+  %x58 = getelementptr inbounds %struct.point, %struct.point* %p1, i32 0, i32 0
+  %44 = load double, double* %x58, align 8
+  %sub59 = fsub double %43, %44
+  %mul60 = fmul double %42, %sub59
+  %45 = load double, double* %separation, align 8
+  %div61 = fdiv double %mul60, %45
+  %sub62 = fsub double %div56, %div61
+  %46 = load double, double* %radius.addr, align 8
+  %call63 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([99 x i8], [99 x i8]* @.str.5, i32 0, i32 0), double %add32, double %add42, double %33, double %sub52, double %sub62, double %46)
+  br label %if.end
+
+if.end:                                           ; preds = %if.else20, %if.then18
+  br label %if.end64
+
+if.end64:                                         ; preds = %if.end, %if.then7
+  br label %if.end65
+
+if.end65:                                         ; preds = %if.end64, %cond.end
+  ret void
+}
+
+declare i32 @printf(i8* %0, ...) #2
+
+; Function Attrs: nounwind readnone speculatable willreturn
+declare double @llvm.pow.f64(double %0, double %1) #1
+
+; Function Attrs: noinline nounwind optnone
+define hidden i32 @main() #0 {
+entry:
+  %retval = alloca i32, align 4
+  %i = alloca i32, align 4
+  %cases = alloca [10 x %struct.point], align 16
+  %radii = alloca [5 x double], align 16
+  store i32 0, i32* %retval, align 4
+  %0 = bitcast [10 x %struct.point]* %cases to i8*
+  call void @llvm.memcpy.p0i8.p0i8.i32(i8* align 16 %0, i8* align 16 bitcast ([10 x %struct.point]* @__const.main.cases to i8*), i32 160, i1 false)
+  %1 = bitcast [5 x double]* %radii to i8*
+  call void @llvm.memset.p0i8.i32(i8* align 16 %1, i8 0, i32 40, i1 false)
+  %2 = bitcast i8* %1 to [5 x double]*
+  %3 = getelementptr inbounds [5 x double], [5 x double]* %2, i32 0, i32 0
+  store double 2.000000e+00, double* %3, align 16
+  %4 = getelementptr inbounds [5 x double], [5 x double]* %2, i32 0, i32 1
+  store double 1.000000e+00, double* %4, align 8
+  %5 = getelementptr inbounds [5 x double], [5 x double]* %2, i32 0, i32 2
+  store double 2.000000e+00, double* %5, align 16
+  %6 = getelementptr inbounds [5 x double], [5 x double]* %2, i32 0, i32 3
+  store double 5.000000e-01, double* %6, align 8
+  store i32 0, i32* %i, align 4
+  br label %for.cond
+
+for.cond:                                         ; preds = %for.inc, %entry
+  %7 = load i32, i32* %i, align 4
+  %cmp = icmp slt i32 %7, 5
+  br i1 %cmp, label %for.body, label %for.end
+
+for.body:                                         ; preds = %for.cond
+  %8 = load i32, i32* %i, align 4
+  %add = add nsw i32 %8, 1
+  %call = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([10 x i8], [10 x i8]* @.str.6, i32 0, i32 0), i32 %add)
+  %9 = load i32, i32* %i, align 4
+  %mul = mul nsw i32 2, %9
+  %arrayidx = getelementptr inbounds [10 x %struct.point], [10 x %struct.point]* %cases, i32 0, i32 %mul
+  %10 = load i32, i32* %i, align 4
+  %mul1 = mul nsw i32 2, %10
+  %add2 = add nsw i32 %mul1, 1
+  %arrayidx3 = getelementptr inbounds [10 x %struct.point], [10 x %struct.point]* %cases, i32 0, i32 %add2
+  %11 = load i32, i32* %i, align 4
+  %arrayidx4 = getelementptr inbounds [5 x double], [5 x double]* %radii, i32 0, i32 %11
+  %12 = load double, double* %arrayidx4, align 8
+  call void @findCircles(%struct.point* byval(%struct.point) align 8 %arrayidx, %struct.point* byval(%struct.point) align 8 %arrayidx3, double %12)
+  br label %for.inc
+
+for.inc:                                          ; preds = %for.body
+  %13 = load i32, i32* %i, align 4
+  %inc = add nsw i32 %13, 1
+  store i32 %inc, i32* %i, align 4
+  br label %for.cond
+
+for.end:                                          ; preds = %for.cond
+  ret i32 0
+}
+
+; Function Attrs: argmemonly nounwind willreturn
+declare void @llvm.memcpy.p0i8.p0i8.i32(i8* noalias nocapture writeonly %0, i8* noalias nocapture readonly %1, i32 %2, i1 immarg %3) #3
+
+; Function Attrs: argmemonly nounwind willreturn writeonly
+declare void @llvm.memset.p0i8.i32(i8* nocapture writeonly %0, i8 %1, i32 %2, i1 immarg %3) #4
+
+attributes #0 = { noinline nounwind optnone "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "min-legal-vector-width"="0" "no-infs-fp-math"="false" "no-jump-tables"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #1 = { nounwind readnone speculatable willreturn }
+attributes #2 = { "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #3 = { argmemonly nounwind willreturn }
+attributes #4 = { argmemonly nounwind willreturn writeonly }
+
+!llvm.module.flags = !{!0}
+!llvm.ident = !{!1}
+
+!0 = !{i32 1, !"wchar_size", i32 4}
+!1 = !{!"clang version 11.0.0 (https://github.com/Jacarte/llvm-project.git 0f6dea67136cc1e0b3d200eb2bb165628970c44b)"}
+
+; Replacing "  %call2 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([45 x i8], [45 x i8]* @.str, i32 0, i32 0), double %2, double %3)"
+; from ""
+; with "i32 0" in:
+"%0:i32 = var
+cand %0 0:i32 (demandedBits=00000000000000000000000000000000)
+"
+; with "i32 0"
+
+Module after replacement:
+; ModuleID = './Circles_of_given_radius_through_two_points.c.bc'
+source_filename = "./Circles_of_given_radius_through_two_points.c"
+target datalayout = "e-m:e-p:32:32-i64:64-n32:64-S128"
+target triple = "wasm32-unknown-wasi"
+
+%struct.point = type { double, double }
+
+@.str = private unnamed_addr constant [45 x i8] c"\0ANo circles can be drawn through (%.4f,%.4f)\00", align 1
+@.str.1 = private unnamed_addr constant [58 x i8] c"\0AInfinitely many circles can be drawn through (%.4f,%.4f)\00", align 1
+@.str.2 = private unnamed_addr constant [100 x i8] c"\0AGiven points are opposite ends of a diameter of the circle with center (%.4f,%.4f) and radius %.4f\00", align 1
+@.str.3 = private unnamed_addr constant [92 x i8] c"\0AGiven points are farther away from each other than a diameter of a circle with radius %.4f\00", align 1
+@.str.4 = private unnamed_addr constant [27 x i8] c"\0ATwo circles are possible.\00", align 1
+@.str.5 = private unnamed_addr constant [99 x i8] c"\0ACircle C1 with center (%.4f,%.4f), radius %.4f and Circle C2 with center (%.4f,%.4f), radius %.4f\00", align 1
+@__const.main.cases = private unnamed_addr constant [10 x %struct.point] [%struct.point { double 1.234000e-01, double 9.876000e-01 }, %struct.point { double 8.765000e-01, double 2.345000e-01 }, %struct.point { double 0.000000e+00, double 2.000000e+00 }, %struct.point zeroinitializer, %struct.point { double 1.234000e-01, double 9.876000e-01 }, %struct.point { double 1.234000e-01, double 9.876000e-01 }, %struct.point { double 1.234000e-01, double 9.876000e-01 }, %struct.point { double 8.765000e-01, double 2.345000e-01 }, %struct.point { double 1.234000e-01, double 9.876000e-01 }, %struct.point { double 1.234000e-01, double 9.876000e-01 }], align 16
+@.str.6 = private unnamed_addr constant [10 x i8] c"\0ACase %d)\00", align 1
+@llvm.used = appending global [1 x i8*] [i8* bitcast (i32 ()* @__main_void to i8*)], section "llvm.metadata"
+
+@__main_void = alias i32 (), i32 ()* @main
+
+; Function Attrs: noinline nounwind optnone
+define hidden double @distance(%struct.point* byval(%struct.point) align 8 %p1, %struct.point* byval(%struct.point) align 8 %p2) #0 {
+entry:
+  %x = getelementptr inbounds %struct.point, %struct.point* %p1, i32 0, i32 0
+  %0 = load double, double* %x, align 8
+  %x1 = getelementptr inbounds %struct.point, %struct.point* %p2, i32 0, i32 0
+  %1 = load double, double* %x1, align 8
+  %sub = fsub double %0, %1
+  %x2 = getelementptr inbounds %struct.point, %struct.point* %p1, i32 0, i32 0
+  %2 = load double, double* %x2, align 8
+  %x3 = getelementptr inbounds %struct.point, %struct.point* %p2, i32 0, i32 0
+  %3 = load double, double* %x3, align 8
+  %sub4 = fsub double %2, %3
+  %mul = fmul double %sub, %sub4
+  %y = getelementptr inbounds %struct.point, %struct.point* %p1, i32 0, i32 1
+  %4 = load double, double* %y, align 8
+  %y5 = getelementptr inbounds %struct.point, %struct.point* %p2, i32 0, i32 1
+  %5 = load double, double* %y5, align 8
+  %sub6 = fsub double %4, %5
+  %y7 = getelementptr inbounds %struct.point, %struct.point* %p1, i32 0, i32 1
+  %6 = load double, double* %y7, align 8
+  %y8 = getelementptr inbounds %struct.point, %struct.point* %p2, i32 0, i32 1
+  %7 = load double, double* %y8, align 8
+  %sub9 = fsub double %6, %7
+  %mul10 = fmul double %sub6, %sub9
+  %add = fadd double %mul, %mul10
+  %8 = call double @llvm.sqrt.f64(double %add)
+  ret double %8
+}
+
+; Function Attrs: nounwind readnone speculatable willreturn
+declare double @llvm.sqrt.f64(double %0) #1
+
+; Function Attrs: noinline nounwind optnone
+define hidden void @findCircles(%struct.point* byval(%struct.point) align 8 %p1, %struct.point* byval(%struct.point) align 8 %p2, double %radius) #0 {
+entry:
+  %radius.addr = alloca double, align 8
+  %separation = alloca double, align 8
+  %mirrorDistance = alloca double, align 8
+  store double %radius, double* %radius.addr, align 8
+  %call = call double @distance(%struct.point* byval(%struct.point) align 8 %p1, %struct.point* byval(%struct.point) align 8 %p2)
+  store double %call, double* %separation, align 8
+  %0 = load double, double* %separation, align 8
+  %cmp = fcmp oeq double %0, 0.000000e+00
+  br i1 %cmp, label %if.then, label %if.else
+
+if.then:                                          ; preds = %entry
+  %1 = load double, double* %radius.addr, align 8
+  %cmp1 = fcmp oeq double %1, 0.000000e+00
+  br i1 %cmp1, label %cond.true, label %cond.false
+
+cond.true:                                        ; preds = %if.then
+  %x = getelementptr inbounds %struct.point, %struct.point* %p1, i32 0, i32 0
+  %2 = load double, double* %x, align 8
+  %y = getelementptr inbounds %struct.point, %struct.point* %p1, i32 0, i32 1
+  %3 = load double, double* %y, align 8
+  %call2 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([45 x i8], [45 x i8]* @.str, i32 0, i32 0), double %2, double %3)
+  br label %cond.end
+
+cond.false:                                       ; preds = %if.then
+  %x3 = getelementptr inbounds %struct.point, %struct.point* %p1, i32 0, i32 0
+  %4 = load double, double* %x3, align 8
+  %y4 = getelementptr inbounds %struct.point, %struct.point* %p1, i32 0, i32 1
+  %5 = load double, double* %y4, align 8
+  %call5 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([58 x i8], [58 x i8]* @.str.1, i32 0, i32 0), double %4, double %5)
+  br label %cond.end
+
+cond.end:                                         ; preds = %cond.false, %cond.true
+  br label %if.end65
+
+if.else:                                          ; preds = %entry
+  %6 = load double, double* %separation, align 8
+  %7 = load double, double* %radius.addr, align 8
+  %mul = fmul double 2.000000e+00, %7
+  %cmp6 = fcmp oeq double %6, %mul
+  br i1 %cmp6, label %if.then7, label %if.else15
+
+if.then7:                                         ; preds = %if.else
+  %x8 = getelementptr inbounds %struct.point, %struct.point* %p1, i32 0, i32 0
+  %8 = load double, double* %x8, align 8
+  %x9 = getelementptr inbounds %struct.point, %struct.point* %p2, i32 0, i32 0
+  %9 = load double, double* %x9, align 8
+  %add = fadd double %8, %9
+  %div = fdiv double %add, 2.000000e+00
+  %y10 = getelementptr inbounds %struct.point, %struct.point* %p1, i32 0, i32 1
+  %10 = load double, double* %y10, align 8
+  %y11 = getelementptr inbounds %struct.point, %struct.point* %p2, i32 0, i32 1
+  %11 = load double, double* %y11, align 8
+  %add12 = fadd double %10, %11
+  %div13 = fdiv double %add12, 2.000000e+00
+  %12 = load double, double* %radius.addr, align 8
+  %call14 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([100 x i8], [100 x i8]* @.str.2, i32 0, i32 0), double %div, double %div13, double %12)
+  br label %if.end64
+
+if.else15:                                        ; preds = %if.else
+  %13 = load double, double* %separation, align 8
+  %14 = load double, double* %radius.addr, align 8
+  %mul16 = fmul double 2.000000e+00, %14
+  %cmp17 = fcmp ogt double %13, %mul16
+  br i1 %cmp17, label %if.then18, label %if.else20
+
+if.then18:                                        ; preds = %if.else15
+  %15 = load double, double* %radius.addr, align 8
+  %call19 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([92 x i8], [92 x i8]* @.str.3, i32 0, i32 0), double %15)
+  br label %if.end
+
+if.else20:                                        ; preds = %if.else15
+  %16 = load double, double* %radius.addr, align 8
+  %17 = call double @llvm.pow.f64(double %16, double 2.000000e+00)
+  %18 = load double, double* %separation, align 8
+  %div21 = fdiv double %18, 2.000000e+00
+  %19 = call double @llvm.pow.f64(double %div21, double 2.000000e+00)
+  %sub = fsub double %17, %19
+  %20 = call double @llvm.sqrt.f64(double %sub)
+  store double %20, double* %mirrorDistance, align 8
+  %call22 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([27 x i8], [27 x i8]* @.str.4, i32 0, i32 0))
+  %x23 = getelementptr inbounds %struct.point, %struct.point* %p1, i32 0, i32 0
+  %21 = load double, double* %x23, align 8
+  %x24 = getelementptr inbounds %struct.point, %struct.point* %p2, i32 0, i32 0
+  %22 = load double, double* %x24, align 8
+  %add25 = fadd double %21, %22
+  %div26 = fdiv double %add25, 2.000000e+00
+  %23 = load double, double* %mirrorDistance, align 8
+  %y27 = getelementptr inbounds %struct.point, %struct.point* %p1, i32 0, i32 1
+  %24 = load double, double* %y27, align 8
+  %y28 = getelementptr inbounds %struct.point, %struct.point* %p2, i32 0, i32 1
+  %25 = load double, double* %y28, align 8
+  %sub29 = fsub double %24, %25
+  %mul30 = fmul double %23, %sub29
+  %26 = load double, double* %separation, align 8
+  %div31 = fdiv double %mul30, %26
+  %add32 = fadd double %div26, %div31
+  %y33 = getelementptr inbounds %struct.point, %struct.point* %p1, i32 0, i32 1
+  %27 = load double, double* %y33, align 8
+  %y34 = getelementptr inbounds %struct.point, %struct.point* %p2, i32 0, i32 1
+  %28 = load double, double* %y34, align 8
+  %add35 = fadd double %27, %28
+  %div36 = fdiv double %add35, 2.000000e+00
+  %29 = load double, double* %mirrorDistance, align 8
+  %x37 = getelementptr inbounds %struct.point, %struct.point* %p2, i32 0, i32 0
+  %30 = load double, double* %x37, align 8
+  %x38 = getelementptr inbounds %struct.point, %struct.point* %p1, i32 0, i32 0
+  %31 = load double, double* %x38, align 8
+  %sub39 = fsub double %30, %31
+  %mul40 = fmul double %29, %sub39
+  %32 = load double, double* %separation, align 8
+  %div41 = fdiv double %mul40, %32
+  %add42 = fadd double %div36, %div41
+  %33 = load double, double* %radius.addr, align 8
+  %x43 = getelementptr inbounds %struct.point, %struct.point* %p1, i32 0, i32 0
+  %34 = load double, double* %x43, align 8
+  %x44 = getelementptr inbounds %struct.point, %struct.point* %p2, i32 0, i32 0
+  %35 = load double, double* %x44, align 8
+  %add45 = fadd double %34, %35
+  %div46 = fdiv double %add45, 2.000000e+00
+  %36 = load double, double* %mirrorDistance, align 8
+  %y47 = getelementptr inbounds %struct.point, %struct.point* %p1, i32 0, i32 1
+  %37 = load double, double* %y47, align 8
+  %y48 = getelementptr inbounds %struct.point, %struct.point* %p2, i32 0, i32 1
+  %38 = load double, double* %y48, align 8
+  %sub49 = fsub double %37, %38
+  %mul50 = fmul double %36, %sub49
+  %39 = load double, double* %separation, align 8
+  %div51 = fdiv double %mul50, %39
+  %sub52 = fsub double %div46, %div51
+  %y53 = getelementptr inbounds %struct.point, %struct.point* %p1, i32 0, i32 1
+  %40 = load double, double* %y53, align 8
+  %y54 = getelementptr inbounds %struct.point, %struct.point* %p2, i32 0, i32 1
+  %41 = load double, double* %y54, align 8
+  %add55 = fadd double %40, %41
+  %div56 = fdiv double %add55, 2.000000e+00
+  %42 = load double, double* %mirrorDistance, align 8
+  %x57 = getelementptr inbounds %struct.point, %struct.point* %p2, i32 0, i32 0
+  %43 = load double, double* %x57, align 8
+  %x58 = getelementptr inbounds %struct.point, %struct.point* %p1, i32 0, i32 0
+  %44 = load double, double* %x58, align 8
+  %sub59 = fsub double %43, %44
+  %mul60 = fmul double %42, %sub59
+  %45 = load double, double* %separation, align 8
+  %div61 = fdiv double %mul60, %45
+  %sub62 = fsub double %div56, %div61
+  %46 = load double, double* %radius.addr, align 8
+  %call63 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([99 x i8], [99 x i8]* @.str.5, i32 0, i32 0), double %add32, double %add42, double %33, double %sub52, double %sub62, double %46)
+  br label %if.end
+
+if.end:                                           ; preds = %if.else20, %if.then18
+  br label %if.end64
+
+if.end64:                                         ; preds = %if.end, %if.then7
+  br label %if.end65
+
+if.end65:                                         ; preds = %if.end64, %cond.end
+  ret void
+}
+
+declare i32 @printf(i8* %0, ...) #2
+
+; Function Attrs: nounwind readnone speculatable willreturn
+declare double @llvm.pow.f64(double %0, double %1) #1
+
+; Function Attrs: noinline nounwind optnone
+define hidden i32 @main() #0 {
+entry:
+  %retval = alloca i32, align 4
+  %i = alloca i32, align 4
+  %cases = alloca [10 x %struct.point], align 16
+  %radii = alloca [5 x double], align 16
+  store i32 0, i32* %retval, align 4
+  %0 = bitcast [10 x %struct.point]* %cases to i8*
+  call void @llvm.memcpy.p0i8.p0i8.i32(i8* align 16 %0, i8* align 16 bitcast ([10 x %struct.point]* @__const.main.cases to i8*), i32 160, i1 false)
+  %1 = bitcast [5 x double]* %radii to i8*
+  call void @llvm.memset.p0i8.i32(i8* align 16 %1, i8 0, i32 40, i1 false)
+  %2 = bitcast i8* %1 to [5 x double]*
+  %3 = getelementptr inbounds [5 x double], [5 x double]* %2, i32 0, i32 0
+  store double 2.000000e+00, double* %3, align 16
+  %4 = getelementptr inbounds [5 x double], [5 x double]* %2, i32 0, i32 1
+  store double 1.000000e+00, double* %4, align 8
+  %5 = getelementptr inbounds [5 x double], [5 x double]* %2, i32 0, i32 2
+  store double 2.000000e+00, double* %5, align 16
+  %6 = getelementptr inbounds [5 x double], [5 x double]* %2, i32 0, i32 3
+  store double 5.000000e-01, double* %6, align 8
+  store i32 0, i32* %i, align 4
+  br label %for.cond
+
+for.cond:                                         ; preds = %for.inc, %entry
+  %7 = load i32, i32* %i, align 4
+  %cmp = icmp slt i32 %7, 5
+  br i1 %cmp, label %for.body, label %for.end
+
+for.body:                                         ; preds = %for.cond
+  %8 = load i32, i32* %i, align 4
+  %add = add nsw i32 %8, 1
+  %call = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([10 x i8], [10 x i8]* @.str.6, i32 0, i32 0), i32 %add)
+  %9 = load i32, i32* %i, align 4
+  %mul = mul nsw i32 2, %9
+  %arrayidx = getelementptr inbounds [10 x %struct.point], [10 x %struct.point]* %cases, i32 0, i32 %mul
+  %10 = load i32, i32* %i, align 4
+  %mul1 = mul nsw i32 2, %10
+  %add2 = add nsw i32 %mul1, 1
+  %arrayidx3 = getelementptr inbounds [10 x %struct.point], [10 x %struct.point]* %cases, i32 0, i32 %add2
+  %11 = load i32, i32* %i, align 4
+  %arrayidx4 = getelementptr inbounds [5 x double], [5 x double]* %radii, i32 0, i32 %11
+  %12 = load double, double* %arrayidx4, align 8
+  call void @findCircles(%struct.point* byval(%struct.point) align 8 %arrayidx, %struct.point* byval(%struct.point) align 8 %arrayidx3, double %12)
+  br label %for.inc
+
+for.inc:                                          ; preds = %for.body
+  %13 = load i32, i32* %i, align 4
+  %inc = add nsw i32 %13, 1
+  store i32 %inc, i32* %i, align 4
+  br label %for.cond
+
+for.end:                                          ; preds = %for.cond
+  ret i32 0
+}
+
+; Function Attrs: argmemonly nounwind willreturn
+declare void @llvm.memcpy.p0i8.p0i8.i32(i8* noalias nocapture writeonly %0, i8* noalias nocapture readonly %1, i32 %2, i1 immarg %3) #3
+
+; Function Attrs: argmemonly nounwind willreturn writeonly
+declare void @llvm.memset.p0i8.i32(i8* nocapture writeonly %0, i8 %1, i32 %2, i1 immarg %3) #4
+
+attributes #0 = { noinline nounwind optnone "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "min-legal-vector-width"="0" "no-infs-fp-math"="false" "no-jump-tables"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #1 = { nounwind readnone speculatable willreturn }
+attributes #2 = { "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #3 = { argmemonly nounwind willreturn }
+attributes #4 = { argmemonly nounwind willreturn writeonly }
+
+!llvm.module.flags = !{!0}
+!llvm.ident = !{!1}
+
+!0 = !{i32 1, !"wchar_size", i32 4}
+!1 = !{!"clang version 11.0.0 (https://github.com/Jacarte/llvm-project.git 0f6dea67136cc1e0b3d200eb2bb165628970c44b)"}
+
+#########################################################
+; exiting Souper's runOnFunction() for findCircles()
+rescanning function after transformation was applied
+
+; entering Souper's runOnFunction() for findCircles()
+
+; ModuleID = './Circles_of_given_radius_through_two_points.c.bc'
+source_filename = "./Circles_of_given_radius_through_two_points.c"
+target datalayout = "e-m:e-p:32:32-i64:64-n32:64-S128"
+target triple = "wasm32-unknown-wasi"
+
+%struct.point = type { double, double }
+
+@.str = private unnamed_addr constant [45 x i8] c"\0ANo circles can be drawn through (%.4f,%.4f)\00", align 1
+@.str.1 = private unnamed_addr constant [58 x i8] c"\0AInfinitely many circles can be drawn through (%.4f,%.4f)\00", align 1
+@.str.2 = private unnamed_addr constant [100 x i8] c"\0AGiven points are opposite ends of a diameter of the circle with center (%.4f,%.4f) and radius %.4f\00", align 1
+@.str.3 = private unnamed_addr constant [92 x i8] c"\0AGiven points are farther away from each other than a diameter of a circle with radius %.4f\00", align 1
+@.str.4 = private unnamed_addr constant [27 x i8] c"\0ATwo circles are possible.\00", align 1
+@.str.5 = private unnamed_addr constant [99 x i8] c"\0ACircle C1 with center (%.4f,%.4f), radius %.4f and Circle C2 with center (%.4f,%.4f), radius %.4f\00", align 1
+@__const.main.cases = private unnamed_addr constant [10 x %struct.point] [%struct.point { double 1.234000e-01, double 9.876000e-01 }, %struct.point { double 8.765000e-01, double 2.345000e-01 }, %struct.point { double 0.000000e+00, double 2.000000e+00 }, %struct.point zeroinitializer, %struct.point { double 1.234000e-01, double 9.876000e-01 }, %struct.point { double 1.234000e-01, double 9.876000e-01 }, %struct.point { double 1.234000e-01, double 9.876000e-01 }, %struct.point { double 8.765000e-01, double 2.345000e-01 }, %struct.point { double 1.234000e-01, double 9.876000e-01 }, %struct.point { double 1.234000e-01, double 9.876000e-01 }], align 16
+@.str.6 = private unnamed_addr constant [10 x i8] c"\0ACase %d)\00", align 1
+@llvm.used = appending global [1 x i8*] [i8* bitcast (i32 ()* @__main_void to i8*)], section "llvm.metadata"
+
+@__main_void = alias i32 (), i32 ()* @main
+
+; Function Attrs: noinline nounwind optnone
+define hidden double @distance(%struct.point* byval(%struct.point) align 8 %p1, %struct.point* byval(%struct.point) align 8 %p2) #0 {
+entry:
+  %x = getelementptr inbounds %struct.point, %struct.point* %p1, i32 0, i32 0
+  %0 = load double, double* %x, align 8
+  %x1 = getelementptr inbounds %struct.point, %struct.point* %p2, i32 0, i32 0
+  %1 = load double, double* %x1, align 8
+  %sub = fsub double %0, %1
+  %x2 = getelementptr inbounds %struct.point, %struct.point* %p1, i32 0, i32 0
+  %2 = load double, double* %x2, align 8
+  %x3 = getelementptr inbounds %struct.point, %struct.point* %p2, i32 0, i32 0
+  %3 = load double, double* %x3, align 8
+  %sub4 = fsub double %2, %3
+  %mul = fmul double %sub, %sub4
+  %y = getelementptr inbounds %struct.point, %struct.point* %p1, i32 0, i32 1
+  %4 = load double, double* %y, align 8
+  %y5 = getelementptr inbounds %struct.point, %struct.point* %p2, i32 0, i32 1
+  %5 = load double, double* %y5, align 8
+  %sub6 = fsub double %4, %5
+  %y7 = getelementptr inbounds %struct.point, %struct.point* %p1, i32 0, i32 1
+  %6 = load double, double* %y7, align 8
+  %y8 = getelementptr inbounds %struct.point, %struct.point* %p2, i32 0, i32 1
+  %7 = load double, double* %y8, align 8
+  %sub9 = fsub double %6, %7
+  %mul10 = fmul double %sub6, %sub9
+  %add = fadd double %mul, %mul10
+  %8 = call double @llvm.sqrt.f64(double %add)
+  ret double %8
+}
+
+; Function Attrs: nounwind readnone speculatable willreturn
+declare double @llvm.sqrt.f64(double %0) #1
+
+; Function Attrs: noinline nounwind optnone
+define hidden void @findCircles(%struct.point* byval(%struct.point) align 8 %p1, %struct.point* byval(%struct.point) align 8 %p2, double %radius) #0 {
+entry:
+  %radius.addr = alloca double, align 8
+  %separation = alloca double, align 8
+  %mirrorDistance = alloca double, align 8
+  store double %radius, double* %radius.addr, align 8
+  %call = call double @distance(%struct.point* byval(%struct.point) align 8 %p1, %struct.point* byval(%struct.point) align 8 %p2)
+  store double %call, double* %separation, align 8
+  %0 = load double, double* %separation, align 8
+  %cmp = fcmp oeq double %0, 0.000000e+00
+  br i1 %cmp, label %if.then, label %if.else
+
+if.then:                                          ; preds = %entry
+  %1 = load double, double* %radius.addr, align 8
+  %cmp1 = fcmp oeq double %1, 0.000000e+00
+  br i1 %cmp1, label %cond.true, label %cond.false
+
+cond.true:                                        ; preds = %if.then
+  %x = getelementptr inbounds %struct.point, %struct.point* %p1, i32 0, i32 0
+  %2 = load double, double* %x, align 8
+  %y = getelementptr inbounds %struct.point, %struct.point* %p1, i32 0, i32 1
+  %3 = load double, double* %y, align 8
+  %call2 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([45 x i8], [45 x i8]* @.str, i32 0, i32 0), double %2, double %3)
+  br label %cond.end
+
+cond.false:                                       ; preds = %if.then
+  %x3 = getelementptr inbounds %struct.point, %struct.point* %p1, i32 0, i32 0
+  %4 = load double, double* %x3, align 8
+  %y4 = getelementptr inbounds %struct.point, %struct.point* %p1, i32 0, i32 1
+  %5 = load double, double* %y4, align 8
+  %call5 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([58 x i8], [58 x i8]* @.str.1, i32 0, i32 0), double %4, double %5)
+  br label %cond.end
+
+cond.end:                                         ; preds = %cond.false, %cond.true
+  br label %if.end65
+
+if.else:                                          ; preds = %entry
+  %6 = load double, double* %separation, align 8
+  %7 = load double, double* %radius.addr, align 8
+  %mul = fmul double 2.000000e+00, %7
+  %cmp6 = fcmp oeq double %6, %mul
+  br i1 %cmp6, label %if.then7, label %if.else15
+
+if.then7:                                         ; preds = %if.else
+  %x8 = getelementptr inbounds %struct.point, %struct.point* %p1, i32 0, i32 0
+  %8 = load double, double* %x8, align 8
+  %x9 = getelementptr inbounds %struct.point, %struct.point* %p2, i32 0, i32 0
+  %9 = load double, double* %x9, align 8
+  %add = fadd double %8, %9
+  %div = fdiv double %add, 2.000000e+00
+  %y10 = getelementptr inbounds %struct.point, %struct.point* %p1, i32 0, i32 1
+  %10 = load double, double* %y10, align 8
+  %y11 = getelementptr inbounds %struct.point, %struct.point* %p2, i32 0, i32 1
+  %11 = load double, double* %y11, align 8
+  %add12 = fadd double %10, %11
+  %div13 = fdiv double %add12, 2.000000e+00
+  %12 = load double, double* %radius.addr, align 8
+  %call14 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([100 x i8], [100 x i8]* @.str.2, i32 0, i32 0), double %div, double %div13, double %12)
+  br label %if.end64
+
+if.else15:                                        ; preds = %if.else
+  %13 = load double, double* %separation, align 8
+  %14 = load double, double* %radius.addr, align 8
+  %mul16 = fmul double 2.000000e+00, %14
+  %cmp17 = fcmp ogt double %13, %mul16
+  br i1 %cmp17, label %if.then18, label %if.else20
+
+if.then18:                                        ; preds = %if.else15
+  %15 = load double, double* %radius.addr, align 8
+  %call19 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([92 x i8], [92 x i8]* @.str.3, i32 0, i32 0), double %15)
+  br label %if.end
+
+if.else20:                                        ; preds = %if.else15
+  %16 = load double, double* %radius.addr, align 8
+  %17 = call double @llvm.pow.f64(double %16, double 2.000000e+00)
+  %18 = load double, double* %separation, align 8
+  %div21 = fdiv double %18, 2.000000e+00
+  %19 = call double @llvm.pow.f64(double %div21, double 2.000000e+00)
+  %sub = fsub double %17, %19
+  %20 = call double @llvm.sqrt.f64(double %sub)
+  store double %20, double* %mirrorDistance, align 8
+  %call22 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([27 x i8], [27 x i8]* @.str.4, i32 0, i32 0))
+  %x23 = getelementptr inbounds %struct.point, %struct.point* %p1, i32 0, i32 0
+  %21 = load double, double* %x23, align 8
+  %x24 = getelementptr inbounds %struct.point, %struct.point* %p2, i32 0, i32 0
+  %22 = load double, double* %x24, align 8
+  %add25 = fadd double %21, %22
+  %div26 = fdiv double %add25, 2.000000e+00
+  %23 = load double, double* %mirrorDistance, align 8
+  %y27 = getelementptr inbounds %struct.point, %struct.point* %p1, i32 0, i32 1
+  %24 = load double, double* %y27, align 8
+  %y28 = getelementptr inbounds %struct.point, %struct.point* %p2, i32 0, i32 1
+  %25 = load double, double* %y28, align 8
+  %sub29 = fsub double %24, %25
+  %mul30 = fmul double %23, %sub29
+  %26 = load double, double* %separation, align 8
+  %div31 = fdiv double %mul30, %26
+  %add32 = fadd double %div26, %div31
+  %y33 = getelementptr inbounds %struct.point, %struct.point* %p1, i32 0, i32 1
+  %27 = load double, double* %y33, align 8
+  %y34 = getelementptr inbounds %struct.point, %struct.point* %p2, i32 0, i32 1
+  %28 = load double, double* %y34, align 8
+  %add35 = fadd double %27, %28
+  %div36 = fdiv double %add35, 2.000000e+00
+  %29 = load double, double* %mirrorDistance, align 8
+  %x37 = getelementptr inbounds %struct.point, %struct.point* %p2, i32 0, i32 0
+  %30 = load double, double* %x37, align 8
+  %x38 = getelementptr inbounds %struct.point, %struct.point* %p1, i32 0, i32 0
+  %31 = load double, double* %x38, align 8
+  %sub39 = fsub double %30, %31
+  %mul40 = fmul double %29, %sub39
+  %32 = load double, double* %separation, align 8
+  %div41 = fdiv double %mul40, %32
+  %add42 = fadd double %div36, %div41
+  %33 = load double, double* %radius.addr, align 8
+  %x43 = getelementptr inbounds %struct.point, %struct.point* %p1, i32 0, i32 0
+  %34 = load double, double* %x43, align 8
+  %x44 = getelementptr inbounds %struct.point, %struct.point* %p2, i32 0, i32 0
+  %35 = load double, double* %x44, align 8
+  %add45 = fadd double %34, %35
+  %div46 = fdiv double %add45, 2.000000e+00
+  %36 = load double, double* %mirrorDistance, align 8
+  %y47 = getelementptr inbounds %struct.point, %struct.point* %p1, i32 0, i32 1
+  %37 = load double, double* %y47, align 8
+  %y48 = getelementptr inbounds %struct.point, %struct.point* %p2, i32 0, i32 1
+  %38 = load double, double* %y48, align 8
+  %sub49 = fsub double %37, %38
+  %mul50 = fmul double %36, %sub49
+  %39 = load double, double* %separation, align 8
+  %div51 = fdiv double %mul50, %39
+  %sub52 = fsub double %div46, %div51
+  %y53 = getelementptr inbounds %struct.point, %struct.point* %p1, i32 0, i32 1
+  %40 = load double, double* %y53, align 8
+  %y54 = getelementptr inbounds %struct.point, %struct.point* %p2, i32 0, i32 1
+  %41 = load double, double* %y54, align 8
+  %add55 = fadd double %40, %41
+  %div56 = fdiv double %add55, 2.000000e+00
+  %42 = load double, double* %mirrorDistance, align 8
+  %x57 = getelementptr inbounds %struct.point, %struct.point* %p2, i32 0, i32 0
+  %43 = load double, double* %x57, align 8
+  %x58 = getelementptr inbounds %struct.point, %struct.point* %p1, i32 0, i32 0
+  %44 = load double, double* %x58, align 8
+  %sub59 = fsub double %43, %44
+  %mul60 = fmul double %42, %sub59
+  %45 = load double, double* %separation, align 8
+  %div61 = fdiv double %mul60, %45
+  %sub62 = fsub double %div56, %div61
+  %46 = load double, double* %radius.addr, align 8
+  %call63 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([99 x i8], [99 x i8]* @.str.5, i32 0, i32 0), double %add32, double %add42, double %33, double %sub52, double %sub62, double %46)
+  br label %if.end
+
+if.end:                                           ; preds = %if.else20, %if.then18
+  br label %if.end64
+
+if.end64:                                         ; preds = %if.end, %if.then7
+  br label %if.end65
+
+if.end65:                                         ; preds = %if.end64, %cond.end
+  ret void
+}
+
+declare i32 @printf(i8* %0, ...) #2
+
+; Function Attrs: nounwind readnone speculatable willreturn
+declare double @llvm.pow.f64(double %0, double %1) #1
+
+; Function Attrs: noinline nounwind optnone
+define hidden i32 @main() #0 {
+entry:
+  %retval = alloca i32, align 4
+  %i = alloca i32, align 4
+  %cases = alloca [10 x %struct.point], align 16
+  %radii = alloca [5 x double], align 16
+  store i32 0, i32* %retval, align 4
+  %0 = bitcast [10 x %struct.point]* %cases to i8*
+  call void @llvm.memcpy.p0i8.p0i8.i32(i8* align 16 %0, i8* align 16 bitcast ([10 x %struct.point]* @__const.main.cases to i8*), i32 160, i1 false)
+  %1 = bitcast [5 x double]* %radii to i8*
+  call void @llvm.memset.p0i8.i32(i8* align 16 %1, i8 0, i32 40, i1 false)
+  %2 = bitcast i8* %1 to [5 x double]*
+  %3 = getelementptr inbounds [5 x double], [5 x double]* %2, i32 0, i32 0
+  store double 2.000000e+00, double* %3, align 16
+  %4 = getelementptr inbounds [5 x double], [5 x double]* %2, i32 0, i32 1
+  store double 1.000000e+00, double* %4, align 8
+  %5 = getelementptr inbounds [5 x double], [5 x double]* %2, i32 0, i32 2
+  store double 2.000000e+00, double* %5, align 16
+  %6 = getelementptr inbounds [5 x double], [5 x double]* %2, i32 0, i32 3
+  store double 5.000000e-01, double* %6, align 8
+  store i32 0, i32* %i, align 4
+  br label %for.cond
+
+for.cond:                                         ; preds = %for.inc, %entry
+  %7 = load i32, i32* %i, align 4
+  %cmp = icmp slt i32 %7, 5
+  br i1 %cmp, label %for.body, label %for.end
+
+for.body:                                         ; preds = %for.cond
+  %8 = load i32, i32* %i, align 4
+  %add = add nsw i32 %8, 1
+  %call = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([10 x i8], [10 x i8]* @.str.6, i32 0, i32 0), i32 %add)
+  %9 = load i32, i32* %i, align 4
+  %mul = mul nsw i32 2, %9
+  %arrayidx = getelementptr inbounds [10 x %struct.point], [10 x %struct.point]* %cases, i32 0, i32 %mul
+  %10 = load i32, i32* %i, align 4
+  %mul1 = mul nsw i32 2, %10
+  %add2 = add nsw i32 %mul1, 1
+  %arrayidx3 = getelementptr inbounds [10 x %struct.point], [10 x %struct.point]* %cases, i32 0, i32 %add2
+  %11 = load i32, i32* %i, align 4
+  %arrayidx4 = getelementptr inbounds [5 x double], [5 x double]* %radii, i32 0, i32 %11
+  %12 = load double, double* %arrayidx4, align 8
+  call void @findCircles(%struct.point* byval(%struct.point) align 8 %arrayidx, %struct.point* byval(%struct.point) align 8 %arrayidx3, double %12)
+  br label %for.inc
+
+for.inc:                                          ; preds = %for.body
+  %13 = load i32, i32* %i, align 4
+  %inc = add nsw i32 %13, 1
+  store i32 %inc, i32* %i, align 4
+  br label %for.cond
+
+for.end:                                          ; preds = %for.cond
+  ret i32 0
+}
+
+; Function Attrs: argmemonly nounwind willreturn
+declare void @llvm.memcpy.p0i8.p0i8.i32(i8* noalias nocapture writeonly %0, i8* noalias nocapture readonly %1, i32 %2, i1 immarg %3) #3
+
+; Function Attrs: argmemonly nounwind willreturn writeonly
+declare void @llvm.memset.p0i8.i32(i8* nocapture writeonly %0, i8 %1, i32 %2, i1 immarg %3) #4
+
+attributes #0 = { noinline nounwind optnone "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "min-legal-vector-width"="0" "no-infs-fp-math"="false" "no-jump-tables"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #1 = { nounwind readnone speculatable willreturn }
+attributes #2 = { "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #3 = { argmemonly nounwind willreturn }
+attributes #4 = { argmemonly nounwind willreturn writeonly }
+
+!llvm.module.flags = !{!0}
+!llvm.ident = !{!1}
+
+!0 = !{i32 1, !"wchar_size", i32 4}
+!1 = !{!"clang version 11.0.0 (https://github.com/Jacarte/llvm-project.git 0f6dea67136cc1e0b3d200eb2bb165628970c44b)"}
+
+; extracted candidates
+
+; *****
+; For LLVM instruction:
+;  %cmp = fcmp oeq double %0, 0.000000e+00
+; Looking for a replacement for:
+%0:i1 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %cmp1 = fcmp oeq double %1, 0.000000e+00
+; Looking for a replacement for:
+%0:i1 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %cmp6 = fcmp oeq double %6, %mul
+; Looking for a replacement for:
+%0:i1 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %cmp17 = fcmp ogt double %13, %mul16
+; Looking for a replacement for:
+%0:i1 = var
+infer %0
+#########################################################
+; exiting Souper's runOnFunction() for findCircles()
+
+; entering Souper's runOnFunction() for main()
+
+; ModuleID = './Circles_of_given_radius_through_two_points.c.bc'
+source_filename = "./Circles_of_given_radius_through_two_points.c"
+target datalayout = "e-m:e-p:32:32-i64:64-n32:64-S128"
+target triple = "wasm32-unknown-wasi"
+
+%struct.point = type { double, double }
+
+@.str = private unnamed_addr constant [45 x i8] c"\0ANo circles can be drawn through (%.4f,%.4f)\00", align 1
+@.str.1 = private unnamed_addr constant [58 x i8] c"\0AInfinitely many circles can be drawn through (%.4f,%.4f)\00", align 1
+@.str.2 = private unnamed_addr constant [100 x i8] c"\0AGiven points are opposite ends of a diameter of the circle with center (%.4f,%.4f) and radius %.4f\00", align 1
+@.str.3 = private unnamed_addr constant [92 x i8] c"\0AGiven points are farther away from each other than a diameter of a circle with radius %.4f\00", align 1
+@.str.4 = private unnamed_addr constant [27 x i8] c"\0ATwo circles are possible.\00", align 1
+@.str.5 = private unnamed_addr constant [99 x i8] c"\0ACircle C1 with center (%.4f,%.4f), radius %.4f and Circle C2 with center (%.4f,%.4f), radius %.4f\00", align 1
+@__const.main.cases = private unnamed_addr constant [10 x %struct.point] [%struct.point { double 1.234000e-01, double 9.876000e-01 }, %struct.point { double 8.765000e-01, double 2.345000e-01 }, %struct.point { double 0.000000e+00, double 2.000000e+00 }, %struct.point zeroinitializer, %struct.point { double 1.234000e-01, double 9.876000e-01 }, %struct.point { double 1.234000e-01, double 9.876000e-01 }, %struct.point { double 1.234000e-01, double 9.876000e-01 }, %struct.point { double 8.765000e-01, double 2.345000e-01 }, %struct.point { double 1.234000e-01, double 9.876000e-01 }, %struct.point { double 1.234000e-01, double 9.876000e-01 }], align 16
+@.str.6 = private unnamed_addr constant [10 x i8] c"\0ACase %d)\00", align 1
+@llvm.used = appending global [1 x i8*] [i8* bitcast (i32 ()* @__main_void to i8*)], section "llvm.metadata"
+
+@__main_void = alias i32 (), i32 ()* @main
+
+; Function Attrs: noinline nounwind optnone
+define hidden double @distance(%struct.point* byval(%struct.point) align 8 %p1, %struct.point* byval(%struct.point) align 8 %p2) #0 {
+entry:
+  %x = getelementptr inbounds %struct.point, %struct.point* %p1, i32 0, i32 0
+  %0 = load double, double* %x, align 8
+  %x1 = getelementptr inbounds %struct.point, %struct.point* %p2, i32 0, i32 0
+  %1 = load double, double* %x1, align 8
+  %sub = fsub double %0, %1
+  %x2 = getelementptr inbounds %struct.point, %struct.point* %p1, i32 0, i32 0
+  %2 = load double, double* %x2, align 8
+  %x3 = getelementptr inbounds %struct.point, %struct.point* %p2, i32 0, i32 0
+  %3 = load double, double* %x3, align 8
+  %sub4 = fsub double %2, %3
+  %mul = fmul double %sub, %sub4
+  %y = getelementptr inbounds %struct.point, %struct.point* %p1, i32 0, i32 1
+  %4 = load double, double* %y, align 8
+  %y5 = getelementptr inbounds %struct.point, %struct.point* %p2, i32 0, i32 1
+  %5 = load double, double* %y5, align 8
+  %sub6 = fsub double %4, %5
+  %y7 = getelementptr inbounds %struct.point, %struct.point* %p1, i32 0, i32 1
+  %6 = load double, double* %y7, align 8
+  %y8 = getelementptr inbounds %struct.point, %struct.point* %p2, i32 0, i32 1
+  %7 = load double, double* %y8, align 8
+  %sub9 = fsub double %6, %7
+  %mul10 = fmul double %sub6, %sub9
+  %add = fadd double %mul, %mul10
+  %8 = call double @llvm.sqrt.f64(double %add)
+  ret double %8
+}
+
+; Function Attrs: nounwind readnone speculatable willreturn
+declare double @llvm.sqrt.f64(double %0) #1
+
+; Function Attrs: noinline nounwind optnone
+define hidden void @findCircles(%struct.point* byval(%struct.point) align 8 %p1, %struct.point* byval(%struct.point) align 8 %p2, double %radius) #0 {
+entry:
+  %radius.addr = alloca double, align 8
+  %separation = alloca double, align 8
+  %mirrorDistance = alloca double, align 8
+  store double %radius, double* %radius.addr, align 8
+  %call = call double @distance(%struct.point* byval(%struct.point) align 8 %p1, %struct.point* byval(%struct.point) align 8 %p2)
+  store double %call, double* %separation, align 8
+  %0 = load double, double* %separation, align 8
+  %cmp = fcmp oeq double %0, 0.000000e+00
+  br i1 %cmp, label %if.then, label %if.else
+
+if.then:                                          ; preds = %entry
+  %1 = load double, double* %radius.addr, align 8
+  %cmp1 = fcmp oeq double %1, 0.000000e+00
+  br i1 %cmp1, label %cond.true, label %cond.false
+
+cond.true:                                        ; preds = %if.then
+  %x = getelementptr inbounds %struct.point, %struct.point* %p1, i32 0, i32 0
+  %2 = load double, double* %x, align 8
+  %y = getelementptr inbounds %struct.point, %struct.point* %p1, i32 0, i32 1
+  %3 = load double, double* %y, align 8
+  %call2 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([45 x i8], [45 x i8]* @.str, i32 0, i32 0), double %2, double %3)
+  br label %cond.end
+
+cond.false:                                       ; preds = %if.then
+  %x3 = getelementptr inbounds %struct.point, %struct.point* %p1, i32 0, i32 0
+  %4 = load double, double* %x3, align 8
+  %y4 = getelementptr inbounds %struct.point, %struct.point* %p1, i32 0, i32 1
+  %5 = load double, double* %y4, align 8
+  %call5 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([58 x i8], [58 x i8]* @.str.1, i32 0, i32 0), double %4, double %5)
+  br label %cond.end
+
+cond.end:                                         ; preds = %cond.false, %cond.true
+  br label %if.end65
+
+if.else:                                          ; preds = %entry
+  %6 = load double, double* %separation, align 8
+  %7 = load double, double* %radius.addr, align 8
+  %mul = fmul double 2.000000e+00, %7
+  %cmp6 = fcmp oeq double %6, %mul
+  br i1 %cmp6, label %if.then7, label %if.else15
+
+if.then7:                                         ; preds = %if.else
+  %x8 = getelementptr inbounds %struct.point, %struct.point* %p1, i32 0, i32 0
+  %8 = load double, double* %x8, align 8
+  %x9 = getelementptr inbounds %struct.point, %struct.point* %p2, i32 0, i32 0
+  %9 = load double, double* %x9, align 8
+  %add = fadd double %8, %9
+  %div = fdiv double %add, 2.000000e+00
+  %y10 = getelementptr inbounds %struct.point, %struct.point* %p1, i32 0, i32 1
+  %10 = load double, double* %y10, align 8
+  %y11 = getelementptr inbounds %struct.point, %struct.point* %p2, i32 0, i32 1
+  %11 = load double, double* %y11, align 8
+  %add12 = fadd double %10, %11
+  %div13 = fdiv double %add12, 2.000000e+00
+  %12 = load double, double* %radius.addr, align 8
+  %call14 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([100 x i8], [100 x i8]* @.str.2, i32 0, i32 0), double %div, double %div13, double %12)
+  br label %if.end64
+
+if.else15:                                        ; preds = %if.else
+  %13 = load double, double* %separation, align 8
+  %14 = load double, double* %radius.addr, align 8
+  %mul16 = fmul double 2.000000e+00, %14
+  %cmp17 = fcmp ogt double %13, %mul16
+  br i1 %cmp17, label %if.then18, label %if.else20
+
+if.then18:                                        ; preds = %if.else15
+  %15 = load double, double* %radius.addr, align 8
+  %call19 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([92 x i8], [92 x i8]* @.str.3, i32 0, i32 0), double %15)
+  br label %if.end
+
+if.else20:                                        ; preds = %if.else15
+  %16 = load double, double* %radius.addr, align 8
+  %17 = call double @llvm.pow.f64(double %16, double 2.000000e+00)
+  %18 = load double, double* %separation, align 8
+  %div21 = fdiv double %18, 2.000000e+00
+  %19 = call double @llvm.pow.f64(double %div21, double 2.000000e+00)
+  %sub = fsub double %17, %19
+  %20 = call double @llvm.sqrt.f64(double %sub)
+  store double %20, double* %mirrorDistance, align 8
+  %call22 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([27 x i8], [27 x i8]* @.str.4, i32 0, i32 0))
+  %x23 = getelementptr inbounds %struct.point, %struct.point* %p1, i32 0, i32 0
+  %21 = load double, double* %x23, align 8
+  %x24 = getelementptr inbounds %struct.point, %struct.point* %p2, i32 0, i32 0
+  %22 = load double, double* %x24, align 8
+  %add25 = fadd double %21, %22
+  %div26 = fdiv double %add25, 2.000000e+00
+  %23 = load double, double* %mirrorDistance, align 8
+  %y27 = getelementptr inbounds %struct.point, %struct.point* %p1, i32 0, i32 1
+  %24 = load double, double* %y27, align 8
+  %y28 = getelementptr inbounds %struct.point, %struct.point* %p2, i32 0, i32 1
+  %25 = load double, double* %y28, align 8
+  %sub29 = fsub double %24, %25
+  %mul30 = fmul double %23, %sub29
+  %26 = load double, double* %separation, align 8
+  %div31 = fdiv double %mul30, %26
+  %add32 = fadd double %div26, %div31
+  %y33 = getelementptr inbounds %struct.point, %struct.point* %p1, i32 0, i32 1
+  %27 = load double, double* %y33, align 8
+  %y34 = getelementptr inbounds %struct.point, %struct.point* %p2, i32 0, i32 1
+  %28 = load double, double* %y34, align 8
+  %add35 = fadd double %27, %28
+  %div36 = fdiv double %add35, 2.000000e+00
+  %29 = load double, double* %mirrorDistance, align 8
+  %x37 = getelementptr inbounds %struct.point, %struct.point* %p2, i32 0, i32 0
+  %30 = load double, double* %x37, align 8
+  %x38 = getelementptr inbounds %struct.point, %struct.point* %p1, i32 0, i32 0
+  %31 = load double, double* %x38, align 8
+  %sub39 = fsub double %30, %31
+  %mul40 = fmul double %29, %sub39
+  %32 = load double, double* %separation, align 8
+  %div41 = fdiv double %mul40, %32
+  %add42 = fadd double %div36, %div41
+  %33 = load double, double* %radius.addr, align 8
+  %x43 = getelementptr inbounds %struct.point, %struct.point* %p1, i32 0, i32 0
+  %34 = load double, double* %x43, align 8
+  %x44 = getelementptr inbounds %struct.point, %struct.point* %p2, i32 0, i32 0
+  %35 = load double, double* %x44, align 8
+  %add45 = fadd double %34, %35
+  %div46 = fdiv double %add45, 2.000000e+00
+  %36 = load double, double* %mirrorDistance, align 8
+  %y47 = getelementptr inbounds %struct.point, %struct.point* %p1, i32 0, i32 1
+  %37 = load double, double* %y47, align 8
+  %y48 = getelementptr inbounds %struct.point, %struct.point* %p2, i32 0, i32 1
+  %38 = load double, double* %y48, align 8
+  %sub49 = fsub double %37, %38
+  %mul50 = fmul double %36, %sub49
+  %39 = load double, double* %separation, align 8
+  %div51 = fdiv double %mul50, %39
+  %sub52 = fsub double %div46, %div51
+  %y53 = getelementptr inbounds %struct.point, %struct.point* %p1, i32 0, i32 1
+  %40 = load double, double* %y53, align 8
+  %y54 = getelementptr inbounds %struct.point, %struct.point* %p2, i32 0, i32 1
+  %41 = load double, double* %y54, align 8
+  %add55 = fadd double %40, %41
+  %div56 = fdiv double %add55, 2.000000e+00
+  %42 = load double, double* %mirrorDistance, align 8
+  %x57 = getelementptr inbounds %struct.point, %struct.point* %p2, i32 0, i32 0
+  %43 = load double, double* %x57, align 8
+  %x58 = getelementptr inbounds %struct.point, %struct.point* %p1, i32 0, i32 0
+  %44 = load double, double* %x58, align 8
+  %sub59 = fsub double %43, %44
+  %mul60 = fmul double %42, %sub59
+  %45 = load double, double* %separation, align 8
+  %div61 = fdiv double %mul60, %45
+  %sub62 = fsub double %div56, %div61
+  %46 = load double, double* %radius.addr, align 8
+  %call63 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([99 x i8], [99 x i8]* @.str.5, i32 0, i32 0), double %add32, double %add42, double %33, double %sub52, double %sub62, double %46)
+  br label %if.end
+
+if.end:                                           ; preds = %if.else20, %if.then18
+  br label %if.end64
+
+if.end64:                                         ; preds = %if.end, %if.then7
+  br label %if.end65
+
+if.end65:                                         ; preds = %if.end64, %cond.end
+  ret void
+}
+
+declare i32 @printf(i8* %0, ...) #2
+
+; Function Attrs: nounwind readnone speculatable willreturn
+declare double @llvm.pow.f64(double %0, double %1) #1
+
+; Function Attrs: noinline nounwind optnone
+define hidden i32 @main() #0 {
+entry:
+  %retval = alloca i32, align 4
+  %i = alloca i32, align 4
+  %cases = alloca [10 x %struct.point], align 16
+  %radii = alloca [5 x double], align 16
+  store i32 0, i32* %retval, align 4
+  %0 = bitcast [10 x %struct.point]* %cases to i8*
+  call void @llvm.memcpy.p0i8.p0i8.i32(i8* align 16 %0, i8* align 16 bitcast ([10 x %struct.point]* @__const.main.cases to i8*), i32 160, i1 false)
+  %1 = bitcast [5 x double]* %radii to i8*
+  call void @llvm.memset.p0i8.i32(i8* align 16 %1, i8 0, i32 40, i1 false)
+  %2 = bitcast i8* %1 to [5 x double]*
+  %3 = getelementptr inbounds [5 x double], [5 x double]* %2, i32 0, i32 0
+  store double 2.000000e+00, double* %3, align 16
+  %4 = getelementptr inbounds [5 x double], [5 x double]* %2, i32 0, i32 1
+  store double 1.000000e+00, double* %4, align 8
+  %5 = getelementptr inbounds [5 x double], [5 x double]* %2, i32 0, i32 2
+  store double 2.000000e+00, double* %5, align 16
+  %6 = getelementptr inbounds [5 x double], [5 x double]* %2, i32 0, i32 3
+  store double 5.000000e-01, double* %6, align 8
+  store i32 0, i32* %i, align 4
+  br label %for.cond
+
+for.cond:                                         ; preds = %for.inc, %entry
+  %7 = load i32, i32* %i, align 4
+  %cmp = icmp slt i32 %7, 5
+  br i1 %cmp, label %for.body, label %for.end
+
+for.body:                                         ; preds = %for.cond
+  %8 = load i32, i32* %i, align 4
+  %add = add nsw i32 %8, 1
+  %call = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([10 x i8], [10 x i8]* @.str.6, i32 0, i32 0), i32 %add)
+  %9 = load i32, i32* %i, align 4
+  %mul = mul nsw i32 2, %9
+  %arrayidx = getelementptr inbounds [10 x %struct.point], [10 x %struct.point]* %cases, i32 0, i32 %mul
+  %10 = load i32, i32* %i, align 4
+  %mul1 = mul nsw i32 2, %10
+  %add2 = add nsw i32 %mul1, 1
+  %arrayidx3 = getelementptr inbounds [10 x %struct.point], [10 x %struct.point]* %cases, i32 0, i32 %add2
+  %11 = load i32, i32* %i, align 4
+  %arrayidx4 = getelementptr inbounds [5 x double], [5 x double]* %radii, i32 0, i32 %11
+  %12 = load double, double* %arrayidx4, align 8
+  call void @findCircles(%struct.point* byval(%struct.point) align 8 %arrayidx, %struct.point* byval(%struct.point) align 8 %arrayidx3, double %12)
+  br label %for.inc
+
+for.inc:                                          ; preds = %for.body
+  %13 = load i32, i32* %i, align 4
+  %inc = add nsw i32 %13, 1
+  store i32 %inc, i32* %i, align 4
+  br label %for.cond
+
+for.end:                                          ; preds = %for.cond
+  ret i32 0
+}
+
+; Function Attrs: argmemonly nounwind willreturn
+declare void @llvm.memcpy.p0i8.p0i8.i32(i8* noalias nocapture writeonly %0, i8* noalias nocapture readonly %1, i32 %2, i1 immarg %3) #3
+
+; Function Attrs: argmemonly nounwind willreturn writeonly
+declare void @llvm.memset.p0i8.i32(i8* nocapture writeonly %0, i8 %1, i32 %2, i1 immarg %3) #4
+
+attributes #0 = { noinline nounwind optnone "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "min-legal-vector-width"="0" "no-infs-fp-math"="false" "no-jump-tables"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #1 = { nounwind readnone speculatable willreturn }
+attributes #2 = { "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #3 = { argmemonly nounwind willreturn }
+attributes #4 = { argmemonly nounwind willreturn writeonly }
+
+!llvm.module.flags = !{!0}
+!llvm.ident = !{!1}
+
+!0 = !{i32 1, !"wchar_size", i32 4}
+!1 = !{!"clang version 11.0.0 (https://github.com/Jacarte/llvm-project.git 0f6dea67136cc1e0b3d200eb2bb165628970c44b)"}
+
+; extracted candidates
+
+; *****
+; For LLVM instruction:
+;  %7 = load i32, i32* %i, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %cmp = icmp slt i32 %7, 5
+; Looking for a replacement for:
+%0:i32 = var
+%1:i1 = slt %0, 5:i32
+infer %1
+
+; *****
+; For LLVM instruction:
+;  %8 = load i32, i32* %i, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %add = add nsw i32 %8, 1
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = addnsw 1:i32, %0
+infer %1
+
+; *****
+; For LLVM instruction:
+;  %9 = load i32, i32* %i, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %mul = mul nsw i32 2, %9
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = mulnsw 2:i32, %0
+infer %1
+
+; *****
+; For LLVM instruction:
+;  %10 = load i32, i32* %i, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %mul1 = mul nsw i32 2, %10
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = mulnsw 2:i32, %0
+infer %1
+
+; *****
+; For LLVM instruction:
+;  %add2 = add nsw i32 %mul1, 1
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = mulnsw 2:i32, %0
+%2:i32 = addnsw 1:i32, %1
+infer %2
+
+; *****
+; For LLVM instruction:
+;  %11 = load i32, i32* %i, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %13 = load i32, i32* %i, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %inc = add nsw i32 %13, 1
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = addnsw 1:i32, %0
+infer %1
+got 1 candidates from LHS
+
+-------------------------------------------------
+%0:i32 = var
+infer %0
+
+
+--------------------------------
+guess 0
+
+%0:i32 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: -1
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+Dataflow Pruned 0/0
+There are 1 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 2 candidates from LHS
+
+-------------------------------------------------
+%0:i32 = var
+%1:i1 = slt %0, 5:i32
+infer %1
+
+
+--------------------------------
+guess 0
+
+%0:i1 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: -1
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: 0
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+Dataflow Pruned 0/0
+There are 1 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 2 candidates from LHS
+
+-------------------------------------------------
+%0:i32 = var
+%1:i32 = addnsw 1:i32, %0
+infer %1
+
+
+--------------------------------
+guess 0
+
+%0:i32 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 1
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: 268435457
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+
+--------------------------------
+guess 1
+
+%0:i32 = var
+
+Cost = 0
+second query is SAT-- constant doesn't work
+Dataflow Pruned 0/0
+There are 2 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 2 candidates from LHS
+
+-------------------------------------------------
+%0:i32 = var
+%1:i32 = mulnsw 2:i32, %0
+infer %1
+
+
+--------------------------------
+guess 0
+
+%0:i32 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: 1073741824
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+
+--------------------------------
+guess 1
+
+%0:i32 = var
+
+Cost = 0
+second query is SAT-- constant doesn't work
+Dataflow Pruned 0/0
+There are 2 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 3 candidates from LHS
+
+-------------------------------------------------
+%0:i32 = var
+%1:i32 = mulnsw 2:i32, %0
+%2:i32 = addnsw 1:i32, %1
+infer %2
+
+
+--------------------------------
+guess 0
+
+%0:i32 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 1
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: 1073741825
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+
+--------------------------------
+guess 1
+
+%0:i32 = var
+
+Cost = 0
+second query is SAT-- constant doesn't work
+
+--------------------------------
+guess 2
+
+%0:i32 = var
+%1:i32 = mulnsw 2:i32, %0
+
+Cost = 1
+second query is SAT-- constant doesn't work
+Dataflow Pruned 0/0
+There are 3 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+#########################################################
+; exiting Souper's runOnFunction() for main()
+Total of 1 replacements done on this module
+Total of 1 replacements candidates on this module

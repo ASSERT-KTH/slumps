@@ -1,0 +1,636 @@
+
+Entering the Souper pass's runOnModule()
+
+
+; entering Souper's runOnFunction() for FTest()
+
+; ModuleID = './Named_parameters.c.bc'
+source_filename = "./Named_parameters.c"
+target datalayout = "e-m:e-p:32:32-i64:64-n32:64-S128"
+target triple = "wasm32-unknown-wasi"
+
+%struct.FTest_args = type { i32, i32, i32 }
+
+@.str = private unnamed_addr constant [21 x i8] c"x: %d, y: %d, z: %d\0A\00", align 1
+
+; Function Attrs: noinline nounwind optnone
+define hidden void @FTest(%struct.FTest_args* byval(%struct.FTest_args) align 4 %args) #0 {
+entry:
+  %x = getelementptr inbounds %struct.FTest_args, %struct.FTest_args* %args, i32 0, i32 0
+  %0 = load i32, i32* %x, align 4
+  %y = getelementptr inbounds %struct.FTest_args, %struct.FTest_args* %args, i32 0, i32 1
+  %1 = load i32, i32* %y, align 4
+  %z = getelementptr inbounds %struct.FTest_args, %struct.FTest_args* %args, i32 0, i32 2
+  %2 = load i32, i32* %z, align 4
+  %call = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([21 x i8], [21 x i8]* @.str, i32 0, i32 0), i32 %0, i32 %1, i32 %2)
+  ret void
+}
+
+declare i32 @printf(i8* %0, ...) #1
+
+; Function Attrs: noinline nounwind optnone
+define hidden void @FTest2(i32 %x, i32 %y, i32 %z) #0 {
+entry:
+  %x.addr = alloca i32, align 4
+  %y.addr = alloca i32, align 4
+  %z.addr = alloca i32, align 4
+  store i32 %x, i32* %x.addr, align 4
+  store i32 %y, i32* %y.addr, align 4
+  store i32 %z, i32* %z.addr, align 4
+  %0 = load i32, i32* %x.addr, align 4
+  %1 = load i32, i32* %y.addr, align 4
+  %2 = load i32, i32* %z.addr, align 4
+  %call = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([21 x i8], [21 x i8]* @.str, i32 0, i32 0), i32 %0, i32 %1, i32 %2)
+  ret void
+}
+
+; Function Attrs: noinline nounwind optnone
+define hidden i32 @__main_argc_argv(i32 %argc, i8** %argv) #0 {
+entry:
+  %retval = alloca i32, align 4
+  %argc.addr = alloca i32, align 4
+  %argv.addr = alloca i8**, align 4
+  %.compoundliteral = alloca %struct.FTest_args, align 4
+  %.compoundliteral1 = alloca %struct.FTest_args, align 4
+  %.compoundliteral5 = alloca %struct.FTest_args, align 4
+  %.compoundliteral9 = alloca %struct.FTest_args, align 4
+  %.compoundliteral13 = alloca %struct.FTest_args, align 4
+  %.compoundliteral17 = alloca %struct.FTest_args, align 4
+  %.compoundliteral21 = alloca %struct.FTest_args, align 4
+  store i32 0, i32* %retval, align 4
+  store i32 %argc, i32* %argc.addr, align 4
+  store i8** %argv, i8*** %argv.addr, align 4
+  %x = getelementptr inbounds %struct.FTest_args, %struct.FTest_args* %.compoundliteral, i32 0, i32 0
+  store i32 0, i32* %x, align 4
+  %y = getelementptr inbounds %struct.FTest_args, %struct.FTest_args* %.compoundliteral, i32 0, i32 1
+  store i32 10, i32* %y, align 4
+  %z = getelementptr inbounds %struct.FTest_args, %struct.FTest_args* %.compoundliteral, i32 0, i32 2
+  store i32 0, i32* %z, align 4
+  call void @FTest(%struct.FTest_args* byval(%struct.FTest_args) align 4 %.compoundliteral)
+  %x2 = getelementptr inbounds %struct.FTest_args, %struct.FTest_args* %.compoundliteral1, i32 0, i32 0
+  store i32 0, i32* %x2, align 4
+  %y3 = getelementptr inbounds %struct.FTest_args, %struct.FTest_args* %.compoundliteral1, i32 0, i32 1
+  store i32 10, i32* %y3, align 4
+  %z4 = getelementptr inbounds %struct.FTest_args, %struct.FTest_args* %.compoundliteral1, i32 0, i32 2
+  store i32 42, i32* %z4, align 4
+  call void @FTest(%struct.FTest_args* byval(%struct.FTest_args) align 4 %.compoundliteral1)
+  %x6 = getelementptr inbounds %struct.FTest_args, %struct.FTest_args* %.compoundliteral5, i32 0, i32 0
+  store i32 42, i32* %x6, align 4
+  %y7 = getelementptr inbounds %struct.FTest_args, %struct.FTest_args* %.compoundliteral5, i32 0, i32 1
+  store i32 10, i32* %y7, align 4
+  %z8 = getelementptr inbounds %struct.FTest_args, %struct.FTest_args* %.compoundliteral5, i32 0, i32 2
+  store i32 47, i32* %z8, align 4
+  call void @FTest(%struct.FTest_args* byval(%struct.FTest_args) align 4 %.compoundliteral5)
+  %x10 = getelementptr inbounds %struct.FTest_args, %struct.FTest_args* %.compoundliteral9, i32 0, i32 0
+  store i32 142, i32* %x10, align 4
+  %y11 = getelementptr inbounds %struct.FTest_args, %struct.FTest_args* %.compoundliteral9, i32 0, i32 1
+  store i32 143, i32* %y11, align 4
+  %z12 = getelementptr inbounds %struct.FTest_args, %struct.FTest_args* %.compoundliteral9, i32 0, i32 2
+  store i32 144, i32* %z12, align 4
+  call void @FTest(%struct.FTest_args* byval(%struct.FTest_args) align 4 %.compoundliteral9)
+  %x14 = getelementptr inbounds %struct.FTest_args, %struct.FTest_args* %.compoundliteral13, i32 0, i32 0
+  store i32 142, i32* %x14, align 4
+  %y15 = getelementptr inbounds %struct.FTest_args, %struct.FTest_args* %.compoundliteral13, i32 0, i32 1
+  store i32 143, i32* %y15, align 4
+  %z16 = getelementptr inbounds %struct.FTest_args, %struct.FTest_args* %.compoundliteral13, i32 0, i32 2
+  store i32 99, i32* %z16, align 4
+  call void @FTest(%struct.FTest_args* byval(%struct.FTest_args) align 4 %.compoundliteral13)
+  %x18 = getelementptr inbounds %struct.FTest_args, %struct.FTest_args* %.compoundliteral17, i32 0, i32 0
+  store i32 142, i32* %x18, align 4
+  %y19 = getelementptr inbounds %struct.FTest_args, %struct.FTest_args* %.compoundliteral17, i32 0, i32 1
+  store i32 143, i32* %y19, align 4
+  %z20 = getelementptr inbounds %struct.FTest_args, %struct.FTest_args* %.compoundliteral17, i32 0, i32 2
+  store i32 144, i32* %z20, align 4
+  call void @FTest2_default_wrapper(%struct.FTest_args* byval(%struct.FTest_args) align 4 %.compoundliteral17)
+  %x22 = getelementptr inbounds %struct.FTest_args, %struct.FTest_args* %.compoundliteral21, i32 0, i32 0
+  store i32 142, i32* %x22, align 4
+  %y23 = getelementptr inbounds %struct.FTest_args, %struct.FTest_args* %.compoundliteral21, i32 0, i32 1
+  store i32 143, i32* %y23, align 4
+  %z24 = getelementptr inbounds %struct.FTest_args, %struct.FTest_args* %.compoundliteral21, i32 0, i32 2
+  store i32 99, i32* %z24, align 4
+  call void @FTest2_default_wrapper(%struct.FTest_args* byval(%struct.FTest_args) align 4 %.compoundliteral21)
+  ret i32 0
+}
+
+; Function Attrs: noinline nounwind optnone
+define internal void @FTest2_default_wrapper(%struct.FTest_args* byval(%struct.FTest_args) align 4 %args) #0 {
+entry:
+  %x = getelementptr inbounds %struct.FTest_args, %struct.FTest_args* %args, i32 0, i32 0
+  %0 = load i32, i32* %x, align 4
+  %y = getelementptr inbounds %struct.FTest_args, %struct.FTest_args* %args, i32 0, i32 1
+  %1 = load i32, i32* %y, align 4
+  %z = getelementptr inbounds %struct.FTest_args, %struct.FTest_args* %args, i32 0, i32 2
+  %2 = load i32, i32* %z, align 4
+  call void @FTest2(i32 %0, i32 %1, i32 %2)
+  ret void
+}
+
+attributes #0 = { noinline nounwind optnone "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "min-legal-vector-width"="0" "no-infs-fp-math"="false" "no-jump-tables"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #1 = { "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+
+!llvm.module.flags = !{!0}
+!llvm.ident = !{!1}
+
+!0 = !{i32 1, !"wchar_size", i32 4}
+!1 = !{!"clang version 11.0.0 (https://github.com/Jacarte/llvm-project.git 0f6dea67136cc1e0b3d200eb2bb165628970c44b)"}
+
+; extracted candidates
+
+; *****
+; For LLVM instruction:
+;  %0 = load i32, i32* %x, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %1 = load i32, i32* %y, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %2 = load i32, i32* %z, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+got 1 candidates from LHS
+
+-------------------------------------------------
+%0:i32 = var
+infer %0
+
+
+--------------------------------
+guess 0
+
+%0:i32 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: -1
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+Dataflow Pruned 0/0
+There are 1 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+#########################################################
+; exiting Souper's runOnFunction() for FTest()
+
+; entering Souper's runOnFunction() for FTest2()
+
+; ModuleID = './Named_parameters.c.bc'
+source_filename = "./Named_parameters.c"
+target datalayout = "e-m:e-p:32:32-i64:64-n32:64-S128"
+target triple = "wasm32-unknown-wasi"
+
+%struct.FTest_args = type { i32, i32, i32 }
+
+@.str = private unnamed_addr constant [21 x i8] c"x: %d, y: %d, z: %d\0A\00", align 1
+
+; Function Attrs: noinline nounwind optnone
+define hidden void @FTest(%struct.FTest_args* byval(%struct.FTest_args) align 4 %args) #0 {
+entry:
+  %x = getelementptr inbounds %struct.FTest_args, %struct.FTest_args* %args, i32 0, i32 0
+  %0 = load i32, i32* %x, align 4
+  %y = getelementptr inbounds %struct.FTest_args, %struct.FTest_args* %args, i32 0, i32 1
+  %1 = load i32, i32* %y, align 4
+  %z = getelementptr inbounds %struct.FTest_args, %struct.FTest_args* %args, i32 0, i32 2
+  %2 = load i32, i32* %z, align 4
+  %call = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([21 x i8], [21 x i8]* @.str, i32 0, i32 0), i32 %0, i32 %1, i32 %2)
+  ret void
+}
+
+declare i32 @printf(i8* %0, ...) #1
+
+; Function Attrs: noinline nounwind optnone
+define hidden void @FTest2(i32 %x, i32 %y, i32 %z) #0 {
+entry:
+  %x.addr = alloca i32, align 4
+  %y.addr = alloca i32, align 4
+  %z.addr = alloca i32, align 4
+  store i32 %x, i32* %x.addr, align 4
+  store i32 %y, i32* %y.addr, align 4
+  store i32 %z, i32* %z.addr, align 4
+  %0 = load i32, i32* %x.addr, align 4
+  %1 = load i32, i32* %y.addr, align 4
+  %2 = load i32, i32* %z.addr, align 4
+  %call = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([21 x i8], [21 x i8]* @.str, i32 0, i32 0), i32 %0, i32 %1, i32 %2)
+  ret void
+}
+
+; Function Attrs: noinline nounwind optnone
+define hidden i32 @__main_argc_argv(i32 %argc, i8** %argv) #0 {
+entry:
+  %retval = alloca i32, align 4
+  %argc.addr = alloca i32, align 4
+  %argv.addr = alloca i8**, align 4
+  %.compoundliteral = alloca %struct.FTest_args, align 4
+  %.compoundliteral1 = alloca %struct.FTest_args, align 4
+  %.compoundliteral5 = alloca %struct.FTest_args, align 4
+  %.compoundliteral9 = alloca %struct.FTest_args, align 4
+  %.compoundliteral13 = alloca %struct.FTest_args, align 4
+  %.compoundliteral17 = alloca %struct.FTest_args, align 4
+  %.compoundliteral21 = alloca %struct.FTest_args, align 4
+  store i32 0, i32* %retval, align 4
+  store i32 %argc, i32* %argc.addr, align 4
+  store i8** %argv, i8*** %argv.addr, align 4
+  %x = getelementptr inbounds %struct.FTest_args, %struct.FTest_args* %.compoundliteral, i32 0, i32 0
+  store i32 0, i32* %x, align 4
+  %y = getelementptr inbounds %struct.FTest_args, %struct.FTest_args* %.compoundliteral, i32 0, i32 1
+  store i32 10, i32* %y, align 4
+  %z = getelementptr inbounds %struct.FTest_args, %struct.FTest_args* %.compoundliteral, i32 0, i32 2
+  store i32 0, i32* %z, align 4
+  call void @FTest(%struct.FTest_args* byval(%struct.FTest_args) align 4 %.compoundliteral)
+  %x2 = getelementptr inbounds %struct.FTest_args, %struct.FTest_args* %.compoundliteral1, i32 0, i32 0
+  store i32 0, i32* %x2, align 4
+  %y3 = getelementptr inbounds %struct.FTest_args, %struct.FTest_args* %.compoundliteral1, i32 0, i32 1
+  store i32 10, i32* %y3, align 4
+  %z4 = getelementptr inbounds %struct.FTest_args, %struct.FTest_args* %.compoundliteral1, i32 0, i32 2
+  store i32 42, i32* %z4, align 4
+  call void @FTest(%struct.FTest_args* byval(%struct.FTest_args) align 4 %.compoundliteral1)
+  %x6 = getelementptr inbounds %struct.FTest_args, %struct.FTest_args* %.compoundliteral5, i32 0, i32 0
+  store i32 42, i32* %x6, align 4
+  %y7 = getelementptr inbounds %struct.FTest_args, %struct.FTest_args* %.compoundliteral5, i32 0, i32 1
+  store i32 10, i32* %y7, align 4
+  %z8 = getelementptr inbounds %struct.FTest_args, %struct.FTest_args* %.compoundliteral5, i32 0, i32 2
+  store i32 47, i32* %z8, align 4
+  call void @FTest(%struct.FTest_args* byval(%struct.FTest_args) align 4 %.compoundliteral5)
+  %x10 = getelementptr inbounds %struct.FTest_args, %struct.FTest_args* %.compoundliteral9, i32 0, i32 0
+  store i32 142, i32* %x10, align 4
+  %y11 = getelementptr inbounds %struct.FTest_args, %struct.FTest_args* %.compoundliteral9, i32 0, i32 1
+  store i32 143, i32* %y11, align 4
+  %z12 = getelementptr inbounds %struct.FTest_args, %struct.FTest_args* %.compoundliteral9, i32 0, i32 2
+  store i32 144, i32* %z12, align 4
+  call void @FTest(%struct.FTest_args* byval(%struct.FTest_args) align 4 %.compoundliteral9)
+  %x14 = getelementptr inbounds %struct.FTest_args, %struct.FTest_args* %.compoundliteral13, i32 0, i32 0
+  store i32 142, i32* %x14, align 4
+  %y15 = getelementptr inbounds %struct.FTest_args, %struct.FTest_args* %.compoundliteral13, i32 0, i32 1
+  store i32 143, i32* %y15, align 4
+  %z16 = getelementptr inbounds %struct.FTest_args, %struct.FTest_args* %.compoundliteral13, i32 0, i32 2
+  store i32 99, i32* %z16, align 4
+  call void @FTest(%struct.FTest_args* byval(%struct.FTest_args) align 4 %.compoundliteral13)
+  %x18 = getelementptr inbounds %struct.FTest_args, %struct.FTest_args* %.compoundliteral17, i32 0, i32 0
+  store i32 142, i32* %x18, align 4
+  %y19 = getelementptr inbounds %struct.FTest_args, %struct.FTest_args* %.compoundliteral17, i32 0, i32 1
+  store i32 143, i32* %y19, align 4
+  %z20 = getelementptr inbounds %struct.FTest_args, %struct.FTest_args* %.compoundliteral17, i32 0, i32 2
+  store i32 144, i32* %z20, align 4
+  call void @FTest2_default_wrapper(%struct.FTest_args* byval(%struct.FTest_args) align 4 %.compoundliteral17)
+  %x22 = getelementptr inbounds %struct.FTest_args, %struct.FTest_args* %.compoundliteral21, i32 0, i32 0
+  store i32 142, i32* %x22, align 4
+  %y23 = getelementptr inbounds %struct.FTest_args, %struct.FTest_args* %.compoundliteral21, i32 0, i32 1
+  store i32 143, i32* %y23, align 4
+  %z24 = getelementptr inbounds %struct.FTest_args, %struct.FTest_args* %.compoundliteral21, i32 0, i32 2
+  store i32 99, i32* %z24, align 4
+  call void @FTest2_default_wrapper(%struct.FTest_args* byval(%struct.FTest_args) align 4 %.compoundliteral21)
+  ret i32 0
+}
+
+; Function Attrs: noinline nounwind optnone
+define internal void @FTest2_default_wrapper(%struct.FTest_args* byval(%struct.FTest_args) align 4 %args) #0 {
+entry:
+  %x = getelementptr inbounds %struct.FTest_args, %struct.FTest_args* %args, i32 0, i32 0
+  %0 = load i32, i32* %x, align 4
+  %y = getelementptr inbounds %struct.FTest_args, %struct.FTest_args* %args, i32 0, i32 1
+  %1 = load i32, i32* %y, align 4
+  %z = getelementptr inbounds %struct.FTest_args, %struct.FTest_args* %args, i32 0, i32 2
+  %2 = load i32, i32* %z, align 4
+  call void @FTest2(i32 %0, i32 %1, i32 %2)
+  ret void
+}
+
+attributes #0 = { noinline nounwind optnone "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "min-legal-vector-width"="0" "no-infs-fp-math"="false" "no-jump-tables"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #1 = { "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+
+!llvm.module.flags = !{!0}
+!llvm.ident = !{!1}
+
+!0 = !{i32 1, !"wchar_size", i32 4}
+!1 = !{!"clang version 11.0.0 (https://github.com/Jacarte/llvm-project.git 0f6dea67136cc1e0b3d200eb2bb165628970c44b)"}
+
+; extracted candidates
+
+; *****
+; For LLVM instruction:
+;  %0 = load i32, i32* %x.addr, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %1 = load i32, i32* %y.addr, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %2 = load i32, i32* %z.addr, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+#########################################################
+; exiting Souper's runOnFunction() for FTest2()
+
+; entering Souper's runOnFunction() for __main_argc_argv()
+
+; ModuleID = './Named_parameters.c.bc'
+source_filename = "./Named_parameters.c"
+target datalayout = "e-m:e-p:32:32-i64:64-n32:64-S128"
+target triple = "wasm32-unknown-wasi"
+
+%struct.FTest_args = type { i32, i32, i32 }
+
+@.str = private unnamed_addr constant [21 x i8] c"x: %d, y: %d, z: %d\0A\00", align 1
+
+; Function Attrs: noinline nounwind optnone
+define hidden void @FTest(%struct.FTest_args* byval(%struct.FTest_args) align 4 %args) #0 {
+entry:
+  %x = getelementptr inbounds %struct.FTest_args, %struct.FTest_args* %args, i32 0, i32 0
+  %0 = load i32, i32* %x, align 4
+  %y = getelementptr inbounds %struct.FTest_args, %struct.FTest_args* %args, i32 0, i32 1
+  %1 = load i32, i32* %y, align 4
+  %z = getelementptr inbounds %struct.FTest_args, %struct.FTest_args* %args, i32 0, i32 2
+  %2 = load i32, i32* %z, align 4
+  %call = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([21 x i8], [21 x i8]* @.str, i32 0, i32 0), i32 %0, i32 %1, i32 %2)
+  ret void
+}
+
+declare i32 @printf(i8* %0, ...) #1
+
+; Function Attrs: noinline nounwind optnone
+define hidden void @FTest2(i32 %x, i32 %y, i32 %z) #0 {
+entry:
+  %x.addr = alloca i32, align 4
+  %y.addr = alloca i32, align 4
+  %z.addr = alloca i32, align 4
+  store i32 %x, i32* %x.addr, align 4
+  store i32 %y, i32* %y.addr, align 4
+  store i32 %z, i32* %z.addr, align 4
+  %0 = load i32, i32* %x.addr, align 4
+  %1 = load i32, i32* %y.addr, align 4
+  %2 = load i32, i32* %z.addr, align 4
+  %call = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([21 x i8], [21 x i8]* @.str, i32 0, i32 0), i32 %0, i32 %1, i32 %2)
+  ret void
+}
+
+; Function Attrs: noinline nounwind optnone
+define hidden i32 @__main_argc_argv(i32 %argc, i8** %argv) #0 {
+entry:
+  %retval = alloca i32, align 4
+  %argc.addr = alloca i32, align 4
+  %argv.addr = alloca i8**, align 4
+  %.compoundliteral = alloca %struct.FTest_args, align 4
+  %.compoundliteral1 = alloca %struct.FTest_args, align 4
+  %.compoundliteral5 = alloca %struct.FTest_args, align 4
+  %.compoundliteral9 = alloca %struct.FTest_args, align 4
+  %.compoundliteral13 = alloca %struct.FTest_args, align 4
+  %.compoundliteral17 = alloca %struct.FTest_args, align 4
+  %.compoundliteral21 = alloca %struct.FTest_args, align 4
+  store i32 0, i32* %retval, align 4
+  store i32 %argc, i32* %argc.addr, align 4
+  store i8** %argv, i8*** %argv.addr, align 4
+  %x = getelementptr inbounds %struct.FTest_args, %struct.FTest_args* %.compoundliteral, i32 0, i32 0
+  store i32 0, i32* %x, align 4
+  %y = getelementptr inbounds %struct.FTest_args, %struct.FTest_args* %.compoundliteral, i32 0, i32 1
+  store i32 10, i32* %y, align 4
+  %z = getelementptr inbounds %struct.FTest_args, %struct.FTest_args* %.compoundliteral, i32 0, i32 2
+  store i32 0, i32* %z, align 4
+  call void @FTest(%struct.FTest_args* byval(%struct.FTest_args) align 4 %.compoundliteral)
+  %x2 = getelementptr inbounds %struct.FTest_args, %struct.FTest_args* %.compoundliteral1, i32 0, i32 0
+  store i32 0, i32* %x2, align 4
+  %y3 = getelementptr inbounds %struct.FTest_args, %struct.FTest_args* %.compoundliteral1, i32 0, i32 1
+  store i32 10, i32* %y3, align 4
+  %z4 = getelementptr inbounds %struct.FTest_args, %struct.FTest_args* %.compoundliteral1, i32 0, i32 2
+  store i32 42, i32* %z4, align 4
+  call void @FTest(%struct.FTest_args* byval(%struct.FTest_args) align 4 %.compoundliteral1)
+  %x6 = getelementptr inbounds %struct.FTest_args, %struct.FTest_args* %.compoundliteral5, i32 0, i32 0
+  store i32 42, i32* %x6, align 4
+  %y7 = getelementptr inbounds %struct.FTest_args, %struct.FTest_args* %.compoundliteral5, i32 0, i32 1
+  store i32 10, i32* %y7, align 4
+  %z8 = getelementptr inbounds %struct.FTest_args, %struct.FTest_args* %.compoundliteral5, i32 0, i32 2
+  store i32 47, i32* %z8, align 4
+  call void @FTest(%struct.FTest_args* byval(%struct.FTest_args) align 4 %.compoundliteral5)
+  %x10 = getelementptr inbounds %struct.FTest_args, %struct.FTest_args* %.compoundliteral9, i32 0, i32 0
+  store i32 142, i32* %x10, align 4
+  %y11 = getelementptr inbounds %struct.FTest_args, %struct.FTest_args* %.compoundliteral9, i32 0, i32 1
+  store i32 143, i32* %y11, align 4
+  %z12 = getelementptr inbounds %struct.FTest_args, %struct.FTest_args* %.compoundliteral9, i32 0, i32 2
+  store i32 144, i32* %z12, align 4
+  call void @FTest(%struct.FTest_args* byval(%struct.FTest_args) align 4 %.compoundliteral9)
+  %x14 = getelementptr inbounds %struct.FTest_args, %struct.FTest_args* %.compoundliteral13, i32 0, i32 0
+  store i32 142, i32* %x14, align 4
+  %y15 = getelementptr inbounds %struct.FTest_args, %struct.FTest_args* %.compoundliteral13, i32 0, i32 1
+  store i32 143, i32* %y15, align 4
+  %z16 = getelementptr inbounds %struct.FTest_args, %struct.FTest_args* %.compoundliteral13, i32 0, i32 2
+  store i32 99, i32* %z16, align 4
+  call void @FTest(%struct.FTest_args* byval(%struct.FTest_args) align 4 %.compoundliteral13)
+  %x18 = getelementptr inbounds %struct.FTest_args, %struct.FTest_args* %.compoundliteral17, i32 0, i32 0
+  store i32 142, i32* %x18, align 4
+  %y19 = getelementptr inbounds %struct.FTest_args, %struct.FTest_args* %.compoundliteral17, i32 0, i32 1
+  store i32 143, i32* %y19, align 4
+  %z20 = getelementptr inbounds %struct.FTest_args, %struct.FTest_args* %.compoundliteral17, i32 0, i32 2
+  store i32 144, i32* %z20, align 4
+  call void @FTest2_default_wrapper(%struct.FTest_args* byval(%struct.FTest_args) align 4 %.compoundliteral17)
+  %x22 = getelementptr inbounds %struct.FTest_args, %struct.FTest_args* %.compoundliteral21, i32 0, i32 0
+  store i32 142, i32* %x22, align 4
+  %y23 = getelementptr inbounds %struct.FTest_args, %struct.FTest_args* %.compoundliteral21, i32 0, i32 1
+  store i32 143, i32* %y23, align 4
+  %z24 = getelementptr inbounds %struct.FTest_args, %struct.FTest_args* %.compoundliteral21, i32 0, i32 2
+  store i32 99, i32* %z24, align 4
+  call void @FTest2_default_wrapper(%struct.FTest_args* byval(%struct.FTest_args) align 4 %.compoundliteral21)
+  ret i32 0
+}
+
+; Function Attrs: noinline nounwind optnone
+define internal void @FTest2_default_wrapper(%struct.FTest_args* byval(%struct.FTest_args) align 4 %args) #0 {
+entry:
+  %x = getelementptr inbounds %struct.FTest_args, %struct.FTest_args* %args, i32 0, i32 0
+  %0 = load i32, i32* %x, align 4
+  %y = getelementptr inbounds %struct.FTest_args, %struct.FTest_args* %args, i32 0, i32 1
+  %1 = load i32, i32* %y, align 4
+  %z = getelementptr inbounds %struct.FTest_args, %struct.FTest_args* %args, i32 0, i32 2
+  %2 = load i32, i32* %z, align 4
+  call void @FTest2(i32 %0, i32 %1, i32 %2)
+  ret void
+}
+
+attributes #0 = { noinline nounwind optnone "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "min-legal-vector-width"="0" "no-infs-fp-math"="false" "no-jump-tables"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #1 = { "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+
+!llvm.module.flags = !{!0}
+!llvm.ident = !{!1}
+
+!0 = !{i32 1, !"wchar_size", i32 4}
+!1 = !{!"clang version 11.0.0 (https://github.com/Jacarte/llvm-project.git 0f6dea67136cc1e0b3d200eb2bb165628970c44b)"}
+
+; extracted candidates
+#########################################################
+; exiting Souper's runOnFunction() for __main_argc_argv()
+
+; entering Souper's runOnFunction() for ./Named_parameters.c.bc:FTest2_default_wrapper()
+
+; ModuleID = './Named_parameters.c.bc'
+source_filename = "./Named_parameters.c"
+target datalayout = "e-m:e-p:32:32-i64:64-n32:64-S128"
+target triple = "wasm32-unknown-wasi"
+
+%struct.FTest_args = type { i32, i32, i32 }
+
+@.str = private unnamed_addr constant [21 x i8] c"x: %d, y: %d, z: %d\0A\00", align 1
+
+; Function Attrs: noinline nounwind optnone
+define hidden void @FTest(%struct.FTest_args* byval(%struct.FTest_args) align 4 %args) #0 {
+entry:
+  %x = getelementptr inbounds %struct.FTest_args, %struct.FTest_args* %args, i32 0, i32 0
+  %0 = load i32, i32* %x, align 4
+  %y = getelementptr inbounds %struct.FTest_args, %struct.FTest_args* %args, i32 0, i32 1
+  %1 = load i32, i32* %y, align 4
+  %z = getelementptr inbounds %struct.FTest_args, %struct.FTest_args* %args, i32 0, i32 2
+  %2 = load i32, i32* %z, align 4
+  %call = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([21 x i8], [21 x i8]* @.str, i32 0, i32 0), i32 %0, i32 %1, i32 %2)
+  ret void
+}
+
+declare i32 @printf(i8* %0, ...) #1
+
+; Function Attrs: noinline nounwind optnone
+define hidden void @FTest2(i32 %x, i32 %y, i32 %z) #0 {
+entry:
+  %x.addr = alloca i32, align 4
+  %y.addr = alloca i32, align 4
+  %z.addr = alloca i32, align 4
+  store i32 %x, i32* %x.addr, align 4
+  store i32 %y, i32* %y.addr, align 4
+  store i32 %z, i32* %z.addr, align 4
+  %0 = load i32, i32* %x.addr, align 4
+  %1 = load i32, i32* %y.addr, align 4
+  %2 = load i32, i32* %z.addr, align 4
+  %call = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([21 x i8], [21 x i8]* @.str, i32 0, i32 0), i32 %0, i32 %1, i32 %2)
+  ret void
+}
+
+; Function Attrs: noinline nounwind optnone
+define hidden i32 @__main_argc_argv(i32 %argc, i8** %argv) #0 {
+entry:
+  %retval = alloca i32, align 4
+  %argc.addr = alloca i32, align 4
+  %argv.addr = alloca i8**, align 4
+  %.compoundliteral = alloca %struct.FTest_args, align 4
+  %.compoundliteral1 = alloca %struct.FTest_args, align 4
+  %.compoundliteral5 = alloca %struct.FTest_args, align 4
+  %.compoundliteral9 = alloca %struct.FTest_args, align 4
+  %.compoundliteral13 = alloca %struct.FTest_args, align 4
+  %.compoundliteral17 = alloca %struct.FTest_args, align 4
+  %.compoundliteral21 = alloca %struct.FTest_args, align 4
+  store i32 0, i32* %retval, align 4
+  store i32 %argc, i32* %argc.addr, align 4
+  store i8** %argv, i8*** %argv.addr, align 4
+  %x = getelementptr inbounds %struct.FTest_args, %struct.FTest_args* %.compoundliteral, i32 0, i32 0
+  store i32 0, i32* %x, align 4
+  %y = getelementptr inbounds %struct.FTest_args, %struct.FTest_args* %.compoundliteral, i32 0, i32 1
+  store i32 10, i32* %y, align 4
+  %z = getelementptr inbounds %struct.FTest_args, %struct.FTest_args* %.compoundliteral, i32 0, i32 2
+  store i32 0, i32* %z, align 4
+  call void @FTest(%struct.FTest_args* byval(%struct.FTest_args) align 4 %.compoundliteral)
+  %x2 = getelementptr inbounds %struct.FTest_args, %struct.FTest_args* %.compoundliteral1, i32 0, i32 0
+  store i32 0, i32* %x2, align 4
+  %y3 = getelementptr inbounds %struct.FTest_args, %struct.FTest_args* %.compoundliteral1, i32 0, i32 1
+  store i32 10, i32* %y3, align 4
+  %z4 = getelementptr inbounds %struct.FTest_args, %struct.FTest_args* %.compoundliteral1, i32 0, i32 2
+  store i32 42, i32* %z4, align 4
+  call void @FTest(%struct.FTest_args* byval(%struct.FTest_args) align 4 %.compoundliteral1)
+  %x6 = getelementptr inbounds %struct.FTest_args, %struct.FTest_args* %.compoundliteral5, i32 0, i32 0
+  store i32 42, i32* %x6, align 4
+  %y7 = getelementptr inbounds %struct.FTest_args, %struct.FTest_args* %.compoundliteral5, i32 0, i32 1
+  store i32 10, i32* %y7, align 4
+  %z8 = getelementptr inbounds %struct.FTest_args, %struct.FTest_args* %.compoundliteral5, i32 0, i32 2
+  store i32 47, i32* %z8, align 4
+  call void @FTest(%struct.FTest_args* byval(%struct.FTest_args) align 4 %.compoundliteral5)
+  %x10 = getelementptr inbounds %struct.FTest_args, %struct.FTest_args* %.compoundliteral9, i32 0, i32 0
+  store i32 142, i32* %x10, align 4
+  %y11 = getelementptr inbounds %struct.FTest_args, %struct.FTest_args* %.compoundliteral9, i32 0, i32 1
+  store i32 143, i32* %y11, align 4
+  %z12 = getelementptr inbounds %struct.FTest_args, %struct.FTest_args* %.compoundliteral9, i32 0, i32 2
+  store i32 144, i32* %z12, align 4
+  call void @FTest(%struct.FTest_args* byval(%struct.FTest_args) align 4 %.compoundliteral9)
+  %x14 = getelementptr inbounds %struct.FTest_args, %struct.FTest_args* %.compoundliteral13, i32 0, i32 0
+  store i32 142, i32* %x14, align 4
+  %y15 = getelementptr inbounds %struct.FTest_args, %struct.FTest_args* %.compoundliteral13, i32 0, i32 1
+  store i32 143, i32* %y15, align 4
+  %z16 = getelementptr inbounds %struct.FTest_args, %struct.FTest_args* %.compoundliteral13, i32 0, i32 2
+  store i32 99, i32* %z16, align 4
+  call void @FTest(%struct.FTest_args* byval(%struct.FTest_args) align 4 %.compoundliteral13)
+  %x18 = getelementptr inbounds %struct.FTest_args, %struct.FTest_args* %.compoundliteral17, i32 0, i32 0
+  store i32 142, i32* %x18, align 4
+  %y19 = getelementptr inbounds %struct.FTest_args, %struct.FTest_args* %.compoundliteral17, i32 0, i32 1
+  store i32 143, i32* %y19, align 4
+  %z20 = getelementptr inbounds %struct.FTest_args, %struct.FTest_args* %.compoundliteral17, i32 0, i32 2
+  store i32 144, i32* %z20, align 4
+  call void @FTest2_default_wrapper(%struct.FTest_args* byval(%struct.FTest_args) align 4 %.compoundliteral17)
+  %x22 = getelementptr inbounds %struct.FTest_args, %struct.FTest_args* %.compoundliteral21, i32 0, i32 0
+  store i32 142, i32* %x22, align 4
+  %y23 = getelementptr inbounds %struct.FTest_args, %struct.FTest_args* %.compoundliteral21, i32 0, i32 1
+  store i32 143, i32* %y23, align 4
+  %z24 = getelementptr inbounds %struct.FTest_args, %struct.FTest_args* %.compoundliteral21, i32 0, i32 2
+  store i32 99, i32* %z24, align 4
+  call void @FTest2_default_wrapper(%struct.FTest_args* byval(%struct.FTest_args) align 4 %.compoundliteral21)
+  ret i32 0
+}
+
+; Function Attrs: noinline nounwind optnone
+define internal void @FTest2_default_wrapper(%struct.FTest_args* byval(%struct.FTest_args) align 4 %args) #0 {
+entry:
+  %x = getelementptr inbounds %struct.FTest_args, %struct.FTest_args* %args, i32 0, i32 0
+  %0 = load i32, i32* %x, align 4
+  %y = getelementptr inbounds %struct.FTest_args, %struct.FTest_args* %args, i32 0, i32 1
+  %1 = load i32, i32* %y, align 4
+  %z = getelementptr inbounds %struct.FTest_args, %struct.FTest_args* %args, i32 0, i32 2
+  %2 = load i32, i32* %z, align 4
+  call void @FTest2(i32 %0, i32 %1, i32 %2)
+  ret void
+}
+
+attributes #0 = { noinline nounwind optnone "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "min-legal-vector-width"="0" "no-infs-fp-math"="false" "no-jump-tables"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #1 = { "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+
+!llvm.module.flags = !{!0}
+!llvm.ident = !{!1}
+
+!0 = !{i32 1, !"wchar_size", i32 4}
+!1 = !{!"clang version 11.0.0 (https://github.com/Jacarte/llvm-project.git 0f6dea67136cc1e0b3d200eb2bb165628970c44b)"}
+
+; extracted candidates
+
+; *****
+; For LLVM instruction:
+;  %0 = load i32, i32* %x, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %1 = load i32, i32* %y, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %2 = load i32, i32* %z, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+#########################################################
+; exiting Souper's runOnFunction() for ./Named_parameters.c.bc:FTest2_default_wrapper()
+Total of 0 replacements done on this module
+Total of 0 replacements candidates on this module

@@ -1,0 +1,835 @@
+
+Entering the Souper pass's runOnModule()
+
+
+; entering Souper's runOnFunction() for compose_call()
+
+; ModuleID = './Function_composition.c.bc'
+source_filename = "./Function_composition.c"
+target datalayout = "e-m:e-p:32:32-i64:64-n32:64-S128"
+target triple = "wasm32-unknown-wasi"
+
+%struct.compose_functor = type { {}*, %struct.double_to_double*, %struct.double_to_double* }
+%struct.double_to_double = type { double (%struct.double_to_double*, double)* }
+
+@.str = private unnamed_addr constant [4 x i8] c"%f\0A\00", align 1
+@llvm.used = appending global [1 x i8*] [i8* bitcast (i32 ()* @__main_void to i8*)], section "llvm.metadata"
+
+@__main_void = alias i32 (), i32 ()* @main
+
+; Function Attrs: noinline nounwind optnone
+define hidden double @compose_call(%struct.compose_functor* %this, double %x) #0 {
+entry:
+  %this.addr = alloca %struct.compose_functor*, align 4
+  %x.addr = alloca double, align 8
+  store %struct.compose_functor* %this, %struct.compose_functor** %this.addr, align 4
+  store double %x, double* %x.addr, align 8
+  %0 = load %struct.compose_functor*, %struct.compose_functor** %this.addr, align 4
+  %f = getelementptr inbounds %struct.compose_functor, %struct.compose_functor* %0, i32 0, i32 1
+  %1 = load %struct.double_to_double*, %struct.double_to_double** %f, align 4
+  %fn = getelementptr inbounds %struct.double_to_double, %struct.double_to_double* %1, i32 0, i32 0
+  %2 = load double (%struct.double_to_double*, double)*, double (%struct.double_to_double*, double)** %fn, align 4
+  %3 = load %struct.compose_functor*, %struct.compose_functor** %this.addr, align 4
+  %f1 = getelementptr inbounds %struct.compose_functor, %struct.compose_functor* %3, i32 0, i32 1
+  %4 = load %struct.double_to_double*, %struct.double_to_double** %f1, align 4
+  %5 = load %struct.compose_functor*, %struct.compose_functor** %this.addr, align 4
+  %g = getelementptr inbounds %struct.compose_functor, %struct.compose_functor* %5, i32 0, i32 2
+  %6 = load %struct.double_to_double*, %struct.double_to_double** %g, align 4
+  %fn2 = getelementptr inbounds %struct.double_to_double, %struct.double_to_double* %6, i32 0, i32 0
+  %7 = load double (%struct.double_to_double*, double)*, double (%struct.double_to_double*, double)** %fn2, align 4
+  %8 = load %struct.compose_functor*, %struct.compose_functor** %this.addr, align 4
+  %g3 = getelementptr inbounds %struct.compose_functor, %struct.compose_functor* %8, i32 0, i32 2
+  %9 = load %struct.double_to_double*, %struct.double_to_double** %g3, align 4
+  %10 = load double, double* %x.addr, align 8
+  %call = call double %7(%struct.double_to_double* %9, double %10)
+  %call4 = call double %2(%struct.double_to_double* %4, double %call)
+  ret double %call4
+}
+
+; Function Attrs: noinline nounwind optnone
+define hidden %struct.double_to_double* @compose(%struct.double_to_double* %f, %struct.double_to_double* %g) #0 {
+entry:
+  %f.addr = alloca %struct.double_to_double*, align 4
+  %g.addr = alloca %struct.double_to_double*, align 4
+  %result = alloca %struct.compose_functor*, align 4
+  store %struct.double_to_double* %f, %struct.double_to_double** %f.addr, align 4
+  store %struct.double_to_double* %g, %struct.double_to_double** %g.addr, align 4
+  %call = call noalias i8* @malloc(i32 12)
+  %0 = bitcast i8* %call to %struct.compose_functor*
+  store %struct.compose_functor* %0, %struct.compose_functor** %result, align 4
+  %1 = load %struct.compose_functor*, %struct.compose_functor** %result, align 4
+  %fn = getelementptr inbounds %struct.compose_functor, %struct.compose_functor* %1, i32 0, i32 0
+  %fn1 = bitcast {}** %fn to double (%struct.compose_functor*, double)**
+  store double (%struct.compose_functor*, double)* @compose_call, double (%struct.compose_functor*, double)** %fn1, align 4
+  %2 = load %struct.double_to_double*, %struct.double_to_double** %f.addr, align 4
+  %3 = load %struct.compose_functor*, %struct.compose_functor** %result, align 4
+  %f2 = getelementptr inbounds %struct.compose_functor, %struct.compose_functor* %3, i32 0, i32 1
+  store %struct.double_to_double* %2, %struct.double_to_double** %f2, align 4
+  %4 = load %struct.double_to_double*, %struct.double_to_double** %g.addr, align 4
+  %5 = load %struct.compose_functor*, %struct.compose_functor** %result, align 4
+  %g3 = getelementptr inbounds %struct.compose_functor, %struct.compose_functor* %5, i32 0, i32 2
+  store %struct.double_to_double* %4, %struct.double_to_double** %g3, align 4
+  %6 = load %struct.compose_functor*, %struct.compose_functor** %result, align 4
+  %7 = bitcast %struct.compose_functor* %6 to %struct.double_to_double*
+  ret %struct.double_to_double* %7
+}
+
+declare noalias i8* @malloc(i32 %0) #1
+
+; Function Attrs: noinline nounwind optnone
+define hidden double @sin_call(%struct.double_to_double* %this, double %x) #0 {
+entry:
+  %this.addr = alloca %struct.double_to_double*, align 4
+  %x.addr = alloca double, align 8
+  store %struct.double_to_double* %this, %struct.double_to_double** %this.addr, align 4
+  store double %x, double* %x.addr, align 8
+  %0 = load double, double* %x.addr, align 8
+  %1 = call double @llvm.sin.f64(double %0)
+  ret double %1
+}
+
+; Function Attrs: nounwind readnone speculatable willreturn
+declare double @llvm.sin.f64(double %0) #2
+
+; Function Attrs: noinline nounwind optnone
+define hidden double @asin_call(%struct.double_to_double* %this, double %x) #0 {
+entry:
+  %this.addr = alloca %struct.double_to_double*, align 4
+  %x.addr = alloca double, align 8
+  store %struct.double_to_double* %this, %struct.double_to_double** %this.addr, align 4
+  store double %x, double* %x.addr, align 8
+  %0 = load double, double* %x.addr, align 8
+  %call = call double @asin(double %0) #4
+  ret double %call
+}
+
+; Function Attrs: nounwind readnone
+declare double @asin(double %0) #3
+
+; Function Attrs: noinline nounwind optnone
+define hidden i32 @main() #0 {
+entry:
+  %retval = alloca i32, align 4
+  %my_sin = alloca %struct.double_to_double*, align 4
+  %my_asin = alloca %struct.double_to_double*, align 4
+  %sin_asin = alloca %struct.double_to_double*, align 4
+  store i32 0, i32* %retval, align 4
+  %call = call noalias i8* @malloc(i32 4)
+  %0 = bitcast i8* %call to %struct.double_to_double*
+  store %struct.double_to_double* %0, %struct.double_to_double** %my_sin, align 4
+  %1 = load %struct.double_to_double*, %struct.double_to_double** %my_sin, align 4
+  %fn = getelementptr inbounds %struct.double_to_double, %struct.double_to_double* %1, i32 0, i32 0
+  store double (%struct.double_to_double*, double)* @sin_call, double (%struct.double_to_double*, double)** %fn, align 4
+  %call1 = call noalias i8* @malloc(i32 4)
+  %2 = bitcast i8* %call1 to %struct.double_to_double*
+  store %struct.double_to_double* %2, %struct.double_to_double** %my_asin, align 4
+  %3 = load %struct.double_to_double*, %struct.double_to_double** %my_asin, align 4
+  %fn2 = getelementptr inbounds %struct.double_to_double, %struct.double_to_double* %3, i32 0, i32 0
+  store double (%struct.double_to_double*, double)* @asin_call, double (%struct.double_to_double*, double)** %fn2, align 4
+  %4 = load %struct.double_to_double*, %struct.double_to_double** %my_sin, align 4
+  %5 = load %struct.double_to_double*, %struct.double_to_double** %my_asin, align 4
+  %call3 = call %struct.double_to_double* @compose(%struct.double_to_double* %4, %struct.double_to_double* %5)
+  store %struct.double_to_double* %call3, %struct.double_to_double** %sin_asin, align 4
+  %6 = load %struct.double_to_double*, %struct.double_to_double** %sin_asin, align 4
+  %fn4 = getelementptr inbounds %struct.double_to_double, %struct.double_to_double* %6, i32 0, i32 0
+  %7 = load double (%struct.double_to_double*, double)*, double (%struct.double_to_double*, double)** %fn4, align 4
+  %8 = load %struct.double_to_double*, %struct.double_to_double** %sin_asin, align 4
+  %call5 = call double %7(%struct.double_to_double* %8, double 5.000000e-01)
+  %call6 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([4 x i8], [4 x i8]* @.str, i32 0, i32 0), double %call5)
+  %9 = load %struct.double_to_double*, %struct.double_to_double** %sin_asin, align 4
+  %10 = bitcast %struct.double_to_double* %9 to i8*
+  call void @free(i8* %10)
+  %11 = load %struct.double_to_double*, %struct.double_to_double** %my_sin, align 4
+  %12 = bitcast %struct.double_to_double* %11 to i8*
+  call void @free(i8* %12)
+  %13 = load %struct.double_to_double*, %struct.double_to_double** %my_asin, align 4
+  %14 = bitcast %struct.double_to_double* %13 to i8*
+  call void @free(i8* %14)
+  ret i32 0
+}
+
+declare i32 @printf(i8* %0, ...) #1
+
+declare void @free(i8* %0) #1
+
+attributes #0 = { noinline nounwind optnone "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "min-legal-vector-width"="0" "no-infs-fp-math"="false" "no-jump-tables"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #1 = { "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #2 = { nounwind readnone speculatable willreturn }
+attributes #3 = { nounwind readnone "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #4 = { nounwind readnone }
+
+!llvm.module.flags = !{!0}
+!llvm.ident = !{!1}
+
+!0 = !{i32 1, !"wchar_size", i32 4}
+!1 = !{!"clang version 11.0.0 (https://github.com/Jacarte/llvm-project.git 0f6dea67136cc1e0b3d200eb2bb165628970c44b)"}
+
+; extracted candidates
+#########################################################
+; exiting Souper's runOnFunction() for compose_call()
+
+; entering Souper's runOnFunction() for compose()
+
+; ModuleID = './Function_composition.c.bc'
+source_filename = "./Function_composition.c"
+target datalayout = "e-m:e-p:32:32-i64:64-n32:64-S128"
+target triple = "wasm32-unknown-wasi"
+
+%struct.compose_functor = type { {}*, %struct.double_to_double*, %struct.double_to_double* }
+%struct.double_to_double = type { double (%struct.double_to_double*, double)* }
+
+@.str = private unnamed_addr constant [4 x i8] c"%f\0A\00", align 1
+@llvm.used = appending global [1 x i8*] [i8* bitcast (i32 ()* @__main_void to i8*)], section "llvm.metadata"
+
+@__main_void = alias i32 (), i32 ()* @main
+
+; Function Attrs: noinline nounwind optnone
+define hidden double @compose_call(%struct.compose_functor* %this, double %x) #0 {
+entry:
+  %this.addr = alloca %struct.compose_functor*, align 4
+  %x.addr = alloca double, align 8
+  store %struct.compose_functor* %this, %struct.compose_functor** %this.addr, align 4
+  store double %x, double* %x.addr, align 8
+  %0 = load %struct.compose_functor*, %struct.compose_functor** %this.addr, align 4
+  %f = getelementptr inbounds %struct.compose_functor, %struct.compose_functor* %0, i32 0, i32 1
+  %1 = load %struct.double_to_double*, %struct.double_to_double** %f, align 4
+  %fn = getelementptr inbounds %struct.double_to_double, %struct.double_to_double* %1, i32 0, i32 0
+  %2 = load double (%struct.double_to_double*, double)*, double (%struct.double_to_double*, double)** %fn, align 4
+  %3 = load %struct.compose_functor*, %struct.compose_functor** %this.addr, align 4
+  %f1 = getelementptr inbounds %struct.compose_functor, %struct.compose_functor* %3, i32 0, i32 1
+  %4 = load %struct.double_to_double*, %struct.double_to_double** %f1, align 4
+  %5 = load %struct.compose_functor*, %struct.compose_functor** %this.addr, align 4
+  %g = getelementptr inbounds %struct.compose_functor, %struct.compose_functor* %5, i32 0, i32 2
+  %6 = load %struct.double_to_double*, %struct.double_to_double** %g, align 4
+  %fn2 = getelementptr inbounds %struct.double_to_double, %struct.double_to_double* %6, i32 0, i32 0
+  %7 = load double (%struct.double_to_double*, double)*, double (%struct.double_to_double*, double)** %fn2, align 4
+  %8 = load %struct.compose_functor*, %struct.compose_functor** %this.addr, align 4
+  %g3 = getelementptr inbounds %struct.compose_functor, %struct.compose_functor* %8, i32 0, i32 2
+  %9 = load %struct.double_to_double*, %struct.double_to_double** %g3, align 4
+  %10 = load double, double* %x.addr, align 8
+  %call = call double %7(%struct.double_to_double* %9, double %10)
+  %call4 = call double %2(%struct.double_to_double* %4, double %call)
+  ret double %call4
+}
+
+; Function Attrs: noinline nounwind optnone
+define hidden %struct.double_to_double* @compose(%struct.double_to_double* %f, %struct.double_to_double* %g) #0 {
+entry:
+  %f.addr = alloca %struct.double_to_double*, align 4
+  %g.addr = alloca %struct.double_to_double*, align 4
+  %result = alloca %struct.compose_functor*, align 4
+  store %struct.double_to_double* %f, %struct.double_to_double** %f.addr, align 4
+  store %struct.double_to_double* %g, %struct.double_to_double** %g.addr, align 4
+  %call = call noalias i8* @malloc(i32 12)
+  %0 = bitcast i8* %call to %struct.compose_functor*
+  store %struct.compose_functor* %0, %struct.compose_functor** %result, align 4
+  %1 = load %struct.compose_functor*, %struct.compose_functor** %result, align 4
+  %fn = getelementptr inbounds %struct.compose_functor, %struct.compose_functor* %1, i32 0, i32 0
+  %fn1 = bitcast {}** %fn to double (%struct.compose_functor*, double)**
+  store double (%struct.compose_functor*, double)* @compose_call, double (%struct.compose_functor*, double)** %fn1, align 4
+  %2 = load %struct.double_to_double*, %struct.double_to_double** %f.addr, align 4
+  %3 = load %struct.compose_functor*, %struct.compose_functor** %result, align 4
+  %f2 = getelementptr inbounds %struct.compose_functor, %struct.compose_functor* %3, i32 0, i32 1
+  store %struct.double_to_double* %2, %struct.double_to_double** %f2, align 4
+  %4 = load %struct.double_to_double*, %struct.double_to_double** %g.addr, align 4
+  %5 = load %struct.compose_functor*, %struct.compose_functor** %result, align 4
+  %g3 = getelementptr inbounds %struct.compose_functor, %struct.compose_functor* %5, i32 0, i32 2
+  store %struct.double_to_double* %4, %struct.double_to_double** %g3, align 4
+  %6 = load %struct.compose_functor*, %struct.compose_functor** %result, align 4
+  %7 = bitcast %struct.compose_functor* %6 to %struct.double_to_double*
+  ret %struct.double_to_double* %7
+}
+
+declare noalias i8* @malloc(i32 %0) #1
+
+; Function Attrs: noinline nounwind optnone
+define hidden double @sin_call(%struct.double_to_double* %this, double %x) #0 {
+entry:
+  %this.addr = alloca %struct.double_to_double*, align 4
+  %x.addr = alloca double, align 8
+  store %struct.double_to_double* %this, %struct.double_to_double** %this.addr, align 4
+  store double %x, double* %x.addr, align 8
+  %0 = load double, double* %x.addr, align 8
+  %1 = call double @llvm.sin.f64(double %0)
+  ret double %1
+}
+
+; Function Attrs: nounwind readnone speculatable willreturn
+declare double @llvm.sin.f64(double %0) #2
+
+; Function Attrs: noinline nounwind optnone
+define hidden double @asin_call(%struct.double_to_double* %this, double %x) #0 {
+entry:
+  %this.addr = alloca %struct.double_to_double*, align 4
+  %x.addr = alloca double, align 8
+  store %struct.double_to_double* %this, %struct.double_to_double** %this.addr, align 4
+  store double %x, double* %x.addr, align 8
+  %0 = load double, double* %x.addr, align 8
+  %call = call double @asin(double %0) #4
+  ret double %call
+}
+
+; Function Attrs: nounwind readnone
+declare double @asin(double %0) #3
+
+; Function Attrs: noinline nounwind optnone
+define hidden i32 @main() #0 {
+entry:
+  %retval = alloca i32, align 4
+  %my_sin = alloca %struct.double_to_double*, align 4
+  %my_asin = alloca %struct.double_to_double*, align 4
+  %sin_asin = alloca %struct.double_to_double*, align 4
+  store i32 0, i32* %retval, align 4
+  %call = call noalias i8* @malloc(i32 4)
+  %0 = bitcast i8* %call to %struct.double_to_double*
+  store %struct.double_to_double* %0, %struct.double_to_double** %my_sin, align 4
+  %1 = load %struct.double_to_double*, %struct.double_to_double** %my_sin, align 4
+  %fn = getelementptr inbounds %struct.double_to_double, %struct.double_to_double* %1, i32 0, i32 0
+  store double (%struct.double_to_double*, double)* @sin_call, double (%struct.double_to_double*, double)** %fn, align 4
+  %call1 = call noalias i8* @malloc(i32 4)
+  %2 = bitcast i8* %call1 to %struct.double_to_double*
+  store %struct.double_to_double* %2, %struct.double_to_double** %my_asin, align 4
+  %3 = load %struct.double_to_double*, %struct.double_to_double** %my_asin, align 4
+  %fn2 = getelementptr inbounds %struct.double_to_double, %struct.double_to_double* %3, i32 0, i32 0
+  store double (%struct.double_to_double*, double)* @asin_call, double (%struct.double_to_double*, double)** %fn2, align 4
+  %4 = load %struct.double_to_double*, %struct.double_to_double** %my_sin, align 4
+  %5 = load %struct.double_to_double*, %struct.double_to_double** %my_asin, align 4
+  %call3 = call %struct.double_to_double* @compose(%struct.double_to_double* %4, %struct.double_to_double* %5)
+  store %struct.double_to_double* %call3, %struct.double_to_double** %sin_asin, align 4
+  %6 = load %struct.double_to_double*, %struct.double_to_double** %sin_asin, align 4
+  %fn4 = getelementptr inbounds %struct.double_to_double, %struct.double_to_double* %6, i32 0, i32 0
+  %7 = load double (%struct.double_to_double*, double)*, double (%struct.double_to_double*, double)** %fn4, align 4
+  %8 = load %struct.double_to_double*, %struct.double_to_double** %sin_asin, align 4
+  %call5 = call double %7(%struct.double_to_double* %8, double 5.000000e-01)
+  %call6 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([4 x i8], [4 x i8]* @.str, i32 0, i32 0), double %call5)
+  %9 = load %struct.double_to_double*, %struct.double_to_double** %sin_asin, align 4
+  %10 = bitcast %struct.double_to_double* %9 to i8*
+  call void @free(i8* %10)
+  %11 = load %struct.double_to_double*, %struct.double_to_double** %my_sin, align 4
+  %12 = bitcast %struct.double_to_double* %11 to i8*
+  call void @free(i8* %12)
+  %13 = load %struct.double_to_double*, %struct.double_to_double** %my_asin, align 4
+  %14 = bitcast %struct.double_to_double* %13 to i8*
+  call void @free(i8* %14)
+  ret i32 0
+}
+
+declare i32 @printf(i8* %0, ...) #1
+
+declare void @free(i8* %0) #1
+
+attributes #0 = { noinline nounwind optnone "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "min-legal-vector-width"="0" "no-infs-fp-math"="false" "no-jump-tables"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #1 = { "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #2 = { nounwind readnone speculatable willreturn }
+attributes #3 = { nounwind readnone "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #4 = { nounwind readnone }
+
+!llvm.module.flags = !{!0}
+!llvm.ident = !{!1}
+
+!0 = !{i32 1, !"wchar_size", i32 4}
+!1 = !{!"clang version 11.0.0 (https://github.com/Jacarte/llvm-project.git 0f6dea67136cc1e0b3d200eb2bb165628970c44b)"}
+
+; extracted candidates
+#########################################################
+; exiting Souper's runOnFunction() for compose()
+
+; entering Souper's runOnFunction() for sin_call()
+
+; ModuleID = './Function_composition.c.bc'
+source_filename = "./Function_composition.c"
+target datalayout = "e-m:e-p:32:32-i64:64-n32:64-S128"
+target triple = "wasm32-unknown-wasi"
+
+%struct.compose_functor = type { {}*, %struct.double_to_double*, %struct.double_to_double* }
+%struct.double_to_double = type { double (%struct.double_to_double*, double)* }
+
+@.str = private unnamed_addr constant [4 x i8] c"%f\0A\00", align 1
+@llvm.used = appending global [1 x i8*] [i8* bitcast (i32 ()* @__main_void to i8*)], section "llvm.metadata"
+
+@__main_void = alias i32 (), i32 ()* @main
+
+; Function Attrs: noinline nounwind optnone
+define hidden double @compose_call(%struct.compose_functor* %this, double %x) #0 {
+entry:
+  %this.addr = alloca %struct.compose_functor*, align 4
+  %x.addr = alloca double, align 8
+  store %struct.compose_functor* %this, %struct.compose_functor** %this.addr, align 4
+  store double %x, double* %x.addr, align 8
+  %0 = load %struct.compose_functor*, %struct.compose_functor** %this.addr, align 4
+  %f = getelementptr inbounds %struct.compose_functor, %struct.compose_functor* %0, i32 0, i32 1
+  %1 = load %struct.double_to_double*, %struct.double_to_double** %f, align 4
+  %fn = getelementptr inbounds %struct.double_to_double, %struct.double_to_double* %1, i32 0, i32 0
+  %2 = load double (%struct.double_to_double*, double)*, double (%struct.double_to_double*, double)** %fn, align 4
+  %3 = load %struct.compose_functor*, %struct.compose_functor** %this.addr, align 4
+  %f1 = getelementptr inbounds %struct.compose_functor, %struct.compose_functor* %3, i32 0, i32 1
+  %4 = load %struct.double_to_double*, %struct.double_to_double** %f1, align 4
+  %5 = load %struct.compose_functor*, %struct.compose_functor** %this.addr, align 4
+  %g = getelementptr inbounds %struct.compose_functor, %struct.compose_functor* %5, i32 0, i32 2
+  %6 = load %struct.double_to_double*, %struct.double_to_double** %g, align 4
+  %fn2 = getelementptr inbounds %struct.double_to_double, %struct.double_to_double* %6, i32 0, i32 0
+  %7 = load double (%struct.double_to_double*, double)*, double (%struct.double_to_double*, double)** %fn2, align 4
+  %8 = load %struct.compose_functor*, %struct.compose_functor** %this.addr, align 4
+  %g3 = getelementptr inbounds %struct.compose_functor, %struct.compose_functor* %8, i32 0, i32 2
+  %9 = load %struct.double_to_double*, %struct.double_to_double** %g3, align 4
+  %10 = load double, double* %x.addr, align 8
+  %call = call double %7(%struct.double_to_double* %9, double %10)
+  %call4 = call double %2(%struct.double_to_double* %4, double %call)
+  ret double %call4
+}
+
+; Function Attrs: noinline nounwind optnone
+define hidden %struct.double_to_double* @compose(%struct.double_to_double* %f, %struct.double_to_double* %g) #0 {
+entry:
+  %f.addr = alloca %struct.double_to_double*, align 4
+  %g.addr = alloca %struct.double_to_double*, align 4
+  %result = alloca %struct.compose_functor*, align 4
+  store %struct.double_to_double* %f, %struct.double_to_double** %f.addr, align 4
+  store %struct.double_to_double* %g, %struct.double_to_double** %g.addr, align 4
+  %call = call noalias i8* @malloc(i32 12)
+  %0 = bitcast i8* %call to %struct.compose_functor*
+  store %struct.compose_functor* %0, %struct.compose_functor** %result, align 4
+  %1 = load %struct.compose_functor*, %struct.compose_functor** %result, align 4
+  %fn = getelementptr inbounds %struct.compose_functor, %struct.compose_functor* %1, i32 0, i32 0
+  %fn1 = bitcast {}** %fn to double (%struct.compose_functor*, double)**
+  store double (%struct.compose_functor*, double)* @compose_call, double (%struct.compose_functor*, double)** %fn1, align 4
+  %2 = load %struct.double_to_double*, %struct.double_to_double** %f.addr, align 4
+  %3 = load %struct.compose_functor*, %struct.compose_functor** %result, align 4
+  %f2 = getelementptr inbounds %struct.compose_functor, %struct.compose_functor* %3, i32 0, i32 1
+  store %struct.double_to_double* %2, %struct.double_to_double** %f2, align 4
+  %4 = load %struct.double_to_double*, %struct.double_to_double** %g.addr, align 4
+  %5 = load %struct.compose_functor*, %struct.compose_functor** %result, align 4
+  %g3 = getelementptr inbounds %struct.compose_functor, %struct.compose_functor* %5, i32 0, i32 2
+  store %struct.double_to_double* %4, %struct.double_to_double** %g3, align 4
+  %6 = load %struct.compose_functor*, %struct.compose_functor** %result, align 4
+  %7 = bitcast %struct.compose_functor* %6 to %struct.double_to_double*
+  ret %struct.double_to_double* %7
+}
+
+declare noalias i8* @malloc(i32 %0) #1
+
+; Function Attrs: noinline nounwind optnone
+define hidden double @sin_call(%struct.double_to_double* %this, double %x) #0 {
+entry:
+  %this.addr = alloca %struct.double_to_double*, align 4
+  %x.addr = alloca double, align 8
+  store %struct.double_to_double* %this, %struct.double_to_double** %this.addr, align 4
+  store double %x, double* %x.addr, align 8
+  %0 = load double, double* %x.addr, align 8
+  %1 = call double @llvm.sin.f64(double %0)
+  ret double %1
+}
+
+; Function Attrs: nounwind readnone speculatable willreturn
+declare double @llvm.sin.f64(double %0) #2
+
+; Function Attrs: noinline nounwind optnone
+define hidden double @asin_call(%struct.double_to_double* %this, double %x) #0 {
+entry:
+  %this.addr = alloca %struct.double_to_double*, align 4
+  %x.addr = alloca double, align 8
+  store %struct.double_to_double* %this, %struct.double_to_double** %this.addr, align 4
+  store double %x, double* %x.addr, align 8
+  %0 = load double, double* %x.addr, align 8
+  %call = call double @asin(double %0) #4
+  ret double %call
+}
+
+; Function Attrs: nounwind readnone
+declare double @asin(double %0) #3
+
+; Function Attrs: noinline nounwind optnone
+define hidden i32 @main() #0 {
+entry:
+  %retval = alloca i32, align 4
+  %my_sin = alloca %struct.double_to_double*, align 4
+  %my_asin = alloca %struct.double_to_double*, align 4
+  %sin_asin = alloca %struct.double_to_double*, align 4
+  store i32 0, i32* %retval, align 4
+  %call = call noalias i8* @malloc(i32 4)
+  %0 = bitcast i8* %call to %struct.double_to_double*
+  store %struct.double_to_double* %0, %struct.double_to_double** %my_sin, align 4
+  %1 = load %struct.double_to_double*, %struct.double_to_double** %my_sin, align 4
+  %fn = getelementptr inbounds %struct.double_to_double, %struct.double_to_double* %1, i32 0, i32 0
+  store double (%struct.double_to_double*, double)* @sin_call, double (%struct.double_to_double*, double)** %fn, align 4
+  %call1 = call noalias i8* @malloc(i32 4)
+  %2 = bitcast i8* %call1 to %struct.double_to_double*
+  store %struct.double_to_double* %2, %struct.double_to_double** %my_asin, align 4
+  %3 = load %struct.double_to_double*, %struct.double_to_double** %my_asin, align 4
+  %fn2 = getelementptr inbounds %struct.double_to_double, %struct.double_to_double* %3, i32 0, i32 0
+  store double (%struct.double_to_double*, double)* @asin_call, double (%struct.double_to_double*, double)** %fn2, align 4
+  %4 = load %struct.double_to_double*, %struct.double_to_double** %my_sin, align 4
+  %5 = load %struct.double_to_double*, %struct.double_to_double** %my_asin, align 4
+  %call3 = call %struct.double_to_double* @compose(%struct.double_to_double* %4, %struct.double_to_double* %5)
+  store %struct.double_to_double* %call3, %struct.double_to_double** %sin_asin, align 4
+  %6 = load %struct.double_to_double*, %struct.double_to_double** %sin_asin, align 4
+  %fn4 = getelementptr inbounds %struct.double_to_double, %struct.double_to_double* %6, i32 0, i32 0
+  %7 = load double (%struct.double_to_double*, double)*, double (%struct.double_to_double*, double)** %fn4, align 4
+  %8 = load %struct.double_to_double*, %struct.double_to_double** %sin_asin, align 4
+  %call5 = call double %7(%struct.double_to_double* %8, double 5.000000e-01)
+  %call6 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([4 x i8], [4 x i8]* @.str, i32 0, i32 0), double %call5)
+  %9 = load %struct.double_to_double*, %struct.double_to_double** %sin_asin, align 4
+  %10 = bitcast %struct.double_to_double* %9 to i8*
+  call void @free(i8* %10)
+  %11 = load %struct.double_to_double*, %struct.double_to_double** %my_sin, align 4
+  %12 = bitcast %struct.double_to_double* %11 to i8*
+  call void @free(i8* %12)
+  %13 = load %struct.double_to_double*, %struct.double_to_double** %my_asin, align 4
+  %14 = bitcast %struct.double_to_double* %13 to i8*
+  call void @free(i8* %14)
+  ret i32 0
+}
+
+declare i32 @printf(i8* %0, ...) #1
+
+declare void @free(i8* %0) #1
+
+attributes #0 = { noinline nounwind optnone "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "min-legal-vector-width"="0" "no-infs-fp-math"="false" "no-jump-tables"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #1 = { "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #2 = { nounwind readnone speculatable willreturn }
+attributes #3 = { nounwind readnone "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #4 = { nounwind readnone }
+
+!llvm.module.flags = !{!0}
+!llvm.ident = !{!1}
+
+!0 = !{i32 1, !"wchar_size", i32 4}
+!1 = !{!"clang version 11.0.0 (https://github.com/Jacarte/llvm-project.git 0f6dea67136cc1e0b3d200eb2bb165628970c44b)"}
+
+; extracted candidates
+#########################################################
+; exiting Souper's runOnFunction() for sin_call()
+
+; entering Souper's runOnFunction() for asin_call()
+
+; ModuleID = './Function_composition.c.bc'
+source_filename = "./Function_composition.c"
+target datalayout = "e-m:e-p:32:32-i64:64-n32:64-S128"
+target triple = "wasm32-unknown-wasi"
+
+%struct.compose_functor = type { {}*, %struct.double_to_double*, %struct.double_to_double* }
+%struct.double_to_double = type { double (%struct.double_to_double*, double)* }
+
+@.str = private unnamed_addr constant [4 x i8] c"%f\0A\00", align 1
+@llvm.used = appending global [1 x i8*] [i8* bitcast (i32 ()* @__main_void to i8*)], section "llvm.metadata"
+
+@__main_void = alias i32 (), i32 ()* @main
+
+; Function Attrs: noinline nounwind optnone
+define hidden double @compose_call(%struct.compose_functor* %this, double %x) #0 {
+entry:
+  %this.addr = alloca %struct.compose_functor*, align 4
+  %x.addr = alloca double, align 8
+  store %struct.compose_functor* %this, %struct.compose_functor** %this.addr, align 4
+  store double %x, double* %x.addr, align 8
+  %0 = load %struct.compose_functor*, %struct.compose_functor** %this.addr, align 4
+  %f = getelementptr inbounds %struct.compose_functor, %struct.compose_functor* %0, i32 0, i32 1
+  %1 = load %struct.double_to_double*, %struct.double_to_double** %f, align 4
+  %fn = getelementptr inbounds %struct.double_to_double, %struct.double_to_double* %1, i32 0, i32 0
+  %2 = load double (%struct.double_to_double*, double)*, double (%struct.double_to_double*, double)** %fn, align 4
+  %3 = load %struct.compose_functor*, %struct.compose_functor** %this.addr, align 4
+  %f1 = getelementptr inbounds %struct.compose_functor, %struct.compose_functor* %3, i32 0, i32 1
+  %4 = load %struct.double_to_double*, %struct.double_to_double** %f1, align 4
+  %5 = load %struct.compose_functor*, %struct.compose_functor** %this.addr, align 4
+  %g = getelementptr inbounds %struct.compose_functor, %struct.compose_functor* %5, i32 0, i32 2
+  %6 = load %struct.double_to_double*, %struct.double_to_double** %g, align 4
+  %fn2 = getelementptr inbounds %struct.double_to_double, %struct.double_to_double* %6, i32 0, i32 0
+  %7 = load double (%struct.double_to_double*, double)*, double (%struct.double_to_double*, double)** %fn2, align 4
+  %8 = load %struct.compose_functor*, %struct.compose_functor** %this.addr, align 4
+  %g3 = getelementptr inbounds %struct.compose_functor, %struct.compose_functor* %8, i32 0, i32 2
+  %9 = load %struct.double_to_double*, %struct.double_to_double** %g3, align 4
+  %10 = load double, double* %x.addr, align 8
+  %call = call double %7(%struct.double_to_double* %9, double %10)
+  %call4 = call double %2(%struct.double_to_double* %4, double %call)
+  ret double %call4
+}
+
+; Function Attrs: noinline nounwind optnone
+define hidden %struct.double_to_double* @compose(%struct.double_to_double* %f, %struct.double_to_double* %g) #0 {
+entry:
+  %f.addr = alloca %struct.double_to_double*, align 4
+  %g.addr = alloca %struct.double_to_double*, align 4
+  %result = alloca %struct.compose_functor*, align 4
+  store %struct.double_to_double* %f, %struct.double_to_double** %f.addr, align 4
+  store %struct.double_to_double* %g, %struct.double_to_double** %g.addr, align 4
+  %call = call noalias i8* @malloc(i32 12)
+  %0 = bitcast i8* %call to %struct.compose_functor*
+  store %struct.compose_functor* %0, %struct.compose_functor** %result, align 4
+  %1 = load %struct.compose_functor*, %struct.compose_functor** %result, align 4
+  %fn = getelementptr inbounds %struct.compose_functor, %struct.compose_functor* %1, i32 0, i32 0
+  %fn1 = bitcast {}** %fn to double (%struct.compose_functor*, double)**
+  store double (%struct.compose_functor*, double)* @compose_call, double (%struct.compose_functor*, double)** %fn1, align 4
+  %2 = load %struct.double_to_double*, %struct.double_to_double** %f.addr, align 4
+  %3 = load %struct.compose_functor*, %struct.compose_functor** %result, align 4
+  %f2 = getelementptr inbounds %struct.compose_functor, %struct.compose_functor* %3, i32 0, i32 1
+  store %struct.double_to_double* %2, %struct.double_to_double** %f2, align 4
+  %4 = load %struct.double_to_double*, %struct.double_to_double** %g.addr, align 4
+  %5 = load %struct.compose_functor*, %struct.compose_functor** %result, align 4
+  %g3 = getelementptr inbounds %struct.compose_functor, %struct.compose_functor* %5, i32 0, i32 2
+  store %struct.double_to_double* %4, %struct.double_to_double** %g3, align 4
+  %6 = load %struct.compose_functor*, %struct.compose_functor** %result, align 4
+  %7 = bitcast %struct.compose_functor* %6 to %struct.double_to_double*
+  ret %struct.double_to_double* %7
+}
+
+declare noalias i8* @malloc(i32 %0) #1
+
+; Function Attrs: noinline nounwind optnone
+define hidden double @sin_call(%struct.double_to_double* %this, double %x) #0 {
+entry:
+  %this.addr = alloca %struct.double_to_double*, align 4
+  %x.addr = alloca double, align 8
+  store %struct.double_to_double* %this, %struct.double_to_double** %this.addr, align 4
+  store double %x, double* %x.addr, align 8
+  %0 = load double, double* %x.addr, align 8
+  %1 = call double @llvm.sin.f64(double %0)
+  ret double %1
+}
+
+; Function Attrs: nounwind readnone speculatable willreturn
+declare double @llvm.sin.f64(double %0) #2
+
+; Function Attrs: noinline nounwind optnone
+define hidden double @asin_call(%struct.double_to_double* %this, double %x) #0 {
+entry:
+  %this.addr = alloca %struct.double_to_double*, align 4
+  %x.addr = alloca double, align 8
+  store %struct.double_to_double* %this, %struct.double_to_double** %this.addr, align 4
+  store double %x, double* %x.addr, align 8
+  %0 = load double, double* %x.addr, align 8
+  %call = call double @asin(double %0) #4
+  ret double %call
+}
+
+; Function Attrs: nounwind readnone
+declare double @asin(double %0) #3
+
+; Function Attrs: noinline nounwind optnone
+define hidden i32 @main() #0 {
+entry:
+  %retval = alloca i32, align 4
+  %my_sin = alloca %struct.double_to_double*, align 4
+  %my_asin = alloca %struct.double_to_double*, align 4
+  %sin_asin = alloca %struct.double_to_double*, align 4
+  store i32 0, i32* %retval, align 4
+  %call = call noalias i8* @malloc(i32 4)
+  %0 = bitcast i8* %call to %struct.double_to_double*
+  store %struct.double_to_double* %0, %struct.double_to_double** %my_sin, align 4
+  %1 = load %struct.double_to_double*, %struct.double_to_double** %my_sin, align 4
+  %fn = getelementptr inbounds %struct.double_to_double, %struct.double_to_double* %1, i32 0, i32 0
+  store double (%struct.double_to_double*, double)* @sin_call, double (%struct.double_to_double*, double)** %fn, align 4
+  %call1 = call noalias i8* @malloc(i32 4)
+  %2 = bitcast i8* %call1 to %struct.double_to_double*
+  store %struct.double_to_double* %2, %struct.double_to_double** %my_asin, align 4
+  %3 = load %struct.double_to_double*, %struct.double_to_double** %my_asin, align 4
+  %fn2 = getelementptr inbounds %struct.double_to_double, %struct.double_to_double* %3, i32 0, i32 0
+  store double (%struct.double_to_double*, double)* @asin_call, double (%struct.double_to_double*, double)** %fn2, align 4
+  %4 = load %struct.double_to_double*, %struct.double_to_double** %my_sin, align 4
+  %5 = load %struct.double_to_double*, %struct.double_to_double** %my_asin, align 4
+  %call3 = call %struct.double_to_double* @compose(%struct.double_to_double* %4, %struct.double_to_double* %5)
+  store %struct.double_to_double* %call3, %struct.double_to_double** %sin_asin, align 4
+  %6 = load %struct.double_to_double*, %struct.double_to_double** %sin_asin, align 4
+  %fn4 = getelementptr inbounds %struct.double_to_double, %struct.double_to_double* %6, i32 0, i32 0
+  %7 = load double (%struct.double_to_double*, double)*, double (%struct.double_to_double*, double)** %fn4, align 4
+  %8 = load %struct.double_to_double*, %struct.double_to_double** %sin_asin, align 4
+  %call5 = call double %7(%struct.double_to_double* %8, double 5.000000e-01)
+  %call6 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([4 x i8], [4 x i8]* @.str, i32 0, i32 0), double %call5)
+  %9 = load %struct.double_to_double*, %struct.double_to_double** %sin_asin, align 4
+  %10 = bitcast %struct.double_to_double* %9 to i8*
+  call void @free(i8* %10)
+  %11 = load %struct.double_to_double*, %struct.double_to_double** %my_sin, align 4
+  %12 = bitcast %struct.double_to_double* %11 to i8*
+  call void @free(i8* %12)
+  %13 = load %struct.double_to_double*, %struct.double_to_double** %my_asin, align 4
+  %14 = bitcast %struct.double_to_double* %13 to i8*
+  call void @free(i8* %14)
+  ret i32 0
+}
+
+declare i32 @printf(i8* %0, ...) #1
+
+declare void @free(i8* %0) #1
+
+attributes #0 = { noinline nounwind optnone "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "min-legal-vector-width"="0" "no-infs-fp-math"="false" "no-jump-tables"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #1 = { "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #2 = { nounwind readnone speculatable willreturn }
+attributes #3 = { nounwind readnone "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #4 = { nounwind readnone }
+
+!llvm.module.flags = !{!0}
+!llvm.ident = !{!1}
+
+!0 = !{i32 1, !"wchar_size", i32 4}
+!1 = !{!"clang version 11.0.0 (https://github.com/Jacarte/llvm-project.git 0f6dea67136cc1e0b3d200eb2bb165628970c44b)"}
+
+; extracted candidates
+#########################################################
+; exiting Souper's runOnFunction() for asin_call()
+
+; entering Souper's runOnFunction() for main()
+
+; ModuleID = './Function_composition.c.bc'
+source_filename = "./Function_composition.c"
+target datalayout = "e-m:e-p:32:32-i64:64-n32:64-S128"
+target triple = "wasm32-unknown-wasi"
+
+%struct.compose_functor = type { {}*, %struct.double_to_double*, %struct.double_to_double* }
+%struct.double_to_double = type { double (%struct.double_to_double*, double)* }
+
+@.str = private unnamed_addr constant [4 x i8] c"%f\0A\00", align 1
+@llvm.used = appending global [1 x i8*] [i8* bitcast (i32 ()* @__main_void to i8*)], section "llvm.metadata"
+
+@__main_void = alias i32 (), i32 ()* @main
+
+; Function Attrs: noinline nounwind optnone
+define hidden double @compose_call(%struct.compose_functor* %this, double %x) #0 {
+entry:
+  %this.addr = alloca %struct.compose_functor*, align 4
+  %x.addr = alloca double, align 8
+  store %struct.compose_functor* %this, %struct.compose_functor** %this.addr, align 4
+  store double %x, double* %x.addr, align 8
+  %0 = load %struct.compose_functor*, %struct.compose_functor** %this.addr, align 4
+  %f = getelementptr inbounds %struct.compose_functor, %struct.compose_functor* %0, i32 0, i32 1
+  %1 = load %struct.double_to_double*, %struct.double_to_double** %f, align 4
+  %fn = getelementptr inbounds %struct.double_to_double, %struct.double_to_double* %1, i32 0, i32 0
+  %2 = load double (%struct.double_to_double*, double)*, double (%struct.double_to_double*, double)** %fn, align 4
+  %3 = load %struct.compose_functor*, %struct.compose_functor** %this.addr, align 4
+  %f1 = getelementptr inbounds %struct.compose_functor, %struct.compose_functor* %3, i32 0, i32 1
+  %4 = load %struct.double_to_double*, %struct.double_to_double** %f1, align 4
+  %5 = load %struct.compose_functor*, %struct.compose_functor** %this.addr, align 4
+  %g = getelementptr inbounds %struct.compose_functor, %struct.compose_functor* %5, i32 0, i32 2
+  %6 = load %struct.double_to_double*, %struct.double_to_double** %g, align 4
+  %fn2 = getelementptr inbounds %struct.double_to_double, %struct.double_to_double* %6, i32 0, i32 0
+  %7 = load double (%struct.double_to_double*, double)*, double (%struct.double_to_double*, double)** %fn2, align 4
+  %8 = load %struct.compose_functor*, %struct.compose_functor** %this.addr, align 4
+  %g3 = getelementptr inbounds %struct.compose_functor, %struct.compose_functor* %8, i32 0, i32 2
+  %9 = load %struct.double_to_double*, %struct.double_to_double** %g3, align 4
+  %10 = load double, double* %x.addr, align 8
+  %call = call double %7(%struct.double_to_double* %9, double %10)
+  %call4 = call double %2(%struct.double_to_double* %4, double %call)
+  ret double %call4
+}
+
+; Function Attrs: noinline nounwind optnone
+define hidden %struct.double_to_double* @compose(%struct.double_to_double* %f, %struct.double_to_double* %g) #0 {
+entry:
+  %f.addr = alloca %struct.double_to_double*, align 4
+  %g.addr = alloca %struct.double_to_double*, align 4
+  %result = alloca %struct.compose_functor*, align 4
+  store %struct.double_to_double* %f, %struct.double_to_double** %f.addr, align 4
+  store %struct.double_to_double* %g, %struct.double_to_double** %g.addr, align 4
+  %call = call noalias i8* @malloc(i32 12)
+  %0 = bitcast i8* %call to %struct.compose_functor*
+  store %struct.compose_functor* %0, %struct.compose_functor** %result, align 4
+  %1 = load %struct.compose_functor*, %struct.compose_functor** %result, align 4
+  %fn = getelementptr inbounds %struct.compose_functor, %struct.compose_functor* %1, i32 0, i32 0
+  %fn1 = bitcast {}** %fn to double (%struct.compose_functor*, double)**
+  store double (%struct.compose_functor*, double)* @compose_call, double (%struct.compose_functor*, double)** %fn1, align 4
+  %2 = load %struct.double_to_double*, %struct.double_to_double** %f.addr, align 4
+  %3 = load %struct.compose_functor*, %struct.compose_functor** %result, align 4
+  %f2 = getelementptr inbounds %struct.compose_functor, %struct.compose_functor* %3, i32 0, i32 1
+  store %struct.double_to_double* %2, %struct.double_to_double** %f2, align 4
+  %4 = load %struct.double_to_double*, %struct.double_to_double** %g.addr, align 4
+  %5 = load %struct.compose_functor*, %struct.compose_functor** %result, align 4
+  %g3 = getelementptr inbounds %struct.compose_functor, %struct.compose_functor* %5, i32 0, i32 2
+  store %struct.double_to_double* %4, %struct.double_to_double** %g3, align 4
+  %6 = load %struct.compose_functor*, %struct.compose_functor** %result, align 4
+  %7 = bitcast %struct.compose_functor* %6 to %struct.double_to_double*
+  ret %struct.double_to_double* %7
+}
+
+declare noalias i8* @malloc(i32 %0) #1
+
+; Function Attrs: noinline nounwind optnone
+define hidden double @sin_call(%struct.double_to_double* %this, double %x) #0 {
+entry:
+  %this.addr = alloca %struct.double_to_double*, align 4
+  %x.addr = alloca double, align 8
+  store %struct.double_to_double* %this, %struct.double_to_double** %this.addr, align 4
+  store double %x, double* %x.addr, align 8
+  %0 = load double, double* %x.addr, align 8
+  %1 = call double @llvm.sin.f64(double %0)
+  ret double %1
+}
+
+; Function Attrs: nounwind readnone speculatable willreturn
+declare double @llvm.sin.f64(double %0) #2
+
+; Function Attrs: noinline nounwind optnone
+define hidden double @asin_call(%struct.double_to_double* %this, double %x) #0 {
+entry:
+  %this.addr = alloca %struct.double_to_double*, align 4
+  %x.addr = alloca double, align 8
+  store %struct.double_to_double* %this, %struct.double_to_double** %this.addr, align 4
+  store double %x, double* %x.addr, align 8
+  %0 = load double, double* %x.addr, align 8
+  %call = call double @asin(double %0) #4
+  ret double %call
+}
+
+; Function Attrs: nounwind readnone
+declare double @asin(double %0) #3
+
+; Function Attrs: noinline nounwind optnone
+define hidden i32 @main() #0 {
+entry:
+  %retval = alloca i32, align 4
+  %my_sin = alloca %struct.double_to_double*, align 4
+  %my_asin = alloca %struct.double_to_double*, align 4
+  %sin_asin = alloca %struct.double_to_double*, align 4
+  store i32 0, i32* %retval, align 4
+  %call = call noalias i8* @malloc(i32 4)
+  %0 = bitcast i8* %call to %struct.double_to_double*
+  store %struct.double_to_double* %0, %struct.double_to_double** %my_sin, align 4
+  %1 = load %struct.double_to_double*, %struct.double_to_double** %my_sin, align 4
+  %fn = getelementptr inbounds %struct.double_to_double, %struct.double_to_double* %1, i32 0, i32 0
+  store double (%struct.double_to_double*, double)* @sin_call, double (%struct.double_to_double*, double)** %fn, align 4
+  %call1 = call noalias i8* @malloc(i32 4)
+  %2 = bitcast i8* %call1 to %struct.double_to_double*
+  store %struct.double_to_double* %2, %struct.double_to_double** %my_asin, align 4
+  %3 = load %struct.double_to_double*, %struct.double_to_double** %my_asin, align 4
+  %fn2 = getelementptr inbounds %struct.double_to_double, %struct.double_to_double* %3, i32 0, i32 0
+  store double (%struct.double_to_double*, double)* @asin_call, double (%struct.double_to_double*, double)** %fn2, align 4
+  %4 = load %struct.double_to_double*, %struct.double_to_double** %my_sin, align 4
+  %5 = load %struct.double_to_double*, %struct.double_to_double** %my_asin, align 4
+  %call3 = call %struct.double_to_double* @compose(%struct.double_to_double* %4, %struct.double_to_double* %5)
+  store %struct.double_to_double* %call3, %struct.double_to_double** %sin_asin, align 4
+  %6 = load %struct.double_to_double*, %struct.double_to_double** %sin_asin, align 4
+  %fn4 = getelementptr inbounds %struct.double_to_double, %struct.double_to_double* %6, i32 0, i32 0
+  %7 = load double (%struct.double_to_double*, double)*, double (%struct.double_to_double*, double)** %fn4, align 4
+  %8 = load %struct.double_to_double*, %struct.double_to_double** %sin_asin, align 4
+  %call5 = call double %7(%struct.double_to_double* %8, double 5.000000e-01)
+  %call6 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([4 x i8], [4 x i8]* @.str, i32 0, i32 0), double %call5)
+  %9 = load %struct.double_to_double*, %struct.double_to_double** %sin_asin, align 4
+  %10 = bitcast %struct.double_to_double* %9 to i8*
+  call void @free(i8* %10)
+  %11 = load %struct.double_to_double*, %struct.double_to_double** %my_sin, align 4
+  %12 = bitcast %struct.double_to_double* %11 to i8*
+  call void @free(i8* %12)
+  %13 = load %struct.double_to_double*, %struct.double_to_double** %my_asin, align 4
+  %14 = bitcast %struct.double_to_double* %13 to i8*
+  call void @free(i8* %14)
+  ret i32 0
+}
+
+declare i32 @printf(i8* %0, ...) #1
+
+declare void @free(i8* %0) #1
+
+attributes #0 = { noinline nounwind optnone "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "min-legal-vector-width"="0" "no-infs-fp-math"="false" "no-jump-tables"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #1 = { "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #2 = { nounwind readnone speculatable willreturn }
+attributes #3 = { nounwind readnone "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #4 = { nounwind readnone }
+
+!llvm.module.flags = !{!0}
+!llvm.ident = !{!1}
+
+!0 = !{i32 1, !"wchar_size", i32 4}
+!1 = !{!"clang version 11.0.0 (https://github.com/Jacarte/llvm-project.git 0f6dea67136cc1e0b3d200eb2bb165628970c44b)"}
+
+; extracted candidates
+#########################################################
+; exiting Souper's runOnFunction() for main()
+Total of 0 replacements done on this module
+Total of 0 replacements candidates on this module

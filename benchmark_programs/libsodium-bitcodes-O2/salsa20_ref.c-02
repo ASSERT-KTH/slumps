@@ -1,0 +1,1863 @@
+; entering Souper's runOnFunction() for ./salsa20_ref.c.bc:stream_ref_xor_ic()
+
+; ModuleID = './salsa20_ref.c.bc'
+source_filename = "crypto_stream/salsa20/ref/salsa20_ref.c"
+target datalayout = "e-m:e-p:32:32-i64:64-n32:64-S128"
+target triple = "wasm32-unknown-wasi"
+
+%struct.crypto_stream_salsa20_implementation = type { i32 (i8*, i64, i8*, i8*)*, i32 (i8*, i8*, i64, i8*, i64, i8*)* }
+
+@crypto_stream_salsa20_ref_implementation = hidden local_unnamed_addr global %struct.crypto_stream_salsa20_implementation { i32 (i8*, i64, i8*, i8*)* @stream_ref, i32 (i8*, i8*, i64, i8*, i64, i8*)* @stream_ref_xor_ic }, align 4
+
+; Function Attrs: nounwind
+define internal i32 @stream_ref(i8* %0, i64 %1, i8* nocapture readonly %2, i8* nocapture readonly %3) #0 {
+  %5 = alloca [16 x i8], align 16
+  %6 = alloca [64 x i8], align 16
+  %7 = alloca [32 x i8], align 16
+  %8 = getelementptr inbounds [16 x i8], [16 x i8]* %5, i32 0, i32 0
+  call void @llvm.lifetime.start.p0i8(i64 16, i8* nonnull %8) #3
+  %9 = getelementptr inbounds [64 x i8], [64 x i8]* %6, i32 0, i32 0
+  call void @llvm.lifetime.start.p0i8(i64 64, i8* nonnull %9) #3
+  %10 = getelementptr inbounds [32 x i8], [32 x i8]* %7, i32 0, i32 0
+  call void @llvm.lifetime.start.p0i8(i64 32, i8* nonnull %10) #3
+  %11 = icmp eq i64 %1, 0
+  br i1 %11, label %90, label %12
+
+12:                                               ; preds = %4
+  %13 = getelementptr inbounds [32 x i8], [32 x i8]* %7, i32 0, i32 0
+  call void @llvm.memcpy.p0i8.p0i8.i32(i8* nonnull align 16 dereferenceable(32) %13, i8* nonnull align 1 dereferenceable(32) %3, i32 32, i1 false)
+  %14 = bitcast i8* %2 to i64*
+  %15 = bitcast [16 x i8]* %5 to i64*
+  %16 = load i64, i64* %14, align 1
+  store i64 %16, i64* %15, align 16
+  %17 = getelementptr inbounds [16 x i8], [16 x i8]* %5, i32 0, i32 8
+  %18 = bitcast i8* %17 to i64*
+  store i64 0, i64* %18, align 8
+  %19 = icmp ugt i64 %1, 63
+  br i1 %19, label %20, label %76
+
+20:                                               ; preds = %12
+  %21 = getelementptr inbounds [16 x i8], [16 x i8]* %5, i32 0, i32 9
+  %22 = getelementptr inbounds [16 x i8], [16 x i8]* %5, i32 0, i32 10
+  %23 = getelementptr inbounds [16 x i8], [16 x i8]* %5, i32 0, i32 11
+  %24 = getelementptr inbounds [16 x i8], [16 x i8]* %5, i32 0, i32 12
+  %25 = getelementptr inbounds [16 x i8], [16 x i8]* %5, i32 0, i32 13
+  %26 = getelementptr inbounds [16 x i8], [16 x i8]* %5, i32 0, i32 14
+  %27 = getelementptr inbounds [16 x i8], [16 x i8]* %5, i32 0, i32 15
+  br label %28
+
+28:                                               ; preds = %20, %28
+  %29 = phi i8* [ %71, %28 ], [ %0, %20 ]
+  %30 = phi i64 [ %70, %28 ], [ %1, %20 ]
+  %31 = call i32 @crypto_core_salsa20(i8* %29, i8* nonnull %8, i8* nonnull %10, i8* null) #3
+  %32 = load i8, i8* %17, align 8
+  %33 = zext i8 %32 to i32
+  %34 = add nuw nsw i32 %33, 1
+  %35 = trunc i32 %34 to i8
+  store i8 %35, i8* %17, align 8
+  %36 = lshr i32 %34, 8
+  %37 = load i8, i8* %21, align 1
+  %38 = zext i8 %37 to i32
+  %39 = add nuw nsw i32 %36, %38
+  %40 = trunc i32 %39 to i8
+  store i8 %40, i8* %21, align 1
+  %41 = lshr i32 %39, 8
+  %42 = load i8, i8* %22, align 2
+  %43 = zext i8 %42 to i32
+  %44 = add nuw nsw i32 %41, %43
+  %45 = trunc i32 %44 to i8
+  store i8 %45, i8* %22, align 2
+  %46 = lshr i32 %44, 8
+  %47 = load i8, i8* %23, align 1
+  %48 = zext i8 %47 to i32
+  %49 = add nuw nsw i32 %46, %48
+  %50 = trunc i32 %49 to i8
+  store i8 %50, i8* %23, align 1
+  %51 = lshr i32 %49, 8
+  %52 = load i8, i8* %24, align 4
+  %53 = zext i8 %52 to i32
+  %54 = add nuw nsw i32 %51, %53
+  %55 = trunc i32 %54 to i8
+  store i8 %55, i8* %24, align 4
+  %56 = lshr i32 %54, 8
+  %57 = load i8, i8* %25, align 1
+  %58 = zext i8 %57 to i32
+  %59 = add nuw nsw i32 %56, %58
+  %60 = trunc i32 %59 to i8
+  store i8 %60, i8* %25, align 1
+  %61 = lshr i32 %59, 8
+  %62 = load i8, i8* %26, align 2
+  %63 = zext i8 %62 to i32
+  %64 = add nuw nsw i32 %61, %63
+  %65 = trunc i32 %64 to i8
+  store i8 %65, i8* %26, align 2
+  %66 = lshr i32 %64, 8
+  %67 = load i8, i8* %27, align 1
+  %68 = trunc i32 %66 to i8
+  %69 = add i8 %67, %68
+  store i8 %69, i8* %27, align 1
+  %70 = add i64 %30, -64
+  %71 = getelementptr i8, i8* %29, i32 64
+  %72 = icmp ugt i64 %70, 63
+  br i1 %72, label %28, label %73
+
+73:                                               ; preds = %28
+  %74 = and i64 %1, 63
+  %75 = icmp eq i64 %74, 0
+  br i1 %75, label %89, label %76
+
+76:                                               ; preds = %12, %73
+  %77 = phi i8* [ %71, %73 ], [ %0, %12 ]
+  %78 = phi i64 [ %74, %73 ], [ %1, %12 ]
+  %79 = call i32 @crypto_core_salsa20(i8* nonnull %9, i8* nonnull %8, i8* nonnull %10, i8* null) #3
+  %80 = trunc i64 %78 to i32
+  %81 = icmp eq i32 %80, 0
+  br i1 %81, label %89, label %82
+
+82:                                               ; preds = %76, %82
+  %83 = phi i32 [ %87, %82 ], [ 0, %76 ]
+  %84 = getelementptr [64 x i8], [64 x i8]* %6, i32 0, i32 %83
+  %85 = load i8, i8* %84, align 1
+  %86 = getelementptr i8, i8* %77, i32 %83
+  store i8 %85, i8* %86, align 1
+  %87 = add nuw i32 %83, 1
+  %88 = icmp eq i32 %87, %80
+  br i1 %88, label %89, label %82
+
+89:                                               ; preds = %82, %76, %73
+  call void @sodium_memzero(i8* nonnull %9, i32 64) #3
+  call void @sodium_memzero(i8* nonnull %10, i32 32) #3
+  br label %90
+
+90:                                               ; preds = %4, %89
+  call void @llvm.lifetime.end.p0i8(i64 32, i8* nonnull %10) #3
+  call void @llvm.lifetime.end.p0i8(i64 64, i8* nonnull %9) #3
+  call void @llvm.lifetime.end.p0i8(i64 16, i8* nonnull %8) #3
+  ret i32 0
+}
+
+; Function Attrs: nounwind
+define internal i32 @stream_ref_xor_ic(i8* nocapture %0, i8* nocapture readonly %1, i64 %2, i8* nocapture readonly %3, i64 %4, i8* nocapture readonly %5) #0 {
+  %7 = alloca [16 x i8], align 16
+  %8 = alloca [64 x i8], align 16
+  %9 = alloca [32 x i8], align 16
+  %10 = getelementptr inbounds [16 x i8], [16 x i8]* %7, i32 0, i32 0
+  call void @llvm.lifetime.start.p0i8(i64 16, i8* nonnull %10) #3
+  %11 = getelementptr inbounds [64 x i8], [64 x i8]* %8, i32 0, i32 0
+  call void @llvm.lifetime.start.p0i8(i64 64, i8* nonnull %11) #3
+  %12 = getelementptr inbounds [32 x i8], [32 x i8]* %9, i32 0, i32 0
+  call void @llvm.lifetime.start.p0i8(i64 32, i8* nonnull %12) #3
+  %13 = icmp eq i64 %2, 0
+  br i1 %13, label %122, label %14
+
+14:                                               ; preds = %6
+  %15 = getelementptr inbounds [32 x i8], [32 x i8]* %9, i32 0, i32 0
+  call void @llvm.memcpy.p0i8.p0i8.i32(i8* nonnull align 16 dereferenceable(32) %15, i8* nonnull align 1 dereferenceable(32) %5, i32 32, i1 false)
+  %16 = bitcast i8* %3 to i64*
+  %17 = bitcast [16 x i8]* %7 to i64*
+  %18 = load i64, i64* %16, align 1
+  store i64 %18, i64* %17, align 16
+  %19 = trunc i64 %4 to i8
+  %20 = getelementptr inbounds [16 x i8], [16 x i8]* %7, i32 0, i32 8
+  store i8 %19, i8* %20, align 8
+  %21 = lshr i64 %4, 8
+  %22 = trunc i64 %21 to i8
+  %23 = getelementptr inbounds [16 x i8], [16 x i8]* %7, i32 0, i32 9
+  store i8 %22, i8* %23, align 1
+  %24 = lshr i64 %4, 16
+  %25 = trunc i64 %24 to i8
+  %26 = getelementptr inbounds [16 x i8], [16 x i8]* %7, i32 0, i32 10
+  store i8 %25, i8* %26, align 2
+  %27 = lshr i64 %4, 24
+  %28 = trunc i64 %27 to i8
+  %29 = getelementptr inbounds [16 x i8], [16 x i8]* %7, i32 0, i32 11
+  store i8 %28, i8* %29, align 1
+  %30 = lshr i64 %4, 32
+  %31 = trunc i64 %30 to i8
+  %32 = getelementptr inbounds [16 x i8], [16 x i8]* %7, i32 0, i32 12
+  store i8 %31, i8* %32, align 4
+  %33 = lshr i64 %4, 40
+  %34 = trunc i64 %33 to i8
+  %35 = getelementptr inbounds [16 x i8], [16 x i8]* %7, i32 0, i32 13
+  store i8 %34, i8* %35, align 1
+  %36 = lshr i64 %4, 48
+  %37 = trunc i64 %36 to i8
+  %38 = getelementptr inbounds [16 x i8], [16 x i8]* %7, i32 0, i32 14
+  store i8 %37, i8* %38, align 2
+  %39 = lshr i64 %4, 56
+  %40 = trunc i64 %39 to i8
+  %41 = getelementptr inbounds [16 x i8], [16 x i8]* %7, i32 0, i32 15
+  store i8 %40, i8* %41, align 1
+  %42 = icmp ugt i64 %2, 63
+  br i1 %42, label %43, label %104
+
+43:                                               ; preds = %14, %58
+  %44 = phi i8* [ %98, %58 ], [ %0, %14 ]
+  %45 = phi i64 [ %97, %58 ], [ %2, %14 ]
+  %46 = phi i8* [ %99, %58 ], [ %1, %14 ]
+  %47 = call i32 @crypto_core_salsa20(i8* nonnull %11, i8* nonnull %10, i8* nonnull %12, i8* null) #3
+  br label %48
+
+48:                                               ; preds = %48, %43
+  %49 = phi i32 [ 0, %43 ], [ %56, %48 ]
+  %50 = getelementptr i8, i8* %46, i32 %49
+  %51 = load i8, i8* %50, align 1
+  %52 = getelementptr [64 x i8], [64 x i8]* %8, i32 0, i32 %49
+  %53 = load i8, i8* %52, align 1
+  %54 = xor i8 %53, %51
+  %55 = getelementptr i8, i8* %44, i32 %49
+  store i8 %54, i8* %55, align 1
+  %56 = add nuw nsw i32 %49, 1
+  %57 = icmp eq i32 %56, 64
+  br i1 %57, label %58, label %48
+
+58:                                               ; preds = %48
+  %59 = load i8, i8* %20, align 8
+  %60 = zext i8 %59 to i32
+  %61 = add nuw nsw i32 %60, 1
+  %62 = trunc i32 %61 to i8
+  store i8 %62, i8* %20, align 8
+  %63 = lshr i32 %61, 8
+  %64 = load i8, i8* %23, align 1
+  %65 = zext i8 %64 to i32
+  %66 = add nuw nsw i32 %63, %65
+  %67 = trunc i32 %66 to i8
+  store i8 %67, i8* %23, align 1
+  %68 = lshr i32 %66, 8
+  %69 = load i8, i8* %26, align 2
+  %70 = zext i8 %69 to i32
+  %71 = add nuw nsw i32 %68, %70
+  %72 = trunc i32 %71 to i8
+  store i8 %72, i8* %26, align 2
+  %73 = lshr i32 %71, 8
+  %74 = load i8, i8* %29, align 1
+  %75 = zext i8 %74 to i32
+  %76 = add nuw nsw i32 %73, %75
+  %77 = trunc i32 %76 to i8
+  store i8 %77, i8* %29, align 1
+  %78 = lshr i32 %76, 8
+  %79 = load i8, i8* %32, align 4
+  %80 = zext i8 %79 to i32
+  %81 = add nuw nsw i32 %78, %80
+  %82 = trunc i32 %81 to i8
+  store i8 %82, i8* %32, align 4
+  %83 = lshr i32 %81, 8
+  %84 = load i8, i8* %35, align 1
+  %85 = zext i8 %84 to i32
+  %86 = add nuw nsw i32 %83, %85
+  %87 = trunc i32 %86 to i8
+  store i8 %87, i8* %35, align 1
+  %88 = lshr i32 %86, 8
+  %89 = load i8, i8* %38, align 2
+  %90 = zext i8 %89 to i32
+  %91 = add nuw nsw i32 %88, %90
+  %92 = trunc i32 %91 to i8
+  store i8 %92, i8* %38, align 2
+  %93 = lshr i32 %91, 8
+  %94 = load i8, i8* %41, align 1
+  %95 = trunc i32 %93 to i8
+  %96 = add i8 %94, %95
+  store i8 %96, i8* %41, align 1
+  %97 = add i64 %45, -64
+  %98 = getelementptr i8, i8* %44, i32 64
+  %99 = getelementptr i8, i8* %46, i32 64
+  %100 = icmp ugt i64 %97, 63
+  br i1 %100, label %43, label %101
+
+101:                                              ; preds = %58
+  %102 = and i64 %2, 63
+  %103 = icmp eq i64 %102, 0
+  br i1 %103, label %121, label %104
+
+104:                                              ; preds = %14, %101
+  %105 = phi i8* [ %98, %101 ], [ %0, %14 ]
+  %106 = phi i64 [ %102, %101 ], [ %2, %14 ]
+  %107 = phi i8* [ %99, %101 ], [ %1, %14 ]
+  %108 = call i32 @crypto_core_salsa20(i8* nonnull %11, i8* nonnull %10, i8* nonnull %12, i8* null) #3
+  %109 = trunc i64 %106 to i32
+  %110 = icmp eq i32 %109, 0
+  br i1 %110, label %121, label %111
+
+111:                                              ; preds = %104, %111
+  %112 = phi i32 [ %119, %111 ], [ 0, %104 ]
+  %113 = getelementptr i8, i8* %107, i32 %112
+  %114 = load i8, i8* %113, align 1
+  %115 = getelementptr [64 x i8], [64 x i8]* %8, i32 0, i32 %112
+  %116 = load i8, i8* %115, align 1
+  %117 = xor i8 %116, %114
+  %118 = getelementptr i8, i8* %105, i32 %112
+  store i8 %117, i8* %118, align 1
+  %119 = add nuw i32 %112, 1
+  %120 = icmp eq i32 %119, %109
+  br i1 %120, label %121, label %111
+
+121:                                              ; preds = %111, %104, %101
+  call void @sodium_memzero(i8* nonnull %11, i32 64) #3
+  call void @sodium_memzero(i8* nonnull %12, i32 32) #3
+  br label %122
+
+122:                                              ; preds = %6, %121
+  call void @llvm.lifetime.end.p0i8(i64 32, i8* nonnull %12) #3
+  call void @llvm.lifetime.end.p0i8(i64 64, i8* nonnull %11) #3
+  call void @llvm.lifetime.end.p0i8(i64 16, i8* nonnull %10) #3
+  ret i32 0
+}
+
+; Function Attrs: argmemonly nounwind willreturn
+declare void @llvm.lifetime.start.p0i8(i64 immarg %0, i8* nocapture %1) #1
+
+declare i32 @crypto_core_salsa20(i8* %0, i8* %1, i8* %2, i8* %3) local_unnamed_addr #2
+
+declare void @sodium_memzero(i8* %0, i32 %1) local_unnamed_addr #2
+
+; Function Attrs: argmemonly nounwind willreturn
+declare void @llvm.lifetime.end.p0i8(i64 immarg %0, i8* nocapture %1) #1
+
+; Function Attrs: argmemonly nounwind willreturn
+declare void @llvm.memcpy.p0i8.p0i8.i32(i8* noalias nocapture writeonly %0, i8* noalias nocapture readonly %1, i32 %2, i1 immarg %3) #1
+
+attributes #0 = { nounwind "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "min-legal-vector-width"="0" "no-infs-fp-math"="false" "no-jump-tables"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="false" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #1 = { argmemonly nounwind willreturn }
+attributes #2 = { "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="false" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #3 = { nounwind }
+
+!llvm.module.flags = !{!0, !1, !2}
+!llvm.ident = !{!3}
+
+!0 = !{i32 1, !"wchar_size", i32 4}
+!1 = !{i32 7, !"PIC Level", i32 2}
+!2 = !{i32 7, !"PIE Level", i32 2}
+!3 = !{!"clang version 10.0.0 (https://github.com/llvm/llvm-project d32170dbd5b0d54436537b6b75beaf44324e0c28)"}
+
+; extracted candidates
+
+; *****
+; For LLVM instruction:
+;  %13 = icmp eq i64 %2, 0
+; Looking for a replacement for:
+%0:i64 = var
+%1:i1 = eq 0:i64, %0
+infer %1
+
+; *****
+; For LLVM instruction:
+;  %18 = load i64, i64* %16, align 1
+; Looking for a replacement for:
+%0:i64 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %19 = trunc i64 %4 to i8
+; Looking for a replacement for:
+%0:i64 = var
+%1:i8 = trunc %0
+infer %1
+
+; *****
+; For LLVM instruction:
+;  %21 = lshr i64 %4, 8
+; Looking for a replacement for:
+%0:i64 = var
+%1:i64 = lshr %0, 8:i64
+infer %1 (demandedBits=0000000000000000000000000000000000000000000000000000000011111111)
+
+; *****
+; For LLVM instruction:
+;  %22 = trunc i64 %21 to i8
+; Looking for a replacement for:
+%0:i64 = var
+%1:i64 = lshr %0, 8:i64
+%2:i8 = trunc %1
+infer %2
+
+; *****
+; For LLVM instruction:
+;  %24 = lshr i64 %4, 16
+; Looking for a replacement for:
+%0:i64 = var
+%1:i64 = lshr %0, 16:i64
+infer %1 (demandedBits=0000000000000000000000000000000000000000000000000000000011111111)
+
+; *****
+; For LLVM instruction:
+;  %25 = trunc i64 %24 to i8
+; Looking for a replacement for:
+%0:i64 = var
+%1:i64 = lshr %0, 16:i64
+%2:i8 = trunc %1
+infer %2
+
+; *****
+; For LLVM instruction:
+;  %27 = lshr i64 %4, 24
+; Looking for a replacement for:
+%0:i64 = var
+%1:i64 = lshr %0, 24:i64
+infer %1 (demandedBits=0000000000000000000000000000000000000000000000000000000011111111)
+
+; *****
+; For LLVM instruction:
+;  %28 = trunc i64 %27 to i8
+; Looking for a replacement for:
+%0:i64 = var
+%1:i64 = lshr %0, 24:i64
+%2:i8 = trunc %1
+infer %2
+
+; *****
+; For LLVM instruction:
+;  %30 = lshr i64 %4, 32
+; Looking for a replacement for:
+%0:i64 = var
+%1:i64 = lshr %0, 32:i64
+infer %1 (demandedBits=0000000000000000000000000000000000000000000000000000000011111111)
+
+; *****
+; For LLVM instruction:
+;  %31 = trunc i64 %30 to i8
+; Looking for a replacement for:
+%0:i64 = var
+%1:i64 = lshr %0, 32:i64
+%2:i8 = trunc %1
+infer %2
+
+; *****
+; For LLVM instruction:
+;  %33 = lshr i64 %4, 40
+; Looking for a replacement for:
+%0:i64 = var
+%1:i64 = lshr %0, 40:i64
+infer %1 (demandedBits=0000000000000000000000000000000000000000000000000000000011111111)
+
+; *****
+; For LLVM instruction:
+;  %34 = trunc i64 %33 to i8
+; Looking for a replacement for:
+%0:i64 = var
+%1:i64 = lshr %0, 40:i64
+%2:i8 = trunc %1
+infer %2
+
+; *****
+; For LLVM instruction:
+;  %36 = lshr i64 %4, 48
+; Looking for a replacement for:
+%0:i64 = var
+%1:i64 = lshr %0, 48:i64
+infer %1 (demandedBits=0000000000000000000000000000000000000000000000000000000011111111)
+
+; *****
+; For LLVM instruction:
+;  %37 = trunc i64 %36 to i8
+; Looking for a replacement for:
+%0:i64 = var
+%1:i64 = lshr %0, 48:i64
+%2:i8 = trunc %1
+infer %2
+
+; *****
+; For LLVM instruction:
+;  %39 = lshr i64 %4, 56
+; Looking for a replacement for:
+%0:i64 = var
+%1:i64 = lshr %0, 56:i64
+infer %1 (demandedBits=0000000000000000000000000000000000000000000000000000000011111111)
+
+; *****
+; For LLVM instruction:
+;  %40 = trunc i64 %39 to i8
+; Looking for a replacement for:
+%0:i64 = var
+%1:i64 = lshr %0, 56:i64
+%2:i8 = trunc %1
+infer %2
+
+; *****
+; For LLVM instruction:
+;  %42 = icmp ugt i64 %2, 63
+; Looking for a replacement for:
+%0:i64 = var
+%1:i1 = eq 0:i64, %0
+pc %1 0:i1
+%2:i1 = ult 63:i64, %0
+infer %2
+
+; *****
+; For LLVM instruction:
+;  %45 = phi i64 [ %97, %58 ], [ %2, %14 ]
+; Looking for a replacement for:
+%0:i64 = var (range=[64,0))
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %49 = phi i32 [ 0, %43 ], [ %56, %48 ]
+; Looking for a replacement for:
+%0:i32 = var (knownBits=0xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx) (nonNegative) (range=[0,64))
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %51 = load i8, i8* %50, align 1
+; Looking for a replacement for:
+%0:i8 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %53 = load i8, i8* %52, align 1
+; Looking for a replacement for:
+%0:i8 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %54 = xor i8 %53, %51
+; Looking for a replacement for:
+%0:i8 = var
+%1:i8 = var
+%2:i8 = xor %0, %1
+infer %2
+
+; *****
+; For LLVM instruction:
+;  %56 = add nuw nsw i32 %49, 1
+; Looking for a replacement for:
+%0:i32 = var (knownBits=0xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx) (nonNegative) (range=[0,64))
+%1:i32 = addnw 1:i32, %0
+infer %1
+
+; *****
+; For LLVM instruction:
+;  %57 = icmp eq i32 %56, 64
+; Looking for a replacement for:
+%0:i32 = var (knownBits=0xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx) (nonNegative) (range=[0,64))
+%1:i32 = addnw 1:i32, %0 (hasExternalUses)
+%2:i1 = eq 64:i32, %1
+infer %2
+
+; *****
+; For LLVM instruction:
+;  %59 = load i8, i8* %20, align 8
+; Looking for a replacement for:
+%0:i8 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %60 = zext i8 %59 to i32
+; Looking for a replacement for:
+%0:i8 = var
+%1:i32 = zext %0
+infer %1
+
+; *****
+; For LLVM instruction:
+;  %61 = add nuw nsw i32 %60, 1
+; Looking for a replacement for:
+%0:i8 = var
+%1:i32 = zext %0
+%2:i32 = addnw 1:i32, %1
+infer %2
+
+; *****
+; For LLVM instruction:
+;  %62 = trunc i32 %61 to i8
+; Looking for a replacement for:
+%0:i8 = var
+%1:i32 = zext %0
+%2:i32 = addnw 1:i32, %1 (hasExternalUses)
+%3:i8 = trunc %2
+infer %3
+
+; *****
+; For LLVM instruction:
+;  %63 = lshr i32 %61, 8
+; Looking for a replacement for:
+%0:i8 = var
+%1:i32 = zext %0
+%2:i32 = addnw 1:i32, %1 (hasExternalUses)
+%3:i32 = lshr %2, 8:i32
+infer %3
+
+; *****
+; For LLVM instruction:
+;  %64 = load i8, i8* %23, align 1
+; Looking for a replacement for:
+%0:i8 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %65 = zext i8 %64 to i32
+; Looking for a replacement for:
+%0:i8 = var
+%1:i32 = zext %0
+infer %1
+
+; *****
+; For LLVM instruction:
+;  %66 = add nuw nsw i32 %63, %65
+; Looking for a replacement for:
+%0:i8 = var
+%1:i32 = zext %0
+%2:i32 = addnw 1:i32, %1 (hasExternalUses)
+%3:i32 = lshr %2, 8:i32
+%4:i8 = var
+%5:i32 = zext %4
+%6:i32 = addnw %3, %5
+infer %6
+
+; *****
+; For LLVM instruction:
+;  %67 = trunc i32 %66 to i8
+; Looking for a replacement for:
+%0:i8 = var
+%1:i32 = zext %0
+%2:i32 = addnw 1:i32, %1 (hasExternalUses)
+%3:i32 = lshr %2, 8:i32
+%4:i8 = var
+%5:i32 = zext %4
+%6:i32 = addnw %3, %5 (hasExternalUses)
+%7:i8 = trunc %6
+infer %7
+
+; *****
+; For LLVM instruction:
+;  %68 = lshr i32 %66, 8
+; Looking for a replacement for:
+%0:i8 = var
+%1:i32 = zext %0
+%2:i32 = addnw 1:i32, %1 (hasExternalUses)
+%3:i32 = lshr %2, 8:i32
+%4:i8 = var
+%5:i32 = zext %4
+%6:i32 = addnw %3, %5 (hasExternalUses)
+%7:i32 = lshr %6, 8:i32
+infer %7
+
+; *****
+; For LLVM instruction:
+;  %69 = load i8, i8* %26, align 2
+; Looking for a replacement for:
+%0:i8 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %70 = zext i8 %69 to i32
+; Looking for a replacement for:
+%0:i8 = var
+%1:i32 = zext %0
+infer %1
+
+; *****
+; For LLVM instruction:
+;  %71 = add nuw nsw i32 %68, %70
+; Looking for a replacement for:
+%0:i8 = var
+%1:i32 = zext %0
+%2:i32 = addnw 1:i32, %1 (hasExternalUses)
+%3:i32 = lshr %2, 8:i32
+%4:i8 = var
+%5:i32 = zext %4
+%6:i32 = addnw %3, %5 (hasExternalUses)
+%7:i32 = lshr %6, 8:i32
+%8:i8 = var
+%9:i32 = zext %8
+%10:i32 = addnw %7, %9
+infer %10
+
+; *****
+; For LLVM instruction:
+;  %72 = trunc i32 %71 to i8
+; Looking for a replacement for:
+%0:i8 = var
+%1:i32 = zext %0
+%2:i32 = addnw 1:i32, %1 (hasExternalUses)
+%3:i32 = lshr %2, 8:i32
+%4:i8 = var
+%5:i32 = zext %4
+%6:i32 = addnw %3, %5 (hasExternalUses)
+%7:i32 = lshr %6, 8:i32
+%8:i8 = var
+%9:i32 = zext %8
+%10:i32 = addnw %7, %9 (hasExternalUses)
+%11:i8 = trunc %10
+infer %11
+
+; *****
+; For LLVM instruction:
+;  %73 = lshr i32 %71, 8
+; Looking for a replacement for:
+%0:i8 = var
+%1:i32 = zext %0
+%2:i32 = addnw 1:i32, %1 (hasExternalUses)
+%3:i32 = lshr %2, 8:i32
+%4:i8 = var
+%5:i32 = zext %4
+%6:i32 = addnw %3, %5 (hasExternalUses)
+%7:i32 = lshr %6, 8:i32
+%8:i8 = var
+%9:i32 = zext %8
+%10:i32 = addnw %7, %9 (hasExternalUses)
+%11:i32 = lshr %10, 8:i32
+infer %11
+
+; *****
+; For LLVM instruction:
+;  %74 = load i8, i8* %29, align 1
+; Looking for a replacement for:
+%0:i8 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %75 = zext i8 %74 to i32
+; Looking for a replacement for:
+%0:i8 = var
+%1:i32 = zext %0
+infer %1
+
+; *****
+; For LLVM instruction:
+;  %76 = add nuw nsw i32 %73, %75
+; Looking for a replacement for:
+%0:i8 = var
+%1:i32 = zext %0
+%2:i32 = addnw 1:i32, %1 (hasExternalUses)
+%3:i32 = lshr %2, 8:i32
+%4:i8 = var
+%5:i32 = zext %4
+%6:i32 = addnw %3, %5 (hasExternalUses)
+%7:i32 = lshr %6, 8:i32
+%8:i8 = var
+%9:i32 = zext %8
+%10:i32 = addnw %7, %9 (hasExternalUses)
+%11:i32 = lshr %10, 8:i32
+%12:i8 = var
+%13:i32 = zext %12
+%14:i32 = addnw %11, %13
+infer %14
+
+; *****
+; For LLVM instruction:
+;  %77 = trunc i32 %76 to i8
+; Looking for a replacement for:
+%0:i8 = var
+%1:i32 = zext %0
+%2:i32 = addnw 1:i32, %1 (hasExternalUses)
+%3:i32 = lshr %2, 8:i32
+%4:i8 = var
+%5:i32 = zext %4
+%6:i32 = addnw %3, %5 (hasExternalUses)
+%7:i32 = lshr %6, 8:i32
+%8:i8 = var
+%9:i32 = zext %8
+%10:i32 = addnw %7, %9 (hasExternalUses)
+%11:i32 = lshr %10, 8:i32
+%12:i8 = var
+%13:i32 = zext %12
+%14:i32 = addnw %11, %13 (hasExternalUses)
+%15:i8 = trunc %14
+infer %15
+
+; *****
+; For LLVM instruction:
+;  %78 = lshr i32 %76, 8
+; Looking for a replacement for:
+%0:i8 = var
+%1:i32 = zext %0
+%2:i32 = addnw 1:i32, %1 (hasExternalUses)
+%3:i32 = lshr %2, 8:i32
+%4:i8 = var
+%5:i32 = zext %4
+%6:i32 = addnw %3, %5 (hasExternalUses)
+%7:i32 = lshr %6, 8:i32
+%8:i8 = var
+%9:i32 = zext %8
+%10:i32 = addnw %7, %9 (hasExternalUses)
+%11:i32 = lshr %10, 8:i32
+%12:i8 = var
+%13:i32 = zext %12
+%14:i32 = addnw %11, %13 (hasExternalUses)
+%15:i32 = lshr %14, 8:i32
+infer %15
+
+; *****
+; For LLVM instruction:
+;  %79 = load i8, i8* %32, align 4
+; Looking for a replacement for:
+%0:i8 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %80 = zext i8 %79 to i32
+; Looking for a replacement for:
+%0:i8 = var
+%1:i32 = zext %0
+infer %1
+
+; *****
+; For LLVM instruction:
+;  %81 = add nuw nsw i32 %78, %80
+; Looking for a replacement for:
+%0:i8 = var
+%1:i32 = zext %0
+%2:i32 = addnw 1:i32, %1 (hasExternalUses)
+%3:i32 = lshr %2, 8:i32
+%4:i8 = var
+%5:i32 = zext %4
+%6:i32 = addnw %3, %5 (hasExternalUses)
+%7:i32 = lshr %6, 8:i32
+%8:i8 = var
+%9:i32 = zext %8
+%10:i32 = addnw %7, %9 (hasExternalUses)
+%11:i32 = lshr %10, 8:i32
+%12:i8 = var
+%13:i32 = zext %12
+%14:i32 = addnw %11, %13 (hasExternalUses)
+%15:i32 = lshr %14, 8:i32
+%16:i8 = var
+%17:i32 = zext %16
+%18:i32 = addnw %15, %17
+infer %18
+
+; *****
+; For LLVM instruction:
+;  %82 = trunc i32 %81 to i8
+; Looking for a replacement for:
+%0:i8 = var
+%1:i32 = zext %0
+%2:i32 = addnw 1:i32, %1 (hasExternalUses)
+%3:i32 = lshr %2, 8:i32
+%4:i8 = var
+%5:i32 = zext %4
+%6:i32 = addnw %3, %5 (hasExternalUses)
+%7:i32 = lshr %6, 8:i32
+%8:i8 = var
+%9:i32 = zext %8
+%10:i32 = addnw %7, %9 (hasExternalUses)
+%11:i32 = lshr %10, 8:i32
+%12:i8 = var
+%13:i32 = zext %12
+%14:i32 = addnw %11, %13 (hasExternalUses)
+%15:i32 = lshr %14, 8:i32
+%16:i8 = var
+%17:i32 = zext %16
+%18:i32 = addnw %15, %17 (hasExternalUses)
+%19:i8 = trunc %18
+infer %19
+
+; *****
+; For LLVM instruction:
+;  %83 = lshr i32 %81, 8
+; Looking for a replacement for:
+%0:i8 = var
+%1:i32 = zext %0
+%2:i32 = addnw 1:i32, %1 (hasExternalUses)
+%3:i32 = lshr %2, 8:i32
+%4:i8 = var
+%5:i32 = zext %4
+%6:i32 = addnw %3, %5 (hasExternalUses)
+%7:i32 = lshr %6, 8:i32
+%8:i8 = var
+%9:i32 = zext %8
+%10:i32 = addnw %7, %9 (hasExternalUses)
+%11:i32 = lshr %10, 8:i32
+%12:i8 = var
+%13:i32 = zext %12
+%14:i32 = addnw %11, %13 (hasExternalUses)
+%15:i32 = lshr %14, 8:i32
+%16:i8 = var
+%17:i32 = zext %16
+%18:i32 = addnw %15, %17 (hasExternalUses)
+%19:i32 = lshr %18, 8:i32
+infer %19 (demandedBits=00000000111111111111111111111111)
+
+; *****
+; For LLVM instruction:
+;  %84 = load i8, i8* %35, align 1
+; Looking for a replacement for:
+%0:i8 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %85 = zext i8 %84 to i32
+; Looking for a replacement for:
+%0:i8 = var
+%1:i32 = zext %0
+infer %1 (demandedBits=00000000111111111111111111111111)
+
+; *****
+; For LLVM instruction:
+;  %86 = add nuw nsw i32 %83, %85
+; Looking for a replacement for:
+%0:i8 = var
+%1:i32 = zext %0
+%2:i32 = addnw 1:i32, %1 (hasExternalUses)
+%3:i32 = lshr %2, 8:i32
+%4:i8 = var
+%5:i32 = zext %4
+%6:i32 = addnw %3, %5 (hasExternalUses)
+%7:i32 = lshr %6, 8:i32
+%8:i8 = var
+%9:i32 = zext %8
+%10:i32 = addnw %7, %9 (hasExternalUses)
+%11:i32 = lshr %10, 8:i32
+%12:i8 = var
+%13:i32 = zext %12
+%14:i32 = addnw %11, %13 (hasExternalUses)
+%15:i32 = lshr %14, 8:i32
+%16:i8 = var
+%17:i32 = zext %16
+%18:i32 = addnw %15, %17 (hasExternalUses)
+%19:i32 = lshr %18, 8:i32
+%20:i8 = var
+%21:i32 = zext %20
+%22:i32 = addnw %19, %21
+infer %22 (demandedBits=00000000111111111111111111111111)
+
+; *****
+; For LLVM instruction:
+;  %87 = trunc i32 %86 to i8
+; Looking for a replacement for:
+%0:i8 = var
+%1:i32 = zext %0
+%2:i32 = addnw 1:i32, %1 (hasExternalUses)
+%3:i32 = lshr %2, 8:i32
+%4:i8 = var
+%5:i32 = zext %4
+%6:i32 = addnw %3, %5 (hasExternalUses)
+%7:i32 = lshr %6, 8:i32
+%8:i8 = var
+%9:i32 = zext %8
+%10:i32 = addnw %7, %9 (hasExternalUses)
+%11:i32 = lshr %10, 8:i32
+%12:i8 = var
+%13:i32 = zext %12
+%14:i32 = addnw %11, %13 (hasExternalUses)
+%15:i32 = lshr %14, 8:i32
+%16:i8 = var
+%17:i32 = zext %16
+%18:i32 = addnw %15, %17 (hasExternalUses)
+%19:i32 = lshr %18, 8:i32
+%20:i8 = var
+%21:i32 = zext %20
+%22:i32 = addnw %19, %21 (hasExternalUses)
+%23:i8 = trunc %22
+infer %23
+
+; *****
+; For LLVM instruction:
+;  %88 = lshr i32 %86, 8
+; Looking for a replacement for:
+%0:i8 = var
+%1:i32 = zext %0
+%2:i32 = addnw 1:i32, %1 (hasExternalUses)
+%3:i32 = lshr %2, 8:i32
+%4:i8 = var
+%5:i32 = zext %4
+%6:i32 = addnw %3, %5 (hasExternalUses)
+%7:i32 = lshr %6, 8:i32
+%8:i8 = var
+%9:i32 = zext %8
+%10:i32 = addnw %7, %9 (hasExternalUses)
+%11:i32 = lshr %10, 8:i32
+%12:i8 = var
+%13:i32 = zext %12
+%14:i32 = addnw %11, %13 (hasExternalUses)
+%15:i32 = lshr %14, 8:i32
+%16:i8 = var
+%17:i32 = zext %16
+%18:i32 = addnw %15, %17 (hasExternalUses)
+%19:i32 = lshr %18, 8:i32
+%20:i8 = var
+%21:i32 = zext %20
+%22:i32 = addnw %19, %21 (hasExternalUses)
+%23:i32 = lshr %22, 8:i32
+infer %23 (demandedBits=00000000000000001111111111111111)
+
+; *****
+; For LLVM instruction:
+;  %89 = load i8, i8* %38, align 2
+; Looking for a replacement for:
+%0:i8 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %90 = zext i8 %89 to i32
+; Looking for a replacement for:
+%0:i8 = var
+%1:i32 = zext %0
+infer %1 (demandedBits=00000000000000001111111111111111)
+
+; *****
+; For LLVM instruction:
+;  %91 = add nuw nsw i32 %88, %90
+; Looking for a replacement for:
+%0:i8 = var
+%1:i32 = zext %0
+%2:i32 = addnw 1:i32, %1 (hasExternalUses)
+%3:i32 = lshr %2, 8:i32
+%4:i8 = var
+%5:i32 = zext %4
+%6:i32 = addnw %3, %5 (hasExternalUses)
+%7:i32 = lshr %6, 8:i32
+%8:i8 = var
+%9:i32 = zext %8
+%10:i32 = addnw %7, %9 (hasExternalUses)
+%11:i32 = lshr %10, 8:i32
+%12:i8 = var
+%13:i32 = zext %12
+%14:i32 = addnw %11, %13 (hasExternalUses)
+%15:i32 = lshr %14, 8:i32
+%16:i8 = var
+%17:i32 = zext %16
+%18:i32 = addnw %15, %17 (hasExternalUses)
+%19:i32 = lshr %18, 8:i32
+%20:i8 = var
+%21:i32 = zext %20
+%22:i32 = addnw %19, %21 (hasExternalUses)
+%23:i32 = lshr %22, 8:i32
+%24:i8 = var
+%25:i32 = zext %24
+%26:i32 = addnw %23, %25
+infer %26 (demandedBits=00000000000000001111111111111111)
+
+; *****
+; For LLVM instruction:
+;  %92 = trunc i32 %91 to i8
+; Looking for a replacement for:
+%0:i8 = var
+%1:i32 = zext %0
+%2:i32 = addnw 1:i32, %1 (hasExternalUses)
+%3:i32 = lshr %2, 8:i32
+%4:i8 = var
+%5:i32 = zext %4
+%6:i32 = addnw %3, %5 (hasExternalUses)
+%7:i32 = lshr %6, 8:i32
+%8:i8 = var
+%9:i32 = zext %8
+%10:i32 = addnw %7, %9 (hasExternalUses)
+%11:i32 = lshr %10, 8:i32
+%12:i8 = var
+%13:i32 = zext %12
+%14:i32 = addnw %11, %13 (hasExternalUses)
+%15:i32 = lshr %14, 8:i32
+%16:i8 = var
+%17:i32 = zext %16
+%18:i32 = addnw %15, %17 (hasExternalUses)
+%19:i32 = lshr %18, 8:i32
+%20:i8 = var
+%21:i32 = zext %20
+%22:i32 = addnw %19, %21 (hasExternalUses)
+%23:i32 = lshr %22, 8:i32
+%24:i8 = var
+%25:i32 = zext %24
+%26:i32 = addnw %23, %25 (hasExternalUses)
+%27:i8 = trunc %26
+infer %27
+
+; *****
+; For LLVM instruction:
+;  %93 = lshr i32 %91, 8
+; Looking for a replacement for:
+%0:i8 = var
+%1:i32 = zext %0
+%2:i32 = addnw 1:i32, %1 (hasExternalUses)
+%3:i32 = lshr %2, 8:i32
+%4:i8 = var
+%5:i32 = zext %4
+%6:i32 = addnw %3, %5 (hasExternalUses)
+%7:i32 = lshr %6, 8:i32
+%8:i8 = var
+%9:i32 = zext %8
+%10:i32 = addnw %7, %9 (hasExternalUses)
+%11:i32 = lshr %10, 8:i32
+%12:i8 = var
+%13:i32 = zext %12
+%14:i32 = addnw %11, %13 (hasExternalUses)
+%15:i32 = lshr %14, 8:i32
+%16:i8 = var
+%17:i32 = zext %16
+%18:i32 = addnw %15, %17 (hasExternalUses)
+%19:i32 = lshr %18, 8:i32
+%20:i8 = var
+%21:i32 = zext %20
+%22:i32 = addnw %19, %21 (hasExternalUses)
+%23:i32 = lshr %22, 8:i32
+%24:i8 = var
+%25:i32 = zext %24
+%26:i32 = addnw %23, %25 (hasExternalUses)
+%27:i32 = lshr %26, 8:i32
+infer %27 (demandedBits=00000000000000000000000011111111)
+
+; *****
+; For LLVM instruction:
+;  %94 = load i8, i8* %41, align 1
+; Looking for a replacement for:
+%0:i8 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %95 = trunc i32 %93 to i8
+; Looking for a replacement for:
+%0:i8 = var
+%1:i32 = zext %0
+%2:i32 = addnw 1:i32, %1 (hasExternalUses)
+%3:i32 = lshr %2, 8:i32
+%4:i8 = var
+%5:i32 = zext %4
+%6:i32 = addnw %3, %5 (hasExternalUses)
+%7:i32 = lshr %6, 8:i32
+%8:i8 = var
+%9:i32 = zext %8
+%10:i32 = addnw %7, %9 (hasExternalUses)
+%11:i32 = lshr %10, 8:i32
+%12:i8 = var
+%13:i32 = zext %12
+%14:i32 = addnw %11, %13 (hasExternalUses)
+%15:i32 = lshr %14, 8:i32
+%16:i8 = var
+%17:i32 = zext %16
+%18:i32 = addnw %15, %17 (hasExternalUses)
+%19:i32 = lshr %18, 8:i32
+%20:i8 = var
+%21:i32 = zext %20
+%22:i32 = addnw %19, %21 (hasExternalUses)
+%23:i32 = lshr %22, 8:i32
+%24:i8 = var
+%25:i32 = zext %24
+%26:i32 = addnw %23, %25 (hasExternalUses)
+%27:i32 = lshr %26, 8:i32
+%28:i8 = trunc %27
+infer %28
+
+; *****
+; For LLVM instruction:
+;  %96 = add i8 %94, %95
+; Looking for a replacement for:
+%0:i8 = var
+%1:i8 = var
+%2:i32 = zext %1
+%3:i32 = addnw 1:i32, %2 (hasExternalUses)
+%4:i32 = lshr %3, 8:i32
+%5:i8 = var
+%6:i32 = zext %5
+%7:i32 = addnw %4, %6 (hasExternalUses)
+%8:i32 = lshr %7, 8:i32
+%9:i8 = var
+%10:i32 = zext %9
+%11:i32 = addnw %8, %10 (hasExternalUses)
+%12:i32 = lshr %11, 8:i32
+%13:i8 = var
+%14:i32 = zext %13
+%15:i32 = addnw %12, %14 (hasExternalUses)
+%16:i32 = lshr %15, 8:i32
+%17:i8 = var
+%18:i32 = zext %17
+%19:i32 = addnw %16, %18 (hasExternalUses)
+%20:i32 = lshr %19, 8:i32
+%21:i8 = var
+%22:i32 = zext %21
+%23:i32 = addnw %20, %22 (hasExternalUses)
+%24:i32 = lshr %23, 8:i32
+%25:i8 = var
+%26:i32 = zext %25
+%27:i32 = addnw %24, %26 (hasExternalUses)
+%28:i32 = lshr %27, 8:i32
+%29:i8 = trunc %28
+%30:i8 = add %0, %29
+infer %30
+
+; *****
+; For LLVM instruction:
+;  %97 = add i64 %45, -64
+; Looking for a replacement for:
+%0:i64 = var (range=[64,0))
+%1:i64 = add 18446744073709551552:i64, %0
+infer %1
+
+; *****
+; For LLVM instruction:
+;  %100 = icmp ugt i64 %97, 63
+; Looking for a replacement for:
+%0:i64 = var (range=[64,0))
+%1:i64 = add 18446744073709551552:i64, %0 (hasExternalUses)
+%2:i1 = ult 63:i64, %1
+infer %2
+
+; *****
+; For LLVM instruction:
+;  %102 = and i64 %2, 63
+; Looking for a replacement for:
+%0:i64 = var
+%1:i64 = and 63:i64, %0
+infer %1
+
+; *****
+; For LLVM instruction:
+;  %103 = icmp eq i64 %102, 0
+; Looking for a replacement for:
+%0:i64 = var
+%1:i64 = and 63:i64, %0 (hasExternalUses)
+%2:i1 = eq 0:i64, %1
+infer %2
+
+; *****
+; For LLVM instruction:
+;  %106 = phi i64 [ %102, %101 ], [ %2, %14 ]
+; Looking for a replacement for:
+%0 = block 2
+%1:i64 = var
+%2:i64 = and 63:i64, %1 (hasExternalUses)
+%3:i64 = phi %0, %2, %1
+infer %3 (demandedBits=0000000000000000000000000000000011111111111111111111111111111111)
+
+; *****
+; For LLVM instruction:
+;  %109 = trunc i64 %106 to i32
+; Looking for a replacement for:
+%0 = block 2
+%1:i64 = var
+%2:i64 = and 63:i64, %1
+%3:i64 = phi %0, %2, %1
+%4:i32 = trunc %3
+infer %4
+
+; *****
+; For LLVM instruction:
+;  %110 = icmp eq i32 %109, 0
+; Looking for a replacement for:
+%0 = block 2
+%1:i64 = var
+%2:i64 = and 63:i64, %1
+%3:i64 = phi %0, %2, %1
+%4:i32 = trunc %3 (hasExternalUses)
+%5:i1 = eq 0:i32, %4
+infer %5
+
+; *****
+; For LLVM instruction:
+;  %112 = phi i32 [ %119, %111 ], [ 0, %104 ]
+; Looking for a replacement for:
+%0:i32 = var (range=[0,-1))
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %114 = load i8, i8* %113, align 1
+; Looking for a replacement for:
+%0:i8 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %116 = load i8, i8* %115, align 1
+; Looking for a replacement for:
+%0:i8 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %117 = xor i8 %116, %114
+; Looking for a replacement for:
+%0:i8 = var
+%1:i8 = var
+%2:i8 = xor %0, %1
+infer %2
+
+; *****
+; For LLVM instruction:
+;  %119 = add nuw i32 %112, 1
+; Looking for a replacement for:
+%0:i32 = var (range=[0,-1))
+%1:i32 = addnuw 1:i32, %0
+infer %1
+
+; *****
+; For LLVM instruction:
+;  %120 = icmp eq i32 %119, %109
+; Looking for a replacement for:
+%0:i32 = var (range=[0,-1))
+%1:i32 = addnuw 1:i32, %0 (hasExternalUses)
+%2 = block 2
+%3:i64 = var
+%4:i64 = and 63:i64, %3
+%5:i64 = phi %2, %4, %3
+%6:i32 = trunc %5 (hasExternalUses)
+%7:i1 = eq %1, %6
+infer %7
+got 2 candidates from LHS
+
+-------------------------------------------------
+%0:i64 = var
+%1:i8 = trunc %0
+infer %1
+
+
+--------------------------------
+guess 0
+
+%0:i8 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: -1
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+Dataflow Pruned 0/0
+There are 1 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 2 candidates from LHS
+
+-------------------------------------------------
+%0:i64 = var
+%1:i64 = lshr %0, 8:i64
+infer %1 (demandedBits=0000000000000000000000000000000000000000000000000000000011111111)
+
+
+--------------------------------
+guess 0
+
+%0:i64 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: 255
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+
+--------------------------------
+guess 1
+
+%0:i64 = var
+
+Cost = 0
+second query is SAT-- constant doesn't work
+Dataflow Pruned 0/0
+There are 2 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 3 candidates from LHS
+
+-------------------------------------------------
+%0:i64 = var
+%1:i64 = lshr %0, 8:i64
+%2:i8 = trunc %1
+infer %2
+
+
+--------------------------------
+guess 0
+
+%0:i8 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: -1
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+Dataflow Pruned 0/0
+There are 1 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 2 candidates from LHS
+
+-------------------------------------------------
+%0:i64 = var
+%1:i64 = lshr %0, 16:i64
+infer %1 (demandedBits=0000000000000000000000000000000000000000000000000000000011111111)
+
+
+--------------------------------
+guess 0
+
+%0:i64 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: 255
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+
+--------------------------------
+guess 1
+
+%0:i64 = var
+
+Cost = 0
+second query is SAT-- constant doesn't work
+Dataflow Pruned 0/0
+There are 2 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 3 candidates from LHS
+
+-------------------------------------------------
+%0:i64 = var
+%1:i64 = lshr %0, 16:i64
+%2:i8 = trunc %1
+infer %2
+
+
+--------------------------------
+guess 0
+
+%0:i8 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: -1
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+Dataflow Pruned 0/0
+There are 1 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 2 candidates from LHS
+
+-------------------------------------------------
+%0:i64 = var
+%1:i64 = lshr %0, 24:i64
+infer %1 (demandedBits=0000000000000000000000000000000000000000000000000000000011111111)
+
+
+--------------------------------
+guess 0
+
+%0:i64 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: 255
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+
+--------------------------------
+guess 1
+
+%0:i64 = var
+
+Cost = 0
+second query is SAT-- constant doesn't work
+Dataflow Pruned 0/0
+There are 2 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 3 candidates from LHS
+
+-------------------------------------------------
+%0:i64 = var
+%1:i64 = lshr %0, 24:i64
+%2:i8 = trunc %1
+infer %2
+
+
+--------------------------------
+guess 0
+
+%0:i8 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: -1
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+Dataflow Pruned 0/0
+There are 1 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 2 candidates from LHS
+
+-------------------------------------------------
+%0:i64 = var
+%1:i64 = lshr %0, 32:i64
+infer %1 (demandedBits=0000000000000000000000000000000000000000000000000000000011111111)
+
+
+--------------------------------
+guess 0
+
+%0:i64 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: 255
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+
+--------------------------------
+guess 1
+
+%0:i64 = var
+
+Cost = 0
+second query is SAT-- constant doesn't work
+Dataflow Pruned 0/0
+There are 2 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 3 candidates from LHS
+
+-------------------------------------------------
+%0:i64 = var
+%1:i64 = lshr %0, 32:i64
+%2:i8 = trunc %1
+infer %2
+
+
+--------------------------------
+guess 0
+
+%0:i8 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: -1
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+Dataflow Pruned 0/0
+There are 1 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 2 candidates from LHS
+
+-------------------------------------------------
+%0:i64 = var
+%1:i64 = lshr %0, 40:i64
+infer %1 (demandedBits=0000000000000000000000000000000000000000000000000000000011111111)
+
+
+--------------------------------
+guess 0
+
+%0:i64 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: 255
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+
+--------------------------------
+guess 1
+
+%0:i64 = var
+
+Cost = 0
+second query is SAT-- constant doesn't work
+Dataflow Pruned 0/0
+There are 2 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 3 candidates from LHS
+
+-------------------------------------------------
+%0:i64 = var
+%1:i64 = lshr %0, 40:i64
+%2:i8 = trunc %1
+infer %2
+
+
+--------------------------------
+guess 0
+
+%0:i8 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: -1
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+Dataflow Pruned 0/0
+There are 1 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 2 candidates from LHS
+
+-------------------------------------------------
+%0:i64 = var
+%1:i64 = lshr %0, 48:i64
+infer %1 (demandedBits=0000000000000000000000000000000000000000000000000000000011111111)
+
+
+--------------------------------
+guess 0
+
+%0:i64 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: 255
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+
+--------------------------------
+guess 1
+
+%0:i64 = var
+
+Cost = 0
+second query is SAT-- constant doesn't work
+Dataflow Pruned 0/0
+There are 2 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 3 candidates from LHS
+
+-------------------------------------------------
+%0:i64 = var
+%1:i64 = lshr %0, 48:i64
+%2:i8 = trunc %1
+infer %2
+
+
+--------------------------------
+guess 0
+
+%0:i8 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: -1
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+Dataflow Pruned 0/0
+There are 1 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 2 candidates from LHS
+
+-------------------------------------------------
+%0:i64 = var
+%1:i64 = lshr %0, 56:i64
+infer %1 (demandedBits=0000000000000000000000000000000000000000000000000000000011111111)
+
+
+--------------------------------
+guess 0
+
+%0:i64 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: 255
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+
+--------------------------------
+guess 1
+
+%0:i64 = var
+
+Cost = 0
+second query is SAT-- constant doesn't work
+Dataflow Pruned 0/0
+There are 2 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 3 candidates from LHS
+
+-------------------------------------------------
+%0:i64 = var
+%1:i64 = lshr %0, 56:i64
+%2:i8 = trunc %1
+infer %2
+
+
+--------------------------------
+guess 0
+
+%0:i8 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: -1
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+Dataflow Pruned 0/0
+There are 1 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 1 candidates from LHS
+
+-------------------------------------------------
+%0:i32 = var (knownBits=0xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx) (nonNegative) (range=[0,64))
+infer %0
+
+
+--------------------------------
+guess 0
+
+%0:i32 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: 16
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+Dataflow Pruned 0/0
+There are 1 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 3 candidates from LHS
+
+-------------------------------------------------
+%0:i8 = var
+%1:i8 = var
+%2:i8 = xor %0, %1
+infer %2
+
+
+--------------------------------
+guess 0
+
+%0:i8 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: -128
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+
+--------------------------------
+guess 1
+
+%0:i8 = var
+
+Cost = 0
+second query is SAT-- constant doesn't work
+
+--------------------------------
+guess 2
+
+%0:i8 = var
+
+Cost = 0
+second query is SAT-- constant doesn't work
+Dataflow Pruned 0/0
+There are 3 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 2 candidates from LHS
+
+-------------------------------------------------
+%0:i32 = var (knownBits=0xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx) (nonNegative) (range=[0,64))
+%1:i32 = addnw 1:i32, %0
+infer %1
+
+
+--------------------------------
+guess 0
+
+%0:i32 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 1
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: 17
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+
+--------------------------------
+guess 1
+
+%0:i32 = var (knownBits=0xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx) (nonNegative) (range=[0,64))
+
+Cost = 0
+second query is SAT-- constant doesn't work
+Dataflow Pruned 0/0
+There are 2 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 3 candidates from LHS
+
+-------------------------------------------------
+%0:i32 = var (knownBits=0xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx) (nonNegative) (range=[0,64))
+%1:i32 = addnw 1:i32, %0 (hasExternalUses)
+%2:i1 = eq 64:i32, %1
+infer %2
+
+
+--------------------------------
+guess 0
+
+%0:i1 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: -1
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+Dataflow Pruned 0/0
+There are 1 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+#########################################################
+; exiting Souper's runOnFunction() for ./salsa20_ref.c.bc:stream_ref_xor_ic()
+Total of 0 replacements done on this module
+Total of 0 replacements candidates on this module

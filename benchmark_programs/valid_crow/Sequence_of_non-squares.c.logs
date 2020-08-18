@@ -1,0 +1,568 @@
+
+Entering the Souper pass's runOnModule()
+
+
+; entering Souper's runOnFunction() for nonsqr()
+
+; ModuleID = './Sequence_of_non-squares.c.bc'
+source_filename = "./Sequence_of_non-squares.c"
+target datalayout = "e-m:e-p:32:32-i64:64-n32:64-S128"
+target triple = "wasm32-unknown-wasi"
+
+@.str = private unnamed_addr constant [4 x i8] c"%d \00", align 1
+@.str.1 = private unnamed_addr constant [2 x i8] c"\0A\00", align 1
+@.str.2 = private unnamed_addr constant [14 x i8] c"j != floor(j)\00", align 1
+@.str.3 = private unnamed_addr constant [28 x i8] c"./Sequence_of_non-squares.c\00", align 1
+@__func__.main = private unnamed_addr constant [5 x i8] c"main\00", align 1
+@llvm.used = appending global [1 x i8*] [i8* bitcast (i32 ()* @__main_void to i8*)], section "llvm.metadata"
+
+@__main_void = alias i32 (), i32 ()* @main
+
+; Function Attrs: noinline nounwind optnone
+define hidden i32 @nonsqr(i32 %n) #0 {
+entry:
+  %n.addr = alloca i32, align 4
+  store i32 %n, i32* %n.addr, align 4
+  %0 = load i32, i32* %n.addr, align 4
+  %1 = load i32, i32* %n.addr, align 4
+  %conv = sitofp i32 %1 to double
+  %2 = call double @llvm.sqrt.f64(double %conv)
+  %add = fadd double 5.000000e-01, %2
+  %conv1 = fptosi double %add to i32
+  %add2 = add nsw i32 %0, %conv1
+  ret i32 %add2
+}
+
+; Function Attrs: nounwind readnone speculatable willreturn
+declare double @llvm.sqrt.f64(double %0) #1
+
+; Function Attrs: noinline nounwind optnone
+define hidden i32 @main() #0 {
+entry:
+  %retval = alloca i32, align 4
+  %i = alloca i32, align 4
+  %j = alloca double, align 8
+  store i32 0, i32* %retval, align 4
+  store i32 1, i32* %i, align 4
+  br label %for.cond
+
+for.cond:                                         ; preds = %for.inc, %entry
+  %0 = load i32, i32* %i, align 4
+  %cmp = icmp slt i32 %0, 23
+  br i1 %cmp, label %for.body, label %for.end
+
+for.body:                                         ; preds = %for.cond
+  %1 = load i32, i32* %i, align 4
+  %call = call i32 @nonsqr(i32 %1)
+  %call1 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([4 x i8], [4 x i8]* @.str, i32 0, i32 0), i32 %call)
+  br label %for.inc
+
+for.inc:                                          ; preds = %for.body
+  %2 = load i32, i32* %i, align 4
+  %inc = add nsw i32 %2, 1
+  store i32 %inc, i32* %i, align 4
+  br label %for.cond
+
+for.end:                                          ; preds = %for.cond
+  %call2 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([2 x i8], [2 x i8]* @.str.1, i32 0, i32 0))
+  store i32 1, i32* %i, align 4
+  br label %for.cond3
+
+for.cond3:                                        ; preds = %for.inc9, %for.end
+  %3 = load i32, i32* %i, align 4
+  %cmp4 = icmp slt i32 %3, 1000000
+  br i1 %cmp4, label %for.body5, label %for.end11
+
+for.body5:                                        ; preds = %for.cond3
+  %4 = load i32, i32* %i, align 4
+  %call6 = call i32 @nonsqr(i32 %4)
+  %conv = sitofp i32 %call6 to double
+  %5 = call double @llvm.sqrt.f64(double %conv)
+  store double %5, double* %j, align 8
+  %6 = load double, double* %j, align 8
+  %7 = load double, double* %j, align 8
+  %8 = call double @llvm.floor.f64(double %7)
+  %cmp7 = fcmp une double %6, %8
+  br i1 %cmp7, label %lor.end, label %lor.rhs
+
+lor.rhs:                                          ; preds = %for.body5
+  call void @__assert_fail(i8* getelementptr inbounds ([14 x i8], [14 x i8]* @.str.2, i32 0, i32 0), i8* getelementptr inbounds ([28 x i8], [28 x i8]* @.str.3, i32 0, i32 0), i32 21, i8* getelementptr inbounds ([5 x i8], [5 x i8]* @__func__.main, i32 0, i32 0)) #4
+  unreachable
+
+9:                                                ; No predecessors!
+  br label %lor.end
+
+lor.end:                                          ; preds = %9, %for.body5
+  %10 = phi i1 [ true, %for.body5 ], [ false, %9 ]
+  %lor.ext = zext i1 %10 to i32
+  br label %for.inc9
+
+for.inc9:                                         ; preds = %lor.end
+  %11 = load i32, i32* %i, align 4
+  %inc10 = add nsw i32 %11, 1
+  store i32 %inc10, i32* %i, align 4
+  br label %for.cond3
+
+for.end11:                                        ; preds = %for.cond3
+  ret i32 0
+}
+
+declare i32 @printf(i8* %0, ...) #2
+
+; Function Attrs: nounwind readnone speculatable willreturn
+declare double @llvm.floor.f64(double %0) #1
+
+; Function Attrs: noreturn
+declare void @__assert_fail(i8* %0, i8* %1, i32 %2, i8* %3) #3
+
+attributes #0 = { noinline nounwind optnone "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "min-legal-vector-width"="0" "no-infs-fp-math"="false" "no-jump-tables"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #1 = { nounwind readnone speculatable willreturn }
+attributes #2 = { "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #3 = { noreturn "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #4 = { noreturn }
+
+!llvm.module.flags = !{!0}
+!llvm.ident = !{!1}
+
+!0 = !{i32 1, !"wchar_size", i32 4}
+!1 = !{!"clang version 11.0.0 (https://github.com/Jacarte/llvm-project.git 0f6dea67136cc1e0b3d200eb2bb165628970c44b)"}
+
+; extracted candidates
+
+; *****
+; For LLVM instruction:
+;  %0 = load i32, i32* %n.addr, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %1 = load i32, i32* %n.addr, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %conv1 = fptosi double %add to i32
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %add2 = add nsw i32 %0, %conv1
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = var
+%2:i32 = addnsw %0, %1
+infer %2
+got 1 candidates from LHS
+
+-------------------------------------------------
+%0:i32 = var
+infer %0
+
+
+--------------------------------
+guess 0
+
+%0:i32 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: -1
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+Dataflow Pruned 0/0
+There are 1 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 3 candidates from LHS
+
+-------------------------------------------------
+%0:i32 = var
+%1:i32 = var
+%2:i32 = addnsw %0, %1
+infer %2
+
+
+--------------------------------
+guess 0
+
+%0:i32 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: -2
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+
+--------------------------------
+guess 1
+
+%0:i32 = var
+
+Cost = 0
+second query is SAT-- constant doesn't work
+
+--------------------------------
+guess 2
+
+%0:i32 = var
+
+Cost = 0
+second query is SAT-- constant doesn't work
+Dataflow Pruned 0/0
+There are 3 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+#########################################################
+; exiting Souper's runOnFunction() for nonsqr()
+
+; entering Souper's runOnFunction() for main()
+
+; ModuleID = './Sequence_of_non-squares.c.bc'
+source_filename = "./Sequence_of_non-squares.c"
+target datalayout = "e-m:e-p:32:32-i64:64-n32:64-S128"
+target triple = "wasm32-unknown-wasi"
+
+@.str = private unnamed_addr constant [4 x i8] c"%d \00", align 1
+@.str.1 = private unnamed_addr constant [2 x i8] c"\0A\00", align 1
+@.str.2 = private unnamed_addr constant [14 x i8] c"j != floor(j)\00", align 1
+@.str.3 = private unnamed_addr constant [28 x i8] c"./Sequence_of_non-squares.c\00", align 1
+@__func__.main = private unnamed_addr constant [5 x i8] c"main\00", align 1
+@llvm.used = appending global [1 x i8*] [i8* bitcast (i32 ()* @__main_void to i8*)], section "llvm.metadata"
+
+@__main_void = alias i32 (), i32 ()* @main
+
+; Function Attrs: noinline nounwind optnone
+define hidden i32 @nonsqr(i32 %n) #0 {
+entry:
+  %n.addr = alloca i32, align 4
+  store i32 %n, i32* %n.addr, align 4
+  %0 = load i32, i32* %n.addr, align 4
+  %1 = load i32, i32* %n.addr, align 4
+  %conv = sitofp i32 %1 to double
+  %2 = call double @llvm.sqrt.f64(double %conv)
+  %add = fadd double 5.000000e-01, %2
+  %conv1 = fptosi double %add to i32
+  %add2 = add nsw i32 %0, %conv1
+  ret i32 %add2
+}
+
+; Function Attrs: nounwind readnone speculatable willreturn
+declare double @llvm.sqrt.f64(double %0) #1
+
+; Function Attrs: noinline nounwind optnone
+define hidden i32 @main() #0 {
+entry:
+  %retval = alloca i32, align 4
+  %i = alloca i32, align 4
+  %j = alloca double, align 8
+  store i32 0, i32* %retval, align 4
+  store i32 1, i32* %i, align 4
+  br label %for.cond
+
+for.cond:                                         ; preds = %for.inc, %entry
+  %0 = load i32, i32* %i, align 4
+  %cmp = icmp slt i32 %0, 23
+  br i1 %cmp, label %for.body, label %for.end
+
+for.body:                                         ; preds = %for.cond
+  %1 = load i32, i32* %i, align 4
+  %call = call i32 @nonsqr(i32 %1)
+  %call1 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([4 x i8], [4 x i8]* @.str, i32 0, i32 0), i32 %call)
+  br label %for.inc
+
+for.inc:                                          ; preds = %for.body
+  %2 = load i32, i32* %i, align 4
+  %inc = add nsw i32 %2, 1
+  store i32 %inc, i32* %i, align 4
+  br label %for.cond
+
+for.end:                                          ; preds = %for.cond
+  %call2 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([2 x i8], [2 x i8]* @.str.1, i32 0, i32 0))
+  store i32 1, i32* %i, align 4
+  br label %for.cond3
+
+for.cond3:                                        ; preds = %for.inc9, %for.end
+  %3 = load i32, i32* %i, align 4
+  %cmp4 = icmp slt i32 %3, 1000000
+  br i1 %cmp4, label %for.body5, label %for.end11
+
+for.body5:                                        ; preds = %for.cond3
+  %4 = load i32, i32* %i, align 4
+  %call6 = call i32 @nonsqr(i32 %4)
+  %conv = sitofp i32 %call6 to double
+  %5 = call double @llvm.sqrt.f64(double %conv)
+  store double %5, double* %j, align 8
+  %6 = load double, double* %j, align 8
+  %7 = load double, double* %j, align 8
+  %8 = call double @llvm.floor.f64(double %7)
+  %cmp7 = fcmp une double %6, %8
+  br i1 %cmp7, label %lor.end, label %lor.rhs
+
+lor.rhs:                                          ; preds = %for.body5
+  call void @__assert_fail(i8* getelementptr inbounds ([14 x i8], [14 x i8]* @.str.2, i32 0, i32 0), i8* getelementptr inbounds ([28 x i8], [28 x i8]* @.str.3, i32 0, i32 0), i32 21, i8* getelementptr inbounds ([5 x i8], [5 x i8]* @__func__.main, i32 0, i32 0)) #4
+  unreachable
+
+9:                                                ; No predecessors!
+  br label %lor.end
+
+lor.end:                                          ; preds = %9, %for.body5
+  %10 = phi i1 [ true, %for.body5 ], [ false, %9 ]
+  %lor.ext = zext i1 %10 to i32
+  br label %for.inc9
+
+for.inc9:                                         ; preds = %lor.end
+  %11 = load i32, i32* %i, align 4
+  %inc10 = add nsw i32 %11, 1
+  store i32 %inc10, i32* %i, align 4
+  br label %for.cond3
+
+for.end11:                                        ; preds = %for.cond3
+  ret i32 0
+}
+
+declare i32 @printf(i8* %0, ...) #2
+
+; Function Attrs: nounwind readnone speculatable willreturn
+declare double @llvm.floor.f64(double %0) #1
+
+; Function Attrs: noreturn
+declare void @__assert_fail(i8* %0, i8* %1, i32 %2, i8* %3) #3
+
+attributes #0 = { noinline nounwind optnone "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "min-legal-vector-width"="0" "no-infs-fp-math"="false" "no-jump-tables"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #1 = { nounwind readnone speculatable willreturn }
+attributes #2 = { "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #3 = { noreturn "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #4 = { noreturn }
+
+!llvm.module.flags = !{!0}
+!llvm.ident = !{!1}
+
+!0 = !{i32 1, !"wchar_size", i32 4}
+!1 = !{!"clang version 11.0.0 (https://github.com/Jacarte/llvm-project.git 0f6dea67136cc1e0b3d200eb2bb165628970c44b)"}
+
+; extracted candidates
+
+; *****
+; For LLVM instruction:
+;  %0 = load i32, i32* %i, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %cmp = icmp slt i32 %0, 23
+; Looking for a replacement for:
+%0:i32 = var
+%1:i1 = slt %0, 23:i32
+infer %1
+
+; *****
+; For LLVM instruction:
+;  %1 = load i32, i32* %i, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %call = call i32 @nonsqr(i32 %1)
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %2 = load i32, i32* %i, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %inc = add nsw i32 %2, 1
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = addnsw 1:i32, %0
+infer %1
+
+; *****
+; For LLVM instruction:
+;  %3 = load i32, i32* %i, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %cmp4 = icmp slt i32 %3, 1000000
+; Looking for a replacement for:
+%0:i32 = var
+%1:i1 = slt %0, 1000000:i32
+infer %1
+
+; *****
+; For LLVM instruction:
+;  %4 = load i32, i32* %i, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %call6 = call i32 @nonsqr(i32 %4)
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %cmp7 = fcmp une double %6, %8
+; Looking for a replacement for:
+%0:i1 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %10 = phi i1 [ true, %for.body5 ], [ false, %9 ]
+; Looking for a replacement for:
+%0:i1 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %11 = load i32, i32* %i, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %inc10 = add nsw i32 %11, 1
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = addnsw 1:i32, %0
+infer %1
+got 2 candidates from LHS
+
+-------------------------------------------------
+%0:i32 = var
+%1:i1 = slt %0, 23:i32
+infer %1
+
+
+--------------------------------
+guess 0
+
+%0:i1 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: -1
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: 0
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+Dataflow Pruned 0/0
+There are 1 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 2 candidates from LHS
+
+-------------------------------------------------
+%0:i32 = var
+%1:i32 = addnsw 1:i32, %0
+infer %1
+
+
+--------------------------------
+guess 0
+
+%0:i32 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 1
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: 268435457
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+
+--------------------------------
+guess 1
+
+%0:i32 = var
+
+Cost = 0
+second query is SAT-- constant doesn't work
+Dataflow Pruned 0/0
+There are 2 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 2 candidates from LHS
+
+-------------------------------------------------
+%0:i32 = var
+%1:i1 = slt %0, 1000000:i32
+infer %1
+
+
+--------------------------------
+guess 0
+
+%0:i1 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: -1
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: 0
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+Dataflow Pruned 0/0
+There are 1 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 1 candidates from LHS
+
+-------------------------------------------------
+%0:i1 = var
+infer %0
+
+
+--------------------------------
+guess 0
+
+%0:i1 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: -1
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+Dataflow Pruned 0/0
+There are 1 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+#########################################################
+; exiting Souper's runOnFunction() for main()
+Total of 0 replacements done on this module
+Total of 0 replacements candidates on this module

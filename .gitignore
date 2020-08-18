@@ -15,6 +15,12 @@ out
 *.slumps.log
 crow_out
 
+utils/reports
 
 dist
 *egg-info
+
+payload*
+traces
+.vscode
+.metals

@@ -1,0 +1,310 @@
+
+Entering the Souper pass's runOnModule()
+
+
+; entering Souper's runOnFunction() for main()
+
+; ModuleID = './Calculating_the_value_of_e.c.bc'
+source_filename = "./Calculating_the_value_of_e.c"
+target datalayout = "e-m:e-p:32:32-i64:64-n32:64-S128"
+target triple = "wasm32-unknown-wasi"
+
+@.str = private unnamed_addr constant [11 x i8] c"e = %.15f\0A\00", align 1
+@llvm.used = appending global [1 x i8*] [i8* bitcast (i32 ()* @__main_void to i8*)], section "llvm.metadata"
+
+@__main_void = alias i32 (), i32 ()* @main
+
+; Function Attrs: noinline nounwind optnone
+define hidden i32 @main() #0 {
+entry:
+  %retval = alloca i32, align 4
+  %fact = alloca i64, align 8
+  %e = alloca double, align 8
+  %e0 = alloca double, align 8
+  %n = alloca i32, align 4
+  store i32 0, i32* %retval, align 4
+  store i64 1, i64* %fact, align 8
+  store double 2.000000e+00, double* %e, align 8
+  store i32 2, i32* %n, align 4
+  br label %do.body
+
+do.body:                                          ; preds = %do.cond, %entry
+  %0 = load double, double* %e, align 8
+  store double %0, double* %e0, align 8
+  %1 = load i32, i32* %n, align 4
+  %inc = add nsw i32 %1, 1
+  store i32 %inc, i32* %n, align 4
+  %conv = sext i32 %1 to i64
+  %2 = load i64, i64* %fact, align 8
+  %mul = mul i64 %2, %conv
+  store i64 %mul, i64* %fact, align 8
+  %3 = load i64, i64* %fact, align 8
+  %conv1 = uitofp i64 %3 to double
+  %div = fdiv double 1.000000e+00, %conv1
+  %4 = load double, double* %e, align 8
+  %add = fadd double %4, %div
+  store double %add, double* %e, align 8
+  br label %do.cond
+
+do.cond:                                          ; preds = %do.body
+  %5 = load double, double* %e, align 8
+  %6 = load double, double* %e0, align 8
+  %sub = fsub double %5, %6
+  %7 = call double @llvm.fabs.f64(double %sub)
+  %cmp = fcmp oge double %7, 1.000000e-15
+  br i1 %cmp, label %do.body, label %do.end
+
+do.end:                                           ; preds = %do.cond
+  %8 = load double, double* %e, align 8
+  %call = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([11 x i8], [11 x i8]* @.str, i32 0, i32 0), double %8)
+  ret i32 0
+}
+
+; Function Attrs: nounwind readnone speculatable willreturn
+declare double @llvm.fabs.f64(double %0) #1
+
+declare i32 @printf(i8* %0, ...) #2
+
+attributes #0 = { noinline nounwind optnone "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "min-legal-vector-width"="0" "no-infs-fp-math"="false" "no-jump-tables"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #1 = { nounwind readnone speculatable willreturn }
+attributes #2 = { "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+
+!llvm.module.flags = !{!0}
+!llvm.ident = !{!1}
+
+!0 = !{i32 1, !"wchar_size", i32 4}
+!1 = !{!"clang version 11.0.0 (https://github.com/Jacarte/llvm-project.git 0f6dea67136cc1e0b3d200eb2bb165628970c44b)"}
+
+; extracted candidates
+
+; *****
+; For LLVM instruction:
+;  %1 = load i32, i32* %n, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %inc = add nsw i32 %1, 1
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = addnsw 1:i32, %0
+infer %1
+
+; *****
+; For LLVM instruction:
+;  %conv = sext i32 %1 to i64
+; Looking for a replacement for:
+%0:i32 = var
+%1:i64 = sext %0
+infer %1
+
+; *****
+; For LLVM instruction:
+;  %2 = load i64, i64* %fact, align 8
+; Looking for a replacement for:
+%0:i64 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %mul = mul i64 %2, %conv
+; Looking for a replacement for:
+%0:i64 = var
+%1:i32 = var
+%2:i64 = sext %1
+%3:i64 = mul %0, %2
+infer %3
+
+; *****
+; For LLVM instruction:
+;  %3 = load i64, i64* %fact, align 8
+; Looking for a replacement for:
+%0:i64 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %cmp = fcmp oge double %7, 1.000000e-15
+; Looking for a replacement for:
+%0:i1 = var
+infer %0
+got 1 candidates from LHS
+
+-------------------------------------------------
+%0:i32 = var
+infer %0
+
+
+--------------------------------
+guess 0
+
+%0:i32 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: -1
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+Dataflow Pruned 0/0
+There are 1 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 2 candidates from LHS
+
+-------------------------------------------------
+%0:i32 = var
+%1:i32 = addnsw 1:i32, %0
+infer %1
+
+
+--------------------------------
+guess 0
+
+%0:i32 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 1
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: 268435457
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+
+--------------------------------
+guess 1
+
+%0:i32 = var
+
+Cost = 0
+second query is SAT-- constant doesn't work
+Dataflow Pruned 0/0
+There are 2 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 2 candidates from LHS
+
+-------------------------------------------------
+%0:i32 = var
+%1:i64 = sext %0
+infer %1
+
+
+--------------------------------
+guess 0
+
+%0:i64 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: -1
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+Dataflow Pruned 0/0
+There are 1 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 1 candidates from LHS
+
+-------------------------------------------------
+%0:i64 = var
+infer %0
+
+
+--------------------------------
+guess 0
+
+%0:i64 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: -1
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+Dataflow Pruned 0/0
+There are 1 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 4 candidates from LHS
+
+-------------------------------------------------
+%0:i64 = var
+%1:i32 = var
+%2:i64 = sext %1
+%3:i64 = mul %0, %2
+infer %3
+
+
+--------------------------------
+guess 0
+
+%0:i64 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: -4204105708069584896
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+
+--------------------------------
+guess 1
+
+%0:i64 = var
+
+Cost = 0
+second query is SAT-- constant doesn't work
+
+--------------------------------
+guess 2
+
+%0:i32 = var
+%1:i64 = sext %0
+
+Cost = 1
+second query is SAT-- constant doesn't work
+Dataflow Pruned 0/0
+There are 3 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 1 candidates from LHS
+
+-------------------------------------------------
+%0:i1 = var
+infer %0
+
+
+--------------------------------
+guess 0
+
+%0:i1 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: -1
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+Dataflow Pruned 0/0
+There are 1 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+#########################################################
+; exiting Souper's runOnFunction() for main()
+Total of 0 replacements done on this module
+Total of 0 replacements candidates on this module

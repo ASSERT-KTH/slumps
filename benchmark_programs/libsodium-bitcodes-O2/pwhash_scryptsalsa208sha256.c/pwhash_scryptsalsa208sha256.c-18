@@ -1,0 +1,1793 @@
+; entering Souper's runOnFunction() for crypto_pwhash_scryptsalsa208sha256()
+
+; ModuleID = './pwhash_scryptsalsa208sha256.c.bc'
+source_filename = "crypto_pwhash/scryptsalsa208sha256/pwhash_scryptsalsa208sha256.c"
+target datalayout = "e-m:e-p:32:32-i64:64-n32:64-S128"
+target triple = "wasm32-unknown-wasi"
+
+%struct.escrypt_region_t = type { i8*, i8*, i32 }
+
+@.str = private unnamed_addr constant [4 x i8] c"$7$\00", align 1
+@errno = external thread_local local_unnamed_addr global i32, align 4
+
+; Function Attrs: norecurse nounwind readnone
+define i32 @crypto_pwhash_scryptsalsa208sha256_bytes_min() local_unnamed_addr #0 {
+  ret i32 16
+}
+
+; Function Attrs: norecurse nounwind readnone
+define i32 @crypto_pwhash_scryptsalsa208sha256_bytes_max() local_unnamed_addr #0 {
+  ret i32 -1
+}
+
+; Function Attrs: norecurse nounwind readnone
+define i32 @crypto_pwhash_scryptsalsa208sha256_passwd_min() local_unnamed_addr #0 {
+  ret i32 0
+}
+
+; Function Attrs: norecurse nounwind readnone
+define i32 @crypto_pwhash_scryptsalsa208sha256_passwd_max() local_unnamed_addr #0 {
+  ret i32 -1
+}
+
+; Function Attrs: norecurse nounwind readnone
+define i32 @crypto_pwhash_scryptsalsa208sha256_saltbytes() local_unnamed_addr #0 {
+  ret i32 32
+}
+
+; Function Attrs: norecurse nounwind readnone
+define i32 @crypto_pwhash_scryptsalsa208sha256_strbytes() local_unnamed_addr #0 {
+  ret i32 102
+}
+
+; Function Attrs: norecurse nounwind readnone
+define i8* @crypto_pwhash_scryptsalsa208sha256_strprefix() local_unnamed_addr #0 {
+  ret i8* getelementptr inbounds ([4 x i8], [4 x i8]* @.str, i32 0, i32 0)
+}
+
+; Function Attrs: norecurse nounwind readnone
+define i32 @crypto_pwhash_scryptsalsa208sha256_opslimit_min() local_unnamed_addr #0 {
+  ret i32 32768
+}
+
+; Function Attrs: norecurse nounwind readnone
+define i32 @crypto_pwhash_scryptsalsa208sha256_opslimit_max() local_unnamed_addr #0 {
+  ret i32 -1
+}
+
+; Function Attrs: norecurse nounwind readnone
+define i32 @crypto_pwhash_scryptsalsa208sha256_memlimit_min() local_unnamed_addr #0 {
+  ret i32 16777216
+}
+
+; Function Attrs: norecurse nounwind readnone
+define i32 @crypto_pwhash_scryptsalsa208sha256_memlimit_max() local_unnamed_addr #0 {
+  ret i32 -1
+}
+
+; Function Attrs: norecurse nounwind readnone
+define i32 @crypto_pwhash_scryptsalsa208sha256_opslimit_interactive() local_unnamed_addr #0 {
+  ret i32 524288
+}
+
+; Function Attrs: norecurse nounwind readnone
+define i32 @crypto_pwhash_scryptsalsa208sha256_memlimit_interactive() local_unnamed_addr #0 {
+  ret i32 16777216
+}
+
+; Function Attrs: norecurse nounwind readnone
+define i32 @crypto_pwhash_scryptsalsa208sha256_opslimit_sensitive() local_unnamed_addr #0 {
+  ret i32 33554432
+}
+
+; Function Attrs: norecurse nounwind readnone
+define i32 @crypto_pwhash_scryptsalsa208sha256_memlimit_sensitive() local_unnamed_addr #0 {
+  ret i32 1073741824
+}
+
+; Function Attrs: nounwind
+define i32 @crypto_pwhash_scryptsalsa208sha256(i8* nonnull %0, i64 %1, i8* nonnull %2, i64 %3, i8* nonnull %4, i64 %5, i32 %6) local_unnamed_addr #1 {
+  %8 = trunc i64 %1 to i32
+  tail call void @llvm.memset.p0i8.i32(i8* nonnull align 1 %0, i8 0, i32 %8, i1 false)
+  %9 = or i64 %3, %1
+  %10 = icmp ugt i64 %9, 4294967295
+  br i1 %10, label %11, label %12
+
+11:                                               ; preds = %7
+  store i32 22, i32* @errno, align 4
+  br label %56
+
+12:                                               ; preds = %7
+  %13 = icmp ult i64 %1, 16
+  br i1 %13, label %55, label %14
+
+14:                                               ; preds = %12
+  %15 = icmp ugt i64 %5, 32768
+  %16 = select i1 %15, i64 %5, i64 32768
+  %17 = lshr i32 %6, 5
+  %18 = zext i32 %17 to i64
+  %19 = icmp ult i64 %16, %18
+  br i1 %19, label %23, label %20
+
+20:                                               ; preds = %14
+  %21 = lshr i32 %6, 11
+  %22 = zext i32 %21 to i64
+  br label %31
+
+23:                                               ; preds = %14
+  %24 = lshr i64 %16, 6
+  br label %26
+
+25:                                               ; preds = %26
+  br i1 false, label %46, label %26
+
+26:                                               ; preds = %25, %23
+  %27 = phi i64 [ 1, %23 ], [ %30, %25 ]
+  %28 = lshr i64 %24, %27
+  %29 = icmp eq i64 %28, 0
+  %30 = add nuw nsw i64 %27, 1
+  br i1 %29, label %46, label %25
+
+31:                                               ; preds = %35, %20
+  %32 = phi i64 [ 1, %20 ], [ %36, %35 ]
+  %33 = lshr i64 %22, %32
+  %34 = icmp eq i64 %33, 0
+  br i1 %34, label %37, label %35
+
+35:                                               ; preds = %31
+  %36 = add nuw nsw i64 %32, 1
+  br i1 false, label %37, label %31
+
+37:                                               ; preds = %35, %31
+  %38 = phi i64 [ %32, %31 ], [ 63, %35 ]
+  %39 = lshr i64 %16, 2
+  %40 = and i64 %38, 4294967295
+  %41 = lshr i64 %39, %40
+  %42 = icmp ult i64 %41, 1073741823
+  %43 = select i1 %42, i64 %41, i64 1073741823
+  %44 = trunc i64 %43 to i32
+  %45 = lshr i32 %44, 3
+  br label %49
+
+46:                                               ; preds = %26, %25
+  %47 = phi i64 [ 63, %25 ], [ %27, %26 ]
+  %48 = and i64 %47, 4294967295
+  br label %49
+
+49:                                               ; preds = %46, %37
+  %50 = phi i64 [ %48, %46 ], [ %40, %37 ]
+  %51 = phi i32 [ 1, %46 ], [ %45, %37 ]
+  %52 = trunc i64 %3 to i32
+  %53 = shl nuw i64 1, %50
+  %54 = tail call i32 @crypto_pwhash_scryptsalsa208sha256_ll(i8* nonnull %2, i32 %52, i8* nonnull %4, i32 32, i64 %53, i32 8, i32 %51, i8* nonnull %0, i32 %8) #5
+  br label %56
+
+55:                                               ; preds = %12
+  store i32 28, i32* @errno, align 4
+  br label %56
+
+56:                                               ; preds = %49, %55, %11
+  %57 = phi i32 [ -1, %11 ], [ -1, %55 ], [ %54, %49 ]
+  ret i32 %57
+}
+
+; Function Attrs: argmemonly nounwind willreturn
+declare void @llvm.lifetime.start.p0i8(i64 immarg %0, i8* nocapture %1) #2
+
+; Function Attrs: argmemonly nounwind willreturn writeonly
+declare void @llvm.memset.p0i8.i32(i8* nocapture writeonly %0, i8 %1, i32 %2, i1 immarg %3) #3
+
+declare i32 @crypto_pwhash_scryptsalsa208sha256_ll(i8* %0, i32 %1, i8* %2, i32 %3, i64 %4, i32 %5, i32 %6, i8* %7, i32 %8) local_unnamed_addr #4
+
+; Function Attrs: argmemonly nounwind willreturn
+declare void @llvm.lifetime.end.p0i8(i64 immarg %0, i8* nocapture %1) #2
+
+; Function Attrs: nounwind
+define i32 @crypto_pwhash_scryptsalsa208sha256_str(i8* nonnull %0, i8* nonnull %1, i64 %2, i64 %3, i32 %4) local_unnamed_addr #1 {
+  %6 = alloca [32 x i8], align 16
+  %7 = alloca [58 x i8], align 16
+  %8 = alloca %struct.escrypt_region_t, align 4
+  %9 = getelementptr inbounds [32 x i8], [32 x i8]* %6, i32 0, i32 0
+  call void @llvm.lifetime.start.p0i8(i64 32, i8* nonnull %9) #5
+  %10 = getelementptr inbounds [58 x i8], [58 x i8]* %7, i32 0, i32 0
+  call void @llvm.lifetime.start.p0i8(i64 58, i8* nonnull %10) #5
+  %11 = bitcast %struct.escrypt_region_t* %8 to i8*
+  call void @llvm.lifetime.start.p0i8(i64 12, i8* nonnull %11) #5
+  tail call void @llvm.memset.p0i8.i32(i8* nonnull align 1 dereferenceable(102) %0, i8 0, i32 102, i1 false)
+  %12 = icmp ugt i64 %2, 4294967295
+  br i1 %12, label %13, label %14
+
+13:                                               ; preds = %5
+  store i32 22, i32* @errno, align 4
+  br label %70
+
+14:                                               ; preds = %5
+  %15 = icmp ugt i64 %3, 32768
+  %16 = select i1 %15, i64 %3, i64 32768
+  %17 = lshr i32 %4, 5
+  %18 = zext i32 %17 to i64
+  %19 = icmp ult i64 %16, %18
+  br i1 %19, label %25, label %20
+
+20:                                               ; preds = %14
+  %21 = lshr i32 %4, 11
+  %22 = zext i32 %21 to i64
+  %23 = and i64 %22, 2097150
+  %24 = icmp eq i64 %23, 0
+  br i1 %24, label %44, label %37
+
+25:                                               ; preds = %14
+  %26 = lshr i64 %16, 6
+  br label %27
+
+27:                                               ; preds = %25, %30
+  %28 = phi i64 [ %33, %30 ], [ 2, %25 ]
+  %29 = icmp eq i64 %28, 63
+  br i1 %29, label %55, label %30
+
+30:                                               ; preds = %27
+  %31 = lshr i64 %26, %28
+  %32 = icmp eq i64 %31, 0
+  %33 = add nuw nsw i64 %28, 1
+  br i1 %32, label %53, label %27
+
+34:                                               ; preds = %37
+  %35 = lshr i64 %22, %39
+  %36 = icmp eq i64 %35, 0
+  br i1 %36, label %41, label %37
+
+37:                                               ; preds = %20, %34
+  %38 = phi i64 [ %39, %34 ], [ 1, %20 ]
+  %39 = add nuw nsw i64 %38, 1
+  %40 = icmp eq i64 %39, 63
+  br i1 %40, label %44, label %34
+
+41:                                               ; preds = %34
+  %42 = trunc i64 %39 to i32
+  %43 = and i64 %39, 4294967295
+  br label %44
+
+44:                                               ; preds = %37, %41, %20
+  %45 = phi i32 [ 1, %20 ], [ %42, %41 ], [ 63, %37 ]
+  %46 = phi i64 [ 1, %20 ], [ %43, %41 ], [ 63, %37 ]
+  %47 = lshr i64 %16, 2
+  %48 = lshr i64 %47, %46
+  %49 = icmp ult i64 %48, 1073741823
+  %50 = select i1 %49, i64 %48, i64 1073741823
+  %51 = trunc i64 %50 to i32
+  %52 = lshr i32 %51, 3
+  br label %55
+
+53:                                               ; preds = %30
+  %54 = trunc i64 %28 to i32
+  br label %55
+
+55:                                               ; preds = %27, %53, %44
+  %56 = phi i32 [ %52, %44 ], [ 1, %53 ], [ 1, %27 ]
+  %57 = phi i32 [ %45, %44 ], [ %54, %53 ], [ 63, %27 ]
+  call void @randombytes_buf(i8* nonnull %9, i32 32) #5
+  %58 = call i8* @escrypt_gensalt_r(i32 %57, i32 8, i32 %56, i8* nonnull %9, i32 32, i8* nonnull %10, i32 58) #5
+  %59 = icmp eq i8* %58, null
+  br i1 %59, label %60, label %61
+
+60:                                               ; preds = %55
+  store i32 28, i32* @errno, align 4
+  br label %70
+
+61:                                               ; preds = %55
+  %62 = call i32 @escrypt_init_local(%struct.escrypt_region_t* nonnull %8) #5
+  %63 = icmp eq i32 %62, 0
+  br i1 %63, label %64, label %70
+
+64:                                               ; preds = %61
+  %65 = trunc i64 %2 to i32
+  %66 = call i8* @escrypt_r(%struct.escrypt_region_t* nonnull %8, i8* nonnull %1, i32 %65, i8* nonnull %10, i8* nonnull %0, i32 102) #5
+  %67 = icmp eq i8* %66, null
+  %68 = call i32 @escrypt_free_local(%struct.escrypt_region_t* nonnull %8) #5
+  br i1 %67, label %69, label %70
+
+69:                                               ; preds = %64
+  store i32 28, i32* @errno, align 4
+  br label %70
+
+70:                                               ; preds = %64, %61, %69, %60, %13
+  %71 = phi i32 [ -1, %13 ], [ -1, %60 ], [ -1, %69 ], [ -1, %61 ], [ 0, %64 ]
+  call void @llvm.lifetime.end.p0i8(i64 12, i8* nonnull %11) #5
+  call void @llvm.lifetime.end.p0i8(i64 58, i8* nonnull %10) #5
+  call void @llvm.lifetime.end.p0i8(i64 32, i8* nonnull %9) #5
+  ret i32 %71
+}
+
+declare void @randombytes_buf(i8* %0, i32 %1) local_unnamed_addr #4
+
+declare i8* @escrypt_gensalt_r(i32 %0, i32 %1, i32 %2, i8* %3, i32 %4, i8* %5, i32 %6) local_unnamed_addr #4
+
+declare i32 @escrypt_init_local(%struct.escrypt_region_t* %0) local_unnamed_addr #4
+
+declare i8* @escrypt_r(%struct.escrypt_region_t* %0, i8* %1, i32 %2, i8* %3, i8* %4, i32 %5) local_unnamed_addr #4
+
+declare i32 @escrypt_free_local(%struct.escrypt_region_t* %0) local_unnamed_addr #4
+
+; Function Attrs: nounwind
+define i32 @crypto_pwhash_scryptsalsa208sha256_str_verify(i8* nonnull %0, i8* nonnull %1, i64 %2) local_unnamed_addr #1 {
+  %4 = alloca [102 x i8], align 16
+  %5 = alloca %struct.escrypt_region_t, align 4
+  %6 = getelementptr inbounds [102 x i8], [102 x i8]* %4, i32 0, i32 0
+  call void @llvm.lifetime.start.p0i8(i64 102, i8* nonnull %6) #5
+  %7 = bitcast %struct.escrypt_region_t* %5 to i8*
+  call void @llvm.lifetime.start.p0i8(i64 12, i8* nonnull %7) #5
+  br label %8
+
+8:                                                ; preds = %13, %3
+  %9 = phi i32 [ 0, %3 ], [ %14, %13 ]
+  %10 = getelementptr i8, i8* %0, i32 %9
+  %11 = load i8, i8* %10, align 1
+  %12 = icmp eq i8 %11, 0
+  br i1 %12, label %16, label %13
+
+13:                                               ; preds = %8
+  %14 = add nuw nsw i32 %9, 1
+  %15 = icmp eq i32 %14, 102
+  br i1 %15, label %28, label %8
+
+16:                                               ; preds = %8
+  %17 = icmp eq i32 %9, 101
+  br i1 %17, label %18, label %28
+
+18:                                               ; preds = %16
+  %19 = call i32 @escrypt_init_local(%struct.escrypt_region_t* nonnull %5) #5
+  %20 = icmp eq i32 %19, 0
+  br i1 %20, label %21, label %28
+
+21:                                               ; preds = %18
+  call void @llvm.memset.p0i8.i32(i8* nonnull align 16 dereferenceable(102) %6, i8 0, i32 102, i1 false)
+  %22 = trunc i64 %2 to i32
+  %23 = call i8* @escrypt_r(%struct.escrypt_region_t* nonnull %5, i8* nonnull %1, i32 %22, i8* nonnull %0, i8* nonnull %6, i32 102) #5
+  %24 = icmp eq i8* %23, null
+  %25 = call i32 @escrypt_free_local(%struct.escrypt_region_t* nonnull %5) #5
+  br i1 %24, label %28, label %26
+
+26:                                               ; preds = %21
+  %27 = call i32 @sodium_memcmp(i8* nonnull %6, i8* nonnull %0, i32 102) #5
+  call void @sodium_memzero(i8* nonnull %6, i32 102) #5
+  br label %28
+
+28:                                               ; preds = %13, %21, %18, %16, %26
+  %29 = phi i32 [ %27, %26 ], [ -1, %16 ], [ -1, %18 ], [ -1, %21 ], [ -1, %13 ]
+  call void @llvm.lifetime.end.p0i8(i64 12, i8* nonnull %7) #5
+  call void @llvm.lifetime.end.p0i8(i64 102, i8* nonnull %6) #5
+  ret i32 %29
+}
+
+declare i32 @sodium_memcmp(i8* %0, i8* %1, i32 %2) local_unnamed_addr #4
+
+declare void @sodium_memzero(i8* %0, i32 %1) local_unnamed_addr #4
+
+; Function Attrs: nounwind
+define i32 @crypto_pwhash_scryptsalsa208sha256_str_needs_rehash(i8* nonnull %0, i64 %1, i32 %2) local_unnamed_addr #1 {
+  %4 = alloca i32, align 4
+  %5 = alloca i32, align 4
+  %6 = alloca i32, align 4
+  %7 = bitcast i32* %4 to i8*
+  call void @llvm.lifetime.start.p0i8(i64 4, i8* nonnull %7) #5
+  %8 = bitcast i32* %5 to i8*
+  call void @llvm.lifetime.start.p0i8(i64 4, i8* nonnull %8) #5
+  %9 = bitcast i32* %6 to i8*
+  call void @llvm.lifetime.start.p0i8(i64 4, i8* nonnull %9) #5
+  %10 = icmp ugt i64 %1, 32768
+  %11 = select i1 %10, i64 %1, i64 32768
+  %12 = lshr i32 %2, 5
+  %13 = zext i32 %12 to i64
+  %14 = icmp ult i64 %11, %13
+  br i1 %14, label %20, label %15
+
+15:                                               ; preds = %3
+  %16 = lshr i32 %2, 11
+  %17 = zext i32 %16 to i64
+  %18 = and i64 %17, 2097150
+  %19 = icmp eq i64 %18, 0
+  br i1 %19, label %39, label %32
+
+20:                                               ; preds = %3
+  %21 = lshr i64 %11, 6
+  br label %22
+
+22:                                               ; preds = %20, %25
+  %23 = phi i64 [ %28, %25 ], [ 2, %20 ]
+  %24 = icmp eq i64 %23, 63
+  br i1 %24, label %50, label %25
+
+25:                                               ; preds = %22
+  %26 = lshr i64 %21, %23
+  %27 = icmp eq i64 %26, 0
+  %28 = add nuw nsw i64 %23, 1
+  br i1 %27, label %48, label %22
+
+29:                                               ; preds = %32
+  %30 = lshr i64 %17, %34
+  %31 = icmp eq i64 %30, 0
+  br i1 %31, label %36, label %32
+
+32:                                               ; preds = %15, %29
+  %33 = phi i64 [ %34, %29 ], [ 1, %15 ]
+  %34 = add nuw nsw i64 %33, 1
+  %35 = icmp eq i64 %34, 63
+  br i1 %35, label %39, label %29
+
+36:                                               ; preds = %29
+  %37 = trunc i64 %34 to i32
+  %38 = and i64 %34, 4294967295
+  br label %39
+
+39:                                               ; preds = %32, %36, %15
+  %40 = phi i32 [ 1, %15 ], [ %37, %36 ], [ 63, %32 ]
+  %41 = phi i64 [ 1, %15 ], [ %38, %36 ], [ 63, %32 ]
+  %42 = lshr i64 %11, 2
+  %43 = lshr i64 %42, %41
+  %44 = icmp ult i64 %43, 1073741823
+  %45 = select i1 %44, i64 %43, i64 1073741823
+  %46 = trunc i64 %45 to i32
+  %47 = lshr i32 %46, 3
+  br label %50
+
+48:                                               ; preds = %25
+  %49 = trunc i64 %23 to i32
+  br label %50
+
+50:                                               ; preds = %22, %48, %39
+  %51 = phi i32 [ %47, %39 ], [ 1, %48 ], [ 1, %22 ]
+  %52 = phi i32 [ %40, %39 ], [ %49, %48 ], [ 63, %22 ]
+  br label %53
+
+53:                                               ; preds = %58, %50
+  %54 = phi i32 [ 0, %50 ], [ %59, %58 ]
+  %55 = getelementptr i8, i8* %0, i32 %54
+  %56 = load i8, i8* %55, align 1
+  %57 = icmp eq i8 %56, 0
+  br i1 %57, label %61, label %58
+
+58:                                               ; preds = %53
+  %59 = add nuw nsw i32 %54, 1
+  %60 = icmp eq i32 %59, 102
+  br i1 %60, label %63, label %53
+
+61:                                               ; preds = %53
+  %62 = icmp eq i32 %54, 101
+  br i1 %62, label %64, label %63
+
+63:                                               ; preds = %58, %61
+  store i32 28, i32* @errno, align 4
+  br label %78
+
+64:                                               ; preds = %61
+  %65 = call i8* @escrypt_parse_setting(i8* nonnull %0, i32* nonnull %4, i32* nonnull %6, i32* nonnull %5) #5
+  %66 = icmp eq i8* %65, null
+  br i1 %66, label %67, label %68
+
+67:                                               ; preds = %64
+  store i32 28, i32* @errno, align 4
+  br label %78
+
+68:                                               ; preds = %64
+  %69 = load i32, i32* %4, align 4
+  %70 = icmp eq i32 %52, %69
+  %71 = load i32, i32* %6, align 4
+  %72 = icmp eq i32 %71, 8
+  %73 = and i1 %70, %72
+  br i1 %73, label %74, label %78
+
+74:                                               ; preds = %68
+  %75 = load i32, i32* %5, align 4
+  %76 = icmp ne i32 %51, %75
+  %77 = zext i1 %76 to i32
+  br label %78
+
+78:                                               ; preds = %74, %68, %67, %63
+  %79 = phi i32 [ -1, %63 ], [ -1, %67 ], [ 1, %68 ], [ %77, %74 ]
+  call void @llvm.lifetime.end.p0i8(i64 4, i8* nonnull %9) #5
+  call void @llvm.lifetime.end.p0i8(i64 4, i8* nonnull %8) #5
+  call void @llvm.lifetime.end.p0i8(i64 4, i8* nonnull %7) #5
+  ret i32 %79
+}
+
+declare i8* @escrypt_parse_setting(i8* %0, i32* %1, i32* %2, i32* %3) local_unnamed_addr #4
+
+attributes #0 = { norecurse nounwind readnone "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "min-legal-vector-width"="0" "no-infs-fp-math"="false" "no-jump-tables"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="false" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #1 = { nounwind "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "min-legal-vector-width"="0" "no-infs-fp-math"="false" "no-jump-tables"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="false" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #2 = { argmemonly nounwind willreturn }
+attributes #3 = { argmemonly nounwind willreturn writeonly }
+attributes #4 = { "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="false" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #5 = { nounwind }
+
+!llvm.module.flags = !{!0, !1, !2}
+!llvm.ident = !{!3}
+
+!0 = !{i32 1, !"wchar_size", i32 4}
+!1 = !{i32 7, !"PIC Level", i32 2}
+!2 = !{i32 7, !"PIE Level", i32 2}
+!3 = !{!"clang version 10.0.0 (https://github.com/llvm/llvm-project d32170dbd5b0d54436537b6b75beaf44324e0c28)"}
+
+; extracted candidates
+
+; *****
+; For LLVM instruction:
+;  %8 = trunc i64 %1 to i32
+; Looking for a replacement for:
+%0:i64 = var
+%1:i32 = trunc %0
+infer %1
+
+; *****
+; For LLVM instruction:
+;  %9 = or i64 %3, %1
+; Looking for a replacement for:
+%0:i64 = var
+%1:i64 = var
+%2:i64 = or %0, %1
+infer %2
+
+; *****
+; For LLVM instruction:
+;  %10 = icmp ugt i64 %9, 4294967295
+; Looking for a replacement for:
+%0:i64 = var
+%1:i64 = var
+%2:i64 = or %0, %1
+%3:i1 = ult 4294967295:i64, %2
+infer %3
+
+; *****
+; For LLVM instruction:
+;  %13 = icmp ult i64 %1, 16
+; Looking for a replacement for:
+%0:i64 = var
+%1:i64 = var
+%2:i64 = or %0, %1
+%3:i1 = ult 4294967295:i64, %2
+pc %3 0:i1
+%4:i1 = ult %0, 16:i64
+infer %4
+
+; *****
+; For LLVM instruction:
+;  %15 = icmp ugt i64 %5, 32768
+; Looking for a replacement for:
+%0:i64 = var
+%1:i1 = ult 32768:i64, %0
+infer %1
+
+; *****
+; For LLVM instruction:
+;  %16 = select i1 %15, i64 %5, i64 32768
+; Looking for a replacement for:
+%0:i64 = var
+%1:i1 = ult 32768:i64, %0
+%2:i64 = select %1, %0, 32768:i64
+infer %2
+
+; *****
+; For LLVM instruction:
+;  %17 = lshr i32 %6, 5
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = lshr %0, 5:i32
+infer %1
+
+; *****
+; For LLVM instruction:
+;  %18 = zext i32 %17 to i64
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = lshr %0, 5:i32
+%2:i64 = zext %1
+infer %2
+
+; *****
+; For LLVM instruction:
+;  %19 = icmp ult i64 %16, %18
+; Looking for a replacement for:
+%0:i64 = var
+%1:i1 = ult 32768:i64, %0
+%2:i64 = select %1, %0, 32768:i64 (hasExternalUses)
+%3:i32 = var
+%4:i32 = lshr %3, 5:i32
+%5:i64 = zext %4
+%6:i1 = ult %2, %5
+infer %6
+
+; *****
+; For LLVM instruction:
+;  %21 = lshr i32 %6, 11
+; Looking for a replacement for:
+%0:i64 = var
+%1:i1 = ult 32768:i64, %0
+%2:i64 = select %1, %0, 32768:i64 (hasExternalUses)
+%3:i32 = var
+%4:i32 = lshr %3, 5:i32
+%5:i64 = zext %4
+%6:i1 = ult %2, %5
+pc %6 0:i1
+%7:i32 = lshr %3, 11:i32
+infer %7
+
+; *****
+; For LLVM instruction:
+;  %22 = zext i32 %21 to i64
+; Looking for a replacement for:
+%0:i64 = var
+%1:i1 = ult 32768:i64, %0
+%2:i64 = select %1, %0, 32768:i64 (hasExternalUses)
+%3:i32 = var
+%4:i32 = lshr %3, 5:i32
+%5:i64 = zext %4
+%6:i1 = ult %2, %5
+pc %6 0:i1
+%7:i32 = lshr %3, 11:i32
+%8:i64 = zext %7
+infer %8
+
+; *****
+; For LLVM instruction:
+;  %24 = lshr i64 %16, 6
+; Looking for a replacement for:
+%0:i64 = var
+%1:i1 = ult 32768:i64, %0
+%2:i64 = select %1, %0, 32768:i64 (hasExternalUses)
+%3:i32 = var
+%4:i32 = lshr %3, 5:i32
+%5:i64 = zext %4
+%6:i1 = ult %2, %5
+pc %6 1:i1
+%7:i64 = lshr %2, 6:i64
+infer %7
+
+; *****
+; For LLVM instruction:
+;  %27 = phi i64 [ 1, %23 ], [ %30, %25 ]
+; Looking for a replacement for:
+%0:i64 = var (knownBits=0xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx) (nonNegative) (nonZero) (range=[1,-9223372036854775808))
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %28 = lshr i64 %24, %27
+; Looking for a replacement for:
+%0:i64 = var
+%1:i1 = ult 32768:i64, %0
+%2:i64 = select %1, %0, 32768:i64 (hasExternalUses)
+%3:i64 = lshr %2, 6:i64
+%4:i64 = var (knownBits=0xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx) (nonNegative) (nonZero) (range=[1,-9223372036854775808))
+%5:i64 = lshr %3, %4
+infer %5
+
+; *****
+; For LLVM instruction:
+;  %29 = icmp eq i64 %28, 0
+; Looking for a replacement for:
+%0:i64 = var
+%1:i1 = ult 32768:i64, %0
+%2:i64 = select %1, %0, 32768:i64 (hasExternalUses)
+%3:i64 = lshr %2, 6:i64
+%4:i64 = var (knownBits=0xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx) (nonNegative) (nonZero) (range=[1,-9223372036854775808))
+%5:i64 = lshr %3, %4
+%6:i1 = eq 0:i64, %5
+infer %6
+
+; *****
+; For LLVM instruction:
+;  %30 = add nuw nsw i64 %27, 1
+; Looking for a replacement for:
+%0:i64 = var (knownBits=0xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx) (nonNegative) (nonZero) (range=[1,-9223372036854775808))
+%1:i64 = addnw 1:i64, %0
+infer %1
+
+; *****
+; For LLVM instruction:
+;  %32 = phi i64 [ 1, %20 ], [ %36, %35 ]
+; Looking for a replacement for:
+%0:i64 = var (knownBits=0xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx) (nonNegative) (nonZero) (range=[1,-9223372036854775808))
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %33 = lshr i64 %22, %32
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = lshr %0, 11:i32
+%2:i64 = zext %1
+%3:i64 = var (knownBits=0xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx) (nonNegative) (nonZero) (range=[1,-9223372036854775808))
+%4:i64 = lshr %2, %3
+infer %4
+
+; *****
+; For LLVM instruction:
+;  %34 = icmp eq i64 %33, 0
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = lshr %0, 11:i32
+%2:i64 = zext %1
+%3:i64 = var (knownBits=0xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx) (nonNegative) (nonZero) (range=[1,-9223372036854775808))
+%4:i64 = lshr %2, %3
+%5:i1 = eq 0:i64, %4
+infer %5
+
+; *****
+; For LLVM instruction:
+;  %36 = add nuw nsw i64 %32, 1
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = lshr %0, 11:i32
+%2:i64 = zext %1
+%3:i64 = var (knownBits=0xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx) (nonNegative) (nonZero) (range=[1,-9223372036854775808))
+%4:i64 = lshr %2, %3
+%5:i1 = eq 0:i64, %4
+pc %5 0:i1
+%6:i64 = addnw 1:i64, %3
+infer %6
+
+; *****
+; For LLVM instruction:
+;  %38 = phi i64 [ %32, %31 ], [ 63, %35 ]
+; Looking for a replacement for:
+%0 = block 2
+%1:i64 = var (knownBits=0xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx) (nonNegative) (nonZero) (range=[1,-9223372036854775808))
+%2:i64 = phi %0, %1, 63:i64
+infer %2 (demandedBits=0000000000000000000000000000000011111111111111111111111111111111)
+
+; *****
+; For LLVM instruction:
+;  %39 = lshr i64 %16, 2
+; Looking for a replacement for:
+%0:i64 = var
+%1:i1 = ult 32768:i64, %0
+%2:i64 = select %1, %0, 32768:i64 (hasExternalUses)
+%3:i64 = lshr %2, 2:i64
+infer %3
+
+; *****
+; For LLVM instruction:
+;  %40 = and i64 %38, 4294967295
+; Looking for a replacement for:
+%0 = block 2
+%1:i64 = var (knownBits=0xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx) (nonNegative) (nonZero) (range=[1,-9223372036854775808))
+%2:i64 = phi %0, %1, 63:i64
+%3:i64 = and 4294967295:i64, %2
+infer %3
+
+; *****
+; For LLVM instruction:
+;  %41 = lshr i64 %39, %40
+; Looking for a replacement for:
+%0:i64 = var
+%1:i1 = ult 32768:i64, %0
+%2:i64 = select %1, %0, 32768:i64 (hasExternalUses)
+%3:i64 = lshr %2, 2:i64
+%4 = block 2
+%5:i64 = var (knownBits=0xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx) (nonNegative) (nonZero) (range=[1,-9223372036854775808))
+%6:i64 = phi %4, %5, 63:i64
+%7:i64 = and 4294967295:i64, %6 (hasExternalUses)
+%8:i64 = lshr %3, %7
+infer %8
+
+; *****
+; For LLVM instruction:
+;  %42 = icmp ult i64 %41, 1073741823
+; Looking for a replacement for:
+%0:i64 = var
+%1:i1 = ult 32768:i64, %0
+%2:i64 = select %1, %0, 32768:i64 (hasExternalUses)
+%3:i64 = lshr %2, 2:i64
+%4 = block 2
+%5:i64 = var (knownBits=0xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx) (nonNegative) (nonZero) (range=[1,-9223372036854775808))
+%6:i64 = phi %4, %5, 63:i64
+%7:i64 = and 4294967295:i64, %6 (hasExternalUses)
+%8:i64 = lshr %3, %7 (hasExternalUses)
+%9:i1 = ult %8, 1073741823:i64
+infer %9
+
+; *****
+; For LLVM instruction:
+;  %43 = select i1 %42, i64 %41, i64 1073741823
+; Looking for a replacement for:
+%0:i64 = var
+%1:i1 = ult 32768:i64, %0
+%2:i64 = select %1, %0, 32768:i64 (hasExternalUses)
+%3:i64 = lshr %2, 2:i64
+%4 = block 2
+%5:i64 = var (knownBits=0xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx) (nonNegative) (nonZero) (range=[1,-9223372036854775808))
+%6:i64 = phi %4, %5, 63:i64
+%7:i64 = and 4294967295:i64, %6 (hasExternalUses)
+%8:i64 = lshr %3, %7
+%9:i1 = ult %8, 1073741823:i64
+%10:i64 = select %9, %8, 1073741823:i64
+infer %10 (demandedBits=0000000000000000000000000000000011111111111111111111111111111000)
+
+; *****
+; For LLVM instruction:
+;  %44 = trunc i64 %43 to i32
+; Looking for a replacement for:
+%0:i64 = var
+%1:i1 = ult 32768:i64, %0
+%2:i64 = select %1, %0, 32768:i64 (hasExternalUses)
+%3:i64 = lshr %2, 2:i64
+%4 = block 2
+%5:i64 = var (knownBits=0xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx) (nonNegative) (nonZero) (range=[1,-9223372036854775808))
+%6:i64 = phi %4, %5, 63:i64
+%7:i64 = and 4294967295:i64, %6 (hasExternalUses)
+%8:i64 = lshr %3, %7
+%9:i1 = ult %8, 1073741823:i64
+%10:i64 = select %9, %8, 1073741823:i64
+%11:i32 = trunc %10
+infer %11 (demandedBits=11111111111111111111111111111000)
+
+; *****
+; For LLVM instruction:
+;  %45 = lshr i32 %44, 3
+; Looking for a replacement for:
+%0:i64 = var
+%1:i1 = ult 32768:i64, %0
+%2:i64 = select %1, %0, 32768:i64 (hasExternalUses)
+%3:i64 = lshr %2, 2:i64
+%4 = block 2
+%5:i64 = var (knownBits=0xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx) (nonNegative) (nonZero) (range=[1,-9223372036854775808))
+%6:i64 = phi %4, %5, 63:i64
+%7:i64 = and 4294967295:i64, %6 (hasExternalUses)
+%8:i64 = lshr %3, %7
+%9:i1 = ult %8, 1073741823:i64
+%10:i64 = select %9, %8, 1073741823:i64
+%11:i32 = trunc %10
+%12:i32 = lshr %11, 3:i32
+infer %12
+
+; *****
+; For LLVM instruction:
+;  %47 = phi i64 [ 63, %25 ], [ %27, %26 ]
+; Looking for a replacement for:
+%0 = block 2
+%1:i64 = var (knownBits=0xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx) (nonNegative) (nonZero) (range=[1,-9223372036854775808))
+%2:i64 = phi %0, 63:i64, %1
+infer %2 (demandedBits=0000000000000000000000000000000011111111111111111111111111111111)
+
+; *****
+; For LLVM instruction:
+;  %48 = and i64 %47, 4294967295
+; Looking for a replacement for:
+%0 = block 2
+%1:i64 = var (knownBits=0xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx) (nonNegative) (nonZero) (range=[1,-9223372036854775808))
+%2:i64 = phi %0, 63:i64, %1
+%3:i64 = and 4294967295:i64, %2
+infer %3
+
+; *****
+; For LLVM instruction:
+;  %50 = phi i64 [ %48, %46 ], [ %40, %37 ]
+; Looking for a replacement for:
+%0 = block 2
+%1 = block 2
+%2:i64 = var (knownBits=0xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx) (nonNegative) (nonZero) (range=[1,-9223372036854775808))
+%3:i64 = phi %1, 63:i64, %2
+%4:i64 = and 4294967295:i64, %3
+%5 = block 2
+%6:i64 = var (knownBits=0xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx) (nonNegative) (nonZero) (range=[1,-9223372036854775808))
+%7:i64 = phi %5, %6, 63:i64
+%8:i64 = and 4294967295:i64, %7 (hasExternalUses)
+%9:i64 = phi %0, %4, %8
+infer %9
+
+; *****
+; For LLVM instruction:
+;  %51 = phi i32 [ 1, %46 ], [ %45, %37 ]
+; Looking for a replacement for:
+%0 = block 2
+%1:i64 = var
+%2:i1 = ult 32768:i64, %1
+%3:i64 = select %2, %1, 32768:i64 (hasExternalUses)
+%4:i64 = lshr %3, 2:i64
+%5 = block 2
+%6:i64 = var (knownBits=0xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx) (nonNegative) (nonZero) (range=[1,-9223372036854775808))
+%7:i64 = phi %5, %6, 63:i64
+%8:i64 = and 4294967295:i64, %7 (hasExternalUses)
+%9:i64 = lshr %4, %8
+%10:i1 = ult %9, 1073741823:i64
+%11:i64 = select %10, %9, 1073741823:i64
+%12:i32 = trunc %11
+%13:i32 = lshr %12, 3:i32
+%14:i32 = phi %0, 1:i32, %13
+infer %14
+
+; *****
+; For LLVM instruction:
+;  %52 = trunc i64 %3 to i32
+; Looking for a replacement for:
+%0:i64 = var
+%1:i32 = trunc %0
+infer %1
+
+; *****
+; For LLVM instruction:
+;  %53 = shl nuw i64 1, %50
+; Looking for a replacement for:
+%0 = block 2
+%1 = block 2
+%2:i64 = var (knownBits=0xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx) (nonNegative) (nonZero) (range=[1,-9223372036854775808))
+%3:i64 = phi %1, 63:i64, %2
+%4:i64 = and 4294967295:i64, %3
+%5 = block 2
+%6:i64 = var (knownBits=0xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx) (nonNegative) (nonZero) (range=[1,-9223372036854775808))
+%7:i64 = phi %5, %6, 63:i64
+%8:i64 = and 4294967295:i64, %7
+%9:i64 = phi %0, %4, %8
+%10:i64 = shlnuw 1:i64, %9
+infer %10
+
+; *****
+; For LLVM instruction:
+;  %54 = tail call i32 @crypto_pwhash_scryptsalsa208sha256_ll(i8* nonnull %2, i32 %52, i8* nonnull %4, i32 32, i64 %53, i32 8, i32 %51, i8* nonnull %0, i32 %8) #5
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %57 = phi i32 [ -1, %11 ], [ -1, %55 ], [ %54, %49 ]
+; Looking for a replacement for:
+%0 = block 3
+%1:i32 = var
+%2:i32 = phi %0, 4294967295:i32, 4294967295:i32, %1
+infer %2
+got 5 candidates from LHS
+
+-------------------------------------------------
+%0:i32 = var
+%1:i32 = lshr %0, 11:i32
+%2:i64 = zext %1
+%3:i64 = var (knownBits=0xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx) (nonNegative) (nonZero) (range=[1,-9223372036854775808))
+%4:i64 = lshr %2, %3
+infer %4
+
+
+--------------------------------
+guess 0
+
+%0:i64 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: 8160
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+
+--------------------------------
+guess 1
+
+%0:i64 = var (knownBits=0xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx) (nonNegative) (nonZero) (range=[1,-9223372036854775808))
+
+Cost = 0
+second query is SAT-- constant doesn't work
+
+--------------------------------
+guess 2
+
+%0:i32 = var
+%1:i32 = lshr %0, 11:i32
+%2:i64 = zext %1
+
+Cost = 2
+second query is SAT-- constant doesn't work
+Dataflow Pruned 0/0
+There are 3 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 6 candidates from LHS
+
+-------------------------------------------------
+%0:i32 = var
+%1:i32 = lshr %0, 11:i32
+%2:i64 = zext %1
+%3:i64 = var (knownBits=0xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx) (nonNegative) (nonZero) (range=[1,-9223372036854775808))
+%4:i64 = lshr %2, %3
+%5:i1 = eq 0:i64, %4
+infer %5
+
+
+--------------------------------
+guess 0
+
+%0:i1 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: -1
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: 0
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+Dataflow Pruned 0/0
+There are 1 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 2 candidates from LHS
+
+-------------------------------------------------
+%0:i32 = var
+%1:i32 = lshr %0, 11:i32
+%2:i64 = zext %1
+%3:i64 = var (knownBits=0xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx) (nonNegative) (nonZero) (range=[1,-9223372036854775808))
+%4:i64 = lshr %2, %3
+%5:i1 = eq 0:i64, %4
+pc %5 0:i1
+%6:i64 = addnw 1:i64, %3
+infer %6
+
+
+--------------------------------
+guess 0
+
+%0:i64 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 9
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: 2
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+
+--------------------------------
+guess 1
+
+%0:i64 = var (knownBits=0xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx) (nonNegative) (nonZero) (range=[1,-9223372036854775808))
+
+Cost = 0
+second query is SAT-- constant doesn't work
+Dataflow Pruned 0/0
+There are 2 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 2 candidates from LHS
+
+-------------------------------------------------
+%0 = block 2
+%1:i64 = var (knownBits=0xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx) (nonNegative) (nonZero) (range=[1,-9223372036854775808))
+%2:i64 = phi %0, %1, 63:i64
+infer %2 (demandedBits=0000000000000000000000000000000011111111111111111111111111111111)
+
+
+--------------------------------
+guess 0
+
+%0:i64 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: 64
+1 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: 63
+2 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+
+--------------------------------
+guess 1
+
+%0:i64 = var (knownBits=0xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx) (nonNegative) (nonZero) (range=[1,-9223372036854775808))
+
+Cost = 0
+second query is SAT-- constant doesn't work
+Dataflow Pruned 0/0
+There are 2 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 4 candidates from LHS
+
+-------------------------------------------------
+%0:i64 = var
+%1:i1 = ult 32768:i64, %0
+%2:i64 = select %1, %0, 32768:i64 (hasExternalUses)
+%3:i64 = lshr %2, 2:i64
+infer %3
+
+
+--------------------------------
+guess 0
+
+%0:i64 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 8192
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: 8200
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+
+--------------------------------
+guess 1
+
+%0:i64 = var
+
+Cost = 0
+second query is SAT-- constant doesn't work
+Dataflow Pruned 0/0
+There are 2 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 3 candidates from LHS
+
+-------------------------------------------------
+%0 = block 2
+%1:i64 = var (knownBits=0xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx) (nonNegative) (nonZero) (range=[1,-9223372036854775808))
+%2:i64 = phi %0, %1, 63:i64
+%3:i64 = and 4294967295:i64, %2
+infer %3
+
+
+--------------------------------
+guess 0
+
+%0:i64 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 63
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: 1
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+
+--------------------------------
+guess 1
+
+%0:i64 = var (knownBits=0xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx) (nonNegative) (nonZero) (range=[1,-9223372036854775808))
+
+Cost = 0
+second query is SAT-- constant doesn't work
+
+--------------------------------
+guess 2
+
+%0 = block 2
+%1:i64 = var (knownBits=0xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx) (nonNegative) (nonZero) (range=[1,-9223372036854775808))
+%2:i64 = phi %0, %1, 63:i64
+
+Cost = 1
+second query is SAT-- constant doesn't work
+Dataflow Pruned 0/0
+There are 3 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 8 candidates from LHS
+
+-------------------------------------------------
+%0:i64 = var
+%1:i1 = ult 32768:i64, %0
+%2:i64 = select %1, %0, 32768:i64 (hasExternalUses)
+%3:i64 = lshr %2, 2:i64
+%4 = block 2
+%5:i64 = var (knownBits=0xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx) (nonNegative) (nonZero) (range=[1,-9223372036854775808))
+%6:i64 = phi %4, %5, 63:i64
+%7:i64 = and 4294967295:i64, %6 (hasExternalUses)
+%8:i64 = lshr %3, %7
+infer %8
+
+
+--------------------------------
+guess 0
+
+%0:i64 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: 2305843009213693951
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+
+--------------------------------
+guess 1
+
+%0:i64 = var
+
+Cost = 0
+second query is SAT-- constant doesn't work
+
+--------------------------------
+guess 2
+
+%0:i64 = var (knownBits=0xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx) (nonNegative) (nonZero) (range=[1,-9223372036854775808))
+
+Cost = 0
+second query is SAT-- constant doesn't work
+
+--------------------------------
+guess 3
+
+%0 = block 2
+%1:i64 = var (knownBits=0xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx) (nonNegative) (nonZero) (range=[1,-9223372036854775808))
+%2:i64 = phi %0, %1, 63:i64
+
+Cost = 1
+second query is SAT-- constant doesn't work
+Dataflow Pruned 0/0
+There are 4 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 8 candidates from LHS
+
+-------------------------------------------------
+%0:i64 = var
+%1:i1 = ult 32768:i64, %0
+%2:i64 = select %1, %0, 32768:i64 (hasExternalUses)
+%3:i64 = lshr %2, 2:i64
+%4 = block 2
+%5:i64 = var (knownBits=0xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx) (nonNegative) (nonZero) (range=[1,-9223372036854775808))
+%6:i64 = phi %4, %5, 63:i64
+%7:i64 = and 4294967295:i64, %6 (hasExternalUses)
+%8:i64 = lshr %3, %7 (hasExternalUses)
+%9:i1 = ult %8, 1073741823:i64
+infer %9
+
+
+--------------------------------
+guess 0
+
+%0:i1 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: -1
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: 0
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+Dataflow Pruned 0/0
+There are 1 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 8 candidates from LHS
+
+-------------------------------------------------
+%0:i64 = var
+%1:i1 = ult 32768:i64, %0
+%2:i64 = select %1, %0, 32768:i64 (hasExternalUses)
+%3:i64 = lshr %2, 2:i64
+%4 = block 2
+%5:i64 = var (knownBits=0xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx) (nonNegative) (nonZero) (range=[1,-9223372036854775808))
+%6:i64 = phi %4, %5, 63:i64
+%7:i64 = and 4294967295:i64, %6 (hasExternalUses)
+%8:i64 = lshr %3, %7
+%9:i1 = ult %8, 1073741823:i64
+%10:i64 = select %9, %8, 1073741823:i64
+infer %10 (demandedBits=0000000000000000000000000000000011111111111111111111111111111000)
+
+
+--------------------------------
+guess 0
+
+%0:i64 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: 1073741823
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+
+--------------------------------
+guess 1
+
+%0 = block 2
+%1:i64 = var (knownBits=0xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx) (nonNegative) (nonZero) (range=[1,-9223372036854775808))
+%2:i64 = phi %0, %1, 63:i64
+
+Cost = 1
+second query is SAT-- constant doesn't work
+
+--------------------------------
+guess 2
+
+%0 = block 2
+%1:i64 = var (knownBits=0xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx) (nonNegative) (nonZero) (range=[1,-9223372036854775808))
+%2:i64 = phi %0, %1, 63:i64
+%3:i64 = and 4294967295:i64, %2
+
+Cost = 2
+second query is SAT-- constant doesn't work
+
+--------------------------------
+guess 3
+
+%0:i64 = var
+%1:i1 = ult 32768:i64, %0
+%2:i64 = select %1, %0, 32768:i64
+
+Cost = 4
+second query is SAT-- constant doesn't work
+
+--------------------------------
+guess 4
+
+%0:i64 = var
+%1:i1 = ult 32768:i64, %0
+%2:i64 = select %1, %0, 32768:i64 (hasExternalUses)
+%3:i64 = lshr %2, 2:i64
+
+Cost = 1
+second query is SAT-- constant doesn't work
+Dataflow Pruned 0/0
+There are 5 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 8 candidates from LHS
+
+-------------------------------------------------
+%0:i64 = var
+%1:i1 = ult 32768:i64, %0
+%2:i64 = select %1, %0, 32768:i64 (hasExternalUses)
+%3:i64 = lshr %2, 2:i64
+%4 = block 2
+%5:i64 = var (knownBits=0xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx) (nonNegative) (nonZero) (range=[1,-9223372036854775808))
+%6:i64 = phi %4, %5, 63:i64
+%7:i64 = and 4294967295:i64, %6 (hasExternalUses)
+%8:i64 = lshr %3, %7
+%9:i1 = ult %8, 1073741823:i64
+%10:i64 = select %9, %8, 1073741823:i64
+%11:i32 = trunc %10
+infer %11 (demandedBits=11111111111111111111111111111000)
+
+
+--------------------------------
+guess 0
+
+%0:i32 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: 1073741823
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+Dataflow Pruned 0/0
+There are 1 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 8 candidates from LHS
+
+-------------------------------------------------
+%0:i64 = var
+%1:i1 = ult 32768:i64, %0
+%2:i64 = select %1, %0, 32768:i64 (hasExternalUses)
+%3:i64 = lshr %2, 2:i64
+%4 = block 2
+%5:i64 = var (knownBits=0xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx) (nonNegative) (nonZero) (range=[1,-9223372036854775808))
+%6:i64 = phi %4, %5, 63:i64
+%7:i64 = and 4294967295:i64, %6 (hasExternalUses)
+%8:i64 = lshr %3, %7
+%9:i1 = ult %8, 1073741823:i64
+%10:i64 = select %9, %8, 1073741823:i64
+%11:i32 = trunc %10
+%12:i32 = lshr %11, 3:i32
+infer %12
+
+
+--------------------------------
+guess 0
+
+%0:i32 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: 134217727
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+Dataflow Pruned 0/0
+There are 1 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 2 candidates from LHS
+
+-------------------------------------------------
+%0 = block 2
+%1:i64 = var (knownBits=0xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx) (nonNegative) (nonZero) (range=[1,-9223372036854775808))
+%2:i64 = phi %0, 63:i64, %1
+infer %2 (demandedBits=0000000000000000000000000000000011111111111111111111111111111111)
+
+
+--------------------------------
+guess 0
+
+%0:i64 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 63
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: 1
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+
+--------------------------------
+guess 1
+
+%0:i64 = var (knownBits=0xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx) (nonNegative) (nonZero) (range=[1,-9223372036854775808))
+
+Cost = 0
+second query is SAT-- constant doesn't work
+Dataflow Pruned 0/0
+There are 2 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 3 candidates from LHS
+
+-------------------------------------------------
+%0 = block 2
+%1:i64 = var (knownBits=0xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx) (nonNegative) (nonZero) (range=[1,-9223372036854775808))
+%2:i64 = phi %0, 63:i64, %1
+%3:i64 = and 4294967295:i64, %2
+infer %3
+
+
+--------------------------------
+guess 0
+
+%0:i64 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: 2147483648
+1 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: 63
+2 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+
+--------------------------------
+guess 1
+
+%0:i64 = var (knownBits=0xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx) (nonNegative) (nonZero) (range=[1,-9223372036854775808))
+
+Cost = 0
+second query is SAT-- constant doesn't work
+
+--------------------------------
+guess 2
+
+%0 = block 2
+%1:i64 = var (knownBits=0xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx) (nonNegative) (nonZero) (range=[1,-9223372036854775808))
+%2:i64 = phi %0, 63:i64, %1
+
+Cost = 1
+second query is SAT-- constant doesn't work
+Dataflow Pruned 0/0
+There are 3 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 7 candidates from LHS
+
+-------------------------------------------------
+%0 = block 2
+%1 = block 2
+%2:i64 = var (knownBits=0xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx) (nonNegative) (nonZero) (range=[1,-9223372036854775808))
+%3:i64 = phi %1, 63:i64, %2
+%4:i64 = and 4294967295:i64, %3
+%5 = block 2
+%6:i64 = var (knownBits=0xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx) (nonNegative) (nonZero) (range=[1,-9223372036854775808))
+%7:i64 = phi %5, %6, 63:i64
+%8:i64 = and 4294967295:i64, %7 (hasExternalUses)
+%9:i64 = phi %0, %4, %8
+infer %9
+
+
+--------------------------------
+guess 0
+
+%0:i64 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 63
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: 0
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+
+--------------------------------
+guess 1
+
+%0:i64 = var (knownBits=0xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx) (nonNegative) (nonZero) (range=[1,-9223372036854775808))
+
+Cost = 0
+second query is SAT-- constant doesn't work
+
+--------------------------------
+guess 2
+
+%0:i64 = var (knownBits=0xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx) (nonNegative) (nonZero) (range=[1,-9223372036854775808))
+
+Cost = 0
+second query is SAT-- constant doesn't work
+
+--------------------------------
+guess 3
+
+%0 = block 2
+%1:i64 = var (knownBits=0xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx) (nonNegative) (nonZero) (range=[1,-9223372036854775808))
+%2:i64 = phi %0, 63:i64, %1
+
+Cost = 1
+second query is SAT-- constant doesn't work
+
+--------------------------------
+guess 4
+
+%0 = block 2
+%1:i64 = var (knownBits=0xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx) (nonNegative) (nonZero) (range=[1,-9223372036854775808))
+%2:i64 = phi %0, %1, 63:i64
+
+Cost = 1
+second query is SAT-- constant doesn't work
+
+--------------------------------
+guess 5
+
+%0 = block 2
+%1:i64 = var (knownBits=0xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx) (nonNegative) (nonZero) (range=[1,-9223372036854775808))
+%2:i64 = phi %0, 63:i64, %1
+%3:i64 = and 4294967295:i64, %2
+
+Cost = 2
+second query is SAT-- constant doesn't work
+
+--------------------------------
+guess 6
+
+%0 = block 2
+%1:i64 = var (knownBits=0xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx) (nonNegative) (nonZero) (range=[1,-9223372036854775808))
+%2:i64 = phi %0, %1, 63:i64
+%3:i64 = and 4294967295:i64, %2
+
+Cost = 2
+second query is SAT-- constant doesn't work
+Dataflow Pruned 0/0
+There are 7 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 8 candidates from LHS
+
+-------------------------------------------------
+%0 = block 2
+%1:i64 = var
+%2:i1 = ult 32768:i64, %1
+%3:i64 = select %2, %1, 32768:i64 (hasExternalUses)
+%4:i64 = lshr %3, 2:i64
+%5 = block 2
+%6:i64 = var (knownBits=0xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx) (nonNegative) (nonZero) (range=[1,-9223372036854775808))
+%7:i64 = phi %5, %6, 63:i64
+%8:i64 = and 4294967295:i64, %7 (hasExternalUses)
+%9:i64 = lshr %4, %8
+%10:i1 = ult %9, 1073741823:i64
+%11:i64 = select %10, %9, 1073741823:i64
+%12:i32 = trunc %11
+%13:i32 = lshr %12, 3:i32
+%14:i32 = phi %0, 1:i32, %13
+infer %14
+
+
+--------------------------------
+guess 0
+
+%0:i32 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: 1
+1 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: 134217727
+2 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+Dataflow Pruned 0/0
+There are 1 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 8 candidates from LHS
+
+-------------------------------------------------
+%0 = block 2
+%1 = block 2
+%2:i64 = var (knownBits=0xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx) (nonNegative) (nonZero) (range=[1,-9223372036854775808))
+%3:i64 = phi %1, 63:i64, %2
+%4:i64 = and 4294967295:i64, %3
+%5 = block 2
+%6:i64 = var (knownBits=0xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx) (nonNegative) (nonZero) (range=[1,-9223372036854775808))
+%7:i64 = phi %5, %6, 63:i64
+%8:i64 = and 4294967295:i64, %7
+%9:i64 = phi %0, %4, %8
+%10:i64 = shlnuw 1:i64, %9
+infer %10
+
+
+--------------------------------
+guess 0
+
+%0:i64 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: -9223372036854775808
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: 4294967296
+1 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: 0
+2 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+
+--------------------------------
+guess 1
+
+%0:i64 = var (knownBits=0xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx) (nonNegative) (nonZero) (range=[1,-9223372036854775808))
+
+Cost = 0
+second query is SAT-- constant doesn't work
+
+--------------------------------
+guess 2
+
+%0:i64 = var (knownBits=0xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx) (nonNegative) (nonZero) (range=[1,-9223372036854775808))
+
+Cost = 0
+second query is SAT-- constant doesn't work
+
+--------------------------------
+guess 3
+
+%0 = block 2
+%1:i64 = var (knownBits=0xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx) (nonNegative) (nonZero) (range=[1,-9223372036854775808))
+%2:i64 = phi %0, 63:i64, %1
+
+Cost = 1
+second query is SAT-- constant doesn't work
+
+--------------------------------
+guess 4
+
+%0 = block 2
+%1:i64 = var (knownBits=0xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx) (nonNegative) (nonZero) (range=[1,-9223372036854775808))
+%2:i64 = phi %0, %1, 63:i64
+
+Cost = 1
+second query is SAT-- constant doesn't work
+
+--------------------------------
+guess 5
+
+%0 = block 2
+%1:i64 = var (knownBits=0xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx) (nonNegative) (nonZero) (range=[1,-9223372036854775808))
+%2:i64 = phi %0, 63:i64, %1
+%3:i64 = and 4294967295:i64, %2
+
+Cost = 2
+second query is SAT-- constant doesn't work
+
+--------------------------------
+guess 6
+
+%0 = block 2
+%1:i64 = var (knownBits=0xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx) (nonNegative) (nonZero) (range=[1,-9223372036854775808))
+%2:i64 = phi %0, %1, 63:i64
+%3:i64 = and 4294967295:i64, %2
+
+Cost = 2
+second query is SAT-- constant doesn't work
+
+--------------------------------
+guess 7
+
+%0 = block 2
+%1 = block 2
+%2:i64 = var (knownBits=0xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx) (nonNegative) (nonZero) (range=[1,-9223372036854775808))
+%3:i64 = phi %1, 63:i64, %2
+%4:i64 = and 4294967295:i64, %3
+%5 = block 2
+%6:i64 = var (knownBits=0xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx) (nonNegative) (nonZero) (range=[1,-9223372036854775808))
+%7:i64 = phi %5, %6, 63:i64
+%8:i64 = and 4294967295:i64, %7 (hasExternalUses)
+%9:i64 = phi %0, %4, %8
+
+Cost = 3
+second query is SAT-- constant doesn't work
+Dataflow Pruned 0/0
+There are 8 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 1 candidates from LHS
+
+-------------------------------------------------
+%0:i32 = var
+infer %0
+
+
+--------------------------------
+guess 0
+
+%0:i32 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: -1
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+Dataflow Pruned 0/0
+There are 1 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 2 candidates from LHS
+
+-------------------------------------------------
+%0 = block 3
+%1:i32 = var
+%2:i32 = phi %0, 4294967295:i32, 4294967295:i32, %1
+infer %2
+
+
+--------------------------------
+guess 0
+
+%0:i32 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: -1
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+
+--------------------------------
+guess 1
+
+%0:i32 = var
+
+Cost = 0
+second query is SAT-- constant doesn't work
+Dataflow Pruned 0/0
+There are 2 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+#########################################################
+; exiting Souper's runOnFunction() for crypto_pwhash_scryptsalsa208sha256()
+

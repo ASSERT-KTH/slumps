@@ -1,0 +1,65 @@
+
+Entering the Souper pass's runOnModule()
+
+
+; entering Souper's runOnFunction() for main()
+
+; ModuleID = './Formatted_numeric_output.c.bc'
+source_filename = "./Formatted_numeric_output.c"
+target datalayout = "e-m:e-p:32:32-i64:64-n32:64-S128"
+target triple = "wasm32-unknown-wasi"
+
+@.str = private unnamed_addr constant [8 x i8] c" %9.3f\0A\00", align 1
+@.str.1 = private unnamed_addr constant [9 x i8] c" %-9.3f\0A\00", align 1
+@.str.2 = private unnamed_addr constant [9 x i8] c" %09.3f\0A\00", align 1
+@.str.3 = private unnamed_addr constant [10 x i8] c" %-09.3f\0A\00", align 1
+@llvm.used = appending global [1 x i8*] [i8* bitcast (i32 ()* @__main_void to i8*)], section "llvm.metadata"
+
+@__main_void = alias i32 (), i32 ()* @main
+
+; Function Attrs: noinline nounwind optnone
+define hidden i32 @main() #0 {
+entry:
+  %retval = alloca i32, align 4
+  %r = alloca float, align 4
+  store i32 0, i32* %retval, align 4
+  store float 7.125000e+00, float* %r, align 4
+  %0 = load float, float* %r, align 4
+  %fneg = fneg float %0
+  %conv = fpext float %fneg to double
+  %call = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([8 x i8], [8 x i8]* @.str, i32 0, i32 0), double %conv)
+  %1 = load float, float* %r, align 4
+  %conv1 = fpext float %1 to double
+  %call2 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([8 x i8], [8 x i8]* @.str, i32 0, i32 0), double %conv1)
+  %2 = load float, float* %r, align 4
+  %conv3 = fpext float %2 to double
+  %call4 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([9 x i8], [9 x i8]* @.str.1, i32 0, i32 0), double %conv3)
+  %3 = load float, float* %r, align 4
+  %fneg5 = fneg float %3
+  %conv6 = fpext float %fneg5 to double
+  %call7 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([9 x i8], [9 x i8]* @.str.2, i32 0, i32 0), double %conv6)
+  %4 = load float, float* %r, align 4
+  %conv8 = fpext float %4 to double
+  %call9 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([9 x i8], [9 x i8]* @.str.2, i32 0, i32 0), double %conv8)
+  %5 = load float, float* %r, align 4
+  %conv10 = fpext float %5 to double
+  %call11 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([10 x i8], [10 x i8]* @.str.3, i32 0, i32 0), double %conv10)
+  ret i32 0
+}
+
+declare i32 @printf(i8* %0, ...) #1
+
+attributes #0 = { noinline nounwind optnone "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "min-legal-vector-width"="0" "no-infs-fp-math"="false" "no-jump-tables"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #1 = { "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+
+!llvm.module.flags = !{!0}
+!llvm.ident = !{!1}
+
+!0 = !{i32 1, !"wchar_size", i32 4}
+!1 = !{!"clang version 11.0.0 (https://github.com/Jacarte/llvm-project.git 0f6dea67136cc1e0b3d200eb2bb165628970c44b)"}
+
+; extracted candidates
+#########################################################
+; exiting Souper's runOnFunction() for main()
+Total of 0 replacements done on this module
+Total of 0 replacements candidates on this module

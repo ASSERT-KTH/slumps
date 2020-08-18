@@ -1,0 +1,1052 @@
+
+Entering the Souper pass's runOnModule()
+
+
+; entering Souper's runOnFunction() for _quad_simpsons_mem()
+
+; ModuleID = './Numerical_integration-Adaptive_Simpsons_method.c.bc'
+source_filename = "./Numerical_integration-Adaptive_Simpsons_method.c"
+target datalayout = "e-m:e-p:32:32-i64:64-n32:64-S128"
+target triple = "wasm32-unknown-wasi"
+
+%struct.triple = type { double, double, double }
+
+@.str = private unnamed_addr constant [50 x i8] c"Simpson's integration of sine from %g to %g = %f\0A\00", align 1
+@llvm.used = appending global [1 x i8*] [i8* bitcast (i32 ()* @__main_void to i8*)], section "llvm.metadata"
+
+@__main_void = alias i32 (), i32 ()* @main
+
+; Function Attrs: noinline nounwind optnone
+define hidden void @_quad_simpsons_mem(%struct.triple* noalias sret align 8 %agg.result, double (double)* %f, double %a, double %fa, double %b, double %fb) #0 {
+entry:
+  %f.addr = alloca double (double)*, align 4
+  %a.addr = alloca double, align 8
+  %fa.addr = alloca double, align 8
+  %b.addr = alloca double, align 8
+  %fb.addr = alloca double, align 8
+  %m = alloca double, align 8
+  %fm = alloca double, align 8
+  %simp = alloca double, align 8
+  store double (double)* %f, double (double)** %f.addr, align 4
+  store double %a, double* %a.addr, align 8
+  store double %fa, double* %fa.addr, align 8
+  store double %b, double* %b.addr, align 8
+  store double %fb, double* %fb.addr, align 8
+  %0 = load double, double* %a.addr, align 8
+  %1 = load double, double* %b.addr, align 8
+  %add = fadd double %0, %1
+  %div = fdiv double %add, 2.000000e+00
+  store double %div, double* %m, align 8
+  %2 = load double (double)*, double (double)** %f.addr, align 4
+  %3 = load double, double* %m, align 8
+  %call = call double %2(double %3)
+  store double %call, double* %fm, align 8
+  %4 = load double, double* %b.addr, align 8
+  %5 = load double, double* %a.addr, align 8
+  %sub = fsub double %4, %5
+  %6 = call double @llvm.fabs.f64(double %sub)
+  %div1 = fdiv double %6, 6.000000e+00
+  %7 = load double, double* %fa.addr, align 8
+  %8 = load double, double* %fm, align 8
+  %mul = fmul double 4.000000e+00, %8
+  %add2 = fadd double %7, %mul
+  %9 = load double, double* %fb.addr, align 8
+  %add3 = fadd double %add2, %9
+  %mul4 = fmul double %div1, %add3
+  store double %mul4, double* %simp, align 8
+  %m5 = getelementptr inbounds %struct.triple, %struct.triple* %agg.result, i32 0, i32 0
+  %10 = load double, double* %m, align 8
+  store double %10, double* %m5, align 8
+  %fm6 = getelementptr inbounds %struct.triple, %struct.triple* %agg.result, i32 0, i32 1
+  %11 = load double, double* %fm, align 8
+  store double %11, double* %fm6, align 8
+  %simp7 = getelementptr inbounds %struct.triple, %struct.triple* %agg.result, i32 0, i32 2
+  %12 = load double, double* %simp, align 8
+  store double %12, double* %simp7, align 8
+  ret void
+}
+
+; Function Attrs: nounwind readnone speculatable willreturn
+declare double @llvm.fabs.f64(double %0) #1
+
+; Function Attrs: noinline nounwind optnone
+define hidden double @_quad_asr(double (double)* %f, double %a, double %fa, double %b, double %fb, double %eps, double %whole, double %m, double %fm) #0 {
+entry:
+  %retval = alloca double, align 8
+  %f.addr = alloca double (double)*, align 4
+  %a.addr = alloca double, align 8
+  %fa.addr = alloca double, align 8
+  %b.addr = alloca double, align 8
+  %fb.addr = alloca double, align 8
+  %eps.addr = alloca double, align 8
+  %whole.addr = alloca double, align 8
+  %m.addr = alloca double, align 8
+  %fm.addr = alloca double, align 8
+  %lt = alloca %struct.triple, align 8
+  %rt = alloca %struct.triple, align 8
+  %delta = alloca double, align 8
+  store double (double)* %f, double (double)** %f.addr, align 4
+  store double %a, double* %a.addr, align 8
+  store double %fa, double* %fa.addr, align 8
+  store double %b, double* %b.addr, align 8
+  store double %fb, double* %fb.addr, align 8
+  store double %eps, double* %eps.addr, align 8
+  store double %whole, double* %whole.addr, align 8
+  store double %m, double* %m.addr, align 8
+  store double %fm, double* %fm.addr, align 8
+  %0 = load double (double)*, double (double)** %f.addr, align 4
+  %1 = load double, double* %a.addr, align 8
+  %2 = load double, double* %fa.addr, align 8
+  %3 = load double, double* %m.addr, align 8
+  %4 = load double, double* %fm.addr, align 8
+  call void @_quad_simpsons_mem(%struct.triple* sret align 8 %lt, double (double)* %0, double %1, double %2, double %3, double %4)
+  %5 = load double (double)*, double (double)** %f.addr, align 4
+  %6 = load double, double* %m.addr, align 8
+  %7 = load double, double* %fm.addr, align 8
+  %8 = load double, double* %b.addr, align 8
+  %9 = load double, double* %fb.addr, align 8
+  call void @_quad_simpsons_mem(%struct.triple* sret align 8 %rt, double (double)* %5, double %6, double %7, double %8, double %9)
+  %simp = getelementptr inbounds %struct.triple, %struct.triple* %lt, i32 0, i32 2
+  %10 = load double, double* %simp, align 8
+  %simp1 = getelementptr inbounds %struct.triple, %struct.triple* %rt, i32 0, i32 2
+  %11 = load double, double* %simp1, align 8
+  %add = fadd double %10, %11
+  %12 = load double, double* %whole.addr, align 8
+  %sub = fsub double %add, %12
+  store double %sub, double* %delta, align 8
+  %13 = load double, double* %delta, align 8
+  %14 = call double @llvm.fabs.f64(double %13)
+  %15 = load double, double* %eps.addr, align 8
+  %mul = fmul double %15, 1.500000e+01
+  %cmp = fcmp ole double %14, %mul
+  br i1 %cmp, label %if.then, label %if.end
+
+if.then:                                          ; preds = %entry
+  %simp2 = getelementptr inbounds %struct.triple, %struct.triple* %lt, i32 0, i32 2
+  %16 = load double, double* %simp2, align 8
+  %simp3 = getelementptr inbounds %struct.triple, %struct.triple* %rt, i32 0, i32 2
+  %17 = load double, double* %simp3, align 8
+  %add4 = fadd double %16, %17
+  %18 = load double, double* %delta, align 8
+  %div = fdiv double %18, 1.500000e+01
+  %add5 = fadd double %add4, %div
+  store double %add5, double* %retval, align 8
+  br label %return
+
+if.end:                                           ; preds = %entry
+  %19 = load double (double)*, double (double)** %f.addr, align 4
+  %20 = load double, double* %a.addr, align 8
+  %21 = load double, double* %fa.addr, align 8
+  %22 = load double, double* %m.addr, align 8
+  %23 = load double, double* %fm.addr, align 8
+  %24 = load double, double* %eps.addr, align 8
+  %div6 = fdiv double %24, 2.000000e+00
+  %simp7 = getelementptr inbounds %struct.triple, %struct.triple* %lt, i32 0, i32 2
+  %25 = load double, double* %simp7, align 8
+  %m8 = getelementptr inbounds %struct.triple, %struct.triple* %lt, i32 0, i32 0
+  %26 = load double, double* %m8, align 8
+  %fm9 = getelementptr inbounds %struct.triple, %struct.triple* %lt, i32 0, i32 1
+  %27 = load double, double* %fm9, align 8
+  %call = call double @_quad_asr(double (double)* %19, double %20, double %21, double %22, double %23, double %div6, double %25, double %26, double %27)
+  %28 = load double (double)*, double (double)** %f.addr, align 4
+  %29 = load double, double* %m.addr, align 8
+  %30 = load double, double* %fm.addr, align 8
+  %31 = load double, double* %b.addr, align 8
+  %32 = load double, double* %fb.addr, align 8
+  %33 = load double, double* %eps.addr, align 8
+  %div10 = fdiv double %33, 2.000000e+00
+  %simp11 = getelementptr inbounds %struct.triple, %struct.triple* %rt, i32 0, i32 2
+  %34 = load double, double* %simp11, align 8
+  %m12 = getelementptr inbounds %struct.triple, %struct.triple* %rt, i32 0, i32 0
+  %35 = load double, double* %m12, align 8
+  %fm13 = getelementptr inbounds %struct.triple, %struct.triple* %rt, i32 0, i32 1
+  %36 = load double, double* %fm13, align 8
+  %call14 = call double @_quad_asr(double (double)* %28, double %29, double %30, double %31, double %32, double %div10, double %34, double %35, double %36)
+  %add15 = fadd double %call, %call14
+  store double %add15, double* %retval, align 8
+  br label %return
+
+return:                                           ; preds = %if.end, %if.then
+  %37 = load double, double* %retval, align 8
+  ret double %37
+}
+
+; Function Attrs: noinline nounwind optnone
+define hidden double @quad_asr(double (double)* %f, double %a, double %b, double %eps) #0 {
+entry:
+  %f.addr = alloca double (double)*, align 4
+  %a.addr = alloca double, align 8
+  %b.addr = alloca double, align 8
+  %eps.addr = alloca double, align 8
+  %fa = alloca double, align 8
+  %fb = alloca double, align 8
+  %t = alloca %struct.triple, align 8
+  store double (double)* %f, double (double)** %f.addr, align 4
+  store double %a, double* %a.addr, align 8
+  store double %b, double* %b.addr, align 8
+  store double %eps, double* %eps.addr, align 8
+  %0 = load double (double)*, double (double)** %f.addr, align 4
+  %1 = load double, double* %a.addr, align 8
+  %call = call double %0(double %1)
+  store double %call, double* %fa, align 8
+  %2 = load double (double)*, double (double)** %f.addr, align 4
+  %3 = load double, double* %b.addr, align 8
+  %call1 = call double %2(double %3)
+  store double %call1, double* %fb, align 8
+  %4 = load double (double)*, double (double)** %f.addr, align 4
+  %5 = load double, double* %a.addr, align 8
+  %6 = load double, double* %fa, align 8
+  %7 = load double, double* %b.addr, align 8
+  %8 = load double, double* %fb, align 8
+  call void @_quad_simpsons_mem(%struct.triple* sret align 8 %t, double (double)* %4, double %5, double %6, double %7, double %8)
+  %9 = load double (double)*, double (double)** %f.addr, align 4
+  %10 = load double, double* %a.addr, align 8
+  %11 = load double, double* %fa, align 8
+  %12 = load double, double* %b.addr, align 8
+  %13 = load double, double* %fb, align 8
+  %14 = load double, double* %eps.addr, align 8
+  %simp = getelementptr inbounds %struct.triple, %struct.triple* %t, i32 0, i32 2
+  %15 = load double, double* %simp, align 8
+  %m = getelementptr inbounds %struct.triple, %struct.triple* %t, i32 0, i32 0
+  %16 = load double, double* %m, align 8
+  %fm = getelementptr inbounds %struct.triple, %struct.triple* %t, i32 0, i32 1
+  %17 = load double, double* %fm, align 8
+  %call2 = call double @_quad_asr(double (double)* %9, double %10, double %11, double %12, double %13, double %14, double %15, double %16, double %17)
+  ret double %call2
+}
+
+; Function Attrs: noinline nounwind optnone
+define hidden i32 @main() #0 {
+entry:
+  %retval = alloca i32, align 4
+  %a = alloca double, align 8
+  %b = alloca double, align 8
+  %sinx = alloca double, align 8
+  store i32 0, i32* %retval, align 4
+  store double 0.000000e+00, double* %a, align 8
+  store double 1.000000e+00, double* %b, align 8
+  %0 = load double, double* %a, align 8
+  %1 = load double, double* %b, align 8
+  %call = call double @quad_asr(double (double)* @sin, double %0, double %1, double 1.000000e-09)
+  store double %call, double* %sinx, align 8
+  %2 = load double, double* %a, align 8
+  %3 = load double, double* %b, align 8
+  %4 = load double, double* %sinx, align 8
+  %call1 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([50 x i8], [50 x i8]* @.str, i32 0, i32 0), double %2, double %3, double %4)
+  ret i32 0
+}
+
+; Function Attrs: nounwind readnone
+declare double @sin(double %0) #2
+
+declare i32 @printf(i8* %0, ...) #3
+
+attributes #0 = { noinline nounwind optnone "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "min-legal-vector-width"="0" "no-infs-fp-math"="false" "no-jump-tables"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #1 = { nounwind readnone speculatable willreturn }
+attributes #2 = { nounwind readnone "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #3 = { "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+
+!llvm.module.flags = !{!0}
+!llvm.ident = !{!1}
+
+!0 = !{i32 1, !"wchar_size", i32 4}
+!1 = !{!"clang version 11.0.0 (https://github.com/Jacarte/llvm-project.git 0f6dea67136cc1e0b3d200eb2bb165628970c44b)"}
+
+; extracted candidates
+#########################################################
+; exiting Souper's runOnFunction() for _quad_simpsons_mem()
+
+; entering Souper's runOnFunction() for _quad_asr()
+
+; ModuleID = './Numerical_integration-Adaptive_Simpsons_method.c.bc'
+source_filename = "./Numerical_integration-Adaptive_Simpsons_method.c"
+target datalayout = "e-m:e-p:32:32-i64:64-n32:64-S128"
+target triple = "wasm32-unknown-wasi"
+
+%struct.triple = type { double, double, double }
+
+@.str = private unnamed_addr constant [50 x i8] c"Simpson's integration of sine from %g to %g = %f\0A\00", align 1
+@llvm.used = appending global [1 x i8*] [i8* bitcast (i32 ()* @__main_void to i8*)], section "llvm.metadata"
+
+@__main_void = alias i32 (), i32 ()* @main
+
+; Function Attrs: noinline nounwind optnone
+define hidden void @_quad_simpsons_mem(%struct.triple* noalias sret align 8 %agg.result, double (double)* %f, double %a, double %fa, double %b, double %fb) #0 {
+entry:
+  %f.addr = alloca double (double)*, align 4
+  %a.addr = alloca double, align 8
+  %fa.addr = alloca double, align 8
+  %b.addr = alloca double, align 8
+  %fb.addr = alloca double, align 8
+  %m = alloca double, align 8
+  %fm = alloca double, align 8
+  %simp = alloca double, align 8
+  store double (double)* %f, double (double)** %f.addr, align 4
+  store double %a, double* %a.addr, align 8
+  store double %fa, double* %fa.addr, align 8
+  store double %b, double* %b.addr, align 8
+  store double %fb, double* %fb.addr, align 8
+  %0 = load double, double* %a.addr, align 8
+  %1 = load double, double* %b.addr, align 8
+  %add = fadd double %0, %1
+  %div = fdiv double %add, 2.000000e+00
+  store double %div, double* %m, align 8
+  %2 = load double (double)*, double (double)** %f.addr, align 4
+  %3 = load double, double* %m, align 8
+  %call = call double %2(double %3)
+  store double %call, double* %fm, align 8
+  %4 = load double, double* %b.addr, align 8
+  %5 = load double, double* %a.addr, align 8
+  %sub = fsub double %4, %5
+  %6 = call double @llvm.fabs.f64(double %sub)
+  %div1 = fdiv double %6, 6.000000e+00
+  %7 = load double, double* %fa.addr, align 8
+  %8 = load double, double* %fm, align 8
+  %mul = fmul double 4.000000e+00, %8
+  %add2 = fadd double %7, %mul
+  %9 = load double, double* %fb.addr, align 8
+  %add3 = fadd double %add2, %9
+  %mul4 = fmul double %div1, %add3
+  store double %mul4, double* %simp, align 8
+  %m5 = getelementptr inbounds %struct.triple, %struct.triple* %agg.result, i32 0, i32 0
+  %10 = load double, double* %m, align 8
+  store double %10, double* %m5, align 8
+  %fm6 = getelementptr inbounds %struct.triple, %struct.triple* %agg.result, i32 0, i32 1
+  %11 = load double, double* %fm, align 8
+  store double %11, double* %fm6, align 8
+  %simp7 = getelementptr inbounds %struct.triple, %struct.triple* %agg.result, i32 0, i32 2
+  %12 = load double, double* %simp, align 8
+  store double %12, double* %simp7, align 8
+  ret void
+}
+
+; Function Attrs: nounwind readnone speculatable willreturn
+declare double @llvm.fabs.f64(double %0) #1
+
+; Function Attrs: noinline nounwind optnone
+define hidden double @_quad_asr(double (double)* %f, double %a, double %fa, double %b, double %fb, double %eps, double %whole, double %m, double %fm) #0 {
+entry:
+  %retval = alloca double, align 8
+  %f.addr = alloca double (double)*, align 4
+  %a.addr = alloca double, align 8
+  %fa.addr = alloca double, align 8
+  %b.addr = alloca double, align 8
+  %fb.addr = alloca double, align 8
+  %eps.addr = alloca double, align 8
+  %whole.addr = alloca double, align 8
+  %m.addr = alloca double, align 8
+  %fm.addr = alloca double, align 8
+  %lt = alloca %struct.triple, align 8
+  %rt = alloca %struct.triple, align 8
+  %delta = alloca double, align 8
+  store double (double)* %f, double (double)** %f.addr, align 4
+  store double %a, double* %a.addr, align 8
+  store double %fa, double* %fa.addr, align 8
+  store double %b, double* %b.addr, align 8
+  store double %fb, double* %fb.addr, align 8
+  store double %eps, double* %eps.addr, align 8
+  store double %whole, double* %whole.addr, align 8
+  store double %m, double* %m.addr, align 8
+  store double %fm, double* %fm.addr, align 8
+  %0 = load double (double)*, double (double)** %f.addr, align 4
+  %1 = load double, double* %a.addr, align 8
+  %2 = load double, double* %fa.addr, align 8
+  %3 = load double, double* %m.addr, align 8
+  %4 = load double, double* %fm.addr, align 8
+  call void @_quad_simpsons_mem(%struct.triple* sret align 8 %lt, double (double)* %0, double %1, double %2, double %3, double %4)
+  %5 = load double (double)*, double (double)** %f.addr, align 4
+  %6 = load double, double* %m.addr, align 8
+  %7 = load double, double* %fm.addr, align 8
+  %8 = load double, double* %b.addr, align 8
+  %9 = load double, double* %fb.addr, align 8
+  call void @_quad_simpsons_mem(%struct.triple* sret align 8 %rt, double (double)* %5, double %6, double %7, double %8, double %9)
+  %simp = getelementptr inbounds %struct.triple, %struct.triple* %lt, i32 0, i32 2
+  %10 = load double, double* %simp, align 8
+  %simp1 = getelementptr inbounds %struct.triple, %struct.triple* %rt, i32 0, i32 2
+  %11 = load double, double* %simp1, align 8
+  %add = fadd double %10, %11
+  %12 = load double, double* %whole.addr, align 8
+  %sub = fsub double %add, %12
+  store double %sub, double* %delta, align 8
+  %13 = load double, double* %delta, align 8
+  %14 = call double @llvm.fabs.f64(double %13)
+  %15 = load double, double* %eps.addr, align 8
+  %mul = fmul double %15, 1.500000e+01
+  %cmp = fcmp ole double %14, %mul
+  br i1 %cmp, label %if.then, label %if.end
+
+if.then:                                          ; preds = %entry
+  %simp2 = getelementptr inbounds %struct.triple, %struct.triple* %lt, i32 0, i32 2
+  %16 = load double, double* %simp2, align 8
+  %simp3 = getelementptr inbounds %struct.triple, %struct.triple* %rt, i32 0, i32 2
+  %17 = load double, double* %simp3, align 8
+  %add4 = fadd double %16, %17
+  %18 = load double, double* %delta, align 8
+  %div = fdiv double %18, 1.500000e+01
+  %add5 = fadd double %add4, %div
+  store double %add5, double* %retval, align 8
+  br label %return
+
+if.end:                                           ; preds = %entry
+  %19 = load double (double)*, double (double)** %f.addr, align 4
+  %20 = load double, double* %a.addr, align 8
+  %21 = load double, double* %fa.addr, align 8
+  %22 = load double, double* %m.addr, align 8
+  %23 = load double, double* %fm.addr, align 8
+  %24 = load double, double* %eps.addr, align 8
+  %div6 = fdiv double %24, 2.000000e+00
+  %simp7 = getelementptr inbounds %struct.triple, %struct.triple* %lt, i32 0, i32 2
+  %25 = load double, double* %simp7, align 8
+  %m8 = getelementptr inbounds %struct.triple, %struct.triple* %lt, i32 0, i32 0
+  %26 = load double, double* %m8, align 8
+  %fm9 = getelementptr inbounds %struct.triple, %struct.triple* %lt, i32 0, i32 1
+  %27 = load double, double* %fm9, align 8
+  %call = call double @_quad_asr(double (double)* %19, double %20, double %21, double %22, double %23, double %div6, double %25, double %26, double %27)
+  %28 = load double (double)*, double (double)** %f.addr, align 4
+  %29 = load double, double* %m.addr, align 8
+  %30 = load double, double* %fm.addr, align 8
+  %31 = load double, double* %b.addr, align 8
+  %32 = load double, double* %fb.addr, align 8
+  %33 = load double, double* %eps.addr, align 8
+  %div10 = fdiv double %33, 2.000000e+00
+  %simp11 = getelementptr inbounds %struct.triple, %struct.triple* %rt, i32 0, i32 2
+  %34 = load double, double* %simp11, align 8
+  %m12 = getelementptr inbounds %struct.triple, %struct.triple* %rt, i32 0, i32 0
+  %35 = load double, double* %m12, align 8
+  %fm13 = getelementptr inbounds %struct.triple, %struct.triple* %rt, i32 0, i32 1
+  %36 = load double, double* %fm13, align 8
+  %call14 = call double @_quad_asr(double (double)* %28, double %29, double %30, double %31, double %32, double %div10, double %34, double %35, double %36)
+  %add15 = fadd double %call, %call14
+  store double %add15, double* %retval, align 8
+  br label %return
+
+return:                                           ; preds = %if.end, %if.then
+  %37 = load double, double* %retval, align 8
+  ret double %37
+}
+
+; Function Attrs: noinline nounwind optnone
+define hidden double @quad_asr(double (double)* %f, double %a, double %b, double %eps) #0 {
+entry:
+  %f.addr = alloca double (double)*, align 4
+  %a.addr = alloca double, align 8
+  %b.addr = alloca double, align 8
+  %eps.addr = alloca double, align 8
+  %fa = alloca double, align 8
+  %fb = alloca double, align 8
+  %t = alloca %struct.triple, align 8
+  store double (double)* %f, double (double)** %f.addr, align 4
+  store double %a, double* %a.addr, align 8
+  store double %b, double* %b.addr, align 8
+  store double %eps, double* %eps.addr, align 8
+  %0 = load double (double)*, double (double)** %f.addr, align 4
+  %1 = load double, double* %a.addr, align 8
+  %call = call double %0(double %1)
+  store double %call, double* %fa, align 8
+  %2 = load double (double)*, double (double)** %f.addr, align 4
+  %3 = load double, double* %b.addr, align 8
+  %call1 = call double %2(double %3)
+  store double %call1, double* %fb, align 8
+  %4 = load double (double)*, double (double)** %f.addr, align 4
+  %5 = load double, double* %a.addr, align 8
+  %6 = load double, double* %fa, align 8
+  %7 = load double, double* %b.addr, align 8
+  %8 = load double, double* %fb, align 8
+  call void @_quad_simpsons_mem(%struct.triple* sret align 8 %t, double (double)* %4, double %5, double %6, double %7, double %8)
+  %9 = load double (double)*, double (double)** %f.addr, align 4
+  %10 = load double, double* %a.addr, align 8
+  %11 = load double, double* %fa, align 8
+  %12 = load double, double* %b.addr, align 8
+  %13 = load double, double* %fb, align 8
+  %14 = load double, double* %eps.addr, align 8
+  %simp = getelementptr inbounds %struct.triple, %struct.triple* %t, i32 0, i32 2
+  %15 = load double, double* %simp, align 8
+  %m = getelementptr inbounds %struct.triple, %struct.triple* %t, i32 0, i32 0
+  %16 = load double, double* %m, align 8
+  %fm = getelementptr inbounds %struct.triple, %struct.triple* %t, i32 0, i32 1
+  %17 = load double, double* %fm, align 8
+  %call2 = call double @_quad_asr(double (double)* %9, double %10, double %11, double %12, double %13, double %14, double %15, double %16, double %17)
+  ret double %call2
+}
+
+; Function Attrs: noinline nounwind optnone
+define hidden i32 @main() #0 {
+entry:
+  %retval = alloca i32, align 4
+  %a = alloca double, align 8
+  %b = alloca double, align 8
+  %sinx = alloca double, align 8
+  store i32 0, i32* %retval, align 4
+  store double 0.000000e+00, double* %a, align 8
+  store double 1.000000e+00, double* %b, align 8
+  %0 = load double, double* %a, align 8
+  %1 = load double, double* %b, align 8
+  %call = call double @quad_asr(double (double)* @sin, double %0, double %1, double 1.000000e-09)
+  store double %call, double* %sinx, align 8
+  %2 = load double, double* %a, align 8
+  %3 = load double, double* %b, align 8
+  %4 = load double, double* %sinx, align 8
+  %call1 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([50 x i8], [50 x i8]* @.str, i32 0, i32 0), double %2, double %3, double %4)
+  ret i32 0
+}
+
+; Function Attrs: nounwind readnone
+declare double @sin(double %0) #2
+
+declare i32 @printf(i8* %0, ...) #3
+
+attributes #0 = { noinline nounwind optnone "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "min-legal-vector-width"="0" "no-infs-fp-math"="false" "no-jump-tables"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #1 = { nounwind readnone speculatable willreturn }
+attributes #2 = { nounwind readnone "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #3 = { "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+
+!llvm.module.flags = !{!0}
+!llvm.ident = !{!1}
+
+!0 = !{i32 1, !"wchar_size", i32 4}
+!1 = !{!"clang version 11.0.0 (https://github.com/Jacarte/llvm-project.git 0f6dea67136cc1e0b3d200eb2bb165628970c44b)"}
+
+; extracted candidates
+
+; *****
+; For LLVM instruction:
+;  %cmp = fcmp ole double %14, %mul
+; Looking for a replacement for:
+%0:i1 = var
+infer %0
+got 1 candidates from LHS
+
+-------------------------------------------------
+%0:i1 = var
+infer %0
+
+
+--------------------------------
+guess 0
+
+%0:i1 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: -1
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+Dataflow Pruned 0/0
+There are 1 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+#########################################################
+; exiting Souper's runOnFunction() for _quad_asr()
+
+; entering Souper's runOnFunction() for quad_asr()
+
+; ModuleID = './Numerical_integration-Adaptive_Simpsons_method.c.bc'
+source_filename = "./Numerical_integration-Adaptive_Simpsons_method.c"
+target datalayout = "e-m:e-p:32:32-i64:64-n32:64-S128"
+target triple = "wasm32-unknown-wasi"
+
+%struct.triple = type { double, double, double }
+
+@.str = private unnamed_addr constant [50 x i8] c"Simpson's integration of sine from %g to %g = %f\0A\00", align 1
+@llvm.used = appending global [1 x i8*] [i8* bitcast (i32 ()* @__main_void to i8*)], section "llvm.metadata"
+
+@__main_void = alias i32 (), i32 ()* @main
+
+; Function Attrs: noinline nounwind optnone
+define hidden void @_quad_simpsons_mem(%struct.triple* noalias sret align 8 %agg.result, double (double)* %f, double %a, double %fa, double %b, double %fb) #0 {
+entry:
+  %f.addr = alloca double (double)*, align 4
+  %a.addr = alloca double, align 8
+  %fa.addr = alloca double, align 8
+  %b.addr = alloca double, align 8
+  %fb.addr = alloca double, align 8
+  %m = alloca double, align 8
+  %fm = alloca double, align 8
+  %simp = alloca double, align 8
+  store double (double)* %f, double (double)** %f.addr, align 4
+  store double %a, double* %a.addr, align 8
+  store double %fa, double* %fa.addr, align 8
+  store double %b, double* %b.addr, align 8
+  store double %fb, double* %fb.addr, align 8
+  %0 = load double, double* %a.addr, align 8
+  %1 = load double, double* %b.addr, align 8
+  %add = fadd double %0, %1
+  %div = fdiv double %add, 2.000000e+00
+  store double %div, double* %m, align 8
+  %2 = load double (double)*, double (double)** %f.addr, align 4
+  %3 = load double, double* %m, align 8
+  %call = call double %2(double %3)
+  store double %call, double* %fm, align 8
+  %4 = load double, double* %b.addr, align 8
+  %5 = load double, double* %a.addr, align 8
+  %sub = fsub double %4, %5
+  %6 = call double @llvm.fabs.f64(double %sub)
+  %div1 = fdiv double %6, 6.000000e+00
+  %7 = load double, double* %fa.addr, align 8
+  %8 = load double, double* %fm, align 8
+  %mul = fmul double 4.000000e+00, %8
+  %add2 = fadd double %7, %mul
+  %9 = load double, double* %fb.addr, align 8
+  %add3 = fadd double %add2, %9
+  %mul4 = fmul double %div1, %add3
+  store double %mul4, double* %simp, align 8
+  %m5 = getelementptr inbounds %struct.triple, %struct.triple* %agg.result, i32 0, i32 0
+  %10 = load double, double* %m, align 8
+  store double %10, double* %m5, align 8
+  %fm6 = getelementptr inbounds %struct.triple, %struct.triple* %agg.result, i32 0, i32 1
+  %11 = load double, double* %fm, align 8
+  store double %11, double* %fm6, align 8
+  %simp7 = getelementptr inbounds %struct.triple, %struct.triple* %agg.result, i32 0, i32 2
+  %12 = load double, double* %simp, align 8
+  store double %12, double* %simp7, align 8
+  ret void
+}
+
+; Function Attrs: nounwind readnone speculatable willreturn
+declare double @llvm.fabs.f64(double %0) #1
+
+; Function Attrs: noinline nounwind optnone
+define hidden double @_quad_asr(double (double)* %f, double %a, double %fa, double %b, double %fb, double %eps, double %whole, double %m, double %fm) #0 {
+entry:
+  %retval = alloca double, align 8
+  %f.addr = alloca double (double)*, align 4
+  %a.addr = alloca double, align 8
+  %fa.addr = alloca double, align 8
+  %b.addr = alloca double, align 8
+  %fb.addr = alloca double, align 8
+  %eps.addr = alloca double, align 8
+  %whole.addr = alloca double, align 8
+  %m.addr = alloca double, align 8
+  %fm.addr = alloca double, align 8
+  %lt = alloca %struct.triple, align 8
+  %rt = alloca %struct.triple, align 8
+  %delta = alloca double, align 8
+  store double (double)* %f, double (double)** %f.addr, align 4
+  store double %a, double* %a.addr, align 8
+  store double %fa, double* %fa.addr, align 8
+  store double %b, double* %b.addr, align 8
+  store double %fb, double* %fb.addr, align 8
+  store double %eps, double* %eps.addr, align 8
+  store double %whole, double* %whole.addr, align 8
+  store double %m, double* %m.addr, align 8
+  store double %fm, double* %fm.addr, align 8
+  %0 = load double (double)*, double (double)** %f.addr, align 4
+  %1 = load double, double* %a.addr, align 8
+  %2 = load double, double* %fa.addr, align 8
+  %3 = load double, double* %m.addr, align 8
+  %4 = load double, double* %fm.addr, align 8
+  call void @_quad_simpsons_mem(%struct.triple* sret align 8 %lt, double (double)* %0, double %1, double %2, double %3, double %4)
+  %5 = load double (double)*, double (double)** %f.addr, align 4
+  %6 = load double, double* %m.addr, align 8
+  %7 = load double, double* %fm.addr, align 8
+  %8 = load double, double* %b.addr, align 8
+  %9 = load double, double* %fb.addr, align 8
+  call void @_quad_simpsons_mem(%struct.triple* sret align 8 %rt, double (double)* %5, double %6, double %7, double %8, double %9)
+  %simp = getelementptr inbounds %struct.triple, %struct.triple* %lt, i32 0, i32 2
+  %10 = load double, double* %simp, align 8
+  %simp1 = getelementptr inbounds %struct.triple, %struct.triple* %rt, i32 0, i32 2
+  %11 = load double, double* %simp1, align 8
+  %add = fadd double %10, %11
+  %12 = load double, double* %whole.addr, align 8
+  %sub = fsub double %add, %12
+  store double %sub, double* %delta, align 8
+  %13 = load double, double* %delta, align 8
+  %14 = call double @llvm.fabs.f64(double %13)
+  %15 = load double, double* %eps.addr, align 8
+  %mul = fmul double %15, 1.500000e+01
+  %cmp = fcmp ole double %14, %mul
+  br i1 %cmp, label %if.then, label %if.end
+
+if.then:                                          ; preds = %entry
+  %simp2 = getelementptr inbounds %struct.triple, %struct.triple* %lt, i32 0, i32 2
+  %16 = load double, double* %simp2, align 8
+  %simp3 = getelementptr inbounds %struct.triple, %struct.triple* %rt, i32 0, i32 2
+  %17 = load double, double* %simp3, align 8
+  %add4 = fadd double %16, %17
+  %18 = load double, double* %delta, align 8
+  %div = fdiv double %18, 1.500000e+01
+  %add5 = fadd double %add4, %div
+  store double %add5, double* %retval, align 8
+  br label %return
+
+if.end:                                           ; preds = %entry
+  %19 = load double (double)*, double (double)** %f.addr, align 4
+  %20 = load double, double* %a.addr, align 8
+  %21 = load double, double* %fa.addr, align 8
+  %22 = load double, double* %m.addr, align 8
+  %23 = load double, double* %fm.addr, align 8
+  %24 = load double, double* %eps.addr, align 8
+  %div6 = fdiv double %24, 2.000000e+00
+  %simp7 = getelementptr inbounds %struct.triple, %struct.triple* %lt, i32 0, i32 2
+  %25 = load double, double* %simp7, align 8
+  %m8 = getelementptr inbounds %struct.triple, %struct.triple* %lt, i32 0, i32 0
+  %26 = load double, double* %m8, align 8
+  %fm9 = getelementptr inbounds %struct.triple, %struct.triple* %lt, i32 0, i32 1
+  %27 = load double, double* %fm9, align 8
+  %call = call double @_quad_asr(double (double)* %19, double %20, double %21, double %22, double %23, double %div6, double %25, double %26, double %27)
+  %28 = load double (double)*, double (double)** %f.addr, align 4
+  %29 = load double, double* %m.addr, align 8
+  %30 = load double, double* %fm.addr, align 8
+  %31 = load double, double* %b.addr, align 8
+  %32 = load double, double* %fb.addr, align 8
+  %33 = load double, double* %eps.addr, align 8
+  %div10 = fdiv double %33, 2.000000e+00
+  %simp11 = getelementptr inbounds %struct.triple, %struct.triple* %rt, i32 0, i32 2
+  %34 = load double, double* %simp11, align 8
+  %m12 = getelementptr inbounds %struct.triple, %struct.triple* %rt, i32 0, i32 0
+  %35 = load double, double* %m12, align 8
+  %fm13 = getelementptr inbounds %struct.triple, %struct.triple* %rt, i32 0, i32 1
+  %36 = load double, double* %fm13, align 8
+  %call14 = call double @_quad_asr(double (double)* %28, double %29, double %30, double %31, double %32, double %div10, double %34, double %35, double %36)
+  %add15 = fadd double %call, %call14
+  store double %add15, double* %retval, align 8
+  br label %return
+
+return:                                           ; preds = %if.end, %if.then
+  %37 = load double, double* %retval, align 8
+  ret double %37
+}
+
+; Function Attrs: noinline nounwind optnone
+define hidden double @quad_asr(double (double)* %f, double %a, double %b, double %eps) #0 {
+entry:
+  %f.addr = alloca double (double)*, align 4
+  %a.addr = alloca double, align 8
+  %b.addr = alloca double, align 8
+  %eps.addr = alloca double, align 8
+  %fa = alloca double, align 8
+  %fb = alloca double, align 8
+  %t = alloca %struct.triple, align 8
+  store double (double)* %f, double (double)** %f.addr, align 4
+  store double %a, double* %a.addr, align 8
+  store double %b, double* %b.addr, align 8
+  store double %eps, double* %eps.addr, align 8
+  %0 = load double (double)*, double (double)** %f.addr, align 4
+  %1 = load double, double* %a.addr, align 8
+  %call = call double %0(double %1)
+  store double %call, double* %fa, align 8
+  %2 = load double (double)*, double (double)** %f.addr, align 4
+  %3 = load double, double* %b.addr, align 8
+  %call1 = call double %2(double %3)
+  store double %call1, double* %fb, align 8
+  %4 = load double (double)*, double (double)** %f.addr, align 4
+  %5 = load double, double* %a.addr, align 8
+  %6 = load double, double* %fa, align 8
+  %7 = load double, double* %b.addr, align 8
+  %8 = load double, double* %fb, align 8
+  call void @_quad_simpsons_mem(%struct.triple* sret align 8 %t, double (double)* %4, double %5, double %6, double %7, double %8)
+  %9 = load double (double)*, double (double)** %f.addr, align 4
+  %10 = load double, double* %a.addr, align 8
+  %11 = load double, double* %fa, align 8
+  %12 = load double, double* %b.addr, align 8
+  %13 = load double, double* %fb, align 8
+  %14 = load double, double* %eps.addr, align 8
+  %simp = getelementptr inbounds %struct.triple, %struct.triple* %t, i32 0, i32 2
+  %15 = load double, double* %simp, align 8
+  %m = getelementptr inbounds %struct.triple, %struct.triple* %t, i32 0, i32 0
+  %16 = load double, double* %m, align 8
+  %fm = getelementptr inbounds %struct.triple, %struct.triple* %t, i32 0, i32 1
+  %17 = load double, double* %fm, align 8
+  %call2 = call double @_quad_asr(double (double)* %9, double %10, double %11, double %12, double %13, double %14, double %15, double %16, double %17)
+  ret double %call2
+}
+
+; Function Attrs: noinline nounwind optnone
+define hidden i32 @main() #0 {
+entry:
+  %retval = alloca i32, align 4
+  %a = alloca double, align 8
+  %b = alloca double, align 8
+  %sinx = alloca double, align 8
+  store i32 0, i32* %retval, align 4
+  store double 0.000000e+00, double* %a, align 8
+  store double 1.000000e+00, double* %b, align 8
+  %0 = load double, double* %a, align 8
+  %1 = load double, double* %b, align 8
+  %call = call double @quad_asr(double (double)* @sin, double %0, double %1, double 1.000000e-09)
+  store double %call, double* %sinx, align 8
+  %2 = load double, double* %a, align 8
+  %3 = load double, double* %b, align 8
+  %4 = load double, double* %sinx, align 8
+  %call1 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([50 x i8], [50 x i8]* @.str, i32 0, i32 0), double %2, double %3, double %4)
+  ret i32 0
+}
+
+; Function Attrs: nounwind readnone
+declare double @sin(double %0) #2
+
+declare i32 @printf(i8* %0, ...) #3
+
+attributes #0 = { noinline nounwind optnone "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "min-legal-vector-width"="0" "no-infs-fp-math"="false" "no-jump-tables"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #1 = { nounwind readnone speculatable willreturn }
+attributes #2 = { nounwind readnone "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #3 = { "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+
+!llvm.module.flags = !{!0}
+!llvm.ident = !{!1}
+
+!0 = !{i32 1, !"wchar_size", i32 4}
+!1 = !{!"clang version 11.0.0 (https://github.com/Jacarte/llvm-project.git 0f6dea67136cc1e0b3d200eb2bb165628970c44b)"}
+
+; extracted candidates
+#########################################################
+; exiting Souper's runOnFunction() for quad_asr()
+
+; entering Souper's runOnFunction() for main()
+
+; ModuleID = './Numerical_integration-Adaptive_Simpsons_method.c.bc'
+source_filename = "./Numerical_integration-Adaptive_Simpsons_method.c"
+target datalayout = "e-m:e-p:32:32-i64:64-n32:64-S128"
+target triple = "wasm32-unknown-wasi"
+
+%struct.triple = type { double, double, double }
+
+@.str = private unnamed_addr constant [50 x i8] c"Simpson's integration of sine from %g to %g = %f\0A\00", align 1
+@llvm.used = appending global [1 x i8*] [i8* bitcast (i32 ()* @__main_void to i8*)], section "llvm.metadata"
+
+@__main_void = alias i32 (), i32 ()* @main
+
+; Function Attrs: noinline nounwind optnone
+define hidden void @_quad_simpsons_mem(%struct.triple* noalias sret align 8 %agg.result, double (double)* %f, double %a, double %fa, double %b, double %fb) #0 {
+entry:
+  %f.addr = alloca double (double)*, align 4
+  %a.addr = alloca double, align 8
+  %fa.addr = alloca double, align 8
+  %b.addr = alloca double, align 8
+  %fb.addr = alloca double, align 8
+  %m = alloca double, align 8
+  %fm = alloca double, align 8
+  %simp = alloca double, align 8
+  store double (double)* %f, double (double)** %f.addr, align 4
+  store double %a, double* %a.addr, align 8
+  store double %fa, double* %fa.addr, align 8
+  store double %b, double* %b.addr, align 8
+  store double %fb, double* %fb.addr, align 8
+  %0 = load double, double* %a.addr, align 8
+  %1 = load double, double* %b.addr, align 8
+  %add = fadd double %0, %1
+  %div = fdiv double %add, 2.000000e+00
+  store double %div, double* %m, align 8
+  %2 = load double (double)*, double (double)** %f.addr, align 4
+  %3 = load double, double* %m, align 8
+  %call = call double %2(double %3)
+  store double %call, double* %fm, align 8
+  %4 = load double, double* %b.addr, align 8
+  %5 = load double, double* %a.addr, align 8
+  %sub = fsub double %4, %5
+  %6 = call double @llvm.fabs.f64(double %sub)
+  %div1 = fdiv double %6, 6.000000e+00
+  %7 = load double, double* %fa.addr, align 8
+  %8 = load double, double* %fm, align 8
+  %mul = fmul double 4.000000e+00, %8
+  %add2 = fadd double %7, %mul
+  %9 = load double, double* %fb.addr, align 8
+  %add3 = fadd double %add2, %9
+  %mul4 = fmul double %div1, %add3
+  store double %mul4, double* %simp, align 8
+  %m5 = getelementptr inbounds %struct.triple, %struct.triple* %agg.result, i32 0, i32 0
+  %10 = load double, double* %m, align 8
+  store double %10, double* %m5, align 8
+  %fm6 = getelementptr inbounds %struct.triple, %struct.triple* %agg.result, i32 0, i32 1
+  %11 = load double, double* %fm, align 8
+  store double %11, double* %fm6, align 8
+  %simp7 = getelementptr inbounds %struct.triple, %struct.triple* %agg.result, i32 0, i32 2
+  %12 = load double, double* %simp, align 8
+  store double %12, double* %simp7, align 8
+  ret void
+}
+
+; Function Attrs: nounwind readnone speculatable willreturn
+declare double @llvm.fabs.f64(double %0) #1
+
+; Function Attrs: noinline nounwind optnone
+define hidden double @_quad_asr(double (double)* %f, double %a, double %fa, double %b, double %fb, double %eps, double %whole, double %m, double %fm) #0 {
+entry:
+  %retval = alloca double, align 8
+  %f.addr = alloca double (double)*, align 4
+  %a.addr = alloca double, align 8
+  %fa.addr = alloca double, align 8
+  %b.addr = alloca double, align 8
+  %fb.addr = alloca double, align 8
+  %eps.addr = alloca double, align 8
+  %whole.addr = alloca double, align 8
+  %m.addr = alloca double, align 8
+  %fm.addr = alloca double, align 8
+  %lt = alloca %struct.triple, align 8
+  %rt = alloca %struct.triple, align 8
+  %delta = alloca double, align 8
+  store double (double)* %f, double (double)** %f.addr, align 4
+  store double %a, double* %a.addr, align 8
+  store double %fa, double* %fa.addr, align 8
+  store double %b, double* %b.addr, align 8
+  store double %fb, double* %fb.addr, align 8
+  store double %eps, double* %eps.addr, align 8
+  store double %whole, double* %whole.addr, align 8
+  store double %m, double* %m.addr, align 8
+  store double %fm, double* %fm.addr, align 8
+  %0 = load double (double)*, double (double)** %f.addr, align 4
+  %1 = load double, double* %a.addr, align 8
+  %2 = load double, double* %fa.addr, align 8
+  %3 = load double, double* %m.addr, align 8
+  %4 = load double, double* %fm.addr, align 8
+  call void @_quad_simpsons_mem(%struct.triple* sret align 8 %lt, double (double)* %0, double %1, double %2, double %3, double %4)
+  %5 = load double (double)*, double (double)** %f.addr, align 4
+  %6 = load double, double* %m.addr, align 8
+  %7 = load double, double* %fm.addr, align 8
+  %8 = load double, double* %b.addr, align 8
+  %9 = load double, double* %fb.addr, align 8
+  call void @_quad_simpsons_mem(%struct.triple* sret align 8 %rt, double (double)* %5, double %6, double %7, double %8, double %9)
+  %simp = getelementptr inbounds %struct.triple, %struct.triple* %lt, i32 0, i32 2
+  %10 = load double, double* %simp, align 8
+  %simp1 = getelementptr inbounds %struct.triple, %struct.triple* %rt, i32 0, i32 2
+  %11 = load double, double* %simp1, align 8
+  %add = fadd double %10, %11
+  %12 = load double, double* %whole.addr, align 8
+  %sub = fsub double %add, %12
+  store double %sub, double* %delta, align 8
+  %13 = load double, double* %delta, align 8
+  %14 = call double @llvm.fabs.f64(double %13)
+  %15 = load double, double* %eps.addr, align 8
+  %mul = fmul double %15, 1.500000e+01
+  %cmp = fcmp ole double %14, %mul
+  br i1 %cmp, label %if.then, label %if.end
+
+if.then:                                          ; preds = %entry
+  %simp2 = getelementptr inbounds %struct.triple, %struct.triple* %lt, i32 0, i32 2
+  %16 = load double, double* %simp2, align 8
+  %simp3 = getelementptr inbounds %struct.triple, %struct.triple* %rt, i32 0, i32 2
+  %17 = load double, double* %simp3, align 8
+  %add4 = fadd double %16, %17
+  %18 = load double, double* %delta, align 8
+  %div = fdiv double %18, 1.500000e+01
+  %add5 = fadd double %add4, %div
+  store double %add5, double* %retval, align 8
+  br label %return
+
+if.end:                                           ; preds = %entry
+  %19 = load double (double)*, double (double)** %f.addr, align 4
+  %20 = load double, double* %a.addr, align 8
+  %21 = load double, double* %fa.addr, align 8
+  %22 = load double, double* %m.addr, align 8
+  %23 = load double, double* %fm.addr, align 8
+  %24 = load double, double* %eps.addr, align 8
+  %div6 = fdiv double %24, 2.000000e+00
+  %simp7 = getelementptr inbounds %struct.triple, %struct.triple* %lt, i32 0, i32 2
+  %25 = load double, double* %simp7, align 8
+  %m8 = getelementptr inbounds %struct.triple, %struct.triple* %lt, i32 0, i32 0
+  %26 = load double, double* %m8, align 8
+  %fm9 = getelementptr inbounds %struct.triple, %struct.triple* %lt, i32 0, i32 1
+  %27 = load double, double* %fm9, align 8
+  %call = call double @_quad_asr(double (double)* %19, double %20, double %21, double %22, double %23, double %div6, double %25, double %26, double %27)
+  %28 = load double (double)*, double (double)** %f.addr, align 4
+  %29 = load double, double* %m.addr, align 8
+  %30 = load double, double* %fm.addr, align 8
+  %31 = load double, double* %b.addr, align 8
+  %32 = load double, double* %fb.addr, align 8
+  %33 = load double, double* %eps.addr, align 8
+  %div10 = fdiv double %33, 2.000000e+00
+  %simp11 = getelementptr inbounds %struct.triple, %struct.triple* %rt, i32 0, i32 2
+  %34 = load double, double* %simp11, align 8
+  %m12 = getelementptr inbounds %struct.triple, %struct.triple* %rt, i32 0, i32 0
+  %35 = load double, double* %m12, align 8
+  %fm13 = getelementptr inbounds %struct.triple, %struct.triple* %rt, i32 0, i32 1
+  %36 = load double, double* %fm13, align 8
+  %call14 = call double @_quad_asr(double (double)* %28, double %29, double %30, double %31, double %32, double %div10, double %34, double %35, double %36)
+  %add15 = fadd double %call, %call14
+  store double %add15, double* %retval, align 8
+  br label %return
+
+return:                                           ; preds = %if.end, %if.then
+  %37 = load double, double* %retval, align 8
+  ret double %37
+}
+
+; Function Attrs: noinline nounwind optnone
+define hidden double @quad_asr(double (double)* %f, double %a, double %b, double %eps) #0 {
+entry:
+  %f.addr = alloca double (double)*, align 4
+  %a.addr = alloca double, align 8
+  %b.addr = alloca double, align 8
+  %eps.addr = alloca double, align 8
+  %fa = alloca double, align 8
+  %fb = alloca double, align 8
+  %t = alloca %struct.triple, align 8
+  store double (double)* %f, double (double)** %f.addr, align 4
+  store double %a, double* %a.addr, align 8
+  store double %b, double* %b.addr, align 8
+  store double %eps, double* %eps.addr, align 8
+  %0 = load double (double)*, double (double)** %f.addr, align 4
+  %1 = load double, double* %a.addr, align 8
+  %call = call double %0(double %1)
+  store double %call, double* %fa, align 8
+  %2 = load double (double)*, double (double)** %f.addr, align 4
+  %3 = load double, double* %b.addr, align 8
+  %call1 = call double %2(double %3)
+  store double %call1, double* %fb, align 8
+  %4 = load double (double)*, double (double)** %f.addr, align 4
+  %5 = load double, double* %a.addr, align 8
+  %6 = load double, double* %fa, align 8
+  %7 = load double, double* %b.addr, align 8
+  %8 = load double, double* %fb, align 8
+  call void @_quad_simpsons_mem(%struct.triple* sret align 8 %t, double (double)* %4, double %5, double %6, double %7, double %8)
+  %9 = load double (double)*, double (double)** %f.addr, align 4
+  %10 = load double, double* %a.addr, align 8
+  %11 = load double, double* %fa, align 8
+  %12 = load double, double* %b.addr, align 8
+  %13 = load double, double* %fb, align 8
+  %14 = load double, double* %eps.addr, align 8
+  %simp = getelementptr inbounds %struct.triple, %struct.triple* %t, i32 0, i32 2
+  %15 = load double, double* %simp, align 8
+  %m = getelementptr inbounds %struct.triple, %struct.triple* %t, i32 0, i32 0
+  %16 = load double, double* %m, align 8
+  %fm = getelementptr inbounds %struct.triple, %struct.triple* %t, i32 0, i32 1
+  %17 = load double, double* %fm, align 8
+  %call2 = call double @_quad_asr(double (double)* %9, double %10, double %11, double %12, double %13, double %14, double %15, double %16, double %17)
+  ret double %call2
+}
+
+; Function Attrs: noinline nounwind optnone
+define hidden i32 @main() #0 {
+entry:
+  %retval = alloca i32, align 4
+  %a = alloca double, align 8
+  %b = alloca double, align 8
+  %sinx = alloca double, align 8
+  store i32 0, i32* %retval, align 4
+  store double 0.000000e+00, double* %a, align 8
+  store double 1.000000e+00, double* %b, align 8
+  %0 = load double, double* %a, align 8
+  %1 = load double, double* %b, align 8
+  %call = call double @quad_asr(double (double)* @sin, double %0, double %1, double 1.000000e-09)
+  store double %call, double* %sinx, align 8
+  %2 = load double, double* %a, align 8
+  %3 = load double, double* %b, align 8
+  %4 = load double, double* %sinx, align 8
+  %call1 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([50 x i8], [50 x i8]* @.str, i32 0, i32 0), double %2, double %3, double %4)
+  ret i32 0
+}
+
+; Function Attrs: nounwind readnone
+declare double @sin(double %0) #2
+
+declare i32 @printf(i8* %0, ...) #3
+
+attributes #0 = { noinline nounwind optnone "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "min-legal-vector-width"="0" "no-infs-fp-math"="false" "no-jump-tables"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #1 = { nounwind readnone speculatable willreturn }
+attributes #2 = { nounwind readnone "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #3 = { "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+
+!llvm.module.flags = !{!0}
+!llvm.ident = !{!1}
+
+!0 = !{i32 1, !"wchar_size", i32 4}
+!1 = !{!"clang version 11.0.0 (https://github.com/Jacarte/llvm-project.git 0f6dea67136cc1e0b3d200eb2bb165628970c44b)"}
+
+; extracted candidates
+#########################################################
+; exiting Souper's runOnFunction() for main()
+Total of 0 replacements done on this module
+Total of 0 replacements candidates on this module

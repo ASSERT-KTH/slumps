@@ -1,0 +1,2 @@
+include log4j.properties
+include splinter/log4j.properties
