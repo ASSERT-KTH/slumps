@@ -1,0 +1,60 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Workflow
+metadata:
+  generateName: slumps-verify-
+spec:
+  entrypoint: slumps-distributed
+  parallelism: 3
+  arguments:
+    parameters:
+    - name: wasm_download
+    - name: file_name
+    - name: folder
+    - name: main
+  templates:
+  - name: slumps-distributed
+    steps:
+    - - name: download-programs
+        template: download-template
+    - - name: execute-program
+        template: verify-template
+        arguments:
+          parameters:
+          - name: program
+            value: "{{item}}"
+        withParam: "{{steps.download-programs.outputs.parameters.programs}}"
+        continueOn:
+          failed: true
+  - name: download-template
+    script:
+      image: madshansen/docker-git-ftp 
+      command: [bash]
+      source: |
+        apt-get update && apt-get install -y python wget unzip && wget {{workflow.parameters.wasm_download}} && unzip "{{workflow.parameters.file_name}}"  -d . && ls -l "{{workflow.parameters.folder}}" | wc -l && python -c "import json,os;  print(json.dumps(os.listdir('{{workflow.parameters.folder}}')))" > /out.txt && cat /out.txt
+    outputs:
+      parameters:
+        - name: programs
+          valueFrom: 
+            path: "/out.txt"
+  - name: verify-template
+    inputs:
+      parameters:
+      - name: program
+    #outputs:
+    #  artifacts:
+    #  - name: slumps
+    #    path: /slumps/crow/out
+    #  - name: logs
+    #    path: /slumps/crow/logs
+    script:
+      image: openjdk:11.0.7
+      command: [bash]
+      source: |
+        apt-get update && apt-get install -y python wget unzip && wget {{workflow.parameters.wasm_download}} && unzip "{{workflow.parameters.file_name}}"  -d . && ls -l "{{workflow.parameters.folder}}" && wget https://github.com/KTH/slumps/releases/download/0.01/swam.jar && java -jar swam.jar run --wasi -m {{workflow.parameters.main}} --time {{workflow.parameters.folder}}/{{inputs.parameters.program}}
+      resources:
+        requests:
+          memory: 2G
+          cpu: 2
+        limits:
+          memory: 4G
+          cpu: 4
