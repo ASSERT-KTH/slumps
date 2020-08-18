@@ -31,9 +31,20 @@ def parse_args(args):
         help=f"Build libsodium. Needed if you don't have the libsodium/{RELINK_CMD_FNAME} file.",
     )
     parser.add_argument(
+        "--only-build",
+        action="store_true",
+        help="Like --build but stop after build is done.",
+    )
+    parser.add_argument(
         "--check", action="store_true", help="Run test suite (make check)"
     )
-    return parser.parse_args(args)
+    parser.add_argument("--reps", type=int, help="How many combinations to try")
+
+    args = parser.parse_args(args)
+    if args.only_build:
+        args.build = True
+
+    return args
 
 
 def main(args):
@@ -45,6 +56,9 @@ def main(args):
         relink_cmd, relink_cwd = load_relink_cmd()
     os.chdir("..")
 
+    if args.only_build:
+        return
+
     # Backup original build & restore it at the end
     _cp_r("libsodium", "libsodium.original")
     atexit.register(
@@ -55,7 +69,7 @@ def main(args):
     )
 
     for idx, combination in enumerate(
-        tqdm(islice(randcartesian("crow_out/libsodium"), 1024), total=1024)
+        tqdm(islice(randcartesian("crow_out/libsodium"), args.reps), total=args.reps)
     ):
         # Refer to generated object files with their absolute path because we are going
         # to change directory
@@ -84,9 +98,7 @@ def update_relink_cmd(*, check=False):
 mkdir -p "$INTERCEPT_BUILD_TARGET_DIR"
 export LD_PRELOAD=/usr/lib/x86_64-linux-gnu/bear/libear.so
 make -j$(nproc)"""
-        + " check\n"
-        if check
-        else "\n"
+        + (" check\n" if check else "\n")
     )
 
     for fname in glob(".ear/execution*"):
