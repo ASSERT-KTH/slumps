@@ -1,0 +1,153 @@
+
+Entering the Souper pass's runOnModule()
+
+
+; entering Souper's runOnFunction() for draw_yinyang()
+
+; ModuleID = './Yin_and_yang.c.bc'
+source_filename = "./Yin_and_yang.c"
+target datalayout = "e-m:e-p:32:32-i64:64-n32:64-S128"
+target triple = "wasm32-unknown-wasi"
+
+@.str = private unnamed_addr constant [62 x i8] c"<use xlink:href='#y' transform='translate(%d,%d) scale(%g)'/>\00", align 1
+@.str.1 = private unnamed_addr constant [594 x i8] c"<?xml version='1.0' encoding='UTF-8' standalone='no'?>\0A<!DOCTYPE svg PUBLIC '-//W3C//DTD SVG 1.1//EN'\0A\09'http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd'>\0A<svg xmlns='http://www.w3.org/2000/svg' version='1.1'\0A\09xmlns:xlink='http://www.w3.org/1999/xlink'\0A\09\09width='30' height='30'>\0A\09<defs><g id='y'>\0A\09\09<circle cx='0' cy='0' r='200' stroke='black'\0A\09\09\09fill='white' stroke-width='1'/>\0A\09\09<path d='M0 -200 A 200 200 0 0 0 0 200\0A\09\09\09100 100 0 0 0 0 0 100 100 0 0 1 0 -200\0A\09\09\09z' fill='black'/>\0A\09\09<circle cx='0' cy='100' r='33' fill='white'/>\0A\09\09<circle cx='0' cy='-100' r='33' fill='black'/>\0A\09</g></defs>\0A\00", align 1
+@.str.2 = private unnamed_addr constant [7 x i8] c"</svg>\00", align 1
+@llvm.used = appending global [1 x i8*] [i8* bitcast (i32 ()* @__main_void to i8*)], section "llvm.metadata"
+
+@__main_void = alias i32 (), i32 ()* @main
+
+; Function Attrs: noinline nounwind optnone
+define hidden void @draw_yinyang(i32 %trans, double %scale) #0 {
+entry:
+  %trans.addr = alloca i32, align 4
+  %scale.addr = alloca double, align 8
+  store i32 %trans, i32* %trans.addr, align 4
+  store double %scale, double* %scale.addr, align 8
+  %0 = load i32, i32* %trans.addr, align 4
+  %1 = load i32, i32* %trans.addr, align 4
+  %2 = load double, double* %scale.addr, align 8
+  %call = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([62 x i8], [62 x i8]* @.str, i32 0, i32 0), i32 %0, i32 %1, double %2)
+  ret void
+}
+
+declare i32 @printf(i8* %0, ...) #1
+
+; Function Attrs: noinline nounwind optnone
+define hidden i32 @main() #0 {
+entry:
+  %retval = alloca i32, align 4
+  store i32 0, i32* %retval, align 4
+  %call = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([594 x i8], [594 x i8]* @.str.1, i32 0, i32 0))
+  call void @draw_yinyang(i32 20, double 5.000000e-02)
+  call void @draw_yinyang(i32 8, double 2.000000e-02)
+  %call1 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([7 x i8], [7 x i8]* @.str.2, i32 0, i32 0))
+  ret i32 0
+}
+
+attributes #0 = { noinline nounwind optnone "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "min-legal-vector-width"="0" "no-infs-fp-math"="false" "no-jump-tables"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #1 = { "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+
+!llvm.module.flags = !{!0}
+!llvm.ident = !{!1}
+
+!0 = !{i32 1, !"wchar_size", i32 4}
+!1 = !{!"clang version 11.0.0 (https://github.com/Jacarte/llvm-project.git 0f6dea67136cc1e0b3d200eb2bb165628970c44b)"}
+
+; extracted candidates
+
+; *****
+; For LLVM instruction:
+;  %0 = load i32, i32* %trans.addr, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %1 = load i32, i32* %trans.addr, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+got 1 candidates from LHS
+
+-------------------------------------------------
+%0:i32 = var
+infer %0
+
+
+--------------------------------
+guess 0
+
+%0:i32 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: -1
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+Dataflow Pruned 0/0
+There are 1 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+#########################################################
+; exiting Souper's runOnFunction() for draw_yinyang()
+
+; entering Souper's runOnFunction() for main()
+
+; ModuleID = './Yin_and_yang.c.bc'
+source_filename = "./Yin_and_yang.c"
+target datalayout = "e-m:e-p:32:32-i64:64-n32:64-S128"
+target triple = "wasm32-unknown-wasi"
+
+@.str = private unnamed_addr constant [62 x i8] c"<use xlink:href='#y' transform='translate(%d,%d) scale(%g)'/>\00", align 1
+@.str.1 = private unnamed_addr constant [594 x i8] c"<?xml version='1.0' encoding='UTF-8' standalone='no'?>\0A<!DOCTYPE svg PUBLIC '-//W3C//DTD SVG 1.1//EN'\0A\09'http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd'>\0A<svg xmlns='http://www.w3.org/2000/svg' version='1.1'\0A\09xmlns:xlink='http://www.w3.org/1999/xlink'\0A\09\09width='30' height='30'>\0A\09<defs><g id='y'>\0A\09\09<circle cx='0' cy='0' r='200' stroke='black'\0A\09\09\09fill='white' stroke-width='1'/>\0A\09\09<path d='M0 -200 A 200 200 0 0 0 0 200\0A\09\09\09100 100 0 0 0 0 0 100 100 0 0 1 0 -200\0A\09\09\09z' fill='black'/>\0A\09\09<circle cx='0' cy='100' r='33' fill='white'/>\0A\09\09<circle cx='0' cy='-100' r='33' fill='black'/>\0A\09</g></defs>\0A\00", align 1
+@.str.2 = private unnamed_addr constant [7 x i8] c"</svg>\00", align 1
+@llvm.used = appending global [1 x i8*] [i8* bitcast (i32 ()* @__main_void to i8*)], section "llvm.metadata"
+
+@__main_void = alias i32 (), i32 ()* @main
+
+; Function Attrs: noinline nounwind optnone
+define hidden void @draw_yinyang(i32 %trans, double %scale) #0 {
+entry:
+  %trans.addr = alloca i32, align 4
+  %scale.addr = alloca double, align 8
+  store i32 %trans, i32* %trans.addr, align 4
+  store double %scale, double* %scale.addr, align 8
+  %0 = load i32, i32* %trans.addr, align 4
+  %1 = load i32, i32* %trans.addr, align 4
+  %2 = load double, double* %scale.addr, align 8
+  %call = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([62 x i8], [62 x i8]* @.str, i32 0, i32 0), i32 %0, i32 %1, double %2)
+  ret void
+}
+
+declare i32 @printf(i8* %0, ...) #1
+
+; Function Attrs: noinline nounwind optnone
+define hidden i32 @main() #0 {
+entry:
+  %retval = alloca i32, align 4
+  store i32 0, i32* %retval, align 4
+  %call = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([594 x i8], [594 x i8]* @.str.1, i32 0, i32 0))
+  call void @draw_yinyang(i32 20, double 5.000000e-02)
+  call void @draw_yinyang(i32 8, double 2.000000e-02)
+  %call1 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([7 x i8], [7 x i8]* @.str.2, i32 0, i32 0))
+  ret i32 0
+}
+
+attributes #0 = { noinline nounwind optnone "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "min-legal-vector-width"="0" "no-infs-fp-math"="false" "no-jump-tables"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #1 = { "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+
+!llvm.module.flags = !{!0}
+!llvm.ident = !{!1}
+
+!0 = !{i32 1, !"wchar_size", i32 4}
+!1 = !{!"clang version 11.0.0 (https://github.com/Jacarte/llvm-project.git 0f6dea67136cc1e0b3d200eb2bb165628970c44b)"}
+
+; extracted candidates
+#########################################################
+; exiting Souper's runOnFunction() for main()
+Total of 0 replacements done on this module
+Total of 0 replacements candidates on this module

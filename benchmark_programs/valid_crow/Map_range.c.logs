@@ -1,0 +1,315 @@
+
+Entering the Souper pass's runOnModule()
+
+
+; entering Souper's runOnFunction() for mapRange()
+
+; ModuleID = './Map_range.c.bc'
+source_filename = "./Map_range.c"
+target datalayout = "e-m:e-p:32:32-i64:64-n32:64-S128"
+target triple = "wasm32-unknown-wasi"
+
+@.str = private unnamed_addr constant [44 x i8] c"Mapping [0,10] to [-1,0] at intervals of 1:\00", align 1
+@.str.1 = private unnamed_addr constant [12 x i8] c"f(%d) = %g\0A\00", align 1
+@llvm.used = appending global [1 x i8*] [i8* bitcast (i32 ()* @__main_void to i8*)], section "llvm.metadata"
+
+@__main_void = alias i32 (), i32 ()* @main
+
+; Function Attrs: noinline nounwind optnone
+define hidden double @mapRange(double %a1, double %a2, double %b1, double %b2, double %s) #0 {
+entry:
+  %a1.addr = alloca double, align 8
+  %a2.addr = alloca double, align 8
+  %b1.addr = alloca double, align 8
+  %b2.addr = alloca double, align 8
+  %s.addr = alloca double, align 8
+  store double %a1, double* %a1.addr, align 8
+  store double %a2, double* %a2.addr, align 8
+  store double %b1, double* %b1.addr, align 8
+  store double %b2, double* %b2.addr, align 8
+  store double %s, double* %s.addr, align 8
+  %0 = load double, double* %b1.addr, align 8
+  %1 = load double, double* %s.addr, align 8
+  %2 = load double, double* %a1.addr, align 8
+  %sub = fsub double %1, %2
+  %3 = load double, double* %b2.addr, align 8
+  %4 = load double, double* %b1.addr, align 8
+  %sub1 = fsub double %3, %4
+  %mul = fmul double %sub, %sub1
+  %5 = load double, double* %a2.addr, align 8
+  %6 = load double, double* %a1.addr, align 8
+  %sub2 = fsub double %5, %6
+  %div = fdiv double %mul, %sub2
+  %add = fadd double %0, %div
+  ret double %add
+}
+
+; Function Attrs: noinline nounwind optnone
+define hidden i32 @main() #0 {
+entry:
+  %retval = alloca i32, align 4
+  %i = alloca i32, align 4
+  store i32 0, i32* %retval, align 4
+  %call = call i32 @puts(i8* getelementptr inbounds ([44 x i8], [44 x i8]* @.str, i32 0, i32 0))
+  store i32 0, i32* %i, align 4
+  br label %for.cond
+
+for.cond:                                         ; preds = %for.inc, %entry
+  %0 = load i32, i32* %i, align 4
+  %cmp = icmp sle i32 %0, 10
+  br i1 %cmp, label %for.body, label %for.end
+
+for.body:                                         ; preds = %for.cond
+  %1 = load i32, i32* %i, align 4
+  %2 = load i32, i32* %i, align 4
+  %conv = sitofp i32 %2 to double
+  %call1 = call double @mapRange(double 0.000000e+00, double 1.000000e+01, double -1.000000e+00, double 0.000000e+00, double %conv)
+  %call2 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([12 x i8], [12 x i8]* @.str.1, i32 0, i32 0), i32 %1, double %call1)
+  br label %for.inc
+
+for.inc:                                          ; preds = %for.body
+  %3 = load i32, i32* %i, align 4
+  %inc = add nsw i32 %3, 1
+  store i32 %inc, i32* %i, align 4
+  br label %for.cond
+
+for.end:                                          ; preds = %for.cond
+  ret i32 0
+}
+
+declare i32 @puts(i8* %0) #1
+
+declare i32 @printf(i8* %0, ...) #1
+
+attributes #0 = { noinline nounwind optnone "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "min-legal-vector-width"="0" "no-infs-fp-math"="false" "no-jump-tables"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #1 = { "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+
+!llvm.module.flags = !{!0}
+!llvm.ident = !{!1}
+
+!0 = !{i32 1, !"wchar_size", i32 4}
+!1 = !{!"clang version 11.0.0 (https://github.com/Jacarte/llvm-project.git 0f6dea67136cc1e0b3d200eb2bb165628970c44b)"}
+
+; extracted candidates
+#########################################################
+; exiting Souper's runOnFunction() for mapRange()
+
+; entering Souper's runOnFunction() for main()
+
+; ModuleID = './Map_range.c.bc'
+source_filename = "./Map_range.c"
+target datalayout = "e-m:e-p:32:32-i64:64-n32:64-S128"
+target triple = "wasm32-unknown-wasi"
+
+@.str = private unnamed_addr constant [44 x i8] c"Mapping [0,10] to [-1,0] at intervals of 1:\00", align 1
+@.str.1 = private unnamed_addr constant [12 x i8] c"f(%d) = %g\0A\00", align 1
+@llvm.used = appending global [1 x i8*] [i8* bitcast (i32 ()* @__main_void to i8*)], section "llvm.metadata"
+
+@__main_void = alias i32 (), i32 ()* @main
+
+; Function Attrs: noinline nounwind optnone
+define hidden double @mapRange(double %a1, double %a2, double %b1, double %b2, double %s) #0 {
+entry:
+  %a1.addr = alloca double, align 8
+  %a2.addr = alloca double, align 8
+  %b1.addr = alloca double, align 8
+  %b2.addr = alloca double, align 8
+  %s.addr = alloca double, align 8
+  store double %a1, double* %a1.addr, align 8
+  store double %a2, double* %a2.addr, align 8
+  store double %b1, double* %b1.addr, align 8
+  store double %b2, double* %b2.addr, align 8
+  store double %s, double* %s.addr, align 8
+  %0 = load double, double* %b1.addr, align 8
+  %1 = load double, double* %s.addr, align 8
+  %2 = load double, double* %a1.addr, align 8
+  %sub = fsub double %1, %2
+  %3 = load double, double* %b2.addr, align 8
+  %4 = load double, double* %b1.addr, align 8
+  %sub1 = fsub double %3, %4
+  %mul = fmul double %sub, %sub1
+  %5 = load double, double* %a2.addr, align 8
+  %6 = load double, double* %a1.addr, align 8
+  %sub2 = fsub double %5, %6
+  %div = fdiv double %mul, %sub2
+  %add = fadd double %0, %div
+  ret double %add
+}
+
+; Function Attrs: noinline nounwind optnone
+define hidden i32 @main() #0 {
+entry:
+  %retval = alloca i32, align 4
+  %i = alloca i32, align 4
+  store i32 0, i32* %retval, align 4
+  %call = call i32 @puts(i8* getelementptr inbounds ([44 x i8], [44 x i8]* @.str, i32 0, i32 0))
+  store i32 0, i32* %i, align 4
+  br label %for.cond
+
+for.cond:                                         ; preds = %for.inc, %entry
+  %0 = load i32, i32* %i, align 4
+  %cmp = icmp sle i32 %0, 10
+  br i1 %cmp, label %for.body, label %for.end
+
+for.body:                                         ; preds = %for.cond
+  %1 = load i32, i32* %i, align 4
+  %2 = load i32, i32* %i, align 4
+  %conv = sitofp i32 %2 to double
+  %call1 = call double @mapRange(double 0.000000e+00, double 1.000000e+01, double -1.000000e+00, double 0.000000e+00, double %conv)
+  %call2 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([12 x i8], [12 x i8]* @.str.1, i32 0, i32 0), i32 %1, double %call1)
+  br label %for.inc
+
+for.inc:                                          ; preds = %for.body
+  %3 = load i32, i32* %i, align 4
+  %inc = add nsw i32 %3, 1
+  store i32 %inc, i32* %i, align 4
+  br label %for.cond
+
+for.end:                                          ; preds = %for.cond
+  ret i32 0
+}
+
+declare i32 @puts(i8* %0) #1
+
+declare i32 @printf(i8* %0, ...) #1
+
+attributes #0 = { noinline nounwind optnone "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "min-legal-vector-width"="0" "no-infs-fp-math"="false" "no-jump-tables"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #1 = { "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+
+!llvm.module.flags = !{!0}
+!llvm.ident = !{!1}
+
+!0 = !{i32 1, !"wchar_size", i32 4}
+!1 = !{!"clang version 11.0.0 (https://github.com/Jacarte/llvm-project.git 0f6dea67136cc1e0b3d200eb2bb165628970c44b)"}
+
+; extracted candidates
+
+; *****
+; For LLVM instruction:
+;  %0 = load i32, i32* %i, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %cmp = icmp sle i32 %0, 10
+; Looking for a replacement for:
+%0:i32 = var
+%1:i1 = sle %0, 10:i32
+infer %1
+
+; *****
+; For LLVM instruction:
+;  %1 = load i32, i32* %i, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %2 = load i32, i32* %i, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %3 = load i32, i32* %i, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %inc = add nsw i32 %3, 1
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = addnsw 1:i32, %0
+infer %1
+got 1 candidates from LHS
+
+-------------------------------------------------
+%0:i32 = var
+infer %0
+
+
+--------------------------------
+guess 0
+
+%0:i32 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: -1
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+Dataflow Pruned 0/0
+There are 1 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 2 candidates from LHS
+
+-------------------------------------------------
+%0:i32 = var
+%1:i1 = sle %0, 10:i32
+infer %1
+
+
+--------------------------------
+guess 0
+
+%0:i1 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: -1
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: 0
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+Dataflow Pruned 0/0
+There are 1 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 2 candidates from LHS
+
+-------------------------------------------------
+%0:i32 = var
+%1:i32 = addnsw 1:i32, %0
+infer %1
+
+
+--------------------------------
+guess 0
+
+%0:i32 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 1
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: 268435457
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+
+--------------------------------
+guess 1
+
+%0:i32 = var
+
+Cost = 0
+second query is SAT-- constant doesn't work
+Dataflow Pruned 0/0
+There are 2 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+#########################################################
+; exiting Souper's runOnFunction() for main()
+Total of 0 replacements done on this module
+Total of 0 replacements candidates on this module

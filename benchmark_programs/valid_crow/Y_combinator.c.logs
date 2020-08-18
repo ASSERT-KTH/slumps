@@ -1,0 +1,2665 @@
+
+Entering the Souper pass's runOnModule()
+
+
+; entering Souper's runOnFunction() for new()
+
+; ModuleID = './Y_combinator.c.bc'
+source_filename = "./Y_combinator.c"
+target datalayout = "e-m:e-p:32:32-i64:64-n32:64-S128"
+target triple = "wasm32-unknown-wasi"
+
+%struct.func_t = type { %struct.func_t* (%struct.func_t*, %struct.func_t*)*, %struct.func_t*, i32 }
+
+@.str = private unnamed_addr constant [4 x i8] c" %d\00", align 1
+@.str.1 = private unnamed_addr constant [6 x i8] c"fac: \00", align 1
+@.str.2 = private unnamed_addr constant [2 x i8] c"\0A\00", align 1
+@.str.3 = private unnamed_addr constant [6 x i8] c"fib: \00", align 1
+@llvm.used = appending global [1 x i8*] [i8* bitcast (i32 ()* @__main_void to i8*)], section "llvm.metadata"
+
+@__main_void = alias i32 (), i32 ()* @main
+
+; Function Attrs: noinline nounwind optnone
+define hidden %struct.func_t* @new(%struct.func_t* (%struct.func_t*, %struct.func_t*)* %f, %struct.func_t* %_) #0 {
+entry:
+  %f.addr = alloca %struct.func_t* (%struct.func_t*, %struct.func_t*)*, align 4
+  %_.addr = alloca %struct.func_t*, align 4
+  %x = alloca %struct.func_t*, align 4
+  store %struct.func_t* (%struct.func_t*, %struct.func_t*)* %f, %struct.func_t* (%struct.func_t*, %struct.func_t*)** %f.addr, align 4
+  store %struct.func_t* %_, %struct.func_t** %_.addr, align 4
+  %call = call noalias i8* @malloc(i32 12)
+  %0 = bitcast i8* %call to %struct.func_t*
+  store %struct.func_t* %0, %struct.func_t** %x, align 4
+  %1 = load %struct.func_t* (%struct.func_t*, %struct.func_t*)*, %struct.func_t* (%struct.func_t*, %struct.func_t*)** %f.addr, align 4
+  %2 = load %struct.func_t*, %struct.func_t** %x, align 4
+  %fn = getelementptr inbounds %struct.func_t, %struct.func_t* %2, i32 0, i32 0
+  store %struct.func_t* (%struct.func_t*, %struct.func_t*)* %1, %struct.func_t* (%struct.func_t*, %struct.func_t*)** %fn, align 4
+  %3 = load %struct.func_t*, %struct.func_t** %_.addr, align 4
+  %4 = load %struct.func_t*, %struct.func_t** %x, align 4
+  %_1 = getelementptr inbounds %struct.func_t, %struct.func_t* %4, i32 0, i32 1
+  store %struct.func_t* %3, %struct.func_t** %_1, align 4
+  %5 = load %struct.func_t*, %struct.func_t** %x, align 4
+  %num = getelementptr inbounds %struct.func_t, %struct.func_t* %5, i32 0, i32 2
+  store i32 0, i32* %num, align 4
+  %6 = load %struct.func_t*, %struct.func_t** %x, align 4
+  ret %struct.func_t* %6
+}
+
+declare noalias i8* @malloc(i32 %0) #1
+
+; Function Attrs: noinline nounwind optnone
+define hidden %struct.func_t* @call(%struct.func_t* %f, %struct.func_t* %n) #0 {
+entry:
+  %f.addr = alloca %struct.func_t*, align 4
+  %n.addr = alloca %struct.func_t*, align 4
+  store %struct.func_t* %f, %struct.func_t** %f.addr, align 4
+  store %struct.func_t* %n, %struct.func_t** %n.addr, align 4
+  %0 = load %struct.func_t*, %struct.func_t** %f.addr, align 4
+  %fn = getelementptr inbounds %struct.func_t, %struct.func_t* %0, i32 0, i32 0
+  %1 = load %struct.func_t* (%struct.func_t*, %struct.func_t*)*, %struct.func_t* (%struct.func_t*, %struct.func_t*)** %fn, align 4
+  %2 = load %struct.func_t*, %struct.func_t** %f.addr, align 4
+  %3 = load %struct.func_t*, %struct.func_t** %n.addr, align 4
+  %call = call %struct.func_t* %1(%struct.func_t* %2, %struct.func_t* %3)
+  ret %struct.func_t* %call
+}
+
+; Function Attrs: noinline nounwind optnone
+define hidden %struct.func_t* @Y(%struct.func_t* (%struct.func_t*, %struct.func_t*)* %f) #0 {
+entry:
+  %f.addr = alloca %struct.func_t* (%struct.func_t*, %struct.func_t*)*, align 4
+  %g = alloca %struct.func_t*, align 4
+  store %struct.func_t* (%struct.func_t*, %struct.func_t*)* %f, %struct.func_t* (%struct.func_t*, %struct.func_t*)** %f.addr, align 4
+  %0 = load %struct.func_t* (%struct.func_t*, %struct.func_t*)*, %struct.func_t* (%struct.func_t*, %struct.func_t*)** %f.addr, align 4
+  %call = call %struct.func_t* @new(%struct.func_t* (%struct.func_t*, %struct.func_t*)* %0, %struct.func_t* null)
+  store %struct.func_t* %call, %struct.func_t** %g, align 4
+  %1 = load %struct.func_t*, %struct.func_t** %g, align 4
+  %2 = load %struct.func_t*, %struct.func_t** %g, align 4
+  %_ = getelementptr inbounds %struct.func_t, %struct.func_t* %2, i32 0, i32 1
+  store %struct.func_t* %1, %struct.func_t** %_, align 4
+  %3 = load %struct.func_t*, %struct.func_t** %g, align 4
+  ret %struct.func_t* %3
+}
+
+; Function Attrs: noinline nounwind optnone
+define hidden %struct.func_t* @num(i32 %n) #0 {
+entry:
+  %n.addr = alloca i32, align 4
+  %x = alloca %struct.func_t*, align 4
+  store i32 %n, i32* %n.addr, align 4
+  %call = call %struct.func_t* @new(%struct.func_t* (%struct.func_t*, %struct.func_t*)* null, %struct.func_t* null)
+  store %struct.func_t* %call, %struct.func_t** %x, align 4
+  %0 = load i32, i32* %n.addr, align 4
+  %1 = load %struct.func_t*, %struct.func_t** %x, align 4
+  %num = getelementptr inbounds %struct.func_t, %struct.func_t* %1, i32 0, i32 2
+  store i32 %0, i32* %num, align 4
+  %2 = load %struct.func_t*, %struct.func_t** %x, align 4
+  ret %struct.func_t* %2
+}
+
+; Function Attrs: noinline nounwind optnone
+define hidden %struct.func_t* @fac(%struct.func_t* %self, %struct.func_t* %n) #0 {
+entry:
+  %self.addr = alloca %struct.func_t*, align 4
+  %n.addr = alloca %struct.func_t*, align 4
+  %nn = alloca i32, align 4
+  store %struct.func_t* %self, %struct.func_t** %self.addr, align 4
+  store %struct.func_t* %n, %struct.func_t** %n.addr, align 4
+  %0 = load %struct.func_t*, %struct.func_t** %n.addr, align 4
+  %num = getelementptr inbounds %struct.func_t, %struct.func_t* %0, i32 0, i32 2
+  %1 = load i32, i32* %num, align 4
+  store i32 %1, i32* %nn, align 4
+  %2 = load i32, i32* %nn, align 4
+  %cmp = icmp sgt i32 %2, 1
+  br i1 %cmp, label %cond.true, label %cond.false
+
+cond.true:                                        ; preds = %entry
+  %3 = load i32, i32* %nn, align 4
+  %4 = load %struct.func_t*, %struct.func_t** %self.addr, align 4
+  %_ = getelementptr inbounds %struct.func_t, %struct.func_t* %4, i32 0, i32 1
+  %5 = load %struct.func_t*, %struct.func_t** %_, align 4
+  %6 = load i32, i32* %nn, align 4
+  %sub = sub nsw i32 %6, 1
+  %call = call %struct.func_t* @num(i32 %sub)
+  %call1 = call %struct.func_t* @call(%struct.func_t* %5, %struct.func_t* %call)
+  %num2 = getelementptr inbounds %struct.func_t, %struct.func_t* %call1, i32 0, i32 2
+  %7 = load i32, i32* %num2, align 4
+  %mul = mul nsw i32 %3, %7
+  %call3 = call %struct.func_t* @num(i32 %mul)
+  br label %cond.end
+
+cond.false:                                       ; preds = %entry
+  %call4 = call %struct.func_t* @num(i32 1)
+  br label %cond.end
+
+cond.end:                                         ; preds = %cond.false, %cond.true
+  %cond = phi %struct.func_t* [ %call3, %cond.true ], [ %call4, %cond.false ]
+  ret %struct.func_t* %cond
+}
+
+; Function Attrs: noinline nounwind optnone
+define hidden %struct.func_t* @fib(%struct.func_t* %self, %struct.func_t* %n) #0 {
+entry:
+  %self.addr = alloca %struct.func_t*, align 4
+  %n.addr = alloca %struct.func_t*, align 4
+  %nn = alloca i32, align 4
+  store %struct.func_t* %self, %struct.func_t** %self.addr, align 4
+  store %struct.func_t* %n, %struct.func_t** %n.addr, align 4
+  %0 = load %struct.func_t*, %struct.func_t** %n.addr, align 4
+  %num = getelementptr inbounds %struct.func_t, %struct.func_t* %0, i32 0, i32 2
+  %1 = load i32, i32* %num, align 4
+  store i32 %1, i32* %nn, align 4
+  %2 = load i32, i32* %nn, align 4
+  %cmp = icmp sgt i32 %2, 1
+  br i1 %cmp, label %cond.true, label %cond.false
+
+cond.true:                                        ; preds = %entry
+  %3 = load %struct.func_t*, %struct.func_t** %self.addr, align 4
+  %_ = getelementptr inbounds %struct.func_t, %struct.func_t* %3, i32 0, i32 1
+  %4 = load %struct.func_t*, %struct.func_t** %_, align 4
+  %5 = load i32, i32* %nn, align 4
+  %sub = sub nsw i32 %5, 1
+  %call = call %struct.func_t* @num(i32 %sub)
+  %call1 = call %struct.func_t* @call(%struct.func_t* %4, %struct.func_t* %call)
+  %num2 = getelementptr inbounds %struct.func_t, %struct.func_t* %call1, i32 0, i32 2
+  %6 = load i32, i32* %num2, align 4
+  %7 = load %struct.func_t*, %struct.func_t** %self.addr, align 4
+  %_3 = getelementptr inbounds %struct.func_t, %struct.func_t* %7, i32 0, i32 1
+  %8 = load %struct.func_t*, %struct.func_t** %_3, align 4
+  %9 = load i32, i32* %nn, align 4
+  %sub4 = sub nsw i32 %9, 2
+  %call5 = call %struct.func_t* @num(i32 %sub4)
+  %call6 = call %struct.func_t* @call(%struct.func_t* %8, %struct.func_t* %call5)
+  %num7 = getelementptr inbounds %struct.func_t, %struct.func_t* %call6, i32 0, i32 2
+  %10 = load i32, i32* %num7, align 4
+  %add = add nsw i32 %6, %10
+  %call8 = call %struct.func_t* @num(i32 %add)
+  br label %cond.end
+
+cond.false:                                       ; preds = %entry
+  %call9 = call %struct.func_t* @num(i32 1)
+  br label %cond.end
+
+cond.end:                                         ; preds = %cond.false, %cond.true
+  %cond = phi %struct.func_t* [ %call8, %cond.true ], [ %call9, %cond.false ]
+  ret %struct.func_t* %cond
+}
+
+; Function Attrs: noinline nounwind optnone
+define hidden void @show(%struct.func_t* %n) #0 {
+entry:
+  %n.addr = alloca %struct.func_t*, align 4
+  store %struct.func_t* %n, %struct.func_t** %n.addr, align 4
+  %0 = load %struct.func_t*, %struct.func_t** %n.addr, align 4
+  %num = getelementptr inbounds %struct.func_t, %struct.func_t* %0, i32 0, i32 2
+  %1 = load i32, i32* %num, align 4
+  %call = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([4 x i8], [4 x i8]* @.str, i32 0, i32 0), i32 %1)
+  ret void
+}
+
+declare i32 @printf(i8* %0, ...) #1
+
+; Function Attrs: noinline nounwind optnone
+define hidden i32 @main() #0 {
+entry:
+  %retval = alloca i32, align 4
+  %i = alloca i32, align 4
+  %f = alloca %struct.func_t*, align 4
+  store i32 0, i32* %retval, align 4
+  %call = call %struct.func_t* @Y(%struct.func_t* (%struct.func_t*, %struct.func_t*)* @fac)
+  store %struct.func_t* %call, %struct.func_t** %f, align 4
+  %call1 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([6 x i8], [6 x i8]* @.str.1, i32 0, i32 0))
+  store i32 1, i32* %i, align 4
+  br label %for.cond
+
+for.cond:                                         ; preds = %for.inc, %entry
+  %0 = load i32, i32* %i, align 4
+  %cmp = icmp slt i32 %0, 10
+  br i1 %cmp, label %for.body, label %for.end
+
+for.body:                                         ; preds = %for.cond
+  %1 = load %struct.func_t*, %struct.func_t** %f, align 4
+  %2 = load i32, i32* %i, align 4
+  %call2 = call %struct.func_t* @num(i32 %2)
+  %call3 = call %struct.func_t* @call(%struct.func_t* %1, %struct.func_t* %call2)
+  call void @show(%struct.func_t* %call3)
+  br label %for.inc
+
+for.inc:                                          ; preds = %for.body
+  %3 = load i32, i32* %i, align 4
+  %inc = add nsw i32 %3, 1
+  store i32 %inc, i32* %i, align 4
+  br label %for.cond
+
+for.end:                                          ; preds = %for.cond
+  %call4 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([2 x i8], [2 x i8]* @.str.2, i32 0, i32 0))
+  %call5 = call %struct.func_t* @Y(%struct.func_t* (%struct.func_t*, %struct.func_t*)* @fib)
+  store %struct.func_t* %call5, %struct.func_t** %f, align 4
+  %call6 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([6 x i8], [6 x i8]* @.str.3, i32 0, i32 0))
+  store i32 1, i32* %i, align 4
+  br label %for.cond7
+
+for.cond7:                                        ; preds = %for.inc12, %for.end
+  %4 = load i32, i32* %i, align 4
+  %cmp8 = icmp slt i32 %4, 10
+  br i1 %cmp8, label %for.body9, label %for.end14
+
+for.body9:                                        ; preds = %for.cond7
+  %5 = load %struct.func_t*, %struct.func_t** %f, align 4
+  %6 = load i32, i32* %i, align 4
+  %call10 = call %struct.func_t* @num(i32 %6)
+  %call11 = call %struct.func_t* @call(%struct.func_t* %5, %struct.func_t* %call10)
+  call void @show(%struct.func_t* %call11)
+  br label %for.inc12
+
+for.inc12:                                        ; preds = %for.body9
+  %7 = load i32, i32* %i, align 4
+  %inc13 = add nsw i32 %7, 1
+  store i32 %inc13, i32* %i, align 4
+  br label %for.cond7
+
+for.end14:                                        ; preds = %for.cond7
+  %call15 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([2 x i8], [2 x i8]* @.str.2, i32 0, i32 0))
+  ret i32 0
+}
+
+attributes #0 = { noinline nounwind optnone "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "min-legal-vector-width"="0" "no-infs-fp-math"="false" "no-jump-tables"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #1 = { "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+
+!llvm.module.flags = !{!0}
+!llvm.ident = !{!1}
+
+!0 = !{i32 1, !"wchar_size", i32 4}
+!1 = !{!"clang version 11.0.0 (https://github.com/Jacarte/llvm-project.git 0f6dea67136cc1e0b3d200eb2bb165628970c44b)"}
+
+; extracted candidates
+#########################################################
+; exiting Souper's runOnFunction() for new()
+
+; entering Souper's runOnFunction() for call()
+
+; ModuleID = './Y_combinator.c.bc'
+source_filename = "./Y_combinator.c"
+target datalayout = "e-m:e-p:32:32-i64:64-n32:64-S128"
+target triple = "wasm32-unknown-wasi"
+
+%struct.func_t = type { %struct.func_t* (%struct.func_t*, %struct.func_t*)*, %struct.func_t*, i32 }
+
+@.str = private unnamed_addr constant [4 x i8] c" %d\00", align 1
+@.str.1 = private unnamed_addr constant [6 x i8] c"fac: \00", align 1
+@.str.2 = private unnamed_addr constant [2 x i8] c"\0A\00", align 1
+@.str.3 = private unnamed_addr constant [6 x i8] c"fib: \00", align 1
+@llvm.used = appending global [1 x i8*] [i8* bitcast (i32 ()* @__main_void to i8*)], section "llvm.metadata"
+
+@__main_void = alias i32 (), i32 ()* @main
+
+; Function Attrs: noinline nounwind optnone
+define hidden %struct.func_t* @new(%struct.func_t* (%struct.func_t*, %struct.func_t*)* %f, %struct.func_t* %_) #0 {
+entry:
+  %f.addr = alloca %struct.func_t* (%struct.func_t*, %struct.func_t*)*, align 4
+  %_.addr = alloca %struct.func_t*, align 4
+  %x = alloca %struct.func_t*, align 4
+  store %struct.func_t* (%struct.func_t*, %struct.func_t*)* %f, %struct.func_t* (%struct.func_t*, %struct.func_t*)** %f.addr, align 4
+  store %struct.func_t* %_, %struct.func_t** %_.addr, align 4
+  %call = call noalias i8* @malloc(i32 12)
+  %0 = bitcast i8* %call to %struct.func_t*
+  store %struct.func_t* %0, %struct.func_t** %x, align 4
+  %1 = load %struct.func_t* (%struct.func_t*, %struct.func_t*)*, %struct.func_t* (%struct.func_t*, %struct.func_t*)** %f.addr, align 4
+  %2 = load %struct.func_t*, %struct.func_t** %x, align 4
+  %fn = getelementptr inbounds %struct.func_t, %struct.func_t* %2, i32 0, i32 0
+  store %struct.func_t* (%struct.func_t*, %struct.func_t*)* %1, %struct.func_t* (%struct.func_t*, %struct.func_t*)** %fn, align 4
+  %3 = load %struct.func_t*, %struct.func_t** %_.addr, align 4
+  %4 = load %struct.func_t*, %struct.func_t** %x, align 4
+  %_1 = getelementptr inbounds %struct.func_t, %struct.func_t* %4, i32 0, i32 1
+  store %struct.func_t* %3, %struct.func_t** %_1, align 4
+  %5 = load %struct.func_t*, %struct.func_t** %x, align 4
+  %num = getelementptr inbounds %struct.func_t, %struct.func_t* %5, i32 0, i32 2
+  store i32 0, i32* %num, align 4
+  %6 = load %struct.func_t*, %struct.func_t** %x, align 4
+  ret %struct.func_t* %6
+}
+
+declare noalias i8* @malloc(i32 %0) #1
+
+; Function Attrs: noinline nounwind optnone
+define hidden %struct.func_t* @call(%struct.func_t* %f, %struct.func_t* %n) #0 {
+entry:
+  %f.addr = alloca %struct.func_t*, align 4
+  %n.addr = alloca %struct.func_t*, align 4
+  store %struct.func_t* %f, %struct.func_t** %f.addr, align 4
+  store %struct.func_t* %n, %struct.func_t** %n.addr, align 4
+  %0 = load %struct.func_t*, %struct.func_t** %f.addr, align 4
+  %fn = getelementptr inbounds %struct.func_t, %struct.func_t* %0, i32 0, i32 0
+  %1 = load %struct.func_t* (%struct.func_t*, %struct.func_t*)*, %struct.func_t* (%struct.func_t*, %struct.func_t*)** %fn, align 4
+  %2 = load %struct.func_t*, %struct.func_t** %f.addr, align 4
+  %3 = load %struct.func_t*, %struct.func_t** %n.addr, align 4
+  %call = call %struct.func_t* %1(%struct.func_t* %2, %struct.func_t* %3)
+  ret %struct.func_t* %call
+}
+
+; Function Attrs: noinline nounwind optnone
+define hidden %struct.func_t* @Y(%struct.func_t* (%struct.func_t*, %struct.func_t*)* %f) #0 {
+entry:
+  %f.addr = alloca %struct.func_t* (%struct.func_t*, %struct.func_t*)*, align 4
+  %g = alloca %struct.func_t*, align 4
+  store %struct.func_t* (%struct.func_t*, %struct.func_t*)* %f, %struct.func_t* (%struct.func_t*, %struct.func_t*)** %f.addr, align 4
+  %0 = load %struct.func_t* (%struct.func_t*, %struct.func_t*)*, %struct.func_t* (%struct.func_t*, %struct.func_t*)** %f.addr, align 4
+  %call = call %struct.func_t* @new(%struct.func_t* (%struct.func_t*, %struct.func_t*)* %0, %struct.func_t* null)
+  store %struct.func_t* %call, %struct.func_t** %g, align 4
+  %1 = load %struct.func_t*, %struct.func_t** %g, align 4
+  %2 = load %struct.func_t*, %struct.func_t** %g, align 4
+  %_ = getelementptr inbounds %struct.func_t, %struct.func_t* %2, i32 0, i32 1
+  store %struct.func_t* %1, %struct.func_t** %_, align 4
+  %3 = load %struct.func_t*, %struct.func_t** %g, align 4
+  ret %struct.func_t* %3
+}
+
+; Function Attrs: noinline nounwind optnone
+define hidden %struct.func_t* @num(i32 %n) #0 {
+entry:
+  %n.addr = alloca i32, align 4
+  %x = alloca %struct.func_t*, align 4
+  store i32 %n, i32* %n.addr, align 4
+  %call = call %struct.func_t* @new(%struct.func_t* (%struct.func_t*, %struct.func_t*)* null, %struct.func_t* null)
+  store %struct.func_t* %call, %struct.func_t** %x, align 4
+  %0 = load i32, i32* %n.addr, align 4
+  %1 = load %struct.func_t*, %struct.func_t** %x, align 4
+  %num = getelementptr inbounds %struct.func_t, %struct.func_t* %1, i32 0, i32 2
+  store i32 %0, i32* %num, align 4
+  %2 = load %struct.func_t*, %struct.func_t** %x, align 4
+  ret %struct.func_t* %2
+}
+
+; Function Attrs: noinline nounwind optnone
+define hidden %struct.func_t* @fac(%struct.func_t* %self, %struct.func_t* %n) #0 {
+entry:
+  %self.addr = alloca %struct.func_t*, align 4
+  %n.addr = alloca %struct.func_t*, align 4
+  %nn = alloca i32, align 4
+  store %struct.func_t* %self, %struct.func_t** %self.addr, align 4
+  store %struct.func_t* %n, %struct.func_t** %n.addr, align 4
+  %0 = load %struct.func_t*, %struct.func_t** %n.addr, align 4
+  %num = getelementptr inbounds %struct.func_t, %struct.func_t* %0, i32 0, i32 2
+  %1 = load i32, i32* %num, align 4
+  store i32 %1, i32* %nn, align 4
+  %2 = load i32, i32* %nn, align 4
+  %cmp = icmp sgt i32 %2, 1
+  br i1 %cmp, label %cond.true, label %cond.false
+
+cond.true:                                        ; preds = %entry
+  %3 = load i32, i32* %nn, align 4
+  %4 = load %struct.func_t*, %struct.func_t** %self.addr, align 4
+  %_ = getelementptr inbounds %struct.func_t, %struct.func_t* %4, i32 0, i32 1
+  %5 = load %struct.func_t*, %struct.func_t** %_, align 4
+  %6 = load i32, i32* %nn, align 4
+  %sub = sub nsw i32 %6, 1
+  %call = call %struct.func_t* @num(i32 %sub)
+  %call1 = call %struct.func_t* @call(%struct.func_t* %5, %struct.func_t* %call)
+  %num2 = getelementptr inbounds %struct.func_t, %struct.func_t* %call1, i32 0, i32 2
+  %7 = load i32, i32* %num2, align 4
+  %mul = mul nsw i32 %3, %7
+  %call3 = call %struct.func_t* @num(i32 %mul)
+  br label %cond.end
+
+cond.false:                                       ; preds = %entry
+  %call4 = call %struct.func_t* @num(i32 1)
+  br label %cond.end
+
+cond.end:                                         ; preds = %cond.false, %cond.true
+  %cond = phi %struct.func_t* [ %call3, %cond.true ], [ %call4, %cond.false ]
+  ret %struct.func_t* %cond
+}
+
+; Function Attrs: noinline nounwind optnone
+define hidden %struct.func_t* @fib(%struct.func_t* %self, %struct.func_t* %n) #0 {
+entry:
+  %self.addr = alloca %struct.func_t*, align 4
+  %n.addr = alloca %struct.func_t*, align 4
+  %nn = alloca i32, align 4
+  store %struct.func_t* %self, %struct.func_t** %self.addr, align 4
+  store %struct.func_t* %n, %struct.func_t** %n.addr, align 4
+  %0 = load %struct.func_t*, %struct.func_t** %n.addr, align 4
+  %num = getelementptr inbounds %struct.func_t, %struct.func_t* %0, i32 0, i32 2
+  %1 = load i32, i32* %num, align 4
+  store i32 %1, i32* %nn, align 4
+  %2 = load i32, i32* %nn, align 4
+  %cmp = icmp sgt i32 %2, 1
+  br i1 %cmp, label %cond.true, label %cond.false
+
+cond.true:                                        ; preds = %entry
+  %3 = load %struct.func_t*, %struct.func_t** %self.addr, align 4
+  %_ = getelementptr inbounds %struct.func_t, %struct.func_t* %3, i32 0, i32 1
+  %4 = load %struct.func_t*, %struct.func_t** %_, align 4
+  %5 = load i32, i32* %nn, align 4
+  %sub = sub nsw i32 %5, 1
+  %call = call %struct.func_t* @num(i32 %sub)
+  %call1 = call %struct.func_t* @call(%struct.func_t* %4, %struct.func_t* %call)
+  %num2 = getelementptr inbounds %struct.func_t, %struct.func_t* %call1, i32 0, i32 2
+  %6 = load i32, i32* %num2, align 4
+  %7 = load %struct.func_t*, %struct.func_t** %self.addr, align 4
+  %_3 = getelementptr inbounds %struct.func_t, %struct.func_t* %7, i32 0, i32 1
+  %8 = load %struct.func_t*, %struct.func_t** %_3, align 4
+  %9 = load i32, i32* %nn, align 4
+  %sub4 = sub nsw i32 %9, 2
+  %call5 = call %struct.func_t* @num(i32 %sub4)
+  %call6 = call %struct.func_t* @call(%struct.func_t* %8, %struct.func_t* %call5)
+  %num7 = getelementptr inbounds %struct.func_t, %struct.func_t* %call6, i32 0, i32 2
+  %10 = load i32, i32* %num7, align 4
+  %add = add nsw i32 %6, %10
+  %call8 = call %struct.func_t* @num(i32 %add)
+  br label %cond.end
+
+cond.false:                                       ; preds = %entry
+  %call9 = call %struct.func_t* @num(i32 1)
+  br label %cond.end
+
+cond.end:                                         ; preds = %cond.false, %cond.true
+  %cond = phi %struct.func_t* [ %call8, %cond.true ], [ %call9, %cond.false ]
+  ret %struct.func_t* %cond
+}
+
+; Function Attrs: noinline nounwind optnone
+define hidden void @show(%struct.func_t* %n) #0 {
+entry:
+  %n.addr = alloca %struct.func_t*, align 4
+  store %struct.func_t* %n, %struct.func_t** %n.addr, align 4
+  %0 = load %struct.func_t*, %struct.func_t** %n.addr, align 4
+  %num = getelementptr inbounds %struct.func_t, %struct.func_t* %0, i32 0, i32 2
+  %1 = load i32, i32* %num, align 4
+  %call = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([4 x i8], [4 x i8]* @.str, i32 0, i32 0), i32 %1)
+  ret void
+}
+
+declare i32 @printf(i8* %0, ...) #1
+
+; Function Attrs: noinline nounwind optnone
+define hidden i32 @main() #0 {
+entry:
+  %retval = alloca i32, align 4
+  %i = alloca i32, align 4
+  %f = alloca %struct.func_t*, align 4
+  store i32 0, i32* %retval, align 4
+  %call = call %struct.func_t* @Y(%struct.func_t* (%struct.func_t*, %struct.func_t*)* @fac)
+  store %struct.func_t* %call, %struct.func_t** %f, align 4
+  %call1 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([6 x i8], [6 x i8]* @.str.1, i32 0, i32 0))
+  store i32 1, i32* %i, align 4
+  br label %for.cond
+
+for.cond:                                         ; preds = %for.inc, %entry
+  %0 = load i32, i32* %i, align 4
+  %cmp = icmp slt i32 %0, 10
+  br i1 %cmp, label %for.body, label %for.end
+
+for.body:                                         ; preds = %for.cond
+  %1 = load %struct.func_t*, %struct.func_t** %f, align 4
+  %2 = load i32, i32* %i, align 4
+  %call2 = call %struct.func_t* @num(i32 %2)
+  %call3 = call %struct.func_t* @call(%struct.func_t* %1, %struct.func_t* %call2)
+  call void @show(%struct.func_t* %call3)
+  br label %for.inc
+
+for.inc:                                          ; preds = %for.body
+  %3 = load i32, i32* %i, align 4
+  %inc = add nsw i32 %3, 1
+  store i32 %inc, i32* %i, align 4
+  br label %for.cond
+
+for.end:                                          ; preds = %for.cond
+  %call4 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([2 x i8], [2 x i8]* @.str.2, i32 0, i32 0))
+  %call5 = call %struct.func_t* @Y(%struct.func_t* (%struct.func_t*, %struct.func_t*)* @fib)
+  store %struct.func_t* %call5, %struct.func_t** %f, align 4
+  %call6 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([6 x i8], [6 x i8]* @.str.3, i32 0, i32 0))
+  store i32 1, i32* %i, align 4
+  br label %for.cond7
+
+for.cond7:                                        ; preds = %for.inc12, %for.end
+  %4 = load i32, i32* %i, align 4
+  %cmp8 = icmp slt i32 %4, 10
+  br i1 %cmp8, label %for.body9, label %for.end14
+
+for.body9:                                        ; preds = %for.cond7
+  %5 = load %struct.func_t*, %struct.func_t** %f, align 4
+  %6 = load i32, i32* %i, align 4
+  %call10 = call %struct.func_t* @num(i32 %6)
+  %call11 = call %struct.func_t* @call(%struct.func_t* %5, %struct.func_t* %call10)
+  call void @show(%struct.func_t* %call11)
+  br label %for.inc12
+
+for.inc12:                                        ; preds = %for.body9
+  %7 = load i32, i32* %i, align 4
+  %inc13 = add nsw i32 %7, 1
+  store i32 %inc13, i32* %i, align 4
+  br label %for.cond7
+
+for.end14:                                        ; preds = %for.cond7
+  %call15 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([2 x i8], [2 x i8]* @.str.2, i32 0, i32 0))
+  ret i32 0
+}
+
+attributes #0 = { noinline nounwind optnone "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "min-legal-vector-width"="0" "no-infs-fp-math"="false" "no-jump-tables"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #1 = { "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+
+!llvm.module.flags = !{!0}
+!llvm.ident = !{!1}
+
+!0 = !{i32 1, !"wchar_size", i32 4}
+!1 = !{!"clang version 11.0.0 (https://github.com/Jacarte/llvm-project.git 0f6dea67136cc1e0b3d200eb2bb165628970c44b)"}
+
+; extracted candidates
+#########################################################
+; exiting Souper's runOnFunction() for call()
+
+; entering Souper's runOnFunction() for Y()
+
+; ModuleID = './Y_combinator.c.bc'
+source_filename = "./Y_combinator.c"
+target datalayout = "e-m:e-p:32:32-i64:64-n32:64-S128"
+target triple = "wasm32-unknown-wasi"
+
+%struct.func_t = type { %struct.func_t* (%struct.func_t*, %struct.func_t*)*, %struct.func_t*, i32 }
+
+@.str = private unnamed_addr constant [4 x i8] c" %d\00", align 1
+@.str.1 = private unnamed_addr constant [6 x i8] c"fac: \00", align 1
+@.str.2 = private unnamed_addr constant [2 x i8] c"\0A\00", align 1
+@.str.3 = private unnamed_addr constant [6 x i8] c"fib: \00", align 1
+@llvm.used = appending global [1 x i8*] [i8* bitcast (i32 ()* @__main_void to i8*)], section "llvm.metadata"
+
+@__main_void = alias i32 (), i32 ()* @main
+
+; Function Attrs: noinline nounwind optnone
+define hidden %struct.func_t* @new(%struct.func_t* (%struct.func_t*, %struct.func_t*)* %f, %struct.func_t* %_) #0 {
+entry:
+  %f.addr = alloca %struct.func_t* (%struct.func_t*, %struct.func_t*)*, align 4
+  %_.addr = alloca %struct.func_t*, align 4
+  %x = alloca %struct.func_t*, align 4
+  store %struct.func_t* (%struct.func_t*, %struct.func_t*)* %f, %struct.func_t* (%struct.func_t*, %struct.func_t*)** %f.addr, align 4
+  store %struct.func_t* %_, %struct.func_t** %_.addr, align 4
+  %call = call noalias i8* @malloc(i32 12)
+  %0 = bitcast i8* %call to %struct.func_t*
+  store %struct.func_t* %0, %struct.func_t** %x, align 4
+  %1 = load %struct.func_t* (%struct.func_t*, %struct.func_t*)*, %struct.func_t* (%struct.func_t*, %struct.func_t*)** %f.addr, align 4
+  %2 = load %struct.func_t*, %struct.func_t** %x, align 4
+  %fn = getelementptr inbounds %struct.func_t, %struct.func_t* %2, i32 0, i32 0
+  store %struct.func_t* (%struct.func_t*, %struct.func_t*)* %1, %struct.func_t* (%struct.func_t*, %struct.func_t*)** %fn, align 4
+  %3 = load %struct.func_t*, %struct.func_t** %_.addr, align 4
+  %4 = load %struct.func_t*, %struct.func_t** %x, align 4
+  %_1 = getelementptr inbounds %struct.func_t, %struct.func_t* %4, i32 0, i32 1
+  store %struct.func_t* %3, %struct.func_t** %_1, align 4
+  %5 = load %struct.func_t*, %struct.func_t** %x, align 4
+  %num = getelementptr inbounds %struct.func_t, %struct.func_t* %5, i32 0, i32 2
+  store i32 0, i32* %num, align 4
+  %6 = load %struct.func_t*, %struct.func_t** %x, align 4
+  ret %struct.func_t* %6
+}
+
+declare noalias i8* @malloc(i32 %0) #1
+
+; Function Attrs: noinline nounwind optnone
+define hidden %struct.func_t* @call(%struct.func_t* %f, %struct.func_t* %n) #0 {
+entry:
+  %f.addr = alloca %struct.func_t*, align 4
+  %n.addr = alloca %struct.func_t*, align 4
+  store %struct.func_t* %f, %struct.func_t** %f.addr, align 4
+  store %struct.func_t* %n, %struct.func_t** %n.addr, align 4
+  %0 = load %struct.func_t*, %struct.func_t** %f.addr, align 4
+  %fn = getelementptr inbounds %struct.func_t, %struct.func_t* %0, i32 0, i32 0
+  %1 = load %struct.func_t* (%struct.func_t*, %struct.func_t*)*, %struct.func_t* (%struct.func_t*, %struct.func_t*)** %fn, align 4
+  %2 = load %struct.func_t*, %struct.func_t** %f.addr, align 4
+  %3 = load %struct.func_t*, %struct.func_t** %n.addr, align 4
+  %call = call %struct.func_t* %1(%struct.func_t* %2, %struct.func_t* %3)
+  ret %struct.func_t* %call
+}
+
+; Function Attrs: noinline nounwind optnone
+define hidden %struct.func_t* @Y(%struct.func_t* (%struct.func_t*, %struct.func_t*)* %f) #0 {
+entry:
+  %f.addr = alloca %struct.func_t* (%struct.func_t*, %struct.func_t*)*, align 4
+  %g = alloca %struct.func_t*, align 4
+  store %struct.func_t* (%struct.func_t*, %struct.func_t*)* %f, %struct.func_t* (%struct.func_t*, %struct.func_t*)** %f.addr, align 4
+  %0 = load %struct.func_t* (%struct.func_t*, %struct.func_t*)*, %struct.func_t* (%struct.func_t*, %struct.func_t*)** %f.addr, align 4
+  %call = call %struct.func_t* @new(%struct.func_t* (%struct.func_t*, %struct.func_t*)* %0, %struct.func_t* null)
+  store %struct.func_t* %call, %struct.func_t** %g, align 4
+  %1 = load %struct.func_t*, %struct.func_t** %g, align 4
+  %2 = load %struct.func_t*, %struct.func_t** %g, align 4
+  %_ = getelementptr inbounds %struct.func_t, %struct.func_t* %2, i32 0, i32 1
+  store %struct.func_t* %1, %struct.func_t** %_, align 4
+  %3 = load %struct.func_t*, %struct.func_t** %g, align 4
+  ret %struct.func_t* %3
+}
+
+; Function Attrs: noinline nounwind optnone
+define hidden %struct.func_t* @num(i32 %n) #0 {
+entry:
+  %n.addr = alloca i32, align 4
+  %x = alloca %struct.func_t*, align 4
+  store i32 %n, i32* %n.addr, align 4
+  %call = call %struct.func_t* @new(%struct.func_t* (%struct.func_t*, %struct.func_t*)* null, %struct.func_t* null)
+  store %struct.func_t* %call, %struct.func_t** %x, align 4
+  %0 = load i32, i32* %n.addr, align 4
+  %1 = load %struct.func_t*, %struct.func_t** %x, align 4
+  %num = getelementptr inbounds %struct.func_t, %struct.func_t* %1, i32 0, i32 2
+  store i32 %0, i32* %num, align 4
+  %2 = load %struct.func_t*, %struct.func_t** %x, align 4
+  ret %struct.func_t* %2
+}
+
+; Function Attrs: noinline nounwind optnone
+define hidden %struct.func_t* @fac(%struct.func_t* %self, %struct.func_t* %n) #0 {
+entry:
+  %self.addr = alloca %struct.func_t*, align 4
+  %n.addr = alloca %struct.func_t*, align 4
+  %nn = alloca i32, align 4
+  store %struct.func_t* %self, %struct.func_t** %self.addr, align 4
+  store %struct.func_t* %n, %struct.func_t** %n.addr, align 4
+  %0 = load %struct.func_t*, %struct.func_t** %n.addr, align 4
+  %num = getelementptr inbounds %struct.func_t, %struct.func_t* %0, i32 0, i32 2
+  %1 = load i32, i32* %num, align 4
+  store i32 %1, i32* %nn, align 4
+  %2 = load i32, i32* %nn, align 4
+  %cmp = icmp sgt i32 %2, 1
+  br i1 %cmp, label %cond.true, label %cond.false
+
+cond.true:                                        ; preds = %entry
+  %3 = load i32, i32* %nn, align 4
+  %4 = load %struct.func_t*, %struct.func_t** %self.addr, align 4
+  %_ = getelementptr inbounds %struct.func_t, %struct.func_t* %4, i32 0, i32 1
+  %5 = load %struct.func_t*, %struct.func_t** %_, align 4
+  %6 = load i32, i32* %nn, align 4
+  %sub = sub nsw i32 %6, 1
+  %call = call %struct.func_t* @num(i32 %sub)
+  %call1 = call %struct.func_t* @call(%struct.func_t* %5, %struct.func_t* %call)
+  %num2 = getelementptr inbounds %struct.func_t, %struct.func_t* %call1, i32 0, i32 2
+  %7 = load i32, i32* %num2, align 4
+  %mul = mul nsw i32 %3, %7
+  %call3 = call %struct.func_t* @num(i32 %mul)
+  br label %cond.end
+
+cond.false:                                       ; preds = %entry
+  %call4 = call %struct.func_t* @num(i32 1)
+  br label %cond.end
+
+cond.end:                                         ; preds = %cond.false, %cond.true
+  %cond = phi %struct.func_t* [ %call3, %cond.true ], [ %call4, %cond.false ]
+  ret %struct.func_t* %cond
+}
+
+; Function Attrs: noinline nounwind optnone
+define hidden %struct.func_t* @fib(%struct.func_t* %self, %struct.func_t* %n) #0 {
+entry:
+  %self.addr = alloca %struct.func_t*, align 4
+  %n.addr = alloca %struct.func_t*, align 4
+  %nn = alloca i32, align 4
+  store %struct.func_t* %self, %struct.func_t** %self.addr, align 4
+  store %struct.func_t* %n, %struct.func_t** %n.addr, align 4
+  %0 = load %struct.func_t*, %struct.func_t** %n.addr, align 4
+  %num = getelementptr inbounds %struct.func_t, %struct.func_t* %0, i32 0, i32 2
+  %1 = load i32, i32* %num, align 4
+  store i32 %1, i32* %nn, align 4
+  %2 = load i32, i32* %nn, align 4
+  %cmp = icmp sgt i32 %2, 1
+  br i1 %cmp, label %cond.true, label %cond.false
+
+cond.true:                                        ; preds = %entry
+  %3 = load %struct.func_t*, %struct.func_t** %self.addr, align 4
+  %_ = getelementptr inbounds %struct.func_t, %struct.func_t* %3, i32 0, i32 1
+  %4 = load %struct.func_t*, %struct.func_t** %_, align 4
+  %5 = load i32, i32* %nn, align 4
+  %sub = sub nsw i32 %5, 1
+  %call = call %struct.func_t* @num(i32 %sub)
+  %call1 = call %struct.func_t* @call(%struct.func_t* %4, %struct.func_t* %call)
+  %num2 = getelementptr inbounds %struct.func_t, %struct.func_t* %call1, i32 0, i32 2
+  %6 = load i32, i32* %num2, align 4
+  %7 = load %struct.func_t*, %struct.func_t** %self.addr, align 4
+  %_3 = getelementptr inbounds %struct.func_t, %struct.func_t* %7, i32 0, i32 1
+  %8 = load %struct.func_t*, %struct.func_t** %_3, align 4
+  %9 = load i32, i32* %nn, align 4
+  %sub4 = sub nsw i32 %9, 2
+  %call5 = call %struct.func_t* @num(i32 %sub4)
+  %call6 = call %struct.func_t* @call(%struct.func_t* %8, %struct.func_t* %call5)
+  %num7 = getelementptr inbounds %struct.func_t, %struct.func_t* %call6, i32 0, i32 2
+  %10 = load i32, i32* %num7, align 4
+  %add = add nsw i32 %6, %10
+  %call8 = call %struct.func_t* @num(i32 %add)
+  br label %cond.end
+
+cond.false:                                       ; preds = %entry
+  %call9 = call %struct.func_t* @num(i32 1)
+  br label %cond.end
+
+cond.end:                                         ; preds = %cond.false, %cond.true
+  %cond = phi %struct.func_t* [ %call8, %cond.true ], [ %call9, %cond.false ]
+  ret %struct.func_t* %cond
+}
+
+; Function Attrs: noinline nounwind optnone
+define hidden void @show(%struct.func_t* %n) #0 {
+entry:
+  %n.addr = alloca %struct.func_t*, align 4
+  store %struct.func_t* %n, %struct.func_t** %n.addr, align 4
+  %0 = load %struct.func_t*, %struct.func_t** %n.addr, align 4
+  %num = getelementptr inbounds %struct.func_t, %struct.func_t* %0, i32 0, i32 2
+  %1 = load i32, i32* %num, align 4
+  %call = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([4 x i8], [4 x i8]* @.str, i32 0, i32 0), i32 %1)
+  ret void
+}
+
+declare i32 @printf(i8* %0, ...) #1
+
+; Function Attrs: noinline nounwind optnone
+define hidden i32 @main() #0 {
+entry:
+  %retval = alloca i32, align 4
+  %i = alloca i32, align 4
+  %f = alloca %struct.func_t*, align 4
+  store i32 0, i32* %retval, align 4
+  %call = call %struct.func_t* @Y(%struct.func_t* (%struct.func_t*, %struct.func_t*)* @fac)
+  store %struct.func_t* %call, %struct.func_t** %f, align 4
+  %call1 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([6 x i8], [6 x i8]* @.str.1, i32 0, i32 0))
+  store i32 1, i32* %i, align 4
+  br label %for.cond
+
+for.cond:                                         ; preds = %for.inc, %entry
+  %0 = load i32, i32* %i, align 4
+  %cmp = icmp slt i32 %0, 10
+  br i1 %cmp, label %for.body, label %for.end
+
+for.body:                                         ; preds = %for.cond
+  %1 = load %struct.func_t*, %struct.func_t** %f, align 4
+  %2 = load i32, i32* %i, align 4
+  %call2 = call %struct.func_t* @num(i32 %2)
+  %call3 = call %struct.func_t* @call(%struct.func_t* %1, %struct.func_t* %call2)
+  call void @show(%struct.func_t* %call3)
+  br label %for.inc
+
+for.inc:                                          ; preds = %for.body
+  %3 = load i32, i32* %i, align 4
+  %inc = add nsw i32 %3, 1
+  store i32 %inc, i32* %i, align 4
+  br label %for.cond
+
+for.end:                                          ; preds = %for.cond
+  %call4 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([2 x i8], [2 x i8]* @.str.2, i32 0, i32 0))
+  %call5 = call %struct.func_t* @Y(%struct.func_t* (%struct.func_t*, %struct.func_t*)* @fib)
+  store %struct.func_t* %call5, %struct.func_t** %f, align 4
+  %call6 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([6 x i8], [6 x i8]* @.str.3, i32 0, i32 0))
+  store i32 1, i32* %i, align 4
+  br label %for.cond7
+
+for.cond7:                                        ; preds = %for.inc12, %for.end
+  %4 = load i32, i32* %i, align 4
+  %cmp8 = icmp slt i32 %4, 10
+  br i1 %cmp8, label %for.body9, label %for.end14
+
+for.body9:                                        ; preds = %for.cond7
+  %5 = load %struct.func_t*, %struct.func_t** %f, align 4
+  %6 = load i32, i32* %i, align 4
+  %call10 = call %struct.func_t* @num(i32 %6)
+  %call11 = call %struct.func_t* @call(%struct.func_t* %5, %struct.func_t* %call10)
+  call void @show(%struct.func_t* %call11)
+  br label %for.inc12
+
+for.inc12:                                        ; preds = %for.body9
+  %7 = load i32, i32* %i, align 4
+  %inc13 = add nsw i32 %7, 1
+  store i32 %inc13, i32* %i, align 4
+  br label %for.cond7
+
+for.end14:                                        ; preds = %for.cond7
+  %call15 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([2 x i8], [2 x i8]* @.str.2, i32 0, i32 0))
+  ret i32 0
+}
+
+attributes #0 = { noinline nounwind optnone "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "min-legal-vector-width"="0" "no-infs-fp-math"="false" "no-jump-tables"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #1 = { "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+
+!llvm.module.flags = !{!0}
+!llvm.ident = !{!1}
+
+!0 = !{i32 1, !"wchar_size", i32 4}
+!1 = !{!"clang version 11.0.0 (https://github.com/Jacarte/llvm-project.git 0f6dea67136cc1e0b3d200eb2bb165628970c44b)"}
+
+; extracted candidates
+#########################################################
+; exiting Souper's runOnFunction() for Y()
+
+; entering Souper's runOnFunction() for num()
+
+; ModuleID = './Y_combinator.c.bc'
+source_filename = "./Y_combinator.c"
+target datalayout = "e-m:e-p:32:32-i64:64-n32:64-S128"
+target triple = "wasm32-unknown-wasi"
+
+%struct.func_t = type { %struct.func_t* (%struct.func_t*, %struct.func_t*)*, %struct.func_t*, i32 }
+
+@.str = private unnamed_addr constant [4 x i8] c" %d\00", align 1
+@.str.1 = private unnamed_addr constant [6 x i8] c"fac: \00", align 1
+@.str.2 = private unnamed_addr constant [2 x i8] c"\0A\00", align 1
+@.str.3 = private unnamed_addr constant [6 x i8] c"fib: \00", align 1
+@llvm.used = appending global [1 x i8*] [i8* bitcast (i32 ()* @__main_void to i8*)], section "llvm.metadata"
+
+@__main_void = alias i32 (), i32 ()* @main
+
+; Function Attrs: noinline nounwind optnone
+define hidden %struct.func_t* @new(%struct.func_t* (%struct.func_t*, %struct.func_t*)* %f, %struct.func_t* %_) #0 {
+entry:
+  %f.addr = alloca %struct.func_t* (%struct.func_t*, %struct.func_t*)*, align 4
+  %_.addr = alloca %struct.func_t*, align 4
+  %x = alloca %struct.func_t*, align 4
+  store %struct.func_t* (%struct.func_t*, %struct.func_t*)* %f, %struct.func_t* (%struct.func_t*, %struct.func_t*)** %f.addr, align 4
+  store %struct.func_t* %_, %struct.func_t** %_.addr, align 4
+  %call = call noalias i8* @malloc(i32 12)
+  %0 = bitcast i8* %call to %struct.func_t*
+  store %struct.func_t* %0, %struct.func_t** %x, align 4
+  %1 = load %struct.func_t* (%struct.func_t*, %struct.func_t*)*, %struct.func_t* (%struct.func_t*, %struct.func_t*)** %f.addr, align 4
+  %2 = load %struct.func_t*, %struct.func_t** %x, align 4
+  %fn = getelementptr inbounds %struct.func_t, %struct.func_t* %2, i32 0, i32 0
+  store %struct.func_t* (%struct.func_t*, %struct.func_t*)* %1, %struct.func_t* (%struct.func_t*, %struct.func_t*)** %fn, align 4
+  %3 = load %struct.func_t*, %struct.func_t** %_.addr, align 4
+  %4 = load %struct.func_t*, %struct.func_t** %x, align 4
+  %_1 = getelementptr inbounds %struct.func_t, %struct.func_t* %4, i32 0, i32 1
+  store %struct.func_t* %3, %struct.func_t** %_1, align 4
+  %5 = load %struct.func_t*, %struct.func_t** %x, align 4
+  %num = getelementptr inbounds %struct.func_t, %struct.func_t* %5, i32 0, i32 2
+  store i32 0, i32* %num, align 4
+  %6 = load %struct.func_t*, %struct.func_t** %x, align 4
+  ret %struct.func_t* %6
+}
+
+declare noalias i8* @malloc(i32 %0) #1
+
+; Function Attrs: noinline nounwind optnone
+define hidden %struct.func_t* @call(%struct.func_t* %f, %struct.func_t* %n) #0 {
+entry:
+  %f.addr = alloca %struct.func_t*, align 4
+  %n.addr = alloca %struct.func_t*, align 4
+  store %struct.func_t* %f, %struct.func_t** %f.addr, align 4
+  store %struct.func_t* %n, %struct.func_t** %n.addr, align 4
+  %0 = load %struct.func_t*, %struct.func_t** %f.addr, align 4
+  %fn = getelementptr inbounds %struct.func_t, %struct.func_t* %0, i32 0, i32 0
+  %1 = load %struct.func_t* (%struct.func_t*, %struct.func_t*)*, %struct.func_t* (%struct.func_t*, %struct.func_t*)** %fn, align 4
+  %2 = load %struct.func_t*, %struct.func_t** %f.addr, align 4
+  %3 = load %struct.func_t*, %struct.func_t** %n.addr, align 4
+  %call = call %struct.func_t* %1(%struct.func_t* %2, %struct.func_t* %3)
+  ret %struct.func_t* %call
+}
+
+; Function Attrs: noinline nounwind optnone
+define hidden %struct.func_t* @Y(%struct.func_t* (%struct.func_t*, %struct.func_t*)* %f) #0 {
+entry:
+  %f.addr = alloca %struct.func_t* (%struct.func_t*, %struct.func_t*)*, align 4
+  %g = alloca %struct.func_t*, align 4
+  store %struct.func_t* (%struct.func_t*, %struct.func_t*)* %f, %struct.func_t* (%struct.func_t*, %struct.func_t*)** %f.addr, align 4
+  %0 = load %struct.func_t* (%struct.func_t*, %struct.func_t*)*, %struct.func_t* (%struct.func_t*, %struct.func_t*)** %f.addr, align 4
+  %call = call %struct.func_t* @new(%struct.func_t* (%struct.func_t*, %struct.func_t*)* %0, %struct.func_t* null)
+  store %struct.func_t* %call, %struct.func_t** %g, align 4
+  %1 = load %struct.func_t*, %struct.func_t** %g, align 4
+  %2 = load %struct.func_t*, %struct.func_t** %g, align 4
+  %_ = getelementptr inbounds %struct.func_t, %struct.func_t* %2, i32 0, i32 1
+  store %struct.func_t* %1, %struct.func_t** %_, align 4
+  %3 = load %struct.func_t*, %struct.func_t** %g, align 4
+  ret %struct.func_t* %3
+}
+
+; Function Attrs: noinline nounwind optnone
+define hidden %struct.func_t* @num(i32 %n) #0 {
+entry:
+  %n.addr = alloca i32, align 4
+  %x = alloca %struct.func_t*, align 4
+  store i32 %n, i32* %n.addr, align 4
+  %call = call %struct.func_t* @new(%struct.func_t* (%struct.func_t*, %struct.func_t*)* null, %struct.func_t* null)
+  store %struct.func_t* %call, %struct.func_t** %x, align 4
+  %0 = load i32, i32* %n.addr, align 4
+  %1 = load %struct.func_t*, %struct.func_t** %x, align 4
+  %num = getelementptr inbounds %struct.func_t, %struct.func_t* %1, i32 0, i32 2
+  store i32 %0, i32* %num, align 4
+  %2 = load %struct.func_t*, %struct.func_t** %x, align 4
+  ret %struct.func_t* %2
+}
+
+; Function Attrs: noinline nounwind optnone
+define hidden %struct.func_t* @fac(%struct.func_t* %self, %struct.func_t* %n) #0 {
+entry:
+  %self.addr = alloca %struct.func_t*, align 4
+  %n.addr = alloca %struct.func_t*, align 4
+  %nn = alloca i32, align 4
+  store %struct.func_t* %self, %struct.func_t** %self.addr, align 4
+  store %struct.func_t* %n, %struct.func_t** %n.addr, align 4
+  %0 = load %struct.func_t*, %struct.func_t** %n.addr, align 4
+  %num = getelementptr inbounds %struct.func_t, %struct.func_t* %0, i32 0, i32 2
+  %1 = load i32, i32* %num, align 4
+  store i32 %1, i32* %nn, align 4
+  %2 = load i32, i32* %nn, align 4
+  %cmp = icmp sgt i32 %2, 1
+  br i1 %cmp, label %cond.true, label %cond.false
+
+cond.true:                                        ; preds = %entry
+  %3 = load i32, i32* %nn, align 4
+  %4 = load %struct.func_t*, %struct.func_t** %self.addr, align 4
+  %_ = getelementptr inbounds %struct.func_t, %struct.func_t* %4, i32 0, i32 1
+  %5 = load %struct.func_t*, %struct.func_t** %_, align 4
+  %6 = load i32, i32* %nn, align 4
+  %sub = sub nsw i32 %6, 1
+  %call = call %struct.func_t* @num(i32 %sub)
+  %call1 = call %struct.func_t* @call(%struct.func_t* %5, %struct.func_t* %call)
+  %num2 = getelementptr inbounds %struct.func_t, %struct.func_t* %call1, i32 0, i32 2
+  %7 = load i32, i32* %num2, align 4
+  %mul = mul nsw i32 %3, %7
+  %call3 = call %struct.func_t* @num(i32 %mul)
+  br label %cond.end
+
+cond.false:                                       ; preds = %entry
+  %call4 = call %struct.func_t* @num(i32 1)
+  br label %cond.end
+
+cond.end:                                         ; preds = %cond.false, %cond.true
+  %cond = phi %struct.func_t* [ %call3, %cond.true ], [ %call4, %cond.false ]
+  ret %struct.func_t* %cond
+}
+
+; Function Attrs: noinline nounwind optnone
+define hidden %struct.func_t* @fib(%struct.func_t* %self, %struct.func_t* %n) #0 {
+entry:
+  %self.addr = alloca %struct.func_t*, align 4
+  %n.addr = alloca %struct.func_t*, align 4
+  %nn = alloca i32, align 4
+  store %struct.func_t* %self, %struct.func_t** %self.addr, align 4
+  store %struct.func_t* %n, %struct.func_t** %n.addr, align 4
+  %0 = load %struct.func_t*, %struct.func_t** %n.addr, align 4
+  %num = getelementptr inbounds %struct.func_t, %struct.func_t* %0, i32 0, i32 2
+  %1 = load i32, i32* %num, align 4
+  store i32 %1, i32* %nn, align 4
+  %2 = load i32, i32* %nn, align 4
+  %cmp = icmp sgt i32 %2, 1
+  br i1 %cmp, label %cond.true, label %cond.false
+
+cond.true:                                        ; preds = %entry
+  %3 = load %struct.func_t*, %struct.func_t** %self.addr, align 4
+  %_ = getelementptr inbounds %struct.func_t, %struct.func_t* %3, i32 0, i32 1
+  %4 = load %struct.func_t*, %struct.func_t** %_, align 4
+  %5 = load i32, i32* %nn, align 4
+  %sub = sub nsw i32 %5, 1
+  %call = call %struct.func_t* @num(i32 %sub)
+  %call1 = call %struct.func_t* @call(%struct.func_t* %4, %struct.func_t* %call)
+  %num2 = getelementptr inbounds %struct.func_t, %struct.func_t* %call1, i32 0, i32 2
+  %6 = load i32, i32* %num2, align 4
+  %7 = load %struct.func_t*, %struct.func_t** %self.addr, align 4
+  %_3 = getelementptr inbounds %struct.func_t, %struct.func_t* %7, i32 0, i32 1
+  %8 = load %struct.func_t*, %struct.func_t** %_3, align 4
+  %9 = load i32, i32* %nn, align 4
+  %sub4 = sub nsw i32 %9, 2
+  %call5 = call %struct.func_t* @num(i32 %sub4)
+  %call6 = call %struct.func_t* @call(%struct.func_t* %8, %struct.func_t* %call5)
+  %num7 = getelementptr inbounds %struct.func_t, %struct.func_t* %call6, i32 0, i32 2
+  %10 = load i32, i32* %num7, align 4
+  %add = add nsw i32 %6, %10
+  %call8 = call %struct.func_t* @num(i32 %add)
+  br label %cond.end
+
+cond.false:                                       ; preds = %entry
+  %call9 = call %struct.func_t* @num(i32 1)
+  br label %cond.end
+
+cond.end:                                         ; preds = %cond.false, %cond.true
+  %cond = phi %struct.func_t* [ %call8, %cond.true ], [ %call9, %cond.false ]
+  ret %struct.func_t* %cond
+}
+
+; Function Attrs: noinline nounwind optnone
+define hidden void @show(%struct.func_t* %n) #0 {
+entry:
+  %n.addr = alloca %struct.func_t*, align 4
+  store %struct.func_t* %n, %struct.func_t** %n.addr, align 4
+  %0 = load %struct.func_t*, %struct.func_t** %n.addr, align 4
+  %num = getelementptr inbounds %struct.func_t, %struct.func_t* %0, i32 0, i32 2
+  %1 = load i32, i32* %num, align 4
+  %call = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([4 x i8], [4 x i8]* @.str, i32 0, i32 0), i32 %1)
+  ret void
+}
+
+declare i32 @printf(i8* %0, ...) #1
+
+; Function Attrs: noinline nounwind optnone
+define hidden i32 @main() #0 {
+entry:
+  %retval = alloca i32, align 4
+  %i = alloca i32, align 4
+  %f = alloca %struct.func_t*, align 4
+  store i32 0, i32* %retval, align 4
+  %call = call %struct.func_t* @Y(%struct.func_t* (%struct.func_t*, %struct.func_t*)* @fac)
+  store %struct.func_t* %call, %struct.func_t** %f, align 4
+  %call1 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([6 x i8], [6 x i8]* @.str.1, i32 0, i32 0))
+  store i32 1, i32* %i, align 4
+  br label %for.cond
+
+for.cond:                                         ; preds = %for.inc, %entry
+  %0 = load i32, i32* %i, align 4
+  %cmp = icmp slt i32 %0, 10
+  br i1 %cmp, label %for.body, label %for.end
+
+for.body:                                         ; preds = %for.cond
+  %1 = load %struct.func_t*, %struct.func_t** %f, align 4
+  %2 = load i32, i32* %i, align 4
+  %call2 = call %struct.func_t* @num(i32 %2)
+  %call3 = call %struct.func_t* @call(%struct.func_t* %1, %struct.func_t* %call2)
+  call void @show(%struct.func_t* %call3)
+  br label %for.inc
+
+for.inc:                                          ; preds = %for.body
+  %3 = load i32, i32* %i, align 4
+  %inc = add nsw i32 %3, 1
+  store i32 %inc, i32* %i, align 4
+  br label %for.cond
+
+for.end:                                          ; preds = %for.cond
+  %call4 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([2 x i8], [2 x i8]* @.str.2, i32 0, i32 0))
+  %call5 = call %struct.func_t* @Y(%struct.func_t* (%struct.func_t*, %struct.func_t*)* @fib)
+  store %struct.func_t* %call5, %struct.func_t** %f, align 4
+  %call6 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([6 x i8], [6 x i8]* @.str.3, i32 0, i32 0))
+  store i32 1, i32* %i, align 4
+  br label %for.cond7
+
+for.cond7:                                        ; preds = %for.inc12, %for.end
+  %4 = load i32, i32* %i, align 4
+  %cmp8 = icmp slt i32 %4, 10
+  br i1 %cmp8, label %for.body9, label %for.end14
+
+for.body9:                                        ; preds = %for.cond7
+  %5 = load %struct.func_t*, %struct.func_t** %f, align 4
+  %6 = load i32, i32* %i, align 4
+  %call10 = call %struct.func_t* @num(i32 %6)
+  %call11 = call %struct.func_t* @call(%struct.func_t* %5, %struct.func_t* %call10)
+  call void @show(%struct.func_t* %call11)
+  br label %for.inc12
+
+for.inc12:                                        ; preds = %for.body9
+  %7 = load i32, i32* %i, align 4
+  %inc13 = add nsw i32 %7, 1
+  store i32 %inc13, i32* %i, align 4
+  br label %for.cond7
+
+for.end14:                                        ; preds = %for.cond7
+  %call15 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([2 x i8], [2 x i8]* @.str.2, i32 0, i32 0))
+  ret i32 0
+}
+
+attributes #0 = { noinline nounwind optnone "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "min-legal-vector-width"="0" "no-infs-fp-math"="false" "no-jump-tables"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #1 = { "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+
+!llvm.module.flags = !{!0}
+!llvm.ident = !{!1}
+
+!0 = !{i32 1, !"wchar_size", i32 4}
+!1 = !{!"clang version 11.0.0 (https://github.com/Jacarte/llvm-project.git 0f6dea67136cc1e0b3d200eb2bb165628970c44b)"}
+
+; extracted candidates
+
+; *****
+; For LLVM instruction:
+;  %0 = load i32, i32* %n.addr, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+got 1 candidates from LHS
+
+-------------------------------------------------
+%0:i32 = var
+infer %0
+
+
+--------------------------------
+guess 0
+
+%0:i32 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: -1
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+Dataflow Pruned 0/0
+There are 1 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+#########################################################
+; exiting Souper's runOnFunction() for num()
+
+; entering Souper's runOnFunction() for fac()
+
+; ModuleID = './Y_combinator.c.bc'
+source_filename = "./Y_combinator.c"
+target datalayout = "e-m:e-p:32:32-i64:64-n32:64-S128"
+target triple = "wasm32-unknown-wasi"
+
+%struct.func_t = type { %struct.func_t* (%struct.func_t*, %struct.func_t*)*, %struct.func_t*, i32 }
+
+@.str = private unnamed_addr constant [4 x i8] c" %d\00", align 1
+@.str.1 = private unnamed_addr constant [6 x i8] c"fac: \00", align 1
+@.str.2 = private unnamed_addr constant [2 x i8] c"\0A\00", align 1
+@.str.3 = private unnamed_addr constant [6 x i8] c"fib: \00", align 1
+@llvm.used = appending global [1 x i8*] [i8* bitcast (i32 ()* @__main_void to i8*)], section "llvm.metadata"
+
+@__main_void = alias i32 (), i32 ()* @main
+
+; Function Attrs: noinline nounwind optnone
+define hidden %struct.func_t* @new(%struct.func_t* (%struct.func_t*, %struct.func_t*)* %f, %struct.func_t* %_) #0 {
+entry:
+  %f.addr = alloca %struct.func_t* (%struct.func_t*, %struct.func_t*)*, align 4
+  %_.addr = alloca %struct.func_t*, align 4
+  %x = alloca %struct.func_t*, align 4
+  store %struct.func_t* (%struct.func_t*, %struct.func_t*)* %f, %struct.func_t* (%struct.func_t*, %struct.func_t*)** %f.addr, align 4
+  store %struct.func_t* %_, %struct.func_t** %_.addr, align 4
+  %call = call noalias i8* @malloc(i32 12)
+  %0 = bitcast i8* %call to %struct.func_t*
+  store %struct.func_t* %0, %struct.func_t** %x, align 4
+  %1 = load %struct.func_t* (%struct.func_t*, %struct.func_t*)*, %struct.func_t* (%struct.func_t*, %struct.func_t*)** %f.addr, align 4
+  %2 = load %struct.func_t*, %struct.func_t** %x, align 4
+  %fn = getelementptr inbounds %struct.func_t, %struct.func_t* %2, i32 0, i32 0
+  store %struct.func_t* (%struct.func_t*, %struct.func_t*)* %1, %struct.func_t* (%struct.func_t*, %struct.func_t*)** %fn, align 4
+  %3 = load %struct.func_t*, %struct.func_t** %_.addr, align 4
+  %4 = load %struct.func_t*, %struct.func_t** %x, align 4
+  %_1 = getelementptr inbounds %struct.func_t, %struct.func_t* %4, i32 0, i32 1
+  store %struct.func_t* %3, %struct.func_t** %_1, align 4
+  %5 = load %struct.func_t*, %struct.func_t** %x, align 4
+  %num = getelementptr inbounds %struct.func_t, %struct.func_t* %5, i32 0, i32 2
+  store i32 0, i32* %num, align 4
+  %6 = load %struct.func_t*, %struct.func_t** %x, align 4
+  ret %struct.func_t* %6
+}
+
+declare noalias i8* @malloc(i32 %0) #1
+
+; Function Attrs: noinline nounwind optnone
+define hidden %struct.func_t* @call(%struct.func_t* %f, %struct.func_t* %n) #0 {
+entry:
+  %f.addr = alloca %struct.func_t*, align 4
+  %n.addr = alloca %struct.func_t*, align 4
+  store %struct.func_t* %f, %struct.func_t** %f.addr, align 4
+  store %struct.func_t* %n, %struct.func_t** %n.addr, align 4
+  %0 = load %struct.func_t*, %struct.func_t** %f.addr, align 4
+  %fn = getelementptr inbounds %struct.func_t, %struct.func_t* %0, i32 0, i32 0
+  %1 = load %struct.func_t* (%struct.func_t*, %struct.func_t*)*, %struct.func_t* (%struct.func_t*, %struct.func_t*)** %fn, align 4
+  %2 = load %struct.func_t*, %struct.func_t** %f.addr, align 4
+  %3 = load %struct.func_t*, %struct.func_t** %n.addr, align 4
+  %call = call %struct.func_t* %1(%struct.func_t* %2, %struct.func_t* %3)
+  ret %struct.func_t* %call
+}
+
+; Function Attrs: noinline nounwind optnone
+define hidden %struct.func_t* @Y(%struct.func_t* (%struct.func_t*, %struct.func_t*)* %f) #0 {
+entry:
+  %f.addr = alloca %struct.func_t* (%struct.func_t*, %struct.func_t*)*, align 4
+  %g = alloca %struct.func_t*, align 4
+  store %struct.func_t* (%struct.func_t*, %struct.func_t*)* %f, %struct.func_t* (%struct.func_t*, %struct.func_t*)** %f.addr, align 4
+  %0 = load %struct.func_t* (%struct.func_t*, %struct.func_t*)*, %struct.func_t* (%struct.func_t*, %struct.func_t*)** %f.addr, align 4
+  %call = call %struct.func_t* @new(%struct.func_t* (%struct.func_t*, %struct.func_t*)* %0, %struct.func_t* null)
+  store %struct.func_t* %call, %struct.func_t** %g, align 4
+  %1 = load %struct.func_t*, %struct.func_t** %g, align 4
+  %2 = load %struct.func_t*, %struct.func_t** %g, align 4
+  %_ = getelementptr inbounds %struct.func_t, %struct.func_t* %2, i32 0, i32 1
+  store %struct.func_t* %1, %struct.func_t** %_, align 4
+  %3 = load %struct.func_t*, %struct.func_t** %g, align 4
+  ret %struct.func_t* %3
+}
+
+; Function Attrs: noinline nounwind optnone
+define hidden %struct.func_t* @num(i32 %n) #0 {
+entry:
+  %n.addr = alloca i32, align 4
+  %x = alloca %struct.func_t*, align 4
+  store i32 %n, i32* %n.addr, align 4
+  %call = call %struct.func_t* @new(%struct.func_t* (%struct.func_t*, %struct.func_t*)* null, %struct.func_t* null)
+  store %struct.func_t* %call, %struct.func_t** %x, align 4
+  %0 = load i32, i32* %n.addr, align 4
+  %1 = load %struct.func_t*, %struct.func_t** %x, align 4
+  %num = getelementptr inbounds %struct.func_t, %struct.func_t* %1, i32 0, i32 2
+  store i32 %0, i32* %num, align 4
+  %2 = load %struct.func_t*, %struct.func_t** %x, align 4
+  ret %struct.func_t* %2
+}
+
+; Function Attrs: noinline nounwind optnone
+define hidden %struct.func_t* @fac(%struct.func_t* %self, %struct.func_t* %n) #0 {
+entry:
+  %self.addr = alloca %struct.func_t*, align 4
+  %n.addr = alloca %struct.func_t*, align 4
+  %nn = alloca i32, align 4
+  store %struct.func_t* %self, %struct.func_t** %self.addr, align 4
+  store %struct.func_t* %n, %struct.func_t** %n.addr, align 4
+  %0 = load %struct.func_t*, %struct.func_t** %n.addr, align 4
+  %num = getelementptr inbounds %struct.func_t, %struct.func_t* %0, i32 0, i32 2
+  %1 = load i32, i32* %num, align 4
+  store i32 %1, i32* %nn, align 4
+  %2 = load i32, i32* %nn, align 4
+  %cmp = icmp sgt i32 %2, 1
+  br i1 %cmp, label %cond.true, label %cond.false
+
+cond.true:                                        ; preds = %entry
+  %3 = load i32, i32* %nn, align 4
+  %4 = load %struct.func_t*, %struct.func_t** %self.addr, align 4
+  %_ = getelementptr inbounds %struct.func_t, %struct.func_t* %4, i32 0, i32 1
+  %5 = load %struct.func_t*, %struct.func_t** %_, align 4
+  %6 = load i32, i32* %nn, align 4
+  %sub = sub nsw i32 %6, 1
+  %call = call %struct.func_t* @num(i32 %sub)
+  %call1 = call %struct.func_t* @call(%struct.func_t* %5, %struct.func_t* %call)
+  %num2 = getelementptr inbounds %struct.func_t, %struct.func_t* %call1, i32 0, i32 2
+  %7 = load i32, i32* %num2, align 4
+  %mul = mul nsw i32 %3, %7
+  %call3 = call %struct.func_t* @num(i32 %mul)
+  br label %cond.end
+
+cond.false:                                       ; preds = %entry
+  %call4 = call %struct.func_t* @num(i32 1)
+  br label %cond.end
+
+cond.end:                                         ; preds = %cond.false, %cond.true
+  %cond = phi %struct.func_t* [ %call3, %cond.true ], [ %call4, %cond.false ]
+  ret %struct.func_t* %cond
+}
+
+; Function Attrs: noinline nounwind optnone
+define hidden %struct.func_t* @fib(%struct.func_t* %self, %struct.func_t* %n) #0 {
+entry:
+  %self.addr = alloca %struct.func_t*, align 4
+  %n.addr = alloca %struct.func_t*, align 4
+  %nn = alloca i32, align 4
+  store %struct.func_t* %self, %struct.func_t** %self.addr, align 4
+  store %struct.func_t* %n, %struct.func_t** %n.addr, align 4
+  %0 = load %struct.func_t*, %struct.func_t** %n.addr, align 4
+  %num = getelementptr inbounds %struct.func_t, %struct.func_t* %0, i32 0, i32 2
+  %1 = load i32, i32* %num, align 4
+  store i32 %1, i32* %nn, align 4
+  %2 = load i32, i32* %nn, align 4
+  %cmp = icmp sgt i32 %2, 1
+  br i1 %cmp, label %cond.true, label %cond.false
+
+cond.true:                                        ; preds = %entry
+  %3 = load %struct.func_t*, %struct.func_t** %self.addr, align 4
+  %_ = getelementptr inbounds %struct.func_t, %struct.func_t* %3, i32 0, i32 1
+  %4 = load %struct.func_t*, %struct.func_t** %_, align 4
+  %5 = load i32, i32* %nn, align 4
+  %sub = sub nsw i32 %5, 1
+  %call = call %struct.func_t* @num(i32 %sub)
+  %call1 = call %struct.func_t* @call(%struct.func_t* %4, %struct.func_t* %call)
+  %num2 = getelementptr inbounds %struct.func_t, %struct.func_t* %call1, i32 0, i32 2
+  %6 = load i32, i32* %num2, align 4
+  %7 = load %struct.func_t*, %struct.func_t** %self.addr, align 4
+  %_3 = getelementptr inbounds %struct.func_t, %struct.func_t* %7, i32 0, i32 1
+  %8 = load %struct.func_t*, %struct.func_t** %_3, align 4
+  %9 = load i32, i32* %nn, align 4
+  %sub4 = sub nsw i32 %9, 2
+  %call5 = call %struct.func_t* @num(i32 %sub4)
+  %call6 = call %struct.func_t* @call(%struct.func_t* %8, %struct.func_t* %call5)
+  %num7 = getelementptr inbounds %struct.func_t, %struct.func_t* %call6, i32 0, i32 2
+  %10 = load i32, i32* %num7, align 4
+  %add = add nsw i32 %6, %10
+  %call8 = call %struct.func_t* @num(i32 %add)
+  br label %cond.end
+
+cond.false:                                       ; preds = %entry
+  %call9 = call %struct.func_t* @num(i32 1)
+  br label %cond.end
+
+cond.end:                                         ; preds = %cond.false, %cond.true
+  %cond = phi %struct.func_t* [ %call8, %cond.true ], [ %call9, %cond.false ]
+  ret %struct.func_t* %cond
+}
+
+; Function Attrs: noinline nounwind optnone
+define hidden void @show(%struct.func_t* %n) #0 {
+entry:
+  %n.addr = alloca %struct.func_t*, align 4
+  store %struct.func_t* %n, %struct.func_t** %n.addr, align 4
+  %0 = load %struct.func_t*, %struct.func_t** %n.addr, align 4
+  %num = getelementptr inbounds %struct.func_t, %struct.func_t* %0, i32 0, i32 2
+  %1 = load i32, i32* %num, align 4
+  %call = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([4 x i8], [4 x i8]* @.str, i32 0, i32 0), i32 %1)
+  ret void
+}
+
+declare i32 @printf(i8* %0, ...) #1
+
+; Function Attrs: noinline nounwind optnone
+define hidden i32 @main() #0 {
+entry:
+  %retval = alloca i32, align 4
+  %i = alloca i32, align 4
+  %f = alloca %struct.func_t*, align 4
+  store i32 0, i32* %retval, align 4
+  %call = call %struct.func_t* @Y(%struct.func_t* (%struct.func_t*, %struct.func_t*)* @fac)
+  store %struct.func_t* %call, %struct.func_t** %f, align 4
+  %call1 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([6 x i8], [6 x i8]* @.str.1, i32 0, i32 0))
+  store i32 1, i32* %i, align 4
+  br label %for.cond
+
+for.cond:                                         ; preds = %for.inc, %entry
+  %0 = load i32, i32* %i, align 4
+  %cmp = icmp slt i32 %0, 10
+  br i1 %cmp, label %for.body, label %for.end
+
+for.body:                                         ; preds = %for.cond
+  %1 = load %struct.func_t*, %struct.func_t** %f, align 4
+  %2 = load i32, i32* %i, align 4
+  %call2 = call %struct.func_t* @num(i32 %2)
+  %call3 = call %struct.func_t* @call(%struct.func_t* %1, %struct.func_t* %call2)
+  call void @show(%struct.func_t* %call3)
+  br label %for.inc
+
+for.inc:                                          ; preds = %for.body
+  %3 = load i32, i32* %i, align 4
+  %inc = add nsw i32 %3, 1
+  store i32 %inc, i32* %i, align 4
+  br label %for.cond
+
+for.end:                                          ; preds = %for.cond
+  %call4 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([2 x i8], [2 x i8]* @.str.2, i32 0, i32 0))
+  %call5 = call %struct.func_t* @Y(%struct.func_t* (%struct.func_t*, %struct.func_t*)* @fib)
+  store %struct.func_t* %call5, %struct.func_t** %f, align 4
+  %call6 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([6 x i8], [6 x i8]* @.str.3, i32 0, i32 0))
+  store i32 1, i32* %i, align 4
+  br label %for.cond7
+
+for.cond7:                                        ; preds = %for.inc12, %for.end
+  %4 = load i32, i32* %i, align 4
+  %cmp8 = icmp slt i32 %4, 10
+  br i1 %cmp8, label %for.body9, label %for.end14
+
+for.body9:                                        ; preds = %for.cond7
+  %5 = load %struct.func_t*, %struct.func_t** %f, align 4
+  %6 = load i32, i32* %i, align 4
+  %call10 = call %struct.func_t* @num(i32 %6)
+  %call11 = call %struct.func_t* @call(%struct.func_t* %5, %struct.func_t* %call10)
+  call void @show(%struct.func_t* %call11)
+  br label %for.inc12
+
+for.inc12:                                        ; preds = %for.body9
+  %7 = load i32, i32* %i, align 4
+  %inc13 = add nsw i32 %7, 1
+  store i32 %inc13, i32* %i, align 4
+  br label %for.cond7
+
+for.end14:                                        ; preds = %for.cond7
+  %call15 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([2 x i8], [2 x i8]* @.str.2, i32 0, i32 0))
+  ret i32 0
+}
+
+attributes #0 = { noinline nounwind optnone "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "min-legal-vector-width"="0" "no-infs-fp-math"="false" "no-jump-tables"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #1 = { "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+
+!llvm.module.flags = !{!0}
+!llvm.ident = !{!1}
+
+!0 = !{i32 1, !"wchar_size", i32 4}
+!1 = !{!"clang version 11.0.0 (https://github.com/Jacarte/llvm-project.git 0f6dea67136cc1e0b3d200eb2bb165628970c44b)"}
+
+; extracted candidates
+
+; *****
+; For LLVM instruction:
+;  %1 = load i32, i32* %num, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %2 = load i32, i32* %nn, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %cmp = icmp sgt i32 %2, 1
+; Looking for a replacement for:
+%0:i32 = var
+%1:i1 = slt 1:i32, %0
+infer %1
+
+; *****
+; For LLVM instruction:
+;  %3 = load i32, i32* %nn, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %6 = load i32, i32* %nn, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %sub = sub nsw i32 %6, 1
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = subnsw %0, 1:i32
+infer %1
+
+; *****
+; For LLVM instruction:
+;  %7 = load i32, i32* %num2, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %mul = mul nsw i32 %3, %7
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = var
+%2:i32 = mulnsw %0, %1
+infer %2
+got 2 candidates from LHS
+
+-------------------------------------------------
+%0:i32 = var
+%1:i1 = slt 1:i32, %0
+infer %1
+
+
+--------------------------------
+guess 0
+
+%0:i1 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: -1
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+Dataflow Pruned 0/0
+There are 1 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 2 candidates from LHS
+
+-------------------------------------------------
+%0:i32 = var
+%1:i32 = subnsw %0, 1:i32
+infer %1
+
+
+--------------------------------
+guess 0
+
+%0:i32 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: -1
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: 536870911
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+
+--------------------------------
+guess 1
+
+%0:i32 = var
+
+Cost = 0
+second query is SAT-- constant doesn't work
+Dataflow Pruned 0/0
+There are 2 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 3 candidates from LHS
+
+-------------------------------------------------
+%0:i32 = var
+%1:i32 = var
+%2:i32 = mulnsw %0, %1
+infer %2
+
+
+--------------------------------
+guess 0
+
+%0:i32 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+ConstantSynthesis: solver returns error on second query
+
+--------------------------------
+guess 1
+
+%0:i32 = var
+
+Cost = 0
+second query is SAT-- constant doesn't work
+
+--------------------------------
+guess 2
+
+%0:i32 = var
+
+Cost = 0
+verification query failed!
+Dataflow Pruned 0/0
+There are 3 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+#########################################################
+; exiting Souper's runOnFunction() for fac()
+
+; entering Souper's runOnFunction() for fib()
+
+; ModuleID = './Y_combinator.c.bc'
+source_filename = "./Y_combinator.c"
+target datalayout = "e-m:e-p:32:32-i64:64-n32:64-S128"
+target triple = "wasm32-unknown-wasi"
+
+%struct.func_t = type { %struct.func_t* (%struct.func_t*, %struct.func_t*)*, %struct.func_t*, i32 }
+
+@.str = private unnamed_addr constant [4 x i8] c" %d\00", align 1
+@.str.1 = private unnamed_addr constant [6 x i8] c"fac: \00", align 1
+@.str.2 = private unnamed_addr constant [2 x i8] c"\0A\00", align 1
+@.str.3 = private unnamed_addr constant [6 x i8] c"fib: \00", align 1
+@llvm.used = appending global [1 x i8*] [i8* bitcast (i32 ()* @__main_void to i8*)], section "llvm.metadata"
+
+@__main_void = alias i32 (), i32 ()* @main
+
+; Function Attrs: noinline nounwind optnone
+define hidden %struct.func_t* @new(%struct.func_t* (%struct.func_t*, %struct.func_t*)* %f, %struct.func_t* %_) #0 {
+entry:
+  %f.addr = alloca %struct.func_t* (%struct.func_t*, %struct.func_t*)*, align 4
+  %_.addr = alloca %struct.func_t*, align 4
+  %x = alloca %struct.func_t*, align 4
+  store %struct.func_t* (%struct.func_t*, %struct.func_t*)* %f, %struct.func_t* (%struct.func_t*, %struct.func_t*)** %f.addr, align 4
+  store %struct.func_t* %_, %struct.func_t** %_.addr, align 4
+  %call = call noalias i8* @malloc(i32 12)
+  %0 = bitcast i8* %call to %struct.func_t*
+  store %struct.func_t* %0, %struct.func_t** %x, align 4
+  %1 = load %struct.func_t* (%struct.func_t*, %struct.func_t*)*, %struct.func_t* (%struct.func_t*, %struct.func_t*)** %f.addr, align 4
+  %2 = load %struct.func_t*, %struct.func_t** %x, align 4
+  %fn = getelementptr inbounds %struct.func_t, %struct.func_t* %2, i32 0, i32 0
+  store %struct.func_t* (%struct.func_t*, %struct.func_t*)* %1, %struct.func_t* (%struct.func_t*, %struct.func_t*)** %fn, align 4
+  %3 = load %struct.func_t*, %struct.func_t** %_.addr, align 4
+  %4 = load %struct.func_t*, %struct.func_t** %x, align 4
+  %_1 = getelementptr inbounds %struct.func_t, %struct.func_t* %4, i32 0, i32 1
+  store %struct.func_t* %3, %struct.func_t** %_1, align 4
+  %5 = load %struct.func_t*, %struct.func_t** %x, align 4
+  %num = getelementptr inbounds %struct.func_t, %struct.func_t* %5, i32 0, i32 2
+  store i32 0, i32* %num, align 4
+  %6 = load %struct.func_t*, %struct.func_t** %x, align 4
+  ret %struct.func_t* %6
+}
+
+declare noalias i8* @malloc(i32 %0) #1
+
+; Function Attrs: noinline nounwind optnone
+define hidden %struct.func_t* @call(%struct.func_t* %f, %struct.func_t* %n) #0 {
+entry:
+  %f.addr = alloca %struct.func_t*, align 4
+  %n.addr = alloca %struct.func_t*, align 4
+  store %struct.func_t* %f, %struct.func_t** %f.addr, align 4
+  store %struct.func_t* %n, %struct.func_t** %n.addr, align 4
+  %0 = load %struct.func_t*, %struct.func_t** %f.addr, align 4
+  %fn = getelementptr inbounds %struct.func_t, %struct.func_t* %0, i32 0, i32 0
+  %1 = load %struct.func_t* (%struct.func_t*, %struct.func_t*)*, %struct.func_t* (%struct.func_t*, %struct.func_t*)** %fn, align 4
+  %2 = load %struct.func_t*, %struct.func_t** %f.addr, align 4
+  %3 = load %struct.func_t*, %struct.func_t** %n.addr, align 4
+  %call = call %struct.func_t* %1(%struct.func_t* %2, %struct.func_t* %3)
+  ret %struct.func_t* %call
+}
+
+; Function Attrs: noinline nounwind optnone
+define hidden %struct.func_t* @Y(%struct.func_t* (%struct.func_t*, %struct.func_t*)* %f) #0 {
+entry:
+  %f.addr = alloca %struct.func_t* (%struct.func_t*, %struct.func_t*)*, align 4
+  %g = alloca %struct.func_t*, align 4
+  store %struct.func_t* (%struct.func_t*, %struct.func_t*)* %f, %struct.func_t* (%struct.func_t*, %struct.func_t*)** %f.addr, align 4
+  %0 = load %struct.func_t* (%struct.func_t*, %struct.func_t*)*, %struct.func_t* (%struct.func_t*, %struct.func_t*)** %f.addr, align 4
+  %call = call %struct.func_t* @new(%struct.func_t* (%struct.func_t*, %struct.func_t*)* %0, %struct.func_t* null)
+  store %struct.func_t* %call, %struct.func_t** %g, align 4
+  %1 = load %struct.func_t*, %struct.func_t** %g, align 4
+  %2 = load %struct.func_t*, %struct.func_t** %g, align 4
+  %_ = getelementptr inbounds %struct.func_t, %struct.func_t* %2, i32 0, i32 1
+  store %struct.func_t* %1, %struct.func_t** %_, align 4
+  %3 = load %struct.func_t*, %struct.func_t** %g, align 4
+  ret %struct.func_t* %3
+}
+
+; Function Attrs: noinline nounwind optnone
+define hidden %struct.func_t* @num(i32 %n) #0 {
+entry:
+  %n.addr = alloca i32, align 4
+  %x = alloca %struct.func_t*, align 4
+  store i32 %n, i32* %n.addr, align 4
+  %call = call %struct.func_t* @new(%struct.func_t* (%struct.func_t*, %struct.func_t*)* null, %struct.func_t* null)
+  store %struct.func_t* %call, %struct.func_t** %x, align 4
+  %0 = load i32, i32* %n.addr, align 4
+  %1 = load %struct.func_t*, %struct.func_t** %x, align 4
+  %num = getelementptr inbounds %struct.func_t, %struct.func_t* %1, i32 0, i32 2
+  store i32 %0, i32* %num, align 4
+  %2 = load %struct.func_t*, %struct.func_t** %x, align 4
+  ret %struct.func_t* %2
+}
+
+; Function Attrs: noinline nounwind optnone
+define hidden %struct.func_t* @fac(%struct.func_t* %self, %struct.func_t* %n) #0 {
+entry:
+  %self.addr = alloca %struct.func_t*, align 4
+  %n.addr = alloca %struct.func_t*, align 4
+  %nn = alloca i32, align 4
+  store %struct.func_t* %self, %struct.func_t** %self.addr, align 4
+  store %struct.func_t* %n, %struct.func_t** %n.addr, align 4
+  %0 = load %struct.func_t*, %struct.func_t** %n.addr, align 4
+  %num = getelementptr inbounds %struct.func_t, %struct.func_t* %0, i32 0, i32 2
+  %1 = load i32, i32* %num, align 4
+  store i32 %1, i32* %nn, align 4
+  %2 = load i32, i32* %nn, align 4
+  %cmp = icmp sgt i32 %2, 1
+  br i1 %cmp, label %cond.true, label %cond.false
+
+cond.true:                                        ; preds = %entry
+  %3 = load i32, i32* %nn, align 4
+  %4 = load %struct.func_t*, %struct.func_t** %self.addr, align 4
+  %_ = getelementptr inbounds %struct.func_t, %struct.func_t* %4, i32 0, i32 1
+  %5 = load %struct.func_t*, %struct.func_t** %_, align 4
+  %6 = load i32, i32* %nn, align 4
+  %sub = sub nsw i32 %6, 1
+  %call = call %struct.func_t* @num(i32 %sub)
+  %call1 = call %struct.func_t* @call(%struct.func_t* %5, %struct.func_t* %call)
+  %num2 = getelementptr inbounds %struct.func_t, %struct.func_t* %call1, i32 0, i32 2
+  %7 = load i32, i32* %num2, align 4
+  %mul = mul nsw i32 %3, %7
+  %call3 = call %struct.func_t* @num(i32 %mul)
+  br label %cond.end
+
+cond.false:                                       ; preds = %entry
+  %call4 = call %struct.func_t* @num(i32 1)
+  br label %cond.end
+
+cond.end:                                         ; preds = %cond.false, %cond.true
+  %cond = phi %struct.func_t* [ %call3, %cond.true ], [ %call4, %cond.false ]
+  ret %struct.func_t* %cond
+}
+
+; Function Attrs: noinline nounwind optnone
+define hidden %struct.func_t* @fib(%struct.func_t* %self, %struct.func_t* %n) #0 {
+entry:
+  %self.addr = alloca %struct.func_t*, align 4
+  %n.addr = alloca %struct.func_t*, align 4
+  %nn = alloca i32, align 4
+  store %struct.func_t* %self, %struct.func_t** %self.addr, align 4
+  store %struct.func_t* %n, %struct.func_t** %n.addr, align 4
+  %0 = load %struct.func_t*, %struct.func_t** %n.addr, align 4
+  %num = getelementptr inbounds %struct.func_t, %struct.func_t* %0, i32 0, i32 2
+  %1 = load i32, i32* %num, align 4
+  store i32 %1, i32* %nn, align 4
+  %2 = load i32, i32* %nn, align 4
+  %cmp = icmp sgt i32 %2, 1
+  br i1 %cmp, label %cond.true, label %cond.false
+
+cond.true:                                        ; preds = %entry
+  %3 = load %struct.func_t*, %struct.func_t** %self.addr, align 4
+  %_ = getelementptr inbounds %struct.func_t, %struct.func_t* %3, i32 0, i32 1
+  %4 = load %struct.func_t*, %struct.func_t** %_, align 4
+  %5 = load i32, i32* %nn, align 4
+  %sub = sub nsw i32 %5, 1
+  %call = call %struct.func_t* @num(i32 %sub)
+  %call1 = call %struct.func_t* @call(%struct.func_t* %4, %struct.func_t* %call)
+  %num2 = getelementptr inbounds %struct.func_t, %struct.func_t* %call1, i32 0, i32 2
+  %6 = load i32, i32* %num2, align 4
+  %7 = load %struct.func_t*, %struct.func_t** %self.addr, align 4
+  %_3 = getelementptr inbounds %struct.func_t, %struct.func_t* %7, i32 0, i32 1
+  %8 = load %struct.func_t*, %struct.func_t** %_3, align 4
+  %9 = load i32, i32* %nn, align 4
+  %sub4 = sub nsw i32 %9, 2
+  %call5 = call %struct.func_t* @num(i32 %sub4)
+  %call6 = call %struct.func_t* @call(%struct.func_t* %8, %struct.func_t* %call5)
+  %num7 = getelementptr inbounds %struct.func_t, %struct.func_t* %call6, i32 0, i32 2
+  %10 = load i32, i32* %num7, align 4
+  %add = add nsw i32 %6, %10
+  %call8 = call %struct.func_t* @num(i32 %add)
+  br label %cond.end
+
+cond.false:                                       ; preds = %entry
+  %call9 = call %struct.func_t* @num(i32 1)
+  br label %cond.end
+
+cond.end:                                         ; preds = %cond.false, %cond.true
+  %cond = phi %struct.func_t* [ %call8, %cond.true ], [ %call9, %cond.false ]
+  ret %struct.func_t* %cond
+}
+
+; Function Attrs: noinline nounwind optnone
+define hidden void @show(%struct.func_t* %n) #0 {
+entry:
+  %n.addr = alloca %struct.func_t*, align 4
+  store %struct.func_t* %n, %struct.func_t** %n.addr, align 4
+  %0 = load %struct.func_t*, %struct.func_t** %n.addr, align 4
+  %num = getelementptr inbounds %struct.func_t, %struct.func_t* %0, i32 0, i32 2
+  %1 = load i32, i32* %num, align 4
+  %call = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([4 x i8], [4 x i8]* @.str, i32 0, i32 0), i32 %1)
+  ret void
+}
+
+declare i32 @printf(i8* %0, ...) #1
+
+; Function Attrs: noinline nounwind optnone
+define hidden i32 @main() #0 {
+entry:
+  %retval = alloca i32, align 4
+  %i = alloca i32, align 4
+  %f = alloca %struct.func_t*, align 4
+  store i32 0, i32* %retval, align 4
+  %call = call %struct.func_t* @Y(%struct.func_t* (%struct.func_t*, %struct.func_t*)* @fac)
+  store %struct.func_t* %call, %struct.func_t** %f, align 4
+  %call1 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([6 x i8], [6 x i8]* @.str.1, i32 0, i32 0))
+  store i32 1, i32* %i, align 4
+  br label %for.cond
+
+for.cond:                                         ; preds = %for.inc, %entry
+  %0 = load i32, i32* %i, align 4
+  %cmp = icmp slt i32 %0, 10
+  br i1 %cmp, label %for.body, label %for.end
+
+for.body:                                         ; preds = %for.cond
+  %1 = load %struct.func_t*, %struct.func_t** %f, align 4
+  %2 = load i32, i32* %i, align 4
+  %call2 = call %struct.func_t* @num(i32 %2)
+  %call3 = call %struct.func_t* @call(%struct.func_t* %1, %struct.func_t* %call2)
+  call void @show(%struct.func_t* %call3)
+  br label %for.inc
+
+for.inc:                                          ; preds = %for.body
+  %3 = load i32, i32* %i, align 4
+  %inc = add nsw i32 %3, 1
+  store i32 %inc, i32* %i, align 4
+  br label %for.cond
+
+for.end:                                          ; preds = %for.cond
+  %call4 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([2 x i8], [2 x i8]* @.str.2, i32 0, i32 0))
+  %call5 = call %struct.func_t* @Y(%struct.func_t* (%struct.func_t*, %struct.func_t*)* @fib)
+  store %struct.func_t* %call5, %struct.func_t** %f, align 4
+  %call6 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([6 x i8], [6 x i8]* @.str.3, i32 0, i32 0))
+  store i32 1, i32* %i, align 4
+  br label %for.cond7
+
+for.cond7:                                        ; preds = %for.inc12, %for.end
+  %4 = load i32, i32* %i, align 4
+  %cmp8 = icmp slt i32 %4, 10
+  br i1 %cmp8, label %for.body9, label %for.end14
+
+for.body9:                                        ; preds = %for.cond7
+  %5 = load %struct.func_t*, %struct.func_t** %f, align 4
+  %6 = load i32, i32* %i, align 4
+  %call10 = call %struct.func_t* @num(i32 %6)
+  %call11 = call %struct.func_t* @call(%struct.func_t* %5, %struct.func_t* %call10)
+  call void @show(%struct.func_t* %call11)
+  br label %for.inc12
+
+for.inc12:                                        ; preds = %for.body9
+  %7 = load i32, i32* %i, align 4
+  %inc13 = add nsw i32 %7, 1
+  store i32 %inc13, i32* %i, align 4
+  br label %for.cond7
+
+for.end14:                                        ; preds = %for.cond7
+  %call15 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([2 x i8], [2 x i8]* @.str.2, i32 0, i32 0))
+  ret i32 0
+}
+
+attributes #0 = { noinline nounwind optnone "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "min-legal-vector-width"="0" "no-infs-fp-math"="false" "no-jump-tables"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #1 = { "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+
+!llvm.module.flags = !{!0}
+!llvm.ident = !{!1}
+
+!0 = !{i32 1, !"wchar_size", i32 4}
+!1 = !{!"clang version 11.0.0 (https://github.com/Jacarte/llvm-project.git 0f6dea67136cc1e0b3d200eb2bb165628970c44b)"}
+
+; extracted candidates
+
+; *****
+; For LLVM instruction:
+;  %1 = load i32, i32* %num, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %2 = load i32, i32* %nn, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %cmp = icmp sgt i32 %2, 1
+; Looking for a replacement for:
+%0:i32 = var
+%1:i1 = slt 1:i32, %0
+infer %1
+
+; *****
+; For LLVM instruction:
+;  %5 = load i32, i32* %nn, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %sub = sub nsw i32 %5, 1
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = subnsw %0, 1:i32
+infer %1
+
+; *****
+; For LLVM instruction:
+;  %6 = load i32, i32* %num2, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %9 = load i32, i32* %nn, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %sub4 = sub nsw i32 %9, 2
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = subnsw %0, 2:i32
+infer %1
+
+; *****
+; For LLVM instruction:
+;  %10 = load i32, i32* %num7, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %add = add nsw i32 %6, %10
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = var
+%2:i32 = addnsw %0, %1
+infer %2
+got 2 candidates from LHS
+
+-------------------------------------------------
+%0:i32 = var
+%1:i32 = subnsw %0, 2:i32
+infer %1
+
+
+--------------------------------
+guess 0
+
+%0:i32 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: -2
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: 226595190
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+
+--------------------------------
+guess 1
+
+%0:i32 = var
+
+Cost = 0
+second query is SAT-- constant doesn't work
+Dataflow Pruned 0/0
+There are 2 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 3 candidates from LHS
+
+-------------------------------------------------
+%0:i32 = var
+%1:i32 = var
+%2:i32 = addnsw %0, %1
+infer %2
+
+
+--------------------------------
+guess 0
+
+%0:i32 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: -2
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+
+--------------------------------
+guess 1
+
+%0:i32 = var
+
+Cost = 0
+second query is SAT-- constant doesn't work
+
+--------------------------------
+guess 2
+
+%0:i32 = var
+
+Cost = 0
+second query is SAT-- constant doesn't work
+Dataflow Pruned 0/0
+There are 3 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+#########################################################
+; exiting Souper's runOnFunction() for fib()
+
+; entering Souper's runOnFunction() for show()
+
+; ModuleID = './Y_combinator.c.bc'
+source_filename = "./Y_combinator.c"
+target datalayout = "e-m:e-p:32:32-i64:64-n32:64-S128"
+target triple = "wasm32-unknown-wasi"
+
+%struct.func_t = type { %struct.func_t* (%struct.func_t*, %struct.func_t*)*, %struct.func_t*, i32 }
+
+@.str = private unnamed_addr constant [4 x i8] c" %d\00", align 1
+@.str.1 = private unnamed_addr constant [6 x i8] c"fac: \00", align 1
+@.str.2 = private unnamed_addr constant [2 x i8] c"\0A\00", align 1
+@.str.3 = private unnamed_addr constant [6 x i8] c"fib: \00", align 1
+@llvm.used = appending global [1 x i8*] [i8* bitcast (i32 ()* @__main_void to i8*)], section "llvm.metadata"
+
+@__main_void = alias i32 (), i32 ()* @main
+
+; Function Attrs: noinline nounwind optnone
+define hidden %struct.func_t* @new(%struct.func_t* (%struct.func_t*, %struct.func_t*)* %f, %struct.func_t* %_) #0 {
+entry:
+  %f.addr = alloca %struct.func_t* (%struct.func_t*, %struct.func_t*)*, align 4
+  %_.addr = alloca %struct.func_t*, align 4
+  %x = alloca %struct.func_t*, align 4
+  store %struct.func_t* (%struct.func_t*, %struct.func_t*)* %f, %struct.func_t* (%struct.func_t*, %struct.func_t*)** %f.addr, align 4
+  store %struct.func_t* %_, %struct.func_t** %_.addr, align 4
+  %call = call noalias i8* @malloc(i32 12)
+  %0 = bitcast i8* %call to %struct.func_t*
+  store %struct.func_t* %0, %struct.func_t** %x, align 4
+  %1 = load %struct.func_t* (%struct.func_t*, %struct.func_t*)*, %struct.func_t* (%struct.func_t*, %struct.func_t*)** %f.addr, align 4
+  %2 = load %struct.func_t*, %struct.func_t** %x, align 4
+  %fn = getelementptr inbounds %struct.func_t, %struct.func_t* %2, i32 0, i32 0
+  store %struct.func_t* (%struct.func_t*, %struct.func_t*)* %1, %struct.func_t* (%struct.func_t*, %struct.func_t*)** %fn, align 4
+  %3 = load %struct.func_t*, %struct.func_t** %_.addr, align 4
+  %4 = load %struct.func_t*, %struct.func_t** %x, align 4
+  %_1 = getelementptr inbounds %struct.func_t, %struct.func_t* %4, i32 0, i32 1
+  store %struct.func_t* %3, %struct.func_t** %_1, align 4
+  %5 = load %struct.func_t*, %struct.func_t** %x, align 4
+  %num = getelementptr inbounds %struct.func_t, %struct.func_t* %5, i32 0, i32 2
+  store i32 0, i32* %num, align 4
+  %6 = load %struct.func_t*, %struct.func_t** %x, align 4
+  ret %struct.func_t* %6
+}
+
+declare noalias i8* @malloc(i32 %0) #1
+
+; Function Attrs: noinline nounwind optnone
+define hidden %struct.func_t* @call(%struct.func_t* %f, %struct.func_t* %n) #0 {
+entry:
+  %f.addr = alloca %struct.func_t*, align 4
+  %n.addr = alloca %struct.func_t*, align 4
+  store %struct.func_t* %f, %struct.func_t** %f.addr, align 4
+  store %struct.func_t* %n, %struct.func_t** %n.addr, align 4
+  %0 = load %struct.func_t*, %struct.func_t** %f.addr, align 4
+  %fn = getelementptr inbounds %struct.func_t, %struct.func_t* %0, i32 0, i32 0
+  %1 = load %struct.func_t* (%struct.func_t*, %struct.func_t*)*, %struct.func_t* (%struct.func_t*, %struct.func_t*)** %fn, align 4
+  %2 = load %struct.func_t*, %struct.func_t** %f.addr, align 4
+  %3 = load %struct.func_t*, %struct.func_t** %n.addr, align 4
+  %call = call %struct.func_t* %1(%struct.func_t* %2, %struct.func_t* %3)
+  ret %struct.func_t* %call
+}
+
+; Function Attrs: noinline nounwind optnone
+define hidden %struct.func_t* @Y(%struct.func_t* (%struct.func_t*, %struct.func_t*)* %f) #0 {
+entry:
+  %f.addr = alloca %struct.func_t* (%struct.func_t*, %struct.func_t*)*, align 4
+  %g = alloca %struct.func_t*, align 4
+  store %struct.func_t* (%struct.func_t*, %struct.func_t*)* %f, %struct.func_t* (%struct.func_t*, %struct.func_t*)** %f.addr, align 4
+  %0 = load %struct.func_t* (%struct.func_t*, %struct.func_t*)*, %struct.func_t* (%struct.func_t*, %struct.func_t*)** %f.addr, align 4
+  %call = call %struct.func_t* @new(%struct.func_t* (%struct.func_t*, %struct.func_t*)* %0, %struct.func_t* null)
+  store %struct.func_t* %call, %struct.func_t** %g, align 4
+  %1 = load %struct.func_t*, %struct.func_t** %g, align 4
+  %2 = load %struct.func_t*, %struct.func_t** %g, align 4
+  %_ = getelementptr inbounds %struct.func_t, %struct.func_t* %2, i32 0, i32 1
+  store %struct.func_t* %1, %struct.func_t** %_, align 4
+  %3 = load %struct.func_t*, %struct.func_t** %g, align 4
+  ret %struct.func_t* %3
+}
+
+; Function Attrs: noinline nounwind optnone
+define hidden %struct.func_t* @num(i32 %n) #0 {
+entry:
+  %n.addr = alloca i32, align 4
+  %x = alloca %struct.func_t*, align 4
+  store i32 %n, i32* %n.addr, align 4
+  %call = call %struct.func_t* @new(%struct.func_t* (%struct.func_t*, %struct.func_t*)* null, %struct.func_t* null)
+  store %struct.func_t* %call, %struct.func_t** %x, align 4
+  %0 = load i32, i32* %n.addr, align 4
+  %1 = load %struct.func_t*, %struct.func_t** %x, align 4
+  %num = getelementptr inbounds %struct.func_t, %struct.func_t* %1, i32 0, i32 2
+  store i32 %0, i32* %num, align 4
+  %2 = load %struct.func_t*, %struct.func_t** %x, align 4
+  ret %struct.func_t* %2
+}
+
+; Function Attrs: noinline nounwind optnone
+define hidden %struct.func_t* @fac(%struct.func_t* %self, %struct.func_t* %n) #0 {
+entry:
+  %self.addr = alloca %struct.func_t*, align 4
+  %n.addr = alloca %struct.func_t*, align 4
+  %nn = alloca i32, align 4
+  store %struct.func_t* %self, %struct.func_t** %self.addr, align 4
+  store %struct.func_t* %n, %struct.func_t** %n.addr, align 4
+  %0 = load %struct.func_t*, %struct.func_t** %n.addr, align 4
+  %num = getelementptr inbounds %struct.func_t, %struct.func_t* %0, i32 0, i32 2
+  %1 = load i32, i32* %num, align 4
+  store i32 %1, i32* %nn, align 4
+  %2 = load i32, i32* %nn, align 4
+  %cmp = icmp sgt i32 %2, 1
+  br i1 %cmp, label %cond.true, label %cond.false
+
+cond.true:                                        ; preds = %entry
+  %3 = load i32, i32* %nn, align 4
+  %4 = load %struct.func_t*, %struct.func_t** %self.addr, align 4
+  %_ = getelementptr inbounds %struct.func_t, %struct.func_t* %4, i32 0, i32 1
+  %5 = load %struct.func_t*, %struct.func_t** %_, align 4
+  %6 = load i32, i32* %nn, align 4
+  %sub = sub nsw i32 %6, 1
+  %call = call %struct.func_t* @num(i32 %sub)
+  %call1 = call %struct.func_t* @call(%struct.func_t* %5, %struct.func_t* %call)
+  %num2 = getelementptr inbounds %struct.func_t, %struct.func_t* %call1, i32 0, i32 2
+  %7 = load i32, i32* %num2, align 4
+  %mul = mul nsw i32 %3, %7
+  %call3 = call %struct.func_t* @num(i32 %mul)
+  br label %cond.end
+
+cond.false:                                       ; preds = %entry
+  %call4 = call %struct.func_t* @num(i32 1)
+  br label %cond.end
+
+cond.end:                                         ; preds = %cond.false, %cond.true
+  %cond = phi %struct.func_t* [ %call3, %cond.true ], [ %call4, %cond.false ]
+  ret %struct.func_t* %cond
+}
+
+; Function Attrs: noinline nounwind optnone
+define hidden %struct.func_t* @fib(%struct.func_t* %self, %struct.func_t* %n) #0 {
+entry:
+  %self.addr = alloca %struct.func_t*, align 4
+  %n.addr = alloca %struct.func_t*, align 4
+  %nn = alloca i32, align 4
+  store %struct.func_t* %self, %struct.func_t** %self.addr, align 4
+  store %struct.func_t* %n, %struct.func_t** %n.addr, align 4
+  %0 = load %struct.func_t*, %struct.func_t** %n.addr, align 4
+  %num = getelementptr inbounds %struct.func_t, %struct.func_t* %0, i32 0, i32 2
+  %1 = load i32, i32* %num, align 4
+  store i32 %1, i32* %nn, align 4
+  %2 = load i32, i32* %nn, align 4
+  %cmp = icmp sgt i32 %2, 1
+  br i1 %cmp, label %cond.true, label %cond.false
+
+cond.true:                                        ; preds = %entry
+  %3 = load %struct.func_t*, %struct.func_t** %self.addr, align 4
+  %_ = getelementptr inbounds %struct.func_t, %struct.func_t* %3, i32 0, i32 1
+  %4 = load %struct.func_t*, %struct.func_t** %_, align 4
+  %5 = load i32, i32* %nn, align 4
+  %sub = sub nsw i32 %5, 1
+  %call = call %struct.func_t* @num(i32 %sub)
+  %call1 = call %struct.func_t* @call(%struct.func_t* %4, %struct.func_t* %call)
+  %num2 = getelementptr inbounds %struct.func_t, %struct.func_t* %call1, i32 0, i32 2
+  %6 = load i32, i32* %num2, align 4
+  %7 = load %struct.func_t*, %struct.func_t** %self.addr, align 4
+  %_3 = getelementptr inbounds %struct.func_t, %struct.func_t* %7, i32 0, i32 1
+  %8 = load %struct.func_t*, %struct.func_t** %_3, align 4
+  %9 = load i32, i32* %nn, align 4
+  %sub4 = sub nsw i32 %9, 2
+  %call5 = call %struct.func_t* @num(i32 %sub4)
+  %call6 = call %struct.func_t* @call(%struct.func_t* %8, %struct.func_t* %call5)
+  %num7 = getelementptr inbounds %struct.func_t, %struct.func_t* %call6, i32 0, i32 2
+  %10 = load i32, i32* %num7, align 4
+  %add = add nsw i32 %6, %10
+  %call8 = call %struct.func_t* @num(i32 %add)
+  br label %cond.end
+
+cond.false:                                       ; preds = %entry
+  %call9 = call %struct.func_t* @num(i32 1)
+  br label %cond.end
+
+cond.end:                                         ; preds = %cond.false, %cond.true
+  %cond = phi %struct.func_t* [ %call8, %cond.true ], [ %call9, %cond.false ]
+  ret %struct.func_t* %cond
+}
+
+; Function Attrs: noinline nounwind optnone
+define hidden void @show(%struct.func_t* %n) #0 {
+entry:
+  %n.addr = alloca %struct.func_t*, align 4
+  store %struct.func_t* %n, %struct.func_t** %n.addr, align 4
+  %0 = load %struct.func_t*, %struct.func_t** %n.addr, align 4
+  %num = getelementptr inbounds %struct.func_t, %struct.func_t* %0, i32 0, i32 2
+  %1 = load i32, i32* %num, align 4
+  %call = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([4 x i8], [4 x i8]* @.str, i32 0, i32 0), i32 %1)
+  ret void
+}
+
+declare i32 @printf(i8* %0, ...) #1
+
+; Function Attrs: noinline nounwind optnone
+define hidden i32 @main() #0 {
+entry:
+  %retval = alloca i32, align 4
+  %i = alloca i32, align 4
+  %f = alloca %struct.func_t*, align 4
+  store i32 0, i32* %retval, align 4
+  %call = call %struct.func_t* @Y(%struct.func_t* (%struct.func_t*, %struct.func_t*)* @fac)
+  store %struct.func_t* %call, %struct.func_t** %f, align 4
+  %call1 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([6 x i8], [6 x i8]* @.str.1, i32 0, i32 0))
+  store i32 1, i32* %i, align 4
+  br label %for.cond
+
+for.cond:                                         ; preds = %for.inc, %entry
+  %0 = load i32, i32* %i, align 4
+  %cmp = icmp slt i32 %0, 10
+  br i1 %cmp, label %for.body, label %for.end
+
+for.body:                                         ; preds = %for.cond
+  %1 = load %struct.func_t*, %struct.func_t** %f, align 4
+  %2 = load i32, i32* %i, align 4
+  %call2 = call %struct.func_t* @num(i32 %2)
+  %call3 = call %struct.func_t* @call(%struct.func_t* %1, %struct.func_t* %call2)
+  call void @show(%struct.func_t* %call3)
+  br label %for.inc
+
+for.inc:                                          ; preds = %for.body
+  %3 = load i32, i32* %i, align 4
+  %inc = add nsw i32 %3, 1
+  store i32 %inc, i32* %i, align 4
+  br label %for.cond
+
+for.end:                                          ; preds = %for.cond
+  %call4 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([2 x i8], [2 x i8]* @.str.2, i32 0, i32 0))
+  %call5 = call %struct.func_t* @Y(%struct.func_t* (%struct.func_t*, %struct.func_t*)* @fib)
+  store %struct.func_t* %call5, %struct.func_t** %f, align 4
+  %call6 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([6 x i8], [6 x i8]* @.str.3, i32 0, i32 0))
+  store i32 1, i32* %i, align 4
+  br label %for.cond7
+
+for.cond7:                                        ; preds = %for.inc12, %for.end
+  %4 = load i32, i32* %i, align 4
+  %cmp8 = icmp slt i32 %4, 10
+  br i1 %cmp8, label %for.body9, label %for.end14
+
+for.body9:                                        ; preds = %for.cond7
+  %5 = load %struct.func_t*, %struct.func_t** %f, align 4
+  %6 = load i32, i32* %i, align 4
+  %call10 = call %struct.func_t* @num(i32 %6)
+  %call11 = call %struct.func_t* @call(%struct.func_t* %5, %struct.func_t* %call10)
+  call void @show(%struct.func_t* %call11)
+  br label %for.inc12
+
+for.inc12:                                        ; preds = %for.body9
+  %7 = load i32, i32* %i, align 4
+  %inc13 = add nsw i32 %7, 1
+  store i32 %inc13, i32* %i, align 4
+  br label %for.cond7
+
+for.end14:                                        ; preds = %for.cond7
+  %call15 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([2 x i8], [2 x i8]* @.str.2, i32 0, i32 0))
+  ret i32 0
+}
+
+attributes #0 = { noinline nounwind optnone "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "min-legal-vector-width"="0" "no-infs-fp-math"="false" "no-jump-tables"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #1 = { "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+
+!llvm.module.flags = !{!0}
+!llvm.ident = !{!1}
+
+!0 = !{i32 1, !"wchar_size", i32 4}
+!1 = !{!"clang version 11.0.0 (https://github.com/Jacarte/llvm-project.git 0f6dea67136cc1e0b3d200eb2bb165628970c44b)"}
+
+; extracted candidates
+
+; *****
+; For LLVM instruction:
+;  %1 = load i32, i32* %num, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+#########################################################
+; exiting Souper's runOnFunction() for show()
+
+; entering Souper's runOnFunction() for main()
+
+; ModuleID = './Y_combinator.c.bc'
+source_filename = "./Y_combinator.c"
+target datalayout = "e-m:e-p:32:32-i64:64-n32:64-S128"
+target triple = "wasm32-unknown-wasi"
+
+%struct.func_t = type { %struct.func_t* (%struct.func_t*, %struct.func_t*)*, %struct.func_t*, i32 }
+
+@.str = private unnamed_addr constant [4 x i8] c" %d\00", align 1
+@.str.1 = private unnamed_addr constant [6 x i8] c"fac: \00", align 1
+@.str.2 = private unnamed_addr constant [2 x i8] c"\0A\00", align 1
+@.str.3 = private unnamed_addr constant [6 x i8] c"fib: \00", align 1
+@llvm.used = appending global [1 x i8*] [i8* bitcast (i32 ()* @__main_void to i8*)], section "llvm.metadata"
+
+@__main_void = alias i32 (), i32 ()* @main
+
+; Function Attrs: noinline nounwind optnone
+define hidden %struct.func_t* @new(%struct.func_t* (%struct.func_t*, %struct.func_t*)* %f, %struct.func_t* %_) #0 {
+entry:
+  %f.addr = alloca %struct.func_t* (%struct.func_t*, %struct.func_t*)*, align 4
+  %_.addr = alloca %struct.func_t*, align 4
+  %x = alloca %struct.func_t*, align 4
+  store %struct.func_t* (%struct.func_t*, %struct.func_t*)* %f, %struct.func_t* (%struct.func_t*, %struct.func_t*)** %f.addr, align 4
+  store %struct.func_t* %_, %struct.func_t** %_.addr, align 4
+  %call = call noalias i8* @malloc(i32 12)
+  %0 = bitcast i8* %call to %struct.func_t*
+  store %struct.func_t* %0, %struct.func_t** %x, align 4
+  %1 = load %struct.func_t* (%struct.func_t*, %struct.func_t*)*, %struct.func_t* (%struct.func_t*, %struct.func_t*)** %f.addr, align 4
+  %2 = load %struct.func_t*, %struct.func_t** %x, align 4
+  %fn = getelementptr inbounds %struct.func_t, %struct.func_t* %2, i32 0, i32 0
+  store %struct.func_t* (%struct.func_t*, %struct.func_t*)* %1, %struct.func_t* (%struct.func_t*, %struct.func_t*)** %fn, align 4
+  %3 = load %struct.func_t*, %struct.func_t** %_.addr, align 4
+  %4 = load %struct.func_t*, %struct.func_t** %x, align 4
+  %_1 = getelementptr inbounds %struct.func_t, %struct.func_t* %4, i32 0, i32 1
+  store %struct.func_t* %3, %struct.func_t** %_1, align 4
+  %5 = load %struct.func_t*, %struct.func_t** %x, align 4
+  %num = getelementptr inbounds %struct.func_t, %struct.func_t* %5, i32 0, i32 2
+  store i32 0, i32* %num, align 4
+  %6 = load %struct.func_t*, %struct.func_t** %x, align 4
+  ret %struct.func_t* %6
+}
+
+declare noalias i8* @malloc(i32 %0) #1
+
+; Function Attrs: noinline nounwind optnone
+define hidden %struct.func_t* @call(%struct.func_t* %f, %struct.func_t* %n) #0 {
+entry:
+  %f.addr = alloca %struct.func_t*, align 4
+  %n.addr = alloca %struct.func_t*, align 4
+  store %struct.func_t* %f, %struct.func_t** %f.addr, align 4
+  store %struct.func_t* %n, %struct.func_t** %n.addr, align 4
+  %0 = load %struct.func_t*, %struct.func_t** %f.addr, align 4
+  %fn = getelementptr inbounds %struct.func_t, %struct.func_t* %0, i32 0, i32 0
+  %1 = load %struct.func_t* (%struct.func_t*, %struct.func_t*)*, %struct.func_t* (%struct.func_t*, %struct.func_t*)** %fn, align 4
+  %2 = load %struct.func_t*, %struct.func_t** %f.addr, align 4
+  %3 = load %struct.func_t*, %struct.func_t** %n.addr, align 4
+  %call = call %struct.func_t* %1(%struct.func_t* %2, %struct.func_t* %3)
+  ret %struct.func_t* %call
+}
+
+; Function Attrs: noinline nounwind optnone
+define hidden %struct.func_t* @Y(%struct.func_t* (%struct.func_t*, %struct.func_t*)* %f) #0 {
+entry:
+  %f.addr = alloca %struct.func_t* (%struct.func_t*, %struct.func_t*)*, align 4
+  %g = alloca %struct.func_t*, align 4
+  store %struct.func_t* (%struct.func_t*, %struct.func_t*)* %f, %struct.func_t* (%struct.func_t*, %struct.func_t*)** %f.addr, align 4
+  %0 = load %struct.func_t* (%struct.func_t*, %struct.func_t*)*, %struct.func_t* (%struct.func_t*, %struct.func_t*)** %f.addr, align 4
+  %call = call %struct.func_t* @new(%struct.func_t* (%struct.func_t*, %struct.func_t*)* %0, %struct.func_t* null)
+  store %struct.func_t* %call, %struct.func_t** %g, align 4
+  %1 = load %struct.func_t*, %struct.func_t** %g, align 4
+  %2 = load %struct.func_t*, %struct.func_t** %g, align 4
+  %_ = getelementptr inbounds %struct.func_t, %struct.func_t* %2, i32 0, i32 1
+  store %struct.func_t* %1, %struct.func_t** %_, align 4
+  %3 = load %struct.func_t*, %struct.func_t** %g, align 4
+  ret %struct.func_t* %3
+}
+
+; Function Attrs: noinline nounwind optnone
+define hidden %struct.func_t* @num(i32 %n) #0 {
+entry:
+  %n.addr = alloca i32, align 4
+  %x = alloca %struct.func_t*, align 4
+  store i32 %n, i32* %n.addr, align 4
+  %call = call %struct.func_t* @new(%struct.func_t* (%struct.func_t*, %struct.func_t*)* null, %struct.func_t* null)
+  store %struct.func_t* %call, %struct.func_t** %x, align 4
+  %0 = load i32, i32* %n.addr, align 4
+  %1 = load %struct.func_t*, %struct.func_t** %x, align 4
+  %num = getelementptr inbounds %struct.func_t, %struct.func_t* %1, i32 0, i32 2
+  store i32 %0, i32* %num, align 4
+  %2 = load %struct.func_t*, %struct.func_t** %x, align 4
+  ret %struct.func_t* %2
+}
+
+; Function Attrs: noinline nounwind optnone
+define hidden %struct.func_t* @fac(%struct.func_t* %self, %struct.func_t* %n) #0 {
+entry:
+  %self.addr = alloca %struct.func_t*, align 4
+  %n.addr = alloca %struct.func_t*, align 4
+  %nn = alloca i32, align 4
+  store %struct.func_t* %self, %struct.func_t** %self.addr, align 4
+  store %struct.func_t* %n, %struct.func_t** %n.addr, align 4
+  %0 = load %struct.func_t*, %struct.func_t** %n.addr, align 4
+  %num = getelementptr inbounds %struct.func_t, %struct.func_t* %0, i32 0, i32 2
+  %1 = load i32, i32* %num, align 4
+  store i32 %1, i32* %nn, align 4
+  %2 = load i32, i32* %nn, align 4
+  %cmp = icmp sgt i32 %2, 1
+  br i1 %cmp, label %cond.true, label %cond.false
+
+cond.true:                                        ; preds = %entry
+  %3 = load i32, i32* %nn, align 4
+  %4 = load %struct.func_t*, %struct.func_t** %self.addr, align 4
+  %_ = getelementptr inbounds %struct.func_t, %struct.func_t* %4, i32 0, i32 1
+  %5 = load %struct.func_t*, %struct.func_t** %_, align 4
+  %6 = load i32, i32* %nn, align 4
+  %sub = sub nsw i32 %6, 1
+  %call = call %struct.func_t* @num(i32 %sub)
+  %call1 = call %struct.func_t* @call(%struct.func_t* %5, %struct.func_t* %call)
+  %num2 = getelementptr inbounds %struct.func_t, %struct.func_t* %call1, i32 0, i32 2
+  %7 = load i32, i32* %num2, align 4
+  %mul = mul nsw i32 %3, %7
+  %call3 = call %struct.func_t* @num(i32 %mul)
+  br label %cond.end
+
+cond.false:                                       ; preds = %entry
+  %call4 = call %struct.func_t* @num(i32 1)
+  br label %cond.end
+
+cond.end:                                         ; preds = %cond.false, %cond.true
+  %cond = phi %struct.func_t* [ %call3, %cond.true ], [ %call4, %cond.false ]
+  ret %struct.func_t* %cond
+}
+
+; Function Attrs: noinline nounwind optnone
+define hidden %struct.func_t* @fib(%struct.func_t* %self, %struct.func_t* %n) #0 {
+entry:
+  %self.addr = alloca %struct.func_t*, align 4
+  %n.addr = alloca %struct.func_t*, align 4
+  %nn = alloca i32, align 4
+  store %struct.func_t* %self, %struct.func_t** %self.addr, align 4
+  store %struct.func_t* %n, %struct.func_t** %n.addr, align 4
+  %0 = load %struct.func_t*, %struct.func_t** %n.addr, align 4
+  %num = getelementptr inbounds %struct.func_t, %struct.func_t* %0, i32 0, i32 2
+  %1 = load i32, i32* %num, align 4
+  store i32 %1, i32* %nn, align 4
+  %2 = load i32, i32* %nn, align 4
+  %cmp = icmp sgt i32 %2, 1
+  br i1 %cmp, label %cond.true, label %cond.false
+
+cond.true:                                        ; preds = %entry
+  %3 = load %struct.func_t*, %struct.func_t** %self.addr, align 4
+  %_ = getelementptr inbounds %struct.func_t, %struct.func_t* %3, i32 0, i32 1
+  %4 = load %struct.func_t*, %struct.func_t** %_, align 4
+  %5 = load i32, i32* %nn, align 4
+  %sub = sub nsw i32 %5, 1
+  %call = call %struct.func_t* @num(i32 %sub)
+  %call1 = call %struct.func_t* @call(%struct.func_t* %4, %struct.func_t* %call)
+  %num2 = getelementptr inbounds %struct.func_t, %struct.func_t* %call1, i32 0, i32 2
+  %6 = load i32, i32* %num2, align 4
+  %7 = load %struct.func_t*, %struct.func_t** %self.addr, align 4
+  %_3 = getelementptr inbounds %struct.func_t, %struct.func_t* %7, i32 0, i32 1
+  %8 = load %struct.func_t*, %struct.func_t** %_3, align 4
+  %9 = load i32, i32* %nn, align 4
+  %sub4 = sub nsw i32 %9, 2
+  %call5 = call %struct.func_t* @num(i32 %sub4)
+  %call6 = call %struct.func_t* @call(%struct.func_t* %8, %struct.func_t* %call5)
+  %num7 = getelementptr inbounds %struct.func_t, %struct.func_t* %call6, i32 0, i32 2
+  %10 = load i32, i32* %num7, align 4
+  %add = add nsw i32 %6, %10
+  %call8 = call %struct.func_t* @num(i32 %add)
+  br label %cond.end
+
+cond.false:                                       ; preds = %entry
+  %call9 = call %struct.func_t* @num(i32 1)
+  br label %cond.end
+
+cond.end:                                         ; preds = %cond.false, %cond.true
+  %cond = phi %struct.func_t* [ %call8, %cond.true ], [ %call9, %cond.false ]
+  ret %struct.func_t* %cond
+}
+
+; Function Attrs: noinline nounwind optnone
+define hidden void @show(%struct.func_t* %n) #0 {
+entry:
+  %n.addr = alloca %struct.func_t*, align 4
+  store %struct.func_t* %n, %struct.func_t** %n.addr, align 4
+  %0 = load %struct.func_t*, %struct.func_t** %n.addr, align 4
+  %num = getelementptr inbounds %struct.func_t, %struct.func_t* %0, i32 0, i32 2
+  %1 = load i32, i32* %num, align 4
+  %call = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([4 x i8], [4 x i8]* @.str, i32 0, i32 0), i32 %1)
+  ret void
+}
+
+declare i32 @printf(i8* %0, ...) #1
+
+; Function Attrs: noinline nounwind optnone
+define hidden i32 @main() #0 {
+entry:
+  %retval = alloca i32, align 4
+  %i = alloca i32, align 4
+  %f = alloca %struct.func_t*, align 4
+  store i32 0, i32* %retval, align 4
+  %call = call %struct.func_t* @Y(%struct.func_t* (%struct.func_t*, %struct.func_t*)* @fac)
+  store %struct.func_t* %call, %struct.func_t** %f, align 4
+  %call1 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([6 x i8], [6 x i8]* @.str.1, i32 0, i32 0))
+  store i32 1, i32* %i, align 4
+  br label %for.cond
+
+for.cond:                                         ; preds = %for.inc, %entry
+  %0 = load i32, i32* %i, align 4
+  %cmp = icmp slt i32 %0, 10
+  br i1 %cmp, label %for.body, label %for.end
+
+for.body:                                         ; preds = %for.cond
+  %1 = load %struct.func_t*, %struct.func_t** %f, align 4
+  %2 = load i32, i32* %i, align 4
+  %call2 = call %struct.func_t* @num(i32 %2)
+  %call3 = call %struct.func_t* @call(%struct.func_t* %1, %struct.func_t* %call2)
+  call void @show(%struct.func_t* %call3)
+  br label %for.inc
+
+for.inc:                                          ; preds = %for.body
+  %3 = load i32, i32* %i, align 4
+  %inc = add nsw i32 %3, 1
+  store i32 %inc, i32* %i, align 4
+  br label %for.cond
+
+for.end:                                          ; preds = %for.cond
+  %call4 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([2 x i8], [2 x i8]* @.str.2, i32 0, i32 0))
+  %call5 = call %struct.func_t* @Y(%struct.func_t* (%struct.func_t*, %struct.func_t*)* @fib)
+  store %struct.func_t* %call5, %struct.func_t** %f, align 4
+  %call6 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([6 x i8], [6 x i8]* @.str.3, i32 0, i32 0))
+  store i32 1, i32* %i, align 4
+  br label %for.cond7
+
+for.cond7:                                        ; preds = %for.inc12, %for.end
+  %4 = load i32, i32* %i, align 4
+  %cmp8 = icmp slt i32 %4, 10
+  br i1 %cmp8, label %for.body9, label %for.end14
+
+for.body9:                                        ; preds = %for.cond7
+  %5 = load %struct.func_t*, %struct.func_t** %f, align 4
+  %6 = load i32, i32* %i, align 4
+  %call10 = call %struct.func_t* @num(i32 %6)
+  %call11 = call %struct.func_t* @call(%struct.func_t* %5, %struct.func_t* %call10)
+  call void @show(%struct.func_t* %call11)
+  br label %for.inc12
+
+for.inc12:                                        ; preds = %for.body9
+  %7 = load i32, i32* %i, align 4
+  %inc13 = add nsw i32 %7, 1
+  store i32 %inc13, i32* %i, align 4
+  br label %for.cond7
+
+for.end14:                                        ; preds = %for.cond7
+  %call15 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([2 x i8], [2 x i8]* @.str.2, i32 0, i32 0))
+  ret i32 0
+}
+
+attributes #0 = { noinline nounwind optnone "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "min-legal-vector-width"="0" "no-infs-fp-math"="false" "no-jump-tables"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #1 = { "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+
+!llvm.module.flags = !{!0}
+!llvm.ident = !{!1}
+
+!0 = !{i32 1, !"wchar_size", i32 4}
+!1 = !{!"clang version 11.0.0 (https://github.com/Jacarte/llvm-project.git 0f6dea67136cc1e0b3d200eb2bb165628970c44b)"}
+
+; extracted candidates
+
+; *****
+; For LLVM instruction:
+;  %0 = load i32, i32* %i, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %cmp = icmp slt i32 %0, 10
+; Looking for a replacement for:
+%0:i32 = var
+%1:i1 = slt %0, 10:i32
+infer %1
+
+; *****
+; For LLVM instruction:
+;  %2 = load i32, i32* %i, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %3 = load i32, i32* %i, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %inc = add nsw i32 %3, 1
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = addnsw 1:i32, %0
+infer %1
+
+; *****
+; For LLVM instruction:
+;  %4 = load i32, i32* %i, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %cmp8 = icmp slt i32 %4, 10
+; Looking for a replacement for:
+%0:i32 = var
+%1:i1 = slt %0, 10:i32
+infer %1
+
+; *****
+; For LLVM instruction:
+;  %6 = load i32, i32* %i, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %7 = load i32, i32* %i, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %inc13 = add nsw i32 %7, 1
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = addnsw 1:i32, %0
+infer %1
+got 2 candidates from LHS
+
+-------------------------------------------------
+%0:i32 = var
+%1:i1 = slt %0, 10:i32
+infer %1
+
+
+--------------------------------
+guess 0
+
+%0:i1 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: -1
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: 0
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+Dataflow Pruned 0/0
+There are 1 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 2 candidates from LHS
+
+-------------------------------------------------
+%0:i32 = var
+%1:i32 = addnsw 1:i32, %0
+infer %1
+
+
+--------------------------------
+guess 0
+
+%0:i32 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 1
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: 268435457
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+
+--------------------------------
+guess 1
+
+%0:i32 = var
+
+Cost = 0
+second query is SAT-- constant doesn't work
+Dataflow Pruned 0/0
+There are 2 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+#########################################################
+; exiting Souper's runOnFunction() for main()
+Total of 0 replacements done on this module
+Total of 0 replacements candidates on this module

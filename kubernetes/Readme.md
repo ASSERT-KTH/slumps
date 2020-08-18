@@ -21,11 +21,6 @@ For more information about Argo workflows and experiments parallelization, go to
           bucket: my-bucket
           endpoint: minio-service.minio:9000
           insecure: true
-          # accessKeySecret and secretKeySecret are secret selectors.
-          # It references the k8s secret named 'argo-artifacts'
-          # which was created during the minio helm install. The keys,
-          # 'accesskey' and 'secretkey', inside that secret are where the
-          # actual minio credentials are stored.
           accessKeySecret:
             name: argo-artifacts
             key: accesskey

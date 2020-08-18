@@ -1,0 +1,2761 @@
+
+Entering the Souper pass's runOnModule()
+
+
+; entering Souper's runOnFunction() for listNew()
+
+; ModuleID = './List_comprehensions.c.bc'
+source_filename = "./List_comprehensions.c"
+target datalayout = "e-m:e-p:32:32-i64:64-n32:64-S128"
+target triple = "wasm32-unknown-wasi"
+
+%struct.ITERATOR = type { %struct.List*, %struct.List*, %struct.ITERATOR* }
+%struct.List = type { %struct.List*, [0 x i8] }
+%struct.Triple = type { i32, i32, i32 }
+
+@SEQ_base = hidden global %struct.ITERATOR zeroinitializer, align 4
+@SEQ_var = hidden global %struct.ITERATOR* @SEQ_base, align 4
+@FE_var = hidden global %struct.ITERATOR* null, align 4
+@.str = private unnamed_addr constant [12 x i8] c"%d, %d, %d\0A\00", align 1
+@llvm.used = appending global [1 x i8*] [i8* bitcast (i32 ()* @__main_void to i8*)], section "llvm.metadata"
+
+@__main_void = alias i32 (), i32 ()* @main
+
+; Function Attrs: noinline nounwind optnone
+define hidden %struct.List* @listNew(i32 %sz, i8* %val) #0 {
+entry:
+  %sz.addr = alloca i32, align 4
+  %val.addr = alloca i8*, align 4
+  %l = alloca %struct.List*, align 4
+  store i32 %sz, i32* %sz.addr, align 4
+  store i8* %val, i8** %val.addr, align 4
+  %0 = load i32, i32* %sz.addr, align 4
+  %add = add i32 4, %0
+  %call = call noalias i8* @malloc(i32 %add)
+  %1 = bitcast i8* %call to %struct.List*
+  store %struct.List* %1, %struct.List** %l, align 4
+  %2 = load %struct.List*, %struct.List** %l, align 4
+  %nx = getelementptr inbounds %struct.List, %struct.List* %2, i32 0, i32 0
+  store %struct.List* null, %struct.List** %nx, align 4
+  %3 = load %struct.List*, %struct.List** %l, align 4
+  %val1 = getelementptr inbounds %struct.List, %struct.List* %3, i32 0, i32 1
+  %arraydecay = getelementptr inbounds [0 x i8], [0 x i8]* %val1, i32 0, i32 0
+  %4 = load i8*, i8** %val.addr, align 4
+  %5 = load i32, i32* %sz.addr, align 4
+  call void @llvm.memcpy.p0i8.p0i8.i32(i8* align 4 %arraydecay, i8* align 1 %4, i32 %5, i1 false)
+  %6 = load %struct.List*, %struct.List** %l, align 4
+  ret %struct.List* %6
+}
+
+declare noalias i8* @malloc(i32 %0) #1
+
+; Function Attrs: argmemonly nounwind willreturn
+declare void @llvm.memcpy.p0i8.p0i8.i32(i8* noalias nocapture writeonly %0, i8* noalias nocapture readonly %1, i32 %2, i1 immarg %3) #2
+
+; Function Attrs: noinline nounwind optnone
+define hidden %struct.List* @listAppend(%struct.List* %l, i32 %sz, i8* %val) #0 {
+entry:
+  %l.addr = alloca %struct.List*, align 4
+  %sz.addr = alloca i32, align 4
+  %val.addr = alloca i8*, align 4
+  store %struct.List* %l, %struct.List** %l.addr, align 4
+  store i32 %sz, i32* %sz.addr, align 4
+  store i8* %val, i8** %val.addr, align 4
+  br label %while.cond
+
+while.cond:                                       ; preds = %while.body, %entry
+  %0 = load %struct.List*, %struct.List** %l.addr, align 4
+  %nx = getelementptr inbounds %struct.List, %struct.List* %0, i32 0, i32 0
+  %1 = load %struct.List*, %struct.List** %nx, align 4
+  %tobool = icmp ne %struct.List* %1, null
+  br i1 %tobool, label %while.body, label %while.end
+
+while.body:                                       ; preds = %while.cond
+  %2 = load %struct.List*, %struct.List** %l.addr, align 4
+  %nx1 = getelementptr inbounds %struct.List, %struct.List* %2, i32 0, i32 0
+  %3 = load %struct.List*, %struct.List** %nx1, align 4
+  store %struct.List* %3, %struct.List** %l.addr, align 4
+  br label %while.cond
+
+while.end:                                        ; preds = %while.cond
+  %4 = load i32, i32* %sz.addr, align 4
+  %5 = load i8*, i8** %val.addr, align 4
+  %call = call %struct.List* @listNew(i32 %4, i8* %5)
+  %6 = load %struct.List*, %struct.List** %l.addr, align 4
+  %nx2 = getelementptr inbounds %struct.List, %struct.List* %6, i32 0, i32 0
+  store %struct.List* %call, %struct.List** %nx2, align 4
+  %7 = load %struct.List*, %struct.List** %l.addr, align 4
+  ret %struct.List* %7
+}
+
+; Function Attrs: noinline nounwind optnone
+define hidden %struct.List* @intRangeList(i32 %f, i32 %t) #0 {
+entry:
+  %f.addr = alloca i32, align 4
+  %t.addr = alloca i32, align 4
+  %l = alloca %struct.List*, align 4
+  %e = alloca %struct.List*, align 4
+  %i = alloca i32, align 4
+  store i32 %f, i32* %f.addr, align 4
+  store i32 %t, i32* %t.addr, align 4
+  %0 = bitcast i32* %f.addr to i8*
+  %call = call %struct.List* @listNew(i32 4, i8* %0)
+  store %struct.List* %call, %struct.List** %l, align 4
+  %1 = load %struct.List*, %struct.List** %l, align 4
+  store %struct.List* %1, %struct.List** %e, align 4
+  %2 = load i32, i32* %f.addr, align 4
+  %add = add nsw i32 %2, 1
+  store i32 %add, i32* %i, align 4
+  br label %for.cond
+
+for.cond:                                         ; preds = %for.inc, %entry
+  %3 = load i32, i32* %i, align 4
+  %4 = load i32, i32* %t.addr, align 4
+  %cmp = icmp sle i32 %3, %4
+  br i1 %cmp, label %for.body, label %for.end
+
+for.body:                                         ; preds = %for.cond
+  %5 = bitcast i32* %i to i8*
+  %call1 = call %struct.List* @listNew(i32 4, i8* %5)
+  %6 = load %struct.List*, %struct.List** %e, align 4
+  %nx = getelementptr inbounds %struct.List, %struct.List* %6, i32 0, i32 0
+  store %struct.List* %call1, %struct.List** %nx, align 4
+  store %struct.List* %call1, %struct.List** %e, align 4
+  br label %for.inc
+
+for.inc:                                          ; preds = %for.body
+  %7 = load i32, i32* %i, align 4
+  %inc = add nsw i32 %7, 1
+  store i32 %inc, i32* %i, align 4
+  br label %for.cond
+
+for.end:                                          ; preds = %for.cond
+  %8 = load %struct.List*, %struct.List** %l, align 4
+  ret %struct.List* %8
+}
+
+; Function Attrs: noinline nounwind optnone
+define hidden i32 @main() #0 {
+entry:
+  %retval = alloca i32, align 4
+  %x = alloca i32, align 4
+  %y = alloca i32, align 4
+  %z = alloca i32, align 4
+  %n = alloca i32, align 4
+  %pTriples = alloca %struct.List*, align 4
+  %.compoundliteral = alloca %struct.ITERATOR, align 4
+  %.compoundliteral1 = alloca %struct.ITERATOR, align 4
+  %.compoundliteral10 = alloca %struct.ITERATOR, align 4
+  %.compoundliteral28 = alloca %struct.ITERATOR, align 4
+  %.compoundliteral53 = alloca %struct.Triple, align 4
+  %.compoundliteral56 = alloca %struct.Triple, align 4
+  %t = alloca %struct.Triple, align 4
+  %.compoundliteral87 = alloca %struct.ITERATOR, align 4
+  store i32 0, i32* %retval, align 4
+  store i32 20, i32* %n, align 4
+  %l = getelementptr inbounds %struct.ITERATOR, %struct.ITERATOR* %.compoundliteral, i32 0, i32 0
+  store %struct.List* null, %struct.List** %l, align 4
+  %old = getelementptr inbounds %struct.ITERATOR, %struct.ITERATOR* %.compoundliteral, i32 0, i32 1
+  store %struct.List* null, %struct.List** %old, align 4
+  %p = getelementptr inbounds %struct.ITERATOR, %struct.ITERATOR* %.compoundliteral, i32 0, i32 2
+  %0 = load %struct.ITERATOR*, %struct.ITERATOR** @SEQ_var, align 4
+  store %struct.ITERATOR* %0, %struct.ITERATOR** %p, align 4
+  store %struct.ITERATOR* %.compoundliteral, %struct.ITERATOR** @SEQ_var, align 4
+  %l2 = getelementptr inbounds %struct.ITERATOR, %struct.ITERATOR* %.compoundliteral1, i32 0, i32 0
+  %call = call %struct.List* @intRangeList(i32 1, i32 20)
+  store %struct.List* %call, %struct.List** %l2, align 4
+  %old3 = getelementptr inbounds %struct.ITERATOR, %struct.ITERATOR* %.compoundliteral1, i32 0, i32 1
+  store %struct.List* null, %struct.List** %old3, align 4
+  %p4 = getelementptr inbounds %struct.ITERATOR, %struct.ITERATOR* %.compoundliteral1, i32 0, i32 2
+  %1 = load %struct.ITERATOR*, %struct.ITERATOR** @FE_var, align 4
+  store %struct.ITERATOR* %1, %struct.ITERATOR** %p4, align 4
+  store %struct.ITERATOR* %.compoundliteral1, %struct.ITERATOR** @FE_var, align 4
+  %2 = load %struct.ITERATOR*, %struct.ITERATOR** @FE_var, align 4
+  %l5 = getelementptr inbounds %struct.ITERATOR, %struct.ITERATOR* %2, i32 0, i32 0
+  %3 = load %struct.List*, %struct.List** %l5, align 4
+  %val = getelementptr inbounds %struct.List, %struct.List* %3, i32 0, i32 1
+  %4 = bitcast [0 x i8]* %val to i32*
+  %5 = load i32, i32* %4, align 4
+  store volatile i32 %5, i32* %x, align 4
+  br label %for.cond
+
+for.cond:                                         ; preds = %for.inc76, %entry
+  %6 = load %struct.ITERATOR*, %struct.ITERATOR** @FE_var, align 4
+  %l6 = getelementptr inbounds %struct.ITERATOR, %struct.ITERATOR* %6, i32 0, i32 0
+  %7 = load %struct.List*, %struct.List** %l6, align 4
+  %tobool = icmp ne %struct.List* %7, null
+  br i1 %tobool, label %cond.true, label %cond.false
+
+cond.true:                                        ; preds = %for.cond
+  %8 = load %struct.ITERATOR*, %struct.ITERATOR** @FE_var, align 4
+  %l7 = getelementptr inbounds %struct.ITERATOR, %struct.ITERATOR* %8, i32 0, i32 0
+  %9 = load %struct.List*, %struct.List** %l7, align 4
+  %val8 = getelementptr inbounds %struct.List, %struct.List* %9, i32 0, i32 1
+  %10 = bitcast [0 x i8]* %val8 to i32*
+  %11 = load i32, i32* %10, align 4
+  store volatile i32 %11, i32* %x, align 4
+  br label %cond.end
+
+cond.false:                                       ; preds = %for.cond
+  br label %cond.end
+
+cond.end:                                         ; preds = %cond.false, %cond.true
+  %cond = phi i32 [ 1, %cond.true ], [ 0, %cond.false ]
+  %tobool9 = icmp ne i32 %cond, 0
+  br i1 %tobool9, label %for.body, label %for.end80
+
+for.body:                                         ; preds = %cond.end
+  %l11 = getelementptr inbounds %struct.ITERATOR, %struct.ITERATOR* %.compoundliteral10, i32 0, i32 0
+  %12 = load volatile i32, i32* %x, align 4
+  %call12 = call %struct.List* @intRangeList(i32 %12, i32 20)
+  store %struct.List* %call12, %struct.List** %l11, align 4
+  %old13 = getelementptr inbounds %struct.ITERATOR, %struct.ITERATOR* %.compoundliteral10, i32 0, i32 1
+  store %struct.List* null, %struct.List** %old13, align 4
+  %p14 = getelementptr inbounds %struct.ITERATOR, %struct.ITERATOR* %.compoundliteral10, i32 0, i32 2
+  %13 = load %struct.ITERATOR*, %struct.ITERATOR** @FE_var, align 4
+  store %struct.ITERATOR* %13, %struct.ITERATOR** %p14, align 4
+  store %struct.ITERATOR* %.compoundliteral10, %struct.ITERATOR** @FE_var, align 4
+  %14 = load %struct.ITERATOR*, %struct.ITERATOR** @FE_var, align 4
+  %l15 = getelementptr inbounds %struct.ITERATOR, %struct.ITERATOR* %14, i32 0, i32 0
+  %15 = load %struct.List*, %struct.List** %l15, align 4
+  %val16 = getelementptr inbounds %struct.List, %struct.List* %15, i32 0, i32 1
+  %16 = bitcast [0 x i8]* %val16 to i32*
+  %17 = load i32, i32* %16, align 4
+  store volatile i32 %17, i32* %y, align 4
+  br label %for.cond17
+
+for.cond17:                                       ; preds = %for.inc70, %for.body
+  %18 = load %struct.ITERATOR*, %struct.ITERATOR** @FE_var, align 4
+  %l18 = getelementptr inbounds %struct.ITERATOR, %struct.ITERATOR* %18, i32 0, i32 0
+  %19 = load %struct.List*, %struct.List** %l18, align 4
+  %tobool19 = icmp ne %struct.List* %19, null
+  br i1 %tobool19, label %cond.true20, label %cond.false23
+
+cond.true20:                                      ; preds = %for.cond17
+  %20 = load %struct.ITERATOR*, %struct.ITERATOR** @FE_var, align 4
+  %l21 = getelementptr inbounds %struct.ITERATOR, %struct.ITERATOR* %20, i32 0, i32 0
+  %21 = load %struct.List*, %struct.List** %l21, align 4
+  %val22 = getelementptr inbounds %struct.List, %struct.List* %21, i32 0, i32 1
+  %22 = bitcast [0 x i8]* %val22 to i32*
+  %23 = load i32, i32* %22, align 4
+  store volatile i32 %23, i32* %y, align 4
+  br label %cond.end24
+
+cond.false23:                                     ; preds = %for.cond17
+  br label %cond.end24
+
+cond.end24:                                       ; preds = %cond.false23, %cond.true20
+  %cond25 = phi i32 [ 1, %cond.true20 ], [ 0, %cond.false23 ]
+  %tobool26 = icmp ne i32 %cond25, 0
+  br i1 %tobool26, label %for.body27, label %for.end74
+
+for.body27:                                       ; preds = %cond.end24
+  %l29 = getelementptr inbounds %struct.ITERATOR, %struct.ITERATOR* %.compoundliteral28, i32 0, i32 0
+  %24 = load volatile i32, i32* %y, align 4
+  %call30 = call %struct.List* @intRangeList(i32 %24, i32 20)
+  store %struct.List* %call30, %struct.List** %l29, align 4
+  %old31 = getelementptr inbounds %struct.ITERATOR, %struct.ITERATOR* %.compoundliteral28, i32 0, i32 1
+  store %struct.List* null, %struct.List** %old31, align 4
+  %p32 = getelementptr inbounds %struct.ITERATOR, %struct.ITERATOR* %.compoundliteral28, i32 0, i32 2
+  %25 = load %struct.ITERATOR*, %struct.ITERATOR** @FE_var, align 4
+  store %struct.ITERATOR* %25, %struct.ITERATOR** %p32, align 4
+  store %struct.ITERATOR* %.compoundliteral28, %struct.ITERATOR** @FE_var, align 4
+  %26 = load %struct.ITERATOR*, %struct.ITERATOR** @FE_var, align 4
+  %l33 = getelementptr inbounds %struct.ITERATOR, %struct.ITERATOR* %26, i32 0, i32 0
+  %27 = load %struct.List*, %struct.List** %l33, align 4
+  %val34 = getelementptr inbounds %struct.List, %struct.List* %27, i32 0, i32 1
+  %28 = bitcast [0 x i8]* %val34 to i32*
+  %29 = load i32, i32* %28, align 4
+  store volatile i32 %29, i32* %z, align 4
+  br label %for.cond35
+
+for.cond35:                                       ; preds = %for.inc, %for.body27
+  %30 = load %struct.ITERATOR*, %struct.ITERATOR** @FE_var, align 4
+  %l36 = getelementptr inbounds %struct.ITERATOR, %struct.ITERATOR* %30, i32 0, i32 0
+  %31 = load %struct.List*, %struct.List** %l36, align 4
+  %tobool37 = icmp ne %struct.List* %31, null
+  br i1 %tobool37, label %cond.true38, label %cond.false41
+
+cond.true38:                                      ; preds = %for.cond35
+  %32 = load %struct.ITERATOR*, %struct.ITERATOR** @FE_var, align 4
+  %l39 = getelementptr inbounds %struct.ITERATOR, %struct.ITERATOR* %32, i32 0, i32 0
+  %33 = load %struct.List*, %struct.List** %l39, align 4
+  %val40 = getelementptr inbounds %struct.List, %struct.List* %33, i32 0, i32 1
+  %34 = bitcast [0 x i8]* %val40 to i32*
+  %35 = load i32, i32* %34, align 4
+  store volatile i32 %35, i32* %z, align 4
+  br label %cond.end42
+
+cond.false41:                                     ; preds = %for.cond35
+  br label %cond.end42
+
+cond.end42:                                       ; preds = %cond.false41, %cond.true38
+  %cond43 = phi i32 [ 1, %cond.true38 ], [ 0, %cond.false41 ]
+  %tobool44 = icmp ne i32 %cond43, 0
+  br i1 %tobool44, label %for.body45, label %for.end
+
+for.body45:                                       ; preds = %cond.end42
+  %36 = load volatile i32, i32* %x, align 4
+  %37 = load volatile i32, i32* %x, align 4
+  %mul = mul nsw i32 %36, %37
+  %38 = load volatile i32, i32* %y, align 4
+  %39 = load volatile i32, i32* %y, align 4
+  %mul46 = mul nsw i32 %38, %39
+  %add = add nsw i32 %mul, %mul46
+  %40 = load volatile i32, i32* %z, align 4
+  %41 = load volatile i32, i32* %z, align 4
+  %mul47 = mul nsw i32 %40, %41
+  %cmp = icmp eq i32 %add, %mul47
+  br i1 %cmp, label %cond.true48, label %cond.false64
+
+cond.true48:                                      ; preds = %for.body45
+  %42 = load %struct.ITERATOR*, %struct.ITERATOR** @SEQ_var, align 4
+  %l49 = getelementptr inbounds %struct.ITERATOR, %struct.ITERATOR* %42, i32 0, i32 0
+  %43 = load %struct.List*, %struct.List** %l49, align 4
+  %tobool50 = icmp ne %struct.List* %43, null
+  br i1 %tobool50, label %cond.true51, label %cond.false55
+
+cond.true51:                                      ; preds = %cond.true48
+  %44 = load %struct.ITERATOR*, %struct.ITERATOR** @SEQ_var, align 4
+  %l52 = getelementptr inbounds %struct.ITERATOR, %struct.ITERATOR* %44, i32 0, i32 0
+  %45 = load %struct.List*, %struct.List** %l52, align 4
+  %_1 = getelementptr inbounds %struct.Triple, %struct.Triple* %.compoundliteral53, i32 0, i32 0
+  %46 = load volatile i32, i32* %x, align 4
+  store i32 %46, i32* %_1, align 4
+  %_2 = getelementptr inbounds %struct.Triple, %struct.Triple* %.compoundliteral53, i32 0, i32 1
+  %47 = load volatile i32, i32* %y, align 4
+  store i32 %47, i32* %_2, align 4
+  %_3 = getelementptr inbounds %struct.Triple, %struct.Triple* %.compoundliteral53, i32 0, i32 2
+  %48 = load volatile i32, i32* %z, align 4
+  store i32 %48, i32* %_3, align 4
+  %49 = bitcast %struct.Triple* %.compoundliteral53 to i8*
+  %call54 = call %struct.List* @listAppend(%struct.List* %45, i32 12, i8* %49)
+  br label %cond.end62
+
+cond.false55:                                     ; preds = %cond.true48
+  %_157 = getelementptr inbounds %struct.Triple, %struct.Triple* %.compoundliteral56, i32 0, i32 0
+  %50 = load volatile i32, i32* %x, align 4
+  store i32 %50, i32* %_157, align 4
+  %_258 = getelementptr inbounds %struct.Triple, %struct.Triple* %.compoundliteral56, i32 0, i32 1
+  %51 = load volatile i32, i32* %y, align 4
+  store i32 %51, i32* %_258, align 4
+  %_359 = getelementptr inbounds %struct.Triple, %struct.Triple* %.compoundliteral56, i32 0, i32 2
+  %52 = load volatile i32, i32* %z, align 4
+  store i32 %52, i32* %_359, align 4
+  %53 = bitcast %struct.Triple* %.compoundliteral56 to i8*
+  %call60 = call %struct.List* @listNew(i32 12, i8* %53)
+  %54 = load %struct.ITERATOR*, %struct.ITERATOR** @SEQ_var, align 4
+  %l61 = getelementptr inbounds %struct.ITERATOR, %struct.ITERATOR* %54, i32 0, i32 0
+  store %struct.List* %call60, %struct.List** %l61, align 4
+  br label %cond.end62
+
+cond.end62:                                       ; preds = %cond.false55, %cond.true51
+  %cond63 = phi %struct.List* [ %call54, %cond.true51 ], [ %call60, %cond.false55 ]
+  br label %cond.end65
+
+cond.false64:                                     ; preds = %for.body45
+  br label %cond.end65
+
+cond.end65:                                       ; preds = %cond.false64, %cond.end62
+  %cond66 = phi %struct.List* [ %cond63, %cond.end62 ], [ null, %cond.false64 ]
+  br label %for.inc
+
+for.inc:                                          ; preds = %cond.end65
+  %55 = load %struct.ITERATOR*, %struct.ITERATOR** @FE_var, align 4
+  %l67 = getelementptr inbounds %struct.ITERATOR, %struct.ITERATOR* %55, i32 0, i32 0
+  %56 = load %struct.List*, %struct.List** %l67, align 4
+  %nx = getelementptr inbounds %struct.List, %struct.List* %56, i32 0, i32 0
+  %57 = load %struct.List*, %struct.List** %nx, align 4
+  %58 = load %struct.ITERATOR*, %struct.ITERATOR** @FE_var, align 4
+  %l68 = getelementptr inbounds %struct.ITERATOR, %struct.ITERATOR* %58, i32 0, i32 0
+  store %struct.List* %57, %struct.List** %l68, align 4
+  br label %for.cond35
+
+for.end:                                          ; preds = %cond.end42
+  %59 = load %struct.ITERATOR*, %struct.ITERATOR** @FE_var, align 4
+  %p69 = getelementptr inbounds %struct.ITERATOR, %struct.ITERATOR* %59, i32 0, i32 2
+  %60 = load %struct.ITERATOR*, %struct.ITERATOR** %p69, align 4
+  store %struct.ITERATOR* %60, %struct.ITERATOR** @FE_var, align 4
+  br label %for.inc70
+
+for.inc70:                                        ; preds = %for.end
+  %61 = load %struct.ITERATOR*, %struct.ITERATOR** @FE_var, align 4
+  %l71 = getelementptr inbounds %struct.ITERATOR, %struct.ITERATOR* %61, i32 0, i32 0
+  %62 = load %struct.List*, %struct.List** %l71, align 4
+  %nx72 = getelementptr inbounds %struct.List, %struct.List* %62, i32 0, i32 0
+  %63 = load %struct.List*, %struct.List** %nx72, align 4
+  %64 = load %struct.ITERATOR*, %struct.ITERATOR** @FE_var, align 4
+  %l73 = getelementptr inbounds %struct.ITERATOR, %struct.ITERATOR* %64, i32 0, i32 0
+  store %struct.List* %63, %struct.List** %l73, align 4
+  br label %for.cond17
+
+for.end74:                                        ; preds = %cond.end24
+  %65 = load %struct.ITERATOR*, %struct.ITERATOR** @FE_var, align 4
+  %p75 = getelementptr inbounds %struct.ITERATOR, %struct.ITERATOR* %65, i32 0, i32 2
+  %66 = load %struct.ITERATOR*, %struct.ITERATOR** %p75, align 4
+  store %struct.ITERATOR* %66, %struct.ITERATOR** @FE_var, align 4
+  br label %for.inc76
+
+for.inc76:                                        ; preds = %for.end74
+  %67 = load %struct.ITERATOR*, %struct.ITERATOR** @FE_var, align 4
+  %l77 = getelementptr inbounds %struct.ITERATOR, %struct.ITERATOR* %67, i32 0, i32 0
+  %68 = load %struct.List*, %struct.List** %l77, align 4
+  %nx78 = getelementptr inbounds %struct.List, %struct.List* %68, i32 0, i32 0
+  %69 = load %struct.List*, %struct.List** %nx78, align 4
+  %70 = load %struct.ITERATOR*, %struct.ITERATOR** @FE_var, align 4
+  %l79 = getelementptr inbounds %struct.ITERATOR, %struct.ITERATOR* %70, i32 0, i32 0
+  store %struct.List* %69, %struct.List** %l79, align 4
+  br label %for.cond
+
+for.end80:                                        ; preds = %cond.end
+  %71 = load %struct.ITERATOR*, %struct.ITERATOR** @FE_var, align 4
+  %p81 = getelementptr inbounds %struct.ITERATOR, %struct.ITERATOR* %71, i32 0, i32 2
+  %72 = load %struct.ITERATOR*, %struct.ITERATOR** %p81, align 4
+  store %struct.ITERATOR* %72, %struct.ITERATOR** @FE_var, align 4
+  %73 = load %struct.ITERATOR*, %struct.ITERATOR** @SEQ_var, align 4
+  %l82 = getelementptr inbounds %struct.ITERATOR, %struct.ITERATOR* %73, i32 0, i32 0
+  %74 = load %struct.List*, %struct.List** %l82, align 4
+  %75 = load %struct.ITERATOR*, %struct.ITERATOR** @SEQ_var, align 4
+  %p83 = getelementptr inbounds %struct.ITERATOR, %struct.ITERATOR* %75, i32 0, i32 2
+  %76 = load %struct.ITERATOR*, %struct.ITERATOR** %p83, align 4
+  %old84 = getelementptr inbounds %struct.ITERATOR, %struct.ITERATOR* %76, i32 0, i32 1
+  store %struct.List* %74, %struct.List** %old84, align 4
+  %77 = load %struct.ITERATOR*, %struct.ITERATOR** @SEQ_var, align 4
+  %p85 = getelementptr inbounds %struct.ITERATOR, %struct.ITERATOR* %77, i32 0, i32 2
+  %78 = load %struct.ITERATOR*, %struct.ITERATOR** %p85, align 4
+  store %struct.ITERATOR* %78, %struct.ITERATOR** @SEQ_var, align 4
+  %79 = load %struct.ITERATOR*, %struct.ITERATOR** @SEQ_var, align 4
+  %old86 = getelementptr inbounds %struct.ITERATOR, %struct.ITERATOR* %79, i32 0, i32 1
+  %80 = load %struct.List*, %struct.List** %old86, align 4
+  store %struct.List* %80, %struct.List** %pTriples, align 4
+  %l88 = getelementptr inbounds %struct.ITERATOR, %struct.ITERATOR* %.compoundliteral87, i32 0, i32 0
+  %81 = load %struct.List*, %struct.List** %pTriples, align 4
+  store %struct.List* %81, %struct.List** %l88, align 4
+  %old89 = getelementptr inbounds %struct.ITERATOR, %struct.ITERATOR* %.compoundliteral87, i32 0, i32 1
+  store %struct.List* null, %struct.List** %old89, align 4
+  %p90 = getelementptr inbounds %struct.ITERATOR, %struct.ITERATOR* %.compoundliteral87, i32 0, i32 2
+  %82 = load %struct.ITERATOR*, %struct.ITERATOR** @FE_var, align 4
+  store %struct.ITERATOR* %82, %struct.ITERATOR** %p90, align 4
+  store %struct.ITERATOR* %.compoundliteral87, %struct.ITERATOR** @FE_var, align 4
+  %83 = load %struct.ITERATOR*, %struct.ITERATOR** @FE_var, align 4
+  %l91 = getelementptr inbounds %struct.ITERATOR, %struct.ITERATOR* %83, i32 0, i32 0
+  %84 = load %struct.List*, %struct.List** %l91, align 4
+  %val92 = getelementptr inbounds %struct.List, %struct.List* %84, i32 0, i32 1
+  %85 = bitcast [0 x i8]* %val92 to %struct.Triple*
+  %86 = bitcast %struct.Triple* %t to i8*
+  %87 = bitcast %struct.Triple* %85 to i8*
+  call void @llvm.memcpy.p0i8.p0i8.i32(i8* align 4 %86, i8* align 4 %87, i32 12, i1 true)
+  br label %for.cond93
+
+for.cond93:                                       ; preds = %for.inc108, %for.end80
+  %88 = load %struct.ITERATOR*, %struct.ITERATOR** @FE_var, align 4
+  %l94 = getelementptr inbounds %struct.ITERATOR, %struct.ITERATOR* %88, i32 0, i32 0
+  %89 = load %struct.List*, %struct.List** %l94, align 4
+  %tobool95 = icmp ne %struct.List* %89, null
+  br i1 %tobool95, label %cond.true96, label %cond.false99
+
+cond.true96:                                      ; preds = %for.cond93
+  %90 = load %struct.ITERATOR*, %struct.ITERATOR** @FE_var, align 4
+  %l97 = getelementptr inbounds %struct.ITERATOR, %struct.ITERATOR* %90, i32 0, i32 0
+  %91 = load %struct.List*, %struct.List** %l97, align 4
+  %val98 = getelementptr inbounds %struct.List, %struct.List* %91, i32 0, i32 1
+  %92 = bitcast [0 x i8]* %val98 to %struct.Triple*
+  %93 = bitcast %struct.Triple* %t to i8*
+  %94 = bitcast %struct.Triple* %92 to i8*
+  call void @llvm.memcpy.p0i8.p0i8.i32(i8* align 4 %93, i8* align 4 %94, i32 12, i1 true)
+  br label %cond.end100
+
+cond.false99:                                     ; preds = %for.cond93
+  br label %cond.end100
+
+cond.end100:                                      ; preds = %cond.false99, %cond.true96
+  %cond101 = phi i32 [ 1, %cond.true96 ], [ 0, %cond.false99 ]
+  %tobool102 = icmp ne i32 %cond101, 0
+  br i1 %tobool102, label %for.body103, label %for.end112
+
+for.body103:                                      ; preds = %cond.end100
+  %_1104 = getelementptr inbounds %struct.Triple, %struct.Triple* %t, i32 0, i32 0
+  %95 = load volatile i32, i32* %_1104, align 4
+  %_2105 = getelementptr inbounds %struct.Triple, %struct.Triple* %t, i32 0, i32 1
+  %96 = load volatile i32, i32* %_2105, align 4
+  %_3106 = getelementptr inbounds %struct.Triple, %struct.Triple* %t, i32 0, i32 2
+  %97 = load volatile i32, i32* %_3106, align 4
+  %call107 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([12 x i8], [12 x i8]* @.str, i32 0, i32 0), i32 %95, i32 %96, i32 %97)
+  br label %for.inc108
+
+for.inc108:                                       ; preds = %for.body103
+  %98 = load %struct.ITERATOR*, %struct.ITERATOR** @FE_var, align 4
+  %l109 = getelementptr inbounds %struct.ITERATOR, %struct.ITERATOR* %98, i32 0, i32 0
+  %99 = load %struct.List*, %struct.List** %l109, align 4
+  %nx110 = getelementptr inbounds %struct.List, %struct.List* %99, i32 0, i32 0
+  %100 = load %struct.List*, %struct.List** %nx110, align 4
+  %101 = load %struct.ITERATOR*, %struct.ITERATOR** @FE_var, align 4
+  %l111 = getelementptr inbounds %struct.ITERATOR, %struct.ITERATOR* %101, i32 0, i32 0
+  store %struct.List* %100, %struct.List** %l111, align 4
+  br label %for.cond93
+
+for.end112:                                       ; preds = %cond.end100
+  %102 = load %struct.ITERATOR*, %struct.ITERATOR** @FE_var, align 4
+  %p113 = getelementptr inbounds %struct.ITERATOR, %struct.ITERATOR* %102, i32 0, i32 2
+  %103 = load %struct.ITERATOR*, %struct.ITERATOR** %p113, align 4
+  store %struct.ITERATOR* %103, %struct.ITERATOR** @FE_var, align 4
+  ret i32 0
+}
+
+declare i32 @printf(i8* %0, ...) #1
+
+attributes #0 = { noinline nounwind optnone "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "min-legal-vector-width"="0" "no-infs-fp-math"="false" "no-jump-tables"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #1 = { "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #2 = { argmemonly nounwind willreturn }
+
+!llvm.module.flags = !{!0}
+!llvm.ident = !{!1}
+
+!0 = !{i32 1, !"wchar_size", i32 4}
+!1 = !{!"clang version 11.0.0 (https://github.com/Jacarte/llvm-project.git 0f6dea67136cc1e0b3d200eb2bb165628970c44b)"}
+
+; extracted candidates
+
+; *****
+; For LLVM instruction:
+;  %0 = load i32, i32* %sz.addr, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %add = add i32 4, %0
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = add 4:i32, %0
+infer %1
+
+; *****
+; For LLVM instruction:
+;  %5 = load i32, i32* %sz.addr, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+got 1 candidates from LHS
+
+-------------------------------------------------
+%0:i32 = var
+infer %0
+
+
+--------------------------------
+guess 0
+
+%0:i32 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: -1
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+Dataflow Pruned 0/0
+There are 1 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 2 candidates from LHS
+
+-------------------------------------------------
+%0:i32 = var
+%1:i32 = add 4:i32, %0
+infer %1
+
+
+--------------------------------
+guess 0
+
+%0:i32 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 4
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: 3
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+
+--------------------------------
+guess 1
+
+%0:i32 = var
+
+Cost = 0
+second query is SAT-- constant doesn't work
+Dataflow Pruned 0/0
+There are 2 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+#########################################################
+; exiting Souper's runOnFunction() for listNew()
+
+; entering Souper's runOnFunction() for listAppend()
+
+; ModuleID = './List_comprehensions.c.bc'
+source_filename = "./List_comprehensions.c"
+target datalayout = "e-m:e-p:32:32-i64:64-n32:64-S128"
+target triple = "wasm32-unknown-wasi"
+
+%struct.ITERATOR = type { %struct.List*, %struct.List*, %struct.ITERATOR* }
+%struct.List = type { %struct.List*, [0 x i8] }
+%struct.Triple = type { i32, i32, i32 }
+
+@SEQ_base = hidden global %struct.ITERATOR zeroinitializer, align 4
+@SEQ_var = hidden global %struct.ITERATOR* @SEQ_base, align 4
+@FE_var = hidden global %struct.ITERATOR* null, align 4
+@.str = private unnamed_addr constant [12 x i8] c"%d, %d, %d\0A\00", align 1
+@llvm.used = appending global [1 x i8*] [i8* bitcast (i32 ()* @__main_void to i8*)], section "llvm.metadata"
+
+@__main_void = alias i32 (), i32 ()* @main
+
+; Function Attrs: noinline nounwind optnone
+define hidden %struct.List* @listNew(i32 %sz, i8* %val) #0 {
+entry:
+  %sz.addr = alloca i32, align 4
+  %val.addr = alloca i8*, align 4
+  %l = alloca %struct.List*, align 4
+  store i32 %sz, i32* %sz.addr, align 4
+  store i8* %val, i8** %val.addr, align 4
+  %0 = load i32, i32* %sz.addr, align 4
+  %add = add i32 4, %0
+  %call = call noalias i8* @malloc(i32 %add)
+  %1 = bitcast i8* %call to %struct.List*
+  store %struct.List* %1, %struct.List** %l, align 4
+  %2 = load %struct.List*, %struct.List** %l, align 4
+  %nx = getelementptr inbounds %struct.List, %struct.List* %2, i32 0, i32 0
+  store %struct.List* null, %struct.List** %nx, align 4
+  %3 = load %struct.List*, %struct.List** %l, align 4
+  %val1 = getelementptr inbounds %struct.List, %struct.List* %3, i32 0, i32 1
+  %arraydecay = getelementptr inbounds [0 x i8], [0 x i8]* %val1, i32 0, i32 0
+  %4 = load i8*, i8** %val.addr, align 4
+  %5 = load i32, i32* %sz.addr, align 4
+  call void @llvm.memcpy.p0i8.p0i8.i32(i8* align 4 %arraydecay, i8* align 1 %4, i32 %5, i1 false)
+  %6 = load %struct.List*, %struct.List** %l, align 4
+  ret %struct.List* %6
+}
+
+declare noalias i8* @malloc(i32 %0) #1
+
+; Function Attrs: argmemonly nounwind willreturn
+declare void @llvm.memcpy.p0i8.p0i8.i32(i8* noalias nocapture writeonly %0, i8* noalias nocapture readonly %1, i32 %2, i1 immarg %3) #2
+
+; Function Attrs: noinline nounwind optnone
+define hidden %struct.List* @listAppend(%struct.List* %l, i32 %sz, i8* %val) #0 {
+entry:
+  %l.addr = alloca %struct.List*, align 4
+  %sz.addr = alloca i32, align 4
+  %val.addr = alloca i8*, align 4
+  store %struct.List* %l, %struct.List** %l.addr, align 4
+  store i32 %sz, i32* %sz.addr, align 4
+  store i8* %val, i8** %val.addr, align 4
+  br label %while.cond
+
+while.cond:                                       ; preds = %while.body, %entry
+  %0 = load %struct.List*, %struct.List** %l.addr, align 4
+  %nx = getelementptr inbounds %struct.List, %struct.List* %0, i32 0, i32 0
+  %1 = load %struct.List*, %struct.List** %nx, align 4
+  %tobool = icmp ne %struct.List* %1, null
+  br i1 %tobool, label %while.body, label %while.end
+
+while.body:                                       ; preds = %while.cond
+  %2 = load %struct.List*, %struct.List** %l.addr, align 4
+  %nx1 = getelementptr inbounds %struct.List, %struct.List* %2, i32 0, i32 0
+  %3 = load %struct.List*, %struct.List** %nx1, align 4
+  store %struct.List* %3, %struct.List** %l.addr, align 4
+  br label %while.cond
+
+while.end:                                        ; preds = %while.cond
+  %4 = load i32, i32* %sz.addr, align 4
+  %5 = load i8*, i8** %val.addr, align 4
+  %call = call %struct.List* @listNew(i32 %4, i8* %5)
+  %6 = load %struct.List*, %struct.List** %l.addr, align 4
+  %nx2 = getelementptr inbounds %struct.List, %struct.List* %6, i32 0, i32 0
+  store %struct.List* %call, %struct.List** %nx2, align 4
+  %7 = load %struct.List*, %struct.List** %l.addr, align 4
+  ret %struct.List* %7
+}
+
+; Function Attrs: noinline nounwind optnone
+define hidden %struct.List* @intRangeList(i32 %f, i32 %t) #0 {
+entry:
+  %f.addr = alloca i32, align 4
+  %t.addr = alloca i32, align 4
+  %l = alloca %struct.List*, align 4
+  %e = alloca %struct.List*, align 4
+  %i = alloca i32, align 4
+  store i32 %f, i32* %f.addr, align 4
+  store i32 %t, i32* %t.addr, align 4
+  %0 = bitcast i32* %f.addr to i8*
+  %call = call %struct.List* @listNew(i32 4, i8* %0)
+  store %struct.List* %call, %struct.List** %l, align 4
+  %1 = load %struct.List*, %struct.List** %l, align 4
+  store %struct.List* %1, %struct.List** %e, align 4
+  %2 = load i32, i32* %f.addr, align 4
+  %add = add nsw i32 %2, 1
+  store i32 %add, i32* %i, align 4
+  br label %for.cond
+
+for.cond:                                         ; preds = %for.inc, %entry
+  %3 = load i32, i32* %i, align 4
+  %4 = load i32, i32* %t.addr, align 4
+  %cmp = icmp sle i32 %3, %4
+  br i1 %cmp, label %for.body, label %for.end
+
+for.body:                                         ; preds = %for.cond
+  %5 = bitcast i32* %i to i8*
+  %call1 = call %struct.List* @listNew(i32 4, i8* %5)
+  %6 = load %struct.List*, %struct.List** %e, align 4
+  %nx = getelementptr inbounds %struct.List, %struct.List* %6, i32 0, i32 0
+  store %struct.List* %call1, %struct.List** %nx, align 4
+  store %struct.List* %call1, %struct.List** %e, align 4
+  br label %for.inc
+
+for.inc:                                          ; preds = %for.body
+  %7 = load i32, i32* %i, align 4
+  %inc = add nsw i32 %7, 1
+  store i32 %inc, i32* %i, align 4
+  br label %for.cond
+
+for.end:                                          ; preds = %for.cond
+  %8 = load %struct.List*, %struct.List** %l, align 4
+  ret %struct.List* %8
+}
+
+; Function Attrs: noinline nounwind optnone
+define hidden i32 @main() #0 {
+entry:
+  %retval = alloca i32, align 4
+  %x = alloca i32, align 4
+  %y = alloca i32, align 4
+  %z = alloca i32, align 4
+  %n = alloca i32, align 4
+  %pTriples = alloca %struct.List*, align 4
+  %.compoundliteral = alloca %struct.ITERATOR, align 4
+  %.compoundliteral1 = alloca %struct.ITERATOR, align 4
+  %.compoundliteral10 = alloca %struct.ITERATOR, align 4
+  %.compoundliteral28 = alloca %struct.ITERATOR, align 4
+  %.compoundliteral53 = alloca %struct.Triple, align 4
+  %.compoundliteral56 = alloca %struct.Triple, align 4
+  %t = alloca %struct.Triple, align 4
+  %.compoundliteral87 = alloca %struct.ITERATOR, align 4
+  store i32 0, i32* %retval, align 4
+  store i32 20, i32* %n, align 4
+  %l = getelementptr inbounds %struct.ITERATOR, %struct.ITERATOR* %.compoundliteral, i32 0, i32 0
+  store %struct.List* null, %struct.List** %l, align 4
+  %old = getelementptr inbounds %struct.ITERATOR, %struct.ITERATOR* %.compoundliteral, i32 0, i32 1
+  store %struct.List* null, %struct.List** %old, align 4
+  %p = getelementptr inbounds %struct.ITERATOR, %struct.ITERATOR* %.compoundliteral, i32 0, i32 2
+  %0 = load %struct.ITERATOR*, %struct.ITERATOR** @SEQ_var, align 4
+  store %struct.ITERATOR* %0, %struct.ITERATOR** %p, align 4
+  store %struct.ITERATOR* %.compoundliteral, %struct.ITERATOR** @SEQ_var, align 4
+  %l2 = getelementptr inbounds %struct.ITERATOR, %struct.ITERATOR* %.compoundliteral1, i32 0, i32 0
+  %call = call %struct.List* @intRangeList(i32 1, i32 20)
+  store %struct.List* %call, %struct.List** %l2, align 4
+  %old3 = getelementptr inbounds %struct.ITERATOR, %struct.ITERATOR* %.compoundliteral1, i32 0, i32 1
+  store %struct.List* null, %struct.List** %old3, align 4
+  %p4 = getelementptr inbounds %struct.ITERATOR, %struct.ITERATOR* %.compoundliteral1, i32 0, i32 2
+  %1 = load %struct.ITERATOR*, %struct.ITERATOR** @FE_var, align 4
+  store %struct.ITERATOR* %1, %struct.ITERATOR** %p4, align 4
+  store %struct.ITERATOR* %.compoundliteral1, %struct.ITERATOR** @FE_var, align 4
+  %2 = load %struct.ITERATOR*, %struct.ITERATOR** @FE_var, align 4
+  %l5 = getelementptr inbounds %struct.ITERATOR, %struct.ITERATOR* %2, i32 0, i32 0
+  %3 = load %struct.List*, %struct.List** %l5, align 4
+  %val = getelementptr inbounds %struct.List, %struct.List* %3, i32 0, i32 1
+  %4 = bitcast [0 x i8]* %val to i32*
+  %5 = load i32, i32* %4, align 4
+  store volatile i32 %5, i32* %x, align 4
+  br label %for.cond
+
+for.cond:                                         ; preds = %for.inc76, %entry
+  %6 = load %struct.ITERATOR*, %struct.ITERATOR** @FE_var, align 4
+  %l6 = getelementptr inbounds %struct.ITERATOR, %struct.ITERATOR* %6, i32 0, i32 0
+  %7 = load %struct.List*, %struct.List** %l6, align 4
+  %tobool = icmp ne %struct.List* %7, null
+  br i1 %tobool, label %cond.true, label %cond.false
+
+cond.true:                                        ; preds = %for.cond
+  %8 = load %struct.ITERATOR*, %struct.ITERATOR** @FE_var, align 4
+  %l7 = getelementptr inbounds %struct.ITERATOR, %struct.ITERATOR* %8, i32 0, i32 0
+  %9 = load %struct.List*, %struct.List** %l7, align 4
+  %val8 = getelementptr inbounds %struct.List, %struct.List* %9, i32 0, i32 1
+  %10 = bitcast [0 x i8]* %val8 to i32*
+  %11 = load i32, i32* %10, align 4
+  store volatile i32 %11, i32* %x, align 4
+  br label %cond.end
+
+cond.false:                                       ; preds = %for.cond
+  br label %cond.end
+
+cond.end:                                         ; preds = %cond.false, %cond.true
+  %cond = phi i32 [ 1, %cond.true ], [ 0, %cond.false ]
+  %tobool9 = icmp ne i32 %cond, 0
+  br i1 %tobool9, label %for.body, label %for.end80
+
+for.body:                                         ; preds = %cond.end
+  %l11 = getelementptr inbounds %struct.ITERATOR, %struct.ITERATOR* %.compoundliteral10, i32 0, i32 0
+  %12 = load volatile i32, i32* %x, align 4
+  %call12 = call %struct.List* @intRangeList(i32 %12, i32 20)
+  store %struct.List* %call12, %struct.List** %l11, align 4
+  %old13 = getelementptr inbounds %struct.ITERATOR, %struct.ITERATOR* %.compoundliteral10, i32 0, i32 1
+  store %struct.List* null, %struct.List** %old13, align 4
+  %p14 = getelementptr inbounds %struct.ITERATOR, %struct.ITERATOR* %.compoundliteral10, i32 0, i32 2
+  %13 = load %struct.ITERATOR*, %struct.ITERATOR** @FE_var, align 4
+  store %struct.ITERATOR* %13, %struct.ITERATOR** %p14, align 4
+  store %struct.ITERATOR* %.compoundliteral10, %struct.ITERATOR** @FE_var, align 4
+  %14 = load %struct.ITERATOR*, %struct.ITERATOR** @FE_var, align 4
+  %l15 = getelementptr inbounds %struct.ITERATOR, %struct.ITERATOR* %14, i32 0, i32 0
+  %15 = load %struct.List*, %struct.List** %l15, align 4
+  %val16 = getelementptr inbounds %struct.List, %struct.List* %15, i32 0, i32 1
+  %16 = bitcast [0 x i8]* %val16 to i32*
+  %17 = load i32, i32* %16, align 4
+  store volatile i32 %17, i32* %y, align 4
+  br label %for.cond17
+
+for.cond17:                                       ; preds = %for.inc70, %for.body
+  %18 = load %struct.ITERATOR*, %struct.ITERATOR** @FE_var, align 4
+  %l18 = getelementptr inbounds %struct.ITERATOR, %struct.ITERATOR* %18, i32 0, i32 0
+  %19 = load %struct.List*, %struct.List** %l18, align 4
+  %tobool19 = icmp ne %struct.List* %19, null
+  br i1 %tobool19, label %cond.true20, label %cond.false23
+
+cond.true20:                                      ; preds = %for.cond17
+  %20 = load %struct.ITERATOR*, %struct.ITERATOR** @FE_var, align 4
+  %l21 = getelementptr inbounds %struct.ITERATOR, %struct.ITERATOR* %20, i32 0, i32 0
+  %21 = load %struct.List*, %struct.List** %l21, align 4
+  %val22 = getelementptr inbounds %struct.List, %struct.List* %21, i32 0, i32 1
+  %22 = bitcast [0 x i8]* %val22 to i32*
+  %23 = load i32, i32* %22, align 4
+  store volatile i32 %23, i32* %y, align 4
+  br label %cond.end24
+
+cond.false23:                                     ; preds = %for.cond17
+  br label %cond.end24
+
+cond.end24:                                       ; preds = %cond.false23, %cond.true20
+  %cond25 = phi i32 [ 1, %cond.true20 ], [ 0, %cond.false23 ]
+  %tobool26 = icmp ne i32 %cond25, 0
+  br i1 %tobool26, label %for.body27, label %for.end74
+
+for.body27:                                       ; preds = %cond.end24
+  %l29 = getelementptr inbounds %struct.ITERATOR, %struct.ITERATOR* %.compoundliteral28, i32 0, i32 0
+  %24 = load volatile i32, i32* %y, align 4
+  %call30 = call %struct.List* @intRangeList(i32 %24, i32 20)
+  store %struct.List* %call30, %struct.List** %l29, align 4
+  %old31 = getelementptr inbounds %struct.ITERATOR, %struct.ITERATOR* %.compoundliteral28, i32 0, i32 1
+  store %struct.List* null, %struct.List** %old31, align 4
+  %p32 = getelementptr inbounds %struct.ITERATOR, %struct.ITERATOR* %.compoundliteral28, i32 0, i32 2
+  %25 = load %struct.ITERATOR*, %struct.ITERATOR** @FE_var, align 4
+  store %struct.ITERATOR* %25, %struct.ITERATOR** %p32, align 4
+  store %struct.ITERATOR* %.compoundliteral28, %struct.ITERATOR** @FE_var, align 4
+  %26 = load %struct.ITERATOR*, %struct.ITERATOR** @FE_var, align 4
+  %l33 = getelementptr inbounds %struct.ITERATOR, %struct.ITERATOR* %26, i32 0, i32 0
+  %27 = load %struct.List*, %struct.List** %l33, align 4
+  %val34 = getelementptr inbounds %struct.List, %struct.List* %27, i32 0, i32 1
+  %28 = bitcast [0 x i8]* %val34 to i32*
+  %29 = load i32, i32* %28, align 4
+  store volatile i32 %29, i32* %z, align 4
+  br label %for.cond35
+
+for.cond35:                                       ; preds = %for.inc, %for.body27
+  %30 = load %struct.ITERATOR*, %struct.ITERATOR** @FE_var, align 4
+  %l36 = getelementptr inbounds %struct.ITERATOR, %struct.ITERATOR* %30, i32 0, i32 0
+  %31 = load %struct.List*, %struct.List** %l36, align 4
+  %tobool37 = icmp ne %struct.List* %31, null
+  br i1 %tobool37, label %cond.true38, label %cond.false41
+
+cond.true38:                                      ; preds = %for.cond35
+  %32 = load %struct.ITERATOR*, %struct.ITERATOR** @FE_var, align 4
+  %l39 = getelementptr inbounds %struct.ITERATOR, %struct.ITERATOR* %32, i32 0, i32 0
+  %33 = load %struct.List*, %struct.List** %l39, align 4
+  %val40 = getelementptr inbounds %struct.List, %struct.List* %33, i32 0, i32 1
+  %34 = bitcast [0 x i8]* %val40 to i32*
+  %35 = load i32, i32* %34, align 4
+  store volatile i32 %35, i32* %z, align 4
+  br label %cond.end42
+
+cond.false41:                                     ; preds = %for.cond35
+  br label %cond.end42
+
+cond.end42:                                       ; preds = %cond.false41, %cond.true38
+  %cond43 = phi i32 [ 1, %cond.true38 ], [ 0, %cond.false41 ]
+  %tobool44 = icmp ne i32 %cond43, 0
+  br i1 %tobool44, label %for.body45, label %for.end
+
+for.body45:                                       ; preds = %cond.end42
+  %36 = load volatile i32, i32* %x, align 4
+  %37 = load volatile i32, i32* %x, align 4
+  %mul = mul nsw i32 %36, %37
+  %38 = load volatile i32, i32* %y, align 4
+  %39 = load volatile i32, i32* %y, align 4
+  %mul46 = mul nsw i32 %38, %39
+  %add = add nsw i32 %mul, %mul46
+  %40 = load volatile i32, i32* %z, align 4
+  %41 = load volatile i32, i32* %z, align 4
+  %mul47 = mul nsw i32 %40, %41
+  %cmp = icmp eq i32 %add, %mul47
+  br i1 %cmp, label %cond.true48, label %cond.false64
+
+cond.true48:                                      ; preds = %for.body45
+  %42 = load %struct.ITERATOR*, %struct.ITERATOR** @SEQ_var, align 4
+  %l49 = getelementptr inbounds %struct.ITERATOR, %struct.ITERATOR* %42, i32 0, i32 0
+  %43 = load %struct.List*, %struct.List** %l49, align 4
+  %tobool50 = icmp ne %struct.List* %43, null
+  br i1 %tobool50, label %cond.true51, label %cond.false55
+
+cond.true51:                                      ; preds = %cond.true48
+  %44 = load %struct.ITERATOR*, %struct.ITERATOR** @SEQ_var, align 4
+  %l52 = getelementptr inbounds %struct.ITERATOR, %struct.ITERATOR* %44, i32 0, i32 0
+  %45 = load %struct.List*, %struct.List** %l52, align 4
+  %_1 = getelementptr inbounds %struct.Triple, %struct.Triple* %.compoundliteral53, i32 0, i32 0
+  %46 = load volatile i32, i32* %x, align 4
+  store i32 %46, i32* %_1, align 4
+  %_2 = getelementptr inbounds %struct.Triple, %struct.Triple* %.compoundliteral53, i32 0, i32 1
+  %47 = load volatile i32, i32* %y, align 4
+  store i32 %47, i32* %_2, align 4
+  %_3 = getelementptr inbounds %struct.Triple, %struct.Triple* %.compoundliteral53, i32 0, i32 2
+  %48 = load volatile i32, i32* %z, align 4
+  store i32 %48, i32* %_3, align 4
+  %49 = bitcast %struct.Triple* %.compoundliteral53 to i8*
+  %call54 = call %struct.List* @listAppend(%struct.List* %45, i32 12, i8* %49)
+  br label %cond.end62
+
+cond.false55:                                     ; preds = %cond.true48
+  %_157 = getelementptr inbounds %struct.Triple, %struct.Triple* %.compoundliteral56, i32 0, i32 0
+  %50 = load volatile i32, i32* %x, align 4
+  store i32 %50, i32* %_157, align 4
+  %_258 = getelementptr inbounds %struct.Triple, %struct.Triple* %.compoundliteral56, i32 0, i32 1
+  %51 = load volatile i32, i32* %y, align 4
+  store i32 %51, i32* %_258, align 4
+  %_359 = getelementptr inbounds %struct.Triple, %struct.Triple* %.compoundliteral56, i32 0, i32 2
+  %52 = load volatile i32, i32* %z, align 4
+  store i32 %52, i32* %_359, align 4
+  %53 = bitcast %struct.Triple* %.compoundliteral56 to i8*
+  %call60 = call %struct.List* @listNew(i32 12, i8* %53)
+  %54 = load %struct.ITERATOR*, %struct.ITERATOR** @SEQ_var, align 4
+  %l61 = getelementptr inbounds %struct.ITERATOR, %struct.ITERATOR* %54, i32 0, i32 0
+  store %struct.List* %call60, %struct.List** %l61, align 4
+  br label %cond.end62
+
+cond.end62:                                       ; preds = %cond.false55, %cond.true51
+  %cond63 = phi %struct.List* [ %call54, %cond.true51 ], [ %call60, %cond.false55 ]
+  br label %cond.end65
+
+cond.false64:                                     ; preds = %for.body45
+  br label %cond.end65
+
+cond.end65:                                       ; preds = %cond.false64, %cond.end62
+  %cond66 = phi %struct.List* [ %cond63, %cond.end62 ], [ null, %cond.false64 ]
+  br label %for.inc
+
+for.inc:                                          ; preds = %cond.end65
+  %55 = load %struct.ITERATOR*, %struct.ITERATOR** @FE_var, align 4
+  %l67 = getelementptr inbounds %struct.ITERATOR, %struct.ITERATOR* %55, i32 0, i32 0
+  %56 = load %struct.List*, %struct.List** %l67, align 4
+  %nx = getelementptr inbounds %struct.List, %struct.List* %56, i32 0, i32 0
+  %57 = load %struct.List*, %struct.List** %nx, align 4
+  %58 = load %struct.ITERATOR*, %struct.ITERATOR** @FE_var, align 4
+  %l68 = getelementptr inbounds %struct.ITERATOR, %struct.ITERATOR* %58, i32 0, i32 0
+  store %struct.List* %57, %struct.List** %l68, align 4
+  br label %for.cond35
+
+for.end:                                          ; preds = %cond.end42
+  %59 = load %struct.ITERATOR*, %struct.ITERATOR** @FE_var, align 4
+  %p69 = getelementptr inbounds %struct.ITERATOR, %struct.ITERATOR* %59, i32 0, i32 2
+  %60 = load %struct.ITERATOR*, %struct.ITERATOR** %p69, align 4
+  store %struct.ITERATOR* %60, %struct.ITERATOR** @FE_var, align 4
+  br label %for.inc70
+
+for.inc70:                                        ; preds = %for.end
+  %61 = load %struct.ITERATOR*, %struct.ITERATOR** @FE_var, align 4
+  %l71 = getelementptr inbounds %struct.ITERATOR, %struct.ITERATOR* %61, i32 0, i32 0
+  %62 = load %struct.List*, %struct.List** %l71, align 4
+  %nx72 = getelementptr inbounds %struct.List, %struct.List* %62, i32 0, i32 0
+  %63 = load %struct.List*, %struct.List** %nx72, align 4
+  %64 = load %struct.ITERATOR*, %struct.ITERATOR** @FE_var, align 4
+  %l73 = getelementptr inbounds %struct.ITERATOR, %struct.ITERATOR* %64, i32 0, i32 0
+  store %struct.List* %63, %struct.List** %l73, align 4
+  br label %for.cond17
+
+for.end74:                                        ; preds = %cond.end24
+  %65 = load %struct.ITERATOR*, %struct.ITERATOR** @FE_var, align 4
+  %p75 = getelementptr inbounds %struct.ITERATOR, %struct.ITERATOR* %65, i32 0, i32 2
+  %66 = load %struct.ITERATOR*, %struct.ITERATOR** %p75, align 4
+  store %struct.ITERATOR* %66, %struct.ITERATOR** @FE_var, align 4
+  br label %for.inc76
+
+for.inc76:                                        ; preds = %for.end74
+  %67 = load %struct.ITERATOR*, %struct.ITERATOR** @FE_var, align 4
+  %l77 = getelementptr inbounds %struct.ITERATOR, %struct.ITERATOR* %67, i32 0, i32 0
+  %68 = load %struct.List*, %struct.List** %l77, align 4
+  %nx78 = getelementptr inbounds %struct.List, %struct.List* %68, i32 0, i32 0
+  %69 = load %struct.List*, %struct.List** %nx78, align 4
+  %70 = load %struct.ITERATOR*, %struct.ITERATOR** @FE_var, align 4
+  %l79 = getelementptr inbounds %struct.ITERATOR, %struct.ITERATOR* %70, i32 0, i32 0
+  store %struct.List* %69, %struct.List** %l79, align 4
+  br label %for.cond
+
+for.end80:                                        ; preds = %cond.end
+  %71 = load %struct.ITERATOR*, %struct.ITERATOR** @FE_var, align 4
+  %p81 = getelementptr inbounds %struct.ITERATOR, %struct.ITERATOR* %71, i32 0, i32 2
+  %72 = load %struct.ITERATOR*, %struct.ITERATOR** %p81, align 4
+  store %struct.ITERATOR* %72, %struct.ITERATOR** @FE_var, align 4
+  %73 = load %struct.ITERATOR*, %struct.ITERATOR** @SEQ_var, align 4
+  %l82 = getelementptr inbounds %struct.ITERATOR, %struct.ITERATOR* %73, i32 0, i32 0
+  %74 = load %struct.List*, %struct.List** %l82, align 4
+  %75 = load %struct.ITERATOR*, %struct.ITERATOR** @SEQ_var, align 4
+  %p83 = getelementptr inbounds %struct.ITERATOR, %struct.ITERATOR* %75, i32 0, i32 2
+  %76 = load %struct.ITERATOR*, %struct.ITERATOR** %p83, align 4
+  %old84 = getelementptr inbounds %struct.ITERATOR, %struct.ITERATOR* %76, i32 0, i32 1
+  store %struct.List* %74, %struct.List** %old84, align 4
+  %77 = load %struct.ITERATOR*, %struct.ITERATOR** @SEQ_var, align 4
+  %p85 = getelementptr inbounds %struct.ITERATOR, %struct.ITERATOR* %77, i32 0, i32 2
+  %78 = load %struct.ITERATOR*, %struct.ITERATOR** %p85, align 4
+  store %struct.ITERATOR* %78, %struct.ITERATOR** @SEQ_var, align 4
+  %79 = load %struct.ITERATOR*, %struct.ITERATOR** @SEQ_var, align 4
+  %old86 = getelementptr inbounds %struct.ITERATOR, %struct.ITERATOR* %79, i32 0, i32 1
+  %80 = load %struct.List*, %struct.List** %old86, align 4
+  store %struct.List* %80, %struct.List** %pTriples, align 4
+  %l88 = getelementptr inbounds %struct.ITERATOR, %struct.ITERATOR* %.compoundliteral87, i32 0, i32 0
+  %81 = load %struct.List*, %struct.List** %pTriples, align 4
+  store %struct.List* %81, %struct.List** %l88, align 4
+  %old89 = getelementptr inbounds %struct.ITERATOR, %struct.ITERATOR* %.compoundliteral87, i32 0, i32 1
+  store %struct.List* null, %struct.List** %old89, align 4
+  %p90 = getelementptr inbounds %struct.ITERATOR, %struct.ITERATOR* %.compoundliteral87, i32 0, i32 2
+  %82 = load %struct.ITERATOR*, %struct.ITERATOR** @FE_var, align 4
+  store %struct.ITERATOR* %82, %struct.ITERATOR** %p90, align 4
+  store %struct.ITERATOR* %.compoundliteral87, %struct.ITERATOR** @FE_var, align 4
+  %83 = load %struct.ITERATOR*, %struct.ITERATOR** @FE_var, align 4
+  %l91 = getelementptr inbounds %struct.ITERATOR, %struct.ITERATOR* %83, i32 0, i32 0
+  %84 = load %struct.List*, %struct.List** %l91, align 4
+  %val92 = getelementptr inbounds %struct.List, %struct.List* %84, i32 0, i32 1
+  %85 = bitcast [0 x i8]* %val92 to %struct.Triple*
+  %86 = bitcast %struct.Triple* %t to i8*
+  %87 = bitcast %struct.Triple* %85 to i8*
+  call void @llvm.memcpy.p0i8.p0i8.i32(i8* align 4 %86, i8* align 4 %87, i32 12, i1 true)
+  br label %for.cond93
+
+for.cond93:                                       ; preds = %for.inc108, %for.end80
+  %88 = load %struct.ITERATOR*, %struct.ITERATOR** @FE_var, align 4
+  %l94 = getelementptr inbounds %struct.ITERATOR, %struct.ITERATOR* %88, i32 0, i32 0
+  %89 = load %struct.List*, %struct.List** %l94, align 4
+  %tobool95 = icmp ne %struct.List* %89, null
+  br i1 %tobool95, label %cond.true96, label %cond.false99
+
+cond.true96:                                      ; preds = %for.cond93
+  %90 = load %struct.ITERATOR*, %struct.ITERATOR** @FE_var, align 4
+  %l97 = getelementptr inbounds %struct.ITERATOR, %struct.ITERATOR* %90, i32 0, i32 0
+  %91 = load %struct.List*, %struct.List** %l97, align 4
+  %val98 = getelementptr inbounds %struct.List, %struct.List* %91, i32 0, i32 1
+  %92 = bitcast [0 x i8]* %val98 to %struct.Triple*
+  %93 = bitcast %struct.Triple* %t to i8*
+  %94 = bitcast %struct.Triple* %92 to i8*
+  call void @llvm.memcpy.p0i8.p0i8.i32(i8* align 4 %93, i8* align 4 %94, i32 12, i1 true)
+  br label %cond.end100
+
+cond.false99:                                     ; preds = %for.cond93
+  br label %cond.end100
+
+cond.end100:                                      ; preds = %cond.false99, %cond.true96
+  %cond101 = phi i32 [ 1, %cond.true96 ], [ 0, %cond.false99 ]
+  %tobool102 = icmp ne i32 %cond101, 0
+  br i1 %tobool102, label %for.body103, label %for.end112
+
+for.body103:                                      ; preds = %cond.end100
+  %_1104 = getelementptr inbounds %struct.Triple, %struct.Triple* %t, i32 0, i32 0
+  %95 = load volatile i32, i32* %_1104, align 4
+  %_2105 = getelementptr inbounds %struct.Triple, %struct.Triple* %t, i32 0, i32 1
+  %96 = load volatile i32, i32* %_2105, align 4
+  %_3106 = getelementptr inbounds %struct.Triple, %struct.Triple* %t, i32 0, i32 2
+  %97 = load volatile i32, i32* %_3106, align 4
+  %call107 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([12 x i8], [12 x i8]* @.str, i32 0, i32 0), i32 %95, i32 %96, i32 %97)
+  br label %for.inc108
+
+for.inc108:                                       ; preds = %for.body103
+  %98 = load %struct.ITERATOR*, %struct.ITERATOR** @FE_var, align 4
+  %l109 = getelementptr inbounds %struct.ITERATOR, %struct.ITERATOR* %98, i32 0, i32 0
+  %99 = load %struct.List*, %struct.List** %l109, align 4
+  %nx110 = getelementptr inbounds %struct.List, %struct.List* %99, i32 0, i32 0
+  %100 = load %struct.List*, %struct.List** %nx110, align 4
+  %101 = load %struct.ITERATOR*, %struct.ITERATOR** @FE_var, align 4
+  %l111 = getelementptr inbounds %struct.ITERATOR, %struct.ITERATOR* %101, i32 0, i32 0
+  store %struct.List* %100, %struct.List** %l111, align 4
+  br label %for.cond93
+
+for.end112:                                       ; preds = %cond.end100
+  %102 = load %struct.ITERATOR*, %struct.ITERATOR** @FE_var, align 4
+  %p113 = getelementptr inbounds %struct.ITERATOR, %struct.ITERATOR* %102, i32 0, i32 2
+  %103 = load %struct.ITERATOR*, %struct.ITERATOR** %p113, align 4
+  store %struct.ITERATOR* %103, %struct.ITERATOR** @FE_var, align 4
+  ret i32 0
+}
+
+declare i32 @printf(i8* %0, ...) #1
+
+attributes #0 = { noinline nounwind optnone "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "min-legal-vector-width"="0" "no-infs-fp-math"="false" "no-jump-tables"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #1 = { "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #2 = { argmemonly nounwind willreturn }
+
+!llvm.module.flags = !{!0}
+!llvm.ident = !{!1}
+
+!0 = !{i32 1, !"wchar_size", i32 4}
+!1 = !{!"clang version 11.0.0 (https://github.com/Jacarte/llvm-project.git 0f6dea67136cc1e0b3d200eb2bb165628970c44b)"}
+
+; extracted candidates
+
+; *****
+; For LLVM instruction:
+;  %tobool = icmp ne %struct.List* %1, null
+; Looking for a replacement for:
+%0:i32 = var
+%1:i1 = ne 0:i32, %0
+infer %1
+
+; *****
+; For LLVM instruction:
+;  %4 = load i32, i32* %sz.addr, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+got 2 candidates from LHS
+
+-------------------------------------------------
+%0:i32 = var
+%1:i1 = ne 0:i32, %0
+infer %1
+
+
+--------------------------------
+guess 0
+
+%0:i1 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: -1
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+Dataflow Pruned 0/0
+There are 1 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+#########################################################
+; exiting Souper's runOnFunction() for listAppend()
+
+; entering Souper's runOnFunction() for intRangeList()
+
+; ModuleID = './List_comprehensions.c.bc'
+source_filename = "./List_comprehensions.c"
+target datalayout = "e-m:e-p:32:32-i64:64-n32:64-S128"
+target triple = "wasm32-unknown-wasi"
+
+%struct.ITERATOR = type { %struct.List*, %struct.List*, %struct.ITERATOR* }
+%struct.List = type { %struct.List*, [0 x i8] }
+%struct.Triple = type { i32, i32, i32 }
+
+@SEQ_base = hidden global %struct.ITERATOR zeroinitializer, align 4
+@SEQ_var = hidden global %struct.ITERATOR* @SEQ_base, align 4
+@FE_var = hidden global %struct.ITERATOR* null, align 4
+@.str = private unnamed_addr constant [12 x i8] c"%d, %d, %d\0A\00", align 1
+@llvm.used = appending global [1 x i8*] [i8* bitcast (i32 ()* @__main_void to i8*)], section "llvm.metadata"
+
+@__main_void = alias i32 (), i32 ()* @main
+
+; Function Attrs: noinline nounwind optnone
+define hidden %struct.List* @listNew(i32 %sz, i8* %val) #0 {
+entry:
+  %sz.addr = alloca i32, align 4
+  %val.addr = alloca i8*, align 4
+  %l = alloca %struct.List*, align 4
+  store i32 %sz, i32* %sz.addr, align 4
+  store i8* %val, i8** %val.addr, align 4
+  %0 = load i32, i32* %sz.addr, align 4
+  %add = add i32 4, %0
+  %call = call noalias i8* @malloc(i32 %add)
+  %1 = bitcast i8* %call to %struct.List*
+  store %struct.List* %1, %struct.List** %l, align 4
+  %2 = load %struct.List*, %struct.List** %l, align 4
+  %nx = getelementptr inbounds %struct.List, %struct.List* %2, i32 0, i32 0
+  store %struct.List* null, %struct.List** %nx, align 4
+  %3 = load %struct.List*, %struct.List** %l, align 4
+  %val1 = getelementptr inbounds %struct.List, %struct.List* %3, i32 0, i32 1
+  %arraydecay = getelementptr inbounds [0 x i8], [0 x i8]* %val1, i32 0, i32 0
+  %4 = load i8*, i8** %val.addr, align 4
+  %5 = load i32, i32* %sz.addr, align 4
+  call void @llvm.memcpy.p0i8.p0i8.i32(i8* align 4 %arraydecay, i8* align 1 %4, i32 %5, i1 false)
+  %6 = load %struct.List*, %struct.List** %l, align 4
+  ret %struct.List* %6
+}
+
+declare noalias i8* @malloc(i32 %0) #1
+
+; Function Attrs: argmemonly nounwind willreturn
+declare void @llvm.memcpy.p0i8.p0i8.i32(i8* noalias nocapture writeonly %0, i8* noalias nocapture readonly %1, i32 %2, i1 immarg %3) #2
+
+; Function Attrs: noinline nounwind optnone
+define hidden %struct.List* @listAppend(%struct.List* %l, i32 %sz, i8* %val) #0 {
+entry:
+  %l.addr = alloca %struct.List*, align 4
+  %sz.addr = alloca i32, align 4
+  %val.addr = alloca i8*, align 4
+  store %struct.List* %l, %struct.List** %l.addr, align 4
+  store i32 %sz, i32* %sz.addr, align 4
+  store i8* %val, i8** %val.addr, align 4
+  br label %while.cond
+
+while.cond:                                       ; preds = %while.body, %entry
+  %0 = load %struct.List*, %struct.List** %l.addr, align 4
+  %nx = getelementptr inbounds %struct.List, %struct.List* %0, i32 0, i32 0
+  %1 = load %struct.List*, %struct.List** %nx, align 4
+  %tobool = icmp ne %struct.List* %1, null
+  br i1 %tobool, label %while.body, label %while.end
+
+while.body:                                       ; preds = %while.cond
+  %2 = load %struct.List*, %struct.List** %l.addr, align 4
+  %nx1 = getelementptr inbounds %struct.List, %struct.List* %2, i32 0, i32 0
+  %3 = load %struct.List*, %struct.List** %nx1, align 4
+  store %struct.List* %3, %struct.List** %l.addr, align 4
+  br label %while.cond
+
+while.end:                                        ; preds = %while.cond
+  %4 = load i32, i32* %sz.addr, align 4
+  %5 = load i8*, i8** %val.addr, align 4
+  %call = call %struct.List* @listNew(i32 %4, i8* %5)
+  %6 = load %struct.List*, %struct.List** %l.addr, align 4
+  %nx2 = getelementptr inbounds %struct.List, %struct.List* %6, i32 0, i32 0
+  store %struct.List* %call, %struct.List** %nx2, align 4
+  %7 = load %struct.List*, %struct.List** %l.addr, align 4
+  ret %struct.List* %7
+}
+
+; Function Attrs: noinline nounwind optnone
+define hidden %struct.List* @intRangeList(i32 %f, i32 %t) #0 {
+entry:
+  %f.addr = alloca i32, align 4
+  %t.addr = alloca i32, align 4
+  %l = alloca %struct.List*, align 4
+  %e = alloca %struct.List*, align 4
+  %i = alloca i32, align 4
+  store i32 %f, i32* %f.addr, align 4
+  store i32 %t, i32* %t.addr, align 4
+  %0 = bitcast i32* %f.addr to i8*
+  %call = call %struct.List* @listNew(i32 4, i8* %0)
+  store %struct.List* %call, %struct.List** %l, align 4
+  %1 = load %struct.List*, %struct.List** %l, align 4
+  store %struct.List* %1, %struct.List** %e, align 4
+  %2 = load i32, i32* %f.addr, align 4
+  %add = add nsw i32 %2, 1
+  store i32 %add, i32* %i, align 4
+  br label %for.cond
+
+for.cond:                                         ; preds = %for.inc, %entry
+  %3 = load i32, i32* %i, align 4
+  %4 = load i32, i32* %t.addr, align 4
+  %cmp = icmp sle i32 %3, %4
+  br i1 %cmp, label %for.body, label %for.end
+
+for.body:                                         ; preds = %for.cond
+  %5 = bitcast i32* %i to i8*
+  %call1 = call %struct.List* @listNew(i32 4, i8* %5)
+  %6 = load %struct.List*, %struct.List** %e, align 4
+  %nx = getelementptr inbounds %struct.List, %struct.List* %6, i32 0, i32 0
+  store %struct.List* %call1, %struct.List** %nx, align 4
+  store %struct.List* %call1, %struct.List** %e, align 4
+  br label %for.inc
+
+for.inc:                                          ; preds = %for.body
+  %7 = load i32, i32* %i, align 4
+  %inc = add nsw i32 %7, 1
+  store i32 %inc, i32* %i, align 4
+  br label %for.cond
+
+for.end:                                          ; preds = %for.cond
+  %8 = load %struct.List*, %struct.List** %l, align 4
+  ret %struct.List* %8
+}
+
+; Function Attrs: noinline nounwind optnone
+define hidden i32 @main() #0 {
+entry:
+  %retval = alloca i32, align 4
+  %x = alloca i32, align 4
+  %y = alloca i32, align 4
+  %z = alloca i32, align 4
+  %n = alloca i32, align 4
+  %pTriples = alloca %struct.List*, align 4
+  %.compoundliteral = alloca %struct.ITERATOR, align 4
+  %.compoundliteral1 = alloca %struct.ITERATOR, align 4
+  %.compoundliteral10 = alloca %struct.ITERATOR, align 4
+  %.compoundliteral28 = alloca %struct.ITERATOR, align 4
+  %.compoundliteral53 = alloca %struct.Triple, align 4
+  %.compoundliteral56 = alloca %struct.Triple, align 4
+  %t = alloca %struct.Triple, align 4
+  %.compoundliteral87 = alloca %struct.ITERATOR, align 4
+  store i32 0, i32* %retval, align 4
+  store i32 20, i32* %n, align 4
+  %l = getelementptr inbounds %struct.ITERATOR, %struct.ITERATOR* %.compoundliteral, i32 0, i32 0
+  store %struct.List* null, %struct.List** %l, align 4
+  %old = getelementptr inbounds %struct.ITERATOR, %struct.ITERATOR* %.compoundliteral, i32 0, i32 1
+  store %struct.List* null, %struct.List** %old, align 4
+  %p = getelementptr inbounds %struct.ITERATOR, %struct.ITERATOR* %.compoundliteral, i32 0, i32 2
+  %0 = load %struct.ITERATOR*, %struct.ITERATOR** @SEQ_var, align 4
+  store %struct.ITERATOR* %0, %struct.ITERATOR** %p, align 4
+  store %struct.ITERATOR* %.compoundliteral, %struct.ITERATOR** @SEQ_var, align 4
+  %l2 = getelementptr inbounds %struct.ITERATOR, %struct.ITERATOR* %.compoundliteral1, i32 0, i32 0
+  %call = call %struct.List* @intRangeList(i32 1, i32 20)
+  store %struct.List* %call, %struct.List** %l2, align 4
+  %old3 = getelementptr inbounds %struct.ITERATOR, %struct.ITERATOR* %.compoundliteral1, i32 0, i32 1
+  store %struct.List* null, %struct.List** %old3, align 4
+  %p4 = getelementptr inbounds %struct.ITERATOR, %struct.ITERATOR* %.compoundliteral1, i32 0, i32 2
+  %1 = load %struct.ITERATOR*, %struct.ITERATOR** @FE_var, align 4
+  store %struct.ITERATOR* %1, %struct.ITERATOR** %p4, align 4
+  store %struct.ITERATOR* %.compoundliteral1, %struct.ITERATOR** @FE_var, align 4
+  %2 = load %struct.ITERATOR*, %struct.ITERATOR** @FE_var, align 4
+  %l5 = getelementptr inbounds %struct.ITERATOR, %struct.ITERATOR* %2, i32 0, i32 0
+  %3 = load %struct.List*, %struct.List** %l5, align 4
+  %val = getelementptr inbounds %struct.List, %struct.List* %3, i32 0, i32 1
+  %4 = bitcast [0 x i8]* %val to i32*
+  %5 = load i32, i32* %4, align 4
+  store volatile i32 %5, i32* %x, align 4
+  br label %for.cond
+
+for.cond:                                         ; preds = %for.inc76, %entry
+  %6 = load %struct.ITERATOR*, %struct.ITERATOR** @FE_var, align 4
+  %l6 = getelementptr inbounds %struct.ITERATOR, %struct.ITERATOR* %6, i32 0, i32 0
+  %7 = load %struct.List*, %struct.List** %l6, align 4
+  %tobool = icmp ne %struct.List* %7, null
+  br i1 %tobool, label %cond.true, label %cond.false
+
+cond.true:                                        ; preds = %for.cond
+  %8 = load %struct.ITERATOR*, %struct.ITERATOR** @FE_var, align 4
+  %l7 = getelementptr inbounds %struct.ITERATOR, %struct.ITERATOR* %8, i32 0, i32 0
+  %9 = load %struct.List*, %struct.List** %l7, align 4
+  %val8 = getelementptr inbounds %struct.List, %struct.List* %9, i32 0, i32 1
+  %10 = bitcast [0 x i8]* %val8 to i32*
+  %11 = load i32, i32* %10, align 4
+  store volatile i32 %11, i32* %x, align 4
+  br label %cond.end
+
+cond.false:                                       ; preds = %for.cond
+  br label %cond.end
+
+cond.end:                                         ; preds = %cond.false, %cond.true
+  %cond = phi i32 [ 1, %cond.true ], [ 0, %cond.false ]
+  %tobool9 = icmp ne i32 %cond, 0
+  br i1 %tobool9, label %for.body, label %for.end80
+
+for.body:                                         ; preds = %cond.end
+  %l11 = getelementptr inbounds %struct.ITERATOR, %struct.ITERATOR* %.compoundliteral10, i32 0, i32 0
+  %12 = load volatile i32, i32* %x, align 4
+  %call12 = call %struct.List* @intRangeList(i32 %12, i32 20)
+  store %struct.List* %call12, %struct.List** %l11, align 4
+  %old13 = getelementptr inbounds %struct.ITERATOR, %struct.ITERATOR* %.compoundliteral10, i32 0, i32 1
+  store %struct.List* null, %struct.List** %old13, align 4
+  %p14 = getelementptr inbounds %struct.ITERATOR, %struct.ITERATOR* %.compoundliteral10, i32 0, i32 2
+  %13 = load %struct.ITERATOR*, %struct.ITERATOR** @FE_var, align 4
+  store %struct.ITERATOR* %13, %struct.ITERATOR** %p14, align 4
+  store %struct.ITERATOR* %.compoundliteral10, %struct.ITERATOR** @FE_var, align 4
+  %14 = load %struct.ITERATOR*, %struct.ITERATOR** @FE_var, align 4
+  %l15 = getelementptr inbounds %struct.ITERATOR, %struct.ITERATOR* %14, i32 0, i32 0
+  %15 = load %struct.List*, %struct.List** %l15, align 4
+  %val16 = getelementptr inbounds %struct.List, %struct.List* %15, i32 0, i32 1
+  %16 = bitcast [0 x i8]* %val16 to i32*
+  %17 = load i32, i32* %16, align 4
+  store volatile i32 %17, i32* %y, align 4
+  br label %for.cond17
+
+for.cond17:                                       ; preds = %for.inc70, %for.body
+  %18 = load %struct.ITERATOR*, %struct.ITERATOR** @FE_var, align 4
+  %l18 = getelementptr inbounds %struct.ITERATOR, %struct.ITERATOR* %18, i32 0, i32 0
+  %19 = load %struct.List*, %struct.List** %l18, align 4
+  %tobool19 = icmp ne %struct.List* %19, null
+  br i1 %tobool19, label %cond.true20, label %cond.false23
+
+cond.true20:                                      ; preds = %for.cond17
+  %20 = load %struct.ITERATOR*, %struct.ITERATOR** @FE_var, align 4
+  %l21 = getelementptr inbounds %struct.ITERATOR, %struct.ITERATOR* %20, i32 0, i32 0
+  %21 = load %struct.List*, %struct.List** %l21, align 4
+  %val22 = getelementptr inbounds %struct.List, %struct.List* %21, i32 0, i32 1
+  %22 = bitcast [0 x i8]* %val22 to i32*
+  %23 = load i32, i32* %22, align 4
+  store volatile i32 %23, i32* %y, align 4
+  br label %cond.end24
+
+cond.false23:                                     ; preds = %for.cond17
+  br label %cond.end24
+
+cond.end24:                                       ; preds = %cond.false23, %cond.true20
+  %cond25 = phi i32 [ 1, %cond.true20 ], [ 0, %cond.false23 ]
+  %tobool26 = icmp ne i32 %cond25, 0
+  br i1 %tobool26, label %for.body27, label %for.end74
+
+for.body27:                                       ; preds = %cond.end24
+  %l29 = getelementptr inbounds %struct.ITERATOR, %struct.ITERATOR* %.compoundliteral28, i32 0, i32 0
+  %24 = load volatile i32, i32* %y, align 4
+  %call30 = call %struct.List* @intRangeList(i32 %24, i32 20)
+  store %struct.List* %call30, %struct.List** %l29, align 4
+  %old31 = getelementptr inbounds %struct.ITERATOR, %struct.ITERATOR* %.compoundliteral28, i32 0, i32 1
+  store %struct.List* null, %struct.List** %old31, align 4
+  %p32 = getelementptr inbounds %struct.ITERATOR, %struct.ITERATOR* %.compoundliteral28, i32 0, i32 2
+  %25 = load %struct.ITERATOR*, %struct.ITERATOR** @FE_var, align 4
+  store %struct.ITERATOR* %25, %struct.ITERATOR** %p32, align 4
+  store %struct.ITERATOR* %.compoundliteral28, %struct.ITERATOR** @FE_var, align 4
+  %26 = load %struct.ITERATOR*, %struct.ITERATOR** @FE_var, align 4
+  %l33 = getelementptr inbounds %struct.ITERATOR, %struct.ITERATOR* %26, i32 0, i32 0
+  %27 = load %struct.List*, %struct.List** %l33, align 4
+  %val34 = getelementptr inbounds %struct.List, %struct.List* %27, i32 0, i32 1
+  %28 = bitcast [0 x i8]* %val34 to i32*
+  %29 = load i32, i32* %28, align 4
+  store volatile i32 %29, i32* %z, align 4
+  br label %for.cond35
+
+for.cond35:                                       ; preds = %for.inc, %for.body27
+  %30 = load %struct.ITERATOR*, %struct.ITERATOR** @FE_var, align 4
+  %l36 = getelementptr inbounds %struct.ITERATOR, %struct.ITERATOR* %30, i32 0, i32 0
+  %31 = load %struct.List*, %struct.List** %l36, align 4
+  %tobool37 = icmp ne %struct.List* %31, null
+  br i1 %tobool37, label %cond.true38, label %cond.false41
+
+cond.true38:                                      ; preds = %for.cond35
+  %32 = load %struct.ITERATOR*, %struct.ITERATOR** @FE_var, align 4
+  %l39 = getelementptr inbounds %struct.ITERATOR, %struct.ITERATOR* %32, i32 0, i32 0
+  %33 = load %struct.List*, %struct.List** %l39, align 4
+  %val40 = getelementptr inbounds %struct.List, %struct.List* %33, i32 0, i32 1
+  %34 = bitcast [0 x i8]* %val40 to i32*
+  %35 = load i32, i32* %34, align 4
+  store volatile i32 %35, i32* %z, align 4
+  br label %cond.end42
+
+cond.false41:                                     ; preds = %for.cond35
+  br label %cond.end42
+
+cond.end42:                                       ; preds = %cond.false41, %cond.true38
+  %cond43 = phi i32 [ 1, %cond.true38 ], [ 0, %cond.false41 ]
+  %tobool44 = icmp ne i32 %cond43, 0
+  br i1 %tobool44, label %for.body45, label %for.end
+
+for.body45:                                       ; preds = %cond.end42
+  %36 = load volatile i32, i32* %x, align 4
+  %37 = load volatile i32, i32* %x, align 4
+  %mul = mul nsw i32 %36, %37
+  %38 = load volatile i32, i32* %y, align 4
+  %39 = load volatile i32, i32* %y, align 4
+  %mul46 = mul nsw i32 %38, %39
+  %add = add nsw i32 %mul, %mul46
+  %40 = load volatile i32, i32* %z, align 4
+  %41 = load volatile i32, i32* %z, align 4
+  %mul47 = mul nsw i32 %40, %41
+  %cmp = icmp eq i32 %add, %mul47
+  br i1 %cmp, label %cond.true48, label %cond.false64
+
+cond.true48:                                      ; preds = %for.body45
+  %42 = load %struct.ITERATOR*, %struct.ITERATOR** @SEQ_var, align 4
+  %l49 = getelementptr inbounds %struct.ITERATOR, %struct.ITERATOR* %42, i32 0, i32 0
+  %43 = load %struct.List*, %struct.List** %l49, align 4
+  %tobool50 = icmp ne %struct.List* %43, null
+  br i1 %tobool50, label %cond.true51, label %cond.false55
+
+cond.true51:                                      ; preds = %cond.true48
+  %44 = load %struct.ITERATOR*, %struct.ITERATOR** @SEQ_var, align 4
+  %l52 = getelementptr inbounds %struct.ITERATOR, %struct.ITERATOR* %44, i32 0, i32 0
+  %45 = load %struct.List*, %struct.List** %l52, align 4
+  %_1 = getelementptr inbounds %struct.Triple, %struct.Triple* %.compoundliteral53, i32 0, i32 0
+  %46 = load volatile i32, i32* %x, align 4
+  store i32 %46, i32* %_1, align 4
+  %_2 = getelementptr inbounds %struct.Triple, %struct.Triple* %.compoundliteral53, i32 0, i32 1
+  %47 = load volatile i32, i32* %y, align 4
+  store i32 %47, i32* %_2, align 4
+  %_3 = getelementptr inbounds %struct.Triple, %struct.Triple* %.compoundliteral53, i32 0, i32 2
+  %48 = load volatile i32, i32* %z, align 4
+  store i32 %48, i32* %_3, align 4
+  %49 = bitcast %struct.Triple* %.compoundliteral53 to i8*
+  %call54 = call %struct.List* @listAppend(%struct.List* %45, i32 12, i8* %49)
+  br label %cond.end62
+
+cond.false55:                                     ; preds = %cond.true48
+  %_157 = getelementptr inbounds %struct.Triple, %struct.Triple* %.compoundliteral56, i32 0, i32 0
+  %50 = load volatile i32, i32* %x, align 4
+  store i32 %50, i32* %_157, align 4
+  %_258 = getelementptr inbounds %struct.Triple, %struct.Triple* %.compoundliteral56, i32 0, i32 1
+  %51 = load volatile i32, i32* %y, align 4
+  store i32 %51, i32* %_258, align 4
+  %_359 = getelementptr inbounds %struct.Triple, %struct.Triple* %.compoundliteral56, i32 0, i32 2
+  %52 = load volatile i32, i32* %z, align 4
+  store i32 %52, i32* %_359, align 4
+  %53 = bitcast %struct.Triple* %.compoundliteral56 to i8*
+  %call60 = call %struct.List* @listNew(i32 12, i8* %53)
+  %54 = load %struct.ITERATOR*, %struct.ITERATOR** @SEQ_var, align 4
+  %l61 = getelementptr inbounds %struct.ITERATOR, %struct.ITERATOR* %54, i32 0, i32 0
+  store %struct.List* %call60, %struct.List** %l61, align 4
+  br label %cond.end62
+
+cond.end62:                                       ; preds = %cond.false55, %cond.true51
+  %cond63 = phi %struct.List* [ %call54, %cond.true51 ], [ %call60, %cond.false55 ]
+  br label %cond.end65
+
+cond.false64:                                     ; preds = %for.body45
+  br label %cond.end65
+
+cond.end65:                                       ; preds = %cond.false64, %cond.end62
+  %cond66 = phi %struct.List* [ %cond63, %cond.end62 ], [ null, %cond.false64 ]
+  br label %for.inc
+
+for.inc:                                          ; preds = %cond.end65
+  %55 = load %struct.ITERATOR*, %struct.ITERATOR** @FE_var, align 4
+  %l67 = getelementptr inbounds %struct.ITERATOR, %struct.ITERATOR* %55, i32 0, i32 0
+  %56 = load %struct.List*, %struct.List** %l67, align 4
+  %nx = getelementptr inbounds %struct.List, %struct.List* %56, i32 0, i32 0
+  %57 = load %struct.List*, %struct.List** %nx, align 4
+  %58 = load %struct.ITERATOR*, %struct.ITERATOR** @FE_var, align 4
+  %l68 = getelementptr inbounds %struct.ITERATOR, %struct.ITERATOR* %58, i32 0, i32 0
+  store %struct.List* %57, %struct.List** %l68, align 4
+  br label %for.cond35
+
+for.end:                                          ; preds = %cond.end42
+  %59 = load %struct.ITERATOR*, %struct.ITERATOR** @FE_var, align 4
+  %p69 = getelementptr inbounds %struct.ITERATOR, %struct.ITERATOR* %59, i32 0, i32 2
+  %60 = load %struct.ITERATOR*, %struct.ITERATOR** %p69, align 4
+  store %struct.ITERATOR* %60, %struct.ITERATOR** @FE_var, align 4
+  br label %for.inc70
+
+for.inc70:                                        ; preds = %for.end
+  %61 = load %struct.ITERATOR*, %struct.ITERATOR** @FE_var, align 4
+  %l71 = getelementptr inbounds %struct.ITERATOR, %struct.ITERATOR* %61, i32 0, i32 0
+  %62 = load %struct.List*, %struct.List** %l71, align 4
+  %nx72 = getelementptr inbounds %struct.List, %struct.List* %62, i32 0, i32 0
+  %63 = load %struct.List*, %struct.List** %nx72, align 4
+  %64 = load %struct.ITERATOR*, %struct.ITERATOR** @FE_var, align 4
+  %l73 = getelementptr inbounds %struct.ITERATOR, %struct.ITERATOR* %64, i32 0, i32 0
+  store %struct.List* %63, %struct.List** %l73, align 4
+  br label %for.cond17
+
+for.end74:                                        ; preds = %cond.end24
+  %65 = load %struct.ITERATOR*, %struct.ITERATOR** @FE_var, align 4
+  %p75 = getelementptr inbounds %struct.ITERATOR, %struct.ITERATOR* %65, i32 0, i32 2
+  %66 = load %struct.ITERATOR*, %struct.ITERATOR** %p75, align 4
+  store %struct.ITERATOR* %66, %struct.ITERATOR** @FE_var, align 4
+  br label %for.inc76
+
+for.inc76:                                        ; preds = %for.end74
+  %67 = load %struct.ITERATOR*, %struct.ITERATOR** @FE_var, align 4
+  %l77 = getelementptr inbounds %struct.ITERATOR, %struct.ITERATOR* %67, i32 0, i32 0
+  %68 = load %struct.List*, %struct.List** %l77, align 4
+  %nx78 = getelementptr inbounds %struct.List, %struct.List* %68, i32 0, i32 0
+  %69 = load %struct.List*, %struct.List** %nx78, align 4
+  %70 = load %struct.ITERATOR*, %struct.ITERATOR** @FE_var, align 4
+  %l79 = getelementptr inbounds %struct.ITERATOR, %struct.ITERATOR* %70, i32 0, i32 0
+  store %struct.List* %69, %struct.List** %l79, align 4
+  br label %for.cond
+
+for.end80:                                        ; preds = %cond.end
+  %71 = load %struct.ITERATOR*, %struct.ITERATOR** @FE_var, align 4
+  %p81 = getelementptr inbounds %struct.ITERATOR, %struct.ITERATOR* %71, i32 0, i32 2
+  %72 = load %struct.ITERATOR*, %struct.ITERATOR** %p81, align 4
+  store %struct.ITERATOR* %72, %struct.ITERATOR** @FE_var, align 4
+  %73 = load %struct.ITERATOR*, %struct.ITERATOR** @SEQ_var, align 4
+  %l82 = getelementptr inbounds %struct.ITERATOR, %struct.ITERATOR* %73, i32 0, i32 0
+  %74 = load %struct.List*, %struct.List** %l82, align 4
+  %75 = load %struct.ITERATOR*, %struct.ITERATOR** @SEQ_var, align 4
+  %p83 = getelementptr inbounds %struct.ITERATOR, %struct.ITERATOR* %75, i32 0, i32 2
+  %76 = load %struct.ITERATOR*, %struct.ITERATOR** %p83, align 4
+  %old84 = getelementptr inbounds %struct.ITERATOR, %struct.ITERATOR* %76, i32 0, i32 1
+  store %struct.List* %74, %struct.List** %old84, align 4
+  %77 = load %struct.ITERATOR*, %struct.ITERATOR** @SEQ_var, align 4
+  %p85 = getelementptr inbounds %struct.ITERATOR, %struct.ITERATOR* %77, i32 0, i32 2
+  %78 = load %struct.ITERATOR*, %struct.ITERATOR** %p85, align 4
+  store %struct.ITERATOR* %78, %struct.ITERATOR** @SEQ_var, align 4
+  %79 = load %struct.ITERATOR*, %struct.ITERATOR** @SEQ_var, align 4
+  %old86 = getelementptr inbounds %struct.ITERATOR, %struct.ITERATOR* %79, i32 0, i32 1
+  %80 = load %struct.List*, %struct.List** %old86, align 4
+  store %struct.List* %80, %struct.List** %pTriples, align 4
+  %l88 = getelementptr inbounds %struct.ITERATOR, %struct.ITERATOR* %.compoundliteral87, i32 0, i32 0
+  %81 = load %struct.List*, %struct.List** %pTriples, align 4
+  store %struct.List* %81, %struct.List** %l88, align 4
+  %old89 = getelementptr inbounds %struct.ITERATOR, %struct.ITERATOR* %.compoundliteral87, i32 0, i32 1
+  store %struct.List* null, %struct.List** %old89, align 4
+  %p90 = getelementptr inbounds %struct.ITERATOR, %struct.ITERATOR* %.compoundliteral87, i32 0, i32 2
+  %82 = load %struct.ITERATOR*, %struct.ITERATOR** @FE_var, align 4
+  store %struct.ITERATOR* %82, %struct.ITERATOR** %p90, align 4
+  store %struct.ITERATOR* %.compoundliteral87, %struct.ITERATOR** @FE_var, align 4
+  %83 = load %struct.ITERATOR*, %struct.ITERATOR** @FE_var, align 4
+  %l91 = getelementptr inbounds %struct.ITERATOR, %struct.ITERATOR* %83, i32 0, i32 0
+  %84 = load %struct.List*, %struct.List** %l91, align 4
+  %val92 = getelementptr inbounds %struct.List, %struct.List* %84, i32 0, i32 1
+  %85 = bitcast [0 x i8]* %val92 to %struct.Triple*
+  %86 = bitcast %struct.Triple* %t to i8*
+  %87 = bitcast %struct.Triple* %85 to i8*
+  call void @llvm.memcpy.p0i8.p0i8.i32(i8* align 4 %86, i8* align 4 %87, i32 12, i1 true)
+  br label %for.cond93
+
+for.cond93:                                       ; preds = %for.inc108, %for.end80
+  %88 = load %struct.ITERATOR*, %struct.ITERATOR** @FE_var, align 4
+  %l94 = getelementptr inbounds %struct.ITERATOR, %struct.ITERATOR* %88, i32 0, i32 0
+  %89 = load %struct.List*, %struct.List** %l94, align 4
+  %tobool95 = icmp ne %struct.List* %89, null
+  br i1 %tobool95, label %cond.true96, label %cond.false99
+
+cond.true96:                                      ; preds = %for.cond93
+  %90 = load %struct.ITERATOR*, %struct.ITERATOR** @FE_var, align 4
+  %l97 = getelementptr inbounds %struct.ITERATOR, %struct.ITERATOR* %90, i32 0, i32 0
+  %91 = load %struct.List*, %struct.List** %l97, align 4
+  %val98 = getelementptr inbounds %struct.List, %struct.List* %91, i32 0, i32 1
+  %92 = bitcast [0 x i8]* %val98 to %struct.Triple*
+  %93 = bitcast %struct.Triple* %t to i8*
+  %94 = bitcast %struct.Triple* %92 to i8*
+  call void @llvm.memcpy.p0i8.p0i8.i32(i8* align 4 %93, i8* align 4 %94, i32 12, i1 true)
+  br label %cond.end100
+
+cond.false99:                                     ; preds = %for.cond93
+  br label %cond.end100
+
+cond.end100:                                      ; preds = %cond.false99, %cond.true96
+  %cond101 = phi i32 [ 1, %cond.true96 ], [ 0, %cond.false99 ]
+  %tobool102 = icmp ne i32 %cond101, 0
+  br i1 %tobool102, label %for.body103, label %for.end112
+
+for.body103:                                      ; preds = %cond.end100
+  %_1104 = getelementptr inbounds %struct.Triple, %struct.Triple* %t, i32 0, i32 0
+  %95 = load volatile i32, i32* %_1104, align 4
+  %_2105 = getelementptr inbounds %struct.Triple, %struct.Triple* %t, i32 0, i32 1
+  %96 = load volatile i32, i32* %_2105, align 4
+  %_3106 = getelementptr inbounds %struct.Triple, %struct.Triple* %t, i32 0, i32 2
+  %97 = load volatile i32, i32* %_3106, align 4
+  %call107 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([12 x i8], [12 x i8]* @.str, i32 0, i32 0), i32 %95, i32 %96, i32 %97)
+  br label %for.inc108
+
+for.inc108:                                       ; preds = %for.body103
+  %98 = load %struct.ITERATOR*, %struct.ITERATOR** @FE_var, align 4
+  %l109 = getelementptr inbounds %struct.ITERATOR, %struct.ITERATOR* %98, i32 0, i32 0
+  %99 = load %struct.List*, %struct.List** %l109, align 4
+  %nx110 = getelementptr inbounds %struct.List, %struct.List* %99, i32 0, i32 0
+  %100 = load %struct.List*, %struct.List** %nx110, align 4
+  %101 = load %struct.ITERATOR*, %struct.ITERATOR** @FE_var, align 4
+  %l111 = getelementptr inbounds %struct.ITERATOR, %struct.ITERATOR* %101, i32 0, i32 0
+  store %struct.List* %100, %struct.List** %l111, align 4
+  br label %for.cond93
+
+for.end112:                                       ; preds = %cond.end100
+  %102 = load %struct.ITERATOR*, %struct.ITERATOR** @FE_var, align 4
+  %p113 = getelementptr inbounds %struct.ITERATOR, %struct.ITERATOR* %102, i32 0, i32 2
+  %103 = load %struct.ITERATOR*, %struct.ITERATOR** %p113, align 4
+  store %struct.ITERATOR* %103, %struct.ITERATOR** @FE_var, align 4
+  ret i32 0
+}
+
+declare i32 @printf(i8* %0, ...) #1
+
+attributes #0 = { noinline nounwind optnone "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "min-legal-vector-width"="0" "no-infs-fp-math"="false" "no-jump-tables"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #1 = { "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #2 = { argmemonly nounwind willreturn }
+
+!llvm.module.flags = !{!0}
+!llvm.ident = !{!1}
+
+!0 = !{i32 1, !"wchar_size", i32 4}
+!1 = !{!"clang version 11.0.0 (https://github.com/Jacarte/llvm-project.git 0f6dea67136cc1e0b3d200eb2bb165628970c44b)"}
+
+; extracted candidates
+
+; *****
+; For LLVM instruction:
+;  %2 = load i32, i32* %f.addr, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %add = add nsw i32 %2, 1
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = addnsw 1:i32, %0
+infer %1
+
+; *****
+; For LLVM instruction:
+;  %3 = load i32, i32* %i, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %4 = load i32, i32* %t.addr, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %cmp = icmp sle i32 %3, %4
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = var
+%2:i1 = sle %0, %1
+infer %2
+
+; *****
+; For LLVM instruction:
+;  %7 = load i32, i32* %i, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %inc = add nsw i32 %7, 1
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = addnsw 1:i32, %0
+infer %1
+got 2 candidates from LHS
+
+-------------------------------------------------
+%0:i32 = var
+%1:i32 = addnsw 1:i32, %0
+infer %1
+
+
+--------------------------------
+guess 0
+
+%0:i32 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 1
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: 268435457
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+
+--------------------------------
+guess 1
+
+%0:i32 = var
+
+Cost = 0
+second query is SAT-- constant doesn't work
+Dataflow Pruned 0/0
+There are 2 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 3 candidates from LHS
+
+-------------------------------------------------
+%0:i32 = var
+%1:i32 = var
+%2:i1 = sle %0, %1
+infer %2
+
+
+--------------------------------
+guess 0
+
+%0:i1 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: -1
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: 0
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+Dataflow Pruned 0/0
+There are 1 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+#########################################################
+; exiting Souper's runOnFunction() for intRangeList()
+
+; entering Souper's runOnFunction() for main()
+
+; ModuleID = './List_comprehensions.c.bc'
+source_filename = "./List_comprehensions.c"
+target datalayout = "e-m:e-p:32:32-i64:64-n32:64-S128"
+target triple = "wasm32-unknown-wasi"
+
+%struct.ITERATOR = type { %struct.List*, %struct.List*, %struct.ITERATOR* }
+%struct.List = type { %struct.List*, [0 x i8] }
+%struct.Triple = type { i32, i32, i32 }
+
+@SEQ_base = hidden global %struct.ITERATOR zeroinitializer, align 4
+@SEQ_var = hidden global %struct.ITERATOR* @SEQ_base, align 4
+@FE_var = hidden global %struct.ITERATOR* null, align 4
+@.str = private unnamed_addr constant [12 x i8] c"%d, %d, %d\0A\00", align 1
+@llvm.used = appending global [1 x i8*] [i8* bitcast (i32 ()* @__main_void to i8*)], section "llvm.metadata"
+
+@__main_void = alias i32 (), i32 ()* @main
+
+; Function Attrs: noinline nounwind optnone
+define hidden %struct.List* @listNew(i32 %sz, i8* %val) #0 {
+entry:
+  %sz.addr = alloca i32, align 4
+  %val.addr = alloca i8*, align 4
+  %l = alloca %struct.List*, align 4
+  store i32 %sz, i32* %sz.addr, align 4
+  store i8* %val, i8** %val.addr, align 4
+  %0 = load i32, i32* %sz.addr, align 4
+  %add = add i32 4, %0
+  %call = call noalias i8* @malloc(i32 %add)
+  %1 = bitcast i8* %call to %struct.List*
+  store %struct.List* %1, %struct.List** %l, align 4
+  %2 = load %struct.List*, %struct.List** %l, align 4
+  %nx = getelementptr inbounds %struct.List, %struct.List* %2, i32 0, i32 0
+  store %struct.List* null, %struct.List** %nx, align 4
+  %3 = load %struct.List*, %struct.List** %l, align 4
+  %val1 = getelementptr inbounds %struct.List, %struct.List* %3, i32 0, i32 1
+  %arraydecay = getelementptr inbounds [0 x i8], [0 x i8]* %val1, i32 0, i32 0
+  %4 = load i8*, i8** %val.addr, align 4
+  %5 = load i32, i32* %sz.addr, align 4
+  call void @llvm.memcpy.p0i8.p0i8.i32(i8* align 4 %arraydecay, i8* align 1 %4, i32 %5, i1 false)
+  %6 = load %struct.List*, %struct.List** %l, align 4
+  ret %struct.List* %6
+}
+
+declare noalias i8* @malloc(i32 %0) #1
+
+; Function Attrs: argmemonly nounwind willreturn
+declare void @llvm.memcpy.p0i8.p0i8.i32(i8* noalias nocapture writeonly %0, i8* noalias nocapture readonly %1, i32 %2, i1 immarg %3) #2
+
+; Function Attrs: noinline nounwind optnone
+define hidden %struct.List* @listAppend(%struct.List* %l, i32 %sz, i8* %val) #0 {
+entry:
+  %l.addr = alloca %struct.List*, align 4
+  %sz.addr = alloca i32, align 4
+  %val.addr = alloca i8*, align 4
+  store %struct.List* %l, %struct.List** %l.addr, align 4
+  store i32 %sz, i32* %sz.addr, align 4
+  store i8* %val, i8** %val.addr, align 4
+  br label %while.cond
+
+while.cond:                                       ; preds = %while.body, %entry
+  %0 = load %struct.List*, %struct.List** %l.addr, align 4
+  %nx = getelementptr inbounds %struct.List, %struct.List* %0, i32 0, i32 0
+  %1 = load %struct.List*, %struct.List** %nx, align 4
+  %tobool = icmp ne %struct.List* %1, null
+  br i1 %tobool, label %while.body, label %while.end
+
+while.body:                                       ; preds = %while.cond
+  %2 = load %struct.List*, %struct.List** %l.addr, align 4
+  %nx1 = getelementptr inbounds %struct.List, %struct.List* %2, i32 0, i32 0
+  %3 = load %struct.List*, %struct.List** %nx1, align 4
+  store %struct.List* %3, %struct.List** %l.addr, align 4
+  br label %while.cond
+
+while.end:                                        ; preds = %while.cond
+  %4 = load i32, i32* %sz.addr, align 4
+  %5 = load i8*, i8** %val.addr, align 4
+  %call = call %struct.List* @listNew(i32 %4, i8* %5)
+  %6 = load %struct.List*, %struct.List** %l.addr, align 4
+  %nx2 = getelementptr inbounds %struct.List, %struct.List* %6, i32 0, i32 0
+  store %struct.List* %call, %struct.List** %nx2, align 4
+  %7 = load %struct.List*, %struct.List** %l.addr, align 4
+  ret %struct.List* %7
+}
+
+; Function Attrs: noinline nounwind optnone
+define hidden %struct.List* @intRangeList(i32 %f, i32 %t) #0 {
+entry:
+  %f.addr = alloca i32, align 4
+  %t.addr = alloca i32, align 4
+  %l = alloca %struct.List*, align 4
+  %e = alloca %struct.List*, align 4
+  %i = alloca i32, align 4
+  store i32 %f, i32* %f.addr, align 4
+  store i32 %t, i32* %t.addr, align 4
+  %0 = bitcast i32* %f.addr to i8*
+  %call = call %struct.List* @listNew(i32 4, i8* %0)
+  store %struct.List* %call, %struct.List** %l, align 4
+  %1 = load %struct.List*, %struct.List** %l, align 4
+  store %struct.List* %1, %struct.List** %e, align 4
+  %2 = load i32, i32* %f.addr, align 4
+  %add = add nsw i32 %2, 1
+  store i32 %add, i32* %i, align 4
+  br label %for.cond
+
+for.cond:                                         ; preds = %for.inc, %entry
+  %3 = load i32, i32* %i, align 4
+  %4 = load i32, i32* %t.addr, align 4
+  %cmp = icmp sle i32 %3, %4
+  br i1 %cmp, label %for.body, label %for.end
+
+for.body:                                         ; preds = %for.cond
+  %5 = bitcast i32* %i to i8*
+  %call1 = call %struct.List* @listNew(i32 4, i8* %5)
+  %6 = load %struct.List*, %struct.List** %e, align 4
+  %nx = getelementptr inbounds %struct.List, %struct.List* %6, i32 0, i32 0
+  store %struct.List* %call1, %struct.List** %nx, align 4
+  store %struct.List* %call1, %struct.List** %e, align 4
+  br label %for.inc
+
+for.inc:                                          ; preds = %for.body
+  %7 = load i32, i32* %i, align 4
+  %inc = add nsw i32 %7, 1
+  store i32 %inc, i32* %i, align 4
+  br label %for.cond
+
+for.end:                                          ; preds = %for.cond
+  %8 = load %struct.List*, %struct.List** %l, align 4
+  ret %struct.List* %8
+}
+
+; Function Attrs: noinline nounwind optnone
+define hidden i32 @main() #0 {
+entry:
+  %retval = alloca i32, align 4
+  %x = alloca i32, align 4
+  %y = alloca i32, align 4
+  %z = alloca i32, align 4
+  %n = alloca i32, align 4
+  %pTriples = alloca %struct.List*, align 4
+  %.compoundliteral = alloca %struct.ITERATOR, align 4
+  %.compoundliteral1 = alloca %struct.ITERATOR, align 4
+  %.compoundliteral10 = alloca %struct.ITERATOR, align 4
+  %.compoundliteral28 = alloca %struct.ITERATOR, align 4
+  %.compoundliteral53 = alloca %struct.Triple, align 4
+  %.compoundliteral56 = alloca %struct.Triple, align 4
+  %t = alloca %struct.Triple, align 4
+  %.compoundliteral87 = alloca %struct.ITERATOR, align 4
+  store i32 0, i32* %retval, align 4
+  store i32 20, i32* %n, align 4
+  %l = getelementptr inbounds %struct.ITERATOR, %struct.ITERATOR* %.compoundliteral, i32 0, i32 0
+  store %struct.List* null, %struct.List** %l, align 4
+  %old = getelementptr inbounds %struct.ITERATOR, %struct.ITERATOR* %.compoundliteral, i32 0, i32 1
+  store %struct.List* null, %struct.List** %old, align 4
+  %p = getelementptr inbounds %struct.ITERATOR, %struct.ITERATOR* %.compoundliteral, i32 0, i32 2
+  %0 = load %struct.ITERATOR*, %struct.ITERATOR** @SEQ_var, align 4
+  store %struct.ITERATOR* %0, %struct.ITERATOR** %p, align 4
+  store %struct.ITERATOR* %.compoundliteral, %struct.ITERATOR** @SEQ_var, align 4
+  %l2 = getelementptr inbounds %struct.ITERATOR, %struct.ITERATOR* %.compoundliteral1, i32 0, i32 0
+  %call = call %struct.List* @intRangeList(i32 1, i32 20)
+  store %struct.List* %call, %struct.List** %l2, align 4
+  %old3 = getelementptr inbounds %struct.ITERATOR, %struct.ITERATOR* %.compoundliteral1, i32 0, i32 1
+  store %struct.List* null, %struct.List** %old3, align 4
+  %p4 = getelementptr inbounds %struct.ITERATOR, %struct.ITERATOR* %.compoundliteral1, i32 0, i32 2
+  %1 = load %struct.ITERATOR*, %struct.ITERATOR** @FE_var, align 4
+  store %struct.ITERATOR* %1, %struct.ITERATOR** %p4, align 4
+  store %struct.ITERATOR* %.compoundliteral1, %struct.ITERATOR** @FE_var, align 4
+  %2 = load %struct.ITERATOR*, %struct.ITERATOR** @FE_var, align 4
+  %l5 = getelementptr inbounds %struct.ITERATOR, %struct.ITERATOR* %2, i32 0, i32 0
+  %3 = load %struct.List*, %struct.List** %l5, align 4
+  %val = getelementptr inbounds %struct.List, %struct.List* %3, i32 0, i32 1
+  %4 = bitcast [0 x i8]* %val to i32*
+  %5 = load i32, i32* %4, align 4
+  store volatile i32 %5, i32* %x, align 4
+  br label %for.cond
+
+for.cond:                                         ; preds = %for.inc76, %entry
+  %6 = load %struct.ITERATOR*, %struct.ITERATOR** @FE_var, align 4
+  %l6 = getelementptr inbounds %struct.ITERATOR, %struct.ITERATOR* %6, i32 0, i32 0
+  %7 = load %struct.List*, %struct.List** %l6, align 4
+  %tobool = icmp ne %struct.List* %7, null
+  br i1 %tobool, label %cond.true, label %cond.false
+
+cond.true:                                        ; preds = %for.cond
+  %8 = load %struct.ITERATOR*, %struct.ITERATOR** @FE_var, align 4
+  %l7 = getelementptr inbounds %struct.ITERATOR, %struct.ITERATOR* %8, i32 0, i32 0
+  %9 = load %struct.List*, %struct.List** %l7, align 4
+  %val8 = getelementptr inbounds %struct.List, %struct.List* %9, i32 0, i32 1
+  %10 = bitcast [0 x i8]* %val8 to i32*
+  %11 = load i32, i32* %10, align 4
+  store volatile i32 %11, i32* %x, align 4
+  br label %cond.end
+
+cond.false:                                       ; preds = %for.cond
+  br label %cond.end
+
+cond.end:                                         ; preds = %cond.false, %cond.true
+  %cond = phi i32 [ 1, %cond.true ], [ 0, %cond.false ]
+  %tobool9 = icmp ne i32 %cond, 0
+  br i1 %tobool9, label %for.body, label %for.end80
+
+for.body:                                         ; preds = %cond.end
+  %l11 = getelementptr inbounds %struct.ITERATOR, %struct.ITERATOR* %.compoundliteral10, i32 0, i32 0
+  %12 = load volatile i32, i32* %x, align 4
+  %call12 = call %struct.List* @intRangeList(i32 %12, i32 20)
+  store %struct.List* %call12, %struct.List** %l11, align 4
+  %old13 = getelementptr inbounds %struct.ITERATOR, %struct.ITERATOR* %.compoundliteral10, i32 0, i32 1
+  store %struct.List* null, %struct.List** %old13, align 4
+  %p14 = getelementptr inbounds %struct.ITERATOR, %struct.ITERATOR* %.compoundliteral10, i32 0, i32 2
+  %13 = load %struct.ITERATOR*, %struct.ITERATOR** @FE_var, align 4
+  store %struct.ITERATOR* %13, %struct.ITERATOR** %p14, align 4
+  store %struct.ITERATOR* %.compoundliteral10, %struct.ITERATOR** @FE_var, align 4
+  %14 = load %struct.ITERATOR*, %struct.ITERATOR** @FE_var, align 4
+  %l15 = getelementptr inbounds %struct.ITERATOR, %struct.ITERATOR* %14, i32 0, i32 0
+  %15 = load %struct.List*, %struct.List** %l15, align 4
+  %val16 = getelementptr inbounds %struct.List, %struct.List* %15, i32 0, i32 1
+  %16 = bitcast [0 x i8]* %val16 to i32*
+  %17 = load i32, i32* %16, align 4
+  store volatile i32 %17, i32* %y, align 4
+  br label %for.cond17
+
+for.cond17:                                       ; preds = %for.inc70, %for.body
+  %18 = load %struct.ITERATOR*, %struct.ITERATOR** @FE_var, align 4
+  %l18 = getelementptr inbounds %struct.ITERATOR, %struct.ITERATOR* %18, i32 0, i32 0
+  %19 = load %struct.List*, %struct.List** %l18, align 4
+  %tobool19 = icmp ne %struct.List* %19, null
+  br i1 %tobool19, label %cond.true20, label %cond.false23
+
+cond.true20:                                      ; preds = %for.cond17
+  %20 = load %struct.ITERATOR*, %struct.ITERATOR** @FE_var, align 4
+  %l21 = getelementptr inbounds %struct.ITERATOR, %struct.ITERATOR* %20, i32 0, i32 0
+  %21 = load %struct.List*, %struct.List** %l21, align 4
+  %val22 = getelementptr inbounds %struct.List, %struct.List* %21, i32 0, i32 1
+  %22 = bitcast [0 x i8]* %val22 to i32*
+  %23 = load i32, i32* %22, align 4
+  store volatile i32 %23, i32* %y, align 4
+  br label %cond.end24
+
+cond.false23:                                     ; preds = %for.cond17
+  br label %cond.end24
+
+cond.end24:                                       ; preds = %cond.false23, %cond.true20
+  %cond25 = phi i32 [ 1, %cond.true20 ], [ 0, %cond.false23 ]
+  %tobool26 = icmp ne i32 %cond25, 0
+  br i1 %tobool26, label %for.body27, label %for.end74
+
+for.body27:                                       ; preds = %cond.end24
+  %l29 = getelementptr inbounds %struct.ITERATOR, %struct.ITERATOR* %.compoundliteral28, i32 0, i32 0
+  %24 = load volatile i32, i32* %y, align 4
+  %call30 = call %struct.List* @intRangeList(i32 %24, i32 20)
+  store %struct.List* %call30, %struct.List** %l29, align 4
+  %old31 = getelementptr inbounds %struct.ITERATOR, %struct.ITERATOR* %.compoundliteral28, i32 0, i32 1
+  store %struct.List* null, %struct.List** %old31, align 4
+  %p32 = getelementptr inbounds %struct.ITERATOR, %struct.ITERATOR* %.compoundliteral28, i32 0, i32 2
+  %25 = load %struct.ITERATOR*, %struct.ITERATOR** @FE_var, align 4
+  store %struct.ITERATOR* %25, %struct.ITERATOR** %p32, align 4
+  store %struct.ITERATOR* %.compoundliteral28, %struct.ITERATOR** @FE_var, align 4
+  %26 = load %struct.ITERATOR*, %struct.ITERATOR** @FE_var, align 4
+  %l33 = getelementptr inbounds %struct.ITERATOR, %struct.ITERATOR* %26, i32 0, i32 0
+  %27 = load %struct.List*, %struct.List** %l33, align 4
+  %val34 = getelementptr inbounds %struct.List, %struct.List* %27, i32 0, i32 1
+  %28 = bitcast [0 x i8]* %val34 to i32*
+  %29 = load i32, i32* %28, align 4
+  store volatile i32 %29, i32* %z, align 4
+  br label %for.cond35
+
+for.cond35:                                       ; preds = %for.inc, %for.body27
+  %30 = load %struct.ITERATOR*, %struct.ITERATOR** @FE_var, align 4
+  %l36 = getelementptr inbounds %struct.ITERATOR, %struct.ITERATOR* %30, i32 0, i32 0
+  %31 = load %struct.List*, %struct.List** %l36, align 4
+  %tobool37 = icmp ne %struct.List* %31, null
+  br i1 %tobool37, label %cond.true38, label %cond.false41
+
+cond.true38:                                      ; preds = %for.cond35
+  %32 = load %struct.ITERATOR*, %struct.ITERATOR** @FE_var, align 4
+  %l39 = getelementptr inbounds %struct.ITERATOR, %struct.ITERATOR* %32, i32 0, i32 0
+  %33 = load %struct.List*, %struct.List** %l39, align 4
+  %val40 = getelementptr inbounds %struct.List, %struct.List* %33, i32 0, i32 1
+  %34 = bitcast [0 x i8]* %val40 to i32*
+  %35 = load i32, i32* %34, align 4
+  store volatile i32 %35, i32* %z, align 4
+  br label %cond.end42
+
+cond.false41:                                     ; preds = %for.cond35
+  br label %cond.end42
+
+cond.end42:                                       ; preds = %cond.false41, %cond.true38
+  %cond43 = phi i32 [ 1, %cond.true38 ], [ 0, %cond.false41 ]
+  %tobool44 = icmp ne i32 %cond43, 0
+  br i1 %tobool44, label %for.body45, label %for.end
+
+for.body45:                                       ; preds = %cond.end42
+  %36 = load volatile i32, i32* %x, align 4
+  %37 = load volatile i32, i32* %x, align 4
+  %mul = mul nsw i32 %36, %37
+  %38 = load volatile i32, i32* %y, align 4
+  %39 = load volatile i32, i32* %y, align 4
+  %mul46 = mul nsw i32 %38, %39
+  %add = add nsw i32 %mul, %mul46
+  %40 = load volatile i32, i32* %z, align 4
+  %41 = load volatile i32, i32* %z, align 4
+  %mul47 = mul nsw i32 %40, %41
+  %cmp = icmp eq i32 %add, %mul47
+  br i1 %cmp, label %cond.true48, label %cond.false64
+
+cond.true48:                                      ; preds = %for.body45
+  %42 = load %struct.ITERATOR*, %struct.ITERATOR** @SEQ_var, align 4
+  %l49 = getelementptr inbounds %struct.ITERATOR, %struct.ITERATOR* %42, i32 0, i32 0
+  %43 = load %struct.List*, %struct.List** %l49, align 4
+  %tobool50 = icmp ne %struct.List* %43, null
+  br i1 %tobool50, label %cond.true51, label %cond.false55
+
+cond.true51:                                      ; preds = %cond.true48
+  %44 = load %struct.ITERATOR*, %struct.ITERATOR** @SEQ_var, align 4
+  %l52 = getelementptr inbounds %struct.ITERATOR, %struct.ITERATOR* %44, i32 0, i32 0
+  %45 = load %struct.List*, %struct.List** %l52, align 4
+  %_1 = getelementptr inbounds %struct.Triple, %struct.Triple* %.compoundliteral53, i32 0, i32 0
+  %46 = load volatile i32, i32* %x, align 4
+  store i32 %46, i32* %_1, align 4
+  %_2 = getelementptr inbounds %struct.Triple, %struct.Triple* %.compoundliteral53, i32 0, i32 1
+  %47 = load volatile i32, i32* %y, align 4
+  store i32 %47, i32* %_2, align 4
+  %_3 = getelementptr inbounds %struct.Triple, %struct.Triple* %.compoundliteral53, i32 0, i32 2
+  %48 = load volatile i32, i32* %z, align 4
+  store i32 %48, i32* %_3, align 4
+  %49 = bitcast %struct.Triple* %.compoundliteral53 to i8*
+  %call54 = call %struct.List* @listAppend(%struct.List* %45, i32 12, i8* %49)
+  br label %cond.end62
+
+cond.false55:                                     ; preds = %cond.true48
+  %_157 = getelementptr inbounds %struct.Triple, %struct.Triple* %.compoundliteral56, i32 0, i32 0
+  %50 = load volatile i32, i32* %x, align 4
+  store i32 %50, i32* %_157, align 4
+  %_258 = getelementptr inbounds %struct.Triple, %struct.Triple* %.compoundliteral56, i32 0, i32 1
+  %51 = load volatile i32, i32* %y, align 4
+  store i32 %51, i32* %_258, align 4
+  %_359 = getelementptr inbounds %struct.Triple, %struct.Triple* %.compoundliteral56, i32 0, i32 2
+  %52 = load volatile i32, i32* %z, align 4
+  store i32 %52, i32* %_359, align 4
+  %53 = bitcast %struct.Triple* %.compoundliteral56 to i8*
+  %call60 = call %struct.List* @listNew(i32 12, i8* %53)
+  %54 = load %struct.ITERATOR*, %struct.ITERATOR** @SEQ_var, align 4
+  %l61 = getelementptr inbounds %struct.ITERATOR, %struct.ITERATOR* %54, i32 0, i32 0
+  store %struct.List* %call60, %struct.List** %l61, align 4
+  br label %cond.end62
+
+cond.end62:                                       ; preds = %cond.false55, %cond.true51
+  %cond63 = phi %struct.List* [ %call54, %cond.true51 ], [ %call60, %cond.false55 ]
+  br label %cond.end65
+
+cond.false64:                                     ; preds = %for.body45
+  br label %cond.end65
+
+cond.end65:                                       ; preds = %cond.false64, %cond.end62
+  %cond66 = phi %struct.List* [ %cond63, %cond.end62 ], [ null, %cond.false64 ]
+  br label %for.inc
+
+for.inc:                                          ; preds = %cond.end65
+  %55 = load %struct.ITERATOR*, %struct.ITERATOR** @FE_var, align 4
+  %l67 = getelementptr inbounds %struct.ITERATOR, %struct.ITERATOR* %55, i32 0, i32 0
+  %56 = load %struct.List*, %struct.List** %l67, align 4
+  %nx = getelementptr inbounds %struct.List, %struct.List* %56, i32 0, i32 0
+  %57 = load %struct.List*, %struct.List** %nx, align 4
+  %58 = load %struct.ITERATOR*, %struct.ITERATOR** @FE_var, align 4
+  %l68 = getelementptr inbounds %struct.ITERATOR, %struct.ITERATOR* %58, i32 0, i32 0
+  store %struct.List* %57, %struct.List** %l68, align 4
+  br label %for.cond35
+
+for.end:                                          ; preds = %cond.end42
+  %59 = load %struct.ITERATOR*, %struct.ITERATOR** @FE_var, align 4
+  %p69 = getelementptr inbounds %struct.ITERATOR, %struct.ITERATOR* %59, i32 0, i32 2
+  %60 = load %struct.ITERATOR*, %struct.ITERATOR** %p69, align 4
+  store %struct.ITERATOR* %60, %struct.ITERATOR** @FE_var, align 4
+  br label %for.inc70
+
+for.inc70:                                        ; preds = %for.end
+  %61 = load %struct.ITERATOR*, %struct.ITERATOR** @FE_var, align 4
+  %l71 = getelementptr inbounds %struct.ITERATOR, %struct.ITERATOR* %61, i32 0, i32 0
+  %62 = load %struct.List*, %struct.List** %l71, align 4
+  %nx72 = getelementptr inbounds %struct.List, %struct.List* %62, i32 0, i32 0
+  %63 = load %struct.List*, %struct.List** %nx72, align 4
+  %64 = load %struct.ITERATOR*, %struct.ITERATOR** @FE_var, align 4
+  %l73 = getelementptr inbounds %struct.ITERATOR, %struct.ITERATOR* %64, i32 0, i32 0
+  store %struct.List* %63, %struct.List** %l73, align 4
+  br label %for.cond17
+
+for.end74:                                        ; preds = %cond.end24
+  %65 = load %struct.ITERATOR*, %struct.ITERATOR** @FE_var, align 4
+  %p75 = getelementptr inbounds %struct.ITERATOR, %struct.ITERATOR* %65, i32 0, i32 2
+  %66 = load %struct.ITERATOR*, %struct.ITERATOR** %p75, align 4
+  store %struct.ITERATOR* %66, %struct.ITERATOR** @FE_var, align 4
+  br label %for.inc76
+
+for.inc76:                                        ; preds = %for.end74
+  %67 = load %struct.ITERATOR*, %struct.ITERATOR** @FE_var, align 4
+  %l77 = getelementptr inbounds %struct.ITERATOR, %struct.ITERATOR* %67, i32 0, i32 0
+  %68 = load %struct.List*, %struct.List** %l77, align 4
+  %nx78 = getelementptr inbounds %struct.List, %struct.List* %68, i32 0, i32 0
+  %69 = load %struct.List*, %struct.List** %nx78, align 4
+  %70 = load %struct.ITERATOR*, %struct.ITERATOR** @FE_var, align 4
+  %l79 = getelementptr inbounds %struct.ITERATOR, %struct.ITERATOR* %70, i32 0, i32 0
+  store %struct.List* %69, %struct.List** %l79, align 4
+  br label %for.cond
+
+for.end80:                                        ; preds = %cond.end
+  %71 = load %struct.ITERATOR*, %struct.ITERATOR** @FE_var, align 4
+  %p81 = getelementptr inbounds %struct.ITERATOR, %struct.ITERATOR* %71, i32 0, i32 2
+  %72 = load %struct.ITERATOR*, %struct.ITERATOR** %p81, align 4
+  store %struct.ITERATOR* %72, %struct.ITERATOR** @FE_var, align 4
+  %73 = load %struct.ITERATOR*, %struct.ITERATOR** @SEQ_var, align 4
+  %l82 = getelementptr inbounds %struct.ITERATOR, %struct.ITERATOR* %73, i32 0, i32 0
+  %74 = load %struct.List*, %struct.List** %l82, align 4
+  %75 = load %struct.ITERATOR*, %struct.ITERATOR** @SEQ_var, align 4
+  %p83 = getelementptr inbounds %struct.ITERATOR, %struct.ITERATOR* %75, i32 0, i32 2
+  %76 = load %struct.ITERATOR*, %struct.ITERATOR** %p83, align 4
+  %old84 = getelementptr inbounds %struct.ITERATOR, %struct.ITERATOR* %76, i32 0, i32 1
+  store %struct.List* %74, %struct.List** %old84, align 4
+  %77 = load %struct.ITERATOR*, %struct.ITERATOR** @SEQ_var, align 4
+  %p85 = getelementptr inbounds %struct.ITERATOR, %struct.ITERATOR* %77, i32 0, i32 2
+  %78 = load %struct.ITERATOR*, %struct.ITERATOR** %p85, align 4
+  store %struct.ITERATOR* %78, %struct.ITERATOR** @SEQ_var, align 4
+  %79 = load %struct.ITERATOR*, %struct.ITERATOR** @SEQ_var, align 4
+  %old86 = getelementptr inbounds %struct.ITERATOR, %struct.ITERATOR* %79, i32 0, i32 1
+  %80 = load %struct.List*, %struct.List** %old86, align 4
+  store %struct.List* %80, %struct.List** %pTriples, align 4
+  %l88 = getelementptr inbounds %struct.ITERATOR, %struct.ITERATOR* %.compoundliteral87, i32 0, i32 0
+  %81 = load %struct.List*, %struct.List** %pTriples, align 4
+  store %struct.List* %81, %struct.List** %l88, align 4
+  %old89 = getelementptr inbounds %struct.ITERATOR, %struct.ITERATOR* %.compoundliteral87, i32 0, i32 1
+  store %struct.List* null, %struct.List** %old89, align 4
+  %p90 = getelementptr inbounds %struct.ITERATOR, %struct.ITERATOR* %.compoundliteral87, i32 0, i32 2
+  %82 = load %struct.ITERATOR*, %struct.ITERATOR** @FE_var, align 4
+  store %struct.ITERATOR* %82, %struct.ITERATOR** %p90, align 4
+  store %struct.ITERATOR* %.compoundliteral87, %struct.ITERATOR** @FE_var, align 4
+  %83 = load %struct.ITERATOR*, %struct.ITERATOR** @FE_var, align 4
+  %l91 = getelementptr inbounds %struct.ITERATOR, %struct.ITERATOR* %83, i32 0, i32 0
+  %84 = load %struct.List*, %struct.List** %l91, align 4
+  %val92 = getelementptr inbounds %struct.List, %struct.List* %84, i32 0, i32 1
+  %85 = bitcast [0 x i8]* %val92 to %struct.Triple*
+  %86 = bitcast %struct.Triple* %t to i8*
+  %87 = bitcast %struct.Triple* %85 to i8*
+  call void @llvm.memcpy.p0i8.p0i8.i32(i8* align 4 %86, i8* align 4 %87, i32 12, i1 true)
+  br label %for.cond93
+
+for.cond93:                                       ; preds = %for.inc108, %for.end80
+  %88 = load %struct.ITERATOR*, %struct.ITERATOR** @FE_var, align 4
+  %l94 = getelementptr inbounds %struct.ITERATOR, %struct.ITERATOR* %88, i32 0, i32 0
+  %89 = load %struct.List*, %struct.List** %l94, align 4
+  %tobool95 = icmp ne %struct.List* %89, null
+  br i1 %tobool95, label %cond.true96, label %cond.false99
+
+cond.true96:                                      ; preds = %for.cond93
+  %90 = load %struct.ITERATOR*, %struct.ITERATOR** @FE_var, align 4
+  %l97 = getelementptr inbounds %struct.ITERATOR, %struct.ITERATOR* %90, i32 0, i32 0
+  %91 = load %struct.List*, %struct.List** %l97, align 4
+  %val98 = getelementptr inbounds %struct.List, %struct.List* %91, i32 0, i32 1
+  %92 = bitcast [0 x i8]* %val98 to %struct.Triple*
+  %93 = bitcast %struct.Triple* %t to i8*
+  %94 = bitcast %struct.Triple* %92 to i8*
+  call void @llvm.memcpy.p0i8.p0i8.i32(i8* align 4 %93, i8* align 4 %94, i32 12, i1 true)
+  br label %cond.end100
+
+cond.false99:                                     ; preds = %for.cond93
+  br label %cond.end100
+
+cond.end100:                                      ; preds = %cond.false99, %cond.true96
+  %cond101 = phi i32 [ 1, %cond.true96 ], [ 0, %cond.false99 ]
+  %tobool102 = icmp ne i32 %cond101, 0
+  br i1 %tobool102, label %for.body103, label %for.end112
+
+for.body103:                                      ; preds = %cond.end100
+  %_1104 = getelementptr inbounds %struct.Triple, %struct.Triple* %t, i32 0, i32 0
+  %95 = load volatile i32, i32* %_1104, align 4
+  %_2105 = getelementptr inbounds %struct.Triple, %struct.Triple* %t, i32 0, i32 1
+  %96 = load volatile i32, i32* %_2105, align 4
+  %_3106 = getelementptr inbounds %struct.Triple, %struct.Triple* %t, i32 0, i32 2
+  %97 = load volatile i32, i32* %_3106, align 4
+  %call107 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([12 x i8], [12 x i8]* @.str, i32 0, i32 0), i32 %95, i32 %96, i32 %97)
+  br label %for.inc108
+
+for.inc108:                                       ; preds = %for.body103
+  %98 = load %struct.ITERATOR*, %struct.ITERATOR** @FE_var, align 4
+  %l109 = getelementptr inbounds %struct.ITERATOR, %struct.ITERATOR* %98, i32 0, i32 0
+  %99 = load %struct.List*, %struct.List** %l109, align 4
+  %nx110 = getelementptr inbounds %struct.List, %struct.List* %99, i32 0, i32 0
+  %100 = load %struct.List*, %struct.List** %nx110, align 4
+  %101 = load %struct.ITERATOR*, %struct.ITERATOR** @FE_var, align 4
+  %l111 = getelementptr inbounds %struct.ITERATOR, %struct.ITERATOR* %101, i32 0, i32 0
+  store %struct.List* %100, %struct.List** %l111, align 4
+  br label %for.cond93
+
+for.end112:                                       ; preds = %cond.end100
+  %102 = load %struct.ITERATOR*, %struct.ITERATOR** @FE_var, align 4
+  %p113 = getelementptr inbounds %struct.ITERATOR, %struct.ITERATOR* %102, i32 0, i32 2
+  %103 = load %struct.ITERATOR*, %struct.ITERATOR** %p113, align 4
+  store %struct.ITERATOR* %103, %struct.ITERATOR** @FE_var, align 4
+  ret i32 0
+}
+
+declare i32 @printf(i8* %0, ...) #1
+
+attributes #0 = { noinline nounwind optnone "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "min-legal-vector-width"="0" "no-infs-fp-math"="false" "no-jump-tables"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #1 = { "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #2 = { argmemonly nounwind willreturn }
+
+!llvm.module.flags = !{!0}
+!llvm.ident = !{!1}
+
+!0 = !{i32 1, !"wchar_size", i32 4}
+!1 = !{!"clang version 11.0.0 (https://github.com/Jacarte/llvm-project.git 0f6dea67136cc1e0b3d200eb2bb165628970c44b)"}
+
+; extracted candidates
+
+; *****
+; For LLVM instruction:
+;  %5 = load i32, i32* %4, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %tobool = icmp ne %struct.List* %7, null
+; Looking for a replacement for:
+%0:i32 = var
+%1:i1 = ne 0:i32, %0
+infer %1
+
+; *****
+; For LLVM instruction:
+;  %11 = load i32, i32* %10, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %cond = phi i32 [ 1, %cond.true ], [ 0, %cond.false ]
+; Looking for a replacement for:
+%0:i32 = var (knownBits=0000000000000000000000000000000x) (nonNegative) (signBits=31) (range=[0,2))
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %tobool9 = icmp ne i32 %cond, 0
+; Looking for a replacement for:
+%0:i32 = var (knownBits=0000000000000000000000000000000x) (nonNegative) (signBits=31) (range=[0,2))
+%1:i1 = ne 0:i32, %0
+infer %1
+
+; *****
+; For LLVM instruction:
+;  %12 = load volatile i32, i32* %x, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %17 = load i32, i32* %16, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %tobool19 = icmp ne %struct.List* %19, null
+; Looking for a replacement for:
+%0:i32 = var
+%1:i1 = ne 0:i32, %0
+infer %1
+
+; *****
+; For LLVM instruction:
+;  %23 = load i32, i32* %22, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %cond25 = phi i32 [ 1, %cond.true20 ], [ 0, %cond.false23 ]
+; Looking for a replacement for:
+%0:i32 = var (knownBits=0000000000000000000000000000000x) (nonNegative) (signBits=31) (range=[0,2))
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %tobool26 = icmp ne i32 %cond25, 0
+; Looking for a replacement for:
+%0:i32 = var (knownBits=0000000000000000000000000000000x) (nonNegative) (signBits=31) (range=[0,2))
+%1:i1 = ne 0:i32, %0
+infer %1
+
+; *****
+; For LLVM instruction:
+;  %24 = load volatile i32, i32* %y, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %29 = load i32, i32* %28, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %tobool37 = icmp ne %struct.List* %31, null
+; Looking for a replacement for:
+%0:i32 = var
+%1:i1 = ne 0:i32, %0
+infer %1
+
+; *****
+; For LLVM instruction:
+;  %35 = load i32, i32* %34, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %cond43 = phi i32 [ 1, %cond.true38 ], [ 0, %cond.false41 ]
+; Looking for a replacement for:
+%0:i32 = var (knownBits=0000000000000000000000000000000x) (nonNegative) (signBits=31) (range=[0,2))
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %tobool44 = icmp ne i32 %cond43, 0
+; Looking for a replacement for:
+%0:i32 = var (knownBits=0000000000000000000000000000000x) (nonNegative) (signBits=31) (range=[0,2))
+%1:i1 = ne 0:i32, %0
+infer %1
+
+; *****
+; For LLVM instruction:
+;  %36 = load volatile i32, i32* %x, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %37 = load volatile i32, i32* %x, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %mul = mul nsw i32 %36, %37
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = var
+%2:i32 = mulnsw %0, %1
+infer %2
+
+; *****
+; For LLVM instruction:
+;  %38 = load volatile i32, i32* %y, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %39 = load volatile i32, i32* %y, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %mul46 = mul nsw i32 %38, %39
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = var
+%2:i32 = mulnsw %0, %1
+infer %2
+
+; *****
+; For LLVM instruction:
+;  %add = add nsw i32 %mul, %mul46
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = var
+%2:i32 = mulnsw %0, %1
+%3:i32 = var
+%4:i32 = var
+%5:i32 = mulnsw %3, %4
+%6:i32 = addnsw %2, %5
+infer %6
+
+; *****
+; For LLVM instruction:
+;  %40 = load volatile i32, i32* %z, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %41 = load volatile i32, i32* %z, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %mul47 = mul nsw i32 %40, %41
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = var
+%2:i32 = mulnsw %0, %1
+infer %2
+
+; *****
+; For LLVM instruction:
+;  %cmp = icmp eq i32 %add, %mul47
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = var
+%2:i32 = mulnsw %0, %1
+%3:i32 = var
+%4:i32 = var
+%5:i32 = mulnsw %3, %4
+%6:i32 = addnsw %2, %5
+%7:i32 = var
+%8:i32 = var
+%9:i32 = mulnsw %7, %8
+%10:i1 = eq %6, %9
+infer %10
+
+; *****
+; For LLVM instruction:
+;  %tobool50 = icmp ne %struct.List* %43, null
+; Looking for a replacement for:
+%0:i32 = var
+%1:i1 = ne 0:i32, %0
+infer %1
+
+; *****
+; For LLVM instruction:
+;  %46 = load volatile i32, i32* %x, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %47 = load volatile i32, i32* %y, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %48 = load volatile i32, i32* %z, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %50 = load volatile i32, i32* %x, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %51 = load volatile i32, i32* %y, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %52 = load volatile i32, i32* %z, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %tobool95 = icmp ne %struct.List* %89, null
+; Looking for a replacement for:
+%0:i32 = var
+%1:i1 = ne 0:i32, %0
+infer %1
+
+; *****
+; For LLVM instruction:
+;  %cond101 = phi i32 [ 1, %cond.true96 ], [ 0, %cond.false99 ]
+; Looking for a replacement for:
+%0:i32 = var (knownBits=0000000000000000000000000000000x) (nonNegative) (signBits=31) (range=[0,2))
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %tobool102 = icmp ne i32 %cond101, 0
+; Looking for a replacement for:
+%0:i32 = var (knownBits=0000000000000000000000000000000x) (nonNegative) (signBits=31) (range=[0,2))
+%1:i1 = ne 0:i32, %0
+infer %1
+
+; *****
+; For LLVM instruction:
+;  %95 = load volatile i32, i32* %_1104, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %96 = load volatile i32, i32* %_2105, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %97 = load volatile i32, i32* %_3106, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+got 1 candidates from LHS
+
+-------------------------------------------------
+%0:i32 = var (knownBits=0000000000000000000000000000000x) (nonNegative) (signBits=31) (range=[0,2))
+infer %0
+
+
+--------------------------------
+guess 0
+
+%0:i32 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: 1
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+Dataflow Pruned 0/0
+There are 1 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 2 candidates from LHS
+
+-------------------------------------------------
+%0:i32 = var (knownBits=0000000000000000000000000000000x) (nonNegative) (signBits=31) (range=[0,2))
+%1:i1 = ne 0:i32, %0
+infer %1
+
+
+--------------------------------
+guess 0
+
+%0:i1 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: -1
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+Dataflow Pruned 0/0
+There are 1 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 3 candidates from LHS
+
+-------------------------------------------------
+%0:i32 = var
+%1:i32 = var
+%2:i32 = mulnsw %0, %1
+infer %2
+
+
+--------------------------------
+guess 0
+
+%0:i32 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+ConstantSynthesis: solver returns error on second query
+
+--------------------------------
+guess 1
+
+%0:i32 = var
+
+Cost = 0
+verification query failed!
+Dataflow Pruned 0/0
+There are 3 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 7 candidates from LHS
+
+-------------------------------------------------
+%0:i32 = var
+%1:i32 = var
+%2:i32 = mulnsw %0, %1
+%3:i32 = var
+%4:i32 = var
+%5:i32 = mulnsw %3, %4
+%6:i32 = addnsw %2, %5
+infer %6
+
+
+--------------------------------
+guess 0
+
+%0:i32 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+ConstantSynthesis: solver returns error on second query
+
+--------------------------------
+guess 1
+
+%0:i32 = var
+
+Cost = 0
+verification query failed!
+Dataflow Pruned 0/0
+There are 7 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 8 candidates from LHS
+
+-------------------------------------------------
+%0:i32 = var
+%1:i32 = var
+%2:i32 = mulnsw %0, %1
+%3:i32 = var
+%4:i32 = var
+%5:i32 = mulnsw %3, %4
+%6:i32 = addnsw %2, %5
+%7:i32 = var
+%8:i32 = var
+%9:i32 = mulnsw %7, %8
+%10:i1 = eq %6, %9
+infer %10
+
+
+--------------------------------
+guess 0
+
+%0:i1 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: -1
+ConstantSynthesis: solver returns error on second query
+Dataflow Pruned 0/0
+There are 1 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+#########################################################
+; exiting Souper's runOnFunction() for main()
+Total of 0 replacements done on this module
+Total of 0 replacements candidates on this module

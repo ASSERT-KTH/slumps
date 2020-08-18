@@ -1,0 +1,4073 @@
+
+Entering the Souper pass's runOnModule()
+
+
+; entering Souper's runOnFunction() for lineSlope()
+
+; ModuleID = './Find_the_intersection_of_two_lines.c.bc'
+source_filename = "./Find_the_intersection_of_two_lines.c"
+target datalayout = "e-m:e-p:32:32-i64:64-n32:64-S128"
+target triple = "wasm32-unknown-wasi"
+
+%struct.point = type { double, double }
+
+@.str = private unnamed_addr constant [65 x i8] c"Usage : %s <four points specified as (x,y) separated by a space>\00", align 1
+@.str.1 = private unnamed_addr constant [69 x i8] c"The lines do not intersect, they are either parallel or co-incident.\00", align 1
+@.str.2 = private unnamed_addr constant [34 x i8] c"Point of intersection : (%lf,%lf)\00", align 1
+
+; Function Attrs: noinline nounwind optnone
+define hidden double @lineSlope(%struct.point* byval(%struct.point) align 8 %a, %struct.point* byval(%struct.point) align 8 %b) #0 {
+entry:
+  %retval = alloca double, align 8
+  %x = getelementptr inbounds %struct.point, %struct.point* %a, i32 0, i32 0
+  %0 = load double, double* %x, align 8
+  %x1 = getelementptr inbounds %struct.point, %struct.point* %b, i32 0, i32 0
+  %1 = load double, double* %x1, align 8
+  %sub = fsub double %0, %1
+  %cmp = fcmp oeq double %sub, 0.000000e+00
+  br i1 %cmp, label %if.then, label %if.else
+
+if.then:                                          ; preds = %entry
+  store double 0x7FF8000000000000, double* %retval, align 8
+  br label %return
+
+if.else:                                          ; preds = %entry
+  %y = getelementptr inbounds %struct.point, %struct.point* %a, i32 0, i32 1
+  %2 = load double, double* %y, align 8
+  %y2 = getelementptr inbounds %struct.point, %struct.point* %b, i32 0, i32 1
+  %3 = load double, double* %y2, align 8
+  %sub3 = fsub double %2, %3
+  %x4 = getelementptr inbounds %struct.point, %struct.point* %a, i32 0, i32 0
+  %4 = load double, double* %x4, align 8
+  %x5 = getelementptr inbounds %struct.point, %struct.point* %b, i32 0, i32 0
+  %5 = load double, double* %x5, align 8
+  %sub6 = fsub double %4, %5
+  %div = fdiv double %sub3, %sub6
+  store double %div, double* %retval, align 8
+  br label %return
+
+return:                                           ; preds = %if.else, %if.then
+  %6 = load double, double* %retval, align 8
+  ret double %6
+}
+
+; Function Attrs: noinline nounwind optnone
+define hidden void @extractPoint(%struct.point* noalias sret align 8 %agg.result, i8* %str) #0 {
+entry:
+  %str.addr = alloca i8*, align 4
+  %i = alloca i32, align 4
+  %j = alloca i32, align 4
+  %start = alloca i32, align 4
+  %end = alloca i32, align 4
+  %length = alloca i32, align 4
+  %holder = alloca i8*, align 4
+  store i8* %str, i8** %str.addr, align 4
+  store i32 0, i32* %i, align 4
+  br label %for.cond
+
+for.cond:                                         ; preds = %for.inc33, %entry
+  %0 = load i8*, i8** %str.addr, align 4
+  %1 = load i32, i32* %i, align 4
+  %arrayidx = getelementptr inbounds i8, i8* %0, i32 %1
+  %2 = load i8, i8* %arrayidx, align 1
+  %conv = sext i8 %2 to i32
+  %cmp = icmp ne i32 %conv, 0
+  br i1 %cmp, label %for.body, label %for.end35
+
+for.body:                                         ; preds = %for.cond
+  %3 = load i8*, i8** %str.addr, align 4
+  %4 = load i32, i32* %i, align 4
+  %arrayidx2 = getelementptr inbounds i8, i8* %3, i32 %4
+  %5 = load i8, i8* %arrayidx2, align 1
+  %conv3 = sext i8 %5 to i32
+  %cmp4 = icmp eq i32 %conv3, 40
+  br i1 %cmp4, label %if.then, label %if.end
+
+if.then:                                          ; preds = %for.body
+  %6 = load i32, i32* %i, align 4
+  store i32 %6, i32* %start, align 4
+  br label %if.end
+
+if.end:                                           ; preds = %if.then, %for.body
+  %7 = load i8*, i8** %str.addr, align 4
+  %8 = load i32, i32* %i, align 4
+  %arrayidx6 = getelementptr inbounds i8, i8* %7, i32 %8
+  %9 = load i8, i8* %arrayidx6, align 1
+  %conv7 = sext i8 %9 to i32
+  %cmp8 = icmp eq i32 %conv7, 44
+  br i1 %cmp8, label %if.then14, label %lor.lhs.false
+
+lor.lhs.false:                                    ; preds = %if.end
+  %10 = load i8*, i8** %str.addr, align 4
+  %11 = load i32, i32* %i, align 4
+  %arrayidx10 = getelementptr inbounds i8, i8* %10, i32 %11
+  %12 = load i8, i8* %arrayidx10, align 1
+  %conv11 = sext i8 %12 to i32
+  %cmp12 = icmp eq i32 %conv11, 41
+  br i1 %cmp12, label %if.then14, label %if.end32
+
+if.then14:                                        ; preds = %lor.lhs.false, %if.end
+  %13 = load i32, i32* %i, align 4
+  store i32 %13, i32* %end, align 4
+  %14 = load i32, i32* %end, align 4
+  %15 = load i32, i32* %start, align 4
+  %sub = sub nsw i32 %14, %15
+  store i32 %sub, i32* %length, align 4
+  %16 = load i32, i32* %length, align 4
+  %mul = mul i32 %16, 1
+  %call = call noalias i8* @malloc(i32 %mul)
+  store i8* %call, i8** %holder, align 4
+  store i32 0, i32* %j, align 4
+  br label %for.cond15
+
+for.cond15:                                       ; preds = %for.inc, %if.then14
+  %17 = load i32, i32* %j, align 4
+  %18 = load i32, i32* %length, align 4
+  %sub16 = sub nsw i32 %18, 1
+  %cmp17 = icmp slt i32 %17, %sub16
+  br i1 %cmp17, label %for.body19, label %for.end
+
+for.body19:                                       ; preds = %for.cond15
+  %19 = load i8*, i8** %str.addr, align 4
+  %20 = load i32, i32* %start, align 4
+  %21 = load i32, i32* %j, align 4
+  %add = add nsw i32 %20, %21
+  %add20 = add nsw i32 %add, 1
+  %arrayidx21 = getelementptr inbounds i8, i8* %19, i32 %add20
+  %22 = load i8, i8* %arrayidx21, align 1
+  %23 = load i8*, i8** %holder, align 4
+  %24 = load i32, i32* %j, align 4
+  %arrayidx22 = getelementptr inbounds i8, i8* %23, i32 %24
+  store i8 %22, i8* %arrayidx22, align 1
+  br label %for.inc
+
+for.inc:                                          ; preds = %for.body19
+  %25 = load i32, i32* %j, align 4
+  %inc = add nsw i32 %25, 1
+  store i32 %inc, i32* %j, align 4
+  br label %for.cond15
+
+for.end:                                          ; preds = %for.cond15
+  %26 = load i8*, i8** %holder, align 4
+  %27 = load i32, i32* %j, align 4
+  %arrayidx23 = getelementptr inbounds i8, i8* %26, i32 %27
+  store i8 0, i8* %arrayidx23, align 1
+  %28 = load i8*, i8** %str.addr, align 4
+  %29 = load i32, i32* %i, align 4
+  %arrayidx24 = getelementptr inbounds i8, i8* %28, i32 %29
+  %30 = load i8, i8* %arrayidx24, align 1
+  %conv25 = sext i8 %30 to i32
+  %cmp26 = icmp eq i32 %conv25, 44
+  br i1 %cmp26, label %if.then28, label %if.else
+
+if.then28:                                        ; preds = %for.end
+  %31 = load i32, i32* %i, align 4
+  store i32 %31, i32* %start, align 4
+  %32 = load i8*, i8** %holder, align 4
+  %call29 = call double @atof(i8* %32)
+  %x = getelementptr inbounds %struct.point, %struct.point* %agg.result, i32 0, i32 0
+  store double %call29, double* %x, align 8
+  br label %if.end31
+
+if.else:                                          ; preds = %for.end
+  %33 = load i8*, i8** %holder, align 4
+  %call30 = call double @atof(i8* %33)
+  %y = getelementptr inbounds %struct.point, %struct.point* %agg.result, i32 0, i32 1
+  store double %call30, double* %y, align 8
+  br label %if.end31
+
+if.end31:                                         ; preds = %if.else, %if.then28
+  br label %if.end32
+
+if.end32:                                         ; preds = %if.end31, %lor.lhs.false
+  br label %for.inc33
+
+for.inc33:                                        ; preds = %if.end32
+  %34 = load i32, i32* %i, align 4
+  %inc34 = add nsw i32 %34, 1
+  store i32 %inc34, i32* %i, align 4
+  br label %for.cond
+
+for.end35:                                        ; preds = %for.cond
+  ret void
+}
+
+declare noalias i8* @malloc(i32 %0) #1
+
+declare double @atof(i8* %0) #1
+
+; Function Attrs: noinline nounwind optnone
+define hidden void @intersectionPoint(%struct.point* noalias sret align 8 %agg.result, %struct.point* byval(%struct.point) align 8 %a1, %struct.point* byval(%struct.point) align 8 %a2, %struct.point* byval(%struct.point) align 8 %b1, %struct.point* byval(%struct.point) align 8 %b2) #0 {
+entry:
+  %slopeA = alloca double, align 8
+  %slopeB = alloca double, align 8
+  %call = call double @lineSlope(%struct.point* byval(%struct.point) align 8 %a1, %struct.point* byval(%struct.point) align 8 %a2)
+  store double %call, double* %slopeA, align 8
+  %call1 = call double @lineSlope(%struct.point* byval(%struct.point) align 8 %b1, %struct.point* byval(%struct.point) align 8 %b2)
+  store double %call1, double* %slopeB, align 8
+  %0 = load double, double* %slopeA, align 8
+  %1 = load double, double* %slopeB, align 8
+  %cmp = fcmp oeq double %0, %1
+  br i1 %cmp, label %if.then, label %if.else
+
+if.then:                                          ; preds = %entry
+  %x = getelementptr inbounds %struct.point, %struct.point* %agg.result, i32 0, i32 0
+  store double 0x7FF8000000000000, double* %x, align 8
+  %y = getelementptr inbounds %struct.point, %struct.point* %agg.result, i32 0, i32 1
+  store double 0x7FF8000000000000, double* %y, align 8
+  br label %if.end45
+
+if.else:                                          ; preds = %entry
+  %2 = load double, double* %slopeA, align 8
+  %cmp2 = fcmp oeq double %2, 0x7FF8000000000000
+  br i1 %cmp2, label %land.lhs.true, label %if.else11
+
+land.lhs.true:                                    ; preds = %if.else
+  %3 = load double, double* %slopeB, align 8
+  %cmp3 = fcmp une double %3, 0x7FF8000000000000
+  br i1 %cmp3, label %if.then4, label %if.else11
+
+if.then4:                                         ; preds = %land.lhs.true
+  %x5 = getelementptr inbounds %struct.point, %struct.point* %a1, i32 0, i32 0
+  %4 = load double, double* %x5, align 8
+  %x6 = getelementptr inbounds %struct.point, %struct.point* %agg.result, i32 0, i32 0
+  store double %4, double* %x6, align 8
+  %x7 = getelementptr inbounds %struct.point, %struct.point* %a1, i32 0, i32 0
+  %5 = load double, double* %x7, align 8
+  %x8 = getelementptr inbounds %struct.point, %struct.point* %b1, i32 0, i32 0
+  %6 = load double, double* %x8, align 8
+  %sub = fsub double %5, %6
+  %7 = load double, double* %slopeB, align 8
+  %mul = fmul double %sub, %7
+  %y9 = getelementptr inbounds %struct.point, %struct.point* %b1, i32 0, i32 1
+  %8 = load double, double* %y9, align 8
+  %add = fadd double %mul, %8
+  %y10 = getelementptr inbounds %struct.point, %struct.point* %agg.result, i32 0, i32 1
+  store double %add, double* %y10, align 8
+  br label %if.end44
+
+if.else11:                                        ; preds = %land.lhs.true, %if.else
+  %9 = load double, double* %slopeB, align 8
+  %cmp12 = fcmp oeq double %9, 0x7FF8000000000000
+  br i1 %cmp12, label %land.lhs.true13, label %if.else25
+
+land.lhs.true13:                                  ; preds = %if.else11
+  %10 = load double, double* %slopeA, align 8
+  %cmp14 = fcmp une double %10, 0x7FF8000000000000
+  br i1 %cmp14, label %if.then15, label %if.else25
+
+if.then15:                                        ; preds = %land.lhs.true13
+  %x16 = getelementptr inbounds %struct.point, %struct.point* %b1, i32 0, i32 0
+  %11 = load double, double* %x16, align 8
+  %x17 = getelementptr inbounds %struct.point, %struct.point* %agg.result, i32 0, i32 0
+  store double %11, double* %x17, align 8
+  %x18 = getelementptr inbounds %struct.point, %struct.point* %b1, i32 0, i32 0
+  %12 = load double, double* %x18, align 8
+  %x19 = getelementptr inbounds %struct.point, %struct.point* %a1, i32 0, i32 0
+  %13 = load double, double* %x19, align 8
+  %sub20 = fsub double %12, %13
+  %14 = load double, double* %slopeA, align 8
+  %mul21 = fmul double %sub20, %14
+  %y22 = getelementptr inbounds %struct.point, %struct.point* %b1, i32 0, i32 1
+  %15 = load double, double* %y22, align 8
+  %add23 = fadd double %mul21, %15
+  %y24 = getelementptr inbounds %struct.point, %struct.point* %agg.result, i32 0, i32 1
+  store double %add23, double* %y24, align 8
+  br label %if.end
+
+if.else25:                                        ; preds = %land.lhs.true13, %if.else11
+  %16 = load double, double* %slopeA, align 8
+  %x26 = getelementptr inbounds %struct.point, %struct.point* %a1, i32 0, i32 0
+  %17 = load double, double* %x26, align 8
+  %mul27 = fmul double %16, %17
+  %18 = load double, double* %slopeB, align 8
+  %x28 = getelementptr inbounds %struct.point, %struct.point* %b1, i32 0, i32 0
+  %19 = load double, double* %x28, align 8
+  %mul29 = fmul double %18, %19
+  %sub30 = fsub double %mul27, %mul29
+  %y31 = getelementptr inbounds %struct.point, %struct.point* %b1, i32 0, i32 1
+  %20 = load double, double* %y31, align 8
+  %add32 = fadd double %sub30, %20
+  %y33 = getelementptr inbounds %struct.point, %struct.point* %a1, i32 0, i32 1
+  %21 = load double, double* %y33, align 8
+  %sub34 = fsub double %add32, %21
+  %22 = load double, double* %slopeA, align 8
+  %23 = load double, double* %slopeB, align 8
+  %sub35 = fsub double %22, %23
+  %div = fdiv double %sub34, %sub35
+  %x36 = getelementptr inbounds %struct.point, %struct.point* %agg.result, i32 0, i32 0
+  store double %div, double* %x36, align 8
+  %24 = load double, double* %slopeB, align 8
+  %x37 = getelementptr inbounds %struct.point, %struct.point* %agg.result, i32 0, i32 0
+  %25 = load double, double* %x37, align 8
+  %x38 = getelementptr inbounds %struct.point, %struct.point* %b1, i32 0, i32 0
+  %26 = load double, double* %x38, align 8
+  %sub39 = fsub double %25, %26
+  %mul40 = fmul double %24, %sub39
+  %y41 = getelementptr inbounds %struct.point, %struct.point* %b1, i32 0, i32 1
+  %27 = load double, double* %y41, align 8
+  %add42 = fadd double %mul40, %27
+  %y43 = getelementptr inbounds %struct.point, %struct.point* %agg.result, i32 0, i32 1
+  store double %add42, double* %y43, align 8
+  br label %if.end
+
+if.end:                                           ; preds = %if.else25, %if.then15
+  br label %if.end44
+
+if.end44:                                         ; preds = %if.end, %if.then4
+  br label %if.end45
+
+if.end45:                                         ; preds = %if.end44, %if.then
+  ret void
+}
+
+; Function Attrs: noinline nounwind optnone
+define hidden i32 @__main_argc_argv(i32 %argC, i8** %argV) #0 {
+entry:
+  %retval = alloca i32, align 4
+  %argC.addr = alloca i32, align 4
+  %argV.addr = alloca i8**, align 4
+  %c = alloca %struct.point, align 8
+  %tmp = alloca %struct.point, align 8
+  %agg.tmp = alloca %struct.point, align 8
+  %agg.tmp2 = alloca %struct.point, align 8
+  %agg.tmp4 = alloca %struct.point, align 8
+  %agg.tmp6 = alloca %struct.point, align 8
+  store i32 0, i32* %retval, align 4
+  store i32 %argC, i32* %argC.addr, align 4
+  store i8** %argV, i8*** %argV.addr, align 4
+  %0 = load i32, i32* %argC.addr, align 4
+  %cmp = icmp slt i32 %0, 5
+  br i1 %cmp, label %if.then, label %if.else
+
+if.then:                                          ; preds = %entry
+  %1 = load i8**, i8*** %argV.addr, align 4
+  %arrayidx = getelementptr inbounds i8*, i8** %1, i32 0
+  %2 = load i8*, i8** %arrayidx, align 4
+  %call = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([65 x i8], [65 x i8]* @.str, i32 0, i32 0), i8* %2)
+  br label %if.end14
+
+if.else:                                          ; preds = %entry
+  %3 = load i8**, i8*** %argV.addr, align 4
+  %arrayidx1 = getelementptr inbounds i8*, i8** %3, i32 1
+  %4 = load i8*, i8** %arrayidx1, align 4
+  call void @extractPoint(%struct.point* sret align 8 %agg.tmp, i8* %4)
+  %5 = load i8**, i8*** %argV.addr, align 4
+  %arrayidx3 = getelementptr inbounds i8*, i8** %5, i32 2
+  %6 = load i8*, i8** %arrayidx3, align 4
+  call void @extractPoint(%struct.point* sret align 8 %agg.tmp2, i8* %6)
+  %7 = load i8**, i8*** %argV.addr, align 4
+  %arrayidx5 = getelementptr inbounds i8*, i8** %7, i32 3
+  %8 = load i8*, i8** %arrayidx5, align 4
+  call void @extractPoint(%struct.point* sret align 8 %agg.tmp4, i8* %8)
+  %9 = load i8**, i8*** %argV.addr, align 4
+  %arrayidx7 = getelementptr inbounds i8*, i8** %9, i32 4
+  %10 = load i8*, i8** %arrayidx7, align 4
+  call void @extractPoint(%struct.point* sret align 8 %agg.tmp6, i8* %10)
+  call void @intersectionPoint(%struct.point* sret align 8 %tmp, %struct.point* byval(%struct.point) align 8 %agg.tmp, %struct.point* byval(%struct.point) align 8 %agg.tmp2, %struct.point* byval(%struct.point) align 8 %agg.tmp4, %struct.point* byval(%struct.point) align 8 %agg.tmp6)
+  %11 = bitcast %struct.point* %c to i8*
+  %12 = bitcast %struct.point* %tmp to i8*
+  call void @llvm.memcpy.p0i8.p0i8.i32(i8* align 8 %11, i8* align 8 %12, i32 16, i1 false)
+  %x = getelementptr inbounds %struct.point, %struct.point* %c, i32 0, i32 0
+  %13 = load double, double* %x, align 8
+  %cmp8 = fcmp oeq double %13, 0x7FF8000000000000
+  br i1 %cmp8, label %if.then9, label %if.else11
+
+if.then9:                                         ; preds = %if.else
+  %call10 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([69 x i8], [69 x i8]* @.str.1, i32 0, i32 0))
+  br label %if.end
+
+if.else11:                                        ; preds = %if.else
+  %x12 = getelementptr inbounds %struct.point, %struct.point* %c, i32 0, i32 0
+  %14 = load double, double* %x12, align 8
+  %y = getelementptr inbounds %struct.point, %struct.point* %c, i32 0, i32 1
+  %15 = load double, double* %y, align 8
+  %call13 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([34 x i8], [34 x i8]* @.str.2, i32 0, i32 0), double %14, double %15)
+  br label %if.end
+
+if.end:                                           ; preds = %if.else11, %if.then9
+  br label %if.end14
+
+if.end14:                                         ; preds = %if.end, %if.then
+  ret i32 0
+}
+
+declare i32 @printf(i8* %0, ...) #1
+
+; Function Attrs: argmemonly nounwind willreturn
+declare void @llvm.memcpy.p0i8.p0i8.i32(i8* noalias nocapture writeonly %0, i8* noalias nocapture readonly %1, i32 %2, i1 immarg %3) #2
+
+attributes #0 = { noinline nounwind optnone "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "min-legal-vector-width"="0" "no-infs-fp-math"="false" "no-jump-tables"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #1 = { "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #2 = { argmemonly nounwind willreturn }
+
+!llvm.module.flags = !{!0}
+!llvm.ident = !{!1}
+
+!0 = !{i32 1, !"wchar_size", i32 4}
+!1 = !{!"clang version 11.0.0 (https://github.com/Jacarte/llvm-project.git 0f6dea67136cc1e0b3d200eb2bb165628970c44b)"}
+
+; extracted candidates
+
+; *****
+; For LLVM instruction:
+;  %cmp = fcmp oeq double %sub, 0.000000e+00
+; Looking for a replacement for:
+%0:i1 = var
+infer %0
+got 1 candidates from LHS
+
+-------------------------------------------------
+%0:i1 = var
+infer %0
+
+
+--------------------------------
+guess 0
+
+%0:i1 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: -1
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+Dataflow Pruned 0/0
+There are 1 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+#########################################################
+; exiting Souper's runOnFunction() for lineSlope()
+
+; entering Souper's runOnFunction() for extractPoint()
+
+; ModuleID = './Find_the_intersection_of_two_lines.c.bc'
+source_filename = "./Find_the_intersection_of_two_lines.c"
+target datalayout = "e-m:e-p:32:32-i64:64-n32:64-S128"
+target triple = "wasm32-unknown-wasi"
+
+%struct.point = type { double, double }
+
+@.str = private unnamed_addr constant [65 x i8] c"Usage : %s <four points specified as (x,y) separated by a space>\00", align 1
+@.str.1 = private unnamed_addr constant [69 x i8] c"The lines do not intersect, they are either parallel or co-incident.\00", align 1
+@.str.2 = private unnamed_addr constant [34 x i8] c"Point of intersection : (%lf,%lf)\00", align 1
+
+; Function Attrs: noinline nounwind optnone
+define hidden double @lineSlope(%struct.point* byval(%struct.point) align 8 %a, %struct.point* byval(%struct.point) align 8 %b) #0 {
+entry:
+  %retval = alloca double, align 8
+  %x = getelementptr inbounds %struct.point, %struct.point* %a, i32 0, i32 0
+  %0 = load double, double* %x, align 8
+  %x1 = getelementptr inbounds %struct.point, %struct.point* %b, i32 0, i32 0
+  %1 = load double, double* %x1, align 8
+  %sub = fsub double %0, %1
+  %cmp = fcmp oeq double %sub, 0.000000e+00
+  br i1 %cmp, label %if.then, label %if.else
+
+if.then:                                          ; preds = %entry
+  store double 0x7FF8000000000000, double* %retval, align 8
+  br label %return
+
+if.else:                                          ; preds = %entry
+  %y = getelementptr inbounds %struct.point, %struct.point* %a, i32 0, i32 1
+  %2 = load double, double* %y, align 8
+  %y2 = getelementptr inbounds %struct.point, %struct.point* %b, i32 0, i32 1
+  %3 = load double, double* %y2, align 8
+  %sub3 = fsub double %2, %3
+  %x4 = getelementptr inbounds %struct.point, %struct.point* %a, i32 0, i32 0
+  %4 = load double, double* %x4, align 8
+  %x5 = getelementptr inbounds %struct.point, %struct.point* %b, i32 0, i32 0
+  %5 = load double, double* %x5, align 8
+  %sub6 = fsub double %4, %5
+  %div = fdiv double %sub3, %sub6
+  store double %div, double* %retval, align 8
+  br label %return
+
+return:                                           ; preds = %if.else, %if.then
+  %6 = load double, double* %retval, align 8
+  ret double %6
+}
+
+; Function Attrs: noinline nounwind optnone
+define hidden void @extractPoint(%struct.point* noalias sret align 8 %agg.result, i8* %str) #0 {
+entry:
+  %str.addr = alloca i8*, align 4
+  %i = alloca i32, align 4
+  %j = alloca i32, align 4
+  %start = alloca i32, align 4
+  %end = alloca i32, align 4
+  %length = alloca i32, align 4
+  %holder = alloca i8*, align 4
+  store i8* %str, i8** %str.addr, align 4
+  store i32 0, i32* %i, align 4
+  br label %for.cond
+
+for.cond:                                         ; preds = %for.inc33, %entry
+  %0 = load i8*, i8** %str.addr, align 4
+  %1 = load i32, i32* %i, align 4
+  %arrayidx = getelementptr inbounds i8, i8* %0, i32 %1
+  %2 = load i8, i8* %arrayidx, align 1
+  %conv = sext i8 %2 to i32
+  %cmp = icmp ne i32 %conv, 0
+  br i1 %cmp, label %for.body, label %for.end35
+
+for.body:                                         ; preds = %for.cond
+  %3 = load i8*, i8** %str.addr, align 4
+  %4 = load i32, i32* %i, align 4
+  %arrayidx2 = getelementptr inbounds i8, i8* %3, i32 %4
+  %5 = load i8, i8* %arrayidx2, align 1
+  %conv3 = sext i8 %5 to i32
+  %cmp4 = icmp eq i32 %conv3, 40
+  br i1 %cmp4, label %if.then, label %if.end
+
+if.then:                                          ; preds = %for.body
+  %6 = load i32, i32* %i, align 4
+  store i32 %6, i32* %start, align 4
+  br label %if.end
+
+if.end:                                           ; preds = %if.then, %for.body
+  %7 = load i8*, i8** %str.addr, align 4
+  %8 = load i32, i32* %i, align 4
+  %arrayidx6 = getelementptr inbounds i8, i8* %7, i32 %8
+  %9 = load i8, i8* %arrayidx6, align 1
+  %conv7 = sext i8 %9 to i32
+  %cmp8 = icmp eq i32 %conv7, 44
+  br i1 %cmp8, label %if.then14, label %lor.lhs.false
+
+lor.lhs.false:                                    ; preds = %if.end
+  %10 = load i8*, i8** %str.addr, align 4
+  %11 = load i32, i32* %i, align 4
+  %arrayidx10 = getelementptr inbounds i8, i8* %10, i32 %11
+  %12 = load i8, i8* %arrayidx10, align 1
+  %conv11 = sext i8 %12 to i32
+  %cmp12 = icmp eq i32 %conv11, 41
+  br i1 %cmp12, label %if.then14, label %if.end32
+
+if.then14:                                        ; preds = %lor.lhs.false, %if.end
+  %13 = load i32, i32* %i, align 4
+  store i32 %13, i32* %end, align 4
+  %14 = load i32, i32* %end, align 4
+  %15 = load i32, i32* %start, align 4
+  %sub = sub nsw i32 %14, %15
+  store i32 %sub, i32* %length, align 4
+  %16 = load i32, i32* %length, align 4
+  %mul = mul i32 %16, 1
+  %call = call noalias i8* @malloc(i32 %mul)
+  store i8* %call, i8** %holder, align 4
+  store i32 0, i32* %j, align 4
+  br label %for.cond15
+
+for.cond15:                                       ; preds = %for.inc, %if.then14
+  %17 = load i32, i32* %j, align 4
+  %18 = load i32, i32* %length, align 4
+  %sub16 = sub nsw i32 %18, 1
+  %cmp17 = icmp slt i32 %17, %sub16
+  br i1 %cmp17, label %for.body19, label %for.end
+
+for.body19:                                       ; preds = %for.cond15
+  %19 = load i8*, i8** %str.addr, align 4
+  %20 = load i32, i32* %start, align 4
+  %21 = load i32, i32* %j, align 4
+  %add = add nsw i32 %20, %21
+  %add20 = add nsw i32 %add, 1
+  %arrayidx21 = getelementptr inbounds i8, i8* %19, i32 %add20
+  %22 = load i8, i8* %arrayidx21, align 1
+  %23 = load i8*, i8** %holder, align 4
+  %24 = load i32, i32* %j, align 4
+  %arrayidx22 = getelementptr inbounds i8, i8* %23, i32 %24
+  store i8 %22, i8* %arrayidx22, align 1
+  br label %for.inc
+
+for.inc:                                          ; preds = %for.body19
+  %25 = load i32, i32* %j, align 4
+  %inc = add nsw i32 %25, 1
+  store i32 %inc, i32* %j, align 4
+  br label %for.cond15
+
+for.end:                                          ; preds = %for.cond15
+  %26 = load i8*, i8** %holder, align 4
+  %27 = load i32, i32* %j, align 4
+  %arrayidx23 = getelementptr inbounds i8, i8* %26, i32 %27
+  store i8 0, i8* %arrayidx23, align 1
+  %28 = load i8*, i8** %str.addr, align 4
+  %29 = load i32, i32* %i, align 4
+  %arrayidx24 = getelementptr inbounds i8, i8* %28, i32 %29
+  %30 = load i8, i8* %arrayidx24, align 1
+  %conv25 = sext i8 %30 to i32
+  %cmp26 = icmp eq i32 %conv25, 44
+  br i1 %cmp26, label %if.then28, label %if.else
+
+if.then28:                                        ; preds = %for.end
+  %31 = load i32, i32* %i, align 4
+  store i32 %31, i32* %start, align 4
+  %32 = load i8*, i8** %holder, align 4
+  %call29 = call double @atof(i8* %32)
+  %x = getelementptr inbounds %struct.point, %struct.point* %agg.result, i32 0, i32 0
+  store double %call29, double* %x, align 8
+  br label %if.end31
+
+if.else:                                          ; preds = %for.end
+  %33 = load i8*, i8** %holder, align 4
+  %call30 = call double @atof(i8* %33)
+  %y = getelementptr inbounds %struct.point, %struct.point* %agg.result, i32 0, i32 1
+  store double %call30, double* %y, align 8
+  br label %if.end31
+
+if.end31:                                         ; preds = %if.else, %if.then28
+  br label %if.end32
+
+if.end32:                                         ; preds = %if.end31, %lor.lhs.false
+  br label %for.inc33
+
+for.inc33:                                        ; preds = %if.end32
+  %34 = load i32, i32* %i, align 4
+  %inc34 = add nsw i32 %34, 1
+  store i32 %inc34, i32* %i, align 4
+  br label %for.cond
+
+for.end35:                                        ; preds = %for.cond
+  ret void
+}
+
+declare noalias i8* @malloc(i32 %0) #1
+
+declare double @atof(i8* %0) #1
+
+; Function Attrs: noinline nounwind optnone
+define hidden void @intersectionPoint(%struct.point* noalias sret align 8 %agg.result, %struct.point* byval(%struct.point) align 8 %a1, %struct.point* byval(%struct.point) align 8 %a2, %struct.point* byval(%struct.point) align 8 %b1, %struct.point* byval(%struct.point) align 8 %b2) #0 {
+entry:
+  %slopeA = alloca double, align 8
+  %slopeB = alloca double, align 8
+  %call = call double @lineSlope(%struct.point* byval(%struct.point) align 8 %a1, %struct.point* byval(%struct.point) align 8 %a2)
+  store double %call, double* %slopeA, align 8
+  %call1 = call double @lineSlope(%struct.point* byval(%struct.point) align 8 %b1, %struct.point* byval(%struct.point) align 8 %b2)
+  store double %call1, double* %slopeB, align 8
+  %0 = load double, double* %slopeA, align 8
+  %1 = load double, double* %slopeB, align 8
+  %cmp = fcmp oeq double %0, %1
+  br i1 %cmp, label %if.then, label %if.else
+
+if.then:                                          ; preds = %entry
+  %x = getelementptr inbounds %struct.point, %struct.point* %agg.result, i32 0, i32 0
+  store double 0x7FF8000000000000, double* %x, align 8
+  %y = getelementptr inbounds %struct.point, %struct.point* %agg.result, i32 0, i32 1
+  store double 0x7FF8000000000000, double* %y, align 8
+  br label %if.end45
+
+if.else:                                          ; preds = %entry
+  %2 = load double, double* %slopeA, align 8
+  %cmp2 = fcmp oeq double %2, 0x7FF8000000000000
+  br i1 %cmp2, label %land.lhs.true, label %if.else11
+
+land.lhs.true:                                    ; preds = %if.else
+  %3 = load double, double* %slopeB, align 8
+  %cmp3 = fcmp une double %3, 0x7FF8000000000000
+  br i1 %cmp3, label %if.then4, label %if.else11
+
+if.then4:                                         ; preds = %land.lhs.true
+  %x5 = getelementptr inbounds %struct.point, %struct.point* %a1, i32 0, i32 0
+  %4 = load double, double* %x5, align 8
+  %x6 = getelementptr inbounds %struct.point, %struct.point* %agg.result, i32 0, i32 0
+  store double %4, double* %x6, align 8
+  %x7 = getelementptr inbounds %struct.point, %struct.point* %a1, i32 0, i32 0
+  %5 = load double, double* %x7, align 8
+  %x8 = getelementptr inbounds %struct.point, %struct.point* %b1, i32 0, i32 0
+  %6 = load double, double* %x8, align 8
+  %sub = fsub double %5, %6
+  %7 = load double, double* %slopeB, align 8
+  %mul = fmul double %sub, %7
+  %y9 = getelementptr inbounds %struct.point, %struct.point* %b1, i32 0, i32 1
+  %8 = load double, double* %y9, align 8
+  %add = fadd double %mul, %8
+  %y10 = getelementptr inbounds %struct.point, %struct.point* %agg.result, i32 0, i32 1
+  store double %add, double* %y10, align 8
+  br label %if.end44
+
+if.else11:                                        ; preds = %land.lhs.true, %if.else
+  %9 = load double, double* %slopeB, align 8
+  %cmp12 = fcmp oeq double %9, 0x7FF8000000000000
+  br i1 %cmp12, label %land.lhs.true13, label %if.else25
+
+land.lhs.true13:                                  ; preds = %if.else11
+  %10 = load double, double* %slopeA, align 8
+  %cmp14 = fcmp une double %10, 0x7FF8000000000000
+  br i1 %cmp14, label %if.then15, label %if.else25
+
+if.then15:                                        ; preds = %land.lhs.true13
+  %x16 = getelementptr inbounds %struct.point, %struct.point* %b1, i32 0, i32 0
+  %11 = load double, double* %x16, align 8
+  %x17 = getelementptr inbounds %struct.point, %struct.point* %agg.result, i32 0, i32 0
+  store double %11, double* %x17, align 8
+  %x18 = getelementptr inbounds %struct.point, %struct.point* %b1, i32 0, i32 0
+  %12 = load double, double* %x18, align 8
+  %x19 = getelementptr inbounds %struct.point, %struct.point* %a1, i32 0, i32 0
+  %13 = load double, double* %x19, align 8
+  %sub20 = fsub double %12, %13
+  %14 = load double, double* %slopeA, align 8
+  %mul21 = fmul double %sub20, %14
+  %y22 = getelementptr inbounds %struct.point, %struct.point* %b1, i32 0, i32 1
+  %15 = load double, double* %y22, align 8
+  %add23 = fadd double %mul21, %15
+  %y24 = getelementptr inbounds %struct.point, %struct.point* %agg.result, i32 0, i32 1
+  store double %add23, double* %y24, align 8
+  br label %if.end
+
+if.else25:                                        ; preds = %land.lhs.true13, %if.else11
+  %16 = load double, double* %slopeA, align 8
+  %x26 = getelementptr inbounds %struct.point, %struct.point* %a1, i32 0, i32 0
+  %17 = load double, double* %x26, align 8
+  %mul27 = fmul double %16, %17
+  %18 = load double, double* %slopeB, align 8
+  %x28 = getelementptr inbounds %struct.point, %struct.point* %b1, i32 0, i32 0
+  %19 = load double, double* %x28, align 8
+  %mul29 = fmul double %18, %19
+  %sub30 = fsub double %mul27, %mul29
+  %y31 = getelementptr inbounds %struct.point, %struct.point* %b1, i32 0, i32 1
+  %20 = load double, double* %y31, align 8
+  %add32 = fadd double %sub30, %20
+  %y33 = getelementptr inbounds %struct.point, %struct.point* %a1, i32 0, i32 1
+  %21 = load double, double* %y33, align 8
+  %sub34 = fsub double %add32, %21
+  %22 = load double, double* %slopeA, align 8
+  %23 = load double, double* %slopeB, align 8
+  %sub35 = fsub double %22, %23
+  %div = fdiv double %sub34, %sub35
+  %x36 = getelementptr inbounds %struct.point, %struct.point* %agg.result, i32 0, i32 0
+  store double %div, double* %x36, align 8
+  %24 = load double, double* %slopeB, align 8
+  %x37 = getelementptr inbounds %struct.point, %struct.point* %agg.result, i32 0, i32 0
+  %25 = load double, double* %x37, align 8
+  %x38 = getelementptr inbounds %struct.point, %struct.point* %b1, i32 0, i32 0
+  %26 = load double, double* %x38, align 8
+  %sub39 = fsub double %25, %26
+  %mul40 = fmul double %24, %sub39
+  %y41 = getelementptr inbounds %struct.point, %struct.point* %b1, i32 0, i32 1
+  %27 = load double, double* %y41, align 8
+  %add42 = fadd double %mul40, %27
+  %y43 = getelementptr inbounds %struct.point, %struct.point* %agg.result, i32 0, i32 1
+  store double %add42, double* %y43, align 8
+  br label %if.end
+
+if.end:                                           ; preds = %if.else25, %if.then15
+  br label %if.end44
+
+if.end44:                                         ; preds = %if.end, %if.then4
+  br label %if.end45
+
+if.end45:                                         ; preds = %if.end44, %if.then
+  ret void
+}
+
+; Function Attrs: noinline nounwind optnone
+define hidden i32 @__main_argc_argv(i32 %argC, i8** %argV) #0 {
+entry:
+  %retval = alloca i32, align 4
+  %argC.addr = alloca i32, align 4
+  %argV.addr = alloca i8**, align 4
+  %c = alloca %struct.point, align 8
+  %tmp = alloca %struct.point, align 8
+  %agg.tmp = alloca %struct.point, align 8
+  %agg.tmp2 = alloca %struct.point, align 8
+  %agg.tmp4 = alloca %struct.point, align 8
+  %agg.tmp6 = alloca %struct.point, align 8
+  store i32 0, i32* %retval, align 4
+  store i32 %argC, i32* %argC.addr, align 4
+  store i8** %argV, i8*** %argV.addr, align 4
+  %0 = load i32, i32* %argC.addr, align 4
+  %cmp = icmp slt i32 %0, 5
+  br i1 %cmp, label %if.then, label %if.else
+
+if.then:                                          ; preds = %entry
+  %1 = load i8**, i8*** %argV.addr, align 4
+  %arrayidx = getelementptr inbounds i8*, i8** %1, i32 0
+  %2 = load i8*, i8** %arrayidx, align 4
+  %call = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([65 x i8], [65 x i8]* @.str, i32 0, i32 0), i8* %2)
+  br label %if.end14
+
+if.else:                                          ; preds = %entry
+  %3 = load i8**, i8*** %argV.addr, align 4
+  %arrayidx1 = getelementptr inbounds i8*, i8** %3, i32 1
+  %4 = load i8*, i8** %arrayidx1, align 4
+  call void @extractPoint(%struct.point* sret align 8 %agg.tmp, i8* %4)
+  %5 = load i8**, i8*** %argV.addr, align 4
+  %arrayidx3 = getelementptr inbounds i8*, i8** %5, i32 2
+  %6 = load i8*, i8** %arrayidx3, align 4
+  call void @extractPoint(%struct.point* sret align 8 %agg.tmp2, i8* %6)
+  %7 = load i8**, i8*** %argV.addr, align 4
+  %arrayidx5 = getelementptr inbounds i8*, i8** %7, i32 3
+  %8 = load i8*, i8** %arrayidx5, align 4
+  call void @extractPoint(%struct.point* sret align 8 %agg.tmp4, i8* %8)
+  %9 = load i8**, i8*** %argV.addr, align 4
+  %arrayidx7 = getelementptr inbounds i8*, i8** %9, i32 4
+  %10 = load i8*, i8** %arrayidx7, align 4
+  call void @extractPoint(%struct.point* sret align 8 %agg.tmp6, i8* %10)
+  call void @intersectionPoint(%struct.point* sret align 8 %tmp, %struct.point* byval(%struct.point) align 8 %agg.tmp, %struct.point* byval(%struct.point) align 8 %agg.tmp2, %struct.point* byval(%struct.point) align 8 %agg.tmp4, %struct.point* byval(%struct.point) align 8 %agg.tmp6)
+  %11 = bitcast %struct.point* %c to i8*
+  %12 = bitcast %struct.point* %tmp to i8*
+  call void @llvm.memcpy.p0i8.p0i8.i32(i8* align 8 %11, i8* align 8 %12, i32 16, i1 false)
+  %x = getelementptr inbounds %struct.point, %struct.point* %c, i32 0, i32 0
+  %13 = load double, double* %x, align 8
+  %cmp8 = fcmp oeq double %13, 0x7FF8000000000000
+  br i1 %cmp8, label %if.then9, label %if.else11
+
+if.then9:                                         ; preds = %if.else
+  %call10 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([69 x i8], [69 x i8]* @.str.1, i32 0, i32 0))
+  br label %if.end
+
+if.else11:                                        ; preds = %if.else
+  %x12 = getelementptr inbounds %struct.point, %struct.point* %c, i32 0, i32 0
+  %14 = load double, double* %x12, align 8
+  %y = getelementptr inbounds %struct.point, %struct.point* %c, i32 0, i32 1
+  %15 = load double, double* %y, align 8
+  %call13 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([34 x i8], [34 x i8]* @.str.2, i32 0, i32 0), double %14, double %15)
+  br label %if.end
+
+if.end:                                           ; preds = %if.else11, %if.then9
+  br label %if.end14
+
+if.end14:                                         ; preds = %if.end, %if.then
+  ret i32 0
+}
+
+declare i32 @printf(i8* %0, ...) #1
+
+; Function Attrs: argmemonly nounwind willreturn
+declare void @llvm.memcpy.p0i8.p0i8.i32(i8* noalias nocapture writeonly %0, i8* noalias nocapture readonly %1, i32 %2, i1 immarg %3) #2
+
+attributes #0 = { noinline nounwind optnone "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "min-legal-vector-width"="0" "no-infs-fp-math"="false" "no-jump-tables"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #1 = { "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #2 = { argmemonly nounwind willreturn }
+
+!llvm.module.flags = !{!0}
+!llvm.ident = !{!1}
+
+!0 = !{i32 1, !"wchar_size", i32 4}
+!1 = !{!"clang version 11.0.0 (https://github.com/Jacarte/llvm-project.git 0f6dea67136cc1e0b3d200eb2bb165628970c44b)"}
+
+; extracted candidates
+
+; *****
+; For LLVM instruction:
+;  %1 = load i32, i32* %i, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %2 = load i8, i8* %arrayidx, align 1
+; Looking for a replacement for:
+%0:i8 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %conv = sext i8 %2 to i32
+; Looking for a replacement for:
+%0:i8 = var
+%1:i32 = sext %0
+infer %1
+
+; *****
+; For LLVM instruction:
+;  %cmp = icmp ne i32 %conv, 0
+; Looking for a replacement for:
+%0:i8 = var
+%1:i32 = sext %0
+%2:i1 = ne 0:i32, %1
+infer %2
+
+; *****
+; For LLVM instruction:
+;  %4 = load i32, i32* %i, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %5 = load i8, i8* %arrayidx2, align 1
+; Looking for a replacement for:
+%0:i8 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %conv3 = sext i8 %5 to i32
+; Looking for a replacement for:
+%0:i8 = var
+%1:i32 = sext %0
+infer %1
+
+; *****
+; For LLVM instruction:
+;  %cmp4 = icmp eq i32 %conv3, 40
+; Looking for a replacement for:
+%0:i8 = var
+%1:i32 = sext %0
+%2:i1 = eq 40:i32, %1
+infer %2
+
+; *****
+; For LLVM instruction:
+;  %6 = load i32, i32* %i, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %8 = load i32, i32* %i, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %9 = load i8, i8* %arrayidx6, align 1
+; Looking for a replacement for:
+%0:i8 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %conv7 = sext i8 %9 to i32
+; Looking for a replacement for:
+%0:i8 = var
+%1:i32 = sext %0
+infer %1
+
+; *****
+; For LLVM instruction:
+;  %cmp8 = icmp eq i32 %conv7, 44
+; Looking for a replacement for:
+%0:i8 = var
+%1:i32 = sext %0
+%2:i1 = eq 44:i32, %1
+infer %2
+
+; *****
+; For LLVM instruction:
+;  %11 = load i32, i32* %i, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %12 = load i8, i8* %arrayidx10, align 1
+; Looking for a replacement for:
+%0:i8 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %conv11 = sext i8 %12 to i32
+; Looking for a replacement for:
+%0:i8 = var
+%1:i32 = sext %0
+infer %1
+
+; *****
+; For LLVM instruction:
+;  %cmp12 = icmp eq i32 %conv11, 41
+; Looking for a replacement for:
+%0:i8 = var
+%1:i32 = sext %0
+%2:i1 = eq 41:i32, %1
+infer %2
+
+; *****
+; For LLVM instruction:
+;  %13 = load i32, i32* %i, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %14 = load i32, i32* %end, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %15 = load i32, i32* %start, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %sub = sub nsw i32 %14, %15
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = var
+%2:i32 = subnsw %0, %1
+infer %2
+
+; *****
+; For LLVM instruction:
+;  %16 = load i32, i32* %length, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %mul = mul i32 %16, 1
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = mul 1:i32, %0
+infer %1
+
+; *****
+; For LLVM instruction:
+;  %17 = load i32, i32* %j, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %18 = load i32, i32* %length, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %sub16 = sub nsw i32 %18, 1
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = subnsw %0, 1:i32
+infer %1
+
+; *****
+; For LLVM instruction:
+;  %cmp17 = icmp slt i32 %17, %sub16
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = var
+%2:i32 = subnsw %1, 1:i32
+%3:i1 = slt %0, %2
+infer %3
+
+; *****
+; For LLVM instruction:
+;  %20 = load i32, i32* %start, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %21 = load i32, i32* %j, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %add = add nsw i32 %20, %21
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = var
+%2:i32 = addnsw %0, %1
+infer %2
+
+; *****
+; For LLVM instruction:
+;  %add20 = add nsw i32 %add, 1
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = var
+%2:i32 = addnsw %0, %1
+%3:i32 = addnsw 1:i32, %2
+infer %3
+
+; *****
+; For LLVM instruction:
+;  %22 = load i8, i8* %arrayidx21, align 1
+; Looking for a replacement for:
+%0:i8 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %24 = load i32, i32* %j, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %25 = load i32, i32* %j, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %inc = add nsw i32 %25, 1
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = addnsw 1:i32, %0
+infer %1
+
+; *****
+; For LLVM instruction:
+;  %27 = load i32, i32* %j, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %29 = load i32, i32* %i, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %30 = load i8, i8* %arrayidx24, align 1
+; Looking for a replacement for:
+%0:i8 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %conv25 = sext i8 %30 to i32
+; Looking for a replacement for:
+%0:i8 = var
+%1:i32 = sext %0
+infer %1
+
+; *****
+; For LLVM instruction:
+;  %cmp26 = icmp eq i32 %conv25, 44
+; Looking for a replacement for:
+%0:i8 = var
+%1:i32 = sext %0
+%2:i1 = eq 44:i32, %1
+infer %2
+
+; *****
+; For LLVM instruction:
+;  %31 = load i32, i32* %i, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %34 = load i32, i32* %i, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %inc34 = add nsw i32 %34, 1
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = addnsw 1:i32, %0
+infer %1
+got 1 candidates from LHS
+
+-------------------------------------------------
+%0:i32 = var
+infer %0
+
+
+--------------------------------
+guess 0
+
+%0:i32 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: -1
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+Dataflow Pruned 0/0
+There are 1 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 1 candidates from LHS
+
+-------------------------------------------------
+%0:i8 = var
+infer %0
+
+
+--------------------------------
+guess 0
+
+%0:i8 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: -1
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+Dataflow Pruned 0/0
+There are 1 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 2 candidates from LHS
+
+-------------------------------------------------
+%0:i8 = var
+%1:i32 = sext %0
+infer %1
+
+
+--------------------------------
+guess 0
+
+%0:i32 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: -1
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+Dataflow Pruned 0/0
+There are 1 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 3 candidates from LHS
+
+-------------------------------------------------
+%0:i8 = var
+%1:i32 = sext %0
+%2:i1 = ne 0:i32, %1
+infer %2
+
+
+--------------------------------
+guess 0
+
+%0:i1 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: -1
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+Dataflow Pruned 0/0
+There are 1 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 3 candidates from LHS
+
+-------------------------------------------------
+%0:i8 = var
+%1:i32 = sext %0
+%2:i1 = eq 40:i32, %1
+infer %2
+
+
+--------------------------------
+guess 0
+
+%0:i1 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: -1
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+Dataflow Pruned 0/0
+There are 1 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 3 candidates from LHS
+
+-------------------------------------------------
+%0:i8 = var
+%1:i32 = sext %0
+%2:i1 = eq 44:i32, %1
+infer %2
+
+
+--------------------------------
+guess 0
+
+%0:i1 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: -1
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+Dataflow Pruned 0/0
+There are 1 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 3 candidates from LHS
+
+-------------------------------------------------
+%0:i8 = var
+%1:i32 = sext %0
+%2:i1 = eq 41:i32, %1
+infer %2
+
+
+--------------------------------
+guess 0
+
+%0:i1 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: -1
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+Dataflow Pruned 0/0
+There are 1 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 3 candidates from LHS
+
+-------------------------------------------------
+%0:i32 = var
+%1:i32 = var
+%2:i32 = subnsw %0, %1
+infer %2
+
+
+--------------------------------
+guess 0
+
+%0:i32 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: 2147418112
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+
+--------------------------------
+guess 1
+
+%0:i32 = var
+
+Cost = 0
+second query is SAT-- constant doesn't work
+
+--------------------------------
+guess 2
+
+%0:i32 = var
+
+Cost = 0
+second query is SAT-- constant doesn't work
+Dataflow Pruned 0/0
+There are 3 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 2 candidates from LHS
+
+-------------------------------------------------
+%0:i32 = var
+%1:i32 = mul 1:i32, %0
+infer %1
+
+
+--------------------------------
+guess 0
+
+%0:i32 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: -1
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+
+--------------------------------
+guess 1
+
+%0:i32 = var
+
+Cost = 0
+second query is UNSAT
+Dataflow Pruned 0/0
+There are 2 Guesses
+There are 1 RHSs before deduplication
+There are 1 RHSs after deduplication
+"
+; No valid RHS in the list
+#########################################################
+
+Module before replacement:
+; ModuleID = './Find_the_intersection_of_two_lines.c.bc'
+source_filename = "./Find_the_intersection_of_two_lines.c"
+target datalayout = "e-m:e-p:32:32-i64:64-n32:64-S128"
+target triple = "wasm32-unknown-wasi"
+
+%struct.point = type { double, double }
+
+@.str = private unnamed_addr constant [65 x i8] c"Usage : %s <four points specified as (x,y) separated by a space>\00", align 1
+@.str.1 = private unnamed_addr constant [69 x i8] c"The lines do not intersect, they are either parallel or co-incident.\00", align 1
+@.str.2 = private unnamed_addr constant [34 x i8] c"Point of intersection : (%lf,%lf)\00", align 1
+
+; Function Attrs: noinline nounwind optnone
+define hidden double @lineSlope(%struct.point* byval(%struct.point) align 8 %a, %struct.point* byval(%struct.point) align 8 %b) #0 {
+entry:
+  %retval = alloca double, align 8
+  %x = getelementptr inbounds %struct.point, %struct.point* %a, i32 0, i32 0
+  %0 = load double, double* %x, align 8
+  %x1 = getelementptr inbounds %struct.point, %struct.point* %b, i32 0, i32 0
+  %1 = load double, double* %x1, align 8
+  %sub = fsub double %0, %1
+  %cmp = fcmp oeq double %sub, 0.000000e+00
+  br i1 %cmp, label %if.then, label %if.else
+
+if.then:                                          ; preds = %entry
+  store double 0x7FF8000000000000, double* %retval, align 8
+  br label %return
+
+if.else:                                          ; preds = %entry
+  %y = getelementptr inbounds %struct.point, %struct.point* %a, i32 0, i32 1
+  %2 = load double, double* %y, align 8
+  %y2 = getelementptr inbounds %struct.point, %struct.point* %b, i32 0, i32 1
+  %3 = load double, double* %y2, align 8
+  %sub3 = fsub double %2, %3
+  %x4 = getelementptr inbounds %struct.point, %struct.point* %a, i32 0, i32 0
+  %4 = load double, double* %x4, align 8
+  %x5 = getelementptr inbounds %struct.point, %struct.point* %b, i32 0, i32 0
+  %5 = load double, double* %x5, align 8
+  %sub6 = fsub double %4, %5
+  %div = fdiv double %sub3, %sub6
+  store double %div, double* %retval, align 8
+  br label %return
+
+return:                                           ; preds = %if.else, %if.then
+  %6 = load double, double* %retval, align 8
+  ret double %6
+}
+
+; Function Attrs: noinline nounwind optnone
+define hidden void @extractPoint(%struct.point* noalias sret align 8 %agg.result, i8* %str) #0 {
+entry:
+  %str.addr = alloca i8*, align 4
+  %i = alloca i32, align 4
+  %j = alloca i32, align 4
+  %start = alloca i32, align 4
+  %end = alloca i32, align 4
+  %length = alloca i32, align 4
+  %holder = alloca i8*, align 4
+  store i8* %str, i8** %str.addr, align 4
+  store i32 0, i32* %i, align 4
+  br label %for.cond
+
+for.cond:                                         ; preds = %for.inc33, %entry
+  %0 = load i8*, i8** %str.addr, align 4
+  %1 = load i32, i32* %i, align 4
+  %arrayidx = getelementptr inbounds i8, i8* %0, i32 %1
+  %2 = load i8, i8* %arrayidx, align 1
+  %conv = sext i8 %2 to i32
+  %cmp = icmp ne i32 %conv, 0
+  br i1 %cmp, label %for.body, label %for.end35
+
+for.body:                                         ; preds = %for.cond
+  %3 = load i8*, i8** %str.addr, align 4
+  %4 = load i32, i32* %i, align 4
+  %arrayidx2 = getelementptr inbounds i8, i8* %3, i32 %4
+  %5 = load i8, i8* %arrayidx2, align 1
+  %conv3 = sext i8 %5 to i32
+  %cmp4 = icmp eq i32 %conv3, 40
+  br i1 %cmp4, label %if.then, label %if.end
+
+if.then:                                          ; preds = %for.body
+  %6 = load i32, i32* %i, align 4
+  store i32 %6, i32* %start, align 4
+  br label %if.end
+
+if.end:                                           ; preds = %if.then, %for.body
+  %7 = load i8*, i8** %str.addr, align 4
+  %8 = load i32, i32* %i, align 4
+  %arrayidx6 = getelementptr inbounds i8, i8* %7, i32 %8
+  %9 = load i8, i8* %arrayidx6, align 1
+  %conv7 = sext i8 %9 to i32
+  %cmp8 = icmp eq i32 %conv7, 44
+  br i1 %cmp8, label %if.then14, label %lor.lhs.false
+
+lor.lhs.false:                                    ; preds = %if.end
+  %10 = load i8*, i8** %str.addr, align 4
+  %11 = load i32, i32* %i, align 4
+  %arrayidx10 = getelementptr inbounds i8, i8* %10, i32 %11
+  %12 = load i8, i8* %arrayidx10, align 1
+  %conv11 = sext i8 %12 to i32
+  %cmp12 = icmp eq i32 %conv11, 41
+  br i1 %cmp12, label %if.then14, label %if.end32
+
+if.then14:                                        ; preds = %lor.lhs.false, %if.end
+  %13 = load i32, i32* %i, align 4
+  store i32 %13, i32* %end, align 4
+  %14 = load i32, i32* %end, align 4
+  %15 = load i32, i32* %start, align 4
+  %sub = sub nsw i32 %14, %15
+  store i32 %sub, i32* %length, align 4
+  %16 = load i32, i32* %length, align 4
+  %mul = mul i32 %16, 1
+  %call = call noalias i8* @malloc(i32 %mul)
+  store i8* %call, i8** %holder, align 4
+  store i32 0, i32* %j, align 4
+  br label %for.cond15
+
+for.cond15:                                       ; preds = %for.inc, %if.then14
+  %17 = load i32, i32* %j, align 4
+  %18 = load i32, i32* %length, align 4
+  %sub16 = sub nsw i32 %18, 1
+  %cmp17 = icmp slt i32 %17, %sub16
+  br i1 %cmp17, label %for.body19, label %for.end
+
+for.body19:                                       ; preds = %for.cond15
+  %19 = load i8*, i8** %str.addr, align 4
+  %20 = load i32, i32* %start, align 4
+  %21 = load i32, i32* %j, align 4
+  %add = add nsw i32 %20, %21
+  %add20 = add nsw i32 %add, 1
+  %arrayidx21 = getelementptr inbounds i8, i8* %19, i32 %add20
+  %22 = load i8, i8* %arrayidx21, align 1
+  %23 = load i8*, i8** %holder, align 4
+  %24 = load i32, i32* %j, align 4
+  %arrayidx22 = getelementptr inbounds i8, i8* %23, i32 %24
+  store i8 %22, i8* %arrayidx22, align 1
+  br label %for.inc
+
+for.inc:                                          ; preds = %for.body19
+  %25 = load i32, i32* %j, align 4
+  %inc = add nsw i32 %25, 1
+  store i32 %inc, i32* %j, align 4
+  br label %for.cond15
+
+for.end:                                          ; preds = %for.cond15
+  %26 = load i8*, i8** %holder, align 4
+  %27 = load i32, i32* %j, align 4
+  %arrayidx23 = getelementptr inbounds i8, i8* %26, i32 %27
+  store i8 0, i8* %arrayidx23, align 1
+  %28 = load i8*, i8** %str.addr, align 4
+  %29 = load i32, i32* %i, align 4
+  %arrayidx24 = getelementptr inbounds i8, i8* %28, i32 %29
+  %30 = load i8, i8* %arrayidx24, align 1
+  %conv25 = sext i8 %30 to i32
+  %cmp26 = icmp eq i32 %conv25, 44
+  br i1 %cmp26, label %if.then28, label %if.else
+
+if.then28:                                        ; preds = %for.end
+  %31 = load i32, i32* %i, align 4
+  store i32 %31, i32* %start, align 4
+  %32 = load i8*, i8** %holder, align 4
+  %call29 = call double @atof(i8* %32)
+  %x = getelementptr inbounds %struct.point, %struct.point* %agg.result, i32 0, i32 0
+  store double %call29, double* %x, align 8
+  br label %if.end31
+
+if.else:                                          ; preds = %for.end
+  %33 = load i8*, i8** %holder, align 4
+  %call30 = call double @atof(i8* %33)
+  %y = getelementptr inbounds %struct.point, %struct.point* %agg.result, i32 0, i32 1
+  store double %call30, double* %y, align 8
+  br label %if.end31
+
+if.end31:                                         ; preds = %if.else, %if.then28
+  br label %if.end32
+
+if.end32:                                         ; preds = %if.end31, %lor.lhs.false
+  br label %for.inc33
+
+for.inc33:                                        ; preds = %if.end32
+  %34 = load i32, i32* %i, align 4
+  %inc34 = add nsw i32 %34, 1
+  store i32 %inc34, i32* %i, align 4
+  br label %for.cond
+
+for.end35:                                        ; preds = %for.cond
+  ret void
+}
+
+declare noalias i8* @malloc(i32 %0) #1
+
+declare double @atof(i8* %0) #1
+
+; Function Attrs: noinline nounwind optnone
+define hidden void @intersectionPoint(%struct.point* noalias sret align 8 %agg.result, %struct.point* byval(%struct.point) align 8 %a1, %struct.point* byval(%struct.point) align 8 %a2, %struct.point* byval(%struct.point) align 8 %b1, %struct.point* byval(%struct.point) align 8 %b2) #0 {
+entry:
+  %slopeA = alloca double, align 8
+  %slopeB = alloca double, align 8
+  %call = call double @lineSlope(%struct.point* byval(%struct.point) align 8 %a1, %struct.point* byval(%struct.point) align 8 %a2)
+  store double %call, double* %slopeA, align 8
+  %call1 = call double @lineSlope(%struct.point* byval(%struct.point) align 8 %b1, %struct.point* byval(%struct.point) align 8 %b2)
+  store double %call1, double* %slopeB, align 8
+  %0 = load double, double* %slopeA, align 8
+  %1 = load double, double* %slopeB, align 8
+  %cmp = fcmp oeq double %0, %1
+  br i1 %cmp, label %if.then, label %if.else
+
+if.then:                                          ; preds = %entry
+  %x = getelementptr inbounds %struct.point, %struct.point* %agg.result, i32 0, i32 0
+  store double 0x7FF8000000000000, double* %x, align 8
+  %y = getelementptr inbounds %struct.point, %struct.point* %agg.result, i32 0, i32 1
+  store double 0x7FF8000000000000, double* %y, align 8
+  br label %if.end45
+
+if.else:                                          ; preds = %entry
+  %2 = load double, double* %slopeA, align 8
+  %cmp2 = fcmp oeq double %2, 0x7FF8000000000000
+  br i1 %cmp2, label %land.lhs.true, label %if.else11
+
+land.lhs.true:                                    ; preds = %if.else
+  %3 = load double, double* %slopeB, align 8
+  %cmp3 = fcmp une double %3, 0x7FF8000000000000
+  br i1 %cmp3, label %if.then4, label %if.else11
+
+if.then4:                                         ; preds = %land.lhs.true
+  %x5 = getelementptr inbounds %struct.point, %struct.point* %a1, i32 0, i32 0
+  %4 = load double, double* %x5, align 8
+  %x6 = getelementptr inbounds %struct.point, %struct.point* %agg.result, i32 0, i32 0
+  store double %4, double* %x6, align 8
+  %x7 = getelementptr inbounds %struct.point, %struct.point* %a1, i32 0, i32 0
+  %5 = load double, double* %x7, align 8
+  %x8 = getelementptr inbounds %struct.point, %struct.point* %b1, i32 0, i32 0
+  %6 = load double, double* %x8, align 8
+  %sub = fsub double %5, %6
+  %7 = load double, double* %slopeB, align 8
+  %mul = fmul double %sub, %7
+  %y9 = getelementptr inbounds %struct.point, %struct.point* %b1, i32 0, i32 1
+  %8 = load double, double* %y9, align 8
+  %add = fadd double %mul, %8
+  %y10 = getelementptr inbounds %struct.point, %struct.point* %agg.result, i32 0, i32 1
+  store double %add, double* %y10, align 8
+  br label %if.end44
+
+if.else11:                                        ; preds = %land.lhs.true, %if.else
+  %9 = load double, double* %slopeB, align 8
+  %cmp12 = fcmp oeq double %9, 0x7FF8000000000000
+  br i1 %cmp12, label %land.lhs.true13, label %if.else25
+
+land.lhs.true13:                                  ; preds = %if.else11
+  %10 = load double, double* %slopeA, align 8
+  %cmp14 = fcmp une double %10, 0x7FF8000000000000
+  br i1 %cmp14, label %if.then15, label %if.else25
+
+if.then15:                                        ; preds = %land.lhs.true13
+  %x16 = getelementptr inbounds %struct.point, %struct.point* %b1, i32 0, i32 0
+  %11 = load double, double* %x16, align 8
+  %x17 = getelementptr inbounds %struct.point, %struct.point* %agg.result, i32 0, i32 0
+  store double %11, double* %x17, align 8
+  %x18 = getelementptr inbounds %struct.point, %struct.point* %b1, i32 0, i32 0
+  %12 = load double, double* %x18, align 8
+  %x19 = getelementptr inbounds %struct.point, %struct.point* %a1, i32 0, i32 0
+  %13 = load double, double* %x19, align 8
+  %sub20 = fsub double %12, %13
+  %14 = load double, double* %slopeA, align 8
+  %mul21 = fmul double %sub20, %14
+  %y22 = getelementptr inbounds %struct.point, %struct.point* %b1, i32 0, i32 1
+  %15 = load double, double* %y22, align 8
+  %add23 = fadd double %mul21, %15
+  %y24 = getelementptr inbounds %struct.point, %struct.point* %agg.result, i32 0, i32 1
+  store double %add23, double* %y24, align 8
+  br label %if.end
+
+if.else25:                                        ; preds = %land.lhs.true13, %if.else11
+  %16 = load double, double* %slopeA, align 8
+  %x26 = getelementptr inbounds %struct.point, %struct.point* %a1, i32 0, i32 0
+  %17 = load double, double* %x26, align 8
+  %mul27 = fmul double %16, %17
+  %18 = load double, double* %slopeB, align 8
+  %x28 = getelementptr inbounds %struct.point, %struct.point* %b1, i32 0, i32 0
+  %19 = load double, double* %x28, align 8
+  %mul29 = fmul double %18, %19
+  %sub30 = fsub double %mul27, %mul29
+  %y31 = getelementptr inbounds %struct.point, %struct.point* %b1, i32 0, i32 1
+  %20 = load double, double* %y31, align 8
+  %add32 = fadd double %sub30, %20
+  %y33 = getelementptr inbounds %struct.point, %struct.point* %a1, i32 0, i32 1
+  %21 = load double, double* %y33, align 8
+  %sub34 = fsub double %add32, %21
+  %22 = load double, double* %slopeA, align 8
+  %23 = load double, double* %slopeB, align 8
+  %sub35 = fsub double %22, %23
+  %div = fdiv double %sub34, %sub35
+  %x36 = getelementptr inbounds %struct.point, %struct.point* %agg.result, i32 0, i32 0
+  store double %div, double* %x36, align 8
+  %24 = load double, double* %slopeB, align 8
+  %x37 = getelementptr inbounds %struct.point, %struct.point* %agg.result, i32 0, i32 0
+  %25 = load double, double* %x37, align 8
+  %x38 = getelementptr inbounds %struct.point, %struct.point* %b1, i32 0, i32 0
+  %26 = load double, double* %x38, align 8
+  %sub39 = fsub double %25, %26
+  %mul40 = fmul double %24, %sub39
+  %y41 = getelementptr inbounds %struct.point, %struct.point* %b1, i32 0, i32 1
+  %27 = load double, double* %y41, align 8
+  %add42 = fadd double %mul40, %27
+  %y43 = getelementptr inbounds %struct.point, %struct.point* %agg.result, i32 0, i32 1
+  store double %add42, double* %y43, align 8
+  br label %if.end
+
+if.end:                                           ; preds = %if.else25, %if.then15
+  br label %if.end44
+
+if.end44:                                         ; preds = %if.end, %if.then4
+  br label %if.end45
+
+if.end45:                                         ; preds = %if.end44, %if.then
+  ret void
+}
+
+; Function Attrs: noinline nounwind optnone
+define hidden i32 @__main_argc_argv(i32 %argC, i8** %argV) #0 {
+entry:
+  %retval = alloca i32, align 4
+  %argC.addr = alloca i32, align 4
+  %argV.addr = alloca i8**, align 4
+  %c = alloca %struct.point, align 8
+  %tmp = alloca %struct.point, align 8
+  %agg.tmp = alloca %struct.point, align 8
+  %agg.tmp2 = alloca %struct.point, align 8
+  %agg.tmp4 = alloca %struct.point, align 8
+  %agg.tmp6 = alloca %struct.point, align 8
+  store i32 0, i32* %retval, align 4
+  store i32 %argC, i32* %argC.addr, align 4
+  store i8** %argV, i8*** %argV.addr, align 4
+  %0 = load i32, i32* %argC.addr, align 4
+  %cmp = icmp slt i32 %0, 5
+  br i1 %cmp, label %if.then, label %if.else
+
+if.then:                                          ; preds = %entry
+  %1 = load i8**, i8*** %argV.addr, align 4
+  %arrayidx = getelementptr inbounds i8*, i8** %1, i32 0
+  %2 = load i8*, i8** %arrayidx, align 4
+  %call = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([65 x i8], [65 x i8]* @.str, i32 0, i32 0), i8* %2)
+  br label %if.end14
+
+if.else:                                          ; preds = %entry
+  %3 = load i8**, i8*** %argV.addr, align 4
+  %arrayidx1 = getelementptr inbounds i8*, i8** %3, i32 1
+  %4 = load i8*, i8** %arrayidx1, align 4
+  call void @extractPoint(%struct.point* sret align 8 %agg.tmp, i8* %4)
+  %5 = load i8**, i8*** %argV.addr, align 4
+  %arrayidx3 = getelementptr inbounds i8*, i8** %5, i32 2
+  %6 = load i8*, i8** %arrayidx3, align 4
+  call void @extractPoint(%struct.point* sret align 8 %agg.tmp2, i8* %6)
+  %7 = load i8**, i8*** %argV.addr, align 4
+  %arrayidx5 = getelementptr inbounds i8*, i8** %7, i32 3
+  %8 = load i8*, i8** %arrayidx5, align 4
+  call void @extractPoint(%struct.point* sret align 8 %agg.tmp4, i8* %8)
+  %9 = load i8**, i8*** %argV.addr, align 4
+  %arrayidx7 = getelementptr inbounds i8*, i8** %9, i32 4
+  %10 = load i8*, i8** %arrayidx7, align 4
+  call void @extractPoint(%struct.point* sret align 8 %agg.tmp6, i8* %10)
+  call void @intersectionPoint(%struct.point* sret align 8 %tmp, %struct.point* byval(%struct.point) align 8 %agg.tmp, %struct.point* byval(%struct.point) align 8 %agg.tmp2, %struct.point* byval(%struct.point) align 8 %agg.tmp4, %struct.point* byval(%struct.point) align 8 %agg.tmp6)
+  %11 = bitcast %struct.point* %c to i8*
+  %12 = bitcast %struct.point* %tmp to i8*
+  call void @llvm.memcpy.p0i8.p0i8.i32(i8* align 8 %11, i8* align 8 %12, i32 16, i1 false)
+  %x = getelementptr inbounds %struct.point, %struct.point* %c, i32 0, i32 0
+  %13 = load double, double* %x, align 8
+  %cmp8 = fcmp oeq double %13, 0x7FF8000000000000
+  br i1 %cmp8, label %if.then9, label %if.else11
+
+if.then9:                                         ; preds = %if.else
+  %call10 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([69 x i8], [69 x i8]* @.str.1, i32 0, i32 0))
+  br label %if.end
+
+if.else11:                                        ; preds = %if.else
+  %x12 = getelementptr inbounds %struct.point, %struct.point* %c, i32 0, i32 0
+  %14 = load double, double* %x12, align 8
+  %y = getelementptr inbounds %struct.point, %struct.point* %c, i32 0, i32 1
+  %15 = load double, double* %y, align 8
+  %call13 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([34 x i8], [34 x i8]* @.str.2, i32 0, i32 0), double %14, double %15)
+  br label %if.end
+
+if.end:                                           ; preds = %if.else11, %if.then9
+  br label %if.end14
+
+if.end14:                                         ; preds = %if.end, %if.then
+  ret i32 0
+}
+
+declare i32 @printf(i8* %0, ...) #1
+
+; Function Attrs: argmemonly nounwind willreturn
+declare void @llvm.memcpy.p0i8.p0i8.i32(i8* noalias nocapture writeonly %0, i8* noalias nocapture readonly %1, i32 %2, i1 immarg %3) #2
+
+attributes #0 = { noinline nounwind optnone "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "min-legal-vector-width"="0" "no-infs-fp-math"="false" "no-jump-tables"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #1 = { "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #2 = { argmemonly nounwind willreturn }
+
+!llvm.module.flags = !{!0}
+!llvm.ident = !{!1}
+
+!0 = !{i32 1, !"wchar_size", i32 4}
+!1 = !{!"clang version 11.0.0 (https://github.com/Jacarte/llvm-project.git 0f6dea67136cc1e0b3d200eb2bb165628970c44b)"}
+
+; Replacing "  %mul = mul i32 %16, 1"
+; from ""
+; with "  %16 = load i32, i32* %length, align 4" in:
+"%0:i32 = var
+%1:i32 = mul 1:i32, %0
+cand %1 %0
+"
+; with "  %16 = load i32, i32* %length, align 4"
+
+Module after replacement:
+; ModuleID = './Find_the_intersection_of_two_lines.c.bc'
+source_filename = "./Find_the_intersection_of_two_lines.c"
+target datalayout = "e-m:e-p:32:32-i64:64-n32:64-S128"
+target triple = "wasm32-unknown-wasi"
+
+%struct.point = type { double, double }
+
+@.str = private unnamed_addr constant [65 x i8] c"Usage : %s <four points specified as (x,y) separated by a space>\00", align 1
+@.str.1 = private unnamed_addr constant [69 x i8] c"The lines do not intersect, they are either parallel or co-incident.\00", align 1
+@.str.2 = private unnamed_addr constant [34 x i8] c"Point of intersection : (%lf,%lf)\00", align 1
+
+; Function Attrs: noinline nounwind optnone
+define hidden double @lineSlope(%struct.point* byval(%struct.point) align 8 %a, %struct.point* byval(%struct.point) align 8 %b) #0 {
+entry:
+  %retval = alloca double, align 8
+  %x = getelementptr inbounds %struct.point, %struct.point* %a, i32 0, i32 0
+  %0 = load double, double* %x, align 8
+  %x1 = getelementptr inbounds %struct.point, %struct.point* %b, i32 0, i32 0
+  %1 = load double, double* %x1, align 8
+  %sub = fsub double %0, %1
+  %cmp = fcmp oeq double %sub, 0.000000e+00
+  br i1 %cmp, label %if.then, label %if.else
+
+if.then:                                          ; preds = %entry
+  store double 0x7FF8000000000000, double* %retval, align 8
+  br label %return
+
+if.else:                                          ; preds = %entry
+  %y = getelementptr inbounds %struct.point, %struct.point* %a, i32 0, i32 1
+  %2 = load double, double* %y, align 8
+  %y2 = getelementptr inbounds %struct.point, %struct.point* %b, i32 0, i32 1
+  %3 = load double, double* %y2, align 8
+  %sub3 = fsub double %2, %3
+  %x4 = getelementptr inbounds %struct.point, %struct.point* %a, i32 0, i32 0
+  %4 = load double, double* %x4, align 8
+  %x5 = getelementptr inbounds %struct.point, %struct.point* %b, i32 0, i32 0
+  %5 = load double, double* %x5, align 8
+  %sub6 = fsub double %4, %5
+  %div = fdiv double %sub3, %sub6
+  store double %div, double* %retval, align 8
+  br label %return
+
+return:                                           ; preds = %if.else, %if.then
+  %6 = load double, double* %retval, align 8
+  ret double %6
+}
+
+; Function Attrs: noinline nounwind optnone
+define hidden void @extractPoint(%struct.point* noalias sret align 8 %agg.result, i8* %str) #0 {
+entry:
+  %str.addr = alloca i8*, align 4
+  %i = alloca i32, align 4
+  %j = alloca i32, align 4
+  %start = alloca i32, align 4
+  %end = alloca i32, align 4
+  %length = alloca i32, align 4
+  %holder = alloca i8*, align 4
+  store i8* %str, i8** %str.addr, align 4
+  store i32 0, i32* %i, align 4
+  br label %for.cond
+
+for.cond:                                         ; preds = %for.inc33, %entry
+  %0 = load i8*, i8** %str.addr, align 4
+  %1 = load i32, i32* %i, align 4
+  %arrayidx = getelementptr inbounds i8, i8* %0, i32 %1
+  %2 = load i8, i8* %arrayidx, align 1
+  %conv = sext i8 %2 to i32
+  %cmp = icmp ne i32 %conv, 0
+  br i1 %cmp, label %for.body, label %for.end35
+
+for.body:                                         ; preds = %for.cond
+  %3 = load i8*, i8** %str.addr, align 4
+  %4 = load i32, i32* %i, align 4
+  %arrayidx2 = getelementptr inbounds i8, i8* %3, i32 %4
+  %5 = load i8, i8* %arrayidx2, align 1
+  %conv3 = sext i8 %5 to i32
+  %cmp4 = icmp eq i32 %conv3, 40
+  br i1 %cmp4, label %if.then, label %if.end
+
+if.then:                                          ; preds = %for.body
+  %6 = load i32, i32* %i, align 4
+  store i32 %6, i32* %start, align 4
+  br label %if.end
+
+if.end:                                           ; preds = %if.then, %for.body
+  %7 = load i8*, i8** %str.addr, align 4
+  %8 = load i32, i32* %i, align 4
+  %arrayidx6 = getelementptr inbounds i8, i8* %7, i32 %8
+  %9 = load i8, i8* %arrayidx6, align 1
+  %conv7 = sext i8 %9 to i32
+  %cmp8 = icmp eq i32 %conv7, 44
+  br i1 %cmp8, label %if.then14, label %lor.lhs.false
+
+lor.lhs.false:                                    ; preds = %if.end
+  %10 = load i8*, i8** %str.addr, align 4
+  %11 = load i32, i32* %i, align 4
+  %arrayidx10 = getelementptr inbounds i8, i8* %10, i32 %11
+  %12 = load i8, i8* %arrayidx10, align 1
+  %conv11 = sext i8 %12 to i32
+  %cmp12 = icmp eq i32 %conv11, 41
+  br i1 %cmp12, label %if.then14, label %if.end32
+
+if.then14:                                        ; preds = %lor.lhs.false, %if.end
+  %13 = load i32, i32* %i, align 4
+  store i32 %13, i32* %end, align 4
+  %14 = load i32, i32* %end, align 4
+  %15 = load i32, i32* %start, align 4
+  %sub = sub nsw i32 %14, %15
+  store i32 %sub, i32* %length, align 4
+  %16 = load i32, i32* %length, align 4
+  %call = call noalias i8* @malloc(i32 %16)
+  store i8* %call, i8** %holder, align 4
+  store i32 0, i32* %j, align 4
+  br label %for.cond15
+
+for.cond15:                                       ; preds = %for.inc, %if.then14
+  %17 = load i32, i32* %j, align 4
+  %18 = load i32, i32* %length, align 4
+  %sub16 = sub nsw i32 %18, 1
+  %cmp17 = icmp slt i32 %17, %sub16
+  br i1 %cmp17, label %for.body19, label %for.end
+
+for.body19:                                       ; preds = %for.cond15
+  %19 = load i8*, i8** %str.addr, align 4
+  %20 = load i32, i32* %start, align 4
+  %21 = load i32, i32* %j, align 4
+  %add = add nsw i32 %20, %21
+  %add20 = add nsw i32 %add, 1
+  %arrayidx21 = getelementptr inbounds i8, i8* %19, i32 %add20
+  %22 = load i8, i8* %arrayidx21, align 1
+  %23 = load i8*, i8** %holder, align 4
+  %24 = load i32, i32* %j, align 4
+  %arrayidx22 = getelementptr inbounds i8, i8* %23, i32 %24
+  store i8 %22, i8* %arrayidx22, align 1
+  br label %for.inc
+
+for.inc:                                          ; preds = %for.body19
+  %25 = load i32, i32* %j, align 4
+  %inc = add nsw i32 %25, 1
+  store i32 %inc, i32* %j, align 4
+  br label %for.cond15
+
+for.end:                                          ; preds = %for.cond15
+  %26 = load i8*, i8** %holder, align 4
+  %27 = load i32, i32* %j, align 4
+  %arrayidx23 = getelementptr inbounds i8, i8* %26, i32 %27
+  store i8 0, i8* %arrayidx23, align 1
+  %28 = load i8*, i8** %str.addr, align 4
+  %29 = load i32, i32* %i, align 4
+  %arrayidx24 = getelementptr inbounds i8, i8* %28, i32 %29
+  %30 = load i8, i8* %arrayidx24, align 1
+  %conv25 = sext i8 %30 to i32
+  %cmp26 = icmp eq i32 %conv25, 44
+  br i1 %cmp26, label %if.then28, label %if.else
+
+if.then28:                                        ; preds = %for.end
+  %31 = load i32, i32* %i, align 4
+  store i32 %31, i32* %start, align 4
+  %32 = load i8*, i8** %holder, align 4
+  %call29 = call double @atof(i8* %32)
+  %x = getelementptr inbounds %struct.point, %struct.point* %agg.result, i32 0, i32 0
+  store double %call29, double* %x, align 8
+  br label %if.end31
+
+if.else:                                          ; preds = %for.end
+  %33 = load i8*, i8** %holder, align 4
+  %call30 = call double @atof(i8* %33)
+  %y = getelementptr inbounds %struct.point, %struct.point* %agg.result, i32 0, i32 1
+  store double %call30, double* %y, align 8
+  br label %if.end31
+
+if.end31:                                         ; preds = %if.else, %if.then28
+  br label %if.end32
+
+if.end32:                                         ; preds = %if.end31, %lor.lhs.false
+  br label %for.inc33
+
+for.inc33:                                        ; preds = %if.end32
+  %34 = load i32, i32* %i, align 4
+  %inc34 = add nsw i32 %34, 1
+  store i32 %inc34, i32* %i, align 4
+  br label %for.cond
+
+for.end35:                                        ; preds = %for.cond
+  ret void
+}
+
+declare noalias i8* @malloc(i32 %0) #1
+
+declare double @atof(i8* %0) #1
+
+; Function Attrs: noinline nounwind optnone
+define hidden void @intersectionPoint(%struct.point* noalias sret align 8 %agg.result, %struct.point* byval(%struct.point) align 8 %a1, %struct.point* byval(%struct.point) align 8 %a2, %struct.point* byval(%struct.point) align 8 %b1, %struct.point* byval(%struct.point) align 8 %b2) #0 {
+entry:
+  %slopeA = alloca double, align 8
+  %slopeB = alloca double, align 8
+  %call = call double @lineSlope(%struct.point* byval(%struct.point) align 8 %a1, %struct.point* byval(%struct.point) align 8 %a2)
+  store double %call, double* %slopeA, align 8
+  %call1 = call double @lineSlope(%struct.point* byval(%struct.point) align 8 %b1, %struct.point* byval(%struct.point) align 8 %b2)
+  store double %call1, double* %slopeB, align 8
+  %0 = load double, double* %slopeA, align 8
+  %1 = load double, double* %slopeB, align 8
+  %cmp = fcmp oeq double %0, %1
+  br i1 %cmp, label %if.then, label %if.else
+
+if.then:                                          ; preds = %entry
+  %x = getelementptr inbounds %struct.point, %struct.point* %agg.result, i32 0, i32 0
+  store double 0x7FF8000000000000, double* %x, align 8
+  %y = getelementptr inbounds %struct.point, %struct.point* %agg.result, i32 0, i32 1
+  store double 0x7FF8000000000000, double* %y, align 8
+  br label %if.end45
+
+if.else:                                          ; preds = %entry
+  %2 = load double, double* %slopeA, align 8
+  %cmp2 = fcmp oeq double %2, 0x7FF8000000000000
+  br i1 %cmp2, label %land.lhs.true, label %if.else11
+
+land.lhs.true:                                    ; preds = %if.else
+  %3 = load double, double* %slopeB, align 8
+  %cmp3 = fcmp une double %3, 0x7FF8000000000000
+  br i1 %cmp3, label %if.then4, label %if.else11
+
+if.then4:                                         ; preds = %land.lhs.true
+  %x5 = getelementptr inbounds %struct.point, %struct.point* %a1, i32 0, i32 0
+  %4 = load double, double* %x5, align 8
+  %x6 = getelementptr inbounds %struct.point, %struct.point* %agg.result, i32 0, i32 0
+  store double %4, double* %x6, align 8
+  %x7 = getelementptr inbounds %struct.point, %struct.point* %a1, i32 0, i32 0
+  %5 = load double, double* %x7, align 8
+  %x8 = getelementptr inbounds %struct.point, %struct.point* %b1, i32 0, i32 0
+  %6 = load double, double* %x8, align 8
+  %sub = fsub double %5, %6
+  %7 = load double, double* %slopeB, align 8
+  %mul = fmul double %sub, %7
+  %y9 = getelementptr inbounds %struct.point, %struct.point* %b1, i32 0, i32 1
+  %8 = load double, double* %y9, align 8
+  %add = fadd double %mul, %8
+  %y10 = getelementptr inbounds %struct.point, %struct.point* %agg.result, i32 0, i32 1
+  store double %add, double* %y10, align 8
+  br label %if.end44
+
+if.else11:                                        ; preds = %land.lhs.true, %if.else
+  %9 = load double, double* %slopeB, align 8
+  %cmp12 = fcmp oeq double %9, 0x7FF8000000000000
+  br i1 %cmp12, label %land.lhs.true13, label %if.else25
+
+land.lhs.true13:                                  ; preds = %if.else11
+  %10 = load double, double* %slopeA, align 8
+  %cmp14 = fcmp une double %10, 0x7FF8000000000000
+  br i1 %cmp14, label %if.then15, label %if.else25
+
+if.then15:                                        ; preds = %land.lhs.true13
+  %x16 = getelementptr inbounds %struct.point, %struct.point* %b1, i32 0, i32 0
+  %11 = load double, double* %x16, align 8
+  %x17 = getelementptr inbounds %struct.point, %struct.point* %agg.result, i32 0, i32 0
+  store double %11, double* %x17, align 8
+  %x18 = getelementptr inbounds %struct.point, %struct.point* %b1, i32 0, i32 0
+  %12 = load double, double* %x18, align 8
+  %x19 = getelementptr inbounds %struct.point, %struct.point* %a1, i32 0, i32 0
+  %13 = load double, double* %x19, align 8
+  %sub20 = fsub double %12, %13
+  %14 = load double, double* %slopeA, align 8
+  %mul21 = fmul double %sub20, %14
+  %y22 = getelementptr inbounds %struct.point, %struct.point* %b1, i32 0, i32 1
+  %15 = load double, double* %y22, align 8
+  %add23 = fadd double %mul21, %15
+  %y24 = getelementptr inbounds %struct.point, %struct.point* %agg.result, i32 0, i32 1
+  store double %add23, double* %y24, align 8
+  br label %if.end
+
+if.else25:                                        ; preds = %land.lhs.true13, %if.else11
+  %16 = load double, double* %slopeA, align 8
+  %x26 = getelementptr inbounds %struct.point, %struct.point* %a1, i32 0, i32 0
+  %17 = load double, double* %x26, align 8
+  %mul27 = fmul double %16, %17
+  %18 = load double, double* %slopeB, align 8
+  %x28 = getelementptr inbounds %struct.point, %struct.point* %b1, i32 0, i32 0
+  %19 = load double, double* %x28, align 8
+  %mul29 = fmul double %18, %19
+  %sub30 = fsub double %mul27, %mul29
+  %y31 = getelementptr inbounds %struct.point, %struct.point* %b1, i32 0, i32 1
+  %20 = load double, double* %y31, align 8
+  %add32 = fadd double %sub30, %20
+  %y33 = getelementptr inbounds %struct.point, %struct.point* %a1, i32 0, i32 1
+  %21 = load double, double* %y33, align 8
+  %sub34 = fsub double %add32, %21
+  %22 = load double, double* %slopeA, align 8
+  %23 = load double, double* %slopeB, align 8
+  %sub35 = fsub double %22, %23
+  %div = fdiv double %sub34, %sub35
+  %x36 = getelementptr inbounds %struct.point, %struct.point* %agg.result, i32 0, i32 0
+  store double %div, double* %x36, align 8
+  %24 = load double, double* %slopeB, align 8
+  %x37 = getelementptr inbounds %struct.point, %struct.point* %agg.result, i32 0, i32 0
+  %25 = load double, double* %x37, align 8
+  %x38 = getelementptr inbounds %struct.point, %struct.point* %b1, i32 0, i32 0
+  %26 = load double, double* %x38, align 8
+  %sub39 = fsub double %25, %26
+  %mul40 = fmul double %24, %sub39
+  %y41 = getelementptr inbounds %struct.point, %struct.point* %b1, i32 0, i32 1
+  %27 = load double, double* %y41, align 8
+  %add42 = fadd double %mul40, %27
+  %y43 = getelementptr inbounds %struct.point, %struct.point* %agg.result, i32 0, i32 1
+  store double %add42, double* %y43, align 8
+  br label %if.end
+
+if.end:                                           ; preds = %if.else25, %if.then15
+  br label %if.end44
+
+if.end44:                                         ; preds = %if.end, %if.then4
+  br label %if.end45
+
+if.end45:                                         ; preds = %if.end44, %if.then
+  ret void
+}
+
+; Function Attrs: noinline nounwind optnone
+define hidden i32 @__main_argc_argv(i32 %argC, i8** %argV) #0 {
+entry:
+  %retval = alloca i32, align 4
+  %argC.addr = alloca i32, align 4
+  %argV.addr = alloca i8**, align 4
+  %c = alloca %struct.point, align 8
+  %tmp = alloca %struct.point, align 8
+  %agg.tmp = alloca %struct.point, align 8
+  %agg.tmp2 = alloca %struct.point, align 8
+  %agg.tmp4 = alloca %struct.point, align 8
+  %agg.tmp6 = alloca %struct.point, align 8
+  store i32 0, i32* %retval, align 4
+  store i32 %argC, i32* %argC.addr, align 4
+  store i8** %argV, i8*** %argV.addr, align 4
+  %0 = load i32, i32* %argC.addr, align 4
+  %cmp = icmp slt i32 %0, 5
+  br i1 %cmp, label %if.then, label %if.else
+
+if.then:                                          ; preds = %entry
+  %1 = load i8**, i8*** %argV.addr, align 4
+  %arrayidx = getelementptr inbounds i8*, i8** %1, i32 0
+  %2 = load i8*, i8** %arrayidx, align 4
+  %call = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([65 x i8], [65 x i8]* @.str, i32 0, i32 0), i8* %2)
+  br label %if.end14
+
+if.else:                                          ; preds = %entry
+  %3 = load i8**, i8*** %argV.addr, align 4
+  %arrayidx1 = getelementptr inbounds i8*, i8** %3, i32 1
+  %4 = load i8*, i8** %arrayidx1, align 4
+  call void @extractPoint(%struct.point* sret align 8 %agg.tmp, i8* %4)
+  %5 = load i8**, i8*** %argV.addr, align 4
+  %arrayidx3 = getelementptr inbounds i8*, i8** %5, i32 2
+  %6 = load i8*, i8** %arrayidx3, align 4
+  call void @extractPoint(%struct.point* sret align 8 %agg.tmp2, i8* %6)
+  %7 = load i8**, i8*** %argV.addr, align 4
+  %arrayidx5 = getelementptr inbounds i8*, i8** %7, i32 3
+  %8 = load i8*, i8** %arrayidx5, align 4
+  call void @extractPoint(%struct.point* sret align 8 %agg.tmp4, i8* %8)
+  %9 = load i8**, i8*** %argV.addr, align 4
+  %arrayidx7 = getelementptr inbounds i8*, i8** %9, i32 4
+  %10 = load i8*, i8** %arrayidx7, align 4
+  call void @extractPoint(%struct.point* sret align 8 %agg.tmp6, i8* %10)
+  call void @intersectionPoint(%struct.point* sret align 8 %tmp, %struct.point* byval(%struct.point) align 8 %agg.tmp, %struct.point* byval(%struct.point) align 8 %agg.tmp2, %struct.point* byval(%struct.point) align 8 %agg.tmp4, %struct.point* byval(%struct.point) align 8 %agg.tmp6)
+  %11 = bitcast %struct.point* %c to i8*
+  %12 = bitcast %struct.point* %tmp to i8*
+  call void @llvm.memcpy.p0i8.p0i8.i32(i8* align 8 %11, i8* align 8 %12, i32 16, i1 false)
+  %x = getelementptr inbounds %struct.point, %struct.point* %c, i32 0, i32 0
+  %13 = load double, double* %x, align 8
+  %cmp8 = fcmp oeq double %13, 0x7FF8000000000000
+  br i1 %cmp8, label %if.then9, label %if.else11
+
+if.then9:                                         ; preds = %if.else
+  %call10 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([69 x i8], [69 x i8]* @.str.1, i32 0, i32 0))
+  br label %if.end
+
+if.else11:                                        ; preds = %if.else
+  %x12 = getelementptr inbounds %struct.point, %struct.point* %c, i32 0, i32 0
+  %14 = load double, double* %x12, align 8
+  %y = getelementptr inbounds %struct.point, %struct.point* %c, i32 0, i32 1
+  %15 = load double, double* %y, align 8
+  %call13 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([34 x i8], [34 x i8]* @.str.2, i32 0, i32 0), double %14, double %15)
+  br label %if.end
+
+if.end:                                           ; preds = %if.else11, %if.then9
+  br label %if.end14
+
+if.end14:                                         ; preds = %if.end, %if.then
+  ret i32 0
+}
+
+declare i32 @printf(i8* %0, ...) #1
+
+; Function Attrs: argmemonly nounwind willreturn
+declare void @llvm.memcpy.p0i8.p0i8.i32(i8* noalias nocapture writeonly %0, i8* noalias nocapture readonly %1, i32 %2, i1 immarg %3) #2
+
+attributes #0 = { noinline nounwind optnone "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "min-legal-vector-width"="0" "no-infs-fp-math"="false" "no-jump-tables"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #1 = { "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #2 = { argmemonly nounwind willreturn }
+
+!llvm.module.flags = !{!0}
+!llvm.ident = !{!1}
+
+!0 = !{i32 1, !"wchar_size", i32 4}
+!1 = !{!"clang version 11.0.0 (https://github.com/Jacarte/llvm-project.git 0f6dea67136cc1e0b3d200eb2bb165628970c44b)"}
+
+#########################################################
+; exiting Souper's runOnFunction() for extractPoint()
+rescanning function after transformation was applied
+
+; entering Souper's runOnFunction() for extractPoint()
+
+; ModuleID = './Find_the_intersection_of_two_lines.c.bc'
+source_filename = "./Find_the_intersection_of_two_lines.c"
+target datalayout = "e-m:e-p:32:32-i64:64-n32:64-S128"
+target triple = "wasm32-unknown-wasi"
+
+%struct.point = type { double, double }
+
+@.str = private unnamed_addr constant [65 x i8] c"Usage : %s <four points specified as (x,y) separated by a space>\00", align 1
+@.str.1 = private unnamed_addr constant [69 x i8] c"The lines do not intersect, they are either parallel or co-incident.\00", align 1
+@.str.2 = private unnamed_addr constant [34 x i8] c"Point of intersection : (%lf,%lf)\00", align 1
+
+; Function Attrs: noinline nounwind optnone
+define hidden double @lineSlope(%struct.point* byval(%struct.point) align 8 %a, %struct.point* byval(%struct.point) align 8 %b) #0 {
+entry:
+  %retval = alloca double, align 8
+  %x = getelementptr inbounds %struct.point, %struct.point* %a, i32 0, i32 0
+  %0 = load double, double* %x, align 8
+  %x1 = getelementptr inbounds %struct.point, %struct.point* %b, i32 0, i32 0
+  %1 = load double, double* %x1, align 8
+  %sub = fsub double %0, %1
+  %cmp = fcmp oeq double %sub, 0.000000e+00
+  br i1 %cmp, label %if.then, label %if.else
+
+if.then:                                          ; preds = %entry
+  store double 0x7FF8000000000000, double* %retval, align 8
+  br label %return
+
+if.else:                                          ; preds = %entry
+  %y = getelementptr inbounds %struct.point, %struct.point* %a, i32 0, i32 1
+  %2 = load double, double* %y, align 8
+  %y2 = getelementptr inbounds %struct.point, %struct.point* %b, i32 0, i32 1
+  %3 = load double, double* %y2, align 8
+  %sub3 = fsub double %2, %3
+  %x4 = getelementptr inbounds %struct.point, %struct.point* %a, i32 0, i32 0
+  %4 = load double, double* %x4, align 8
+  %x5 = getelementptr inbounds %struct.point, %struct.point* %b, i32 0, i32 0
+  %5 = load double, double* %x5, align 8
+  %sub6 = fsub double %4, %5
+  %div = fdiv double %sub3, %sub6
+  store double %div, double* %retval, align 8
+  br label %return
+
+return:                                           ; preds = %if.else, %if.then
+  %6 = load double, double* %retval, align 8
+  ret double %6
+}
+
+; Function Attrs: noinline nounwind optnone
+define hidden void @extractPoint(%struct.point* noalias sret align 8 %agg.result, i8* %str) #0 {
+entry:
+  %str.addr = alloca i8*, align 4
+  %i = alloca i32, align 4
+  %j = alloca i32, align 4
+  %start = alloca i32, align 4
+  %end = alloca i32, align 4
+  %length = alloca i32, align 4
+  %holder = alloca i8*, align 4
+  store i8* %str, i8** %str.addr, align 4
+  store i32 0, i32* %i, align 4
+  br label %for.cond
+
+for.cond:                                         ; preds = %for.inc33, %entry
+  %0 = load i8*, i8** %str.addr, align 4
+  %1 = load i32, i32* %i, align 4
+  %arrayidx = getelementptr inbounds i8, i8* %0, i32 %1
+  %2 = load i8, i8* %arrayidx, align 1
+  %conv = sext i8 %2 to i32
+  %cmp = icmp ne i32 %conv, 0
+  br i1 %cmp, label %for.body, label %for.end35
+
+for.body:                                         ; preds = %for.cond
+  %3 = load i8*, i8** %str.addr, align 4
+  %4 = load i32, i32* %i, align 4
+  %arrayidx2 = getelementptr inbounds i8, i8* %3, i32 %4
+  %5 = load i8, i8* %arrayidx2, align 1
+  %conv3 = sext i8 %5 to i32
+  %cmp4 = icmp eq i32 %conv3, 40
+  br i1 %cmp4, label %if.then, label %if.end
+
+if.then:                                          ; preds = %for.body
+  %6 = load i32, i32* %i, align 4
+  store i32 %6, i32* %start, align 4
+  br label %if.end
+
+if.end:                                           ; preds = %if.then, %for.body
+  %7 = load i8*, i8** %str.addr, align 4
+  %8 = load i32, i32* %i, align 4
+  %arrayidx6 = getelementptr inbounds i8, i8* %7, i32 %8
+  %9 = load i8, i8* %arrayidx6, align 1
+  %conv7 = sext i8 %9 to i32
+  %cmp8 = icmp eq i32 %conv7, 44
+  br i1 %cmp8, label %if.then14, label %lor.lhs.false
+
+lor.lhs.false:                                    ; preds = %if.end
+  %10 = load i8*, i8** %str.addr, align 4
+  %11 = load i32, i32* %i, align 4
+  %arrayidx10 = getelementptr inbounds i8, i8* %10, i32 %11
+  %12 = load i8, i8* %arrayidx10, align 1
+  %conv11 = sext i8 %12 to i32
+  %cmp12 = icmp eq i32 %conv11, 41
+  br i1 %cmp12, label %if.then14, label %if.end32
+
+if.then14:                                        ; preds = %lor.lhs.false, %if.end
+  %13 = load i32, i32* %i, align 4
+  store i32 %13, i32* %end, align 4
+  %14 = load i32, i32* %end, align 4
+  %15 = load i32, i32* %start, align 4
+  %sub = sub nsw i32 %14, %15
+  store i32 %sub, i32* %length, align 4
+  %16 = load i32, i32* %length, align 4
+  %call = call noalias i8* @malloc(i32 %16)
+  store i8* %call, i8** %holder, align 4
+  store i32 0, i32* %j, align 4
+  br label %for.cond15
+
+for.cond15:                                       ; preds = %for.inc, %if.then14
+  %17 = load i32, i32* %j, align 4
+  %18 = load i32, i32* %length, align 4
+  %sub16 = sub nsw i32 %18, 1
+  %cmp17 = icmp slt i32 %17, %sub16
+  br i1 %cmp17, label %for.body19, label %for.end
+
+for.body19:                                       ; preds = %for.cond15
+  %19 = load i8*, i8** %str.addr, align 4
+  %20 = load i32, i32* %start, align 4
+  %21 = load i32, i32* %j, align 4
+  %add = add nsw i32 %20, %21
+  %add20 = add nsw i32 %add, 1
+  %arrayidx21 = getelementptr inbounds i8, i8* %19, i32 %add20
+  %22 = load i8, i8* %arrayidx21, align 1
+  %23 = load i8*, i8** %holder, align 4
+  %24 = load i32, i32* %j, align 4
+  %arrayidx22 = getelementptr inbounds i8, i8* %23, i32 %24
+  store i8 %22, i8* %arrayidx22, align 1
+  br label %for.inc
+
+for.inc:                                          ; preds = %for.body19
+  %25 = load i32, i32* %j, align 4
+  %inc = add nsw i32 %25, 1
+  store i32 %inc, i32* %j, align 4
+  br label %for.cond15
+
+for.end:                                          ; preds = %for.cond15
+  %26 = load i8*, i8** %holder, align 4
+  %27 = load i32, i32* %j, align 4
+  %arrayidx23 = getelementptr inbounds i8, i8* %26, i32 %27
+  store i8 0, i8* %arrayidx23, align 1
+  %28 = load i8*, i8** %str.addr, align 4
+  %29 = load i32, i32* %i, align 4
+  %arrayidx24 = getelementptr inbounds i8, i8* %28, i32 %29
+  %30 = load i8, i8* %arrayidx24, align 1
+  %conv25 = sext i8 %30 to i32
+  %cmp26 = icmp eq i32 %conv25, 44
+  br i1 %cmp26, label %if.then28, label %if.else
+
+if.then28:                                        ; preds = %for.end
+  %31 = load i32, i32* %i, align 4
+  store i32 %31, i32* %start, align 4
+  %32 = load i8*, i8** %holder, align 4
+  %call29 = call double @atof(i8* %32)
+  %x = getelementptr inbounds %struct.point, %struct.point* %agg.result, i32 0, i32 0
+  store double %call29, double* %x, align 8
+  br label %if.end31
+
+if.else:                                          ; preds = %for.end
+  %33 = load i8*, i8** %holder, align 4
+  %call30 = call double @atof(i8* %33)
+  %y = getelementptr inbounds %struct.point, %struct.point* %agg.result, i32 0, i32 1
+  store double %call30, double* %y, align 8
+  br label %if.end31
+
+if.end31:                                         ; preds = %if.else, %if.then28
+  br label %if.end32
+
+if.end32:                                         ; preds = %if.end31, %lor.lhs.false
+  br label %for.inc33
+
+for.inc33:                                        ; preds = %if.end32
+  %34 = load i32, i32* %i, align 4
+  %inc34 = add nsw i32 %34, 1
+  store i32 %inc34, i32* %i, align 4
+  br label %for.cond
+
+for.end35:                                        ; preds = %for.cond
+  ret void
+}
+
+declare noalias i8* @malloc(i32 %0) #1
+
+declare double @atof(i8* %0) #1
+
+; Function Attrs: noinline nounwind optnone
+define hidden void @intersectionPoint(%struct.point* noalias sret align 8 %agg.result, %struct.point* byval(%struct.point) align 8 %a1, %struct.point* byval(%struct.point) align 8 %a2, %struct.point* byval(%struct.point) align 8 %b1, %struct.point* byval(%struct.point) align 8 %b2) #0 {
+entry:
+  %slopeA = alloca double, align 8
+  %slopeB = alloca double, align 8
+  %call = call double @lineSlope(%struct.point* byval(%struct.point) align 8 %a1, %struct.point* byval(%struct.point) align 8 %a2)
+  store double %call, double* %slopeA, align 8
+  %call1 = call double @lineSlope(%struct.point* byval(%struct.point) align 8 %b1, %struct.point* byval(%struct.point) align 8 %b2)
+  store double %call1, double* %slopeB, align 8
+  %0 = load double, double* %slopeA, align 8
+  %1 = load double, double* %slopeB, align 8
+  %cmp = fcmp oeq double %0, %1
+  br i1 %cmp, label %if.then, label %if.else
+
+if.then:                                          ; preds = %entry
+  %x = getelementptr inbounds %struct.point, %struct.point* %agg.result, i32 0, i32 0
+  store double 0x7FF8000000000000, double* %x, align 8
+  %y = getelementptr inbounds %struct.point, %struct.point* %agg.result, i32 0, i32 1
+  store double 0x7FF8000000000000, double* %y, align 8
+  br label %if.end45
+
+if.else:                                          ; preds = %entry
+  %2 = load double, double* %slopeA, align 8
+  %cmp2 = fcmp oeq double %2, 0x7FF8000000000000
+  br i1 %cmp2, label %land.lhs.true, label %if.else11
+
+land.lhs.true:                                    ; preds = %if.else
+  %3 = load double, double* %slopeB, align 8
+  %cmp3 = fcmp une double %3, 0x7FF8000000000000
+  br i1 %cmp3, label %if.then4, label %if.else11
+
+if.then4:                                         ; preds = %land.lhs.true
+  %x5 = getelementptr inbounds %struct.point, %struct.point* %a1, i32 0, i32 0
+  %4 = load double, double* %x5, align 8
+  %x6 = getelementptr inbounds %struct.point, %struct.point* %agg.result, i32 0, i32 0
+  store double %4, double* %x6, align 8
+  %x7 = getelementptr inbounds %struct.point, %struct.point* %a1, i32 0, i32 0
+  %5 = load double, double* %x7, align 8
+  %x8 = getelementptr inbounds %struct.point, %struct.point* %b1, i32 0, i32 0
+  %6 = load double, double* %x8, align 8
+  %sub = fsub double %5, %6
+  %7 = load double, double* %slopeB, align 8
+  %mul = fmul double %sub, %7
+  %y9 = getelementptr inbounds %struct.point, %struct.point* %b1, i32 0, i32 1
+  %8 = load double, double* %y9, align 8
+  %add = fadd double %mul, %8
+  %y10 = getelementptr inbounds %struct.point, %struct.point* %agg.result, i32 0, i32 1
+  store double %add, double* %y10, align 8
+  br label %if.end44
+
+if.else11:                                        ; preds = %land.lhs.true, %if.else
+  %9 = load double, double* %slopeB, align 8
+  %cmp12 = fcmp oeq double %9, 0x7FF8000000000000
+  br i1 %cmp12, label %land.lhs.true13, label %if.else25
+
+land.lhs.true13:                                  ; preds = %if.else11
+  %10 = load double, double* %slopeA, align 8
+  %cmp14 = fcmp une double %10, 0x7FF8000000000000
+  br i1 %cmp14, label %if.then15, label %if.else25
+
+if.then15:                                        ; preds = %land.lhs.true13
+  %x16 = getelementptr inbounds %struct.point, %struct.point* %b1, i32 0, i32 0
+  %11 = load double, double* %x16, align 8
+  %x17 = getelementptr inbounds %struct.point, %struct.point* %agg.result, i32 0, i32 0
+  store double %11, double* %x17, align 8
+  %x18 = getelementptr inbounds %struct.point, %struct.point* %b1, i32 0, i32 0
+  %12 = load double, double* %x18, align 8
+  %x19 = getelementptr inbounds %struct.point, %struct.point* %a1, i32 0, i32 0
+  %13 = load double, double* %x19, align 8
+  %sub20 = fsub double %12, %13
+  %14 = load double, double* %slopeA, align 8
+  %mul21 = fmul double %sub20, %14
+  %y22 = getelementptr inbounds %struct.point, %struct.point* %b1, i32 0, i32 1
+  %15 = load double, double* %y22, align 8
+  %add23 = fadd double %mul21, %15
+  %y24 = getelementptr inbounds %struct.point, %struct.point* %agg.result, i32 0, i32 1
+  store double %add23, double* %y24, align 8
+  br label %if.end
+
+if.else25:                                        ; preds = %land.lhs.true13, %if.else11
+  %16 = load double, double* %slopeA, align 8
+  %x26 = getelementptr inbounds %struct.point, %struct.point* %a1, i32 0, i32 0
+  %17 = load double, double* %x26, align 8
+  %mul27 = fmul double %16, %17
+  %18 = load double, double* %slopeB, align 8
+  %x28 = getelementptr inbounds %struct.point, %struct.point* %b1, i32 0, i32 0
+  %19 = load double, double* %x28, align 8
+  %mul29 = fmul double %18, %19
+  %sub30 = fsub double %mul27, %mul29
+  %y31 = getelementptr inbounds %struct.point, %struct.point* %b1, i32 0, i32 1
+  %20 = load double, double* %y31, align 8
+  %add32 = fadd double %sub30, %20
+  %y33 = getelementptr inbounds %struct.point, %struct.point* %a1, i32 0, i32 1
+  %21 = load double, double* %y33, align 8
+  %sub34 = fsub double %add32, %21
+  %22 = load double, double* %slopeA, align 8
+  %23 = load double, double* %slopeB, align 8
+  %sub35 = fsub double %22, %23
+  %div = fdiv double %sub34, %sub35
+  %x36 = getelementptr inbounds %struct.point, %struct.point* %agg.result, i32 0, i32 0
+  store double %div, double* %x36, align 8
+  %24 = load double, double* %slopeB, align 8
+  %x37 = getelementptr inbounds %struct.point, %struct.point* %agg.result, i32 0, i32 0
+  %25 = load double, double* %x37, align 8
+  %x38 = getelementptr inbounds %struct.point, %struct.point* %b1, i32 0, i32 0
+  %26 = load double, double* %x38, align 8
+  %sub39 = fsub double %25, %26
+  %mul40 = fmul double %24, %sub39
+  %y41 = getelementptr inbounds %struct.point, %struct.point* %b1, i32 0, i32 1
+  %27 = load double, double* %y41, align 8
+  %add42 = fadd double %mul40, %27
+  %y43 = getelementptr inbounds %struct.point, %struct.point* %agg.result, i32 0, i32 1
+  store double %add42, double* %y43, align 8
+  br label %if.end
+
+if.end:                                           ; preds = %if.else25, %if.then15
+  br label %if.end44
+
+if.end44:                                         ; preds = %if.end, %if.then4
+  br label %if.end45
+
+if.end45:                                         ; preds = %if.end44, %if.then
+  ret void
+}
+
+; Function Attrs: noinline nounwind optnone
+define hidden i32 @__main_argc_argv(i32 %argC, i8** %argV) #0 {
+entry:
+  %retval = alloca i32, align 4
+  %argC.addr = alloca i32, align 4
+  %argV.addr = alloca i8**, align 4
+  %c = alloca %struct.point, align 8
+  %tmp = alloca %struct.point, align 8
+  %agg.tmp = alloca %struct.point, align 8
+  %agg.tmp2 = alloca %struct.point, align 8
+  %agg.tmp4 = alloca %struct.point, align 8
+  %agg.tmp6 = alloca %struct.point, align 8
+  store i32 0, i32* %retval, align 4
+  store i32 %argC, i32* %argC.addr, align 4
+  store i8** %argV, i8*** %argV.addr, align 4
+  %0 = load i32, i32* %argC.addr, align 4
+  %cmp = icmp slt i32 %0, 5
+  br i1 %cmp, label %if.then, label %if.else
+
+if.then:                                          ; preds = %entry
+  %1 = load i8**, i8*** %argV.addr, align 4
+  %arrayidx = getelementptr inbounds i8*, i8** %1, i32 0
+  %2 = load i8*, i8** %arrayidx, align 4
+  %call = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([65 x i8], [65 x i8]* @.str, i32 0, i32 0), i8* %2)
+  br label %if.end14
+
+if.else:                                          ; preds = %entry
+  %3 = load i8**, i8*** %argV.addr, align 4
+  %arrayidx1 = getelementptr inbounds i8*, i8** %3, i32 1
+  %4 = load i8*, i8** %arrayidx1, align 4
+  call void @extractPoint(%struct.point* sret align 8 %agg.tmp, i8* %4)
+  %5 = load i8**, i8*** %argV.addr, align 4
+  %arrayidx3 = getelementptr inbounds i8*, i8** %5, i32 2
+  %6 = load i8*, i8** %arrayidx3, align 4
+  call void @extractPoint(%struct.point* sret align 8 %agg.tmp2, i8* %6)
+  %7 = load i8**, i8*** %argV.addr, align 4
+  %arrayidx5 = getelementptr inbounds i8*, i8** %7, i32 3
+  %8 = load i8*, i8** %arrayidx5, align 4
+  call void @extractPoint(%struct.point* sret align 8 %agg.tmp4, i8* %8)
+  %9 = load i8**, i8*** %argV.addr, align 4
+  %arrayidx7 = getelementptr inbounds i8*, i8** %9, i32 4
+  %10 = load i8*, i8** %arrayidx7, align 4
+  call void @extractPoint(%struct.point* sret align 8 %agg.tmp6, i8* %10)
+  call void @intersectionPoint(%struct.point* sret align 8 %tmp, %struct.point* byval(%struct.point) align 8 %agg.tmp, %struct.point* byval(%struct.point) align 8 %agg.tmp2, %struct.point* byval(%struct.point) align 8 %agg.tmp4, %struct.point* byval(%struct.point) align 8 %agg.tmp6)
+  %11 = bitcast %struct.point* %c to i8*
+  %12 = bitcast %struct.point* %tmp to i8*
+  call void @llvm.memcpy.p0i8.p0i8.i32(i8* align 8 %11, i8* align 8 %12, i32 16, i1 false)
+  %x = getelementptr inbounds %struct.point, %struct.point* %c, i32 0, i32 0
+  %13 = load double, double* %x, align 8
+  %cmp8 = fcmp oeq double %13, 0x7FF8000000000000
+  br i1 %cmp8, label %if.then9, label %if.else11
+
+if.then9:                                         ; preds = %if.else
+  %call10 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([69 x i8], [69 x i8]* @.str.1, i32 0, i32 0))
+  br label %if.end
+
+if.else11:                                        ; preds = %if.else
+  %x12 = getelementptr inbounds %struct.point, %struct.point* %c, i32 0, i32 0
+  %14 = load double, double* %x12, align 8
+  %y = getelementptr inbounds %struct.point, %struct.point* %c, i32 0, i32 1
+  %15 = load double, double* %y, align 8
+  %call13 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([34 x i8], [34 x i8]* @.str.2, i32 0, i32 0), double %14, double %15)
+  br label %if.end
+
+if.end:                                           ; preds = %if.else11, %if.then9
+  br label %if.end14
+
+if.end14:                                         ; preds = %if.end, %if.then
+  ret i32 0
+}
+
+declare i32 @printf(i8* %0, ...) #1
+
+; Function Attrs: argmemonly nounwind willreturn
+declare void @llvm.memcpy.p0i8.p0i8.i32(i8* noalias nocapture writeonly %0, i8* noalias nocapture readonly %1, i32 %2, i1 immarg %3) #2
+
+attributes #0 = { noinline nounwind optnone "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "min-legal-vector-width"="0" "no-infs-fp-math"="false" "no-jump-tables"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #1 = { "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #2 = { argmemonly nounwind willreturn }
+
+!llvm.module.flags = !{!0}
+!llvm.ident = !{!1}
+
+!0 = !{i32 1, !"wchar_size", i32 4}
+!1 = !{!"clang version 11.0.0 (https://github.com/Jacarte/llvm-project.git 0f6dea67136cc1e0b3d200eb2bb165628970c44b)"}
+
+; extracted candidates
+
+; *****
+; For LLVM instruction:
+;  %1 = load i32, i32* %i, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %2 = load i8, i8* %arrayidx, align 1
+; Looking for a replacement for:
+%0:i8 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %conv = sext i8 %2 to i32
+; Looking for a replacement for:
+%0:i8 = var
+%1:i32 = sext %0
+infer %1
+
+; *****
+; For LLVM instruction:
+;  %cmp = icmp ne i32 %conv, 0
+; Looking for a replacement for:
+%0:i8 = var
+%1:i32 = sext %0
+%2:i1 = ne 0:i32, %1
+infer %2
+
+; *****
+; For LLVM instruction:
+;  %4 = load i32, i32* %i, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %5 = load i8, i8* %arrayidx2, align 1
+; Looking for a replacement for:
+%0:i8 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %conv3 = sext i8 %5 to i32
+; Looking for a replacement for:
+%0:i8 = var
+%1:i32 = sext %0
+infer %1
+
+; *****
+; For LLVM instruction:
+;  %cmp4 = icmp eq i32 %conv3, 40
+; Looking for a replacement for:
+%0:i8 = var
+%1:i32 = sext %0
+%2:i1 = eq 40:i32, %1
+infer %2
+
+; *****
+; For LLVM instruction:
+;  %6 = load i32, i32* %i, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %8 = load i32, i32* %i, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %9 = load i8, i8* %arrayidx6, align 1
+; Looking for a replacement for:
+%0:i8 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %conv7 = sext i8 %9 to i32
+; Looking for a replacement for:
+%0:i8 = var
+%1:i32 = sext %0
+infer %1
+
+; *****
+; For LLVM instruction:
+;  %cmp8 = icmp eq i32 %conv7, 44
+; Looking for a replacement for:
+%0:i8 = var
+%1:i32 = sext %0
+%2:i1 = eq 44:i32, %1
+infer %2
+
+; *****
+; For LLVM instruction:
+;  %11 = load i32, i32* %i, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %12 = load i8, i8* %arrayidx10, align 1
+; Looking for a replacement for:
+%0:i8 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %conv11 = sext i8 %12 to i32
+; Looking for a replacement for:
+%0:i8 = var
+%1:i32 = sext %0
+infer %1
+
+; *****
+; For LLVM instruction:
+;  %cmp12 = icmp eq i32 %conv11, 41
+; Looking for a replacement for:
+%0:i8 = var
+%1:i32 = sext %0
+%2:i1 = eq 41:i32, %1
+infer %2
+
+; *****
+; For LLVM instruction:
+;  %13 = load i32, i32* %i, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %14 = load i32, i32* %end, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %15 = load i32, i32* %start, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %sub = sub nsw i32 %14, %15
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = var
+%2:i32 = subnsw %0, %1
+infer %2
+
+; *****
+; For LLVM instruction:
+;  %16 = load i32, i32* %length, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %17 = load i32, i32* %j, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %18 = load i32, i32* %length, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %sub16 = sub nsw i32 %18, 1
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = subnsw %0, 1:i32
+infer %1
+
+; *****
+; For LLVM instruction:
+;  %cmp17 = icmp slt i32 %17, %sub16
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = var
+%2:i32 = subnsw %1, 1:i32
+%3:i1 = slt %0, %2
+infer %3
+
+; *****
+; For LLVM instruction:
+;  %20 = load i32, i32* %start, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %21 = load i32, i32* %j, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %add = add nsw i32 %20, %21
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = var
+%2:i32 = addnsw %0, %1
+infer %2
+
+; *****
+; For LLVM instruction:
+;  %add20 = add nsw i32 %add, 1
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = var
+%2:i32 = addnsw %0, %1
+%3:i32 = addnsw 1:i32, %2
+infer %3
+
+; *****
+; For LLVM instruction:
+;  %22 = load i8, i8* %arrayidx21, align 1
+; Looking for a replacement for:
+%0:i8 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %24 = load i32, i32* %j, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %25 = load i32, i32* %j, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %inc = add nsw i32 %25, 1
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = addnsw 1:i32, %0
+infer %1
+
+; *****
+; For LLVM instruction:
+;  %27 = load i32, i32* %j, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %29 = load i32, i32* %i, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %30 = load i8, i8* %arrayidx24, align 1
+; Looking for a replacement for:
+%0:i8 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %conv25 = sext i8 %30 to i32
+; Looking for a replacement for:
+%0:i8 = var
+%1:i32 = sext %0
+infer %1
+
+; *****
+; For LLVM instruction:
+;  %cmp26 = icmp eq i32 %conv25, 44
+; Looking for a replacement for:
+%0:i8 = var
+%1:i32 = sext %0
+%2:i1 = eq 44:i32, %1
+infer %2
+
+; *****
+; For LLVM instruction:
+;  %31 = load i32, i32* %i, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %34 = load i32, i32* %i, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %inc34 = add nsw i32 %34, 1
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = addnsw 1:i32, %0
+infer %1
+got 2 candidates from LHS
+
+-------------------------------------------------
+%0:i32 = var
+%1:i32 = subnsw %0, 1:i32
+infer %1
+
+
+--------------------------------
+guess 0
+
+%0:i32 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: -1
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: 536870911
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+
+--------------------------------
+guess 1
+
+%0:i32 = var
+
+Cost = 0
+second query is SAT-- constant doesn't work
+Dataflow Pruned 0/0
+There are 2 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 4 candidates from LHS
+
+-------------------------------------------------
+%0:i32 = var
+%1:i32 = var
+%2:i32 = subnsw %1, 1:i32
+%3:i1 = slt %0, %2
+infer %3
+
+
+--------------------------------
+guess 0
+
+%0:i1 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: -1
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+Dataflow Pruned 0/0
+There are 1 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 3 candidates from LHS
+
+-------------------------------------------------
+%0:i32 = var
+%1:i32 = var
+%2:i32 = addnsw %0, %1
+infer %2
+
+
+--------------------------------
+guess 0
+
+%0:i32 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: -2
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+
+--------------------------------
+guess 1
+
+%0:i32 = var
+
+Cost = 0
+second query is SAT-- constant doesn't work
+
+--------------------------------
+guess 2
+
+%0:i32 = var
+
+Cost = 0
+second query is SAT-- constant doesn't work
+Dataflow Pruned 0/0
+There are 3 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 4 candidates from LHS
+
+-------------------------------------------------
+%0:i32 = var
+%1:i32 = var
+%2:i32 = addnsw %0, %1
+%3:i32 = addnsw 1:i32, %2
+infer %3
+
+
+--------------------------------
+guess 0
+
+%0:i32 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 1
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: -16
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+
+--------------------------------
+guess 1
+
+%0:i32 = var
+
+Cost = 0
+second query is SAT-- constant doesn't work
+
+--------------------------------
+guess 2
+
+%0:i32 = var
+
+Cost = 0
+second query is SAT-- constant doesn't work
+
+--------------------------------
+guess 3
+
+%0:i32 = var
+%1:i32 = var
+%2:i32 = addnsw %0, %1
+
+Cost = 1
+second query is SAT-- constant doesn't work
+Dataflow Pruned 0/0
+There are 4 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 2 candidates from LHS
+
+-------------------------------------------------
+%0:i32 = var
+%1:i32 = addnsw 1:i32, %0
+infer %1
+
+
+--------------------------------
+guess 0
+
+%0:i32 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 1
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: 268435457
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+
+--------------------------------
+guess 1
+
+%0:i32 = var
+
+Cost = 0
+second query is SAT-- constant doesn't work
+Dataflow Pruned 0/0
+There are 2 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+#########################################################
+; exiting Souper's runOnFunction() for extractPoint()
+
+; entering Souper's runOnFunction() for intersectionPoint()
+
+; ModuleID = './Find_the_intersection_of_two_lines.c.bc'
+source_filename = "./Find_the_intersection_of_two_lines.c"
+target datalayout = "e-m:e-p:32:32-i64:64-n32:64-S128"
+target triple = "wasm32-unknown-wasi"
+
+%struct.point = type { double, double }
+
+@.str = private unnamed_addr constant [65 x i8] c"Usage : %s <four points specified as (x,y) separated by a space>\00", align 1
+@.str.1 = private unnamed_addr constant [69 x i8] c"The lines do not intersect, they are either parallel or co-incident.\00", align 1
+@.str.2 = private unnamed_addr constant [34 x i8] c"Point of intersection : (%lf,%lf)\00", align 1
+
+; Function Attrs: noinline nounwind optnone
+define hidden double @lineSlope(%struct.point* byval(%struct.point) align 8 %a, %struct.point* byval(%struct.point) align 8 %b) #0 {
+entry:
+  %retval = alloca double, align 8
+  %x = getelementptr inbounds %struct.point, %struct.point* %a, i32 0, i32 0
+  %0 = load double, double* %x, align 8
+  %x1 = getelementptr inbounds %struct.point, %struct.point* %b, i32 0, i32 0
+  %1 = load double, double* %x1, align 8
+  %sub = fsub double %0, %1
+  %cmp = fcmp oeq double %sub, 0.000000e+00
+  br i1 %cmp, label %if.then, label %if.else
+
+if.then:                                          ; preds = %entry
+  store double 0x7FF8000000000000, double* %retval, align 8
+  br label %return
+
+if.else:                                          ; preds = %entry
+  %y = getelementptr inbounds %struct.point, %struct.point* %a, i32 0, i32 1
+  %2 = load double, double* %y, align 8
+  %y2 = getelementptr inbounds %struct.point, %struct.point* %b, i32 0, i32 1
+  %3 = load double, double* %y2, align 8
+  %sub3 = fsub double %2, %3
+  %x4 = getelementptr inbounds %struct.point, %struct.point* %a, i32 0, i32 0
+  %4 = load double, double* %x4, align 8
+  %x5 = getelementptr inbounds %struct.point, %struct.point* %b, i32 0, i32 0
+  %5 = load double, double* %x5, align 8
+  %sub6 = fsub double %4, %5
+  %div = fdiv double %sub3, %sub6
+  store double %div, double* %retval, align 8
+  br label %return
+
+return:                                           ; preds = %if.else, %if.then
+  %6 = load double, double* %retval, align 8
+  ret double %6
+}
+
+; Function Attrs: noinline nounwind optnone
+define hidden void @extractPoint(%struct.point* noalias sret align 8 %agg.result, i8* %str) #0 {
+entry:
+  %str.addr = alloca i8*, align 4
+  %i = alloca i32, align 4
+  %j = alloca i32, align 4
+  %start = alloca i32, align 4
+  %end = alloca i32, align 4
+  %length = alloca i32, align 4
+  %holder = alloca i8*, align 4
+  store i8* %str, i8** %str.addr, align 4
+  store i32 0, i32* %i, align 4
+  br label %for.cond
+
+for.cond:                                         ; preds = %for.inc33, %entry
+  %0 = load i8*, i8** %str.addr, align 4
+  %1 = load i32, i32* %i, align 4
+  %arrayidx = getelementptr inbounds i8, i8* %0, i32 %1
+  %2 = load i8, i8* %arrayidx, align 1
+  %conv = sext i8 %2 to i32
+  %cmp = icmp ne i32 %conv, 0
+  br i1 %cmp, label %for.body, label %for.end35
+
+for.body:                                         ; preds = %for.cond
+  %3 = load i8*, i8** %str.addr, align 4
+  %4 = load i32, i32* %i, align 4
+  %arrayidx2 = getelementptr inbounds i8, i8* %3, i32 %4
+  %5 = load i8, i8* %arrayidx2, align 1
+  %conv3 = sext i8 %5 to i32
+  %cmp4 = icmp eq i32 %conv3, 40
+  br i1 %cmp4, label %if.then, label %if.end
+
+if.then:                                          ; preds = %for.body
+  %6 = load i32, i32* %i, align 4
+  store i32 %6, i32* %start, align 4
+  br label %if.end
+
+if.end:                                           ; preds = %if.then, %for.body
+  %7 = load i8*, i8** %str.addr, align 4
+  %8 = load i32, i32* %i, align 4
+  %arrayidx6 = getelementptr inbounds i8, i8* %7, i32 %8
+  %9 = load i8, i8* %arrayidx6, align 1
+  %conv7 = sext i8 %9 to i32
+  %cmp8 = icmp eq i32 %conv7, 44
+  br i1 %cmp8, label %if.then14, label %lor.lhs.false
+
+lor.lhs.false:                                    ; preds = %if.end
+  %10 = load i8*, i8** %str.addr, align 4
+  %11 = load i32, i32* %i, align 4
+  %arrayidx10 = getelementptr inbounds i8, i8* %10, i32 %11
+  %12 = load i8, i8* %arrayidx10, align 1
+  %conv11 = sext i8 %12 to i32
+  %cmp12 = icmp eq i32 %conv11, 41
+  br i1 %cmp12, label %if.then14, label %if.end32
+
+if.then14:                                        ; preds = %lor.lhs.false, %if.end
+  %13 = load i32, i32* %i, align 4
+  store i32 %13, i32* %end, align 4
+  %14 = load i32, i32* %end, align 4
+  %15 = load i32, i32* %start, align 4
+  %sub = sub nsw i32 %14, %15
+  store i32 %sub, i32* %length, align 4
+  %16 = load i32, i32* %length, align 4
+  %call = call noalias i8* @malloc(i32 %16)
+  store i8* %call, i8** %holder, align 4
+  store i32 0, i32* %j, align 4
+  br label %for.cond15
+
+for.cond15:                                       ; preds = %for.inc, %if.then14
+  %17 = load i32, i32* %j, align 4
+  %18 = load i32, i32* %length, align 4
+  %sub16 = sub nsw i32 %18, 1
+  %cmp17 = icmp slt i32 %17, %sub16
+  br i1 %cmp17, label %for.body19, label %for.end
+
+for.body19:                                       ; preds = %for.cond15
+  %19 = load i8*, i8** %str.addr, align 4
+  %20 = load i32, i32* %start, align 4
+  %21 = load i32, i32* %j, align 4
+  %add = add nsw i32 %20, %21
+  %add20 = add nsw i32 %add, 1
+  %arrayidx21 = getelementptr inbounds i8, i8* %19, i32 %add20
+  %22 = load i8, i8* %arrayidx21, align 1
+  %23 = load i8*, i8** %holder, align 4
+  %24 = load i32, i32* %j, align 4
+  %arrayidx22 = getelementptr inbounds i8, i8* %23, i32 %24
+  store i8 %22, i8* %arrayidx22, align 1
+  br label %for.inc
+
+for.inc:                                          ; preds = %for.body19
+  %25 = load i32, i32* %j, align 4
+  %inc = add nsw i32 %25, 1
+  store i32 %inc, i32* %j, align 4
+  br label %for.cond15
+
+for.end:                                          ; preds = %for.cond15
+  %26 = load i8*, i8** %holder, align 4
+  %27 = load i32, i32* %j, align 4
+  %arrayidx23 = getelementptr inbounds i8, i8* %26, i32 %27
+  store i8 0, i8* %arrayidx23, align 1
+  %28 = load i8*, i8** %str.addr, align 4
+  %29 = load i32, i32* %i, align 4
+  %arrayidx24 = getelementptr inbounds i8, i8* %28, i32 %29
+  %30 = load i8, i8* %arrayidx24, align 1
+  %conv25 = sext i8 %30 to i32
+  %cmp26 = icmp eq i32 %conv25, 44
+  br i1 %cmp26, label %if.then28, label %if.else
+
+if.then28:                                        ; preds = %for.end
+  %31 = load i32, i32* %i, align 4
+  store i32 %31, i32* %start, align 4
+  %32 = load i8*, i8** %holder, align 4
+  %call29 = call double @atof(i8* %32)
+  %x = getelementptr inbounds %struct.point, %struct.point* %agg.result, i32 0, i32 0
+  store double %call29, double* %x, align 8
+  br label %if.end31
+
+if.else:                                          ; preds = %for.end
+  %33 = load i8*, i8** %holder, align 4
+  %call30 = call double @atof(i8* %33)
+  %y = getelementptr inbounds %struct.point, %struct.point* %agg.result, i32 0, i32 1
+  store double %call30, double* %y, align 8
+  br label %if.end31
+
+if.end31:                                         ; preds = %if.else, %if.then28
+  br label %if.end32
+
+if.end32:                                         ; preds = %if.end31, %lor.lhs.false
+  br label %for.inc33
+
+for.inc33:                                        ; preds = %if.end32
+  %34 = load i32, i32* %i, align 4
+  %inc34 = add nsw i32 %34, 1
+  store i32 %inc34, i32* %i, align 4
+  br label %for.cond
+
+for.end35:                                        ; preds = %for.cond
+  ret void
+}
+
+declare noalias i8* @malloc(i32 %0) #1
+
+declare double @atof(i8* %0) #1
+
+; Function Attrs: noinline nounwind optnone
+define hidden void @intersectionPoint(%struct.point* noalias sret align 8 %agg.result, %struct.point* byval(%struct.point) align 8 %a1, %struct.point* byval(%struct.point) align 8 %a2, %struct.point* byval(%struct.point) align 8 %b1, %struct.point* byval(%struct.point) align 8 %b2) #0 {
+entry:
+  %slopeA = alloca double, align 8
+  %slopeB = alloca double, align 8
+  %call = call double @lineSlope(%struct.point* byval(%struct.point) align 8 %a1, %struct.point* byval(%struct.point) align 8 %a2)
+  store double %call, double* %slopeA, align 8
+  %call1 = call double @lineSlope(%struct.point* byval(%struct.point) align 8 %b1, %struct.point* byval(%struct.point) align 8 %b2)
+  store double %call1, double* %slopeB, align 8
+  %0 = load double, double* %slopeA, align 8
+  %1 = load double, double* %slopeB, align 8
+  %cmp = fcmp oeq double %0, %1
+  br i1 %cmp, label %if.then, label %if.else
+
+if.then:                                          ; preds = %entry
+  %x = getelementptr inbounds %struct.point, %struct.point* %agg.result, i32 0, i32 0
+  store double 0x7FF8000000000000, double* %x, align 8
+  %y = getelementptr inbounds %struct.point, %struct.point* %agg.result, i32 0, i32 1
+  store double 0x7FF8000000000000, double* %y, align 8
+  br label %if.end45
+
+if.else:                                          ; preds = %entry
+  %2 = load double, double* %slopeA, align 8
+  %cmp2 = fcmp oeq double %2, 0x7FF8000000000000
+  br i1 %cmp2, label %land.lhs.true, label %if.else11
+
+land.lhs.true:                                    ; preds = %if.else
+  %3 = load double, double* %slopeB, align 8
+  %cmp3 = fcmp une double %3, 0x7FF8000000000000
+  br i1 %cmp3, label %if.then4, label %if.else11
+
+if.then4:                                         ; preds = %land.lhs.true
+  %x5 = getelementptr inbounds %struct.point, %struct.point* %a1, i32 0, i32 0
+  %4 = load double, double* %x5, align 8
+  %x6 = getelementptr inbounds %struct.point, %struct.point* %agg.result, i32 0, i32 0
+  store double %4, double* %x6, align 8
+  %x7 = getelementptr inbounds %struct.point, %struct.point* %a1, i32 0, i32 0
+  %5 = load double, double* %x7, align 8
+  %x8 = getelementptr inbounds %struct.point, %struct.point* %b1, i32 0, i32 0
+  %6 = load double, double* %x8, align 8
+  %sub = fsub double %5, %6
+  %7 = load double, double* %slopeB, align 8
+  %mul = fmul double %sub, %7
+  %y9 = getelementptr inbounds %struct.point, %struct.point* %b1, i32 0, i32 1
+  %8 = load double, double* %y9, align 8
+  %add = fadd double %mul, %8
+  %y10 = getelementptr inbounds %struct.point, %struct.point* %agg.result, i32 0, i32 1
+  store double %add, double* %y10, align 8
+  br label %if.end44
+
+if.else11:                                        ; preds = %land.lhs.true, %if.else
+  %9 = load double, double* %slopeB, align 8
+  %cmp12 = fcmp oeq double %9, 0x7FF8000000000000
+  br i1 %cmp12, label %land.lhs.true13, label %if.else25
+
+land.lhs.true13:                                  ; preds = %if.else11
+  %10 = load double, double* %slopeA, align 8
+  %cmp14 = fcmp une double %10, 0x7FF8000000000000
+  br i1 %cmp14, label %if.then15, label %if.else25
+
+if.then15:                                        ; preds = %land.lhs.true13
+  %x16 = getelementptr inbounds %struct.point, %struct.point* %b1, i32 0, i32 0
+  %11 = load double, double* %x16, align 8
+  %x17 = getelementptr inbounds %struct.point, %struct.point* %agg.result, i32 0, i32 0
+  store double %11, double* %x17, align 8
+  %x18 = getelementptr inbounds %struct.point, %struct.point* %b1, i32 0, i32 0
+  %12 = load double, double* %x18, align 8
+  %x19 = getelementptr inbounds %struct.point, %struct.point* %a1, i32 0, i32 0
+  %13 = load double, double* %x19, align 8
+  %sub20 = fsub double %12, %13
+  %14 = load double, double* %slopeA, align 8
+  %mul21 = fmul double %sub20, %14
+  %y22 = getelementptr inbounds %struct.point, %struct.point* %b1, i32 0, i32 1
+  %15 = load double, double* %y22, align 8
+  %add23 = fadd double %mul21, %15
+  %y24 = getelementptr inbounds %struct.point, %struct.point* %agg.result, i32 0, i32 1
+  store double %add23, double* %y24, align 8
+  br label %if.end
+
+if.else25:                                        ; preds = %land.lhs.true13, %if.else11
+  %16 = load double, double* %slopeA, align 8
+  %x26 = getelementptr inbounds %struct.point, %struct.point* %a1, i32 0, i32 0
+  %17 = load double, double* %x26, align 8
+  %mul27 = fmul double %16, %17
+  %18 = load double, double* %slopeB, align 8
+  %x28 = getelementptr inbounds %struct.point, %struct.point* %b1, i32 0, i32 0
+  %19 = load double, double* %x28, align 8
+  %mul29 = fmul double %18, %19
+  %sub30 = fsub double %mul27, %mul29
+  %y31 = getelementptr inbounds %struct.point, %struct.point* %b1, i32 0, i32 1
+  %20 = load double, double* %y31, align 8
+  %add32 = fadd double %sub30, %20
+  %y33 = getelementptr inbounds %struct.point, %struct.point* %a1, i32 0, i32 1
+  %21 = load double, double* %y33, align 8
+  %sub34 = fsub double %add32, %21
+  %22 = load double, double* %slopeA, align 8
+  %23 = load double, double* %slopeB, align 8
+  %sub35 = fsub double %22, %23
+  %div = fdiv double %sub34, %sub35
+  %x36 = getelementptr inbounds %struct.point, %struct.point* %agg.result, i32 0, i32 0
+  store double %div, double* %x36, align 8
+  %24 = load double, double* %slopeB, align 8
+  %x37 = getelementptr inbounds %struct.point, %struct.point* %agg.result, i32 0, i32 0
+  %25 = load double, double* %x37, align 8
+  %x38 = getelementptr inbounds %struct.point, %struct.point* %b1, i32 0, i32 0
+  %26 = load double, double* %x38, align 8
+  %sub39 = fsub double %25, %26
+  %mul40 = fmul double %24, %sub39
+  %y41 = getelementptr inbounds %struct.point, %struct.point* %b1, i32 0, i32 1
+  %27 = load double, double* %y41, align 8
+  %add42 = fadd double %mul40, %27
+  %y43 = getelementptr inbounds %struct.point, %struct.point* %agg.result, i32 0, i32 1
+  store double %add42, double* %y43, align 8
+  br label %if.end
+
+if.end:                                           ; preds = %if.else25, %if.then15
+  br label %if.end44
+
+if.end44:                                         ; preds = %if.end, %if.then4
+  br label %if.end45
+
+if.end45:                                         ; preds = %if.end44, %if.then
+  ret void
+}
+
+; Function Attrs: noinline nounwind optnone
+define hidden i32 @__main_argc_argv(i32 %argC, i8** %argV) #0 {
+entry:
+  %retval = alloca i32, align 4
+  %argC.addr = alloca i32, align 4
+  %argV.addr = alloca i8**, align 4
+  %c = alloca %struct.point, align 8
+  %tmp = alloca %struct.point, align 8
+  %agg.tmp = alloca %struct.point, align 8
+  %agg.tmp2 = alloca %struct.point, align 8
+  %agg.tmp4 = alloca %struct.point, align 8
+  %agg.tmp6 = alloca %struct.point, align 8
+  store i32 0, i32* %retval, align 4
+  store i32 %argC, i32* %argC.addr, align 4
+  store i8** %argV, i8*** %argV.addr, align 4
+  %0 = load i32, i32* %argC.addr, align 4
+  %cmp = icmp slt i32 %0, 5
+  br i1 %cmp, label %if.then, label %if.else
+
+if.then:                                          ; preds = %entry
+  %1 = load i8**, i8*** %argV.addr, align 4
+  %arrayidx = getelementptr inbounds i8*, i8** %1, i32 0
+  %2 = load i8*, i8** %arrayidx, align 4
+  %call = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([65 x i8], [65 x i8]* @.str, i32 0, i32 0), i8* %2)
+  br label %if.end14
+
+if.else:                                          ; preds = %entry
+  %3 = load i8**, i8*** %argV.addr, align 4
+  %arrayidx1 = getelementptr inbounds i8*, i8** %3, i32 1
+  %4 = load i8*, i8** %arrayidx1, align 4
+  call void @extractPoint(%struct.point* sret align 8 %agg.tmp, i8* %4)
+  %5 = load i8**, i8*** %argV.addr, align 4
+  %arrayidx3 = getelementptr inbounds i8*, i8** %5, i32 2
+  %6 = load i8*, i8** %arrayidx3, align 4
+  call void @extractPoint(%struct.point* sret align 8 %agg.tmp2, i8* %6)
+  %7 = load i8**, i8*** %argV.addr, align 4
+  %arrayidx5 = getelementptr inbounds i8*, i8** %7, i32 3
+  %8 = load i8*, i8** %arrayidx5, align 4
+  call void @extractPoint(%struct.point* sret align 8 %agg.tmp4, i8* %8)
+  %9 = load i8**, i8*** %argV.addr, align 4
+  %arrayidx7 = getelementptr inbounds i8*, i8** %9, i32 4
+  %10 = load i8*, i8** %arrayidx7, align 4
+  call void @extractPoint(%struct.point* sret align 8 %agg.tmp6, i8* %10)
+  call void @intersectionPoint(%struct.point* sret align 8 %tmp, %struct.point* byval(%struct.point) align 8 %agg.tmp, %struct.point* byval(%struct.point) align 8 %agg.tmp2, %struct.point* byval(%struct.point) align 8 %agg.tmp4, %struct.point* byval(%struct.point) align 8 %agg.tmp6)
+  %11 = bitcast %struct.point* %c to i8*
+  %12 = bitcast %struct.point* %tmp to i8*
+  call void @llvm.memcpy.p0i8.p0i8.i32(i8* align 8 %11, i8* align 8 %12, i32 16, i1 false)
+  %x = getelementptr inbounds %struct.point, %struct.point* %c, i32 0, i32 0
+  %13 = load double, double* %x, align 8
+  %cmp8 = fcmp oeq double %13, 0x7FF8000000000000
+  br i1 %cmp8, label %if.then9, label %if.else11
+
+if.then9:                                         ; preds = %if.else
+  %call10 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([69 x i8], [69 x i8]* @.str.1, i32 0, i32 0))
+  br label %if.end
+
+if.else11:                                        ; preds = %if.else
+  %x12 = getelementptr inbounds %struct.point, %struct.point* %c, i32 0, i32 0
+  %14 = load double, double* %x12, align 8
+  %y = getelementptr inbounds %struct.point, %struct.point* %c, i32 0, i32 1
+  %15 = load double, double* %y, align 8
+  %call13 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([34 x i8], [34 x i8]* @.str.2, i32 0, i32 0), double %14, double %15)
+  br label %if.end
+
+if.end:                                           ; preds = %if.else11, %if.then9
+  br label %if.end14
+
+if.end14:                                         ; preds = %if.end, %if.then
+  ret i32 0
+}
+
+declare i32 @printf(i8* %0, ...) #1
+
+; Function Attrs: argmemonly nounwind willreturn
+declare void @llvm.memcpy.p0i8.p0i8.i32(i8* noalias nocapture writeonly %0, i8* noalias nocapture readonly %1, i32 %2, i1 immarg %3) #2
+
+attributes #0 = { noinline nounwind optnone "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "min-legal-vector-width"="0" "no-infs-fp-math"="false" "no-jump-tables"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #1 = { "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #2 = { argmemonly nounwind willreturn }
+
+!llvm.module.flags = !{!0}
+!llvm.ident = !{!1}
+
+!0 = !{i32 1, !"wchar_size", i32 4}
+!1 = !{!"clang version 11.0.0 (https://github.com/Jacarte/llvm-project.git 0f6dea67136cc1e0b3d200eb2bb165628970c44b)"}
+
+; extracted candidates
+
+; *****
+; For LLVM instruction:
+;  %cmp = fcmp oeq double %0, %1
+; Looking for a replacement for:
+%0:i1 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %cmp2 = fcmp oeq double %2, 0x7FF8000000000000
+; Looking for a replacement for:
+%0:i1 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %cmp3 = fcmp une double %3, 0x7FF8000000000000
+; Looking for a replacement for:
+%0:i1 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %cmp12 = fcmp oeq double %9, 0x7FF8000000000000
+; Looking for a replacement for:
+%0:i1 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %cmp14 = fcmp une double %10, 0x7FF8000000000000
+; Looking for a replacement for:
+%0:i1 = var
+infer %0
+#########################################################
+; exiting Souper's runOnFunction() for intersectionPoint()
+
+; entering Souper's runOnFunction() for __main_argc_argv()
+
+; ModuleID = './Find_the_intersection_of_two_lines.c.bc'
+source_filename = "./Find_the_intersection_of_two_lines.c"
+target datalayout = "e-m:e-p:32:32-i64:64-n32:64-S128"
+target triple = "wasm32-unknown-wasi"
+
+%struct.point = type { double, double }
+
+@.str = private unnamed_addr constant [65 x i8] c"Usage : %s <four points specified as (x,y) separated by a space>\00", align 1
+@.str.1 = private unnamed_addr constant [69 x i8] c"The lines do not intersect, they are either parallel or co-incident.\00", align 1
+@.str.2 = private unnamed_addr constant [34 x i8] c"Point of intersection : (%lf,%lf)\00", align 1
+
+; Function Attrs: noinline nounwind optnone
+define hidden double @lineSlope(%struct.point* byval(%struct.point) align 8 %a, %struct.point* byval(%struct.point) align 8 %b) #0 {
+entry:
+  %retval = alloca double, align 8
+  %x = getelementptr inbounds %struct.point, %struct.point* %a, i32 0, i32 0
+  %0 = load double, double* %x, align 8
+  %x1 = getelementptr inbounds %struct.point, %struct.point* %b, i32 0, i32 0
+  %1 = load double, double* %x1, align 8
+  %sub = fsub double %0, %1
+  %cmp = fcmp oeq double %sub, 0.000000e+00
+  br i1 %cmp, label %if.then, label %if.else
+
+if.then:                                          ; preds = %entry
+  store double 0x7FF8000000000000, double* %retval, align 8
+  br label %return
+
+if.else:                                          ; preds = %entry
+  %y = getelementptr inbounds %struct.point, %struct.point* %a, i32 0, i32 1
+  %2 = load double, double* %y, align 8
+  %y2 = getelementptr inbounds %struct.point, %struct.point* %b, i32 0, i32 1
+  %3 = load double, double* %y2, align 8
+  %sub3 = fsub double %2, %3
+  %x4 = getelementptr inbounds %struct.point, %struct.point* %a, i32 0, i32 0
+  %4 = load double, double* %x4, align 8
+  %x5 = getelementptr inbounds %struct.point, %struct.point* %b, i32 0, i32 0
+  %5 = load double, double* %x5, align 8
+  %sub6 = fsub double %4, %5
+  %div = fdiv double %sub3, %sub6
+  store double %div, double* %retval, align 8
+  br label %return
+
+return:                                           ; preds = %if.else, %if.then
+  %6 = load double, double* %retval, align 8
+  ret double %6
+}
+
+; Function Attrs: noinline nounwind optnone
+define hidden void @extractPoint(%struct.point* noalias sret align 8 %agg.result, i8* %str) #0 {
+entry:
+  %str.addr = alloca i8*, align 4
+  %i = alloca i32, align 4
+  %j = alloca i32, align 4
+  %start = alloca i32, align 4
+  %end = alloca i32, align 4
+  %length = alloca i32, align 4
+  %holder = alloca i8*, align 4
+  store i8* %str, i8** %str.addr, align 4
+  store i32 0, i32* %i, align 4
+  br label %for.cond
+
+for.cond:                                         ; preds = %for.inc33, %entry
+  %0 = load i8*, i8** %str.addr, align 4
+  %1 = load i32, i32* %i, align 4
+  %arrayidx = getelementptr inbounds i8, i8* %0, i32 %1
+  %2 = load i8, i8* %arrayidx, align 1
+  %conv = sext i8 %2 to i32
+  %cmp = icmp ne i32 %conv, 0
+  br i1 %cmp, label %for.body, label %for.end35
+
+for.body:                                         ; preds = %for.cond
+  %3 = load i8*, i8** %str.addr, align 4
+  %4 = load i32, i32* %i, align 4
+  %arrayidx2 = getelementptr inbounds i8, i8* %3, i32 %4
+  %5 = load i8, i8* %arrayidx2, align 1
+  %conv3 = sext i8 %5 to i32
+  %cmp4 = icmp eq i32 %conv3, 40
+  br i1 %cmp4, label %if.then, label %if.end
+
+if.then:                                          ; preds = %for.body
+  %6 = load i32, i32* %i, align 4
+  store i32 %6, i32* %start, align 4
+  br label %if.end
+
+if.end:                                           ; preds = %if.then, %for.body
+  %7 = load i8*, i8** %str.addr, align 4
+  %8 = load i32, i32* %i, align 4
+  %arrayidx6 = getelementptr inbounds i8, i8* %7, i32 %8
+  %9 = load i8, i8* %arrayidx6, align 1
+  %conv7 = sext i8 %9 to i32
+  %cmp8 = icmp eq i32 %conv7, 44
+  br i1 %cmp8, label %if.then14, label %lor.lhs.false
+
+lor.lhs.false:                                    ; preds = %if.end
+  %10 = load i8*, i8** %str.addr, align 4
+  %11 = load i32, i32* %i, align 4
+  %arrayidx10 = getelementptr inbounds i8, i8* %10, i32 %11
+  %12 = load i8, i8* %arrayidx10, align 1
+  %conv11 = sext i8 %12 to i32
+  %cmp12 = icmp eq i32 %conv11, 41
+  br i1 %cmp12, label %if.then14, label %if.end32
+
+if.then14:                                        ; preds = %lor.lhs.false, %if.end
+  %13 = load i32, i32* %i, align 4
+  store i32 %13, i32* %end, align 4
+  %14 = load i32, i32* %end, align 4
+  %15 = load i32, i32* %start, align 4
+  %sub = sub nsw i32 %14, %15
+  store i32 %sub, i32* %length, align 4
+  %16 = load i32, i32* %length, align 4
+  %call = call noalias i8* @malloc(i32 %16)
+  store i8* %call, i8** %holder, align 4
+  store i32 0, i32* %j, align 4
+  br label %for.cond15
+
+for.cond15:                                       ; preds = %for.inc, %if.then14
+  %17 = load i32, i32* %j, align 4
+  %18 = load i32, i32* %length, align 4
+  %sub16 = sub nsw i32 %18, 1
+  %cmp17 = icmp slt i32 %17, %sub16
+  br i1 %cmp17, label %for.body19, label %for.end
+
+for.body19:                                       ; preds = %for.cond15
+  %19 = load i8*, i8** %str.addr, align 4
+  %20 = load i32, i32* %start, align 4
+  %21 = load i32, i32* %j, align 4
+  %add = add nsw i32 %20, %21
+  %add20 = add nsw i32 %add, 1
+  %arrayidx21 = getelementptr inbounds i8, i8* %19, i32 %add20
+  %22 = load i8, i8* %arrayidx21, align 1
+  %23 = load i8*, i8** %holder, align 4
+  %24 = load i32, i32* %j, align 4
+  %arrayidx22 = getelementptr inbounds i8, i8* %23, i32 %24
+  store i8 %22, i8* %arrayidx22, align 1
+  br label %for.inc
+
+for.inc:                                          ; preds = %for.body19
+  %25 = load i32, i32* %j, align 4
+  %inc = add nsw i32 %25, 1
+  store i32 %inc, i32* %j, align 4
+  br label %for.cond15
+
+for.end:                                          ; preds = %for.cond15
+  %26 = load i8*, i8** %holder, align 4
+  %27 = load i32, i32* %j, align 4
+  %arrayidx23 = getelementptr inbounds i8, i8* %26, i32 %27
+  store i8 0, i8* %arrayidx23, align 1
+  %28 = load i8*, i8** %str.addr, align 4
+  %29 = load i32, i32* %i, align 4
+  %arrayidx24 = getelementptr inbounds i8, i8* %28, i32 %29
+  %30 = load i8, i8* %arrayidx24, align 1
+  %conv25 = sext i8 %30 to i32
+  %cmp26 = icmp eq i32 %conv25, 44
+  br i1 %cmp26, label %if.then28, label %if.else
+
+if.then28:                                        ; preds = %for.end
+  %31 = load i32, i32* %i, align 4
+  store i32 %31, i32* %start, align 4
+  %32 = load i8*, i8** %holder, align 4
+  %call29 = call double @atof(i8* %32)
+  %x = getelementptr inbounds %struct.point, %struct.point* %agg.result, i32 0, i32 0
+  store double %call29, double* %x, align 8
+  br label %if.end31
+
+if.else:                                          ; preds = %for.end
+  %33 = load i8*, i8** %holder, align 4
+  %call30 = call double @atof(i8* %33)
+  %y = getelementptr inbounds %struct.point, %struct.point* %agg.result, i32 0, i32 1
+  store double %call30, double* %y, align 8
+  br label %if.end31
+
+if.end31:                                         ; preds = %if.else, %if.then28
+  br label %if.end32
+
+if.end32:                                         ; preds = %if.end31, %lor.lhs.false
+  br label %for.inc33
+
+for.inc33:                                        ; preds = %if.end32
+  %34 = load i32, i32* %i, align 4
+  %inc34 = add nsw i32 %34, 1
+  store i32 %inc34, i32* %i, align 4
+  br label %for.cond
+
+for.end35:                                        ; preds = %for.cond
+  ret void
+}
+
+declare noalias i8* @malloc(i32 %0) #1
+
+declare double @atof(i8* %0) #1
+
+; Function Attrs: noinline nounwind optnone
+define hidden void @intersectionPoint(%struct.point* noalias sret align 8 %agg.result, %struct.point* byval(%struct.point) align 8 %a1, %struct.point* byval(%struct.point) align 8 %a2, %struct.point* byval(%struct.point) align 8 %b1, %struct.point* byval(%struct.point) align 8 %b2) #0 {
+entry:
+  %slopeA = alloca double, align 8
+  %slopeB = alloca double, align 8
+  %call = call double @lineSlope(%struct.point* byval(%struct.point) align 8 %a1, %struct.point* byval(%struct.point) align 8 %a2)
+  store double %call, double* %slopeA, align 8
+  %call1 = call double @lineSlope(%struct.point* byval(%struct.point) align 8 %b1, %struct.point* byval(%struct.point) align 8 %b2)
+  store double %call1, double* %slopeB, align 8
+  %0 = load double, double* %slopeA, align 8
+  %1 = load double, double* %slopeB, align 8
+  %cmp = fcmp oeq double %0, %1
+  br i1 %cmp, label %if.then, label %if.else
+
+if.then:                                          ; preds = %entry
+  %x = getelementptr inbounds %struct.point, %struct.point* %agg.result, i32 0, i32 0
+  store double 0x7FF8000000000000, double* %x, align 8
+  %y = getelementptr inbounds %struct.point, %struct.point* %agg.result, i32 0, i32 1
+  store double 0x7FF8000000000000, double* %y, align 8
+  br label %if.end45
+
+if.else:                                          ; preds = %entry
+  %2 = load double, double* %slopeA, align 8
+  %cmp2 = fcmp oeq double %2, 0x7FF8000000000000
+  br i1 %cmp2, label %land.lhs.true, label %if.else11
+
+land.lhs.true:                                    ; preds = %if.else
+  %3 = load double, double* %slopeB, align 8
+  %cmp3 = fcmp une double %3, 0x7FF8000000000000
+  br i1 %cmp3, label %if.then4, label %if.else11
+
+if.then4:                                         ; preds = %land.lhs.true
+  %x5 = getelementptr inbounds %struct.point, %struct.point* %a1, i32 0, i32 0
+  %4 = load double, double* %x5, align 8
+  %x6 = getelementptr inbounds %struct.point, %struct.point* %agg.result, i32 0, i32 0
+  store double %4, double* %x6, align 8
+  %x7 = getelementptr inbounds %struct.point, %struct.point* %a1, i32 0, i32 0
+  %5 = load double, double* %x7, align 8
+  %x8 = getelementptr inbounds %struct.point, %struct.point* %b1, i32 0, i32 0
+  %6 = load double, double* %x8, align 8
+  %sub = fsub double %5, %6
+  %7 = load double, double* %slopeB, align 8
+  %mul = fmul double %sub, %7
+  %y9 = getelementptr inbounds %struct.point, %struct.point* %b1, i32 0, i32 1
+  %8 = load double, double* %y9, align 8
+  %add = fadd double %mul, %8
+  %y10 = getelementptr inbounds %struct.point, %struct.point* %agg.result, i32 0, i32 1
+  store double %add, double* %y10, align 8
+  br label %if.end44
+
+if.else11:                                        ; preds = %land.lhs.true, %if.else
+  %9 = load double, double* %slopeB, align 8
+  %cmp12 = fcmp oeq double %9, 0x7FF8000000000000
+  br i1 %cmp12, label %land.lhs.true13, label %if.else25
+
+land.lhs.true13:                                  ; preds = %if.else11
+  %10 = load double, double* %slopeA, align 8
+  %cmp14 = fcmp une double %10, 0x7FF8000000000000
+  br i1 %cmp14, label %if.then15, label %if.else25
+
+if.then15:                                        ; preds = %land.lhs.true13
+  %x16 = getelementptr inbounds %struct.point, %struct.point* %b1, i32 0, i32 0
+  %11 = load double, double* %x16, align 8
+  %x17 = getelementptr inbounds %struct.point, %struct.point* %agg.result, i32 0, i32 0
+  store double %11, double* %x17, align 8
+  %x18 = getelementptr inbounds %struct.point, %struct.point* %b1, i32 0, i32 0
+  %12 = load double, double* %x18, align 8
+  %x19 = getelementptr inbounds %struct.point, %struct.point* %a1, i32 0, i32 0
+  %13 = load double, double* %x19, align 8
+  %sub20 = fsub double %12, %13
+  %14 = load double, double* %slopeA, align 8
+  %mul21 = fmul double %sub20, %14
+  %y22 = getelementptr inbounds %struct.point, %struct.point* %b1, i32 0, i32 1
+  %15 = load double, double* %y22, align 8
+  %add23 = fadd double %mul21, %15
+  %y24 = getelementptr inbounds %struct.point, %struct.point* %agg.result, i32 0, i32 1
+  store double %add23, double* %y24, align 8
+  br label %if.end
+
+if.else25:                                        ; preds = %land.lhs.true13, %if.else11
+  %16 = load double, double* %slopeA, align 8
+  %x26 = getelementptr inbounds %struct.point, %struct.point* %a1, i32 0, i32 0
+  %17 = load double, double* %x26, align 8
+  %mul27 = fmul double %16, %17
+  %18 = load double, double* %slopeB, align 8
+  %x28 = getelementptr inbounds %struct.point, %struct.point* %b1, i32 0, i32 0
+  %19 = load double, double* %x28, align 8
+  %mul29 = fmul double %18, %19
+  %sub30 = fsub double %mul27, %mul29
+  %y31 = getelementptr inbounds %struct.point, %struct.point* %b1, i32 0, i32 1
+  %20 = load double, double* %y31, align 8
+  %add32 = fadd double %sub30, %20
+  %y33 = getelementptr inbounds %struct.point, %struct.point* %a1, i32 0, i32 1
+  %21 = load double, double* %y33, align 8
+  %sub34 = fsub double %add32, %21
+  %22 = load double, double* %slopeA, align 8
+  %23 = load double, double* %slopeB, align 8
+  %sub35 = fsub double %22, %23
+  %div = fdiv double %sub34, %sub35
+  %x36 = getelementptr inbounds %struct.point, %struct.point* %agg.result, i32 0, i32 0
+  store double %div, double* %x36, align 8
+  %24 = load double, double* %slopeB, align 8
+  %x37 = getelementptr inbounds %struct.point, %struct.point* %agg.result, i32 0, i32 0
+  %25 = load double, double* %x37, align 8
+  %x38 = getelementptr inbounds %struct.point, %struct.point* %b1, i32 0, i32 0
+  %26 = load double, double* %x38, align 8
+  %sub39 = fsub double %25, %26
+  %mul40 = fmul double %24, %sub39
+  %y41 = getelementptr inbounds %struct.point, %struct.point* %b1, i32 0, i32 1
+  %27 = load double, double* %y41, align 8
+  %add42 = fadd double %mul40, %27
+  %y43 = getelementptr inbounds %struct.point, %struct.point* %agg.result, i32 0, i32 1
+  store double %add42, double* %y43, align 8
+  br label %if.end
+
+if.end:                                           ; preds = %if.else25, %if.then15
+  br label %if.end44
+
+if.end44:                                         ; preds = %if.end, %if.then4
+  br label %if.end45
+
+if.end45:                                         ; preds = %if.end44, %if.then
+  ret void
+}
+
+; Function Attrs: noinline nounwind optnone
+define hidden i32 @__main_argc_argv(i32 %argC, i8** %argV) #0 {
+entry:
+  %retval = alloca i32, align 4
+  %argC.addr = alloca i32, align 4
+  %argV.addr = alloca i8**, align 4
+  %c = alloca %struct.point, align 8
+  %tmp = alloca %struct.point, align 8
+  %agg.tmp = alloca %struct.point, align 8
+  %agg.tmp2 = alloca %struct.point, align 8
+  %agg.tmp4 = alloca %struct.point, align 8
+  %agg.tmp6 = alloca %struct.point, align 8
+  store i32 0, i32* %retval, align 4
+  store i32 %argC, i32* %argC.addr, align 4
+  store i8** %argV, i8*** %argV.addr, align 4
+  %0 = load i32, i32* %argC.addr, align 4
+  %cmp = icmp slt i32 %0, 5
+  br i1 %cmp, label %if.then, label %if.else
+
+if.then:                                          ; preds = %entry
+  %1 = load i8**, i8*** %argV.addr, align 4
+  %arrayidx = getelementptr inbounds i8*, i8** %1, i32 0
+  %2 = load i8*, i8** %arrayidx, align 4
+  %call = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([65 x i8], [65 x i8]* @.str, i32 0, i32 0), i8* %2)
+  br label %if.end14
+
+if.else:                                          ; preds = %entry
+  %3 = load i8**, i8*** %argV.addr, align 4
+  %arrayidx1 = getelementptr inbounds i8*, i8** %3, i32 1
+  %4 = load i8*, i8** %arrayidx1, align 4
+  call void @extractPoint(%struct.point* sret align 8 %agg.tmp, i8* %4)
+  %5 = load i8**, i8*** %argV.addr, align 4
+  %arrayidx3 = getelementptr inbounds i8*, i8** %5, i32 2
+  %6 = load i8*, i8** %arrayidx3, align 4
+  call void @extractPoint(%struct.point* sret align 8 %agg.tmp2, i8* %6)
+  %7 = load i8**, i8*** %argV.addr, align 4
+  %arrayidx5 = getelementptr inbounds i8*, i8** %7, i32 3
+  %8 = load i8*, i8** %arrayidx5, align 4
+  call void @extractPoint(%struct.point* sret align 8 %agg.tmp4, i8* %8)
+  %9 = load i8**, i8*** %argV.addr, align 4
+  %arrayidx7 = getelementptr inbounds i8*, i8** %9, i32 4
+  %10 = load i8*, i8** %arrayidx7, align 4
+  call void @extractPoint(%struct.point* sret align 8 %agg.tmp6, i8* %10)
+  call void @intersectionPoint(%struct.point* sret align 8 %tmp, %struct.point* byval(%struct.point) align 8 %agg.tmp, %struct.point* byval(%struct.point) align 8 %agg.tmp2, %struct.point* byval(%struct.point) align 8 %agg.tmp4, %struct.point* byval(%struct.point) align 8 %agg.tmp6)
+  %11 = bitcast %struct.point* %c to i8*
+  %12 = bitcast %struct.point* %tmp to i8*
+  call void @llvm.memcpy.p0i8.p0i8.i32(i8* align 8 %11, i8* align 8 %12, i32 16, i1 false)
+  %x = getelementptr inbounds %struct.point, %struct.point* %c, i32 0, i32 0
+  %13 = load double, double* %x, align 8
+  %cmp8 = fcmp oeq double %13, 0x7FF8000000000000
+  br i1 %cmp8, label %if.then9, label %if.else11
+
+if.then9:                                         ; preds = %if.else
+  %call10 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([69 x i8], [69 x i8]* @.str.1, i32 0, i32 0))
+  br label %if.end
+
+if.else11:                                        ; preds = %if.else
+  %x12 = getelementptr inbounds %struct.point, %struct.point* %c, i32 0, i32 0
+  %14 = load double, double* %x12, align 8
+  %y = getelementptr inbounds %struct.point, %struct.point* %c, i32 0, i32 1
+  %15 = load double, double* %y, align 8
+  %call13 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([34 x i8], [34 x i8]* @.str.2, i32 0, i32 0), double %14, double %15)
+  br label %if.end
+
+if.end:                                           ; preds = %if.else11, %if.then9
+  br label %if.end14
+
+if.end14:                                         ; preds = %if.end, %if.then
+  ret i32 0
+}
+
+declare i32 @printf(i8* %0, ...) #1
+
+; Function Attrs: argmemonly nounwind willreturn
+declare void @llvm.memcpy.p0i8.p0i8.i32(i8* noalias nocapture writeonly %0, i8* noalias nocapture readonly %1, i32 %2, i1 immarg %3) #2
+
+attributes #0 = { noinline nounwind optnone "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "min-legal-vector-width"="0" "no-infs-fp-math"="false" "no-jump-tables"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #1 = { "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #2 = { argmemonly nounwind willreturn }
+
+!llvm.module.flags = !{!0}
+!llvm.ident = !{!1}
+
+!0 = !{i32 1, !"wchar_size", i32 4}
+!1 = !{!"clang version 11.0.0 (https://github.com/Jacarte/llvm-project.git 0f6dea67136cc1e0b3d200eb2bb165628970c44b)"}
+
+; extracted candidates
+
+; *****
+; For LLVM instruction:
+;  %0 = load i32, i32* %argC.addr, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %cmp = icmp slt i32 %0, 5
+; Looking for a replacement for:
+%0:i32 = var
+%1:i1 = slt %0, 5:i32
+infer %1
+
+; *****
+; For LLVM instruction:
+;  %cmp8 = fcmp oeq double %13, 0x7FF8000000000000
+; Looking for a replacement for:
+%0:i1 = var
+infer %0
+got 2 candidates from LHS
+
+-------------------------------------------------
+%0:i32 = var
+%1:i1 = slt %0, 5:i32
+infer %1
+
+
+--------------------------------
+guess 0
+
+%0:i1 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: -1
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: 0
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+Dataflow Pruned 0/0
+There are 1 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+#########################################################
+; exiting Souper's runOnFunction() for __main_argc_argv()
+Total of 1 replacements done on this module
+Total of 1 replacements candidates on this module

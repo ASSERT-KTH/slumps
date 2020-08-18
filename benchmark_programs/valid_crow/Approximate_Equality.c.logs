@@ -1,0 +1,361 @@
+
+Entering the Souper pass's runOnModule()
+
+
+; entering Souper's runOnFunction() for approxEquals()
+
+; ModuleID = './Approximate_Equality.c.bc'
+source_filename = "./Approximate_Equality.c"
+target datalayout = "e-m:e-p:32:32-i64:64-n32:64-S128"
+target triple = "wasm32-unknown-wasi"
+
+@.str = private unnamed_addr constant [14 x i8] c"%f, %f => %d\0A\00", align 1
+@llvm.used = appending global [1 x i8*] [i8* bitcast (i32 ()* @__main_void to i8*)], section "llvm.metadata"
+
+@__main_void = alias i32 (), i32 ()* @main
+
+; Function Attrs: noinline nounwind optnone
+define hidden zeroext i1 @approxEquals(double %value, double %other, double %epsilon) #0 {
+entry:
+  %value.addr = alloca double, align 8
+  %other.addr = alloca double, align 8
+  %epsilon.addr = alloca double, align 8
+  store double %value, double* %value.addr, align 8
+  store double %other, double* %other.addr, align 8
+  store double %epsilon, double* %epsilon.addr, align 8
+  %0 = load double, double* %value.addr, align 8
+  %1 = load double, double* %other.addr, align 8
+  %sub = fsub double %0, %1
+  %2 = call double @llvm.fabs.f64(double %sub)
+  %3 = load double, double* %epsilon.addr, align 8
+  %cmp = fcmp olt double %2, %3
+  ret i1 %cmp
+}
+
+; Function Attrs: nounwind readnone speculatable willreturn
+declare double @llvm.fabs.f64(double %0) #1
+
+; Function Attrs: noinline nounwind optnone
+define hidden void @test(double %a, double %b) #0 {
+entry:
+  %a.addr = alloca double, align 8
+  %b.addr = alloca double, align 8
+  %epsilon = alloca double, align 8
+  store double %a, double* %a.addr, align 8
+  store double %b, double* %b.addr, align 8
+  store double 1.000000e-18, double* %epsilon, align 8
+  %0 = load double, double* %a.addr, align 8
+  %1 = load double, double* %b.addr, align 8
+  %2 = load double, double* %a.addr, align 8
+  %3 = load double, double* %b.addr, align 8
+  %4 = load double, double* %epsilon, align 8
+  %call = call zeroext i1 @approxEquals(double %2, double %3, double %4)
+  %conv = zext i1 %call to i32
+  %call1 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([14 x i8], [14 x i8]* @.str, i32 0, i32 0), double %0, double %1, i32 %conv)
+  ret void
+}
+
+declare i32 @printf(i8* %0, ...) #2
+
+; Function Attrs: noinline nounwind optnone
+define hidden i32 @main() #0 {
+entry:
+  %retval = alloca i32, align 4
+  store i32 0, i32* %retval, align 4
+  call void @test(double 0x42D6BCC41E900001, double 0x42D6BCC41E900001)
+  call void @test(double 1.000100e+02, double 1.000110e+02)
+  call void @test(double 0x41CDCD6500000002, double 0x41CDCD6500000001)
+  call void @test(double 1.000000e-03, double 0x3F50624DEE6E89D6)
+  call void @test(double 1.010000e-22, double 0.000000e+00)
+  %0 = call double @llvm.sqrt.f64(double 2.000000e+00)
+  %1 = call double @llvm.sqrt.f64(double 2.000000e+00)
+  %mul = fmul double %0, %1
+  call void @test(double %mul, double 2.000000e+00)
+  %2 = call double @llvm.sqrt.f64(double 2.000000e+00)
+  %fneg = fneg double %2
+  %3 = call double @llvm.sqrt.f64(double 2.000000e+00)
+  %mul1 = fmul double %fneg, %3
+  call void @test(double %mul1, double -2.000000e+00)
+  call void @test(double 0x400921FB54442D18, double 0x400921FB54442D18)
+  ret i32 0
+}
+
+; Function Attrs: nounwind readnone speculatable willreturn
+declare double @llvm.sqrt.f64(double %0) #1
+
+attributes #0 = { noinline nounwind optnone "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "min-legal-vector-width"="0" "no-infs-fp-math"="false" "no-jump-tables"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #1 = { nounwind readnone speculatable willreturn }
+attributes #2 = { "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+
+!llvm.module.flags = !{!0}
+!llvm.ident = !{!1}
+
+!0 = !{i32 1, !"wchar_size", i32 4}
+!1 = !{!"clang version 11.0.0 (https://github.com/Jacarte/llvm-project.git 0f6dea67136cc1e0b3d200eb2bb165628970c44b)"}
+
+; extracted candidates
+
+; *****
+; For LLVM instruction:
+;  %cmp = fcmp olt double %2, %3
+; Looking for a replacement for:
+%0:i1 = var
+infer %0
+got 1 candidates from LHS
+
+-------------------------------------------------
+%0:i1 = var
+infer %0
+
+
+--------------------------------
+guess 0
+
+%0:i1 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: -1
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+Dataflow Pruned 0/0
+There are 1 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+#########################################################
+; exiting Souper's runOnFunction() for approxEquals()
+
+; entering Souper's runOnFunction() for test()
+
+; ModuleID = './Approximate_Equality.c.bc'
+source_filename = "./Approximate_Equality.c"
+target datalayout = "e-m:e-p:32:32-i64:64-n32:64-S128"
+target triple = "wasm32-unknown-wasi"
+
+@.str = private unnamed_addr constant [14 x i8] c"%f, %f => %d\0A\00", align 1
+@llvm.used = appending global [1 x i8*] [i8* bitcast (i32 ()* @__main_void to i8*)], section "llvm.metadata"
+
+@__main_void = alias i32 (), i32 ()* @main
+
+; Function Attrs: noinline nounwind optnone
+define hidden zeroext i1 @approxEquals(double %value, double %other, double %epsilon) #0 {
+entry:
+  %value.addr = alloca double, align 8
+  %other.addr = alloca double, align 8
+  %epsilon.addr = alloca double, align 8
+  store double %value, double* %value.addr, align 8
+  store double %other, double* %other.addr, align 8
+  store double %epsilon, double* %epsilon.addr, align 8
+  %0 = load double, double* %value.addr, align 8
+  %1 = load double, double* %other.addr, align 8
+  %sub = fsub double %0, %1
+  %2 = call double @llvm.fabs.f64(double %sub)
+  %3 = load double, double* %epsilon.addr, align 8
+  %cmp = fcmp olt double %2, %3
+  ret i1 %cmp
+}
+
+; Function Attrs: nounwind readnone speculatable willreturn
+declare double @llvm.fabs.f64(double %0) #1
+
+; Function Attrs: noinline nounwind optnone
+define hidden void @test(double %a, double %b) #0 {
+entry:
+  %a.addr = alloca double, align 8
+  %b.addr = alloca double, align 8
+  %epsilon = alloca double, align 8
+  store double %a, double* %a.addr, align 8
+  store double %b, double* %b.addr, align 8
+  store double 1.000000e-18, double* %epsilon, align 8
+  %0 = load double, double* %a.addr, align 8
+  %1 = load double, double* %b.addr, align 8
+  %2 = load double, double* %a.addr, align 8
+  %3 = load double, double* %b.addr, align 8
+  %4 = load double, double* %epsilon, align 8
+  %call = call zeroext i1 @approxEquals(double %2, double %3, double %4)
+  %conv = zext i1 %call to i32
+  %call1 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([14 x i8], [14 x i8]* @.str, i32 0, i32 0), double %0, double %1, i32 %conv)
+  ret void
+}
+
+declare i32 @printf(i8* %0, ...) #2
+
+; Function Attrs: noinline nounwind optnone
+define hidden i32 @main() #0 {
+entry:
+  %retval = alloca i32, align 4
+  store i32 0, i32* %retval, align 4
+  call void @test(double 0x42D6BCC41E900001, double 0x42D6BCC41E900001)
+  call void @test(double 1.000100e+02, double 1.000110e+02)
+  call void @test(double 0x41CDCD6500000002, double 0x41CDCD6500000001)
+  call void @test(double 1.000000e-03, double 0x3F50624DEE6E89D6)
+  call void @test(double 1.010000e-22, double 0.000000e+00)
+  %0 = call double @llvm.sqrt.f64(double 2.000000e+00)
+  %1 = call double @llvm.sqrt.f64(double 2.000000e+00)
+  %mul = fmul double %0, %1
+  call void @test(double %mul, double 2.000000e+00)
+  %2 = call double @llvm.sqrt.f64(double 2.000000e+00)
+  %fneg = fneg double %2
+  %3 = call double @llvm.sqrt.f64(double 2.000000e+00)
+  %mul1 = fmul double %fneg, %3
+  call void @test(double %mul1, double -2.000000e+00)
+  call void @test(double 0x400921FB54442D18, double 0x400921FB54442D18)
+  ret i32 0
+}
+
+; Function Attrs: nounwind readnone speculatable willreturn
+declare double @llvm.sqrt.f64(double %0) #1
+
+attributes #0 = { noinline nounwind optnone "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "min-legal-vector-width"="0" "no-infs-fp-math"="false" "no-jump-tables"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #1 = { nounwind readnone speculatable willreturn }
+attributes #2 = { "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+
+!llvm.module.flags = !{!0}
+!llvm.ident = !{!1}
+
+!0 = !{i32 1, !"wchar_size", i32 4}
+!1 = !{!"clang version 11.0.0 (https://github.com/Jacarte/llvm-project.git 0f6dea67136cc1e0b3d200eb2bb165628970c44b)"}
+
+; extracted candidates
+
+; *****
+; For LLVM instruction:
+;  %call = call zeroext i1 @approxEquals(double %2, double %3, double %4)
+; Looking for a replacement for:
+%0:i1 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %conv = zext i1 %call to i32
+; Looking for a replacement for:
+%0:i1 = var
+%1:i32 = zext %0
+infer %1
+got 2 candidates from LHS
+
+-------------------------------------------------
+%0:i1 = var
+%1:i32 = zext %0
+infer %1
+
+
+--------------------------------
+guess 0
+
+%0:i32 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: 1
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+Dataflow Pruned 0/0
+There are 1 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+#########################################################
+; exiting Souper's runOnFunction() for test()
+
+; entering Souper's runOnFunction() for main()
+
+; ModuleID = './Approximate_Equality.c.bc'
+source_filename = "./Approximate_Equality.c"
+target datalayout = "e-m:e-p:32:32-i64:64-n32:64-S128"
+target triple = "wasm32-unknown-wasi"
+
+@.str = private unnamed_addr constant [14 x i8] c"%f, %f => %d\0A\00", align 1
+@llvm.used = appending global [1 x i8*] [i8* bitcast (i32 ()* @__main_void to i8*)], section "llvm.metadata"
+
+@__main_void = alias i32 (), i32 ()* @main
+
+; Function Attrs: noinline nounwind optnone
+define hidden zeroext i1 @approxEquals(double %value, double %other, double %epsilon) #0 {
+entry:
+  %value.addr = alloca double, align 8
+  %other.addr = alloca double, align 8
+  %epsilon.addr = alloca double, align 8
+  store double %value, double* %value.addr, align 8
+  store double %other, double* %other.addr, align 8
+  store double %epsilon, double* %epsilon.addr, align 8
+  %0 = load double, double* %value.addr, align 8
+  %1 = load double, double* %other.addr, align 8
+  %sub = fsub double %0, %1
+  %2 = call double @llvm.fabs.f64(double %sub)
+  %3 = load double, double* %epsilon.addr, align 8
+  %cmp = fcmp olt double %2, %3
+  ret i1 %cmp
+}
+
+; Function Attrs: nounwind readnone speculatable willreturn
+declare double @llvm.fabs.f64(double %0) #1
+
+; Function Attrs: noinline nounwind optnone
+define hidden void @test(double %a, double %b) #0 {
+entry:
+  %a.addr = alloca double, align 8
+  %b.addr = alloca double, align 8
+  %epsilon = alloca double, align 8
+  store double %a, double* %a.addr, align 8
+  store double %b, double* %b.addr, align 8
+  store double 1.000000e-18, double* %epsilon, align 8
+  %0 = load double, double* %a.addr, align 8
+  %1 = load double, double* %b.addr, align 8
+  %2 = load double, double* %a.addr, align 8
+  %3 = load double, double* %b.addr, align 8
+  %4 = load double, double* %epsilon, align 8
+  %call = call zeroext i1 @approxEquals(double %2, double %3, double %4)
+  %conv = zext i1 %call to i32
+  %call1 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([14 x i8], [14 x i8]* @.str, i32 0, i32 0), double %0, double %1, i32 %conv)
+  ret void
+}
+
+declare i32 @printf(i8* %0, ...) #2
+
+; Function Attrs: noinline nounwind optnone
+define hidden i32 @main() #0 {
+entry:
+  %retval = alloca i32, align 4
+  store i32 0, i32* %retval, align 4
+  call void @test(double 0x42D6BCC41E900001, double 0x42D6BCC41E900001)
+  call void @test(double 1.000100e+02, double 1.000110e+02)
+  call void @test(double 0x41CDCD6500000002, double 0x41CDCD6500000001)
+  call void @test(double 1.000000e-03, double 0x3F50624DEE6E89D6)
+  call void @test(double 1.010000e-22, double 0.000000e+00)
+  %0 = call double @llvm.sqrt.f64(double 2.000000e+00)
+  %1 = call double @llvm.sqrt.f64(double 2.000000e+00)
+  %mul = fmul double %0, %1
+  call void @test(double %mul, double 2.000000e+00)
+  %2 = call double @llvm.sqrt.f64(double 2.000000e+00)
+  %fneg = fneg double %2
+  %3 = call double @llvm.sqrt.f64(double 2.000000e+00)
+  %mul1 = fmul double %fneg, %3
+  call void @test(double %mul1, double -2.000000e+00)
+  call void @test(double 0x400921FB54442D18, double 0x400921FB54442D18)
+  ret i32 0
+}
+
+; Function Attrs: nounwind readnone speculatable willreturn
+declare double @llvm.sqrt.f64(double %0) #1
+
+attributes #0 = { noinline nounwind optnone "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "min-legal-vector-width"="0" "no-infs-fp-math"="false" "no-jump-tables"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #1 = { nounwind readnone speculatable willreturn }
+attributes #2 = { "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+
+!llvm.module.flags = !{!0}
+!llvm.ident = !{!1}
+
+!0 = !{i32 1, !"wchar_size", i32 4}
+!1 = !{!"clang version 11.0.0 (https://github.com/Jacarte/llvm-project.git 0f6dea67136cc1e0b3d200eb2bb165628970c44b)"}
+
+; extracted candidates
+#########################################################
+; exiting Souper's runOnFunction() for main()
+Total of 0 replacements done on this module
+Total of 0 replacements candidates on this module
