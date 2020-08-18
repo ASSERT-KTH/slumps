@@ -2,13 +2,9 @@
 
 Research repository on randomization and superoptimization for WebAssembly/WASM. Corresponding papers:
 
-* [Superoptimization of WebAssembly Bytecode (MoreVM 2020)](http://arxiv.org/pdf/2002.10213)
-
 ## Intro to superoptimization
 
 Given a C program compiled to WASM, SLUMPs generates a new WASM program which is smaller in size, and potentially faster, as we show in the image below.
-
-![pass](docs/pass.png)
 
 ## Prerequisites
 
@@ -96,9 +92,6 @@ souper | solver | -z3-path=/slumps/souper/third_party/z3/build/z3 | |
 | | souper-debug-level | 2 | |
 | | souper-common | -solver-timeout=1800 | |
 
-## Study of memory disclosure vulnerabilities
-
-[Slides](https://jacarte.github.io/wasm_presentation/)
 
 ## Souper new features
 
@@ -111,9 +104,3 @@ We added some features/options to Souper:
 - **`souper-redis-pass`**: Password for redis connection
 
 
-## Issues
-
-- Candidates overlapping. For example, in the `bitwise_IO` problem there are only 36 different programs:
-    `Total number of programs 2048. Different sha count 36. Pruned count 2012`
-
-- LLVM frontend for WASM: This will provide the WASM -> WASM behavior in SLUMPs

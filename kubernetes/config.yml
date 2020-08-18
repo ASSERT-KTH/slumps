@@ -1,0 +1,13 @@
+data:
+  config: |
+    artifactRepository:
+      s3:
+        bucket: my-bucket
+        endpoint: minio-service.minio:9000
+        insecure: true
+        accessKeySecret:
+          name: argo-artifacts
+          key: accesskey
+        secretKeySecret:
+          name: argo-artifacts
+          key: secretkey

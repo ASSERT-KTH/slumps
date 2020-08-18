@@ -1,8 +1,13 @@
 name: Build souper
 
+# this is the workflow for CROW/Souper, we don't care about other changes
 on: 
   push:
+    paths-ignore: 
+      - 'wasm-fuzzer/**'
   pull_request:
+    paths-ignore: 
+      - 'wasm-fuzzer/**'
 
 jobs:
   build-macos:
