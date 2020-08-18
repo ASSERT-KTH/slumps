@@ -1,0 +1,604 @@
+
+Entering the Souper pass's runOnModule()
+
+
+; entering Souper's runOnFunction() for kelvinToCelsius()
+
+; ModuleID = './Temperature_conversion.c.bc'
+source_filename = "./Temperature_conversion.c"
+target datalayout = "e-m:e-p:32:32-i64:64-n32:64-S128"
+target triple = "wasm32-unknown-wasi"
+
+@.str = private unnamed_addr constant [8 x i8] c"K %.2f\0A\00", align 1
+@.str.1 = private unnamed_addr constant [8 x i8] c"C %.2f\0A\00", align 1
+@.str.2 = private unnamed_addr constant [8 x i8] c"F %.2f\0A\00", align 1
+@.str.3 = private unnamed_addr constant [7 x i8] c"R %.2f\00", align 1
+
+; Function Attrs: noinline nounwind optnone
+define hidden double @kelvinToCelsius(double %k) #0 {
+entry:
+  %k.addr = alloca double, align 8
+  store double %k, double* %k.addr, align 8
+  %0 = load double, double* %k.addr, align 8
+  %sub = fsub double %0, 2.731500e+02
+  ret double %sub
+}
+
+; Function Attrs: noinline nounwind optnone
+define hidden double @kelvinToFahrenheit(double %k) #0 {
+entry:
+  %k.addr = alloca double, align 8
+  store double %k, double* %k.addr, align 8
+  %0 = load double, double* %k.addr, align 8
+  %mul = fmul double %0, 1.800000e+00
+  %sub = fsub double %mul, 4.596700e+02
+  ret double %sub
+}
+
+; Function Attrs: noinline nounwind optnone
+define hidden double @kelvinToRankine(double %k) #0 {
+entry:
+  %k.addr = alloca double, align 8
+  store double %k, double* %k.addr, align 8
+  %0 = load double, double* %k.addr, align 8
+  %mul = fmul double %0, 1.800000e+00
+  ret double %mul
+}
+
+; Function Attrs: noinline nounwind optnone
+define hidden void @convertKelvin(double %kelvin) #0 {
+entry:
+  %kelvin.addr = alloca double, align 8
+  store double %kelvin, double* %kelvin.addr, align 8
+  %0 = load double, double* %kelvin.addr, align 8
+  %call = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([8 x i8], [8 x i8]* @.str, i32 0, i32 0), double %0)
+  %1 = load double, double* %kelvin.addr, align 8
+  %call1 = call double @kelvinToCelsius(double %1)
+  %call2 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([8 x i8], [8 x i8]* @.str.1, i32 0, i32 0), double %call1)
+  %2 = load double, double* %kelvin.addr, align 8
+  %call3 = call double @kelvinToFahrenheit(double %2)
+  %call4 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([8 x i8], [8 x i8]* @.str.2, i32 0, i32 0), double %call3)
+  %3 = load double, double* %kelvin.addr, align 8
+  %call5 = call double @kelvinToRankine(double %3)
+  %call6 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([7 x i8], [7 x i8]* @.str.3, i32 0, i32 0), double %call5)
+  ret void
+}
+
+declare i32 @printf(i8* %0, ...) #1
+
+; Function Attrs: noinline nounwind optnone
+define hidden i32 @__main_argc_argv(i32 %argc, i8** %argv) #0 {
+entry:
+  %retval = alloca i32, align 4
+  %argc.addr = alloca i32, align 4
+  %argv.addr = alloca i8**, align 4
+  %kelvin = alloca double, align 8
+  store i32 0, i32* %retval, align 4
+  store i32 %argc, i32* %argc.addr, align 4
+  store i8** %argv, i8*** %argv.addr, align 4
+  %0 = load i32, i32* %argc.addr, align 4
+  %cmp = icmp sgt i32 %0, 1
+  br i1 %cmp, label %if.then, label %if.end
+
+if.then:                                          ; preds = %entry
+  %1 = load i8**, i8*** %argv.addr, align 4
+  %arrayidx = getelementptr inbounds i8*, i8** %1, i32 1
+  %2 = load i8*, i8** %arrayidx, align 4
+  %call = call double @atof(i8* %2)
+  store double %call, double* %kelvin, align 8
+  %3 = load double, double* %kelvin, align 8
+  call void @convertKelvin(double %3)
+  br label %if.end
+
+if.end:                                           ; preds = %if.then, %entry
+  ret i32 0
+}
+
+declare double @atof(i8* %0) #1
+
+attributes #0 = { noinline nounwind optnone "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "min-legal-vector-width"="0" "no-infs-fp-math"="false" "no-jump-tables"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #1 = { "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+
+!llvm.module.flags = !{!0}
+!llvm.ident = !{!1}
+
+!0 = !{i32 1, !"wchar_size", i32 4}
+!1 = !{!"clang version 11.0.0 (https://github.com/Jacarte/llvm-project.git 0f6dea67136cc1e0b3d200eb2bb165628970c44b)"}
+
+; extracted candidates
+#########################################################
+; exiting Souper's runOnFunction() for kelvinToCelsius()
+
+; entering Souper's runOnFunction() for kelvinToFahrenheit()
+
+; ModuleID = './Temperature_conversion.c.bc'
+source_filename = "./Temperature_conversion.c"
+target datalayout = "e-m:e-p:32:32-i64:64-n32:64-S128"
+target triple = "wasm32-unknown-wasi"
+
+@.str = private unnamed_addr constant [8 x i8] c"K %.2f\0A\00", align 1
+@.str.1 = private unnamed_addr constant [8 x i8] c"C %.2f\0A\00", align 1
+@.str.2 = private unnamed_addr constant [8 x i8] c"F %.2f\0A\00", align 1
+@.str.3 = private unnamed_addr constant [7 x i8] c"R %.2f\00", align 1
+
+; Function Attrs: noinline nounwind optnone
+define hidden double @kelvinToCelsius(double %k) #0 {
+entry:
+  %k.addr = alloca double, align 8
+  store double %k, double* %k.addr, align 8
+  %0 = load double, double* %k.addr, align 8
+  %sub = fsub double %0, 2.731500e+02
+  ret double %sub
+}
+
+; Function Attrs: noinline nounwind optnone
+define hidden double @kelvinToFahrenheit(double %k) #0 {
+entry:
+  %k.addr = alloca double, align 8
+  store double %k, double* %k.addr, align 8
+  %0 = load double, double* %k.addr, align 8
+  %mul = fmul double %0, 1.800000e+00
+  %sub = fsub double %mul, 4.596700e+02
+  ret double %sub
+}
+
+; Function Attrs: noinline nounwind optnone
+define hidden double @kelvinToRankine(double %k) #0 {
+entry:
+  %k.addr = alloca double, align 8
+  store double %k, double* %k.addr, align 8
+  %0 = load double, double* %k.addr, align 8
+  %mul = fmul double %0, 1.800000e+00
+  ret double %mul
+}
+
+; Function Attrs: noinline nounwind optnone
+define hidden void @convertKelvin(double %kelvin) #0 {
+entry:
+  %kelvin.addr = alloca double, align 8
+  store double %kelvin, double* %kelvin.addr, align 8
+  %0 = load double, double* %kelvin.addr, align 8
+  %call = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([8 x i8], [8 x i8]* @.str, i32 0, i32 0), double %0)
+  %1 = load double, double* %kelvin.addr, align 8
+  %call1 = call double @kelvinToCelsius(double %1)
+  %call2 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([8 x i8], [8 x i8]* @.str.1, i32 0, i32 0), double %call1)
+  %2 = load double, double* %kelvin.addr, align 8
+  %call3 = call double @kelvinToFahrenheit(double %2)
+  %call4 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([8 x i8], [8 x i8]* @.str.2, i32 0, i32 0), double %call3)
+  %3 = load double, double* %kelvin.addr, align 8
+  %call5 = call double @kelvinToRankine(double %3)
+  %call6 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([7 x i8], [7 x i8]* @.str.3, i32 0, i32 0), double %call5)
+  ret void
+}
+
+declare i32 @printf(i8* %0, ...) #1
+
+; Function Attrs: noinline nounwind optnone
+define hidden i32 @__main_argc_argv(i32 %argc, i8** %argv) #0 {
+entry:
+  %retval = alloca i32, align 4
+  %argc.addr = alloca i32, align 4
+  %argv.addr = alloca i8**, align 4
+  %kelvin = alloca double, align 8
+  store i32 0, i32* %retval, align 4
+  store i32 %argc, i32* %argc.addr, align 4
+  store i8** %argv, i8*** %argv.addr, align 4
+  %0 = load i32, i32* %argc.addr, align 4
+  %cmp = icmp sgt i32 %0, 1
+  br i1 %cmp, label %if.then, label %if.end
+
+if.then:                                          ; preds = %entry
+  %1 = load i8**, i8*** %argv.addr, align 4
+  %arrayidx = getelementptr inbounds i8*, i8** %1, i32 1
+  %2 = load i8*, i8** %arrayidx, align 4
+  %call = call double @atof(i8* %2)
+  store double %call, double* %kelvin, align 8
+  %3 = load double, double* %kelvin, align 8
+  call void @convertKelvin(double %3)
+  br label %if.end
+
+if.end:                                           ; preds = %if.then, %entry
+  ret i32 0
+}
+
+declare double @atof(i8* %0) #1
+
+attributes #0 = { noinline nounwind optnone "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "min-legal-vector-width"="0" "no-infs-fp-math"="false" "no-jump-tables"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #1 = { "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+
+!llvm.module.flags = !{!0}
+!llvm.ident = !{!1}
+
+!0 = !{i32 1, !"wchar_size", i32 4}
+!1 = !{!"clang version 11.0.0 (https://github.com/Jacarte/llvm-project.git 0f6dea67136cc1e0b3d200eb2bb165628970c44b)"}
+
+; extracted candidates
+#########################################################
+; exiting Souper's runOnFunction() for kelvinToFahrenheit()
+
+; entering Souper's runOnFunction() for kelvinToRankine()
+
+; ModuleID = './Temperature_conversion.c.bc'
+source_filename = "./Temperature_conversion.c"
+target datalayout = "e-m:e-p:32:32-i64:64-n32:64-S128"
+target triple = "wasm32-unknown-wasi"
+
+@.str = private unnamed_addr constant [8 x i8] c"K %.2f\0A\00", align 1
+@.str.1 = private unnamed_addr constant [8 x i8] c"C %.2f\0A\00", align 1
+@.str.2 = private unnamed_addr constant [8 x i8] c"F %.2f\0A\00", align 1
+@.str.3 = private unnamed_addr constant [7 x i8] c"R %.2f\00", align 1
+
+; Function Attrs: noinline nounwind optnone
+define hidden double @kelvinToCelsius(double %k) #0 {
+entry:
+  %k.addr = alloca double, align 8
+  store double %k, double* %k.addr, align 8
+  %0 = load double, double* %k.addr, align 8
+  %sub = fsub double %0, 2.731500e+02
+  ret double %sub
+}
+
+; Function Attrs: noinline nounwind optnone
+define hidden double @kelvinToFahrenheit(double %k) #0 {
+entry:
+  %k.addr = alloca double, align 8
+  store double %k, double* %k.addr, align 8
+  %0 = load double, double* %k.addr, align 8
+  %mul = fmul double %0, 1.800000e+00
+  %sub = fsub double %mul, 4.596700e+02
+  ret double %sub
+}
+
+; Function Attrs: noinline nounwind optnone
+define hidden double @kelvinToRankine(double %k) #0 {
+entry:
+  %k.addr = alloca double, align 8
+  store double %k, double* %k.addr, align 8
+  %0 = load double, double* %k.addr, align 8
+  %mul = fmul double %0, 1.800000e+00
+  ret double %mul
+}
+
+; Function Attrs: noinline nounwind optnone
+define hidden void @convertKelvin(double %kelvin) #0 {
+entry:
+  %kelvin.addr = alloca double, align 8
+  store double %kelvin, double* %kelvin.addr, align 8
+  %0 = load double, double* %kelvin.addr, align 8
+  %call = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([8 x i8], [8 x i8]* @.str, i32 0, i32 0), double %0)
+  %1 = load double, double* %kelvin.addr, align 8
+  %call1 = call double @kelvinToCelsius(double %1)
+  %call2 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([8 x i8], [8 x i8]* @.str.1, i32 0, i32 0), double %call1)
+  %2 = load double, double* %kelvin.addr, align 8
+  %call3 = call double @kelvinToFahrenheit(double %2)
+  %call4 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([8 x i8], [8 x i8]* @.str.2, i32 0, i32 0), double %call3)
+  %3 = load double, double* %kelvin.addr, align 8
+  %call5 = call double @kelvinToRankine(double %3)
+  %call6 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([7 x i8], [7 x i8]* @.str.3, i32 0, i32 0), double %call5)
+  ret void
+}
+
+declare i32 @printf(i8* %0, ...) #1
+
+; Function Attrs: noinline nounwind optnone
+define hidden i32 @__main_argc_argv(i32 %argc, i8** %argv) #0 {
+entry:
+  %retval = alloca i32, align 4
+  %argc.addr = alloca i32, align 4
+  %argv.addr = alloca i8**, align 4
+  %kelvin = alloca double, align 8
+  store i32 0, i32* %retval, align 4
+  store i32 %argc, i32* %argc.addr, align 4
+  store i8** %argv, i8*** %argv.addr, align 4
+  %0 = load i32, i32* %argc.addr, align 4
+  %cmp = icmp sgt i32 %0, 1
+  br i1 %cmp, label %if.then, label %if.end
+
+if.then:                                          ; preds = %entry
+  %1 = load i8**, i8*** %argv.addr, align 4
+  %arrayidx = getelementptr inbounds i8*, i8** %1, i32 1
+  %2 = load i8*, i8** %arrayidx, align 4
+  %call = call double @atof(i8* %2)
+  store double %call, double* %kelvin, align 8
+  %3 = load double, double* %kelvin, align 8
+  call void @convertKelvin(double %3)
+  br label %if.end
+
+if.end:                                           ; preds = %if.then, %entry
+  ret i32 0
+}
+
+declare double @atof(i8* %0) #1
+
+attributes #0 = { noinline nounwind optnone "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "min-legal-vector-width"="0" "no-infs-fp-math"="false" "no-jump-tables"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #1 = { "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+
+!llvm.module.flags = !{!0}
+!llvm.ident = !{!1}
+
+!0 = !{i32 1, !"wchar_size", i32 4}
+!1 = !{!"clang version 11.0.0 (https://github.com/Jacarte/llvm-project.git 0f6dea67136cc1e0b3d200eb2bb165628970c44b)"}
+
+; extracted candidates
+#########################################################
+; exiting Souper's runOnFunction() for kelvinToRankine()
+
+; entering Souper's runOnFunction() for convertKelvin()
+
+; ModuleID = './Temperature_conversion.c.bc'
+source_filename = "./Temperature_conversion.c"
+target datalayout = "e-m:e-p:32:32-i64:64-n32:64-S128"
+target triple = "wasm32-unknown-wasi"
+
+@.str = private unnamed_addr constant [8 x i8] c"K %.2f\0A\00", align 1
+@.str.1 = private unnamed_addr constant [8 x i8] c"C %.2f\0A\00", align 1
+@.str.2 = private unnamed_addr constant [8 x i8] c"F %.2f\0A\00", align 1
+@.str.3 = private unnamed_addr constant [7 x i8] c"R %.2f\00", align 1
+
+; Function Attrs: noinline nounwind optnone
+define hidden double @kelvinToCelsius(double %k) #0 {
+entry:
+  %k.addr = alloca double, align 8
+  store double %k, double* %k.addr, align 8
+  %0 = load double, double* %k.addr, align 8
+  %sub = fsub double %0, 2.731500e+02
+  ret double %sub
+}
+
+; Function Attrs: noinline nounwind optnone
+define hidden double @kelvinToFahrenheit(double %k) #0 {
+entry:
+  %k.addr = alloca double, align 8
+  store double %k, double* %k.addr, align 8
+  %0 = load double, double* %k.addr, align 8
+  %mul = fmul double %0, 1.800000e+00
+  %sub = fsub double %mul, 4.596700e+02
+  ret double %sub
+}
+
+; Function Attrs: noinline nounwind optnone
+define hidden double @kelvinToRankine(double %k) #0 {
+entry:
+  %k.addr = alloca double, align 8
+  store double %k, double* %k.addr, align 8
+  %0 = load double, double* %k.addr, align 8
+  %mul = fmul double %0, 1.800000e+00
+  ret double %mul
+}
+
+; Function Attrs: noinline nounwind optnone
+define hidden void @convertKelvin(double %kelvin) #0 {
+entry:
+  %kelvin.addr = alloca double, align 8
+  store double %kelvin, double* %kelvin.addr, align 8
+  %0 = load double, double* %kelvin.addr, align 8
+  %call = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([8 x i8], [8 x i8]* @.str, i32 0, i32 0), double %0)
+  %1 = load double, double* %kelvin.addr, align 8
+  %call1 = call double @kelvinToCelsius(double %1)
+  %call2 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([8 x i8], [8 x i8]* @.str.1, i32 0, i32 0), double %call1)
+  %2 = load double, double* %kelvin.addr, align 8
+  %call3 = call double @kelvinToFahrenheit(double %2)
+  %call4 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([8 x i8], [8 x i8]* @.str.2, i32 0, i32 0), double %call3)
+  %3 = load double, double* %kelvin.addr, align 8
+  %call5 = call double @kelvinToRankine(double %3)
+  %call6 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([7 x i8], [7 x i8]* @.str.3, i32 0, i32 0), double %call5)
+  ret void
+}
+
+declare i32 @printf(i8* %0, ...) #1
+
+; Function Attrs: noinline nounwind optnone
+define hidden i32 @__main_argc_argv(i32 %argc, i8** %argv) #0 {
+entry:
+  %retval = alloca i32, align 4
+  %argc.addr = alloca i32, align 4
+  %argv.addr = alloca i8**, align 4
+  %kelvin = alloca double, align 8
+  store i32 0, i32* %retval, align 4
+  store i32 %argc, i32* %argc.addr, align 4
+  store i8** %argv, i8*** %argv.addr, align 4
+  %0 = load i32, i32* %argc.addr, align 4
+  %cmp = icmp sgt i32 %0, 1
+  br i1 %cmp, label %if.then, label %if.end
+
+if.then:                                          ; preds = %entry
+  %1 = load i8**, i8*** %argv.addr, align 4
+  %arrayidx = getelementptr inbounds i8*, i8** %1, i32 1
+  %2 = load i8*, i8** %arrayidx, align 4
+  %call = call double @atof(i8* %2)
+  store double %call, double* %kelvin, align 8
+  %3 = load double, double* %kelvin, align 8
+  call void @convertKelvin(double %3)
+  br label %if.end
+
+if.end:                                           ; preds = %if.then, %entry
+  ret i32 0
+}
+
+declare double @atof(i8* %0) #1
+
+attributes #0 = { noinline nounwind optnone "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "min-legal-vector-width"="0" "no-infs-fp-math"="false" "no-jump-tables"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #1 = { "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+
+!llvm.module.flags = !{!0}
+!llvm.ident = !{!1}
+
+!0 = !{i32 1, !"wchar_size", i32 4}
+!1 = !{!"clang version 11.0.0 (https://github.com/Jacarte/llvm-project.git 0f6dea67136cc1e0b3d200eb2bb165628970c44b)"}
+
+; extracted candidates
+#########################################################
+; exiting Souper's runOnFunction() for convertKelvin()
+
+; entering Souper's runOnFunction() for __main_argc_argv()
+
+; ModuleID = './Temperature_conversion.c.bc'
+source_filename = "./Temperature_conversion.c"
+target datalayout = "e-m:e-p:32:32-i64:64-n32:64-S128"
+target triple = "wasm32-unknown-wasi"
+
+@.str = private unnamed_addr constant [8 x i8] c"K %.2f\0A\00", align 1
+@.str.1 = private unnamed_addr constant [8 x i8] c"C %.2f\0A\00", align 1
+@.str.2 = private unnamed_addr constant [8 x i8] c"F %.2f\0A\00", align 1
+@.str.3 = private unnamed_addr constant [7 x i8] c"R %.2f\00", align 1
+
+; Function Attrs: noinline nounwind optnone
+define hidden double @kelvinToCelsius(double %k) #0 {
+entry:
+  %k.addr = alloca double, align 8
+  store double %k, double* %k.addr, align 8
+  %0 = load double, double* %k.addr, align 8
+  %sub = fsub double %0, 2.731500e+02
+  ret double %sub
+}
+
+; Function Attrs: noinline nounwind optnone
+define hidden double @kelvinToFahrenheit(double %k) #0 {
+entry:
+  %k.addr = alloca double, align 8
+  store double %k, double* %k.addr, align 8
+  %0 = load double, double* %k.addr, align 8
+  %mul = fmul double %0, 1.800000e+00
+  %sub = fsub double %mul, 4.596700e+02
+  ret double %sub
+}
+
+; Function Attrs: noinline nounwind optnone
+define hidden double @kelvinToRankine(double %k) #0 {
+entry:
+  %k.addr = alloca double, align 8
+  store double %k, double* %k.addr, align 8
+  %0 = load double, double* %k.addr, align 8
+  %mul = fmul double %0, 1.800000e+00
+  ret double %mul
+}
+
+; Function Attrs: noinline nounwind optnone
+define hidden void @convertKelvin(double %kelvin) #0 {
+entry:
+  %kelvin.addr = alloca double, align 8
+  store double %kelvin, double* %kelvin.addr, align 8
+  %0 = load double, double* %kelvin.addr, align 8
+  %call = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([8 x i8], [8 x i8]* @.str, i32 0, i32 0), double %0)
+  %1 = load double, double* %kelvin.addr, align 8
+  %call1 = call double @kelvinToCelsius(double %1)
+  %call2 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([8 x i8], [8 x i8]* @.str.1, i32 0, i32 0), double %call1)
+  %2 = load double, double* %kelvin.addr, align 8
+  %call3 = call double @kelvinToFahrenheit(double %2)
+  %call4 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([8 x i8], [8 x i8]* @.str.2, i32 0, i32 0), double %call3)
+  %3 = load double, double* %kelvin.addr, align 8
+  %call5 = call double @kelvinToRankine(double %3)
+  %call6 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([7 x i8], [7 x i8]* @.str.3, i32 0, i32 0), double %call5)
+  ret void
+}
+
+declare i32 @printf(i8* %0, ...) #1
+
+; Function Attrs: noinline nounwind optnone
+define hidden i32 @__main_argc_argv(i32 %argc, i8** %argv) #0 {
+entry:
+  %retval = alloca i32, align 4
+  %argc.addr = alloca i32, align 4
+  %argv.addr = alloca i8**, align 4
+  %kelvin = alloca double, align 8
+  store i32 0, i32* %retval, align 4
+  store i32 %argc, i32* %argc.addr, align 4
+  store i8** %argv, i8*** %argv.addr, align 4
+  %0 = load i32, i32* %argc.addr, align 4
+  %cmp = icmp sgt i32 %0, 1
+  br i1 %cmp, label %if.then, label %if.end
+
+if.then:                                          ; preds = %entry
+  %1 = load i8**, i8*** %argv.addr, align 4
+  %arrayidx = getelementptr inbounds i8*, i8** %1, i32 1
+  %2 = load i8*, i8** %arrayidx, align 4
+  %call = call double @atof(i8* %2)
+  store double %call, double* %kelvin, align 8
+  %3 = load double, double* %kelvin, align 8
+  call void @convertKelvin(double %3)
+  br label %if.end
+
+if.end:                                           ; preds = %if.then, %entry
+  ret i32 0
+}
+
+declare double @atof(i8* %0) #1
+
+attributes #0 = { noinline nounwind optnone "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "min-legal-vector-width"="0" "no-infs-fp-math"="false" "no-jump-tables"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #1 = { "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+
+!llvm.module.flags = !{!0}
+!llvm.ident = !{!1}
+
+!0 = !{i32 1, !"wchar_size", i32 4}
+!1 = !{!"clang version 11.0.0 (https://github.com/Jacarte/llvm-project.git 0f6dea67136cc1e0b3d200eb2bb165628970c44b)"}
+
+; extracted candidates
+
+; *****
+; For LLVM instruction:
+;  %0 = load i32, i32* %argc.addr, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %cmp = icmp sgt i32 %0, 1
+; Looking for a replacement for:
+%0:i32 = var
+%1:i1 = slt 1:i32, %0
+infer %1
+got 1 candidates from LHS
+
+-------------------------------------------------
+%0:i32 = var
+infer %0
+
+
+--------------------------------
+guess 0
+
+%0:i32 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: -1
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+Dataflow Pruned 0/0
+There are 1 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 2 candidates from LHS
+
+-------------------------------------------------
+%0:i32 = var
+%1:i1 = slt 1:i32, %0
+infer %1
+
+
+--------------------------------
+guess 0
+
+%0:i1 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: -1
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+Dataflow Pruned 0/0
+There are 1 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+#########################################################
+; exiting Souper's runOnFunction() for __main_argc_argv()
+Total of 0 replacements done on this module
+Total of 0 replacements candidates on this module

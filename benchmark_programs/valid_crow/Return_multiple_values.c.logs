@@ -1,0 +1,230 @@
+
+Entering the Souper pass's runOnModule()
+
+
+; entering Souper's runOnFunction() for example()
+
+; ModuleID = './Return_multiple_values.c.bc'
+source_filename = "./Return_multiple_values.c"
+target datalayout = "e-m:e-p:32:32-i64:64-n32:64-S128"
+target triple = "wasm32-unknown-wasi"
+
+%struct.Composite = type { i32, float, i8, [100 x i8], double }
+
+@__const.example.C = private unnamed_addr constant %struct.Composite { i32 1, float 0x4002666660000000, i8 97, [100 x i8] c"Hello World\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00", double 4.567800e+01 }, align 8
+@.str = private unnamed_addr constant [70 x i8] c"Values from a function returning a structure : { %d, %f, %c, %s, %f}\0A\00", align 1
+@llvm.used = appending global [1 x i8*] [i8* bitcast (i32 ()* @__main_void to i8*)], section "llvm.metadata"
+
+@__main_void = alias i32 (), i32 ()* @main
+
+; Function Attrs: noinline nounwind optnone
+define hidden void @example(%struct.Composite* noalias sret align 8 %agg.result) #0 {
+entry:
+  %0 = bitcast %struct.Composite* %agg.result to i8*
+  call void @llvm.memcpy.p0i8.p0i8.i32(i8* align 8 %0, i8* align 8 bitcast (%struct.Composite* @__const.example.C to i8*), i32 120, i1 false)
+  ret void
+}
+
+; Function Attrs: argmemonly nounwind willreturn
+declare void @llvm.memcpy.p0i8.p0i8.i32(i8* noalias nocapture writeonly %0, i8* noalias nocapture readonly %1, i32 %2, i1 immarg %3) #1
+
+; Function Attrs: noinline nounwind optnone
+define hidden i32 @main() #0 {
+entry:
+  %retval = alloca i32, align 4
+  %C = alloca %struct.Composite, align 8
+  store i32 0, i32* %retval, align 4
+  call void @example(%struct.Composite* sret align 8 %C)
+  %integer = getelementptr inbounds %struct.Composite, %struct.Composite* %C, i32 0, i32 0
+  %0 = load i32, i32* %integer, align 8
+  %decimal = getelementptr inbounds %struct.Composite, %struct.Composite* %C, i32 0, i32 1
+  %1 = load float, float* %decimal, align 4
+  %conv = fpext float %1 to double
+  %letter = getelementptr inbounds %struct.Composite, %struct.Composite* %C, i32 0, i32 2
+  %2 = load i8, i8* %letter, align 8
+  %conv1 = sext i8 %2 to i32
+  %string = getelementptr inbounds %struct.Composite, %struct.Composite* %C, i32 0, i32 3
+  %arraydecay = getelementptr inbounds [100 x i8], [100 x i8]* %string, i32 0, i32 0
+  %bigDecimal = getelementptr inbounds %struct.Composite, %struct.Composite* %C, i32 0, i32 4
+  %3 = load double, double* %bigDecimal, align 8
+  %call = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([70 x i8], [70 x i8]* @.str, i32 0, i32 0), i32 %0, double %conv, i32 %conv1, i8* %arraydecay, double %3)
+  ret i32 0
+}
+
+declare i32 @printf(i8* %0, ...) #2
+
+attributes #0 = { noinline nounwind optnone "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "min-legal-vector-width"="0" "no-infs-fp-math"="false" "no-jump-tables"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #1 = { argmemonly nounwind willreturn }
+attributes #2 = { "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+
+!llvm.module.flags = !{!0}
+!llvm.ident = !{!1}
+
+!0 = !{i32 1, !"wchar_size", i32 4}
+!1 = !{!"clang version 11.0.0 (https://github.com/Jacarte/llvm-project.git 0f6dea67136cc1e0b3d200eb2bb165628970c44b)"}
+
+; extracted candidates
+#########################################################
+; exiting Souper's runOnFunction() for example()
+
+; entering Souper's runOnFunction() for main()
+
+; ModuleID = './Return_multiple_values.c.bc'
+source_filename = "./Return_multiple_values.c"
+target datalayout = "e-m:e-p:32:32-i64:64-n32:64-S128"
+target triple = "wasm32-unknown-wasi"
+
+%struct.Composite = type { i32, float, i8, [100 x i8], double }
+
+@__const.example.C = private unnamed_addr constant %struct.Composite { i32 1, float 0x4002666660000000, i8 97, [100 x i8] c"Hello World\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00", double 4.567800e+01 }, align 8
+@.str = private unnamed_addr constant [70 x i8] c"Values from a function returning a structure : { %d, %f, %c, %s, %f}\0A\00", align 1
+@llvm.used = appending global [1 x i8*] [i8* bitcast (i32 ()* @__main_void to i8*)], section "llvm.metadata"
+
+@__main_void = alias i32 (), i32 ()* @main
+
+; Function Attrs: noinline nounwind optnone
+define hidden void @example(%struct.Composite* noalias sret align 8 %agg.result) #0 {
+entry:
+  %0 = bitcast %struct.Composite* %agg.result to i8*
+  call void @llvm.memcpy.p0i8.p0i8.i32(i8* align 8 %0, i8* align 8 bitcast (%struct.Composite* @__const.example.C to i8*), i32 120, i1 false)
+  ret void
+}
+
+; Function Attrs: argmemonly nounwind willreturn
+declare void @llvm.memcpy.p0i8.p0i8.i32(i8* noalias nocapture writeonly %0, i8* noalias nocapture readonly %1, i32 %2, i1 immarg %3) #1
+
+; Function Attrs: noinline nounwind optnone
+define hidden i32 @main() #0 {
+entry:
+  %retval = alloca i32, align 4
+  %C = alloca %struct.Composite, align 8
+  store i32 0, i32* %retval, align 4
+  call void @example(%struct.Composite* sret align 8 %C)
+  %integer = getelementptr inbounds %struct.Composite, %struct.Composite* %C, i32 0, i32 0
+  %0 = load i32, i32* %integer, align 8
+  %decimal = getelementptr inbounds %struct.Composite, %struct.Composite* %C, i32 0, i32 1
+  %1 = load float, float* %decimal, align 4
+  %conv = fpext float %1 to double
+  %letter = getelementptr inbounds %struct.Composite, %struct.Composite* %C, i32 0, i32 2
+  %2 = load i8, i8* %letter, align 8
+  %conv1 = sext i8 %2 to i32
+  %string = getelementptr inbounds %struct.Composite, %struct.Composite* %C, i32 0, i32 3
+  %arraydecay = getelementptr inbounds [100 x i8], [100 x i8]* %string, i32 0, i32 0
+  %bigDecimal = getelementptr inbounds %struct.Composite, %struct.Composite* %C, i32 0, i32 4
+  %3 = load double, double* %bigDecimal, align 8
+  %call = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([70 x i8], [70 x i8]* @.str, i32 0, i32 0), i32 %0, double %conv, i32 %conv1, i8* %arraydecay, double %3)
+  ret i32 0
+}
+
+declare i32 @printf(i8* %0, ...) #2
+
+attributes #0 = { noinline nounwind optnone "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "min-legal-vector-width"="0" "no-infs-fp-math"="false" "no-jump-tables"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #1 = { argmemonly nounwind willreturn }
+attributes #2 = { "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+
+!llvm.module.flags = !{!0}
+!llvm.ident = !{!1}
+
+!0 = !{i32 1, !"wchar_size", i32 4}
+!1 = !{!"clang version 11.0.0 (https://github.com/Jacarte/llvm-project.git 0f6dea67136cc1e0b3d200eb2bb165628970c44b)"}
+
+; extracted candidates
+
+; *****
+; For LLVM instruction:
+;  %0 = load i32, i32* %integer, align 8
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %2 = load i8, i8* %letter, align 8
+; Looking for a replacement for:
+%0:i8 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %conv1 = sext i8 %2 to i32
+; Looking for a replacement for:
+%0:i8 = var
+%1:i32 = sext %0
+infer %1
+got 1 candidates from LHS
+
+-------------------------------------------------
+%0:i32 = var
+infer %0
+
+
+--------------------------------
+guess 0
+
+%0:i32 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: -1
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+Dataflow Pruned 0/0
+There are 1 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 1 candidates from LHS
+
+-------------------------------------------------
+%0:i8 = var
+infer %0
+
+
+--------------------------------
+guess 0
+
+%0:i8 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: -1
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+Dataflow Pruned 0/0
+There are 1 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 2 candidates from LHS
+
+-------------------------------------------------
+%0:i8 = var
+%1:i32 = sext %0
+infer %1
+
+
+--------------------------------
+guess 0
+
+%0:i32 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: -1
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+Dataflow Pruned 0/0
+There are 1 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+#########################################################
+; exiting Souper's runOnFunction() for main()
+Total of 0 replacements done on this module
+Total of 0 replacements candidates on this module

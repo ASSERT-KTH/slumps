@@ -1,0 +1,482 @@
+
+Entering the Souper pass's runOnModule()
+
+
+; entering Souper's runOnFunction() for x()
+
+; ModuleID = './Accumulator_factory.c.bc'
+source_filename = "./Accumulator_factory.c"
+target datalayout = "e-m:e-p:32:32-i64:64-n32:64-S128"
+target triple = "wasm32-unknown-wasi"
+
+@x._n = internal global double 1.000000e+00, align 8
+@y._n = internal global i32 3, align 4
+@z._n = internal global i32 97, align 4
+@.str = private unnamed_addr constant [4 x i8] c"%f\0A\00", align 1
+@.str.1 = private unnamed_addr constant [4 x i8] c"%i\0A\00", align 1
+@.str.2 = private unnamed_addr constant [4 x i8] c"%c\0A\00", align 1
+@llvm.used = appending global [1 x i8*] [i8* bitcast (i32 ()* @__main_void to i8*)], section "llvm.metadata"
+
+@__main_void = alias i32 (), i32 ()* @main
+
+; Function Attrs: noinline nounwind optnone
+define hidden double @x(double %i) #0 {
+entry:
+  %i.addr = alloca double, align 8
+  store double %i, double* %i.addr, align 8
+  %0 = load double, double* %i.addr, align 8
+  %1 = load double, double* @x._n, align 8
+  %add = fadd double %1, %0
+  store double %add, double* @x._n, align 8
+  ret double %add
+}
+
+; Function Attrs: noinline nounwind optnone
+define hidden i32 @y(i32 %i) #0 {
+entry:
+  %i.addr = alloca i32, align 4
+  store i32 %i, i32* %i.addr, align 4
+  %0 = load i32, i32* %i.addr, align 4
+  %1 = load i32, i32* @y._n, align 4
+  %add = add nsw i32 %1, %0
+  store i32 %add, i32* @y._n, align 4
+  ret i32 %add
+}
+
+; Function Attrs: noinline nounwind optnone
+define hidden i32 @z(i32 %i) #0 {
+entry:
+  %i.addr = alloca i32, align 4
+  store i32 %i, i32* %i.addr, align 4
+  %0 = load i32, i32* %i.addr, align 4
+  %1 = load i32, i32* @z._n, align 4
+  %add = add nsw i32 %1, %0
+  store i32 %add, i32* @z._n, align 4
+  ret i32 %add
+}
+
+; Function Attrs: noinline nounwind optnone
+define hidden i32 @main() #0 {
+entry:
+  %retval = alloca i32, align 4
+  store i32 0, i32* %retval, align 4
+  %call = call double @x(double 5.000000e+00)
+  %call1 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([4 x i8], [4 x i8]* @.str, i32 0, i32 0), double %call)
+  %call2 = call double @x(double 2.300000e+00)
+  %call3 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([4 x i8], [4 x i8]* @.str, i32 0, i32 0), double %call2)
+  %call4 = call i32 @y(i32 5)
+  %call5 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([4 x i8], [4 x i8]* @.str.1, i32 0, i32 0), i32 %call4)
+  %call6 = call i32 @y(i32 3)
+  %call7 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([4 x i8], [4 x i8]* @.str.1, i32 0, i32 0), i32 %call6)
+  %call8 = call i32 @z(i32 5)
+  %call9 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([4 x i8], [4 x i8]* @.str.2, i32 0, i32 0), i32 %call8)
+  ret i32 0
+}
+
+declare i32 @printf(i8* %0, ...) #1
+
+attributes #0 = { noinline nounwind optnone "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "min-legal-vector-width"="0" "no-infs-fp-math"="false" "no-jump-tables"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #1 = { "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+
+!llvm.module.flags = !{!0}
+!llvm.ident = !{!1}
+
+!0 = !{i32 1, !"wchar_size", i32 4}
+!1 = !{!"clang version 11.0.0 (https://github.com/Jacarte/llvm-project.git 0f6dea67136cc1e0b3d200eb2bb165628970c44b)"}
+
+; extracted candidates
+#########################################################
+; exiting Souper's runOnFunction() for x()
+
+; entering Souper's runOnFunction() for y()
+
+; ModuleID = './Accumulator_factory.c.bc'
+source_filename = "./Accumulator_factory.c"
+target datalayout = "e-m:e-p:32:32-i64:64-n32:64-S128"
+target triple = "wasm32-unknown-wasi"
+
+@x._n = internal global double 1.000000e+00, align 8
+@y._n = internal global i32 3, align 4
+@z._n = internal global i32 97, align 4
+@.str = private unnamed_addr constant [4 x i8] c"%f\0A\00", align 1
+@.str.1 = private unnamed_addr constant [4 x i8] c"%i\0A\00", align 1
+@.str.2 = private unnamed_addr constant [4 x i8] c"%c\0A\00", align 1
+@llvm.used = appending global [1 x i8*] [i8* bitcast (i32 ()* @__main_void to i8*)], section "llvm.metadata"
+
+@__main_void = alias i32 (), i32 ()* @main
+
+; Function Attrs: noinline nounwind optnone
+define hidden double @x(double %i) #0 {
+entry:
+  %i.addr = alloca double, align 8
+  store double %i, double* %i.addr, align 8
+  %0 = load double, double* %i.addr, align 8
+  %1 = load double, double* @x._n, align 8
+  %add = fadd double %1, %0
+  store double %add, double* @x._n, align 8
+  ret double %add
+}
+
+; Function Attrs: noinline nounwind optnone
+define hidden i32 @y(i32 %i) #0 {
+entry:
+  %i.addr = alloca i32, align 4
+  store i32 %i, i32* %i.addr, align 4
+  %0 = load i32, i32* %i.addr, align 4
+  %1 = load i32, i32* @y._n, align 4
+  %add = add nsw i32 %1, %0
+  store i32 %add, i32* @y._n, align 4
+  ret i32 %add
+}
+
+; Function Attrs: noinline nounwind optnone
+define hidden i32 @z(i32 %i) #0 {
+entry:
+  %i.addr = alloca i32, align 4
+  store i32 %i, i32* %i.addr, align 4
+  %0 = load i32, i32* %i.addr, align 4
+  %1 = load i32, i32* @z._n, align 4
+  %add = add nsw i32 %1, %0
+  store i32 %add, i32* @z._n, align 4
+  ret i32 %add
+}
+
+; Function Attrs: noinline nounwind optnone
+define hidden i32 @main() #0 {
+entry:
+  %retval = alloca i32, align 4
+  store i32 0, i32* %retval, align 4
+  %call = call double @x(double 5.000000e+00)
+  %call1 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([4 x i8], [4 x i8]* @.str, i32 0, i32 0), double %call)
+  %call2 = call double @x(double 2.300000e+00)
+  %call3 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([4 x i8], [4 x i8]* @.str, i32 0, i32 0), double %call2)
+  %call4 = call i32 @y(i32 5)
+  %call5 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([4 x i8], [4 x i8]* @.str.1, i32 0, i32 0), i32 %call4)
+  %call6 = call i32 @y(i32 3)
+  %call7 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([4 x i8], [4 x i8]* @.str.1, i32 0, i32 0), i32 %call6)
+  %call8 = call i32 @z(i32 5)
+  %call9 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([4 x i8], [4 x i8]* @.str.2, i32 0, i32 0), i32 %call8)
+  ret i32 0
+}
+
+declare i32 @printf(i8* %0, ...) #1
+
+attributes #0 = { noinline nounwind optnone "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "min-legal-vector-width"="0" "no-infs-fp-math"="false" "no-jump-tables"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #1 = { "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+
+!llvm.module.flags = !{!0}
+!llvm.ident = !{!1}
+
+!0 = !{i32 1, !"wchar_size", i32 4}
+!1 = !{!"clang version 11.0.0 (https://github.com/Jacarte/llvm-project.git 0f6dea67136cc1e0b3d200eb2bb165628970c44b)"}
+
+; extracted candidates
+
+; *****
+; For LLVM instruction:
+;  %0 = load i32, i32* %i.addr, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %1 = load i32, i32* @y._n, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %add = add nsw i32 %1, %0
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = var
+%2:i32 = addnsw %0, %1
+infer %2
+got 1 candidates from LHS
+
+-------------------------------------------------
+%0:i32 = var
+infer %0
+
+
+--------------------------------
+guess 0
+
+%0:i32 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: -1
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+Dataflow Pruned 0/0
+There are 1 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 3 candidates from LHS
+
+-------------------------------------------------
+%0:i32 = var
+%1:i32 = var
+%2:i32 = addnsw %0, %1
+infer %2
+
+
+--------------------------------
+guess 0
+
+%0:i32 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: -2
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+
+--------------------------------
+guess 1
+
+%0:i32 = var
+
+Cost = 0
+second query is SAT-- constant doesn't work
+
+--------------------------------
+guess 2
+
+%0:i32 = var
+
+Cost = 0
+second query is SAT-- constant doesn't work
+Dataflow Pruned 0/0
+There are 3 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+#########################################################
+; exiting Souper's runOnFunction() for y()
+
+; entering Souper's runOnFunction() for z()
+
+; ModuleID = './Accumulator_factory.c.bc'
+source_filename = "./Accumulator_factory.c"
+target datalayout = "e-m:e-p:32:32-i64:64-n32:64-S128"
+target triple = "wasm32-unknown-wasi"
+
+@x._n = internal global double 1.000000e+00, align 8
+@y._n = internal global i32 3, align 4
+@z._n = internal global i32 97, align 4
+@.str = private unnamed_addr constant [4 x i8] c"%f\0A\00", align 1
+@.str.1 = private unnamed_addr constant [4 x i8] c"%i\0A\00", align 1
+@.str.2 = private unnamed_addr constant [4 x i8] c"%c\0A\00", align 1
+@llvm.used = appending global [1 x i8*] [i8* bitcast (i32 ()* @__main_void to i8*)], section "llvm.metadata"
+
+@__main_void = alias i32 (), i32 ()* @main
+
+; Function Attrs: noinline nounwind optnone
+define hidden double @x(double %i) #0 {
+entry:
+  %i.addr = alloca double, align 8
+  store double %i, double* %i.addr, align 8
+  %0 = load double, double* %i.addr, align 8
+  %1 = load double, double* @x._n, align 8
+  %add = fadd double %1, %0
+  store double %add, double* @x._n, align 8
+  ret double %add
+}
+
+; Function Attrs: noinline nounwind optnone
+define hidden i32 @y(i32 %i) #0 {
+entry:
+  %i.addr = alloca i32, align 4
+  store i32 %i, i32* %i.addr, align 4
+  %0 = load i32, i32* %i.addr, align 4
+  %1 = load i32, i32* @y._n, align 4
+  %add = add nsw i32 %1, %0
+  store i32 %add, i32* @y._n, align 4
+  ret i32 %add
+}
+
+; Function Attrs: noinline nounwind optnone
+define hidden i32 @z(i32 %i) #0 {
+entry:
+  %i.addr = alloca i32, align 4
+  store i32 %i, i32* %i.addr, align 4
+  %0 = load i32, i32* %i.addr, align 4
+  %1 = load i32, i32* @z._n, align 4
+  %add = add nsw i32 %1, %0
+  store i32 %add, i32* @z._n, align 4
+  ret i32 %add
+}
+
+; Function Attrs: noinline nounwind optnone
+define hidden i32 @main() #0 {
+entry:
+  %retval = alloca i32, align 4
+  store i32 0, i32* %retval, align 4
+  %call = call double @x(double 5.000000e+00)
+  %call1 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([4 x i8], [4 x i8]* @.str, i32 0, i32 0), double %call)
+  %call2 = call double @x(double 2.300000e+00)
+  %call3 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([4 x i8], [4 x i8]* @.str, i32 0, i32 0), double %call2)
+  %call4 = call i32 @y(i32 5)
+  %call5 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([4 x i8], [4 x i8]* @.str.1, i32 0, i32 0), i32 %call4)
+  %call6 = call i32 @y(i32 3)
+  %call7 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([4 x i8], [4 x i8]* @.str.1, i32 0, i32 0), i32 %call6)
+  %call8 = call i32 @z(i32 5)
+  %call9 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([4 x i8], [4 x i8]* @.str.2, i32 0, i32 0), i32 %call8)
+  ret i32 0
+}
+
+declare i32 @printf(i8* %0, ...) #1
+
+attributes #0 = { noinline nounwind optnone "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "min-legal-vector-width"="0" "no-infs-fp-math"="false" "no-jump-tables"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #1 = { "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+
+!llvm.module.flags = !{!0}
+!llvm.ident = !{!1}
+
+!0 = !{i32 1, !"wchar_size", i32 4}
+!1 = !{!"clang version 11.0.0 (https://github.com/Jacarte/llvm-project.git 0f6dea67136cc1e0b3d200eb2bb165628970c44b)"}
+
+; extracted candidates
+
+; *****
+; For LLVM instruction:
+;  %0 = load i32, i32* %i.addr, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %1 = load i32, i32* @z._n, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %add = add nsw i32 %1, %0
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = var
+%2:i32 = addnsw %0, %1
+infer %2
+#########################################################
+; exiting Souper's runOnFunction() for z()
+
+; entering Souper's runOnFunction() for main()
+
+; ModuleID = './Accumulator_factory.c.bc'
+source_filename = "./Accumulator_factory.c"
+target datalayout = "e-m:e-p:32:32-i64:64-n32:64-S128"
+target triple = "wasm32-unknown-wasi"
+
+@x._n = internal global double 1.000000e+00, align 8
+@y._n = internal global i32 3, align 4
+@z._n = internal global i32 97, align 4
+@.str = private unnamed_addr constant [4 x i8] c"%f\0A\00", align 1
+@.str.1 = private unnamed_addr constant [4 x i8] c"%i\0A\00", align 1
+@.str.2 = private unnamed_addr constant [4 x i8] c"%c\0A\00", align 1
+@llvm.used = appending global [1 x i8*] [i8* bitcast (i32 ()* @__main_void to i8*)], section "llvm.metadata"
+
+@__main_void = alias i32 (), i32 ()* @main
+
+; Function Attrs: noinline nounwind optnone
+define hidden double @x(double %i) #0 {
+entry:
+  %i.addr = alloca double, align 8
+  store double %i, double* %i.addr, align 8
+  %0 = load double, double* %i.addr, align 8
+  %1 = load double, double* @x._n, align 8
+  %add = fadd double %1, %0
+  store double %add, double* @x._n, align 8
+  ret double %add
+}
+
+; Function Attrs: noinline nounwind optnone
+define hidden i32 @y(i32 %i) #0 {
+entry:
+  %i.addr = alloca i32, align 4
+  store i32 %i, i32* %i.addr, align 4
+  %0 = load i32, i32* %i.addr, align 4
+  %1 = load i32, i32* @y._n, align 4
+  %add = add nsw i32 %1, %0
+  store i32 %add, i32* @y._n, align 4
+  ret i32 %add
+}
+
+; Function Attrs: noinline nounwind optnone
+define hidden i32 @z(i32 %i) #0 {
+entry:
+  %i.addr = alloca i32, align 4
+  store i32 %i, i32* %i.addr, align 4
+  %0 = load i32, i32* %i.addr, align 4
+  %1 = load i32, i32* @z._n, align 4
+  %add = add nsw i32 %1, %0
+  store i32 %add, i32* @z._n, align 4
+  ret i32 %add
+}
+
+; Function Attrs: noinline nounwind optnone
+define hidden i32 @main() #0 {
+entry:
+  %retval = alloca i32, align 4
+  store i32 0, i32* %retval, align 4
+  %call = call double @x(double 5.000000e+00)
+  %call1 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([4 x i8], [4 x i8]* @.str, i32 0, i32 0), double %call)
+  %call2 = call double @x(double 2.300000e+00)
+  %call3 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([4 x i8], [4 x i8]* @.str, i32 0, i32 0), double %call2)
+  %call4 = call i32 @y(i32 5)
+  %call5 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([4 x i8], [4 x i8]* @.str.1, i32 0, i32 0), i32 %call4)
+  %call6 = call i32 @y(i32 3)
+  %call7 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([4 x i8], [4 x i8]* @.str.1, i32 0, i32 0), i32 %call6)
+  %call8 = call i32 @z(i32 5)
+  %call9 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([4 x i8], [4 x i8]* @.str.2, i32 0, i32 0), i32 %call8)
+  ret i32 0
+}
+
+declare i32 @printf(i8* %0, ...) #1
+
+attributes #0 = { noinline nounwind optnone "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "min-legal-vector-width"="0" "no-infs-fp-math"="false" "no-jump-tables"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #1 = { "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+
+!llvm.module.flags = !{!0}
+!llvm.ident = !{!1}
+
+!0 = !{i32 1, !"wchar_size", i32 4}
+!1 = !{!"clang version 11.0.0 (https://github.com/Jacarte/llvm-project.git 0f6dea67136cc1e0b3d200eb2bb165628970c44b)"}
+
+; extracted candidates
+
+; *****
+; For LLVM instruction:
+;  %call4 = call i32 @y(i32 5)
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %call6 = call i32 @y(i32 3)
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %call8 = call i32 @z(i32 5)
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+#########################################################
+; exiting Souper's runOnFunction() for main()
+Total of 0 replacements done on this module
+Total of 0 replacements candidates on this module

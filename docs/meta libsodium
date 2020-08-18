@@ -1,0 +1,148 @@
+argon2-core (5)(3)
+   
+ X argon2_free_instance(), 10,2, 2, 20%
+   _crypto_pwhash_argon2_pick_best_implementation()
+   argon2_fill_memory_blocks(), 22,5, 5, 22%
+ X argon2_finalize(), 20,6, 6, 30%
+ X argon2_initialize(), 68,27, 26, 39%
+   argon2_validate_inputs(), 33,9, 9, 27%
+
+argon2-encoding.c (2) (2)
+   X argon2_decode_string(), 109,30, 15, 27%
+   X argon2_encode_string(), 81,15, 6, 18%
+
+blake2b-ref (13) (3)
+	blake2b_update(), 22,7, 6, 31%
+	blake2b_init(), 4,0, 0, 0%
+  X blake2b_init_salt_personal(), 18,4, 4, 22%
+	blake2b_init_key(), 15,1, 1, 6%
+  X blake2b(), 44,7, 6, 15%
+	blake2b_final(), 37,17, 17, 45%
+	blake2b_init_param(), 16,8, 8, 50%
+  X blake2b_update(), 21,8, 6, 38%
+	blake2b_init_key_salt_personal(), 29,5, 5, 17%
+	blake2b_salt_personal(), 69,15, 14, 21%
+	blake2b_pick_best_implementation(), 68,16, 14, 23%
+
+chacha20-ref (5) (3)
+   stream_ietf_ext_ref(), 13,11, 11, 84%
+X  chacha20_encrypt_bytes() , 267,53, 34, 19%
+X  stream_ietf_ext_ref_xor_ic(), 12,11, 11, 91%
+X  stream_ref_xor_ic(), 14,10, 10, 71%
+   stream_ref(), 12,10, 10, 83%
+
+
+codecs (5) (5)
+X    sodium_hex2bin(), 59,8, 1, 13%
+X	sodium_base64_encoded_len(), 18,0, 0, 0%
+X	sodium_bin2hex(), 29,1, 1, 3%
+X	sodium_bin2base64(), 192,8, 2, 4%
+X	sodium_base642bin(), 133,10, 3, 7%
+	
+
+core_ed25519.c (5) (1)
+   crypto_core_ed25519_add(), 9,4, 0, 44%
+   crypto_core_ed25519_bytes()
+   crypto_core_ed25519_from_hash()
+   crypto_core_ed25519_from_uniform()
+   crypto_core_ed25519_hashbytes()
+X  crypto_core_ed25519_is_valid_point(), 12,5, 0, 41%
+   crypto_core_ed25519_nonreducedscalarbytes()
+   crypto_core_ed25519_random()
+   crypto_core_ed25519_scalar_add()
+   crypto_core_ed25519_scalar_complement()
+   crypto_core_ed25519_scalar_invert(), 2,1, 0, 50%
+   crypto_core_ed25519_scalar_mul()
+   crypto_core_ed25519_scalar_negate()
+   crypto_core_ed25519_scalar_random(), 6,3, 1, 50%
+   crypto_core_ed25519_scalar_reduce()
+   crypto_core_ed25519_scalar_sub()
+   crypto_core_ed25519_scalarbytes()
+   crypto_core_ed25519_sub(), 9,4, 0, 44%
+   crypto_core_ed25519_uniformbytes()
+
+crypto_scrypt-common (5) (1)
+   decode64_uint32(), 34,5, 5, 14%
+   crypto_pwhash_scryptsalsa208sha256_ll(), 7,3, 0, 42%
+X  escrypt_gensalt_r(), 90,21, 13, 23%
+   escrypt_parse_setting(), 13,5, 4, 38%
+   escrypt_r(), 70,22, 8, 31%
+
+pbkdf2-sha256.c   (1) (1)
+X   escrypt_PBKDF2_SHA256(), 27,4, 2, 14%
+
+pwhash_scryptsalsa208sha256.c (3) (1)
+X  crypto_pwhash_scryptsalsa208sha256(), 38,1, 0, 2%
+   crypto_pwhash_scryptsalsa208sha256_bytes_max()
+   crypto_pwhash_scryptsalsa208sha256_bytes_min()
+   crypto_pwhash_scryptsalsa208sha256_memlimit_interactive()
+   crypto_pwhash_scryptsalsa208sha256_memlimit_max()
+   crypto_pwhash_scryptsalsa208sha256_memlimit_min()
+   crypto_pwhash_scryptsalsa208sha256_memlimit_sensitive()
+   crypto_pwhash_scryptsalsa208sha256_opslimit_interactive()
+   crypto_pwhash_scryptsalsa208sha256_opslimit_max()
+   crypto_pwhash_scryptsalsa208sha256_opslimit_min()
+   crypto_pwhash_scryptsalsa208sha256_opslimit_sensitive()
+   crypto_pwhash_scryptsalsa208sha256_passwd_max()
+   crypto_pwhash_scryptsalsa208sha256_passwd_min()
+   crypto_pwhash_scryptsalsa208sha256_saltbytes()
+   crypto_pwhash_scryptsalsa208sha256_str(), 40,1, 0, 2%
+   crypto_pwhash_scryptsalsa208sha256_str_needs_rehash(), 12,3, 1, 25%
+   crypto_pwhash_scryptsalsa208sha256_str_verify()
+   crypto_pwhash_scryptsalsa208sha256_strbytes()
+   crypto_pwhash_scryptsalsa208sha256_strprefix()
+
+pwhash_scryptsalsa208sha256_nosse.c (2) (2)
+   blockmix_salsa8()
+X  salsa20_8(), 227,48, 32, 21%
+X  escrypt_kdf_nosse(), 92,15, 11, 16%
+
+randombytes.c (7) (1)
+   randombytes_init_if_needed(), 2,0, 0, 0%
+   randombytes(), 3,0, 0, 0%
+   randombytes_buf(), 1,0, 0, 0%
+   randombytes_buf_deterministic(), 1,0, 0, 0%
+   randombytes_close()
+   randombytes_implementation_name()
+   randombytes_random(), 1,1, 0, 100%
+   randombytes_seedbytes()
+   randombytes_set_implementation()
+   randombytes_stir(), 1,0, 0, 0%
+X  randombytes_uniform(), 9,2, 0, 22%
+
+salsa20_ref.c (2) (2)
+X   ./salsa20_ref.c.bc:stream_ref(), 76,13, 13, 17%
+X   ./salsa20_ref.c.bc:stream_ref_xor_ic(), 53,10, 10, 18%
+
+scalarmult_ristretto255_ref10.c (3) (3)
+X   crypto_scalarmult_ristretto255(), 12,4, 2, 33%
+X   crypto_scalarmult_ristretto255_base(), 9,3, 2, 33%
+    crypto_scalarmult_ristretto255_bytes()
+X   crypto_scalarmult_ristretto255_scalarbytes(), 9,3, 2, 33%
+
+stream_chacha20 (8) (8)
+   _crypto_stream_chacha20_pick_best_implementation()
+X  crypto_stream_chacha20(), 2,1, 0, 50%
+X  crypto_stream_chacha20_ietf(), 2,1, 0, 50%
+X  crypto_stream_chacha20_ietf_ext(), 2,1, 0, 50%
+X  crypto_stream_chacha20_ietf_ext_xor_ic(), 2,1, 0, 50%
+   crypto_stream_chacha20_ietf_keybytes()
+   crypto_stream_chacha20_ietf_keygen()
+   crypto_stream_chacha20_ietf_messagebytes_max()
+   crypto_stream_chacha20_ietf_noncebytes()
+X  crypto_stream_chacha20_ietf_xor(), 2,1, 0, 50%
+X  crypto_stream_chacha20_ietf_xor_ic(), 7,1, 0, 14%
+   crypto_stream_chacha20_keybytes()
+   crypto_stream_chacha20_keygen()
+   crypto_stream_chacha20_messagebytes_max()
+   crypto_stream_chacha20_noncebytes()
+X  crypto_stream_chacha20_xor(), 2,1, 0, 50%
+X  crypto_stream_chacha20_xor_ic(), 2,1, 0, 50%
+
+verify (3) (3)
+X  crypto_verify_16(), 15,4, 4, 26%
+   crypto_verify_16_bytes()
+X  crypto_verify_32(), 15,4, 4, 26%
+   crypto_verify_32_bytes()
+X  crypto_verify_64(), 15,4, 4, 26%
+   crypto_verify_64_bytes()

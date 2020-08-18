@@ -1,0 +1,3159 @@
+; entering Souper's runOnFunction() for crypto_hash_sha256_update()
+
+; ModuleID = './hash_sha256_cp.c.bc'
+source_filename = "crypto_hash/sha256/cp/hash_sha256_cp.c"
+target datalayout = "e-m:e-p:32:32-i64:64-n32:64-S128"
+target triple = "wasm32-unknown-wasi"
+
+%struct.crypto_hash_sha256_state = type { [8 x i32], i64, [64 x i8] }
+
+@crypto_hash_sha256_init.sha256_initial_state = internal unnamed_addr constant [8 x i32] [i32 1779033703, i32 -1150833019, i32 1013904242, i32 -1521486534, i32 1359893119, i32 -1694144372, i32 528734635, i32 1541459225], align 16
+@Krnd = internal unnamed_addr constant [64 x i32] [i32 1116352408, i32 1899447441, i32 -1245643825, i32 -373957723, i32 961987163, i32 1508970993, i32 -1841331548, i32 -1424204075, i32 -670586216, i32 310598401, i32 607225278, i32 1426881987, i32 1925078388, i32 -2132889090, i32 -1680079193, i32 -1046744716, i32 -459576895, i32 -272742522, i32 264347078, i32 604807628, i32 770255983, i32 1249150122, i32 1555081692, i32 1996064986, i32 -1740746414, i32 -1473132947, i32 -1341970488, i32 -1084653625, i32 -958395405, i32 -710438585, i32 113926993, i32 338241895, i32 666307205, i32 773529912, i32 1294757372, i32 1396182291, i32 1695183700, i32 1986661051, i32 -2117940946, i32 -1838011259, i32 -1564481375, i32 -1474664885, i32 -1035236496, i32 -949202525, i32 -778901479, i32 -694614492, i32 -200395387, i32 275423344, i32 430227734, i32 506948616, i32 659060556, i32 883997877, i32 958139571, i32 1322822218, i32 1537002063, i32 1747873779, i32 1955562222, i32 2024104815, i32 -2067236844, i32 -1933114872, i32 -1866530822, i32 -1538233109, i32 -1090935817, i32 -965641998], align 16
+@PAD = internal unnamed_addr constant <{ i8, [63 x i8] }> <{ i8 -128, [63 x i8] zeroinitializer }>, align 16
+
+; Function Attrs: nounwind
+define i32 @crypto_hash_sha256_init(%struct.crypto_hash_sha256_state* nocapture nonnull %0) local_unnamed_addr #0 {
+  %2 = getelementptr inbounds %struct.crypto_hash_sha256_state, %struct.crypto_hash_sha256_state* %0, i32 0, i32 1
+  store i64 0, i64* %2, align 8
+  %3 = bitcast %struct.crypto_hash_sha256_state* %0 to i8*
+  tail call void @llvm.memcpy.p0i8.p0i8.i32(i8* nonnull align 8 dereferenceable(32) %3, i8* nonnull align 16 dereferenceable(32) bitcast ([8 x i32]* @crypto_hash_sha256_init.sha256_initial_state to i8*), i32 32, i1 false)
+  ret i32 0
+}
+
+; Function Attrs: argmemonly nounwind willreturn
+declare void @llvm.memcpy.p0i8.p0i8.i32(i8* noalias nocapture writeonly %0, i8* noalias nocapture readonly %1, i32 %2, i1 immarg %3) #1
+
+; Function Attrs: nounwind
+define i32 @crypto_hash_sha256_update(%struct.crypto_hash_sha256_state* nocapture nonnull %0, i8* nocapture readonly %1, i64 %2) local_unnamed_addr #0 {
+  %4 = alloca [72 x i32], align 16
+  %5 = bitcast [72 x i32]* %4 to i8*
+  call void @llvm.lifetime.start.p0i8(i64 288, i8* nonnull %5) #4
+  %6 = icmp eq i64 %2, 0
+  br i1 %6, label %68, label %7
+
+7:                                                ; preds = %3
+  %8 = getelementptr inbounds %struct.crypto_hash_sha256_state, %struct.crypto_hash_sha256_state* %0, i32 0, i32 1
+  %9 = load i64, i64* %8, align 8
+  %10 = lshr i64 %9, 3
+  %11 = and i64 %10, 63
+  %12 = shl i64 %2, 3
+  %13 = add i64 %9, %12
+  store i64 %13, i64* %8, align 8
+  %14 = sub nuw nsw i64 64, %11
+  %15 = icmp ugt i64 %14, %2
+  br i1 %15, label %16, label %26
+
+16:                                               ; preds = %7, %16
+  %17 = phi i64 [ %24, %16 ], [ 0, %7 ]
+  %18 = trunc i64 %17 to i32
+  %19 = getelementptr i8, i8* %1, i32 %18
+  %20 = load i8, i8* %19, align 1
+  %21 = add i64 %17, %11
+  %22 = trunc i64 %21 to i32
+  %23 = getelementptr %struct.crypto_hash_sha256_state, %struct.crypto_hash_sha256_state* %0, i32 0, i32 2, i32 %22
+  store i8 %20, i8* %23, align 1
+  %24 = add nuw i64 %17, 1
+  %25 = icmp eq i64 %24, %2
+  br i1 %25, label %68, label %16
+
+26:                                               ; preds = %7, %26
+  %27 = phi i64 [ %34, %26 ], [ 0, %7 ]
+  %28 = trunc i64 %27 to i32
+  %29 = getelementptr i8, i8* %1, i32 %28
+  %30 = load i8, i8* %29, align 1
+  %31 = add nuw nsw i64 %27, %11
+  %32 = trunc i64 %31 to i32
+  %33 = getelementptr %struct.crypto_hash_sha256_state, %struct.crypto_hash_sha256_state* %0, i32 0, i32 2, i32 %32
+  store i8 %30, i8* %33, align 1
+  %34 = add nuw nsw i64 %27, 1
+  %35 = icmp eq i64 %34, %14
+  br i1 %35, label %36, label %26
+
+36:                                               ; preds = %26
+  %37 = getelementptr inbounds %struct.crypto_hash_sha256_state, %struct.crypto_hash_sha256_state* %0, i32 0, i32 0, i32 0
+  %38 = getelementptr inbounds %struct.crypto_hash_sha256_state, %struct.crypto_hash_sha256_state* %0, i32 0, i32 2, i32 0
+  %39 = getelementptr inbounds [72 x i32], [72 x i32]* %4, i32 0, i32 0
+  %40 = getelementptr inbounds [72 x i32], [72 x i32]* %4, i32 0, i32 64
+  call fastcc void @SHA256_Transform(i32* nonnull %37, i8* nonnull %38, i32* nonnull %39, i32* nonnull %40)
+  %41 = trunc i64 %14 to i32
+  %42 = getelementptr i8, i8* %1, i32 %41
+  %43 = sub i64 %2, %14
+  %44 = icmp ugt i64 %43, 63
+  br i1 %44, label %45, label %49
+
+45:                                               ; preds = %36
+  %46 = add i64 %10, %2
+  br label %53
+
+47:                                               ; preds = %53
+  %48 = and i64 %46, 63
+  br label %49
+
+49:                                               ; preds = %47, %36
+  %50 = phi i8* [ %42, %36 ], [ %56, %47 ]
+  %51 = phi i64 [ %43, %36 ], [ %48, %47 ]
+  %52 = icmp eq i64 %51, 0
+  br i1 %52, label %67, label %59
+
+53:                                               ; preds = %45, %53
+  %54 = phi i64 [ %57, %53 ], [ %43, %45 ]
+  %55 = phi i8* [ %56, %53 ], [ %42, %45 ]
+  call fastcc void @SHA256_Transform(i32* nonnull %37, i8* %55, i32* nonnull %39, i32* nonnull %40)
+  %56 = getelementptr i8, i8* %55, i32 64
+  %57 = add i64 %54, -64
+  %58 = icmp ugt i64 %57, 63
+  br i1 %58, label %53, label %47
+
+59:                                               ; preds = %49, %59
+  %60 = phi i64 [ %65, %59 ], [ 0, %49 ]
+  %61 = trunc i64 %60 to i32
+  %62 = getelementptr i8, i8* %50, i32 %61
+  %63 = load i8, i8* %62, align 1
+  %64 = getelementptr %struct.crypto_hash_sha256_state, %struct.crypto_hash_sha256_state* %0, i32 0, i32 2, i32 %61
+  store i8 %63, i8* %64, align 1
+  %65 = add nuw i64 %60, 1
+  %66 = icmp eq i64 %65, %51
+  br i1 %66, label %67, label %59
+
+67:                                               ; preds = %59, %49
+  call void @sodium_memzero(i8* nonnull %5, i32 288) #4
+  br label %68
+
+68:                                               ; preds = %16, %3, %67
+  call void @llvm.lifetime.end.p0i8(i64 288, i8* nonnull %5) #4
+  ret i32 0
+}
+
+; Function Attrs: argmemonly nounwind willreturn
+declare void @llvm.lifetime.start.p0i8(i64 immarg %0, i8* nocapture %1) #1
+
+; Function Attrs: nounwind
+define internal fastcc void @SHA256_Transform(i32* nocapture %0, i8* nocapture readonly %1, i32* %2, i32* %3) unnamed_addr #0 {
+  br label %5
+
+5:                                                ; preds = %5, %4
+  %6 = phi i32 [ 0, %4 ], [ %27, %5 ]
+  %7 = shl nuw nsw i32 %6, 2
+  %8 = getelementptr i8, i8* %1, i32 %7
+  %9 = getelementptr i8, i8* %8, i32 3
+  %10 = load i8, i8* %9, align 1
+  %11 = zext i8 %10 to i32
+  %12 = getelementptr i8, i8* %8, i32 2
+  %13 = load i8, i8* %12, align 1
+  %14 = zext i8 %13 to i32
+  %15 = shl nuw nsw i32 %14, 8
+  %16 = or i32 %15, %11
+  %17 = getelementptr i8, i8* %8, i32 1
+  %18 = load i8, i8* %17, align 1
+  %19 = zext i8 %18 to i32
+  %20 = shl nuw nsw i32 %19, 16
+  %21 = or i32 %16, %20
+  %22 = load i8, i8* %8, align 1
+  %23 = zext i8 %22 to i32
+  %24 = shl nuw i32 %23, 24
+  %25 = or i32 %21, %24
+  %26 = getelementptr i32, i32* %2, i32 %6
+  store i32 %25, i32* %26, align 4
+  %27 = add nuw nsw i32 %6, 1
+  %28 = icmp eq i32 %27, 16
+  br i1 %28, label %29, label %5
+
+29:                                               ; preds = %5
+  %30 = bitcast i32* %3 to i8*
+  %31 = bitcast i32* %0 to i8*
+  tail call void @llvm.memcpy.p0i8.p0i8.i32(i8* nonnull align 4 dereferenceable(32) %30, i8* nonnull align 4 dereferenceable(32) %31, i32 32, i1 false)
+  %32 = getelementptr i32, i32* %3, i32 4
+  %33 = getelementptr i32, i32* %3, i32 5
+  %34 = getelementptr i32, i32* %3, i32 6
+  %35 = getelementptr i32, i32* %3, i32 7
+  %36 = getelementptr i32, i32* %3, i32 3
+  %37 = getelementptr i32, i32* %3, i32 1
+  %38 = getelementptr i32, i32* %3, i32 2
+  %39 = load i32, i32* %2, align 4
+  br label %40
+
+40:                                               ; preds = %705, %29
+  %41 = phi i32 [ %39, %29 ], [ %1130, %705 ]
+  %42 = phi i32 [ 0, %29 ], [ %732, %705 ]
+  %43 = load i32, i32* %32, align 4
+  %44 = lshr i32 %43, 6
+  %45 = shl i32 %43, 26
+  %46 = or i32 %45, %44
+  %47 = lshr i32 %43, 11
+  %48 = shl i32 %43, 21
+  %49 = or i32 %48, %47
+  %50 = xor i32 %46, %49
+  %51 = lshr i32 %43, 25
+  %52 = shl i32 %43, 7
+  %53 = or i32 %52, %51
+  %54 = xor i32 %50, %53
+  %55 = load i32, i32* %33, align 4
+  %56 = load i32, i32* %34, align 4
+  %57 = xor i32 %56, %55
+  %58 = and i32 %57, %43
+  %59 = xor i32 %58, %56
+  %60 = getelementptr [64 x i32], [64 x i32]* @Krnd, i32 0, i32 %42
+  %61 = load i32, i32* %60, align 16
+  %62 = load i32, i32* %35, align 4
+  %63 = add i32 %54, %41
+  %64 = add i32 %63, %61
+  %65 = add i32 %64, %59
+  %66 = add i32 %65, %62
+  %67 = load i32, i32* %36, align 4
+  %68 = add i32 %66, %67
+  store i32 %68, i32* %36, align 4
+  %69 = load i32, i32* %3, align 4
+  %70 = lshr i32 %69, 2
+  %71 = shl i32 %69, 30
+  %72 = or i32 %71, %70
+  %73 = lshr i32 %69, 13
+  %74 = shl i32 %69, 19
+  %75 = or i32 %74, %73
+  %76 = xor i32 %72, %75
+  %77 = lshr i32 %69, 22
+  %78 = shl i32 %69, 10
+  %79 = or i32 %78, %77
+  %80 = xor i32 %76, %79
+  %81 = load i32, i32* %37, align 4
+  %82 = load i32, i32* %38, align 4
+  %83 = or i32 %82, %81
+  %84 = and i32 %83, %69
+  %85 = and i32 %82, %81
+  %86 = or i32 %84, %85
+  %87 = add i32 %80, %66
+  %88 = add i32 %87, %86
+  store i32 %88, i32* %35, align 4
+  %89 = lshr i32 %68, 6
+  %90 = shl i32 %68, 26
+  %91 = or i32 %90, %89
+  %92 = lshr i32 %68, 11
+  %93 = shl i32 %68, 21
+  %94 = or i32 %93, %92
+  %95 = xor i32 %91, %94
+  %96 = lshr i32 %68, 25
+  %97 = shl i32 %68, 7
+  %98 = or i32 %97, %96
+  %99 = xor i32 %95, %98
+  %100 = xor i32 %55, %43
+  %101 = and i32 %68, %100
+  %102 = xor i32 %101, %55
+  %103 = or i32 %42, 1
+  %104 = getelementptr i32, i32* %2, i32 %103
+  %105 = load i32, i32* %104, align 4
+  %106 = getelementptr [64 x i32], [64 x i32]* @Krnd, i32 0, i32 %103
+  %107 = load i32, i32* %106, align 4
+  %108 = add i32 %102, %56
+  %109 = add i32 %108, %105
+  %110 = add i32 %109, %99
+  %111 = add i32 %110, %107
+  %112 = add i32 %111, %82
+  store i32 %112, i32* %38, align 4
+  %113 = lshr i32 %88, 2
+  %114 = shl i32 %88, 30
+  %115 = or i32 %114, %113
+  %116 = lshr i32 %88, 13
+  %117 = shl i32 %88, 19
+  %118 = or i32 %117, %116
+  %119 = xor i32 %115, %118
+  %120 = lshr i32 %88, 22
+  %121 = shl i32 %88, 10
+  %122 = or i32 %121, %120
+  %123 = xor i32 %119, %122
+  %124 = or i32 %81, %69
+  %125 = and i32 %88, %124
+  %126 = and i32 %81, %69
+  %127 = or i32 %125, %126
+  %128 = add i32 %111, %127
+  %129 = add i32 %128, %123
+  store i32 %129, i32* %34, align 4
+  %130 = lshr i32 %112, 6
+  %131 = shl i32 %112, 26
+  %132 = or i32 %131, %130
+  %133 = lshr i32 %112, 11
+  %134 = shl i32 %112, 21
+  %135 = or i32 %134, %133
+  %136 = xor i32 %132, %135
+  %137 = lshr i32 %112, 25
+  %138 = shl i32 %112, 7
+  %139 = or i32 %138, %137
+  %140 = xor i32 %136, %139
+  %141 = xor i32 %68, %43
+  %142 = and i32 %112, %141
+  %143 = xor i32 %142, %43
+  %144 = or i32 %42, 2
+  %145 = getelementptr i32, i32* %2, i32 %144
+  %146 = load i32, i32* %145, align 4
+  %147 = getelementptr [64 x i32], [64 x i32]* @Krnd, i32 0, i32 %144
+  %148 = load i32, i32* %147, align 8
+  %149 = add i32 %146, %55
+  %150 = add i32 %149, %148
+  %151 = add i32 %150, %143
+  %152 = add i32 %151, %140
+  %153 = add i32 %152, %81
+  store i32 %153, i32* %37, align 4
+  %154 = lshr i32 %129, 2
+  %155 = shl i32 %129, 30
+  %156 = or i32 %155, %154
+  %157 = lshr i32 %129, 13
+  %158 = shl i32 %129, 19
+  %159 = or i32 %158, %157
+  %160 = xor i32 %156, %159
+  %161 = lshr i32 %129, 22
+  %162 = shl i32 %129, 10
+  %163 = or i32 %162, %161
+  %164 = xor i32 %160, %163
+  %165 = or i32 %88, %69
+  %166 = and i32 %129, %165
+  %167 = and i32 %88, %69
+  %168 = or i32 %166, %167
+  %169 = add i32 %164, %168
+  %170 = add i32 %169, %152
+  store i32 %170, i32* %33, align 4
+  %171 = lshr i32 %153, 6
+  %172 = shl i32 %153, 26
+  %173 = or i32 %172, %171
+  %174 = lshr i32 %153, 11
+  %175 = shl i32 %153, 21
+  %176 = or i32 %175, %174
+  %177 = xor i32 %173, %176
+  %178 = lshr i32 %153, 25
+  %179 = shl i32 %153, 7
+  %180 = or i32 %179, %178
+  %181 = xor i32 %177, %180
+  %182 = xor i32 %112, %68
+  %183 = and i32 %153, %182
+  %184 = xor i32 %183, %68
+  %185 = or i32 %42, 3
+  %186 = getelementptr i32, i32* %2, i32 %185
+  %187 = load i32, i32* %186, align 4
+  %188 = getelementptr [64 x i32], [64 x i32]* @Krnd, i32 0, i32 %185
+  %189 = load i32, i32* %188, align 4
+  %190 = add i32 %187, %43
+  %191 = add i32 %190, %189
+  %192 = add i32 %191, %184
+  %193 = add i32 %192, %181
+  %194 = add i32 %193, %69
+  store i32 %194, i32* %3, align 4
+  %195 = lshr i32 %170, 2
+  %196 = shl i32 %170, 30
+  %197 = or i32 %196, %195
+  %198 = lshr i32 %170, 13
+  %199 = shl i32 %170, 19
+  %200 = or i32 %199, %198
+  %201 = xor i32 %197, %200
+  %202 = lshr i32 %170, 22
+  %203 = shl i32 %170, 10
+  %204 = or i32 %203, %202
+  %205 = xor i32 %201, %204
+  %206 = or i32 %129, %88
+  %207 = and i32 %170, %206
+  %208 = and i32 %129, %88
+  %209 = or i32 %207, %208
+  %210 = add i32 %205, %209
+  %211 = add i32 %210, %193
+  store i32 %211, i32* %32, align 4
+  %212 = lshr i32 %194, 6
+  %213 = shl i32 %194, 26
+  %214 = or i32 %213, %212
+  %215 = lshr i32 %194, 11
+  %216 = shl i32 %194, 21
+  %217 = or i32 %216, %215
+  %218 = xor i32 %214, %217
+  %219 = lshr i32 %194, 25
+  %220 = shl i32 %194, 7
+  %221 = or i32 %220, %219
+  %222 = xor i32 %218, %221
+  %223 = xor i32 %153, %112
+  %224 = and i32 %194, %223
+  %225 = xor i32 %224, %112
+  %226 = or i32 %42, 4
+  %227 = getelementptr i32, i32* %2, i32 %226
+  %228 = load i32, i32* %227, align 4
+  %229 = getelementptr [64 x i32], [64 x i32]* @Krnd, i32 0, i32 %226
+  %230 = load i32, i32* %229, align 16
+  %231 = add i32 %228, %68
+  %232 = add i32 %231, %230
+  %233 = add i32 %232, %225
+  %234 = add i32 %233, %222
+  %235 = add i32 %234, %88
+  store i32 %235, i32* %35, align 4
+  %236 = lshr i32 %211, 2
+  %237 = shl i32 %211, 30
+  %238 = or i32 %237, %236
+  %239 = lshr i32 %211, 13
+  %240 = shl i32 %211, 19
+  %241 = or i32 %240, %239
+  %242 = xor i32 %238, %241
+  %243 = lshr i32 %211, 22
+  %244 = shl i32 %211, 10
+  %245 = or i32 %244, %243
+  %246 = xor i32 %242, %245
+  %247 = or i32 %170, %129
+  %248 = and i32 %211, %247
+  %249 = and i32 %170, %129
+  %250 = or i32 %248, %249
+  %251 = add i32 %246, %250
+  %252 = add i32 %251, %234
+  store i32 %252, i32* %36, align 4
+  %253 = lshr i32 %235, 6
+  %254 = shl i32 %235, 26
+  %255 = or i32 %254, %253
+  %256 = lshr i32 %235, 11
+  %257 = shl i32 %235, 21
+  %258 = or i32 %257, %256
+  %259 = xor i32 %255, %258
+  %260 = lshr i32 %235, 25
+  %261 = shl i32 %235, 7
+  %262 = or i32 %261, %260
+  %263 = xor i32 %259, %262
+  %264 = xor i32 %194, %153
+  %265 = and i32 %235, %264
+  %266 = xor i32 %265, %153
+  %267 = or i32 %42, 5
+  %268 = getelementptr i32, i32* %2, i32 %267
+  %269 = load i32, i32* %268, align 4
+  %270 = getelementptr [64 x i32], [64 x i32]* @Krnd, i32 0, i32 %267
+  %271 = load i32, i32* %270, align 4
+  %272 = add i32 %269, %112
+  %273 = add i32 %272, %271
+  %274 = add i32 %273, %266
+  %275 = add i32 %274, %263
+  %276 = add i32 %275, %129
+  store i32 %276, i32* %34, align 4
+  %277 = lshr i32 %252, 2
+  %278 = shl i32 %252, 30
+  %279 = or i32 %278, %277
+  %280 = lshr i32 %252, 13
+  %281 = shl i32 %252, 19
+  %282 = or i32 %281, %280
+  %283 = xor i32 %279, %282
+  %284 = lshr i32 %252, 22
+  %285 = shl i32 %252, 10
+  %286 = or i32 %285, %284
+  %287 = xor i32 %283, %286
+  %288 = or i32 %211, %170
+  %289 = and i32 %252, %288
+  %290 = and i32 %211, %170
+  %291 = or i32 %289, %290
+  %292 = add i32 %287, %291
+  %293 = add i32 %292, %275
+  store i32 %293, i32* %38, align 4
+  %294 = lshr i32 %276, 6
+  %295 = shl i32 %276, 26
+  %296 = or i32 %295, %294
+  %297 = lshr i32 %276, 11
+  %298 = shl i32 %276, 21
+  %299 = or i32 %298, %297
+  %300 = xor i32 %296, %299
+  %301 = lshr i32 %276, 25
+  %302 = shl i32 %276, 7
+  %303 = or i32 %302, %301
+  %304 = xor i32 %300, %303
+  %305 = xor i32 %235, %194
+  %306 = and i32 %276, %305
+  %307 = xor i32 %306, %194
+  %308 = or i32 %42, 6
+  %309 = getelementptr i32, i32* %2, i32 %308
+  %310 = load i32, i32* %309, align 4
+  %311 = getelementptr [64 x i32], [64 x i32]* @Krnd, i32 0, i32 %308
+  %312 = load i32, i32* %311, align 8
+  %313 = add i32 %310, %153
+  %314 = add i32 %313, %312
+  %315 = add i32 %314, %307
+  %316 = add i32 %315, %304
+  %317 = add i32 %316, %170
+  store i32 %317, i32* %33, align 4
+  %318 = lshr i32 %293, 2
+  %319 = shl i32 %293, 30
+  %320 = or i32 %319, %318
+  %321 = lshr i32 %293, 13
+  %322 = shl i32 %293, 19
+  %323 = or i32 %322, %321
+  %324 = xor i32 %320, %323
+  %325 = lshr i32 %293, 22
+  %326 = shl i32 %293, 10
+  %327 = or i32 %326, %325
+  %328 = xor i32 %324, %327
+  %329 = or i32 %252, %211
+  %330 = and i32 %293, %329
+  %331 = and i32 %252, %211
+  %332 = or i32 %330, %331
+  %333 = add i32 %328, %332
+  %334 = add i32 %333, %316
+  store i32 %334, i32* %37, align 4
+  %335 = lshr i32 %317, 6
+  %336 = shl i32 %317, 26
+  %337 = or i32 %336, %335
+  %338 = lshr i32 %317, 11
+  %339 = shl i32 %317, 21
+  %340 = or i32 %339, %338
+  %341 = xor i32 %337, %340
+  %342 = lshr i32 %317, 25
+  %343 = shl i32 %317, 7
+  %344 = or i32 %343, %342
+  %345 = xor i32 %341, %344
+  %346 = xor i32 %276, %235
+  %347 = and i32 %317, %346
+  %348 = xor i32 %347, %235
+  %349 = or i32 %42, 7
+  %350 = getelementptr i32, i32* %2, i32 %349
+  %351 = load i32, i32* %350, align 4
+  %352 = getelementptr [64 x i32], [64 x i32]* @Krnd, i32 0, i32 %349
+  %353 = load i32, i32* %352, align 4
+  %354 = add i32 %351, %194
+  %355 = add i32 %354, %353
+  %356 = add i32 %355, %348
+  %357 = add i32 %356, %345
+  %358 = add i32 %357, %211
+  store i32 %358, i32* %32, align 4
+  %359 = lshr i32 %334, 2
+  %360 = shl i32 %334, 30
+  %361 = or i32 %360, %359
+  %362 = lshr i32 %334, 13
+  %363 = shl i32 %334, 19
+  %364 = or i32 %363, %362
+  %365 = xor i32 %361, %364
+  %366 = lshr i32 %334, 22
+  %367 = shl i32 %334, 10
+  %368 = or i32 %367, %366
+  %369 = xor i32 %365, %368
+  %370 = or i32 %293, %252
+  %371 = and i32 %334, %370
+  %372 = and i32 %293, %252
+  %373 = or i32 %371, %372
+  %374 = add i32 %369, %373
+  %375 = add i32 %374, %357
+  store i32 %375, i32* %3, align 4
+  %376 = lshr i32 %358, 6
+  %377 = shl i32 %358, 26
+  %378 = or i32 %377, %376
+  %379 = lshr i32 %358, 11
+  %380 = shl i32 %358, 21
+  %381 = or i32 %380, %379
+  %382 = xor i32 %378, %381
+  %383 = lshr i32 %358, 25
+  %384 = shl i32 %358, 7
+  %385 = or i32 %384, %383
+  %386 = xor i32 %382, %385
+  %387 = xor i32 %317, %276
+  %388 = and i32 %358, %387
+  %389 = xor i32 %388, %276
+  %390 = or i32 %42, 8
+  %391 = getelementptr i32, i32* %2, i32 %390
+  %392 = load i32, i32* %391, align 4
+  %393 = getelementptr [64 x i32], [64 x i32]* @Krnd, i32 0, i32 %390
+  %394 = load i32, i32* %393, align 16
+  %395 = add i32 %392, %235
+  %396 = add i32 %395, %394
+  %397 = add i32 %396, %389
+  %398 = add i32 %397, %386
+  %399 = add i32 %398, %252
+  store i32 %399, i32* %36, align 4
+  %400 = lshr i32 %375, 2
+  %401 = shl i32 %375, 30
+  %402 = or i32 %401, %400
+  %403 = lshr i32 %375, 13
+  %404 = shl i32 %375, 19
+  %405 = or i32 %404, %403
+  %406 = xor i32 %402, %405
+  %407 = lshr i32 %375, 22
+  %408 = shl i32 %375, 10
+  %409 = or i32 %408, %407
+  %410 = xor i32 %406, %409
+  %411 = or i32 %334, %293
+  %412 = and i32 %375, %411
+  %413 = and i32 %334, %293
+  %414 = or i32 %412, %413
+  %415 = add i32 %410, %414
+  %416 = add i32 %415, %398
+  store i32 %416, i32* %35, align 4
+  %417 = lshr i32 %399, 6
+  %418 = shl i32 %399, 26
+  %419 = or i32 %418, %417
+  %420 = lshr i32 %399, 11
+  %421 = shl i32 %399, 21
+  %422 = or i32 %421, %420
+  %423 = xor i32 %419, %422
+  %424 = lshr i32 %399, 25
+  %425 = shl i32 %399, 7
+  %426 = or i32 %425, %424
+  %427 = xor i32 %423, %426
+  %428 = xor i32 %358, %317
+  %429 = and i32 %399, %428
+  %430 = xor i32 %429, %317
+  %431 = or i32 %42, 9
+  %432 = getelementptr i32, i32* %2, i32 %431
+  %433 = load i32, i32* %432, align 4
+  %434 = getelementptr [64 x i32], [64 x i32]* @Krnd, i32 0, i32 %431
+  %435 = load i32, i32* %434, align 4
+  %436 = add i32 %435, %433
+  %437 = add i32 %436, %276
+  %438 = add i32 %437, %430
+  %439 = add i32 %438, %427
+  %440 = add i32 %439, %293
+  store i32 %440, i32* %38, align 4
+  %441 = lshr i32 %416, 2
+  %442 = shl i32 %416, 30
+  %443 = or i32 %442, %441
+  %444 = lshr i32 %416, 13
+  %445 = shl i32 %416, 19
+  %446 = or i32 %445, %444
+  %447 = xor i32 %443, %446
+  %448 = lshr i32 %416, 22
+  %449 = shl i32 %416, 10
+  %450 = or i32 %449, %448
+  %451 = xor i32 %447, %450
+  %452 = or i32 %375, %334
+  %453 = and i32 %416, %452
+  %454 = and i32 %375, %334
+  %455 = or i32 %453, %454
+  %456 = add i32 %451, %455
+  %457 = add i32 %456, %439
+  store i32 %457, i32* %34, align 4
+  %458 = lshr i32 %440, 6
+  %459 = shl i32 %440, 26
+  %460 = or i32 %459, %458
+  %461 = lshr i32 %440, 11
+  %462 = shl i32 %440, 21
+  %463 = or i32 %462, %461
+  %464 = xor i32 %460, %463
+  %465 = lshr i32 %440, 25
+  %466 = shl i32 %440, 7
+  %467 = or i32 %466, %465
+  %468 = xor i32 %464, %467
+  %469 = xor i32 %399, %358
+  %470 = and i32 %440, %469
+  %471 = xor i32 %470, %358
+  %472 = or i32 %42, 10
+  %473 = getelementptr i32, i32* %2, i32 %472
+  %474 = load i32, i32* %473, align 4
+  %475 = getelementptr [64 x i32], [64 x i32]* @Krnd, i32 0, i32 %472
+  %476 = load i32, i32* %475, align 8
+  %477 = add i32 %476, %474
+  %478 = add i32 %477, %317
+  %479 = add i32 %478, %471
+  %480 = add i32 %479, %468
+  %481 = add i32 %480, %334
+  store i32 %481, i32* %37, align 4
+  %482 = lshr i32 %457, 2
+  %483 = shl i32 %457, 30
+  %484 = or i32 %483, %482
+  %485 = lshr i32 %457, 13
+  %486 = shl i32 %457, 19
+  %487 = or i32 %486, %485
+  %488 = xor i32 %484, %487
+  %489 = lshr i32 %457, 22
+  %490 = shl i32 %457, 10
+  %491 = or i32 %490, %489
+  %492 = xor i32 %488, %491
+  %493 = or i32 %416, %375
+  %494 = and i32 %457, %493
+  %495 = and i32 %416, %375
+  %496 = or i32 %494, %495
+  %497 = add i32 %492, %496
+  %498 = add i32 %497, %480
+  store i32 %498, i32* %33, align 4
+  %499 = lshr i32 %481, 6
+  %500 = shl i32 %481, 26
+  %501 = or i32 %500, %499
+  %502 = lshr i32 %481, 11
+  %503 = shl i32 %481, 21
+  %504 = or i32 %503, %502
+  %505 = xor i32 %501, %504
+  %506 = lshr i32 %481, 25
+  %507 = shl i32 %481, 7
+  %508 = or i32 %507, %506
+  %509 = xor i32 %505, %508
+  %510 = xor i32 %440, %399
+  %511 = and i32 %481, %510
+  %512 = xor i32 %511, %399
+  %513 = or i32 %42, 11
+  %514 = getelementptr i32, i32* %2, i32 %513
+  %515 = load i32, i32* %514, align 4
+  %516 = getelementptr [64 x i32], [64 x i32]* @Krnd, i32 0, i32 %513
+  %517 = load i32, i32* %516, align 4
+  %518 = add i32 %517, %515
+  %519 = add i32 %518, %358
+  %520 = add i32 %519, %512
+  %521 = add i32 %520, %509
+  %522 = add i32 %521, %375
+  store i32 %522, i32* %3, align 4
+  %523 = lshr i32 %498, 2
+  %524 = shl i32 %498, 30
+  %525 = or i32 %524, %523
+  %526 = lshr i32 %498, 13
+  %527 = shl i32 %498, 19
+  %528 = or i32 %527, %526
+  %529 = xor i32 %525, %528
+  %530 = lshr i32 %498, 22
+  %531 = shl i32 %498, 10
+  %532 = or i32 %531, %530
+  %533 = xor i32 %529, %532
+  %534 = or i32 %457, %416
+  %535 = and i32 %498, %534
+  %536 = and i32 %457, %416
+  %537 = or i32 %535, %536
+  %538 = add i32 %533, %537
+  %539 = add i32 %538, %521
+  store i32 %539, i32* %32, align 4
+  %540 = lshr i32 %522, 6
+  %541 = shl i32 %522, 26
+  %542 = or i32 %541, %540
+  %543 = lshr i32 %522, 11
+  %544 = shl i32 %522, 21
+  %545 = or i32 %544, %543
+  %546 = xor i32 %542, %545
+  %547 = lshr i32 %522, 25
+  %548 = shl i32 %522, 7
+  %549 = or i32 %548, %547
+  %550 = xor i32 %546, %549
+  %551 = xor i32 %481, %440
+  %552 = and i32 %522, %551
+  %553 = xor i32 %552, %440
+  %554 = or i32 %42, 12
+  %555 = getelementptr i32, i32* %2, i32 %554
+  %556 = load i32, i32* %555, align 4
+  %557 = getelementptr [64 x i32], [64 x i32]* @Krnd, i32 0, i32 %554
+  %558 = load i32, i32* %557, align 16
+  %559 = add i32 %558, %556
+  %560 = add i32 %559, %399
+  %561 = add i32 %560, %553
+  %562 = add i32 %561, %550
+  %563 = add i32 %562, %416
+  store i32 %563, i32* %35, align 4
+  %564 = lshr i32 %539, 2
+  %565 = shl i32 %539, 30
+  %566 = or i32 %565, %564
+  %567 = lshr i32 %539, 13
+  %568 = shl i32 %539, 19
+  %569 = or i32 %568, %567
+  %570 = xor i32 %566, %569
+  %571 = lshr i32 %539, 22
+  %572 = shl i32 %539, 10
+  %573 = or i32 %572, %571
+  %574 = xor i32 %570, %573
+  %575 = or i32 %498, %457
+  %576 = and i32 %539, %575
+  %577 = and i32 %498, %457
+  %578 = or i32 %576, %577
+  %579 = add i32 %574, %578
+  %580 = add i32 %579, %562
+  store i32 %580, i32* %36, align 4
+  %581 = lshr i32 %563, 6
+  %582 = shl i32 %563, 26
+  %583 = or i32 %582, %581
+  %584 = lshr i32 %563, 11
+  %585 = shl i32 %563, 21
+  %586 = or i32 %585, %584
+  %587 = xor i32 %583, %586
+  %588 = lshr i32 %563, 25
+  %589 = shl i32 %563, 7
+  %590 = or i32 %589, %588
+  %591 = xor i32 %587, %590
+  %592 = xor i32 %522, %481
+  %593 = and i32 %563, %592
+  %594 = xor i32 %593, %481
+  %595 = or i32 %42, 13
+  %596 = getelementptr i32, i32* %2, i32 %595
+  %597 = load i32, i32* %596, align 4
+  %598 = getelementptr [64 x i32], [64 x i32]* @Krnd, i32 0, i32 %595
+  %599 = load i32, i32* %598, align 4
+  %600 = add i32 %599, %597
+  %601 = add i32 %600, %440
+  %602 = add i32 %601, %594
+  %603 = add i32 %602, %591
+  %604 = add i32 %603, %457
+  store i32 %604, i32* %34, align 4
+  %605 = lshr i32 %580, 2
+  %606 = shl i32 %580, 30
+  %607 = or i32 %606, %605
+  %608 = lshr i32 %580, 13
+  %609 = shl i32 %580, 19
+  %610 = or i32 %609, %608
+  %611 = xor i32 %607, %610
+  %612 = lshr i32 %580, 22
+  %613 = shl i32 %580, 10
+  %614 = or i32 %613, %612
+  %615 = xor i32 %611, %614
+  %616 = or i32 %539, %498
+  %617 = and i32 %580, %616
+  %618 = and i32 %539, %498
+  %619 = or i32 %617, %618
+  %620 = add i32 %615, %619
+  %621 = add i32 %620, %603
+  store i32 %621, i32* %38, align 4
+  %622 = lshr i32 %604, 6
+  %623 = shl i32 %604, 26
+  %624 = or i32 %623, %622
+  %625 = lshr i32 %604, 11
+  %626 = shl i32 %604, 21
+  %627 = or i32 %626, %625
+  %628 = xor i32 %624, %627
+  %629 = lshr i32 %604, 25
+  %630 = shl i32 %604, 7
+  %631 = or i32 %630, %629
+  %632 = xor i32 %628, %631
+  %633 = xor i32 %563, %522
+  %634 = and i32 %604, %633
+  %635 = xor i32 %634, %522
+  %636 = or i32 %42, 14
+  %637 = getelementptr i32, i32* %2, i32 %636
+  %638 = load i32, i32* %637, align 4
+  %639 = getelementptr [64 x i32], [64 x i32]* @Krnd, i32 0, i32 %636
+  %640 = load i32, i32* %639, align 8
+  %641 = add i32 %640, %638
+  %642 = add i32 %641, %481
+  %643 = add i32 %642, %635
+  %644 = add i32 %643, %632
+  %645 = add i32 %644, %498
+  store i32 %645, i32* %33, align 4
+  %646 = lshr i32 %621, 2
+  %647 = shl i32 %621, 30
+  %648 = or i32 %647, %646
+  %649 = lshr i32 %621, 13
+  %650 = shl i32 %621, 19
+  %651 = or i32 %650, %649
+  %652 = xor i32 %648, %651
+  %653 = lshr i32 %621, 22
+  %654 = shl i32 %621, 10
+  %655 = or i32 %654, %653
+  %656 = xor i32 %652, %655
+  %657 = or i32 %580, %539
+  %658 = and i32 %621, %657
+  %659 = and i32 %580, %539
+  %660 = or i32 %658, %659
+  %661 = add i32 %656, %660
+  %662 = add i32 %661, %644
+  store i32 %662, i32* %37, align 4
+  %663 = lshr i32 %645, 6
+  %664 = shl i32 %645, 26
+  %665 = or i32 %664, %663
+  %666 = lshr i32 %645, 11
+  %667 = shl i32 %645, 21
+  %668 = or i32 %667, %666
+  %669 = xor i32 %665, %668
+  %670 = lshr i32 %645, 25
+  %671 = shl i32 %645, 7
+  %672 = or i32 %671, %670
+  %673 = xor i32 %669, %672
+  %674 = xor i32 %604, %563
+  %675 = and i32 %645, %674
+  %676 = xor i32 %675, %563
+  %677 = or i32 %42, 15
+  %678 = getelementptr i32, i32* %2, i32 %677
+  %679 = load i32, i32* %678, align 4
+  %680 = getelementptr [64 x i32], [64 x i32]* @Krnd, i32 0, i32 %677
+  %681 = load i32, i32* %680, align 4
+  %682 = add i32 %681, %679
+  %683 = add i32 %682, %522
+  %684 = add i32 %683, %676
+  %685 = add i32 %684, %673
+  %686 = add i32 %685, %539
+  store i32 %686, i32* %32, align 4
+  %687 = lshr i32 %662, 2
+  %688 = shl i32 %662, 30
+  %689 = or i32 %688, %687
+  %690 = lshr i32 %662, 13
+  %691 = shl i32 %662, 19
+  %692 = or i32 %691, %690
+  %693 = xor i32 %689, %692
+  %694 = lshr i32 %662, 22
+  %695 = shl i32 %662, 10
+  %696 = or i32 %695, %694
+  %697 = xor i32 %693, %696
+  %698 = or i32 %621, %580
+  %699 = and i32 %662, %698
+  %700 = and i32 %621, %580
+  %701 = or i32 %699, %700
+  %702 = add i32 %697, %701
+  %703 = add i32 %702, %685
+  store i32 %703, i32* %3, align 4
+  %704 = icmp eq i32 %42, 48
+  br i1 %704, label %1145, label %705
+
+705:                                              ; preds = %40
+  %706 = getelementptr i32, i32* %2, i32 %42
+  %707 = load i32, i32* %637, align 4
+  %708 = lshr i32 %707, 17
+  %709 = shl i32 %707, 15
+  %710 = or i32 %709, %708
+  %711 = lshr i32 %707, 19
+  %712 = shl i32 %707, 13
+  %713 = or i32 %712, %711
+  %714 = lshr i32 %707, 10
+  %715 = xor i32 %713, %714
+  %716 = xor i32 %715, %710
+  %717 = load i32, i32* %432, align 4
+  %718 = load i32, i32* %104, align 4
+  %719 = lshr i32 %718, 7
+  %720 = shl i32 %718, 25
+  %721 = or i32 %720, %719
+  %722 = lshr i32 %718, 18
+  %723 = shl i32 %718, 14
+  %724 = or i32 %723, %722
+  %725 = lshr i32 %718, 3
+  %726 = xor i32 %724, %725
+  %727 = xor i32 %726, %721
+  %728 = load i32, i32* %706, align 4
+  %729 = add i32 %728, %717
+  %730 = add i32 %729, %716
+  %731 = add i32 %730, %727
+  %732 = add nuw nsw i32 %42, 16
+  %733 = getelementptr i32, i32* %2, i32 %732
+  store i32 %731, i32* %733, align 4
+  %734 = load i32, i32* %678, align 4
+  %735 = lshr i32 %734, 17
+  %736 = shl i32 %734, 15
+  %737 = or i32 %736, %735
+  %738 = lshr i32 %734, 19
+  %739 = shl i32 %734, 13
+  %740 = or i32 %739, %738
+  %741 = lshr i32 %734, 10
+  %742 = xor i32 %740, %741
+  %743 = xor i32 %742, %737
+  %744 = add nuw nsw i32 %103, 9
+  %745 = getelementptr i32, i32* %2, i32 %744
+  %746 = load i32, i32* %745, align 4
+  %747 = add nuw nsw i32 %103, 1
+  %748 = getelementptr i32, i32* %2, i32 %747
+  %749 = load i32, i32* %748, align 4
+  %750 = lshr i32 %749, 7
+  %751 = shl i32 %749, 25
+  %752 = or i32 %751, %750
+  %753 = lshr i32 %749, 18
+  %754 = shl i32 %749, 14
+  %755 = or i32 %754, %753
+  %756 = lshr i32 %749, 3
+  %757 = xor i32 %755, %756
+  %758 = xor i32 %757, %752
+  %759 = add i32 %746, %718
+  %760 = add i32 %759, %743
+  %761 = add i32 %760, %758
+  %762 = add nuw nsw i32 %103, 16
+  %763 = getelementptr i32, i32* %2, i32 %762
+  store i32 %761, i32* %763, align 4
+  %764 = lshr i32 %731, 17
+  %765 = shl i32 %731, 15
+  %766 = or i32 %765, %764
+  %767 = lshr i32 %731, 19
+  %768 = shl i32 %731, 13
+  %769 = or i32 %768, %767
+  %770 = lshr i32 %731, 10
+  %771 = xor i32 %769, %770
+  %772 = xor i32 %771, %766
+  %773 = load i32, i32* %514, align 4
+  %774 = load i32, i32* %186, align 4
+  %775 = lshr i32 %774, 7
+  %776 = shl i32 %774, 25
+  %777 = or i32 %776, %775
+  %778 = lshr i32 %774, 18
+  %779 = shl i32 %774, 14
+  %780 = or i32 %779, %778
+  %781 = lshr i32 %774, 3
+  %782 = xor i32 %780, %781
+  %783 = xor i32 %782, %777
+  %784 = add i32 %749, %773
+  %785 = add i32 %784, %772
+  %786 = add i32 %785, %783
+  %787 = add nuw nsw i32 %144, 16
+  %788 = getelementptr i32, i32* %2, i32 %787
+  store i32 %786, i32* %788, align 4
+  %789 = lshr i32 %761, 17
+  %790 = shl i32 %761, 15
+  %791 = or i32 %790, %789
+  %792 = lshr i32 %761, 19
+  %793 = shl i32 %761, 13
+  %794 = or i32 %793, %792
+  %795 = lshr i32 %761, 10
+  %796 = xor i32 %794, %795
+  %797 = xor i32 %796, %791
+  %798 = add nuw nsw i32 %185, 9
+  %799 = getelementptr i32, i32* %2, i32 %798
+  %800 = load i32, i32* %799, align 4
+  %801 = add nuw nsw i32 %185, 1
+  %802 = getelementptr i32, i32* %2, i32 %801
+  %803 = load i32, i32* %802, align 4
+  %804 = lshr i32 %803, 7
+  %805 = shl i32 %803, 25
+  %806 = or i32 %805, %804
+  %807 = lshr i32 %803, 18
+  %808 = shl i32 %803, 14
+  %809 = or i32 %808, %807
+  %810 = lshr i32 %803, 3
+  %811 = xor i32 %809, %810
+  %812 = xor i32 %811, %806
+  %813 = add i32 %800, %774
+  %814 = add i32 %813, %797
+  %815 = add i32 %814, %812
+  %816 = add nuw nsw i32 %185, 16
+  %817 = getelementptr i32, i32* %2, i32 %816
+  store i32 %815, i32* %817, align 4
+  %818 = lshr i32 %786, 17
+  %819 = shl i32 %786, 15
+  %820 = or i32 %819, %818
+  %821 = lshr i32 %786, 19
+  %822 = shl i32 %786, 13
+  %823 = or i32 %822, %821
+  %824 = lshr i32 %786, 10
+  %825 = xor i32 %823, %824
+  %826 = xor i32 %825, %820
+  %827 = load i32, i32* %596, align 4
+  %828 = load i32, i32* %268, align 4
+  %829 = lshr i32 %828, 7
+  %830 = shl i32 %828, 25
+  %831 = or i32 %830, %829
+  %832 = lshr i32 %828, 18
+  %833 = shl i32 %828, 14
+  %834 = or i32 %833, %832
+  %835 = lshr i32 %828, 3
+  %836 = xor i32 %834, %835
+  %837 = xor i32 %836, %831
+  %838 = add i32 %803, %827
+  %839 = add i32 %838, %826
+  %840 = add i32 %839, %837
+  %841 = add nuw nsw i32 %226, 16
+  %842 = getelementptr i32, i32* %2, i32 %841
+  store i32 %840, i32* %842, align 4
+  %843 = lshr i32 %815, 17
+  %844 = shl i32 %815, 15
+  %845 = or i32 %844, %843
+  %846 = lshr i32 %815, 19
+  %847 = shl i32 %815, 13
+  %848 = or i32 %847, %846
+  %849 = lshr i32 %815, 10
+  %850 = xor i32 %848, %849
+  %851 = xor i32 %850, %845
+  %852 = add nuw nsw i32 %267, 9
+  %853 = getelementptr i32, i32* %2, i32 %852
+  %854 = load i32, i32* %853, align 4
+  %855 = add nuw nsw i32 %267, 1
+  %856 = getelementptr i32, i32* %2, i32 %855
+  %857 = load i32, i32* %856, align 4
+  %858 = lshr i32 %857, 7
+  %859 = shl i32 %857, 25
+  %860 = or i32 %859, %858
+  %861 = lshr i32 %857, 18
+  %862 = shl i32 %857, 14
+  %863 = or i32 %862, %861
+  %864 = lshr i32 %857, 3
+  %865 = xor i32 %863, %864
+  %866 = xor i32 %865, %860
+  %867 = add i32 %854, %828
+  %868 = add i32 %867, %851
+  %869 = add i32 %868, %866
+  %870 = add nuw nsw i32 %267, 16
+  %871 = getelementptr i32, i32* %2, i32 %870
+  store i32 %869, i32* %871, align 4
+  %872 = lshr i32 %840, 17
+  %873 = shl i32 %840, 15
+  %874 = or i32 %873, %872
+  %875 = lshr i32 %840, 19
+  %876 = shl i32 %840, 13
+  %877 = or i32 %876, %875
+  %878 = lshr i32 %840, 10
+  %879 = xor i32 %877, %878
+  %880 = xor i32 %879, %874
+  %881 = load i32, i32* %350, align 4
+  %882 = lshr i32 %881, 7
+  %883 = shl i32 %881, 25
+  %884 = or i32 %883, %882
+  %885 = lshr i32 %881, 18
+  %886 = shl i32 %881, 14
+  %887 = or i32 %886, %885
+  %888 = lshr i32 %881, 3
+  %889 = xor i32 %887, %888
+  %890 = xor i32 %889, %884
+  %891 = add i32 %857, %734
+  %892 = add i32 %891, %880
+  %893 = add i32 %892, %890
+  %894 = add nuw nsw i32 %308, 16
+  %895 = getelementptr i32, i32* %2, i32 %894
+  store i32 %893, i32* %895, align 4
+  %896 = lshr i32 %869, 17
+  %897 = shl i32 %869, 15
+  %898 = or i32 %897, %896
+  %899 = lshr i32 %869, 19
+  %900 = shl i32 %869, 13
+  %901 = or i32 %900, %899
+  %902 = lshr i32 %869, 10
+  %903 = xor i32 %901, %902
+  %904 = xor i32 %903, %898
+  %905 = add nuw nsw i32 %349, 9
+  %906 = getelementptr i32, i32* %2, i32 %905
+  %907 = load i32, i32* %906, align 4
+  %908 = add nuw nsw i32 %349, 1
+  %909 = getelementptr i32, i32* %2, i32 %908
+  %910 = load i32, i32* %909, align 4
+  %911 = lshr i32 %910, 7
+  %912 = shl i32 %910, 25
+  %913 = or i32 %912, %911
+  %914 = lshr i32 %910, 18
+  %915 = shl i32 %910, 14
+  %916 = or i32 %915, %914
+  %917 = lshr i32 %910, 3
+  %918 = xor i32 %916, %917
+  %919 = xor i32 %918, %913
+  %920 = add i32 %907, %881
+  %921 = add i32 %920, %904
+  %922 = add i32 %921, %919
+  %923 = add nuw nsw i32 %349, 16
+  %924 = getelementptr i32, i32* %2, i32 %923
+  store i32 %922, i32* %924, align 4
+  %925 = lshr i32 %893, 17
+  %926 = shl i32 %893, 15
+  %927 = or i32 %926, %925
+  %928 = lshr i32 %893, 19
+  %929 = shl i32 %893, 13
+  %930 = or i32 %929, %928
+  %931 = lshr i32 %893, 10
+  %932 = xor i32 %930, %931
+  %933 = xor i32 %932, %927
+  %934 = add nuw nsw i32 %390, 9
+  %935 = getelementptr i32, i32* %2, i32 %934
+  %936 = load i32, i32* %935, align 4
+  %937 = lshr i32 %717, 7
+  %938 = shl i32 %717, 25
+  %939 = or i32 %938, %937
+  %940 = lshr i32 %717, 18
+  %941 = shl i32 %717, 14
+  %942 = or i32 %941, %940
+  %943 = lshr i32 %717, 3
+  %944 = xor i32 %942, %943
+  %945 = xor i32 %944, %939
+  %946 = add i32 %936, %945
+  %947 = add i32 %946, %910
+  %948 = add i32 %947, %933
+  %949 = add nuw nsw i32 %390, 16
+  %950 = getelementptr i32, i32* %2, i32 %949
+  store i32 %948, i32* %950, align 4
+  %951 = lshr i32 %922, 17
+  %952 = shl i32 %922, 15
+  %953 = or i32 %952, %951
+  %954 = lshr i32 %922, 19
+  %955 = shl i32 %922, 13
+  %956 = or i32 %955, %954
+  %957 = lshr i32 %922, 10
+  %958 = xor i32 %956, %957
+  %959 = xor i32 %958, %953
+  %960 = add nuw nsw i32 %431, 9
+  %961 = getelementptr i32, i32* %2, i32 %960
+  %962 = load i32, i32* %961, align 4
+  %963 = add nuw nsw i32 %431, 1
+  %964 = getelementptr i32, i32* %2, i32 %963
+  %965 = load i32, i32* %964, align 4
+  %966 = lshr i32 %965, 7
+  %967 = shl i32 %965, 25
+  %968 = or i32 %967, %966
+  %969 = lshr i32 %965, 18
+  %970 = shl i32 %965, 14
+  %971 = or i32 %970, %969
+  %972 = lshr i32 %965, 3
+  %973 = xor i32 %971, %972
+  %974 = xor i32 %973, %968
+  %975 = add i32 %962, %717
+  %976 = add i32 %975, %959
+  %977 = add i32 %976, %974
+  %978 = add nuw nsw i32 %431, 16
+  %979 = getelementptr i32, i32* %2, i32 %978
+  store i32 %977, i32* %979, align 4
+  %980 = lshr i32 %948, 17
+  %981 = shl i32 %948, 15
+  %982 = or i32 %981, %980
+  %983 = lshr i32 %948, 19
+  %984 = shl i32 %948, 13
+  %985 = or i32 %984, %983
+  %986 = lshr i32 %948, 10
+  %987 = xor i32 %985, %986
+  %988 = xor i32 %987, %982
+  %989 = add nuw nsw i32 %472, 9
+  %990 = getelementptr i32, i32* %2, i32 %989
+  %991 = load i32, i32* %990, align 4
+  %992 = lshr i32 %773, 7
+  %993 = shl i32 %773, 25
+  %994 = or i32 %993, %992
+  %995 = lshr i32 %773, 18
+  %996 = shl i32 %773, 14
+  %997 = or i32 %996, %995
+  %998 = lshr i32 %773, 3
+  %999 = xor i32 %997, %998
+  %1000 = xor i32 %999, %994
+  %1001 = add i32 %991, %1000
+  %1002 = add i32 %1001, %965
+  %1003 = add i32 %1002, %988
+  %1004 = add nuw nsw i32 %472, 16
+  %1005 = getelementptr i32, i32* %2, i32 %1004
+  store i32 %1003, i32* %1005, align 4
+  %1006 = lshr i32 %977, 17
+  %1007 = shl i32 %977, 15
+  %1008 = or i32 %1007, %1006
+  %1009 = lshr i32 %977, 19
+  %1010 = shl i32 %977, 13
+  %1011 = or i32 %1010, %1009
+  %1012 = lshr i32 %977, 10
+  %1013 = xor i32 %1011, %1012
+  %1014 = xor i32 %1013, %1008
+  %1015 = add nuw nsw i32 %513, 9
+  %1016 = getelementptr i32, i32* %2, i32 %1015
+  %1017 = load i32, i32* %1016, align 4
+  %1018 = add nuw nsw i32 %513, 1
+  %1019 = getelementptr i32, i32* %2, i32 %1018
+  %1020 = load i32, i32* %1019, align 4
+  %1021 = lshr i32 %1020, 7
+  %1022 = shl i32 %1020, 25
+  %1023 = or i32 %1022, %1021
+  %1024 = lshr i32 %1020, 18
+  %1025 = shl i32 %1020, 14
+  %1026 = or i32 %1025, %1024
+  %1027 = lshr i32 %1020, 3
+  %1028 = xor i32 %1026, %1027
+  %1029 = xor i32 %1028, %1023
+  %1030 = add i32 %1017, %773
+  %1031 = add i32 %1030, %1014
+  %1032 = add i32 %1031, %1029
+  %1033 = add nuw nsw i32 %513, 16
+  %1034 = getelementptr i32, i32* %2, i32 %1033
+  store i32 %1032, i32* %1034, align 4
+  %1035 = lshr i32 %1003, 17
+  %1036 = shl i32 %1003, 15
+  %1037 = or i32 %1036, %1035
+  %1038 = lshr i32 %1003, 19
+  %1039 = shl i32 %1003, 13
+  %1040 = or i32 %1039, %1038
+  %1041 = lshr i32 %1003, 10
+  %1042 = xor i32 %1040, %1041
+  %1043 = xor i32 %1042, %1037
+  %1044 = add nuw nsw i32 %554, 9
+  %1045 = getelementptr i32, i32* %2, i32 %1044
+  %1046 = load i32, i32* %1045, align 4
+  %1047 = lshr i32 %827, 7
+  %1048 = shl i32 %827, 25
+  %1049 = or i32 %1048, %1047
+  %1050 = lshr i32 %827, 18
+  %1051 = shl i32 %827, 14
+  %1052 = or i32 %1051, %1050
+  %1053 = lshr i32 %827, 3
+  %1054 = xor i32 %1052, %1053
+  %1055 = xor i32 %1054, %1049
+  %1056 = add i32 %1046, %1055
+  %1057 = add i32 %1056, %1020
+  %1058 = add i32 %1057, %1043
+  %1059 = add nuw nsw i32 %554, 16
+  %1060 = getelementptr i32, i32* %2, i32 %1059
+  store i32 %1058, i32* %1060, align 4
+  %1061 = lshr i32 %1032, 17
+  %1062 = shl i32 %1032, 15
+  %1063 = or i32 %1062, %1061
+  %1064 = lshr i32 %1032, 19
+  %1065 = shl i32 %1032, 13
+  %1066 = or i32 %1065, %1064
+  %1067 = lshr i32 %1032, 10
+  %1068 = xor i32 %1066, %1067
+  %1069 = xor i32 %1068, %1063
+  %1070 = add nuw nsw i32 %595, 9
+  %1071 = getelementptr i32, i32* %2, i32 %1070
+  %1072 = load i32, i32* %1071, align 4
+  %1073 = add nuw nsw i32 %595, 1
+  %1074 = getelementptr i32, i32* %2, i32 %1073
+  %1075 = load i32, i32* %1074, align 4
+  %1076 = lshr i32 %1075, 7
+  %1077 = shl i32 %1075, 25
+  %1078 = or i32 %1077, %1076
+  %1079 = lshr i32 %1075, 18
+  %1080 = shl i32 %1075, 14
+  %1081 = or i32 %1080, %1079
+  %1082 = lshr i32 %1075, 3
+  %1083 = xor i32 %1081, %1082
+  %1084 = xor i32 %1083, %1078
+  %1085 = add i32 %1072, %827
+  %1086 = add i32 %1085, %1069
+  %1087 = add i32 %1086, %1084
+  %1088 = add nuw nsw i32 %595, 16
+  %1089 = getelementptr i32, i32* %2, i32 %1088
+  store i32 %1087, i32* %1089, align 4
+  %1090 = lshr i32 %1058, 17
+  %1091 = shl i32 %1058, 15
+  %1092 = or i32 %1091, %1090
+  %1093 = lshr i32 %1058, 19
+  %1094 = shl i32 %1058, 13
+  %1095 = or i32 %1094, %1093
+  %1096 = lshr i32 %1058, 10
+  %1097 = xor i32 %1095, %1096
+  %1098 = xor i32 %1097, %1092
+  %1099 = add nuw nsw i32 %636, 9
+  %1100 = getelementptr i32, i32* %2, i32 %1099
+  %1101 = load i32, i32* %1100, align 4
+  %1102 = lshr i32 %734, 7
+  %1103 = shl i32 %734, 25
+  %1104 = or i32 %1103, %1102
+  %1105 = lshr i32 %734, 18
+  %1106 = shl i32 %734, 14
+  %1107 = or i32 %1106, %1105
+  %1108 = lshr i32 %734, 3
+  %1109 = xor i32 %1107, %1108
+  %1110 = xor i32 %1109, %1104
+  %1111 = add i32 %1110, %707
+  %1112 = add i32 %1111, %1101
+  %1113 = add i32 %1112, %1098
+  %1114 = add nuw nsw i32 %636, 16
+  %1115 = getelementptr i32, i32* %2, i32 %1114
+  store i32 %1113, i32* %1115, align 4
+  %1116 = lshr i32 %1087, 17
+  %1117 = shl i32 %1087, 15
+  %1118 = or i32 %1117, %1116
+  %1119 = lshr i32 %1087, 19
+  %1120 = shl i32 %1087, 13
+  %1121 = or i32 %1120, %1119
+  %1122 = lshr i32 %1087, 10
+  %1123 = xor i32 %1121, %1122
+  %1124 = xor i32 %1123, %1118
+  %1125 = add nuw nsw i32 %677, 9
+  %1126 = getelementptr i32, i32* %2, i32 %1125
+  %1127 = load i32, i32* %1126, align 4
+  %1128 = add nuw nsw i32 %677, 1
+  %1129 = getelementptr i32, i32* %2, i32 %1128
+  %1130 = load i32, i32* %1129, align 4
+  %1131 = lshr i32 %1130, 7
+  %1132 = shl i32 %1130, 25
+  %1133 = or i32 %1132, %1131
+  %1134 = lshr i32 %1130, 18
+  %1135 = shl i32 %1130, 14
+  %1136 = or i32 %1135, %1134
+  %1137 = lshr i32 %1130, 3
+  %1138 = xor i32 %1136, %1137
+  %1139 = xor i32 %1138, %1133
+  %1140 = add i32 %1127, %734
+  %1141 = add i32 %1140, %1124
+  %1142 = add i32 %1141, %1139
+  %1143 = add nuw nsw i32 %677, 16
+  %1144 = getelementptr i32, i32* %2, i32 %1143
+  store i32 %1142, i32* %1144, align 4
+  br label %40
+
+1145:                                             ; preds = %40
+  %1146 = load i32, i32* %0, align 4
+  %1147 = add i32 %1146, %703
+  store i32 %1147, i32* %0, align 4
+  %1148 = load i32, i32* %37, align 4
+  %1149 = getelementptr i32, i32* %0, i32 1
+  %1150 = load i32, i32* %1149, align 4
+  %1151 = add i32 %1150, %1148
+  store i32 %1151, i32* %1149, align 4
+  %1152 = load i32, i32* %38, align 4
+  %1153 = getelementptr i32, i32* %0, i32 2
+  %1154 = load i32, i32* %1153, align 4
+  %1155 = add i32 %1154, %1152
+  store i32 %1155, i32* %1153, align 4
+  %1156 = load i32, i32* %36, align 4
+  %1157 = getelementptr i32, i32* %0, i32 3
+  %1158 = load i32, i32* %1157, align 4
+  %1159 = add i32 %1158, %1156
+  store i32 %1159, i32* %1157, align 4
+  %1160 = load i32, i32* %32, align 4
+  %1161 = getelementptr i32, i32* %0, i32 4
+  %1162 = load i32, i32* %1161, align 4
+  %1163 = add i32 %1162, %1160
+  store i32 %1163, i32* %1161, align 4
+  %1164 = load i32, i32* %33, align 4
+  %1165 = getelementptr i32, i32* %0, i32 5
+  %1166 = load i32, i32* %1165, align 4
+  %1167 = add i32 %1166, %1164
+  store i32 %1167, i32* %1165, align 4
+  %1168 = load i32, i32* %34, align 4
+  %1169 = getelementptr i32, i32* %0, i32 6
+  %1170 = load i32, i32* %1169, align 4
+  %1171 = add i32 %1170, %1168
+  store i32 %1171, i32* %1169, align 4
+  %1172 = load i32, i32* %35, align 4
+  %1173 = getelementptr i32, i32* %0, i32 7
+  %1174 = load i32, i32* %1173, align 4
+  %1175 = add i32 %1174, %1172
+  store i32 %1175, i32* %1173, align 4
+  ret void
+}
+
+declare void @sodium_memzero(i8* %0, i32 %1) local_unnamed_addr #2
+
+; Function Attrs: argmemonly nounwind willreturn
+declare void @llvm.lifetime.end.p0i8(i64 immarg %0, i8* nocapture %1) #1
+
+; Function Attrs: nounwind
+define i32 @crypto_hash_sha256_final(%struct.crypto_hash_sha256_state* nonnull %0, i8* nonnull %1) local_unnamed_addr #0 {
+  %3 = alloca [72 x i32], align 16
+  %4 = bitcast [72 x i32]* %3 to i8*
+  call void @llvm.lifetime.start.p0i8(i64 288, i8* nonnull %4) #4
+  %5 = getelementptr inbounds [72 x i32], [72 x i32]* %3, i32 0, i32 0
+  %6 = getelementptr inbounds %struct.crypto_hash_sha256_state, %struct.crypto_hash_sha256_state* %0, i32 0, i32 1
+  %7 = load i64, i64* %6, align 8
+  %8 = lshr i64 %7, 3
+  %9 = trunc i64 %8 to i32
+  %10 = and i32 %9, 63
+  %11 = icmp ult i32 %10, 56
+  br i1 %11, label %19, label %12
+
+12:                                               ; preds = %2
+  %13 = sub nuw nsw i32 64, %10
+  %14 = icmp eq i32 %13, 0
+  br i1 %14, label %26, label %15
+
+15:                                               ; preds = %12
+  %16 = getelementptr %struct.crypto_hash_sha256_state, %struct.crypto_hash_sha256_state* %0, i32 0, i32 0, i32 10
+  %17 = bitcast i32* %16 to i8*
+  %18 = getelementptr i8, i8* %17, i32 %10
+  tail call void @llvm.memcpy.p0i8.p0i8.i32(i8* align 1 %18, i8* align 16 getelementptr inbounds (<{ i8, [63 x i8] }>, <{ i8, [63 x i8] }>* @PAD, i32 0, i32 0), i32 %13, i1 false) #4
+  br label %26
+
+19:                                               ; preds = %2
+  %20 = sub nuw nsw i32 56, %10
+  %21 = icmp eq i32 %20, 0
+  br i1 %21, label %31, label %22
+
+22:                                               ; preds = %19
+  %23 = getelementptr %struct.crypto_hash_sha256_state, %struct.crypto_hash_sha256_state* %0, i32 0, i32 0, i32 10
+  %24 = bitcast i32* %23 to i8*
+  %25 = getelementptr i8, i8* %24, i32 %10
+  tail call void @llvm.memcpy.p0i8.p0i8.i32(i8* align 1 %25, i8* align 16 getelementptr inbounds (<{ i8, [63 x i8] }>, <{ i8, [63 x i8] }>* @PAD, i32 0, i32 0), i32 %20, i1 false) #4
+  br label %31
+
+26:                                               ; preds = %15, %12
+  %27 = getelementptr inbounds %struct.crypto_hash_sha256_state, %struct.crypto_hash_sha256_state* %0, i32 0, i32 0, i32 0
+  %28 = getelementptr inbounds %struct.crypto_hash_sha256_state, %struct.crypto_hash_sha256_state* %0, i32 0, i32 2, i32 0
+  %29 = getelementptr inbounds [72 x i32], [72 x i32]* %3, i32 0, i32 64
+  call fastcc void @SHA256_Transform(i32* nonnull %27, i8* nonnull %28, i32* nonnull %5, i32* nonnull %29) #4
+  call void @llvm.memset.p0i8.i32(i8* nonnull align 8 dereferenceable(56) %28, i8 0, i32 56, i1 false) #4
+  %30 = load i64, i64* %6, align 8
+  br label %31
+
+31:                                               ; preds = %19, %22, %26
+  %32 = phi i64 [ %7, %22 ], [ %7, %19 ], [ %30, %26 ]
+  %33 = getelementptr %struct.crypto_hash_sha256_state, %struct.crypto_hash_sha256_state* %0, i32 0, i32 2, i32 56
+  %34 = trunc i64 %32 to i8
+  %35 = getelementptr %struct.crypto_hash_sha256_state, %struct.crypto_hash_sha256_state* %0, i32 0, i32 2, i32 63
+  store i8 %34, i8* %35, align 1
+  %36 = lshr i64 %32, 8
+  %37 = trunc i64 %36 to i8
+  %38 = getelementptr %struct.crypto_hash_sha256_state, %struct.crypto_hash_sha256_state* %0, i32 0, i32 2, i32 62
+  store i8 %37, i8* %38, align 1
+  %39 = lshr i64 %32, 16
+  %40 = trunc i64 %39 to i8
+  %41 = getelementptr %struct.crypto_hash_sha256_state, %struct.crypto_hash_sha256_state* %0, i32 0, i32 2, i32 61
+  store i8 %40, i8* %41, align 1
+  %42 = lshr i64 %32, 24
+  %43 = trunc i64 %42 to i8
+  %44 = getelementptr %struct.crypto_hash_sha256_state, %struct.crypto_hash_sha256_state* %0, i32 0, i32 2, i32 60
+  store i8 %43, i8* %44, align 1
+  %45 = lshr i64 %32, 32
+  %46 = trunc i64 %45 to i8
+  %47 = getelementptr %struct.crypto_hash_sha256_state, %struct.crypto_hash_sha256_state* %0, i32 0, i32 2, i32 59
+  store i8 %46, i8* %47, align 1
+  %48 = lshr i64 %32, 40
+  %49 = trunc i64 %48 to i8
+  %50 = getelementptr %struct.crypto_hash_sha256_state, %struct.crypto_hash_sha256_state* %0, i32 0, i32 2, i32 58
+  store i8 %49, i8* %50, align 1
+  %51 = lshr i64 %32, 48
+  %52 = trunc i64 %51 to i8
+  %53 = getelementptr %struct.crypto_hash_sha256_state, %struct.crypto_hash_sha256_state* %0, i32 0, i32 2, i32 57
+  store i8 %52, i8* %53, align 1
+  %54 = lshr i64 %32, 56
+  %55 = trunc i64 %54 to i8
+  store i8 %55, i8* %33, align 1
+  %56 = getelementptr inbounds %struct.crypto_hash_sha256_state, %struct.crypto_hash_sha256_state* %0, i32 0, i32 0, i32 0
+  %57 = getelementptr inbounds %struct.crypto_hash_sha256_state, %struct.crypto_hash_sha256_state* %0, i32 0, i32 2, i32 0
+  %58 = getelementptr inbounds [72 x i32], [72 x i32]* %3, i32 0, i32 64
+  call fastcc void @SHA256_Transform(i32* nonnull %56, i8* nonnull %57, i32* nonnull %5, i32* nonnull %58) #4
+  %59 = load i32, i32* %56, align 4
+  %60 = trunc i32 %59 to i8
+  %61 = getelementptr i8, i8* %1, i32 3
+  store i8 %60, i8* %61, align 1
+  %62 = lshr i32 %59, 8
+  %63 = trunc i32 %62 to i8
+  %64 = getelementptr i8, i8* %1, i32 2
+  store i8 %63, i8* %64, align 1
+  %65 = lshr i32 %59, 16
+  %66 = trunc i32 %65 to i8
+  %67 = getelementptr i8, i8* %1, i32 1
+  store i8 %66, i8* %67, align 1
+  %68 = lshr i32 %59, 24
+  %69 = trunc i32 %68 to i8
+  store i8 %69, i8* %1, align 1
+  %70 = getelementptr i8, i8* %1, i32 4
+  %71 = getelementptr %struct.crypto_hash_sha256_state, %struct.crypto_hash_sha256_state* %0, i32 0, i32 0, i32 1
+  %72 = load i32, i32* %71, align 4
+  %73 = trunc i32 %72 to i8
+  %74 = getelementptr i8, i8* %1, i32 7
+  store i8 %73, i8* %74, align 1
+  %75 = lshr i32 %72, 8
+  %76 = trunc i32 %75 to i8
+  %77 = getelementptr i8, i8* %1, i32 6
+  store i8 %76, i8* %77, align 1
+  %78 = lshr i32 %72, 16
+  %79 = trunc i32 %78 to i8
+  %80 = getelementptr i8, i8* %1, i32 5
+  store i8 %79, i8* %80, align 1
+  %81 = lshr i32 %72, 24
+  %82 = trunc i32 %81 to i8
+  store i8 %82, i8* %70, align 1
+  %83 = getelementptr i8, i8* %1, i32 8
+  %84 = getelementptr %struct.crypto_hash_sha256_state, %struct.crypto_hash_sha256_state* %0, i32 0, i32 0, i32 2
+  %85 = load i32, i32* %84, align 4
+  %86 = trunc i32 %85 to i8
+  %87 = getelementptr i8, i8* %1, i32 11
+  store i8 %86, i8* %87, align 1
+  %88 = lshr i32 %85, 8
+  %89 = trunc i32 %88 to i8
+  %90 = getelementptr i8, i8* %1, i32 10
+  store i8 %89, i8* %90, align 1
+  %91 = lshr i32 %85, 16
+  %92 = trunc i32 %91 to i8
+  %93 = getelementptr i8, i8* %1, i32 9
+  store i8 %92, i8* %93, align 1
+  %94 = lshr i32 %85, 24
+  %95 = trunc i32 %94 to i8
+  store i8 %95, i8* %83, align 1
+  %96 = getelementptr i8, i8* %1, i32 12
+  %97 = getelementptr %struct.crypto_hash_sha256_state, %struct.crypto_hash_sha256_state* %0, i32 0, i32 0, i32 3
+  %98 = load i32, i32* %97, align 4
+  %99 = trunc i32 %98 to i8
+  %100 = getelementptr i8, i8* %1, i32 15
+  store i8 %99, i8* %100, align 1
+  %101 = lshr i32 %98, 8
+  %102 = trunc i32 %101 to i8
+  %103 = getelementptr i8, i8* %1, i32 14
+  store i8 %102, i8* %103, align 1
+  %104 = lshr i32 %98, 16
+  %105 = trunc i32 %104 to i8
+  %106 = getelementptr i8, i8* %1, i32 13
+  store i8 %105, i8* %106, align 1
+  %107 = lshr i32 %98, 24
+  %108 = trunc i32 %107 to i8
+  store i8 %108, i8* %96, align 1
+  %109 = getelementptr i8, i8* %1, i32 16
+  %110 = getelementptr %struct.crypto_hash_sha256_state, %struct.crypto_hash_sha256_state* %0, i32 0, i32 0, i32 4
+  %111 = load i32, i32* %110, align 4
+  %112 = trunc i32 %111 to i8
+  %113 = getelementptr i8, i8* %1, i32 19
+  store i8 %112, i8* %113, align 1
+  %114 = lshr i32 %111, 8
+  %115 = trunc i32 %114 to i8
+  %116 = getelementptr i8, i8* %1, i32 18
+  store i8 %115, i8* %116, align 1
+  %117 = lshr i32 %111, 16
+  %118 = trunc i32 %117 to i8
+  %119 = getelementptr i8, i8* %1, i32 17
+  store i8 %118, i8* %119, align 1
+  %120 = lshr i32 %111, 24
+  %121 = trunc i32 %120 to i8
+  store i8 %121, i8* %109, align 1
+  %122 = getelementptr i8, i8* %1, i32 20
+  %123 = getelementptr %struct.crypto_hash_sha256_state, %struct.crypto_hash_sha256_state* %0, i32 0, i32 0, i32 5
+  %124 = load i32, i32* %123, align 4
+  %125 = trunc i32 %124 to i8
+  %126 = getelementptr i8, i8* %1, i32 23
+  store i8 %125, i8* %126, align 1
+  %127 = lshr i32 %124, 8
+  %128 = trunc i32 %127 to i8
+  %129 = getelementptr i8, i8* %1, i32 22
+  store i8 %128, i8* %129, align 1
+  %130 = lshr i32 %124, 16
+  %131 = trunc i32 %130 to i8
+  %132 = getelementptr i8, i8* %1, i32 21
+  store i8 %131, i8* %132, align 1
+  %133 = lshr i32 %124, 24
+  %134 = trunc i32 %133 to i8
+  store i8 %134, i8* %122, align 1
+  %135 = getelementptr i8, i8* %1, i32 24
+  %136 = getelementptr %struct.crypto_hash_sha256_state, %struct.crypto_hash_sha256_state* %0, i32 0, i32 0, i32 6
+  %137 = load i32, i32* %136, align 4
+  %138 = trunc i32 %137 to i8
+  %139 = getelementptr i8, i8* %1, i32 27
+  store i8 %138, i8* %139, align 1
+  %140 = lshr i32 %137, 8
+  %141 = trunc i32 %140 to i8
+  %142 = getelementptr i8, i8* %1, i32 26
+  store i8 %141, i8* %142, align 1
+  %143 = lshr i32 %137, 16
+  %144 = trunc i32 %143 to i8
+  %145 = getelementptr i8, i8* %1, i32 25
+  store i8 %144, i8* %145, align 1
+  %146 = lshr i32 %137, 24
+  %147 = trunc i32 %146 to i8
+  store i8 %147, i8* %135, align 1
+  %148 = getelementptr i8, i8* %1, i32 28
+  %149 = getelementptr %struct.crypto_hash_sha256_state, %struct.crypto_hash_sha256_state* %0, i32 0, i32 0, i32 7
+  %150 = load i32, i32* %149, align 4
+  %151 = trunc i32 %150 to i8
+  %152 = getelementptr i8, i8* %1, i32 31
+  store i8 %151, i8* %152, align 1
+  %153 = lshr i32 %150, 8
+  %154 = trunc i32 %153 to i8
+  %155 = getelementptr i8, i8* %1, i32 30
+  store i8 %154, i8* %155, align 1
+  %156 = lshr i32 %150, 16
+  %157 = trunc i32 %156 to i8
+  %158 = getelementptr i8, i8* %1, i32 29
+  store i8 %157, i8* %158, align 1
+  %159 = lshr i32 %150, 24
+  %160 = trunc i32 %159 to i8
+  store i8 %160, i8* %148, align 1
+  call void @sodium_memzero(i8* nonnull %4, i32 288) #4
+  %161 = bitcast %struct.crypto_hash_sha256_state* %0 to i8*
+  call void @sodium_memzero(i8* nonnull %161, i32 104) #4
+  call void @llvm.lifetime.end.p0i8(i64 288, i8* nonnull %4) #4
+  ret i32 0
+}
+
+; Function Attrs: nounwind
+define i32 @crypto_hash_sha256(i8* nonnull %0, i8* nocapture readonly %1, i64 %2) local_unnamed_addr #0 {
+  %4 = alloca %struct.crypto_hash_sha256_state, align 8
+  %5 = bitcast %struct.crypto_hash_sha256_state* %4 to i8*
+  call void @llvm.lifetime.start.p0i8(i64 104, i8* nonnull %5) #4
+  %6 = getelementptr inbounds %struct.crypto_hash_sha256_state, %struct.crypto_hash_sha256_state* %4, i32 0, i32 1
+  store i64 0, i64* %6, align 8
+  call void @llvm.memcpy.p0i8.p0i8.i32(i8* nonnull align 8 dereferenceable(32) %5, i8* nonnull align 16 dereferenceable(32) bitcast ([8 x i32]* @crypto_hash_sha256_init.sha256_initial_state to i8*), i32 32, i1 false) #4
+  %7 = call i32 @crypto_hash_sha256_update(%struct.crypto_hash_sha256_state* %4, i8* %1, i64 %2)
+  %8 = call i32 @crypto_hash_sha256_final(%struct.crypto_hash_sha256_state* %4, i8* %0)
+  call void @llvm.lifetime.end.p0i8(i64 104, i8* nonnull %5) #4
+  ret i32 0
+}
+
+; Function Attrs: argmemonly nounwind willreturn writeonly
+declare void @llvm.memset.p0i8.i32(i8* nocapture writeonly %0, i8 %1, i32 %2, i1 immarg %3) #3
+
+attributes #0 = { nounwind "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "min-legal-vector-width"="0" "no-infs-fp-math"="false" "no-jump-tables"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="false" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #1 = { argmemonly nounwind willreturn }
+attributes #2 = { "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="false" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #3 = { argmemonly nounwind willreturn writeonly }
+attributes #4 = { nounwind }
+
+!llvm.module.flags = !{!0, !1, !2}
+!llvm.ident = !{!3}
+
+!0 = !{i32 1, !"wchar_size", i32 4}
+!1 = !{i32 7, !"PIC Level", i32 2}
+!2 = !{i32 7, !"PIE Level", i32 2}
+!3 = !{!"clang version 10.0.0 (https://github.com/llvm/llvm-project d32170dbd5b0d54436537b6b75beaf44324e0c28)"}
+
+; extracted candidates
+
+; *****
+; For LLVM instruction:
+;  %6 = icmp eq i64 %2, 0
+; Looking for a replacement for:
+%0:i64 = var
+%1:i1 = eq 0:i64, %0
+infer %1
+
+; *****
+; For LLVM instruction:
+;  %9 = load i64, i64* %8, align 8
+; Looking for a replacement for:
+%0:i64 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %10 = lshr i64 %9, 3
+; Looking for a replacement for:
+%0:i64 = var
+%1:i64 = lshr %0, 3:i64
+infer %1 (demandedBits=0000000000000000000000000000000000000000000000000000000000111111)
+
+; *****
+; For LLVM instruction:
+;  %11 = and i64 %10, 63
+; Looking for a replacement for:
+%0:i64 = var
+%1:i64 = lshr %0, 3:i64 (hasExternalUses)
+%2:i64 = and 63:i64, %1
+infer %2
+
+; *****
+; For LLVM instruction:
+;  %12 = shl i64 %2, 3
+; Looking for a replacement for:
+%0:i64 = var
+%1:i1 = eq 0:i64, %0
+pc %1 0:i1
+%2:i64 = shl %0, 3:i64
+infer %2
+
+; *****
+; For LLVM instruction:
+;  %13 = add i64 %9, %12
+; Looking for a replacement for:
+%0:i64 = var
+%1:i1 = eq 0:i64, %0
+pc %1 0:i1
+%2:i64 = var
+%3:i64 = shl %0, 3:i64
+%4:i64 = add %2, %3
+infer %4
+
+; *****
+; For LLVM instruction:
+;  %14 = sub nuw nsw i64 64, %11
+; Looking for a replacement for:
+%0:i64 = var
+%1:i64 = lshr %0, 3:i64 (hasExternalUses)
+%2:i64 = and 63:i64, %1 (hasExternalUses)
+%3:i64 = subnw 64:i64, %2
+infer %3
+
+; *****
+; For LLVM instruction:
+;  %15 = icmp ugt i64 %14, %2
+; Looking for a replacement for:
+%0:i64 = var
+%1:i1 = eq 0:i64, %0
+pc %1 0:i1
+%2:i64 = var
+%3:i64 = lshr %2, 3:i64 (hasExternalUses)
+%4:i64 = and 63:i64, %3 (hasExternalUses)
+%5:i64 = subnw 64:i64, %4 (hasExternalUses)
+%6:i1 = ult %0, %5
+infer %6
+
+; *****
+; For LLVM instruction:
+;  %17 = phi i64 [ %24, %16 ], [ 0, %7 ]
+; Looking for a replacement for:
+%0:i64 = var (range=[0,-1))
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %18 = trunc i64 %17 to i32
+; Looking for a replacement for:
+%0:i64 = var (range=[0,-1))
+%1:i32 = trunc %0
+infer %1
+
+; *****
+; For LLVM instruction:
+;  %20 = load i8, i8* %19, align 1
+; Looking for a replacement for:
+%0:i8 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %21 = add i64 %17, %11
+; Looking for a replacement for:
+%0:i64 = var (range=[0,-1))
+%1:i64 = var
+%2:i64 = lshr %1, 3:i64 (hasExternalUses)
+%3:i64 = and 63:i64, %2 (hasExternalUses)
+%4:i64 = add %0, %3
+infer %4 (demandedBits=0000000000000000000000000000000011111111111111111111111111111111)
+
+; *****
+; For LLVM instruction:
+;  %22 = trunc i64 %21 to i32
+; Looking for a replacement for:
+%0:i64 = var (range=[0,-1))
+%1:i64 = var
+%2:i64 = lshr %1, 3:i64 (hasExternalUses)
+%3:i64 = and 63:i64, %2 (hasExternalUses)
+%4:i64 = add %0, %3
+%5:i32 = trunc %4
+infer %5
+
+; *****
+; For LLVM instruction:
+;  %24 = add nuw i64 %17, 1
+; Looking for a replacement for:
+%0:i64 = var (range=[0,-1))
+%1:i64 = addnuw 1:i64, %0
+infer %1
+
+; *****
+; For LLVM instruction:
+;  %25 = icmp eq i64 %24, %2
+; Looking for a replacement for:
+%0:i64 = var
+%1:i64 = var (range=[0,-1))
+%2:i64 = addnuw 1:i64, %1 (hasExternalUses)
+%3:i1 = eq %0, %2
+infer %3
+
+; *****
+; For LLVM instruction:
+;  %27 = phi i64 [ %34, %26 ], [ 0, %7 ]
+; Looking for a replacement for:
+%0:i64 = var (knownBits=0xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx) (nonNegative) (range=[0,64))
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %28 = trunc i64 %27 to i32
+; Looking for a replacement for:
+%0:i64 = var (knownBits=0xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx) (nonNegative) (range=[0,64))
+%1:i32 = trunc %0
+infer %1
+
+; *****
+; For LLVM instruction:
+;  %30 = load i8, i8* %29, align 1
+; Looking for a replacement for:
+%0:i8 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %31 = add nuw nsw i64 %27, %11
+; Looking for a replacement for:
+%0:i64 = var (knownBits=0xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx) (nonNegative) (range=[0,64))
+%1:i64 = var
+%2:i64 = lshr %1, 3:i64 (hasExternalUses)
+%3:i64 = and 63:i64, %2 (hasExternalUses)
+%4:i64 = addnw %0, %3
+infer %4 (demandedBits=0000000000000000000000000000000011111111111111111111111111111111)
+
+; *****
+; For LLVM instruction:
+;  %32 = trunc i64 %31 to i32
+; Looking for a replacement for:
+%0:i64 = var (knownBits=0xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx) (nonNegative) (range=[0,64))
+%1:i64 = var
+%2:i64 = lshr %1, 3:i64 (hasExternalUses)
+%3:i64 = and 63:i64, %2 (hasExternalUses)
+%4:i64 = addnw %0, %3
+%5:i32 = trunc %4
+infer %5
+
+; *****
+; For LLVM instruction:
+;  %34 = add nuw nsw i64 %27, 1
+; Looking for a replacement for:
+%0:i64 = var (knownBits=0xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx) (nonNegative) (range=[0,64))
+%1:i64 = addnw 1:i64, %0
+infer %1
+
+; *****
+; For LLVM instruction:
+;  %35 = icmp eq i64 %34, %14
+; Looking for a replacement for:
+%0:i64 = var (knownBits=0xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx) (nonNegative) (range=[0,64))
+%1:i64 = addnw 1:i64, %0 (hasExternalUses)
+%2:i64 = var
+%3:i64 = lshr %2, 3:i64 (hasExternalUses)
+%4:i64 = and 63:i64, %3 (hasExternalUses)
+%5:i64 = subnw 64:i64, %4 (hasExternalUses)
+%6:i1 = eq %1, %5
+infer %6
+
+; *****
+; For LLVM instruction:
+;  %41 = trunc i64 %14 to i32
+; Looking for a replacement for:
+%0:i64 = var (knownBits=0xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx) (nonNegative) (range=[0,64))
+%1:i64 = addnw 1:i64, %0 (hasExternalUses)
+%2:i64 = var
+%3:i64 = lshr %2, 3:i64 (hasExternalUses)
+%4:i64 = and 63:i64, %3 (hasExternalUses)
+%5:i64 = subnw 64:i64, %4 (hasExternalUses)
+%6:i1 = eq %1, %5
+pc %6 1:i1
+%7:i32 = trunc %5
+infer %7
+
+; *****
+; For LLVM instruction:
+;  %43 = sub i64 %2, %14
+; Looking for a replacement for:
+%0:i64 = var (knownBits=0xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx) (nonNegative) (range=[0,64))
+%1:i64 = addnw 1:i64, %0 (hasExternalUses)
+%2:i64 = var
+%3:i64 = lshr %2, 3:i64 (hasExternalUses)
+%4:i64 = and 63:i64, %3 (hasExternalUses)
+%5:i64 = subnw 64:i64, %4 (hasExternalUses)
+%6:i1 = eq %1, %5
+pc %6 1:i1
+%7:i64 = var
+%8:i64 = sub %7, %5
+infer %8
+
+; *****
+; For LLVM instruction:
+;  %44 = icmp ugt i64 %43, 63
+; Looking for a replacement for:
+%0:i64 = var (knownBits=0xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx) (nonNegative) (range=[0,64))
+%1:i64 = addnw 1:i64, %0 (hasExternalUses)
+%2:i64 = var
+%3:i64 = lshr %2, 3:i64 (hasExternalUses)
+%4:i64 = and 63:i64, %3 (hasExternalUses)
+%5:i64 = subnw 64:i64, %4 (hasExternalUses)
+%6:i1 = eq %1, %5
+pc %6 1:i1
+%7:i64 = var
+%8:i64 = sub %7, %5 (hasExternalUses)
+%9:i1 = ult 63:i64, %8
+infer %9
+
+; *****
+; For LLVM instruction:
+;  %46 = add i64 %10, %2
+; Looking for a replacement for:
+%0:i64 = var (knownBits=0xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx) (nonNegative) (range=[0,64))
+%1:i64 = addnw 1:i64, %0 (hasExternalUses)
+%2:i64 = var
+%3:i64 = lshr %2, 3:i64 (hasExternalUses)
+%4:i64 = and 63:i64, %3 (hasExternalUses)
+%5:i64 = subnw 64:i64, %4 (hasExternalUses)
+%6:i1 = eq %1, %5
+pc %6 1:i1
+%7:i64 = var
+%8:i64 = sub %7, %5 (hasExternalUses)
+%9:i1 = ult 63:i64, %8
+pc %9 1:i1
+%10:i64 = add %7, %3
+infer %10 (demandedBits=0000000000000000000000000000000000000000000000000000000000111111)
+
+; *****
+; For LLVM instruction:
+;  %48 = and i64 %46, 63
+; Looking for a replacement for:
+%0:i64 = var
+%1:i64 = var
+%2:i64 = lshr %1, 3:i64 (hasExternalUses)
+%3:i64 = add %0, %2
+%4:i64 = and 63:i64, %3
+infer %4
+
+; *****
+; For LLVM instruction:
+;  %51 = phi i64 [ %43, %36 ], [ %48, %47 ]
+; Looking for a replacement for:
+%0 = block 2
+%1:i64 = var
+%2:i64 = var
+%3:i64 = lshr %2, 3:i64
+%4:i64 = and 63:i64, %3 (hasExternalUses)
+%5:i64 = subnw 64:i64, %4 (hasExternalUses)
+%6:i64 = sub %1, %5 (hasExternalUses)
+%7:i64 = add %1, %3
+%8:i64 = and 63:i64, %7
+%9:i64 = phi %0, %6, %8
+infer %9
+
+; *****
+; For LLVM instruction:
+;  %52 = icmp eq i64 %51, 0
+; Looking for a replacement for:
+%0 = block 2
+%1:i64 = var
+%2:i64 = var
+%3:i64 = lshr %2, 3:i64
+%4:i64 = and 63:i64, %3
+%5:i64 = subnw 64:i64, %4
+%6:i64 = sub %1, %5
+%7:i64 = add %1, %3
+%8:i64 = and 63:i64, %7
+%9:i64 = phi %0, %6, %8
+%10:i1 = eq 0:i64, %9
+infer %10
+
+; *****
+; For LLVM instruction:
+;  %54 = phi i64 [ %57, %53 ], [ %43, %45 ]
+; Looking for a replacement for:
+%0:i64 = var (range=[64,0))
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %57 = add i64 %54, -64
+; Looking for a replacement for:
+%0:i64 = var (range=[64,0))
+%1:i64 = add 18446744073709551552:i64, %0
+infer %1
+
+; *****
+; For LLVM instruction:
+;  %58 = icmp ugt i64 %57, 63
+; Looking for a replacement for:
+%0:i64 = var (range=[64,0))
+%1:i64 = add 18446744073709551552:i64, %0 (hasExternalUses)
+%2:i1 = ult 63:i64, %1
+infer %2
+
+; *****
+; For LLVM instruction:
+;  %60 = phi i64 [ %65, %59 ], [ 0, %49 ]
+; Looking for a replacement for:
+%0:i64 = var (range=[0,-1))
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %61 = trunc i64 %60 to i32
+; Looking for a replacement for:
+%0:i64 = var (range=[0,-1))
+%1:i32 = trunc %0
+infer %1
+
+; *****
+; For LLVM instruction:
+;  %63 = load i8, i8* %62, align 1
+; Looking for a replacement for:
+%0:i8 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %65 = add nuw i64 %60, 1
+; Looking for a replacement for:
+%0:i64 = var (range=[0,-1))
+%1:i64 = addnuw 1:i64, %0
+infer %1
+
+; *****
+; For LLVM instruction:
+;  %66 = icmp eq i64 %65, %51
+; Looking for a replacement for:
+%0 = block 2
+%1:i64 = var
+%2:i64 = var
+%3:i64 = lshr %2, 3:i64
+%4:i64 = and 63:i64, %3
+%5:i64 = subnw 64:i64, %4
+%6:i64 = sub %1, %5
+%7:i64 = add %1, %3
+%8:i64 = and 63:i64, %7
+%9:i64 = phi %0, %6, %8
+%10:i64 = var (range=[0,-1))
+%11:i64 = addnuw 1:i64, %10 (hasExternalUses)
+%12:i1 = eq %9, %11
+infer %12
+got 2 candidates from LHS
+
+-------------------------------------------------
+%0:i64 = var
+%1:i1 = eq 0:i64, %0
+infer %1
+
+
+--------------------------------
+guess 0
+
+%0:i1 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: -1
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: 0
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+Dataflow Pruned 0/0
+There are 1 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 1 candidates from LHS
+
+-------------------------------------------------
+%0:i64 = var
+infer %0
+
+
+--------------------------------
+guess 0
+
+%0:i64 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: -1
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+Dataflow Pruned 0/0
+There are 1 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 2 candidates from LHS
+
+-------------------------------------------------
+%0:i64 = var
+%1:i64 = lshr %0, 3:i64
+infer %1 (demandedBits=0000000000000000000000000000000000000000000000000000000000111111)
+
+
+--------------------------------
+guess 0
+
+%0:i64 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: 63
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+
+--------------------------------
+guess 1
+
+%0:i64 = var
+
+Cost = 0
+second query is SAT-- constant doesn't work
+Dataflow Pruned 0/0
+There are 2 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 3 candidates from LHS
+
+-------------------------------------------------
+%0:i64 = var
+%1:i64 = lshr %0, 3:i64 (hasExternalUses)
+%2:i64 = and 63:i64, %1
+infer %2
+
+
+--------------------------------
+guess 0
+
+%0:i64 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: 63
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+
+--------------------------------
+guess 1
+
+%0:i64 = var
+
+Cost = 0
+second query is SAT-- constant doesn't work
+Dataflow Pruned 0/0
+There are 2 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 2 candidates from LHS
+
+-------------------------------------------------
+%0:i64 = var
+%1:i1 = eq 0:i64, %0
+pc %1 0:i1
+%2:i64 = shl %0, 3:i64
+infer %2
+
+
+--------------------------------
+guess 0
+
+%0:i64 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: -8
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: 65536
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+
+--------------------------------
+guess 1
+
+%0:i64 = var
+
+Cost = 0
+second query is SAT-- constant doesn't work
+Dataflow Pruned 0/0
+There are 2 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 4 candidates from LHS
+
+-------------------------------------------------
+%0:i64 = var
+%1:i1 = eq 0:i64, %0
+pc %1 0:i1
+%2:i64 = var
+%3:i64 = shl %0, 3:i64
+%4:i64 = add %2, %3
+infer %4
+
+
+--------------------------------
+guess 0
+
+%0:i64 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: -8
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: -9
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+
+--------------------------------
+guess 1
+
+%0:i64 = var
+
+Cost = 0
+second query is SAT-- constant doesn't work
+
+--------------------------------
+guess 2
+
+%0:i64 = var
+
+Cost = 0
+second query is SAT-- constant doesn't work
+
+--------------------------------
+guess 3
+
+%0:i64 = var
+%1:i64 = shl %0, 3:i64
+
+Cost = 1
+second query is SAT-- constant doesn't work
+Dataflow Pruned 0/0
+There are 4 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 4 candidates from LHS
+
+-------------------------------------------------
+%0:i64 = var
+%1:i64 = lshr %0, 3:i64 (hasExternalUses)
+%2:i64 = and 63:i64, %1 (hasExternalUses)
+%3:i64 = subnw 64:i64, %2
+infer %3
+
+
+--------------------------------
+guess 0
+
+%0:i64 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 64
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: 48
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+
+--------------------------------
+guess 1
+
+%0:i64 = var
+
+Cost = 0
+second query is SAT-- constant doesn't work
+Dataflow Pruned 0/0
+There are 2 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 6 candidates from LHS
+
+-------------------------------------------------
+%0:i64 = var
+%1:i1 = eq 0:i64, %0
+pc %1 0:i1
+%2:i64 = var
+%3:i64 = lshr %2, 3:i64 (hasExternalUses)
+%4:i64 = and 63:i64, %3 (hasExternalUses)
+%5:i64 = subnw 64:i64, %4 (hasExternalUses)
+%6:i1 = ult %0, %5
+infer %6
+
+
+--------------------------------
+guess 0
+
+%0:i1 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: -1
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+Dataflow Pruned 0/0
+There are 1 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 1 candidates from LHS
+
+-------------------------------------------------
+%0:i64 = var (range=[0,-1))
+infer %0
+
+
+--------------------------------
+guess 0
+
+%0:i64 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: -524289
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+Dataflow Pruned 0/0
+There are 1 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 2 candidates from LHS
+
+-------------------------------------------------
+%0:i64 = var (range=[0,-1))
+%1:i32 = trunc %0
+infer %1
+
+
+--------------------------------
+guess 0
+
+%0:i32 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: -1
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+Dataflow Pruned 0/0
+There are 1 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 1 candidates from LHS
+
+-------------------------------------------------
+%0:i8 = var
+infer %0
+
+
+--------------------------------
+guess 0
+
+%0:i8 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: -1
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+Dataflow Pruned 0/0
+There are 1 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 5 candidates from LHS
+
+-------------------------------------------------
+%0:i64 = var (range=[0,-1))
+%1:i64 = var
+%2:i64 = lshr %1, 3:i64 (hasExternalUses)
+%3:i64 = and 63:i64, %2 (hasExternalUses)
+%4:i64 = add %0, %3
+infer %4 (demandedBits=0000000000000000000000000000000011111111111111111111111111111111)
+
+
+--------------------------------
+guess 0
+
+%0:i64 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: 1073741824
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+
+--------------------------------
+guess 1
+
+%0:i64 = var (range=[0,-1))
+
+Cost = 0
+second query is SAT-- constant doesn't work
+
+--------------------------------
+guess 2
+
+%0:i64 = var
+
+Cost = 0
+second query is SAT-- constant doesn't work
+Dataflow Pruned 0/0
+There are 3 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 6 candidates from LHS
+
+-------------------------------------------------
+%0:i64 = var (range=[0,-1))
+%1:i64 = var
+%2:i64 = lshr %1, 3:i64 (hasExternalUses)
+%3:i64 = and 63:i64, %2 (hasExternalUses)
+%4:i64 = add %0, %3
+%5:i32 = trunc %4
+infer %5
+
+
+--------------------------------
+guess 0
+
+%0:i32 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: 1073741824
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+Dataflow Pruned 0/0
+There are 1 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 2 candidates from LHS
+
+-------------------------------------------------
+%0:i64 = var (range=[0,-1))
+%1:i64 = addnuw 1:i64, %0
+infer %1
+
+
+--------------------------------
+guess 0
+
+%0:i64 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 1
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: 4611686018427387905
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+
+--------------------------------
+guess 1
+
+%0:i64 = var (range=[0,-1))
+
+Cost = 0
+second query is SAT-- constant doesn't work
+Dataflow Pruned 0/0
+There are 2 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 4 candidates from LHS
+
+-------------------------------------------------
+%0:i64 = var
+%1:i64 = var (range=[0,-1))
+%2:i64 = addnuw 1:i64, %1 (hasExternalUses)
+%3:i1 = eq %0, %2
+infer %3
+
+
+--------------------------------
+guess 0
+
+%0:i1 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: -1
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+Dataflow Pruned 0/0
+There are 1 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 1 candidates from LHS
+
+-------------------------------------------------
+%0:i64 = var (knownBits=0xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx) (nonNegative) (range=[0,64))
+infer %0
+
+
+--------------------------------
+guess 0
+
+%0:i64 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: 16
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+Dataflow Pruned 0/0
+There are 1 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 2 candidates from LHS
+
+-------------------------------------------------
+%0:i64 = var (knownBits=0xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx) (nonNegative) (range=[0,64))
+%1:i32 = trunc %0
+infer %1
+
+
+--------------------------------
+guess 0
+
+%0:i32 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: 16
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+Dataflow Pruned 0/0
+There are 1 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 5 candidates from LHS
+
+-------------------------------------------------
+%0:i64 = var (knownBits=0xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx) (nonNegative) (range=[0,64))
+%1:i64 = var
+%2:i64 = lshr %1, 3:i64 (hasExternalUses)
+%3:i64 = and 63:i64, %2 (hasExternalUses)
+%4:i64 = addnw %0, %3
+infer %4 (demandedBits=0000000000000000000000000000000011111111111111111111111111111111)
+
+
+--------------------------------
+guess 0
+
+%0:i64 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: 16
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+
+--------------------------------
+guess 1
+
+%0:i64 = var (knownBits=0xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx) (nonNegative) (range=[0,64))
+
+Cost = 0
+second query is SAT-- constant doesn't work
+
+--------------------------------
+guess 2
+
+%0:i64 = var
+
+Cost = 0
+second query is SAT-- constant doesn't work
+Dataflow Pruned 0/0
+There are 3 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 6 candidates from LHS
+
+-------------------------------------------------
+%0:i64 = var (knownBits=0xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx) (nonNegative) (range=[0,64))
+%1:i64 = var
+%2:i64 = lshr %1, 3:i64 (hasExternalUses)
+%3:i64 = and 63:i64, %2 (hasExternalUses)
+%4:i64 = addnw %0, %3
+%5:i32 = trunc %4
+infer %5
+
+
+--------------------------------
+guess 0
+
+%0:i32 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: 16
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+Dataflow Pruned 0/0
+There are 1 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 2 candidates from LHS
+
+-------------------------------------------------
+%0:i64 = var (knownBits=0xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx) (nonNegative) (range=[0,64))
+%1:i64 = addnw 1:i64, %0
+infer %1
+
+
+--------------------------------
+guess 0
+
+%0:i64 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 1
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: 5
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+
+--------------------------------
+guess 1
+
+%0:i64 = var (knownBits=0xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx) (nonNegative) (range=[0,64))
+
+Cost = 0
+second query is SAT-- constant doesn't work
+Dataflow Pruned 0/0
+There are 2 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 7 candidates from LHS
+
+-------------------------------------------------
+%0:i64 = var (knownBits=0xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx) (nonNegative) (range=[0,64))
+%1:i64 = addnw 1:i64, %0 (hasExternalUses)
+%2:i64 = var
+%3:i64 = lshr %2, 3:i64 (hasExternalUses)
+%4:i64 = and 63:i64, %3 (hasExternalUses)
+%5:i64 = subnw 64:i64, %4 (hasExternalUses)
+%6:i1 = eq %1, %5
+infer %6
+
+
+--------------------------------
+guess 0
+
+%0:i1 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: -1
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+Dataflow Pruned 0/0
+There are 1 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 5 candidates from LHS
+
+-------------------------------------------------
+%0:i64 = var (knownBits=0xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx) (nonNegative) (range=[0,64))
+%1:i64 = addnw 1:i64, %0 (hasExternalUses)
+%2:i64 = var
+%3:i64 = lshr %2, 3:i64 (hasExternalUses)
+%4:i64 = and 63:i64, %3 (hasExternalUses)
+%5:i64 = subnw 64:i64, %4 (hasExternalUses)
+%6:i1 = eq %1, %5
+pc %6 1:i1
+%7:i32 = trunc %5
+infer %7
+
+
+--------------------------------
+guess 0
+
+%0:i32 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 63
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: 47
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+Dataflow Pruned 0/0
+There are 1 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 6 candidates from LHS
+
+-------------------------------------------------
+%0:i64 = var (knownBits=0xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx) (nonNegative) (range=[0,64))
+%1:i64 = addnw 1:i64, %0 (hasExternalUses)
+%2:i64 = var
+%3:i64 = lshr %2, 3:i64 (hasExternalUses)
+%4:i64 = and 63:i64, %3 (hasExternalUses)
+%5:i64 = subnw 64:i64, %4 (hasExternalUses)
+%6:i1 = eq %1, %5
+pc %6 1:i1
+%7:i64 = var
+%8:i64 = sub %7, %5
+infer %8
+
+
+--------------------------------
+guess 0
+
+%0:i64 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: -63
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: -66
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+
+--------------------------------
+guess 1
+
+%0:i64 = var
+
+Cost = 0
+second query is SAT-- constant doesn't work
+
+--------------------------------
+guess 2
+
+%0:i64 = var
+
+Cost = 0
+second query is SAT-- constant doesn't work
+Dataflow Pruned 0/0
+There are 3 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 7 candidates from LHS
+
+-------------------------------------------------
+%0:i64 = var (knownBits=0xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx) (nonNegative) (range=[0,64))
+%1:i64 = addnw 1:i64, %0 (hasExternalUses)
+%2:i64 = var
+%3:i64 = lshr %2, 3:i64 (hasExternalUses)
+%4:i64 = and 63:i64, %3 (hasExternalUses)
+%5:i64 = subnw 64:i64, %4 (hasExternalUses)
+%6:i1 = eq %1, %5
+pc %6 1:i1
+%7:i64 = var
+%8:i64 = sub %7, %5 (hasExternalUses)
+%9:i1 = ult 63:i64, %8
+infer %9
+
+
+--------------------------------
+guess 0
+
+%0:i1 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: -1
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: 0
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+Dataflow Pruned 0/0
+There are 1 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 4 candidates from LHS
+
+-------------------------------------------------
+%0:i64 = var (knownBits=0xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx) (nonNegative) (range=[0,64))
+%1:i64 = addnw 1:i64, %0 (hasExternalUses)
+%2:i64 = var
+%3:i64 = lshr %2, 3:i64 (hasExternalUses)
+%4:i64 = and 63:i64, %3 (hasExternalUses)
+%5:i64 = subnw 64:i64, %4 (hasExternalUses)
+%6:i1 = eq %1, %5
+pc %6 1:i1
+%7:i64 = var
+%8:i64 = sub %7, %5 (hasExternalUses)
+%9:i1 = ult 63:i64, %8
+pc %9 1:i1
+%10:i64 = add %7, %3
+infer %10 (demandedBits=0000000000000000000000000000000000000000000000000000000000111111)
+
+
+--------------------------------
+guess 0
+
+%0:i64 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: -9223372028264841200
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+
+--------------------------------
+guess 1
+
+%0:i64 = var
+
+Cost = 0
+second query is SAT-- constant doesn't work
+
+--------------------------------
+guess 2
+
+%0:i64 = var
+
+Cost = 0
+second query is SAT-- constant doesn't work
+Dataflow Pruned 0/0
+There are 3 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 5 candidates from LHS
+
+-------------------------------------------------
+%0:i64 = var
+%1:i64 = var
+%2:i64 = lshr %1, 3:i64 (hasExternalUses)
+%3:i64 = add %0, %2
+%4:i64 = and 63:i64, %3
+infer %4
+
+
+--------------------------------
+guess 0
+
+%0:i64 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: 63
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+
+--------------------------------
+guess 1
+
+%0:i64 = var
+
+Cost = 0
+second query is SAT-- constant doesn't work
+
+--------------------------------
+guess 2
+
+%0:i64 = var
+
+Cost = 0
+second query is SAT-- constant doesn't work
+
+--------------------------------
+guess 3
+
+%0:i64 = var
+%1:i64 = lshr %0, 3:i64
+
+Cost = 1
+second query is SAT-- constant doesn't work
+Dataflow Pruned 0/0
+There are 4 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 8 candidates from LHS
+
+-------------------------------------------------
+%0 = block 2
+%1:i64 = var
+%2:i64 = var
+%3:i64 = lshr %2, 3:i64
+%4:i64 = and 63:i64, %3 (hasExternalUses)
+%5:i64 = subnw 64:i64, %4 (hasExternalUses)
+%6:i64 = sub %1, %5 (hasExternalUses)
+%7:i64 = add %1, %3
+%8:i64 = and 63:i64, %7
+%9:i64 = phi %0, %6, %8
+infer %9
+
+
+--------------------------------
+guess 0
+
+%0:i64 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: 39
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+
+--------------------------------
+guess 1
+
+%0:i64 = var
+
+Cost = 0
+second query is SAT-- constant doesn't work
+
+--------------------------------
+guess 2
+
+%0:i64 = var
+%1:i64 = lshr %0, 3:i64
+
+Cost = 1
+second query is SAT-- constant doesn't work
+
+--------------------------------
+guess 3
+
+%0:i64 = var
+%1:i64 = var
+%2:i64 = lshr %1, 3:i64 (hasExternalUses)
+%3:i64 = add %0, %2
+
+Cost = 1
+second query is SAT-- constant doesn't work
+
+--------------------------------
+guess 4
+
+%0:i64 = var
+%1:i64 = lshr %0, 3:i64 (hasExternalUses)
+%2:i64 = and 63:i64, %1
+
+Cost = 1
+second query is SAT-- constant doesn't work
+
+--------------------------------
+guess 5
+
+%0:i64 = var
+%1:i64 = var
+%2:i64 = lshr %1, 3:i64 (hasExternalUses)
+%3:i64 = add %0, %2
+%4:i64 = and 63:i64, %3
+
+Cost = 2
+second query is SAT-- constant doesn't work
+
+--------------------------------
+guess 6
+
+%0:i64 = var
+%1:i64 = lshr %0, 3:i64 (hasExternalUses)
+%2:i64 = and 63:i64, %1 (hasExternalUses)
+%3:i64 = subnw 64:i64, %2
+
+Cost = 1
+second query is SAT-- constant doesn't work
+Dataflow Pruned 0/0
+There are 7 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 8 candidates from LHS
+
+-------------------------------------------------
+%0 = block 2
+%1:i64 = var
+%2:i64 = var
+%3:i64 = lshr %2, 3:i64
+%4:i64 = and 63:i64, %3
+%5:i64 = subnw 64:i64, %4
+%6:i64 = sub %1, %5
+%7:i64 = add %1, %3
+%8:i64 = and 63:i64, %7
+%9:i64 = phi %0, %6, %8
+%10:i1 = eq 0:i64, %9
+infer %10
+
+
+--------------------------------
+guess 0
+
+%0:i1 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: -1
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: 0
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+Dataflow Pruned 0/0
+There are 1 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 1 candidates from LHS
+
+-------------------------------------------------
+%0:i64 = var (range=[64,0))
+infer %0
+
+
+--------------------------------
+guess 0
+
+%0:i64 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 64
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: -9223372036854775808
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+Dataflow Pruned 0/0
+There are 1 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 2 candidates from LHS
+
+-------------------------------------------------
+%0:i64 = var (range=[64,0))
+%1:i64 = add 18446744073709551552:i64, %0
+infer %1
+
+
+--------------------------------
+guess 0
+
+%0:i64 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: 9223372036854775744
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+
+--------------------------------
+guess 1
+
+%0:i64 = var (range=[64,0))
+
+Cost = 0
+second query is SAT-- constant doesn't work
+Dataflow Pruned 0/0
+There are 2 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 3 candidates from LHS
+
+-------------------------------------------------
+%0:i64 = var (range=[64,0))
+%1:i64 = add 18446744073709551552:i64, %0 (hasExternalUses)
+%2:i1 = ult 63:i64, %1
+infer %2
+
+
+--------------------------------
+guess 0
+
+%0:i1 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: -1
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+Dataflow Pruned 0/0
+There are 1 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 8 candidates from LHS
+
+-------------------------------------------------
+%0 = block 2
+%1:i64 = var
+%2:i64 = var
+%3:i64 = lshr %2, 3:i64
+%4:i64 = and 63:i64, %3
+%5:i64 = subnw 64:i64, %4
+%6:i64 = sub %1, %5
+%7:i64 = add %1, %3
+%8:i64 = and 63:i64, %7
+%9:i64 = phi %0, %6, %8
+%10:i64 = var (range=[0,-1))
+%11:i64 = addnuw 1:i64, %10 (hasExternalUses)
+%12:i1 = eq %9, %11
+infer %12
+
+
+--------------------------------
+guess 0
+
+%0:i1 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: -1
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+Dataflow Pruned 0/0
+There are 1 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+#########################################################
+; exiting Souper's runOnFunction() for crypto_hash_sha256_update()
+
+; entering Souper's runOnFunction() for ./hash_sha256_cp.c.bc:SHA256_Transform()

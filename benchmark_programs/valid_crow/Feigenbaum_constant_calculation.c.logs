@@ -1,0 +1,606 @@
+
+Entering the Souper pass's runOnModule()
+
+
+; entering Souper's runOnFunction() for feigenbaum()
+
+; ModuleID = './Feigenbaum_constant_calculation.c.bc'
+source_filename = "./Feigenbaum_constant_calculation.c"
+target datalayout = "e-m:e-p:32:32-i64:64-n32:64-S128"
+target triple = "wasm32-unknown-wasi"
+
+@.str = private unnamed_addr constant [12 x i8] c" i       d\0A\00", align 1
+@.str.1 = private unnamed_addr constant [13 x i8] c"%2d    %.8f\0A\00", align 1
+@llvm.used = appending global [1 x i8*] [i8* bitcast (i32 ()* @__main_void to i8*)], section "llvm.metadata"
+
+@__main_void = alias i32 (), i32 ()* @main
+
+; Function Attrs: noinline nounwind optnone
+define hidden void @feigenbaum() #0 {
+entry:
+  %i = alloca i32, align 4
+  %j = alloca i32, align 4
+  %k = alloca i32, align 4
+  %max_it = alloca i32, align 4
+  %max_it_j = alloca i32, align 4
+  %a = alloca double, align 8
+  %x = alloca double, align 8
+  %y = alloca double, align 8
+  %d = alloca double, align 8
+  %a1 = alloca double, align 8
+  %a2 = alloca double, align 8
+  %d1 = alloca double, align 8
+  store i32 13, i32* %max_it, align 4
+  store i32 10, i32* %max_it_j, align 4
+  store double 1.000000e+00, double* %a1, align 8
+  store double 0.000000e+00, double* %a2, align 8
+  store double 3.200000e+00, double* %d1, align 8
+  %call = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([12 x i8], [12 x i8]* @.str, i32 0, i32 0))
+  store i32 2, i32* %i, align 4
+  br label %for.cond
+
+for.cond:                                         ; preds = %for.inc20, %entry
+  %0 = load i32, i32* %i, align 4
+  %1 = load i32, i32* %max_it, align 4
+  %cmp = icmp sle i32 %0, %1
+  br i1 %cmp, label %for.body, label %for.end22
+
+for.body:                                         ; preds = %for.cond
+  %2 = load double, double* %a1, align 8
+  %3 = load double, double* %a1, align 8
+  %4 = load double, double* %a2, align 8
+  %sub = fsub double %3, %4
+  %5 = load double, double* %d1, align 8
+  %div = fdiv double %sub, %5
+  %add = fadd double %2, %div
+  store double %add, double* %a, align 8
+  store i32 1, i32* %j, align 4
+  br label %for.cond1
+
+for.cond1:                                        ; preds = %for.inc13, %for.body
+  %6 = load i32, i32* %j, align 4
+  %7 = load i32, i32* %max_it_j, align 4
+  %cmp2 = icmp sle i32 %6, %7
+  br i1 %cmp2, label %for.body3, label %for.end15
+
+for.body3:                                        ; preds = %for.cond1
+  store double 0.000000e+00, double* %x, align 8
+  store double 0.000000e+00, double* %y, align 8
+  store i32 1, i32* %k, align 4
+  br label %for.cond4
+
+for.cond4:                                        ; preds = %for.inc, %for.body3
+  %8 = load i32, i32* %k, align 4
+  %9 = load i32, i32* %i, align 4
+  %shl = shl i32 1, %9
+  %cmp5 = icmp sle i32 %8, %shl
+  br i1 %cmp5, label %for.body6, label %for.end
+
+for.body6:                                        ; preds = %for.cond4
+  %10 = load double, double* %y, align 8
+  %mul = fmul double 2.000000e+00, %10
+  %11 = load double, double* %x, align 8
+  %mul7 = fmul double %mul, %11
+  %sub8 = fsub double 1.000000e+00, %mul7
+  store double %sub8, double* %y, align 8
+  %12 = load double, double* %a, align 8
+  %13 = load double, double* %x, align 8
+  %14 = load double, double* %x, align 8
+  %mul9 = fmul double %13, %14
+  %sub10 = fsub double %12, %mul9
+  store double %sub10, double* %x, align 8
+  br label %for.inc
+
+for.inc:                                          ; preds = %for.body6
+  %15 = load i32, i32* %k, align 4
+  %inc = add nsw i32 %15, 1
+  store i32 %inc, i32* %k, align 4
+  br label %for.cond4
+
+for.end:                                          ; preds = %for.cond4
+  %16 = load double, double* %x, align 8
+  %17 = load double, double* %y, align 8
+  %div11 = fdiv double %16, %17
+  %18 = load double, double* %a, align 8
+  %sub12 = fsub double %18, %div11
+  store double %sub12, double* %a, align 8
+  br label %for.inc13
+
+for.inc13:                                        ; preds = %for.end
+  %19 = load i32, i32* %j, align 4
+  %inc14 = add nsw i32 %19, 1
+  store i32 %inc14, i32* %j, align 4
+  br label %for.cond1
+
+for.end15:                                        ; preds = %for.cond1
+  %20 = load double, double* %a1, align 8
+  %21 = load double, double* %a2, align 8
+  %sub16 = fsub double %20, %21
+  %22 = load double, double* %a, align 8
+  %23 = load double, double* %a1, align 8
+  %sub17 = fsub double %22, %23
+  %div18 = fdiv double %sub16, %sub17
+  store double %div18, double* %d, align 8
+  %24 = load i32, i32* %i, align 4
+  %25 = load double, double* %d, align 8
+  %call19 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([13 x i8], [13 x i8]* @.str.1, i32 0, i32 0), i32 %24, double %25)
+  %26 = load double, double* %d, align 8
+  store double %26, double* %d1, align 8
+  %27 = load double, double* %a1, align 8
+  store double %27, double* %a2, align 8
+  %28 = load double, double* %a, align 8
+  store double %28, double* %a1, align 8
+  br label %for.inc20
+
+for.inc20:                                        ; preds = %for.end15
+  %29 = load i32, i32* %i, align 4
+  %inc21 = add nsw i32 %29, 1
+  store i32 %inc21, i32* %i, align 4
+  br label %for.cond
+
+for.end22:                                        ; preds = %for.cond
+  ret void
+}
+
+declare i32 @printf(i8* %0, ...) #1
+
+; Function Attrs: noinline nounwind optnone
+define hidden i32 @main() #0 {
+entry:
+  %retval = alloca i32, align 4
+  store i32 0, i32* %retval, align 4
+  call void @feigenbaum()
+  ret i32 0
+}
+
+attributes #0 = { noinline nounwind optnone "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "min-legal-vector-width"="0" "no-infs-fp-math"="false" "no-jump-tables"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #1 = { "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+
+!llvm.module.flags = !{!0}
+!llvm.ident = !{!1}
+
+!0 = !{i32 1, !"wchar_size", i32 4}
+!1 = !{!"clang version 11.0.0 (https://github.com/Jacarte/llvm-project.git 0f6dea67136cc1e0b3d200eb2bb165628970c44b)"}
+
+; extracted candidates
+
+; *****
+; For LLVM instruction:
+;  %0 = load i32, i32* %i, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %1 = load i32, i32* %max_it, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %cmp = icmp sle i32 %0, %1
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = var
+%2:i1 = sle %0, %1
+infer %2
+
+; *****
+; For LLVM instruction:
+;  %6 = load i32, i32* %j, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %7 = load i32, i32* %max_it_j, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %cmp2 = icmp sle i32 %6, %7
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = var
+%2:i1 = sle %0, %1
+infer %2
+
+; *****
+; For LLVM instruction:
+;  %8 = load i32, i32* %k, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %9 = load i32, i32* %i, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %shl = shl i32 1, %9
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = shl 1:i32, %0
+infer %1
+
+; *****
+; For LLVM instruction:
+;  %cmp5 = icmp sle i32 %8, %shl
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = var
+%2:i32 = shl 1:i32, %1
+%3:i1 = sle %0, %2
+infer %3
+
+; *****
+; For LLVM instruction:
+;  %15 = load i32, i32* %k, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %inc = add nsw i32 %15, 1
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = addnsw 1:i32, %0
+infer %1
+
+; *****
+; For LLVM instruction:
+;  %19 = load i32, i32* %j, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %inc14 = add nsw i32 %19, 1
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = addnsw 1:i32, %0
+infer %1
+
+; *****
+; For LLVM instruction:
+;  %24 = load i32, i32* %i, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %29 = load i32, i32* %i, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %inc21 = add nsw i32 %29, 1
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = addnsw 1:i32, %0
+infer %1
+got 1 candidates from LHS
+
+-------------------------------------------------
+%0:i32 = var
+infer %0
+
+
+--------------------------------
+guess 0
+
+%0:i32 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: -1
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+Dataflow Pruned 0/0
+There are 1 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 3 candidates from LHS
+
+-------------------------------------------------
+%0:i32 = var
+%1:i32 = var
+%2:i1 = sle %0, %1
+infer %2
+
+
+--------------------------------
+guess 0
+
+%0:i1 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: -1
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: 0
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+Dataflow Pruned 0/0
+There are 1 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 2 candidates from LHS
+
+-------------------------------------------------
+%0:i32 = var
+%1:i32 = shl 1:i32, %0
+infer %1
+
+
+--------------------------------
+guess 0
+
+%0:i32 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 1
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: 256
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+
+--------------------------------
+guess 1
+
+%0:i32 = var
+
+Cost = 0
+second query is SAT-- constant doesn't work
+Dataflow Pruned 0/0
+There are 2 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 4 candidates from LHS
+
+-------------------------------------------------
+%0:i32 = var
+%1:i32 = var
+%2:i32 = shl 1:i32, %1
+%3:i1 = sle %0, %2
+infer %3
+
+
+--------------------------------
+guess 0
+
+%0:i1 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: -1
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: 0
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+Dataflow Pruned 0/0
+There are 1 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 2 candidates from LHS
+
+-------------------------------------------------
+%0:i32 = var
+%1:i32 = addnsw 1:i32, %0
+infer %1
+
+
+--------------------------------
+guess 0
+
+%0:i32 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 1
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: 268435457
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+
+--------------------------------
+guess 1
+
+%0:i32 = var
+
+Cost = 0
+second query is SAT-- constant doesn't work
+Dataflow Pruned 0/0
+There are 2 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+#########################################################
+; exiting Souper's runOnFunction() for feigenbaum()
+
+; entering Souper's runOnFunction() for main()
+
+; ModuleID = './Feigenbaum_constant_calculation.c.bc'
+source_filename = "./Feigenbaum_constant_calculation.c"
+target datalayout = "e-m:e-p:32:32-i64:64-n32:64-S128"
+target triple = "wasm32-unknown-wasi"
+
+@.str = private unnamed_addr constant [12 x i8] c" i       d\0A\00", align 1
+@.str.1 = private unnamed_addr constant [13 x i8] c"%2d    %.8f\0A\00", align 1
+@llvm.used = appending global [1 x i8*] [i8* bitcast (i32 ()* @__main_void to i8*)], section "llvm.metadata"
+
+@__main_void = alias i32 (), i32 ()* @main
+
+; Function Attrs: noinline nounwind optnone
+define hidden void @feigenbaum() #0 {
+entry:
+  %i = alloca i32, align 4
+  %j = alloca i32, align 4
+  %k = alloca i32, align 4
+  %max_it = alloca i32, align 4
+  %max_it_j = alloca i32, align 4
+  %a = alloca double, align 8
+  %x = alloca double, align 8
+  %y = alloca double, align 8
+  %d = alloca double, align 8
+  %a1 = alloca double, align 8
+  %a2 = alloca double, align 8
+  %d1 = alloca double, align 8
+  store i32 13, i32* %max_it, align 4
+  store i32 10, i32* %max_it_j, align 4
+  store double 1.000000e+00, double* %a1, align 8
+  store double 0.000000e+00, double* %a2, align 8
+  store double 3.200000e+00, double* %d1, align 8
+  %call = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([12 x i8], [12 x i8]* @.str, i32 0, i32 0))
+  store i32 2, i32* %i, align 4
+  br label %for.cond
+
+for.cond:                                         ; preds = %for.inc20, %entry
+  %0 = load i32, i32* %i, align 4
+  %1 = load i32, i32* %max_it, align 4
+  %cmp = icmp sle i32 %0, %1
+  br i1 %cmp, label %for.body, label %for.end22
+
+for.body:                                         ; preds = %for.cond
+  %2 = load double, double* %a1, align 8
+  %3 = load double, double* %a1, align 8
+  %4 = load double, double* %a2, align 8
+  %sub = fsub double %3, %4
+  %5 = load double, double* %d1, align 8
+  %div = fdiv double %sub, %5
+  %add = fadd double %2, %div
+  store double %add, double* %a, align 8
+  store i32 1, i32* %j, align 4
+  br label %for.cond1
+
+for.cond1:                                        ; preds = %for.inc13, %for.body
+  %6 = load i32, i32* %j, align 4
+  %7 = load i32, i32* %max_it_j, align 4
+  %cmp2 = icmp sle i32 %6, %7
+  br i1 %cmp2, label %for.body3, label %for.end15
+
+for.body3:                                        ; preds = %for.cond1
+  store double 0.000000e+00, double* %x, align 8
+  store double 0.000000e+00, double* %y, align 8
+  store i32 1, i32* %k, align 4
+  br label %for.cond4
+
+for.cond4:                                        ; preds = %for.inc, %for.body3
+  %8 = load i32, i32* %k, align 4
+  %9 = load i32, i32* %i, align 4
+  %shl = shl i32 1, %9
+  %cmp5 = icmp sle i32 %8, %shl
+  br i1 %cmp5, label %for.body6, label %for.end
+
+for.body6:                                        ; preds = %for.cond4
+  %10 = load double, double* %y, align 8
+  %mul = fmul double 2.000000e+00, %10
+  %11 = load double, double* %x, align 8
+  %mul7 = fmul double %mul, %11
+  %sub8 = fsub double 1.000000e+00, %mul7
+  store double %sub8, double* %y, align 8
+  %12 = load double, double* %a, align 8
+  %13 = load double, double* %x, align 8
+  %14 = load double, double* %x, align 8
+  %mul9 = fmul double %13, %14
+  %sub10 = fsub double %12, %mul9
+  store double %sub10, double* %x, align 8
+  br label %for.inc
+
+for.inc:                                          ; preds = %for.body6
+  %15 = load i32, i32* %k, align 4
+  %inc = add nsw i32 %15, 1
+  store i32 %inc, i32* %k, align 4
+  br label %for.cond4
+
+for.end:                                          ; preds = %for.cond4
+  %16 = load double, double* %x, align 8
+  %17 = load double, double* %y, align 8
+  %div11 = fdiv double %16, %17
+  %18 = load double, double* %a, align 8
+  %sub12 = fsub double %18, %div11
+  store double %sub12, double* %a, align 8
+  br label %for.inc13
+
+for.inc13:                                        ; preds = %for.end
+  %19 = load i32, i32* %j, align 4
+  %inc14 = add nsw i32 %19, 1
+  store i32 %inc14, i32* %j, align 4
+  br label %for.cond1
+
+for.end15:                                        ; preds = %for.cond1
+  %20 = load double, double* %a1, align 8
+  %21 = load double, double* %a2, align 8
+  %sub16 = fsub double %20, %21
+  %22 = load double, double* %a, align 8
+  %23 = load double, double* %a1, align 8
+  %sub17 = fsub double %22, %23
+  %div18 = fdiv double %sub16, %sub17
+  store double %div18, double* %d, align 8
+  %24 = load i32, i32* %i, align 4
+  %25 = load double, double* %d, align 8
+  %call19 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([13 x i8], [13 x i8]* @.str.1, i32 0, i32 0), i32 %24, double %25)
+  %26 = load double, double* %d, align 8
+  store double %26, double* %d1, align 8
+  %27 = load double, double* %a1, align 8
+  store double %27, double* %a2, align 8
+  %28 = load double, double* %a, align 8
+  store double %28, double* %a1, align 8
+  br label %for.inc20
+
+for.inc20:                                        ; preds = %for.end15
+  %29 = load i32, i32* %i, align 4
+  %inc21 = add nsw i32 %29, 1
+  store i32 %inc21, i32* %i, align 4
+  br label %for.cond
+
+for.end22:                                        ; preds = %for.cond
+  ret void
+}
+
+declare i32 @printf(i8* %0, ...) #1
+
+; Function Attrs: noinline nounwind optnone
+define hidden i32 @main() #0 {
+entry:
+  %retval = alloca i32, align 4
+  store i32 0, i32* %retval, align 4
+  call void @feigenbaum()
+  ret i32 0
+}
+
+attributes #0 = { noinline nounwind optnone "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "min-legal-vector-width"="0" "no-infs-fp-math"="false" "no-jump-tables"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #1 = { "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+
+!llvm.module.flags = !{!0}
+!llvm.ident = !{!1}
+
+!0 = !{i32 1, !"wchar_size", i32 4}
+!1 = !{!"clang version 11.0.0 (https://github.com/Jacarte/llvm-project.git 0f6dea67136cc1e0b3d200eb2bb165628970c44b)"}
+
+; extracted candidates
+#########################################################
+; exiting Souper's runOnFunction() for main()
+Total of 0 replacements done on this module
+Total of 0 replacements candidates on this module

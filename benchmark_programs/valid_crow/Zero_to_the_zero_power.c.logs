@@ -1,0 +1,82 @@
+
+Entering the Souper pass's runOnModule()
+
+
+; entering Souper's runOnFunction() for main()
+
+; ModuleID = './Zero_to_the_zero_power.c.bc'
+source_filename = "./Zero_to_the_zero_power.c"
+target datalayout = "e-m:e-p:32:32-i64:64-n32:64-S128"
+target triple = "wasm32-unknown-wasi"
+
+@.str = private unnamed_addr constant [12 x i8] c"0 ^ 0 = %f\0A\00", align 1
+@.str.1 = private unnamed_addr constant [22 x i8] c"0+0i ^ 0+0i = %f+%fi\0A\00", align 1
+@llvm.used = appending global [1 x i8*] [i8* bitcast (i32 ()* @__main_void to i8*)], section "llvm.metadata"
+
+@__main_void = alias i32 (), i32 ()* @main
+
+; Function Attrs: noinline nounwind optnone
+define hidden i32 @main() #0 {
+entry:
+  %retval = alloca i32, align 4
+  %c = alloca { double, double }, align 8
+  %tmp = alloca { double, double }, align 8
+  %indirect-arg-temp = alloca { double, double }, align 8
+  %indirect-arg-temp1 = alloca { double, double }, align 8
+  store i32 0, i32* %retval, align 4
+  %0 = call double @llvm.pow.f64(double 0.000000e+00, double 0.000000e+00)
+  %call = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([12 x i8], [12 x i8]* @.str, i32 0, i32 0), double %0)
+  %indirect-arg-temp.realp = getelementptr inbounds { double, double }, { double, double }* %indirect-arg-temp, i32 0, i32 0
+  %indirect-arg-temp.imagp = getelementptr inbounds { double, double }, { double, double }* %indirect-arg-temp, i32 0, i32 1
+  store double 0.000000e+00, double* %indirect-arg-temp.realp, align 8
+  store double 0.000000e+00, double* %indirect-arg-temp.imagp, align 8
+  %indirect-arg-temp1.realp = getelementptr inbounds { double, double }, { double, double }* %indirect-arg-temp1, i32 0, i32 0
+  %indirect-arg-temp1.imagp = getelementptr inbounds { double, double }, { double, double }* %indirect-arg-temp1, i32 0, i32 1
+  store double 0.000000e+00, double* %indirect-arg-temp1.realp, align 8
+  store double 0.000000e+00, double* %indirect-arg-temp1.imagp, align 8
+  call void @cpow({ double, double }* sret align 8 %tmp, { double, double }* byval({ double, double }) align 8 %indirect-arg-temp, { double, double }* byval({ double, double }) align 8 %indirect-arg-temp1) #4
+  %tmp.realp = getelementptr inbounds { double, double }, { double, double }* %tmp, i32 0, i32 0
+  %tmp.real = load double, double* %tmp.realp, align 8
+  %tmp.imagp = getelementptr inbounds { double, double }, { double, double }* %tmp, i32 0, i32 1
+  %tmp.imag = load double, double* %tmp.imagp, align 8
+  %c.realp = getelementptr inbounds { double, double }, { double, double }* %c, i32 0, i32 0
+  %c.imagp = getelementptr inbounds { double, double }, { double, double }* %c, i32 0, i32 1
+  store double %tmp.real, double* %c.realp, align 8
+  store double %tmp.imag, double* %c.imagp, align 8
+  %c.realp2 = getelementptr inbounds { double, double }, { double, double }* %c, i32 0, i32 0
+  %c.real = load double, double* %c.realp2, align 8
+  %c.imagp3 = getelementptr inbounds { double, double }, { double, double }* %c, i32 0, i32 1
+  %c.imag = load double, double* %c.imagp3, align 8
+  %c.realp4 = getelementptr inbounds { double, double }, { double, double }* %c, i32 0, i32 0
+  %c.real5 = load double, double* %c.realp4, align 8
+  %c.imagp6 = getelementptr inbounds { double, double }, { double, double }* %c, i32 0, i32 1
+  %c.imag7 = load double, double* %c.imagp6, align 8
+  %call8 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([22 x i8], [22 x i8]* @.str.1, i32 0, i32 0), double %c.real, double %c.imag7)
+  ret i32 0
+}
+
+declare i32 @printf(i8* %0, ...) #1
+
+; Function Attrs: nounwind readnone speculatable willreturn
+declare double @llvm.pow.f64(double %0, double %1) #2
+
+; Function Attrs: nounwind
+declare void @cpow({ double, double }* sret align 8 %0, { double, double }* byval({ double, double }) align 8 %1, { double, double }* byval({ double, double }) align 8 %2) #3
+
+attributes #0 = { noinline nounwind optnone "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "min-legal-vector-width"="0" "no-infs-fp-math"="false" "no-jump-tables"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #1 = { "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #2 = { nounwind readnone speculatable willreturn }
+attributes #3 = { nounwind "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #4 = { nounwind }
+
+!llvm.module.flags = !{!0}
+!llvm.ident = !{!1}
+
+!0 = !{i32 1, !"wchar_size", i32 4}
+!1 = !{!"clang version 11.0.0 (https://github.com/Jacarte/llvm-project.git 0f6dea67136cc1e0b3d200eb2bb165628970c44b)"}
+
+; extracted candidates
+#########################################################
+; exiting Souper's runOnFunction() for main()
+Total of 0 replacements done on this module
+Total of 0 replacements candidates on this module

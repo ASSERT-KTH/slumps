@@ -1,0 +1,2169 @@
+
+Entering the Souper pass's runOnModule()
+
+
+; entering Souper's runOnFunction() for push()
+
+; ModuleID = './Priority_queue.c.bc'
+source_filename = "./Priority_queue.c"
+target datalayout = "e-m:e-p:32:32-i64:64-n32:64-S128"
+target triple = "wasm32-unknown-wasi"
+
+%struct.heap_t = type { %struct.node_t*, i32, i32 }
+%struct.node_t = type { i32, i8* }
+
+@.str = private unnamed_addr constant [13 x i8] c"Clear drains\00", align 1
+@.str.1 = private unnamed_addr constant [9 x i8] c"Feed cat\00", align 1
+@.str.2 = private unnamed_addr constant [9 x i8] c"Make tea\00", align 1
+@.str.3 = private unnamed_addr constant [15 x i8] c"Solve RC tasks\00", align 1
+@.str.4 = private unnamed_addr constant [11 x i8] c"Tax return\00", align 1
+@.str.5 = private unnamed_addr constant [4 x i8] c"%s\0A\00", align 1
+@llvm.used = appending global [1 x i8*] [i8* bitcast (i32 ()* @__main_void to i8*)], section "llvm.metadata"
+
+@__main_void = alias i32 (), i32 ()* @main
+
+; Function Attrs: noinline nounwind optnone
+define hidden void @push(%struct.heap_t* %h, i32 %priority, i8* %data) #0 {
+entry:
+  %h.addr = alloca %struct.heap_t*, align 4
+  %priority.addr = alloca i32, align 4
+  %data.addr = alloca i8*, align 4
+  %i = alloca i32, align 4
+  %j = alloca i32, align 4
+  store %struct.heap_t* %h, %struct.heap_t** %h.addr, align 4
+  store i32 %priority, i32* %priority.addr, align 4
+  store i8* %data, i8** %data.addr, align 4
+  %0 = load %struct.heap_t*, %struct.heap_t** %h.addr, align 4
+  %len = getelementptr inbounds %struct.heap_t, %struct.heap_t* %0, i32 0, i32 1
+  %1 = load i32, i32* %len, align 4
+  %add = add nsw i32 %1, 1
+  %2 = load %struct.heap_t*, %struct.heap_t** %h.addr, align 4
+  %size = getelementptr inbounds %struct.heap_t, %struct.heap_t* %2, i32 0, i32 2
+  %3 = load i32, i32* %size, align 4
+  %cmp = icmp sge i32 %add, %3
+  br i1 %cmp, label %if.then, label %if.end
+
+if.then:                                          ; preds = %entry
+  %4 = load %struct.heap_t*, %struct.heap_t** %h.addr, align 4
+  %size1 = getelementptr inbounds %struct.heap_t, %struct.heap_t* %4, i32 0, i32 2
+  %5 = load i32, i32* %size1, align 4
+  %tobool = icmp ne i32 %5, 0
+  br i1 %tobool, label %cond.true, label %cond.false
+
+cond.true:                                        ; preds = %if.then
+  %6 = load %struct.heap_t*, %struct.heap_t** %h.addr, align 4
+  %size2 = getelementptr inbounds %struct.heap_t, %struct.heap_t* %6, i32 0, i32 2
+  %7 = load i32, i32* %size2, align 4
+  %mul = mul nsw i32 %7, 2
+  br label %cond.end
+
+cond.false:                                       ; preds = %if.then
+  br label %cond.end
+
+cond.end:                                         ; preds = %cond.false, %cond.true
+  %cond = phi i32 [ %mul, %cond.true ], [ 4, %cond.false ]
+  %8 = load %struct.heap_t*, %struct.heap_t** %h.addr, align 4
+  %size3 = getelementptr inbounds %struct.heap_t, %struct.heap_t* %8, i32 0, i32 2
+  store i32 %cond, i32* %size3, align 4
+  %9 = load %struct.heap_t*, %struct.heap_t** %h.addr, align 4
+  %nodes = getelementptr inbounds %struct.heap_t, %struct.heap_t* %9, i32 0, i32 0
+  %10 = load %struct.node_t*, %struct.node_t** %nodes, align 4
+  %11 = bitcast %struct.node_t* %10 to i8*
+  %12 = load %struct.heap_t*, %struct.heap_t** %h.addr, align 4
+  %size4 = getelementptr inbounds %struct.heap_t, %struct.heap_t* %12, i32 0, i32 2
+  %13 = load i32, i32* %size4, align 4
+  %mul5 = mul i32 %13, 8
+  %call = call i8* @realloc(i8* %11, i32 %mul5)
+  %14 = bitcast i8* %call to %struct.node_t*
+  %15 = load %struct.heap_t*, %struct.heap_t** %h.addr, align 4
+  %nodes6 = getelementptr inbounds %struct.heap_t, %struct.heap_t* %15, i32 0, i32 0
+  store %struct.node_t* %14, %struct.node_t** %nodes6, align 4
+  br label %if.end
+
+if.end:                                           ; preds = %cond.end, %entry
+  %16 = load %struct.heap_t*, %struct.heap_t** %h.addr, align 4
+  %len7 = getelementptr inbounds %struct.heap_t, %struct.heap_t* %16, i32 0, i32 1
+  %17 = load i32, i32* %len7, align 4
+  %add8 = add nsw i32 %17, 1
+  store i32 %add8, i32* %i, align 4
+  %18 = load i32, i32* %i, align 4
+  %div = sdiv i32 %18, 2
+  store i32 %div, i32* %j, align 4
+  br label %while.cond
+
+while.cond:                                       ; preds = %while.body, %if.end
+  %19 = load i32, i32* %i, align 4
+  %cmp9 = icmp sgt i32 %19, 1
+  br i1 %cmp9, label %land.rhs, label %land.end
+
+land.rhs:                                         ; preds = %while.cond
+  %20 = load %struct.heap_t*, %struct.heap_t** %h.addr, align 4
+  %nodes10 = getelementptr inbounds %struct.heap_t, %struct.heap_t* %20, i32 0, i32 0
+  %21 = load %struct.node_t*, %struct.node_t** %nodes10, align 4
+  %22 = load i32, i32* %j, align 4
+  %arrayidx = getelementptr inbounds %struct.node_t, %struct.node_t* %21, i32 %22
+  %priority11 = getelementptr inbounds %struct.node_t, %struct.node_t* %arrayidx, i32 0, i32 0
+  %23 = load i32, i32* %priority11, align 4
+  %24 = load i32, i32* %priority.addr, align 4
+  %cmp12 = icmp sgt i32 %23, %24
+  br label %land.end
+
+land.end:                                         ; preds = %land.rhs, %while.cond
+  %25 = phi i1 [ false, %while.cond ], [ %cmp12, %land.rhs ]
+  br i1 %25, label %while.body, label %while.end
+
+while.body:                                       ; preds = %land.end
+  %26 = load %struct.heap_t*, %struct.heap_t** %h.addr, align 4
+  %nodes13 = getelementptr inbounds %struct.heap_t, %struct.heap_t* %26, i32 0, i32 0
+  %27 = load %struct.node_t*, %struct.node_t** %nodes13, align 4
+  %28 = load i32, i32* %i, align 4
+  %arrayidx14 = getelementptr inbounds %struct.node_t, %struct.node_t* %27, i32 %28
+  %29 = load %struct.heap_t*, %struct.heap_t** %h.addr, align 4
+  %nodes15 = getelementptr inbounds %struct.heap_t, %struct.heap_t* %29, i32 0, i32 0
+  %30 = load %struct.node_t*, %struct.node_t** %nodes15, align 4
+  %31 = load i32, i32* %j, align 4
+  %arrayidx16 = getelementptr inbounds %struct.node_t, %struct.node_t* %30, i32 %31
+  %32 = bitcast %struct.node_t* %arrayidx14 to i8*
+  %33 = bitcast %struct.node_t* %arrayidx16 to i8*
+  call void @llvm.memcpy.p0i8.p0i8.i32(i8* align 4 %32, i8* align 4 %33, i32 8, i1 false)
+  %34 = load i32, i32* %j, align 4
+  store i32 %34, i32* %i, align 4
+  %35 = load i32, i32* %j, align 4
+  %div17 = sdiv i32 %35, 2
+  store i32 %div17, i32* %j, align 4
+  br label %while.cond
+
+while.end:                                        ; preds = %land.end
+  %36 = load i32, i32* %priority.addr, align 4
+  %37 = load %struct.heap_t*, %struct.heap_t** %h.addr, align 4
+  %nodes18 = getelementptr inbounds %struct.heap_t, %struct.heap_t* %37, i32 0, i32 0
+  %38 = load %struct.node_t*, %struct.node_t** %nodes18, align 4
+  %39 = load i32, i32* %i, align 4
+  %arrayidx19 = getelementptr inbounds %struct.node_t, %struct.node_t* %38, i32 %39
+  %priority20 = getelementptr inbounds %struct.node_t, %struct.node_t* %arrayidx19, i32 0, i32 0
+  store i32 %36, i32* %priority20, align 4
+  %40 = load i8*, i8** %data.addr, align 4
+  %41 = load %struct.heap_t*, %struct.heap_t** %h.addr, align 4
+  %nodes21 = getelementptr inbounds %struct.heap_t, %struct.heap_t* %41, i32 0, i32 0
+  %42 = load %struct.node_t*, %struct.node_t** %nodes21, align 4
+  %43 = load i32, i32* %i, align 4
+  %arrayidx22 = getelementptr inbounds %struct.node_t, %struct.node_t* %42, i32 %43
+  %data23 = getelementptr inbounds %struct.node_t, %struct.node_t* %arrayidx22, i32 0, i32 1
+  store i8* %40, i8** %data23, align 4
+  %44 = load %struct.heap_t*, %struct.heap_t** %h.addr, align 4
+  %len24 = getelementptr inbounds %struct.heap_t, %struct.heap_t* %44, i32 0, i32 1
+  %45 = load i32, i32* %len24, align 4
+  %inc = add nsw i32 %45, 1
+  store i32 %inc, i32* %len24, align 4
+  ret void
+}
+
+declare i8* @realloc(i8* %0, i32 %1) #1
+
+; Function Attrs: argmemonly nounwind willreturn
+declare void @llvm.memcpy.p0i8.p0i8.i32(i8* noalias nocapture writeonly %0, i8* noalias nocapture readonly %1, i32 %2, i1 immarg %3) #2
+
+; Function Attrs: noinline nounwind optnone
+define hidden i8* @pop(%struct.heap_t* %h) #0 {
+entry:
+  %retval = alloca i8*, align 4
+  %h.addr = alloca %struct.heap_t*, align 4
+  %i = alloca i32, align 4
+  %j = alloca i32, align 4
+  %k = alloca i32, align 4
+  %data = alloca i8*, align 4
+  store %struct.heap_t* %h, %struct.heap_t** %h.addr, align 4
+  %0 = load %struct.heap_t*, %struct.heap_t** %h.addr, align 4
+  %len = getelementptr inbounds %struct.heap_t, %struct.heap_t* %0, i32 0, i32 1
+  %1 = load i32, i32* %len, align 4
+  %tobool = icmp ne i32 %1, 0
+  br i1 %tobool, label %if.end, label %if.then
+
+if.then:                                          ; preds = %entry
+  store i8* null, i8** %retval, align 4
+  br label %return
+
+if.end:                                           ; preds = %entry
+  %2 = load %struct.heap_t*, %struct.heap_t** %h.addr, align 4
+  %nodes = getelementptr inbounds %struct.heap_t, %struct.heap_t* %2, i32 0, i32 0
+  %3 = load %struct.node_t*, %struct.node_t** %nodes, align 4
+  %arrayidx = getelementptr inbounds %struct.node_t, %struct.node_t* %3, i32 1
+  %data1 = getelementptr inbounds %struct.node_t, %struct.node_t* %arrayidx, i32 0, i32 1
+  %4 = load i8*, i8** %data1, align 4
+  store i8* %4, i8** %data, align 4
+  %5 = load %struct.heap_t*, %struct.heap_t** %h.addr, align 4
+  %nodes2 = getelementptr inbounds %struct.heap_t, %struct.heap_t* %5, i32 0, i32 0
+  %6 = load %struct.node_t*, %struct.node_t** %nodes2, align 4
+  %arrayidx3 = getelementptr inbounds %struct.node_t, %struct.node_t* %6, i32 1
+  %7 = load %struct.heap_t*, %struct.heap_t** %h.addr, align 4
+  %nodes4 = getelementptr inbounds %struct.heap_t, %struct.heap_t* %7, i32 0, i32 0
+  %8 = load %struct.node_t*, %struct.node_t** %nodes4, align 4
+  %9 = load %struct.heap_t*, %struct.heap_t** %h.addr, align 4
+  %len5 = getelementptr inbounds %struct.heap_t, %struct.heap_t* %9, i32 0, i32 1
+  %10 = load i32, i32* %len5, align 4
+  %arrayidx6 = getelementptr inbounds %struct.node_t, %struct.node_t* %8, i32 %10
+  %11 = bitcast %struct.node_t* %arrayidx3 to i8*
+  %12 = bitcast %struct.node_t* %arrayidx6 to i8*
+  call void @llvm.memcpy.p0i8.p0i8.i32(i8* align 4 %11, i8* align 4 %12, i32 8, i1 false)
+  %13 = load %struct.heap_t*, %struct.heap_t** %h.addr, align 4
+  %len7 = getelementptr inbounds %struct.heap_t, %struct.heap_t* %13, i32 0, i32 1
+  %14 = load i32, i32* %len7, align 4
+  %dec = add nsw i32 %14, -1
+  store i32 %dec, i32* %len7, align 4
+  store i32 1, i32* %i, align 4
+  br label %while.cond
+
+while.cond:                                       ; preds = %if.end35, %if.end
+  %15 = load i32, i32* %i, align 4
+  %16 = load %struct.heap_t*, %struct.heap_t** %h.addr, align 4
+  %len8 = getelementptr inbounds %struct.heap_t, %struct.heap_t* %16, i32 0, i32 1
+  %17 = load i32, i32* %len8, align 4
+  %add = add nsw i32 %17, 1
+  %cmp = icmp ne i32 %15, %add
+  br i1 %cmp, label %while.body, label %while.end
+
+while.body:                                       ; preds = %while.cond
+  %18 = load %struct.heap_t*, %struct.heap_t** %h.addr, align 4
+  %len9 = getelementptr inbounds %struct.heap_t, %struct.heap_t* %18, i32 0, i32 1
+  %19 = load i32, i32* %len9, align 4
+  %add10 = add nsw i32 %19, 1
+  store i32 %add10, i32* %k, align 4
+  %20 = load i32, i32* %i, align 4
+  %mul = mul nsw i32 2, %20
+  store i32 %mul, i32* %j, align 4
+  %21 = load i32, i32* %j, align 4
+  %22 = load %struct.heap_t*, %struct.heap_t** %h.addr, align 4
+  %len11 = getelementptr inbounds %struct.heap_t, %struct.heap_t* %22, i32 0, i32 1
+  %23 = load i32, i32* %len11, align 4
+  %cmp12 = icmp sle i32 %21, %23
+  br i1 %cmp12, label %land.lhs.true, label %if.end20
+
+land.lhs.true:                                    ; preds = %while.body
+  %24 = load %struct.heap_t*, %struct.heap_t** %h.addr, align 4
+  %nodes13 = getelementptr inbounds %struct.heap_t, %struct.heap_t* %24, i32 0, i32 0
+  %25 = load %struct.node_t*, %struct.node_t** %nodes13, align 4
+  %26 = load i32, i32* %j, align 4
+  %arrayidx14 = getelementptr inbounds %struct.node_t, %struct.node_t* %25, i32 %26
+  %priority = getelementptr inbounds %struct.node_t, %struct.node_t* %arrayidx14, i32 0, i32 0
+  %27 = load i32, i32* %priority, align 4
+  %28 = load %struct.heap_t*, %struct.heap_t** %h.addr, align 4
+  %nodes15 = getelementptr inbounds %struct.heap_t, %struct.heap_t* %28, i32 0, i32 0
+  %29 = load %struct.node_t*, %struct.node_t** %nodes15, align 4
+  %30 = load i32, i32* %k, align 4
+  %arrayidx16 = getelementptr inbounds %struct.node_t, %struct.node_t* %29, i32 %30
+  %priority17 = getelementptr inbounds %struct.node_t, %struct.node_t* %arrayidx16, i32 0, i32 0
+  %31 = load i32, i32* %priority17, align 4
+  %cmp18 = icmp slt i32 %27, %31
+  br i1 %cmp18, label %if.then19, label %if.end20
+
+if.then19:                                        ; preds = %land.lhs.true
+  %32 = load i32, i32* %j, align 4
+  store i32 %32, i32* %k, align 4
+  br label %if.end20
+
+if.end20:                                         ; preds = %if.then19, %land.lhs.true, %while.body
+  %33 = load i32, i32* %j, align 4
+  %add21 = add nsw i32 %33, 1
+  %34 = load %struct.heap_t*, %struct.heap_t** %h.addr, align 4
+  %len22 = getelementptr inbounds %struct.heap_t, %struct.heap_t* %34, i32 0, i32 1
+  %35 = load i32, i32* %len22, align 4
+  %cmp23 = icmp sle i32 %add21, %35
+  br i1 %cmp23, label %land.lhs.true24, label %if.end35
+
+land.lhs.true24:                                  ; preds = %if.end20
+  %36 = load %struct.heap_t*, %struct.heap_t** %h.addr, align 4
+  %nodes25 = getelementptr inbounds %struct.heap_t, %struct.heap_t* %36, i32 0, i32 0
+  %37 = load %struct.node_t*, %struct.node_t** %nodes25, align 4
+  %38 = load i32, i32* %j, align 4
+  %add26 = add nsw i32 %38, 1
+  %arrayidx27 = getelementptr inbounds %struct.node_t, %struct.node_t* %37, i32 %add26
+  %priority28 = getelementptr inbounds %struct.node_t, %struct.node_t* %arrayidx27, i32 0, i32 0
+  %39 = load i32, i32* %priority28, align 4
+  %40 = load %struct.heap_t*, %struct.heap_t** %h.addr, align 4
+  %nodes29 = getelementptr inbounds %struct.heap_t, %struct.heap_t* %40, i32 0, i32 0
+  %41 = load %struct.node_t*, %struct.node_t** %nodes29, align 4
+  %42 = load i32, i32* %k, align 4
+  %arrayidx30 = getelementptr inbounds %struct.node_t, %struct.node_t* %41, i32 %42
+  %priority31 = getelementptr inbounds %struct.node_t, %struct.node_t* %arrayidx30, i32 0, i32 0
+  %43 = load i32, i32* %priority31, align 4
+  %cmp32 = icmp slt i32 %39, %43
+  br i1 %cmp32, label %if.then33, label %if.end35
+
+if.then33:                                        ; preds = %land.lhs.true24
+  %44 = load i32, i32* %j, align 4
+  %add34 = add nsw i32 %44, 1
+  store i32 %add34, i32* %k, align 4
+  br label %if.end35
+
+if.end35:                                         ; preds = %if.then33, %land.lhs.true24, %if.end20
+  %45 = load %struct.heap_t*, %struct.heap_t** %h.addr, align 4
+  %nodes36 = getelementptr inbounds %struct.heap_t, %struct.heap_t* %45, i32 0, i32 0
+  %46 = load %struct.node_t*, %struct.node_t** %nodes36, align 4
+  %47 = load i32, i32* %i, align 4
+  %arrayidx37 = getelementptr inbounds %struct.node_t, %struct.node_t* %46, i32 %47
+  %48 = load %struct.heap_t*, %struct.heap_t** %h.addr, align 4
+  %nodes38 = getelementptr inbounds %struct.heap_t, %struct.heap_t* %48, i32 0, i32 0
+  %49 = load %struct.node_t*, %struct.node_t** %nodes38, align 4
+  %50 = load i32, i32* %k, align 4
+  %arrayidx39 = getelementptr inbounds %struct.node_t, %struct.node_t* %49, i32 %50
+  %51 = bitcast %struct.node_t* %arrayidx37 to i8*
+  %52 = bitcast %struct.node_t* %arrayidx39 to i8*
+  call void @llvm.memcpy.p0i8.p0i8.i32(i8* align 4 %51, i8* align 4 %52, i32 8, i1 false)
+  %53 = load i32, i32* %k, align 4
+  store i32 %53, i32* %i, align 4
+  br label %while.cond
+
+while.end:                                        ; preds = %while.cond
+  %54 = load i8*, i8** %data, align 4
+  store i8* %54, i8** %retval, align 4
+  br label %return
+
+return:                                           ; preds = %while.end, %if.then
+  %55 = load i8*, i8** %retval, align 4
+  ret i8* %55
+}
+
+; Function Attrs: noinline nounwind optnone
+define hidden i32 @main() #0 {
+entry:
+  %retval = alloca i32, align 4
+  %h = alloca %struct.heap_t*, align 4
+  %i = alloca i32, align 4
+  store i32 0, i32* %retval, align 4
+  %call = call noalias i8* @calloc(i32 1, i32 12)
+  %0 = bitcast i8* %call to %struct.heap_t*
+  store %struct.heap_t* %0, %struct.heap_t** %h, align 4
+  %1 = load %struct.heap_t*, %struct.heap_t** %h, align 4
+  call void @push(%struct.heap_t* %1, i32 3, i8* getelementptr inbounds ([13 x i8], [13 x i8]* @.str, i32 0, i32 0))
+  %2 = load %struct.heap_t*, %struct.heap_t** %h, align 4
+  call void @push(%struct.heap_t* %2, i32 4, i8* getelementptr inbounds ([9 x i8], [9 x i8]* @.str.1, i32 0, i32 0))
+  %3 = load %struct.heap_t*, %struct.heap_t** %h, align 4
+  call void @push(%struct.heap_t* %3, i32 5, i8* getelementptr inbounds ([9 x i8], [9 x i8]* @.str.2, i32 0, i32 0))
+  %4 = load %struct.heap_t*, %struct.heap_t** %h, align 4
+  call void @push(%struct.heap_t* %4, i32 1, i8* getelementptr inbounds ([15 x i8], [15 x i8]* @.str.3, i32 0, i32 0))
+  %5 = load %struct.heap_t*, %struct.heap_t** %h, align 4
+  call void @push(%struct.heap_t* %5, i32 2, i8* getelementptr inbounds ([11 x i8], [11 x i8]* @.str.4, i32 0, i32 0))
+  store i32 0, i32* %i, align 4
+  br label %for.cond
+
+for.cond:                                         ; preds = %for.inc, %entry
+  %6 = load i32, i32* %i, align 4
+  %cmp = icmp slt i32 %6, 5
+  br i1 %cmp, label %for.body, label %for.end
+
+for.body:                                         ; preds = %for.cond
+  %7 = load %struct.heap_t*, %struct.heap_t** %h, align 4
+  %call1 = call i8* @pop(%struct.heap_t* %7)
+  %call2 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([4 x i8], [4 x i8]* @.str.5, i32 0, i32 0), i8* %call1)
+  br label %for.inc
+
+for.inc:                                          ; preds = %for.body
+  %8 = load i32, i32* %i, align 4
+  %inc = add nsw i32 %8, 1
+  store i32 %inc, i32* %i, align 4
+  br label %for.cond
+
+for.end:                                          ; preds = %for.cond
+  ret i32 0
+}
+
+declare noalias i8* @calloc(i32 %0, i32 %1) #1
+
+declare i32 @printf(i8* %0, ...) #1
+
+attributes #0 = { noinline nounwind optnone "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "min-legal-vector-width"="0" "no-infs-fp-math"="false" "no-jump-tables"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #1 = { "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #2 = { argmemonly nounwind willreturn }
+
+!llvm.module.flags = !{!0}
+!llvm.ident = !{!1}
+
+!0 = !{i32 1, !"wchar_size", i32 4}
+!1 = !{!"clang version 11.0.0 (https://github.com/Jacarte/llvm-project.git 0f6dea67136cc1e0b3d200eb2bb165628970c44b)"}
+
+; extracted candidates
+
+; *****
+; For LLVM instruction:
+;  %1 = load i32, i32* %len, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %add = add nsw i32 %1, 1
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = addnsw 1:i32, %0
+infer %1
+
+; *****
+; For LLVM instruction:
+;  %3 = load i32, i32* %size, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %cmp = icmp sge i32 %add, %3
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = var
+%2:i32 = addnsw 1:i32, %1
+%3:i1 = sle %0, %2
+infer %3
+
+; *****
+; For LLVM instruction:
+;  %5 = load i32, i32* %size1, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %tobool = icmp ne i32 %5, 0
+; Looking for a replacement for:
+%0:i32 = var
+%1:i1 = ne 0:i32, %0
+infer %1
+
+; *****
+; For LLVM instruction:
+;  %7 = load i32, i32* %size2, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %mul = mul nsw i32 %7, 2
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = mulnsw 2:i32, %0
+infer %1
+
+; *****
+; For LLVM instruction:
+;  %cond = phi i32 [ %mul, %cond.true ], [ 4, %cond.false ]
+; Looking for a replacement for:
+%0 = block 2
+%1:i32 = var
+%2:i32 = mulnsw 2:i32, %1
+%3:i32 = phi %0, %2, 4:i32
+infer %3
+
+; *****
+; For LLVM instruction:
+;  %13 = load i32, i32* %size4, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %mul5 = mul i32 %13, 8
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = mul 8:i32, %0
+infer %1
+
+; *****
+; For LLVM instruction:
+;  %17 = load i32, i32* %len7, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %add8 = add nsw i32 %17, 1
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = addnsw 1:i32, %0
+infer %1
+
+; *****
+; For LLVM instruction:
+;  %18 = load i32, i32* %i, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %div = sdiv i32 %18, 2
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = sdiv %0, 2:i32
+infer %1
+
+; *****
+; For LLVM instruction:
+;  %19 = load i32, i32* %i, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %cmp9 = icmp sgt i32 %19, 1
+; Looking for a replacement for:
+%0:i32 = var
+%1:i1 = slt 1:i32, %0
+infer %1
+
+; *****
+; For LLVM instruction:
+;  %22 = load i32, i32* %j, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %23 = load i32, i32* %priority11, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %24 = load i32, i32* %priority.addr, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %cmp12 = icmp sgt i32 %23, %24
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = var
+%2:i1 = slt %0, %1
+infer %2
+
+; *****
+; For LLVM instruction:
+;  %25 = phi i1 [ false, %while.cond ], [ %cmp12, %land.rhs ]
+; Looking for a replacement for:
+%0:i1 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %28 = load i32, i32* %i, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %31 = load i32, i32* %j, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %34 = load i32, i32* %j, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %35 = load i32, i32* %j, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %div17 = sdiv i32 %35, 2
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = sdiv %0, 2:i32
+infer %1
+
+; *****
+; For LLVM instruction:
+;  %36 = load i32, i32* %priority.addr, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %39 = load i32, i32* %i, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %43 = load i32, i32* %i, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %45 = load i32, i32* %len24, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %inc = add nsw i32 %45, 1
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = addnsw 1:i32, %0
+infer %1
+got 1 candidates from LHS
+
+-------------------------------------------------
+%0:i32 = var
+infer %0
+
+
+--------------------------------
+guess 0
+
+%0:i32 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: -1
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+Dataflow Pruned 0/0
+There are 1 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 2 candidates from LHS
+
+-------------------------------------------------
+%0:i32 = var
+%1:i32 = addnsw 1:i32, %0
+infer %1
+
+
+--------------------------------
+guess 0
+
+%0:i32 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 1
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: 268435457
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+
+--------------------------------
+guess 1
+
+%0:i32 = var
+
+Cost = 0
+second query is SAT-- constant doesn't work
+Dataflow Pruned 0/0
+There are 2 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 4 candidates from LHS
+
+-------------------------------------------------
+%0:i32 = var
+%1:i32 = var
+%2:i32 = addnsw 1:i32, %1
+%3:i1 = sle %0, %2
+infer %3
+
+
+--------------------------------
+guess 0
+
+%0:i1 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: -1
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: 0
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+Dataflow Pruned 0/0
+There are 1 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 2 candidates from LHS
+
+-------------------------------------------------
+%0:i32 = var
+%1:i1 = ne 0:i32, %0
+infer %1
+
+
+--------------------------------
+guess 0
+
+%0:i1 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: -1
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+Dataflow Pruned 0/0
+There are 1 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 2 candidates from LHS
+
+-------------------------------------------------
+%0:i32 = var
+%1:i32 = mulnsw 2:i32, %0
+infer %1
+
+
+--------------------------------
+guess 0
+
+%0:i32 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: 1073741824
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+
+--------------------------------
+guess 1
+
+%0:i32 = var
+
+Cost = 0
+second query is SAT-- constant doesn't work
+Dataflow Pruned 0/0
+There are 2 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 3 candidates from LHS
+
+-------------------------------------------------
+%0 = block 2
+%1:i32 = var
+%2:i32 = mulnsw 2:i32, %1
+%3:i32 = phi %0, %2, 4:i32
+infer %3
+
+
+--------------------------------
+guess 0
+
+%0:i32 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 4
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: 0
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+
+--------------------------------
+guess 1
+
+%0:i32 = var
+
+Cost = 0
+second query is SAT-- constant doesn't work
+
+--------------------------------
+guess 2
+
+%0:i32 = var
+%1:i32 = mulnsw 2:i32, %0
+
+Cost = 1
+second query is SAT-- constant doesn't work
+Dataflow Pruned 0/0
+There are 3 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 2 candidates from LHS
+
+-------------------------------------------------
+%0:i32 = var
+%1:i32 = mul 8:i32, %0
+infer %1
+
+
+--------------------------------
+guess 0
+
+%0:i32 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: 1073741824
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+
+--------------------------------
+guess 1
+
+%0:i32 = var
+
+Cost = 0
+second query is SAT-- constant doesn't work
+Dataflow Pruned 0/0
+There are 2 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 2 candidates from LHS
+
+-------------------------------------------------
+%0:i32 = var
+%1:i32 = sdiv %0, 2:i32
+infer %1
+
+
+--------------------------------
+guess 0
+
+%0:i32 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: 631636206
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+
+--------------------------------
+guess 1
+
+%0:i32 = var
+
+Cost = 0
+second query is SAT-- constant doesn't work
+Dataflow Pruned 0/0
+There are 2 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 2 candidates from LHS
+
+-------------------------------------------------
+%0:i32 = var
+%1:i1 = slt 1:i32, %0
+infer %1
+
+
+--------------------------------
+guess 0
+
+%0:i1 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: -1
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+Dataflow Pruned 0/0
+There are 1 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 3 candidates from LHS
+
+-------------------------------------------------
+%0:i32 = var
+%1:i32 = var
+%2:i1 = slt %0, %1
+infer %2
+
+
+--------------------------------
+guess 0
+
+%0:i1 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: -1
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+Dataflow Pruned 0/0
+There are 1 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 1 candidates from LHS
+
+-------------------------------------------------
+%0:i1 = var
+infer %0
+
+
+--------------------------------
+guess 0
+
+%0:i1 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: -1
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+Dataflow Pruned 0/0
+There are 1 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+#########################################################
+; exiting Souper's runOnFunction() for push()
+
+; entering Souper's runOnFunction() for pop()
+
+; ModuleID = './Priority_queue.c.bc'
+source_filename = "./Priority_queue.c"
+target datalayout = "e-m:e-p:32:32-i64:64-n32:64-S128"
+target triple = "wasm32-unknown-wasi"
+
+%struct.heap_t = type { %struct.node_t*, i32, i32 }
+%struct.node_t = type { i32, i8* }
+
+@.str = private unnamed_addr constant [13 x i8] c"Clear drains\00", align 1
+@.str.1 = private unnamed_addr constant [9 x i8] c"Feed cat\00", align 1
+@.str.2 = private unnamed_addr constant [9 x i8] c"Make tea\00", align 1
+@.str.3 = private unnamed_addr constant [15 x i8] c"Solve RC tasks\00", align 1
+@.str.4 = private unnamed_addr constant [11 x i8] c"Tax return\00", align 1
+@.str.5 = private unnamed_addr constant [4 x i8] c"%s\0A\00", align 1
+@llvm.used = appending global [1 x i8*] [i8* bitcast (i32 ()* @__main_void to i8*)], section "llvm.metadata"
+
+@__main_void = alias i32 (), i32 ()* @main
+
+; Function Attrs: noinline nounwind optnone
+define hidden void @push(%struct.heap_t* %h, i32 %priority, i8* %data) #0 {
+entry:
+  %h.addr = alloca %struct.heap_t*, align 4
+  %priority.addr = alloca i32, align 4
+  %data.addr = alloca i8*, align 4
+  %i = alloca i32, align 4
+  %j = alloca i32, align 4
+  store %struct.heap_t* %h, %struct.heap_t** %h.addr, align 4
+  store i32 %priority, i32* %priority.addr, align 4
+  store i8* %data, i8** %data.addr, align 4
+  %0 = load %struct.heap_t*, %struct.heap_t** %h.addr, align 4
+  %len = getelementptr inbounds %struct.heap_t, %struct.heap_t* %0, i32 0, i32 1
+  %1 = load i32, i32* %len, align 4
+  %add = add nsw i32 %1, 1
+  %2 = load %struct.heap_t*, %struct.heap_t** %h.addr, align 4
+  %size = getelementptr inbounds %struct.heap_t, %struct.heap_t* %2, i32 0, i32 2
+  %3 = load i32, i32* %size, align 4
+  %cmp = icmp sge i32 %add, %3
+  br i1 %cmp, label %if.then, label %if.end
+
+if.then:                                          ; preds = %entry
+  %4 = load %struct.heap_t*, %struct.heap_t** %h.addr, align 4
+  %size1 = getelementptr inbounds %struct.heap_t, %struct.heap_t* %4, i32 0, i32 2
+  %5 = load i32, i32* %size1, align 4
+  %tobool = icmp ne i32 %5, 0
+  br i1 %tobool, label %cond.true, label %cond.false
+
+cond.true:                                        ; preds = %if.then
+  %6 = load %struct.heap_t*, %struct.heap_t** %h.addr, align 4
+  %size2 = getelementptr inbounds %struct.heap_t, %struct.heap_t* %6, i32 0, i32 2
+  %7 = load i32, i32* %size2, align 4
+  %mul = mul nsw i32 %7, 2
+  br label %cond.end
+
+cond.false:                                       ; preds = %if.then
+  br label %cond.end
+
+cond.end:                                         ; preds = %cond.false, %cond.true
+  %cond = phi i32 [ %mul, %cond.true ], [ 4, %cond.false ]
+  %8 = load %struct.heap_t*, %struct.heap_t** %h.addr, align 4
+  %size3 = getelementptr inbounds %struct.heap_t, %struct.heap_t* %8, i32 0, i32 2
+  store i32 %cond, i32* %size3, align 4
+  %9 = load %struct.heap_t*, %struct.heap_t** %h.addr, align 4
+  %nodes = getelementptr inbounds %struct.heap_t, %struct.heap_t* %9, i32 0, i32 0
+  %10 = load %struct.node_t*, %struct.node_t** %nodes, align 4
+  %11 = bitcast %struct.node_t* %10 to i8*
+  %12 = load %struct.heap_t*, %struct.heap_t** %h.addr, align 4
+  %size4 = getelementptr inbounds %struct.heap_t, %struct.heap_t* %12, i32 0, i32 2
+  %13 = load i32, i32* %size4, align 4
+  %mul5 = mul i32 %13, 8
+  %call = call i8* @realloc(i8* %11, i32 %mul5)
+  %14 = bitcast i8* %call to %struct.node_t*
+  %15 = load %struct.heap_t*, %struct.heap_t** %h.addr, align 4
+  %nodes6 = getelementptr inbounds %struct.heap_t, %struct.heap_t* %15, i32 0, i32 0
+  store %struct.node_t* %14, %struct.node_t** %nodes6, align 4
+  br label %if.end
+
+if.end:                                           ; preds = %cond.end, %entry
+  %16 = load %struct.heap_t*, %struct.heap_t** %h.addr, align 4
+  %len7 = getelementptr inbounds %struct.heap_t, %struct.heap_t* %16, i32 0, i32 1
+  %17 = load i32, i32* %len7, align 4
+  %add8 = add nsw i32 %17, 1
+  store i32 %add8, i32* %i, align 4
+  %18 = load i32, i32* %i, align 4
+  %div = sdiv i32 %18, 2
+  store i32 %div, i32* %j, align 4
+  br label %while.cond
+
+while.cond:                                       ; preds = %while.body, %if.end
+  %19 = load i32, i32* %i, align 4
+  %cmp9 = icmp sgt i32 %19, 1
+  br i1 %cmp9, label %land.rhs, label %land.end
+
+land.rhs:                                         ; preds = %while.cond
+  %20 = load %struct.heap_t*, %struct.heap_t** %h.addr, align 4
+  %nodes10 = getelementptr inbounds %struct.heap_t, %struct.heap_t* %20, i32 0, i32 0
+  %21 = load %struct.node_t*, %struct.node_t** %nodes10, align 4
+  %22 = load i32, i32* %j, align 4
+  %arrayidx = getelementptr inbounds %struct.node_t, %struct.node_t* %21, i32 %22
+  %priority11 = getelementptr inbounds %struct.node_t, %struct.node_t* %arrayidx, i32 0, i32 0
+  %23 = load i32, i32* %priority11, align 4
+  %24 = load i32, i32* %priority.addr, align 4
+  %cmp12 = icmp sgt i32 %23, %24
+  br label %land.end
+
+land.end:                                         ; preds = %land.rhs, %while.cond
+  %25 = phi i1 [ false, %while.cond ], [ %cmp12, %land.rhs ]
+  br i1 %25, label %while.body, label %while.end
+
+while.body:                                       ; preds = %land.end
+  %26 = load %struct.heap_t*, %struct.heap_t** %h.addr, align 4
+  %nodes13 = getelementptr inbounds %struct.heap_t, %struct.heap_t* %26, i32 0, i32 0
+  %27 = load %struct.node_t*, %struct.node_t** %nodes13, align 4
+  %28 = load i32, i32* %i, align 4
+  %arrayidx14 = getelementptr inbounds %struct.node_t, %struct.node_t* %27, i32 %28
+  %29 = load %struct.heap_t*, %struct.heap_t** %h.addr, align 4
+  %nodes15 = getelementptr inbounds %struct.heap_t, %struct.heap_t* %29, i32 0, i32 0
+  %30 = load %struct.node_t*, %struct.node_t** %nodes15, align 4
+  %31 = load i32, i32* %j, align 4
+  %arrayidx16 = getelementptr inbounds %struct.node_t, %struct.node_t* %30, i32 %31
+  %32 = bitcast %struct.node_t* %arrayidx14 to i8*
+  %33 = bitcast %struct.node_t* %arrayidx16 to i8*
+  call void @llvm.memcpy.p0i8.p0i8.i32(i8* align 4 %32, i8* align 4 %33, i32 8, i1 false)
+  %34 = load i32, i32* %j, align 4
+  store i32 %34, i32* %i, align 4
+  %35 = load i32, i32* %j, align 4
+  %div17 = sdiv i32 %35, 2
+  store i32 %div17, i32* %j, align 4
+  br label %while.cond
+
+while.end:                                        ; preds = %land.end
+  %36 = load i32, i32* %priority.addr, align 4
+  %37 = load %struct.heap_t*, %struct.heap_t** %h.addr, align 4
+  %nodes18 = getelementptr inbounds %struct.heap_t, %struct.heap_t* %37, i32 0, i32 0
+  %38 = load %struct.node_t*, %struct.node_t** %nodes18, align 4
+  %39 = load i32, i32* %i, align 4
+  %arrayidx19 = getelementptr inbounds %struct.node_t, %struct.node_t* %38, i32 %39
+  %priority20 = getelementptr inbounds %struct.node_t, %struct.node_t* %arrayidx19, i32 0, i32 0
+  store i32 %36, i32* %priority20, align 4
+  %40 = load i8*, i8** %data.addr, align 4
+  %41 = load %struct.heap_t*, %struct.heap_t** %h.addr, align 4
+  %nodes21 = getelementptr inbounds %struct.heap_t, %struct.heap_t* %41, i32 0, i32 0
+  %42 = load %struct.node_t*, %struct.node_t** %nodes21, align 4
+  %43 = load i32, i32* %i, align 4
+  %arrayidx22 = getelementptr inbounds %struct.node_t, %struct.node_t* %42, i32 %43
+  %data23 = getelementptr inbounds %struct.node_t, %struct.node_t* %arrayidx22, i32 0, i32 1
+  store i8* %40, i8** %data23, align 4
+  %44 = load %struct.heap_t*, %struct.heap_t** %h.addr, align 4
+  %len24 = getelementptr inbounds %struct.heap_t, %struct.heap_t* %44, i32 0, i32 1
+  %45 = load i32, i32* %len24, align 4
+  %inc = add nsw i32 %45, 1
+  store i32 %inc, i32* %len24, align 4
+  ret void
+}
+
+declare i8* @realloc(i8* %0, i32 %1) #1
+
+; Function Attrs: argmemonly nounwind willreturn
+declare void @llvm.memcpy.p0i8.p0i8.i32(i8* noalias nocapture writeonly %0, i8* noalias nocapture readonly %1, i32 %2, i1 immarg %3) #2
+
+; Function Attrs: noinline nounwind optnone
+define hidden i8* @pop(%struct.heap_t* %h) #0 {
+entry:
+  %retval = alloca i8*, align 4
+  %h.addr = alloca %struct.heap_t*, align 4
+  %i = alloca i32, align 4
+  %j = alloca i32, align 4
+  %k = alloca i32, align 4
+  %data = alloca i8*, align 4
+  store %struct.heap_t* %h, %struct.heap_t** %h.addr, align 4
+  %0 = load %struct.heap_t*, %struct.heap_t** %h.addr, align 4
+  %len = getelementptr inbounds %struct.heap_t, %struct.heap_t* %0, i32 0, i32 1
+  %1 = load i32, i32* %len, align 4
+  %tobool = icmp ne i32 %1, 0
+  br i1 %tobool, label %if.end, label %if.then
+
+if.then:                                          ; preds = %entry
+  store i8* null, i8** %retval, align 4
+  br label %return
+
+if.end:                                           ; preds = %entry
+  %2 = load %struct.heap_t*, %struct.heap_t** %h.addr, align 4
+  %nodes = getelementptr inbounds %struct.heap_t, %struct.heap_t* %2, i32 0, i32 0
+  %3 = load %struct.node_t*, %struct.node_t** %nodes, align 4
+  %arrayidx = getelementptr inbounds %struct.node_t, %struct.node_t* %3, i32 1
+  %data1 = getelementptr inbounds %struct.node_t, %struct.node_t* %arrayidx, i32 0, i32 1
+  %4 = load i8*, i8** %data1, align 4
+  store i8* %4, i8** %data, align 4
+  %5 = load %struct.heap_t*, %struct.heap_t** %h.addr, align 4
+  %nodes2 = getelementptr inbounds %struct.heap_t, %struct.heap_t* %5, i32 0, i32 0
+  %6 = load %struct.node_t*, %struct.node_t** %nodes2, align 4
+  %arrayidx3 = getelementptr inbounds %struct.node_t, %struct.node_t* %6, i32 1
+  %7 = load %struct.heap_t*, %struct.heap_t** %h.addr, align 4
+  %nodes4 = getelementptr inbounds %struct.heap_t, %struct.heap_t* %7, i32 0, i32 0
+  %8 = load %struct.node_t*, %struct.node_t** %nodes4, align 4
+  %9 = load %struct.heap_t*, %struct.heap_t** %h.addr, align 4
+  %len5 = getelementptr inbounds %struct.heap_t, %struct.heap_t* %9, i32 0, i32 1
+  %10 = load i32, i32* %len5, align 4
+  %arrayidx6 = getelementptr inbounds %struct.node_t, %struct.node_t* %8, i32 %10
+  %11 = bitcast %struct.node_t* %arrayidx3 to i8*
+  %12 = bitcast %struct.node_t* %arrayidx6 to i8*
+  call void @llvm.memcpy.p0i8.p0i8.i32(i8* align 4 %11, i8* align 4 %12, i32 8, i1 false)
+  %13 = load %struct.heap_t*, %struct.heap_t** %h.addr, align 4
+  %len7 = getelementptr inbounds %struct.heap_t, %struct.heap_t* %13, i32 0, i32 1
+  %14 = load i32, i32* %len7, align 4
+  %dec = add nsw i32 %14, -1
+  store i32 %dec, i32* %len7, align 4
+  store i32 1, i32* %i, align 4
+  br label %while.cond
+
+while.cond:                                       ; preds = %if.end35, %if.end
+  %15 = load i32, i32* %i, align 4
+  %16 = load %struct.heap_t*, %struct.heap_t** %h.addr, align 4
+  %len8 = getelementptr inbounds %struct.heap_t, %struct.heap_t* %16, i32 0, i32 1
+  %17 = load i32, i32* %len8, align 4
+  %add = add nsw i32 %17, 1
+  %cmp = icmp ne i32 %15, %add
+  br i1 %cmp, label %while.body, label %while.end
+
+while.body:                                       ; preds = %while.cond
+  %18 = load %struct.heap_t*, %struct.heap_t** %h.addr, align 4
+  %len9 = getelementptr inbounds %struct.heap_t, %struct.heap_t* %18, i32 0, i32 1
+  %19 = load i32, i32* %len9, align 4
+  %add10 = add nsw i32 %19, 1
+  store i32 %add10, i32* %k, align 4
+  %20 = load i32, i32* %i, align 4
+  %mul = mul nsw i32 2, %20
+  store i32 %mul, i32* %j, align 4
+  %21 = load i32, i32* %j, align 4
+  %22 = load %struct.heap_t*, %struct.heap_t** %h.addr, align 4
+  %len11 = getelementptr inbounds %struct.heap_t, %struct.heap_t* %22, i32 0, i32 1
+  %23 = load i32, i32* %len11, align 4
+  %cmp12 = icmp sle i32 %21, %23
+  br i1 %cmp12, label %land.lhs.true, label %if.end20
+
+land.lhs.true:                                    ; preds = %while.body
+  %24 = load %struct.heap_t*, %struct.heap_t** %h.addr, align 4
+  %nodes13 = getelementptr inbounds %struct.heap_t, %struct.heap_t* %24, i32 0, i32 0
+  %25 = load %struct.node_t*, %struct.node_t** %nodes13, align 4
+  %26 = load i32, i32* %j, align 4
+  %arrayidx14 = getelementptr inbounds %struct.node_t, %struct.node_t* %25, i32 %26
+  %priority = getelementptr inbounds %struct.node_t, %struct.node_t* %arrayidx14, i32 0, i32 0
+  %27 = load i32, i32* %priority, align 4
+  %28 = load %struct.heap_t*, %struct.heap_t** %h.addr, align 4
+  %nodes15 = getelementptr inbounds %struct.heap_t, %struct.heap_t* %28, i32 0, i32 0
+  %29 = load %struct.node_t*, %struct.node_t** %nodes15, align 4
+  %30 = load i32, i32* %k, align 4
+  %arrayidx16 = getelementptr inbounds %struct.node_t, %struct.node_t* %29, i32 %30
+  %priority17 = getelementptr inbounds %struct.node_t, %struct.node_t* %arrayidx16, i32 0, i32 0
+  %31 = load i32, i32* %priority17, align 4
+  %cmp18 = icmp slt i32 %27, %31
+  br i1 %cmp18, label %if.then19, label %if.end20
+
+if.then19:                                        ; preds = %land.lhs.true
+  %32 = load i32, i32* %j, align 4
+  store i32 %32, i32* %k, align 4
+  br label %if.end20
+
+if.end20:                                         ; preds = %if.then19, %land.lhs.true, %while.body
+  %33 = load i32, i32* %j, align 4
+  %add21 = add nsw i32 %33, 1
+  %34 = load %struct.heap_t*, %struct.heap_t** %h.addr, align 4
+  %len22 = getelementptr inbounds %struct.heap_t, %struct.heap_t* %34, i32 0, i32 1
+  %35 = load i32, i32* %len22, align 4
+  %cmp23 = icmp sle i32 %add21, %35
+  br i1 %cmp23, label %land.lhs.true24, label %if.end35
+
+land.lhs.true24:                                  ; preds = %if.end20
+  %36 = load %struct.heap_t*, %struct.heap_t** %h.addr, align 4
+  %nodes25 = getelementptr inbounds %struct.heap_t, %struct.heap_t* %36, i32 0, i32 0
+  %37 = load %struct.node_t*, %struct.node_t** %nodes25, align 4
+  %38 = load i32, i32* %j, align 4
+  %add26 = add nsw i32 %38, 1
+  %arrayidx27 = getelementptr inbounds %struct.node_t, %struct.node_t* %37, i32 %add26
+  %priority28 = getelementptr inbounds %struct.node_t, %struct.node_t* %arrayidx27, i32 0, i32 0
+  %39 = load i32, i32* %priority28, align 4
+  %40 = load %struct.heap_t*, %struct.heap_t** %h.addr, align 4
+  %nodes29 = getelementptr inbounds %struct.heap_t, %struct.heap_t* %40, i32 0, i32 0
+  %41 = load %struct.node_t*, %struct.node_t** %nodes29, align 4
+  %42 = load i32, i32* %k, align 4
+  %arrayidx30 = getelementptr inbounds %struct.node_t, %struct.node_t* %41, i32 %42
+  %priority31 = getelementptr inbounds %struct.node_t, %struct.node_t* %arrayidx30, i32 0, i32 0
+  %43 = load i32, i32* %priority31, align 4
+  %cmp32 = icmp slt i32 %39, %43
+  br i1 %cmp32, label %if.then33, label %if.end35
+
+if.then33:                                        ; preds = %land.lhs.true24
+  %44 = load i32, i32* %j, align 4
+  %add34 = add nsw i32 %44, 1
+  store i32 %add34, i32* %k, align 4
+  br label %if.end35
+
+if.end35:                                         ; preds = %if.then33, %land.lhs.true24, %if.end20
+  %45 = load %struct.heap_t*, %struct.heap_t** %h.addr, align 4
+  %nodes36 = getelementptr inbounds %struct.heap_t, %struct.heap_t* %45, i32 0, i32 0
+  %46 = load %struct.node_t*, %struct.node_t** %nodes36, align 4
+  %47 = load i32, i32* %i, align 4
+  %arrayidx37 = getelementptr inbounds %struct.node_t, %struct.node_t* %46, i32 %47
+  %48 = load %struct.heap_t*, %struct.heap_t** %h.addr, align 4
+  %nodes38 = getelementptr inbounds %struct.heap_t, %struct.heap_t* %48, i32 0, i32 0
+  %49 = load %struct.node_t*, %struct.node_t** %nodes38, align 4
+  %50 = load i32, i32* %k, align 4
+  %arrayidx39 = getelementptr inbounds %struct.node_t, %struct.node_t* %49, i32 %50
+  %51 = bitcast %struct.node_t* %arrayidx37 to i8*
+  %52 = bitcast %struct.node_t* %arrayidx39 to i8*
+  call void @llvm.memcpy.p0i8.p0i8.i32(i8* align 4 %51, i8* align 4 %52, i32 8, i1 false)
+  %53 = load i32, i32* %k, align 4
+  store i32 %53, i32* %i, align 4
+  br label %while.cond
+
+while.end:                                        ; preds = %while.cond
+  %54 = load i8*, i8** %data, align 4
+  store i8* %54, i8** %retval, align 4
+  br label %return
+
+return:                                           ; preds = %while.end, %if.then
+  %55 = load i8*, i8** %retval, align 4
+  ret i8* %55
+}
+
+; Function Attrs: noinline nounwind optnone
+define hidden i32 @main() #0 {
+entry:
+  %retval = alloca i32, align 4
+  %h = alloca %struct.heap_t*, align 4
+  %i = alloca i32, align 4
+  store i32 0, i32* %retval, align 4
+  %call = call noalias i8* @calloc(i32 1, i32 12)
+  %0 = bitcast i8* %call to %struct.heap_t*
+  store %struct.heap_t* %0, %struct.heap_t** %h, align 4
+  %1 = load %struct.heap_t*, %struct.heap_t** %h, align 4
+  call void @push(%struct.heap_t* %1, i32 3, i8* getelementptr inbounds ([13 x i8], [13 x i8]* @.str, i32 0, i32 0))
+  %2 = load %struct.heap_t*, %struct.heap_t** %h, align 4
+  call void @push(%struct.heap_t* %2, i32 4, i8* getelementptr inbounds ([9 x i8], [9 x i8]* @.str.1, i32 0, i32 0))
+  %3 = load %struct.heap_t*, %struct.heap_t** %h, align 4
+  call void @push(%struct.heap_t* %3, i32 5, i8* getelementptr inbounds ([9 x i8], [9 x i8]* @.str.2, i32 0, i32 0))
+  %4 = load %struct.heap_t*, %struct.heap_t** %h, align 4
+  call void @push(%struct.heap_t* %4, i32 1, i8* getelementptr inbounds ([15 x i8], [15 x i8]* @.str.3, i32 0, i32 0))
+  %5 = load %struct.heap_t*, %struct.heap_t** %h, align 4
+  call void @push(%struct.heap_t* %5, i32 2, i8* getelementptr inbounds ([11 x i8], [11 x i8]* @.str.4, i32 0, i32 0))
+  store i32 0, i32* %i, align 4
+  br label %for.cond
+
+for.cond:                                         ; preds = %for.inc, %entry
+  %6 = load i32, i32* %i, align 4
+  %cmp = icmp slt i32 %6, 5
+  br i1 %cmp, label %for.body, label %for.end
+
+for.body:                                         ; preds = %for.cond
+  %7 = load %struct.heap_t*, %struct.heap_t** %h, align 4
+  %call1 = call i8* @pop(%struct.heap_t* %7)
+  %call2 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([4 x i8], [4 x i8]* @.str.5, i32 0, i32 0), i8* %call1)
+  br label %for.inc
+
+for.inc:                                          ; preds = %for.body
+  %8 = load i32, i32* %i, align 4
+  %inc = add nsw i32 %8, 1
+  store i32 %inc, i32* %i, align 4
+  br label %for.cond
+
+for.end:                                          ; preds = %for.cond
+  ret i32 0
+}
+
+declare noalias i8* @calloc(i32 %0, i32 %1) #1
+
+declare i32 @printf(i8* %0, ...) #1
+
+attributes #0 = { noinline nounwind optnone "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "min-legal-vector-width"="0" "no-infs-fp-math"="false" "no-jump-tables"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #1 = { "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #2 = { argmemonly nounwind willreturn }
+
+!llvm.module.flags = !{!0}
+!llvm.ident = !{!1}
+
+!0 = !{i32 1, !"wchar_size", i32 4}
+!1 = !{!"clang version 11.0.0 (https://github.com/Jacarte/llvm-project.git 0f6dea67136cc1e0b3d200eb2bb165628970c44b)"}
+
+; extracted candidates
+
+; *****
+; For LLVM instruction:
+;  %1 = load i32, i32* %len, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %tobool = icmp ne i32 %1, 0
+; Looking for a replacement for:
+%0:i32 = var
+%1:i1 = ne 0:i32, %0
+infer %1
+
+; *****
+; For LLVM instruction:
+;  %10 = load i32, i32* %len5, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %14 = load i32, i32* %len7, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %dec = add nsw i32 %14, -1
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = addnsw 4294967295:i32, %0
+infer %1
+
+; *****
+; For LLVM instruction:
+;  %15 = load i32, i32* %i, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %17 = load i32, i32* %len8, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %add = add nsw i32 %17, 1
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = addnsw 1:i32, %0
+infer %1
+
+; *****
+; For LLVM instruction:
+;  %cmp = icmp ne i32 %15, %add
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = var
+%2:i32 = addnsw 1:i32, %1
+%3:i1 = ne %0, %2
+infer %3
+
+; *****
+; For LLVM instruction:
+;  %19 = load i32, i32* %len9, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %add10 = add nsw i32 %19, 1
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = addnsw 1:i32, %0
+infer %1
+
+; *****
+; For LLVM instruction:
+;  %20 = load i32, i32* %i, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %mul = mul nsw i32 2, %20
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = mulnsw 2:i32, %0
+infer %1
+
+; *****
+; For LLVM instruction:
+;  %21 = load i32, i32* %j, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %23 = load i32, i32* %len11, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %cmp12 = icmp sle i32 %21, %23
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = var
+%2:i1 = sle %0, %1
+infer %2
+
+; *****
+; For LLVM instruction:
+;  %26 = load i32, i32* %j, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %27 = load i32, i32* %priority, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %30 = load i32, i32* %k, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %31 = load i32, i32* %priority17, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %cmp18 = icmp slt i32 %27, %31
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = var
+%2:i1 = slt %0, %1
+infer %2
+
+; *****
+; For LLVM instruction:
+;  %32 = load i32, i32* %j, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %33 = load i32, i32* %j, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %add21 = add nsw i32 %33, 1
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = addnsw 1:i32, %0
+infer %1
+
+; *****
+; For LLVM instruction:
+;  %35 = load i32, i32* %len22, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %cmp23 = icmp sle i32 %add21, %35
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = addnsw 1:i32, %0
+%2:i32 = var
+%3:i1 = sle %1, %2
+infer %3
+
+; *****
+; For LLVM instruction:
+;  %38 = load i32, i32* %j, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %add26 = add nsw i32 %38, 1
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = addnsw 1:i32, %0
+infer %1
+
+; *****
+; For LLVM instruction:
+;  %39 = load i32, i32* %priority28, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %42 = load i32, i32* %k, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %43 = load i32, i32* %priority31, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %cmp32 = icmp slt i32 %39, %43
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = var
+%2:i1 = slt %0, %1
+infer %2
+
+; *****
+; For LLVM instruction:
+;  %44 = load i32, i32* %j, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %add34 = add nsw i32 %44, 1
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = addnsw 1:i32, %0
+infer %1
+
+; *****
+; For LLVM instruction:
+;  %47 = load i32, i32* %i, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %50 = load i32, i32* %k, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %53 = load i32, i32* %k, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+got 2 candidates from LHS
+
+-------------------------------------------------
+%0:i32 = var
+%1:i32 = addnsw 4294967295:i32, %0
+infer %1
+
+
+--------------------------------
+guess 0
+
+%0:i32 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: -1
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: 536870911
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+
+--------------------------------
+guess 1
+
+%0:i32 = var
+
+Cost = 0
+second query is SAT-- constant doesn't work
+Dataflow Pruned 0/0
+There are 2 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 4 candidates from LHS
+
+-------------------------------------------------
+%0:i32 = var
+%1:i32 = var
+%2:i32 = addnsw 1:i32, %1
+%3:i1 = ne %0, %2
+infer %3
+
+
+--------------------------------
+guess 0
+
+%0:i1 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: -1
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: 0
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+Dataflow Pruned 0/0
+There are 1 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 3 candidates from LHS
+
+-------------------------------------------------
+%0:i32 = var
+%1:i32 = var
+%2:i1 = sle %0, %1
+infer %2
+
+
+--------------------------------
+guess 0
+
+%0:i1 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: -1
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: 0
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+Dataflow Pruned 0/0
+There are 1 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 4 candidates from LHS
+
+-------------------------------------------------
+%0:i32 = var
+%1:i32 = addnsw 1:i32, %0
+%2:i32 = var
+%3:i1 = sle %1, %2
+infer %3
+
+
+--------------------------------
+guess 0
+
+%0:i1 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: -1
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+Dataflow Pruned 0/0
+There are 1 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+#########################################################
+; exiting Souper's runOnFunction() for pop()
+
+; entering Souper's runOnFunction() for main()
+
+; ModuleID = './Priority_queue.c.bc'
+source_filename = "./Priority_queue.c"
+target datalayout = "e-m:e-p:32:32-i64:64-n32:64-S128"
+target triple = "wasm32-unknown-wasi"
+
+%struct.heap_t = type { %struct.node_t*, i32, i32 }
+%struct.node_t = type { i32, i8* }
+
+@.str = private unnamed_addr constant [13 x i8] c"Clear drains\00", align 1
+@.str.1 = private unnamed_addr constant [9 x i8] c"Feed cat\00", align 1
+@.str.2 = private unnamed_addr constant [9 x i8] c"Make tea\00", align 1
+@.str.3 = private unnamed_addr constant [15 x i8] c"Solve RC tasks\00", align 1
+@.str.4 = private unnamed_addr constant [11 x i8] c"Tax return\00", align 1
+@.str.5 = private unnamed_addr constant [4 x i8] c"%s\0A\00", align 1
+@llvm.used = appending global [1 x i8*] [i8* bitcast (i32 ()* @__main_void to i8*)], section "llvm.metadata"
+
+@__main_void = alias i32 (), i32 ()* @main
+
+; Function Attrs: noinline nounwind optnone
+define hidden void @push(%struct.heap_t* %h, i32 %priority, i8* %data) #0 {
+entry:
+  %h.addr = alloca %struct.heap_t*, align 4
+  %priority.addr = alloca i32, align 4
+  %data.addr = alloca i8*, align 4
+  %i = alloca i32, align 4
+  %j = alloca i32, align 4
+  store %struct.heap_t* %h, %struct.heap_t** %h.addr, align 4
+  store i32 %priority, i32* %priority.addr, align 4
+  store i8* %data, i8** %data.addr, align 4
+  %0 = load %struct.heap_t*, %struct.heap_t** %h.addr, align 4
+  %len = getelementptr inbounds %struct.heap_t, %struct.heap_t* %0, i32 0, i32 1
+  %1 = load i32, i32* %len, align 4
+  %add = add nsw i32 %1, 1
+  %2 = load %struct.heap_t*, %struct.heap_t** %h.addr, align 4
+  %size = getelementptr inbounds %struct.heap_t, %struct.heap_t* %2, i32 0, i32 2
+  %3 = load i32, i32* %size, align 4
+  %cmp = icmp sge i32 %add, %3
+  br i1 %cmp, label %if.then, label %if.end
+
+if.then:                                          ; preds = %entry
+  %4 = load %struct.heap_t*, %struct.heap_t** %h.addr, align 4
+  %size1 = getelementptr inbounds %struct.heap_t, %struct.heap_t* %4, i32 0, i32 2
+  %5 = load i32, i32* %size1, align 4
+  %tobool = icmp ne i32 %5, 0
+  br i1 %tobool, label %cond.true, label %cond.false
+
+cond.true:                                        ; preds = %if.then
+  %6 = load %struct.heap_t*, %struct.heap_t** %h.addr, align 4
+  %size2 = getelementptr inbounds %struct.heap_t, %struct.heap_t* %6, i32 0, i32 2
+  %7 = load i32, i32* %size2, align 4
+  %mul = mul nsw i32 %7, 2
+  br label %cond.end
+
+cond.false:                                       ; preds = %if.then
+  br label %cond.end
+
+cond.end:                                         ; preds = %cond.false, %cond.true
+  %cond = phi i32 [ %mul, %cond.true ], [ 4, %cond.false ]
+  %8 = load %struct.heap_t*, %struct.heap_t** %h.addr, align 4
+  %size3 = getelementptr inbounds %struct.heap_t, %struct.heap_t* %8, i32 0, i32 2
+  store i32 %cond, i32* %size3, align 4
+  %9 = load %struct.heap_t*, %struct.heap_t** %h.addr, align 4
+  %nodes = getelementptr inbounds %struct.heap_t, %struct.heap_t* %9, i32 0, i32 0
+  %10 = load %struct.node_t*, %struct.node_t** %nodes, align 4
+  %11 = bitcast %struct.node_t* %10 to i8*
+  %12 = load %struct.heap_t*, %struct.heap_t** %h.addr, align 4
+  %size4 = getelementptr inbounds %struct.heap_t, %struct.heap_t* %12, i32 0, i32 2
+  %13 = load i32, i32* %size4, align 4
+  %mul5 = mul i32 %13, 8
+  %call = call i8* @realloc(i8* %11, i32 %mul5)
+  %14 = bitcast i8* %call to %struct.node_t*
+  %15 = load %struct.heap_t*, %struct.heap_t** %h.addr, align 4
+  %nodes6 = getelementptr inbounds %struct.heap_t, %struct.heap_t* %15, i32 0, i32 0
+  store %struct.node_t* %14, %struct.node_t** %nodes6, align 4
+  br label %if.end
+
+if.end:                                           ; preds = %cond.end, %entry
+  %16 = load %struct.heap_t*, %struct.heap_t** %h.addr, align 4
+  %len7 = getelementptr inbounds %struct.heap_t, %struct.heap_t* %16, i32 0, i32 1
+  %17 = load i32, i32* %len7, align 4
+  %add8 = add nsw i32 %17, 1
+  store i32 %add8, i32* %i, align 4
+  %18 = load i32, i32* %i, align 4
+  %div = sdiv i32 %18, 2
+  store i32 %div, i32* %j, align 4
+  br label %while.cond
+
+while.cond:                                       ; preds = %while.body, %if.end
+  %19 = load i32, i32* %i, align 4
+  %cmp9 = icmp sgt i32 %19, 1
+  br i1 %cmp9, label %land.rhs, label %land.end
+
+land.rhs:                                         ; preds = %while.cond
+  %20 = load %struct.heap_t*, %struct.heap_t** %h.addr, align 4
+  %nodes10 = getelementptr inbounds %struct.heap_t, %struct.heap_t* %20, i32 0, i32 0
+  %21 = load %struct.node_t*, %struct.node_t** %nodes10, align 4
+  %22 = load i32, i32* %j, align 4
+  %arrayidx = getelementptr inbounds %struct.node_t, %struct.node_t* %21, i32 %22
+  %priority11 = getelementptr inbounds %struct.node_t, %struct.node_t* %arrayidx, i32 0, i32 0
+  %23 = load i32, i32* %priority11, align 4
+  %24 = load i32, i32* %priority.addr, align 4
+  %cmp12 = icmp sgt i32 %23, %24
+  br label %land.end
+
+land.end:                                         ; preds = %land.rhs, %while.cond
+  %25 = phi i1 [ false, %while.cond ], [ %cmp12, %land.rhs ]
+  br i1 %25, label %while.body, label %while.end
+
+while.body:                                       ; preds = %land.end
+  %26 = load %struct.heap_t*, %struct.heap_t** %h.addr, align 4
+  %nodes13 = getelementptr inbounds %struct.heap_t, %struct.heap_t* %26, i32 0, i32 0
+  %27 = load %struct.node_t*, %struct.node_t** %nodes13, align 4
+  %28 = load i32, i32* %i, align 4
+  %arrayidx14 = getelementptr inbounds %struct.node_t, %struct.node_t* %27, i32 %28
+  %29 = load %struct.heap_t*, %struct.heap_t** %h.addr, align 4
+  %nodes15 = getelementptr inbounds %struct.heap_t, %struct.heap_t* %29, i32 0, i32 0
+  %30 = load %struct.node_t*, %struct.node_t** %nodes15, align 4
+  %31 = load i32, i32* %j, align 4
+  %arrayidx16 = getelementptr inbounds %struct.node_t, %struct.node_t* %30, i32 %31
+  %32 = bitcast %struct.node_t* %arrayidx14 to i8*
+  %33 = bitcast %struct.node_t* %arrayidx16 to i8*
+  call void @llvm.memcpy.p0i8.p0i8.i32(i8* align 4 %32, i8* align 4 %33, i32 8, i1 false)
+  %34 = load i32, i32* %j, align 4
+  store i32 %34, i32* %i, align 4
+  %35 = load i32, i32* %j, align 4
+  %div17 = sdiv i32 %35, 2
+  store i32 %div17, i32* %j, align 4
+  br label %while.cond
+
+while.end:                                        ; preds = %land.end
+  %36 = load i32, i32* %priority.addr, align 4
+  %37 = load %struct.heap_t*, %struct.heap_t** %h.addr, align 4
+  %nodes18 = getelementptr inbounds %struct.heap_t, %struct.heap_t* %37, i32 0, i32 0
+  %38 = load %struct.node_t*, %struct.node_t** %nodes18, align 4
+  %39 = load i32, i32* %i, align 4
+  %arrayidx19 = getelementptr inbounds %struct.node_t, %struct.node_t* %38, i32 %39
+  %priority20 = getelementptr inbounds %struct.node_t, %struct.node_t* %arrayidx19, i32 0, i32 0
+  store i32 %36, i32* %priority20, align 4
+  %40 = load i8*, i8** %data.addr, align 4
+  %41 = load %struct.heap_t*, %struct.heap_t** %h.addr, align 4
+  %nodes21 = getelementptr inbounds %struct.heap_t, %struct.heap_t* %41, i32 0, i32 0
+  %42 = load %struct.node_t*, %struct.node_t** %nodes21, align 4
+  %43 = load i32, i32* %i, align 4
+  %arrayidx22 = getelementptr inbounds %struct.node_t, %struct.node_t* %42, i32 %43
+  %data23 = getelementptr inbounds %struct.node_t, %struct.node_t* %arrayidx22, i32 0, i32 1
+  store i8* %40, i8** %data23, align 4
+  %44 = load %struct.heap_t*, %struct.heap_t** %h.addr, align 4
+  %len24 = getelementptr inbounds %struct.heap_t, %struct.heap_t* %44, i32 0, i32 1
+  %45 = load i32, i32* %len24, align 4
+  %inc = add nsw i32 %45, 1
+  store i32 %inc, i32* %len24, align 4
+  ret void
+}
+
+declare i8* @realloc(i8* %0, i32 %1) #1
+
+; Function Attrs: argmemonly nounwind willreturn
+declare void @llvm.memcpy.p0i8.p0i8.i32(i8* noalias nocapture writeonly %0, i8* noalias nocapture readonly %1, i32 %2, i1 immarg %3) #2
+
+; Function Attrs: noinline nounwind optnone
+define hidden i8* @pop(%struct.heap_t* %h) #0 {
+entry:
+  %retval = alloca i8*, align 4
+  %h.addr = alloca %struct.heap_t*, align 4
+  %i = alloca i32, align 4
+  %j = alloca i32, align 4
+  %k = alloca i32, align 4
+  %data = alloca i8*, align 4
+  store %struct.heap_t* %h, %struct.heap_t** %h.addr, align 4
+  %0 = load %struct.heap_t*, %struct.heap_t** %h.addr, align 4
+  %len = getelementptr inbounds %struct.heap_t, %struct.heap_t* %0, i32 0, i32 1
+  %1 = load i32, i32* %len, align 4
+  %tobool = icmp ne i32 %1, 0
+  br i1 %tobool, label %if.end, label %if.then
+
+if.then:                                          ; preds = %entry
+  store i8* null, i8** %retval, align 4
+  br label %return
+
+if.end:                                           ; preds = %entry
+  %2 = load %struct.heap_t*, %struct.heap_t** %h.addr, align 4
+  %nodes = getelementptr inbounds %struct.heap_t, %struct.heap_t* %2, i32 0, i32 0
+  %3 = load %struct.node_t*, %struct.node_t** %nodes, align 4
+  %arrayidx = getelementptr inbounds %struct.node_t, %struct.node_t* %3, i32 1
+  %data1 = getelementptr inbounds %struct.node_t, %struct.node_t* %arrayidx, i32 0, i32 1
+  %4 = load i8*, i8** %data1, align 4
+  store i8* %4, i8** %data, align 4
+  %5 = load %struct.heap_t*, %struct.heap_t** %h.addr, align 4
+  %nodes2 = getelementptr inbounds %struct.heap_t, %struct.heap_t* %5, i32 0, i32 0
+  %6 = load %struct.node_t*, %struct.node_t** %nodes2, align 4
+  %arrayidx3 = getelementptr inbounds %struct.node_t, %struct.node_t* %6, i32 1
+  %7 = load %struct.heap_t*, %struct.heap_t** %h.addr, align 4
+  %nodes4 = getelementptr inbounds %struct.heap_t, %struct.heap_t* %7, i32 0, i32 0
+  %8 = load %struct.node_t*, %struct.node_t** %nodes4, align 4
+  %9 = load %struct.heap_t*, %struct.heap_t** %h.addr, align 4
+  %len5 = getelementptr inbounds %struct.heap_t, %struct.heap_t* %9, i32 0, i32 1
+  %10 = load i32, i32* %len5, align 4
+  %arrayidx6 = getelementptr inbounds %struct.node_t, %struct.node_t* %8, i32 %10
+  %11 = bitcast %struct.node_t* %arrayidx3 to i8*
+  %12 = bitcast %struct.node_t* %arrayidx6 to i8*
+  call void @llvm.memcpy.p0i8.p0i8.i32(i8* align 4 %11, i8* align 4 %12, i32 8, i1 false)
+  %13 = load %struct.heap_t*, %struct.heap_t** %h.addr, align 4
+  %len7 = getelementptr inbounds %struct.heap_t, %struct.heap_t* %13, i32 0, i32 1
+  %14 = load i32, i32* %len7, align 4
+  %dec = add nsw i32 %14, -1
+  store i32 %dec, i32* %len7, align 4
+  store i32 1, i32* %i, align 4
+  br label %while.cond
+
+while.cond:                                       ; preds = %if.end35, %if.end
+  %15 = load i32, i32* %i, align 4
+  %16 = load %struct.heap_t*, %struct.heap_t** %h.addr, align 4
+  %len8 = getelementptr inbounds %struct.heap_t, %struct.heap_t* %16, i32 0, i32 1
+  %17 = load i32, i32* %len8, align 4
+  %add = add nsw i32 %17, 1
+  %cmp = icmp ne i32 %15, %add
+  br i1 %cmp, label %while.body, label %while.end
+
+while.body:                                       ; preds = %while.cond
+  %18 = load %struct.heap_t*, %struct.heap_t** %h.addr, align 4
+  %len9 = getelementptr inbounds %struct.heap_t, %struct.heap_t* %18, i32 0, i32 1
+  %19 = load i32, i32* %len9, align 4
+  %add10 = add nsw i32 %19, 1
+  store i32 %add10, i32* %k, align 4
+  %20 = load i32, i32* %i, align 4
+  %mul = mul nsw i32 2, %20
+  store i32 %mul, i32* %j, align 4
+  %21 = load i32, i32* %j, align 4
+  %22 = load %struct.heap_t*, %struct.heap_t** %h.addr, align 4
+  %len11 = getelementptr inbounds %struct.heap_t, %struct.heap_t* %22, i32 0, i32 1
+  %23 = load i32, i32* %len11, align 4
+  %cmp12 = icmp sle i32 %21, %23
+  br i1 %cmp12, label %land.lhs.true, label %if.end20
+
+land.lhs.true:                                    ; preds = %while.body
+  %24 = load %struct.heap_t*, %struct.heap_t** %h.addr, align 4
+  %nodes13 = getelementptr inbounds %struct.heap_t, %struct.heap_t* %24, i32 0, i32 0
+  %25 = load %struct.node_t*, %struct.node_t** %nodes13, align 4
+  %26 = load i32, i32* %j, align 4
+  %arrayidx14 = getelementptr inbounds %struct.node_t, %struct.node_t* %25, i32 %26
+  %priority = getelementptr inbounds %struct.node_t, %struct.node_t* %arrayidx14, i32 0, i32 0
+  %27 = load i32, i32* %priority, align 4
+  %28 = load %struct.heap_t*, %struct.heap_t** %h.addr, align 4
+  %nodes15 = getelementptr inbounds %struct.heap_t, %struct.heap_t* %28, i32 0, i32 0
+  %29 = load %struct.node_t*, %struct.node_t** %nodes15, align 4
+  %30 = load i32, i32* %k, align 4
+  %arrayidx16 = getelementptr inbounds %struct.node_t, %struct.node_t* %29, i32 %30
+  %priority17 = getelementptr inbounds %struct.node_t, %struct.node_t* %arrayidx16, i32 0, i32 0
+  %31 = load i32, i32* %priority17, align 4
+  %cmp18 = icmp slt i32 %27, %31
+  br i1 %cmp18, label %if.then19, label %if.end20
+
+if.then19:                                        ; preds = %land.lhs.true
+  %32 = load i32, i32* %j, align 4
+  store i32 %32, i32* %k, align 4
+  br label %if.end20
+
+if.end20:                                         ; preds = %if.then19, %land.lhs.true, %while.body
+  %33 = load i32, i32* %j, align 4
+  %add21 = add nsw i32 %33, 1
+  %34 = load %struct.heap_t*, %struct.heap_t** %h.addr, align 4
+  %len22 = getelementptr inbounds %struct.heap_t, %struct.heap_t* %34, i32 0, i32 1
+  %35 = load i32, i32* %len22, align 4
+  %cmp23 = icmp sle i32 %add21, %35
+  br i1 %cmp23, label %land.lhs.true24, label %if.end35
+
+land.lhs.true24:                                  ; preds = %if.end20
+  %36 = load %struct.heap_t*, %struct.heap_t** %h.addr, align 4
+  %nodes25 = getelementptr inbounds %struct.heap_t, %struct.heap_t* %36, i32 0, i32 0
+  %37 = load %struct.node_t*, %struct.node_t** %nodes25, align 4
+  %38 = load i32, i32* %j, align 4
+  %add26 = add nsw i32 %38, 1
+  %arrayidx27 = getelementptr inbounds %struct.node_t, %struct.node_t* %37, i32 %add26
+  %priority28 = getelementptr inbounds %struct.node_t, %struct.node_t* %arrayidx27, i32 0, i32 0
+  %39 = load i32, i32* %priority28, align 4
+  %40 = load %struct.heap_t*, %struct.heap_t** %h.addr, align 4
+  %nodes29 = getelementptr inbounds %struct.heap_t, %struct.heap_t* %40, i32 0, i32 0
+  %41 = load %struct.node_t*, %struct.node_t** %nodes29, align 4
+  %42 = load i32, i32* %k, align 4
+  %arrayidx30 = getelementptr inbounds %struct.node_t, %struct.node_t* %41, i32 %42
+  %priority31 = getelementptr inbounds %struct.node_t, %struct.node_t* %arrayidx30, i32 0, i32 0
+  %43 = load i32, i32* %priority31, align 4
+  %cmp32 = icmp slt i32 %39, %43
+  br i1 %cmp32, label %if.then33, label %if.end35
+
+if.then33:                                        ; preds = %land.lhs.true24
+  %44 = load i32, i32* %j, align 4
+  %add34 = add nsw i32 %44, 1
+  store i32 %add34, i32* %k, align 4
+  br label %if.end35
+
+if.end35:                                         ; preds = %if.then33, %land.lhs.true24, %if.end20
+  %45 = load %struct.heap_t*, %struct.heap_t** %h.addr, align 4
+  %nodes36 = getelementptr inbounds %struct.heap_t, %struct.heap_t* %45, i32 0, i32 0
+  %46 = load %struct.node_t*, %struct.node_t** %nodes36, align 4
+  %47 = load i32, i32* %i, align 4
+  %arrayidx37 = getelementptr inbounds %struct.node_t, %struct.node_t* %46, i32 %47
+  %48 = load %struct.heap_t*, %struct.heap_t** %h.addr, align 4
+  %nodes38 = getelementptr inbounds %struct.heap_t, %struct.heap_t* %48, i32 0, i32 0
+  %49 = load %struct.node_t*, %struct.node_t** %nodes38, align 4
+  %50 = load i32, i32* %k, align 4
+  %arrayidx39 = getelementptr inbounds %struct.node_t, %struct.node_t* %49, i32 %50
+  %51 = bitcast %struct.node_t* %arrayidx37 to i8*
+  %52 = bitcast %struct.node_t* %arrayidx39 to i8*
+  call void @llvm.memcpy.p0i8.p0i8.i32(i8* align 4 %51, i8* align 4 %52, i32 8, i1 false)
+  %53 = load i32, i32* %k, align 4
+  store i32 %53, i32* %i, align 4
+  br label %while.cond
+
+while.end:                                        ; preds = %while.cond
+  %54 = load i8*, i8** %data, align 4
+  store i8* %54, i8** %retval, align 4
+  br label %return
+
+return:                                           ; preds = %while.end, %if.then
+  %55 = load i8*, i8** %retval, align 4
+  ret i8* %55
+}
+
+; Function Attrs: noinline nounwind optnone
+define hidden i32 @main() #0 {
+entry:
+  %retval = alloca i32, align 4
+  %h = alloca %struct.heap_t*, align 4
+  %i = alloca i32, align 4
+  store i32 0, i32* %retval, align 4
+  %call = call noalias i8* @calloc(i32 1, i32 12)
+  %0 = bitcast i8* %call to %struct.heap_t*
+  store %struct.heap_t* %0, %struct.heap_t** %h, align 4
+  %1 = load %struct.heap_t*, %struct.heap_t** %h, align 4
+  call void @push(%struct.heap_t* %1, i32 3, i8* getelementptr inbounds ([13 x i8], [13 x i8]* @.str, i32 0, i32 0))
+  %2 = load %struct.heap_t*, %struct.heap_t** %h, align 4
+  call void @push(%struct.heap_t* %2, i32 4, i8* getelementptr inbounds ([9 x i8], [9 x i8]* @.str.1, i32 0, i32 0))
+  %3 = load %struct.heap_t*, %struct.heap_t** %h, align 4
+  call void @push(%struct.heap_t* %3, i32 5, i8* getelementptr inbounds ([9 x i8], [9 x i8]* @.str.2, i32 0, i32 0))
+  %4 = load %struct.heap_t*, %struct.heap_t** %h, align 4
+  call void @push(%struct.heap_t* %4, i32 1, i8* getelementptr inbounds ([15 x i8], [15 x i8]* @.str.3, i32 0, i32 0))
+  %5 = load %struct.heap_t*, %struct.heap_t** %h, align 4
+  call void @push(%struct.heap_t* %5, i32 2, i8* getelementptr inbounds ([11 x i8], [11 x i8]* @.str.4, i32 0, i32 0))
+  store i32 0, i32* %i, align 4
+  br label %for.cond
+
+for.cond:                                         ; preds = %for.inc, %entry
+  %6 = load i32, i32* %i, align 4
+  %cmp = icmp slt i32 %6, 5
+  br i1 %cmp, label %for.body, label %for.end
+
+for.body:                                         ; preds = %for.cond
+  %7 = load %struct.heap_t*, %struct.heap_t** %h, align 4
+  %call1 = call i8* @pop(%struct.heap_t* %7)
+  %call2 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([4 x i8], [4 x i8]* @.str.5, i32 0, i32 0), i8* %call1)
+  br label %for.inc
+
+for.inc:                                          ; preds = %for.body
+  %8 = load i32, i32* %i, align 4
+  %inc = add nsw i32 %8, 1
+  store i32 %inc, i32* %i, align 4
+  br label %for.cond
+
+for.end:                                          ; preds = %for.cond
+  ret i32 0
+}
+
+declare noalias i8* @calloc(i32 %0, i32 %1) #1
+
+declare i32 @printf(i8* %0, ...) #1
+
+attributes #0 = { noinline nounwind optnone "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "min-legal-vector-width"="0" "no-infs-fp-math"="false" "no-jump-tables"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #1 = { "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #2 = { argmemonly nounwind willreturn }
+
+!llvm.module.flags = !{!0}
+!llvm.ident = !{!1}
+
+!0 = !{i32 1, !"wchar_size", i32 4}
+!1 = !{!"clang version 11.0.0 (https://github.com/Jacarte/llvm-project.git 0f6dea67136cc1e0b3d200eb2bb165628970c44b)"}
+
+; extracted candidates
+
+; *****
+; For LLVM instruction:
+;  %6 = load i32, i32* %i, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %cmp = icmp slt i32 %6, 5
+; Looking for a replacement for:
+%0:i32 = var
+%1:i1 = slt %0, 5:i32
+infer %1
+
+; *****
+; For LLVM instruction:
+;  %8 = load i32, i32* %i, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %inc = add nsw i32 %8, 1
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = addnsw 1:i32, %0
+infer %1
+got 2 candidates from LHS
+
+-------------------------------------------------
+%0:i32 = var
+%1:i1 = slt %0, 5:i32
+infer %1
+
+
+--------------------------------
+guess 0
+
+%0:i1 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: -1
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: 0
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+Dataflow Pruned 0/0
+There are 1 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+#########################################################
+; exiting Souper's runOnFunction() for main()
+Total of 0 replacements done on this module
+Total of 0 replacements candidates on this module

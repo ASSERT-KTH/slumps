@@ -1,0 +1,1945 @@
+
+Entering the Souper pass's runOnModule()
+
+
+; entering Souper's runOnFunction() for circle_sort_inner()
+
+; ModuleID = './Sorting_Algorithms-Circle_Sort.c.bc'
+source_filename = "./Sorting_Algorithms-Circle_Sort.c"
+target datalayout = "e-m:e-p:32:32-i64:64-n32:64-S128"
+target triple = "wasm32-unknown-wasi"
+
+@.str = private unnamed_addr constant [4 x i8] c"%d \00", align 1
+@__const.main.x = private unnamed_addr constant [10 x i32] [i32 5, i32 -1, i32 101, i32 -4, i32 0, i32 1, i32 8, i32 6, i32 2, i32 3], align 16
+@llvm.used = appending global [1 x i8*] [i8* bitcast (i32 ()* @__main_void to i8*)], section "llvm.metadata"
+
+@__main_void = alias i32 (), i32 ()* @main
+
+; Function Attrs: noinline nounwind optnone
+define hidden i32 @circle_sort_inner(i32* %start, i32* %end) #0 {
+entry:
+  %retval = alloca i32, align 4
+  %start.addr = alloca i32*, align 4
+  %end.addr = alloca i32*, align 4
+  %p = alloca i32*, align 4
+  %q = alloca i32*, align 4
+  %t = alloca i32, align 4
+  %swapped = alloca i32, align 4
+  store i32* %start, i32** %start.addr, align 4
+  store i32* %end, i32** %end.addr, align 4
+  %0 = load i32*, i32** %start.addr, align 4
+  %1 = load i32*, i32** %end.addr, align 4
+  %cmp = icmp eq i32* %0, %1
+  br i1 %cmp, label %if.then, label %if.end
+
+if.then:                                          ; preds = %entry
+  store i32 0, i32* %retval, align 4
+  br label %return
+
+if.end:                                           ; preds = %entry
+  store i32 0, i32* %swapped, align 4
+  %2 = load i32*, i32** %start.addr, align 4
+  store i32* %2, i32** %p, align 4
+  %3 = load i32*, i32** %end.addr, align 4
+  store i32* %3, i32** %q, align 4
+  br label %for.cond
+
+for.cond:                                         ; preds = %for.inc, %if.end
+  %4 = load i32*, i32** %p, align 4
+  %5 = load i32*, i32** %q, align 4
+  %cmp1 = icmp ult i32* %4, %5
+  br i1 %cmp1, label %lor.end, label %lor.rhs
+
+lor.rhs:                                          ; preds = %for.cond
+  %6 = load i32*, i32** %p, align 4
+  %7 = load i32*, i32** %q, align 4
+  %cmp2 = icmp eq i32* %6, %7
+  br i1 %cmp2, label %land.rhs, label %land.end
+
+land.rhs:                                         ; preds = %lor.rhs
+  %8 = load i32*, i32** %q, align 4
+  %incdec.ptr = getelementptr inbounds i32, i32* %8, i32 1
+  store i32* %incdec.ptr, i32** %q, align 4
+  %tobool = icmp ne i32* %incdec.ptr, null
+  br label %land.end
+
+land.end:                                         ; preds = %land.rhs, %lor.rhs
+  %9 = phi i1 [ false, %lor.rhs ], [ %tobool, %land.rhs ]
+  br label %lor.end
+
+lor.end:                                          ; preds = %land.end, %for.cond
+  %10 = phi i1 [ true, %for.cond ], [ %9, %land.end ]
+  br i1 %10, label %for.body, label %for.end
+
+for.body:                                         ; preds = %lor.end
+  %11 = load i32*, i32** %p, align 4
+  %12 = load i32, i32* %11, align 4
+  %13 = load i32*, i32** %q, align 4
+  %14 = load i32, i32* %13, align 4
+  %cmp3 = icmp sgt i32 %12, %14
+  br i1 %cmp3, label %if.then4, label %if.end5
+
+if.then4:                                         ; preds = %for.body
+  %15 = load i32*, i32** %p, align 4
+  %16 = load i32, i32* %15, align 4
+  store i32 %16, i32* %t, align 4
+  %17 = load i32*, i32** %q, align 4
+  %18 = load i32, i32* %17, align 4
+  %19 = load i32*, i32** %p, align 4
+  store i32 %18, i32* %19, align 4
+  %20 = load i32, i32* %t, align 4
+  %21 = load i32*, i32** %q, align 4
+  store i32 %20, i32* %21, align 4
+  store i32 1, i32* %swapped, align 4
+  br label %if.end5
+
+if.end5:                                          ; preds = %if.then4, %for.body
+  br label %for.inc
+
+for.inc:                                          ; preds = %if.end5
+  %22 = load i32*, i32** %p, align 4
+  %incdec.ptr6 = getelementptr inbounds i32, i32* %22, i32 1
+  store i32* %incdec.ptr6, i32** %p, align 4
+  %23 = load i32*, i32** %q, align 4
+  %incdec.ptr7 = getelementptr inbounds i32, i32* %23, i32 -1
+  store i32* %incdec.ptr7, i32** %q, align 4
+  br label %for.cond
+
+for.end:                                          ; preds = %lor.end
+  %24 = load i32, i32* %swapped, align 4
+  %25 = load i32*, i32** %start.addr, align 4
+  %26 = load i32*, i32** %q, align 4
+  %call = call i32 @circle_sort_inner(i32* %25, i32* %26)
+  %or = or i32 %24, %call
+  %27 = load i32*, i32** %p, align 4
+  %28 = load i32*, i32** %end.addr, align 4
+  %call8 = call i32 @circle_sort_inner(i32* %27, i32* %28)
+  %or9 = or i32 %or, %call8
+  store i32 %or9, i32* %retval, align 4
+  br label %return
+
+return:                                           ; preds = %for.end, %if.then
+  %29 = load i32, i32* %retval, align 4
+  ret i32 %29
+}
+
+; Function Attrs: noinline nounwind optnone
+define hidden void @circle_sort(i32* %x, i32 %n) #0 {
+entry:
+  %x.addr = alloca i32*, align 4
+  %n.addr = alloca i32, align 4
+  %i = alloca i32, align 4
+  store i32* %x, i32** %x.addr, align 4
+  store i32 %n, i32* %n.addr, align 4
+  br label %do.body
+
+do.body:                                          ; preds = %do.cond, %entry
+  store i32 0, i32* %i, align 4
+  br label %for.cond
+
+for.cond:                                         ; preds = %for.inc, %do.body
+  %0 = load i32, i32* %i, align 4
+  %1 = load i32, i32* %n.addr, align 4
+  %cmp = icmp slt i32 %0, %1
+  br i1 %cmp, label %for.body, label %for.end
+
+for.body:                                         ; preds = %for.cond
+  %2 = load i32*, i32** %x.addr, align 4
+  %3 = load i32, i32* %i, align 4
+  %arrayidx = getelementptr inbounds i32, i32* %2, i32 %3
+  %4 = load i32, i32* %arrayidx, align 4
+  %call = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([4 x i8], [4 x i8]* @.str, i32 0, i32 0), i32 %4)
+  br label %for.inc
+
+for.inc:                                          ; preds = %for.body
+  %5 = load i32, i32* %i, align 4
+  %inc = add nsw i32 %5, 1
+  store i32 %inc, i32* %i, align 4
+  br label %for.cond
+
+for.end:                                          ; preds = %for.cond
+  %call1 = call i32 @putchar(i32 10)
+  br label %do.cond
+
+do.cond:                                          ; preds = %for.end
+  %6 = load i32*, i32** %x.addr, align 4
+  %7 = load i32*, i32** %x.addr, align 4
+  %8 = load i32, i32* %n.addr, align 4
+  %sub = sub nsw i32 %8, 1
+  %add.ptr = getelementptr inbounds i32, i32* %7, i32 %sub
+  %call2 = call i32 @circle_sort_inner(i32* %6, i32* %add.ptr)
+  %tobool = icmp ne i32 %call2, 0
+  br i1 %tobool, label %do.body, label %do.end
+
+do.end:                                           ; preds = %do.cond
+  ret void
+}
+
+declare i32 @printf(i8* %0, ...) #1
+
+declare i32 @putchar(i32 %0) #1
+
+; Function Attrs: noinline nounwind optnone
+define hidden i32 @main() #0 {
+entry:
+  %retval = alloca i32, align 4
+  %x = alloca [10 x i32], align 16
+  store i32 0, i32* %retval, align 4
+  %0 = bitcast [10 x i32]* %x to i8*
+  call void @llvm.memcpy.p0i8.p0i8.i32(i8* align 16 %0, i8* align 16 bitcast ([10 x i32]* @__const.main.x to i8*), i32 40, i1 false)
+  %arraydecay = getelementptr inbounds [10 x i32], [10 x i32]* %x, i32 0, i32 0
+  call void @circle_sort(i32* %arraydecay, i32 10)
+  ret i32 0
+}
+
+; Function Attrs: argmemonly nounwind willreturn
+declare void @llvm.memcpy.p0i8.p0i8.i32(i8* noalias nocapture writeonly %0, i8* noalias nocapture readonly %1, i32 %2, i1 immarg %3) #2
+
+attributes #0 = { noinline nounwind optnone "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "min-legal-vector-width"="0" "no-infs-fp-math"="false" "no-jump-tables"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #1 = { "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #2 = { argmemonly nounwind willreturn }
+
+!llvm.module.flags = !{!0}
+!llvm.ident = !{!1}
+
+!0 = !{i32 1, !"wchar_size", i32 4}
+!1 = !{!"clang version 11.0.0 (https://github.com/Jacarte/llvm-project.git 0f6dea67136cc1e0b3d200eb2bb165628970c44b)"}
+
+; extracted candidates
+
+; *****
+; For LLVM instruction:
+;  %cmp = icmp eq i32* %0, %1
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = var
+%2:i1 = eq %0, %1
+infer %2
+
+; *****
+; For LLVM instruction:
+;  %cmp1 = icmp ult i32* %4, %5
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = var
+%2:i1 = ult %0, %1
+infer %2
+
+; *****
+; For LLVM instruction:
+;  %cmp2 = icmp eq i32* %6, %7
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = var
+%2:i1 = eq %0, %1
+infer %2
+
+; *****
+; For LLVM instruction:
+;  %tobool = icmp ne i32* %incdec.ptr, null
+; Looking for a replacement for:
+%0:i32 = var (nonZero)
+%1:i1 = ne 0:i32, %0
+infer %1
+
+; *****
+; For LLVM instruction:
+;  %9 = phi i1 [ false, %lor.rhs ], [ %tobool, %land.rhs ]
+; Looking for a replacement for:
+%0:i1 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %10 = phi i1 [ true, %for.cond ], [ %9, %land.end ]
+; Looking for a replacement for:
+%0:i1 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %12 = load i32, i32* %11, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %14 = load i32, i32* %13, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %cmp3 = icmp sgt i32 %12, %14
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = var
+%2:i1 = slt %0, %1
+infer %2
+
+; *****
+; For LLVM instruction:
+;  %16 = load i32, i32* %15, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %18 = load i32, i32* %17, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %20 = load i32, i32* %t, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %24 = load i32, i32* %swapped, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %call = call i32 @circle_sort_inner(i32* %25, i32* %26)
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %or = or i32 %24, %call
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = var
+%2:i32 = or %0, %1
+infer %2
+
+; *****
+; For LLVM instruction:
+;  %call8 = call i32 @circle_sort_inner(i32* %27, i32* %28)
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %or9 = or i32 %or, %call8
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = var
+%2:i32 = var
+%3:i32 = or %1, %2
+%4:i32 = or %0, %3
+infer %4
+
+; *****
+; For LLVM instruction:
+;  %29 = load i32, i32* %retval, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+got 3 candidates from LHS
+
+-------------------------------------------------
+%0:i32 = var
+%1:i32 = var
+%2:i1 = eq %0, %1
+infer %2
+
+
+--------------------------------
+guess 0
+
+%0:i1 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: -1
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: 0
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+Dataflow Pruned 0/0
+There are 1 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 3 candidates from LHS
+
+-------------------------------------------------
+%0:i32 = var
+%1:i32 = var
+%2:i1 = ult %0, %1
+infer %2
+
+
+--------------------------------
+guess 0
+
+%0:i1 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: -1
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+Dataflow Pruned 0/0
+There are 1 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 2 candidates from LHS
+
+-------------------------------------------------
+%0:i32 = var (nonZero)
+%1:i1 = ne 0:i32, %0
+infer %1
+
+
+--------------------------------
+guess 0
+
+%0:i1 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: -1
+second query is UNSAT-- this guess works
+Dataflow Pruned 0/0
+There are 1 Guesses
+There are 1 RHSs before deduplication
+There are 1 RHSs after deduplication
+"
+; No valid RHS in the list
+#########################################################
+
+Module before replacement:
+; ModuleID = './Sorting_Algorithms-Circle_Sort.c.bc'
+source_filename = "./Sorting_Algorithms-Circle_Sort.c"
+target datalayout = "e-m:e-p:32:32-i64:64-n32:64-S128"
+target triple = "wasm32-unknown-wasi"
+
+@.str = private unnamed_addr constant [4 x i8] c"%d \00", align 1
+@__const.main.x = private unnamed_addr constant [10 x i32] [i32 5, i32 -1, i32 101, i32 -4, i32 0, i32 1, i32 8, i32 6, i32 2, i32 3], align 16
+@llvm.used = appending global [1 x i8*] [i8* bitcast (i32 ()* @__main_void to i8*)], section "llvm.metadata"
+
+@__main_void = alias i32 (), i32 ()* @main
+
+; Function Attrs: noinline nounwind optnone
+define hidden i32 @circle_sort_inner(i32* %start, i32* %end) #0 {
+entry:
+  %retval = alloca i32, align 4
+  %start.addr = alloca i32*, align 4
+  %end.addr = alloca i32*, align 4
+  %p = alloca i32*, align 4
+  %q = alloca i32*, align 4
+  %t = alloca i32, align 4
+  %swapped = alloca i32, align 4
+  store i32* %start, i32** %start.addr, align 4
+  store i32* %end, i32** %end.addr, align 4
+  %0 = load i32*, i32** %start.addr, align 4
+  %1 = load i32*, i32** %end.addr, align 4
+  %cmp = icmp eq i32* %0, %1
+  br i1 %cmp, label %if.then, label %if.end
+
+if.then:                                          ; preds = %entry
+  store i32 0, i32* %retval, align 4
+  br label %return
+
+if.end:                                           ; preds = %entry
+  store i32 0, i32* %swapped, align 4
+  %2 = load i32*, i32** %start.addr, align 4
+  store i32* %2, i32** %p, align 4
+  %3 = load i32*, i32** %end.addr, align 4
+  store i32* %3, i32** %q, align 4
+  br label %for.cond
+
+for.cond:                                         ; preds = %for.inc, %if.end
+  %4 = load i32*, i32** %p, align 4
+  %5 = load i32*, i32** %q, align 4
+  %cmp1 = icmp ult i32* %4, %5
+  br i1 %cmp1, label %lor.end, label %lor.rhs
+
+lor.rhs:                                          ; preds = %for.cond
+  %6 = load i32*, i32** %p, align 4
+  %7 = load i32*, i32** %q, align 4
+  %cmp2 = icmp eq i32* %6, %7
+  br i1 %cmp2, label %land.rhs, label %land.end
+
+land.rhs:                                         ; preds = %lor.rhs
+  %8 = load i32*, i32** %q, align 4
+  %incdec.ptr = getelementptr inbounds i32, i32* %8, i32 1
+  store i32* %incdec.ptr, i32** %q, align 4
+  %tobool = icmp ne i32* %incdec.ptr, null
+  br label %land.end
+
+land.end:                                         ; preds = %land.rhs, %lor.rhs
+  %9 = phi i1 [ false, %lor.rhs ], [ %tobool, %land.rhs ]
+  br label %lor.end
+
+lor.end:                                          ; preds = %land.end, %for.cond
+  %10 = phi i1 [ true, %for.cond ], [ %9, %land.end ]
+  br i1 %10, label %for.body, label %for.end
+
+for.body:                                         ; preds = %lor.end
+  %11 = load i32*, i32** %p, align 4
+  %12 = load i32, i32* %11, align 4
+  %13 = load i32*, i32** %q, align 4
+  %14 = load i32, i32* %13, align 4
+  %cmp3 = icmp sgt i32 %12, %14
+  br i1 %cmp3, label %if.then4, label %if.end5
+
+if.then4:                                         ; preds = %for.body
+  %15 = load i32*, i32** %p, align 4
+  %16 = load i32, i32* %15, align 4
+  store i32 %16, i32* %t, align 4
+  %17 = load i32*, i32** %q, align 4
+  %18 = load i32, i32* %17, align 4
+  %19 = load i32*, i32** %p, align 4
+  store i32 %18, i32* %19, align 4
+  %20 = load i32, i32* %t, align 4
+  %21 = load i32*, i32** %q, align 4
+  store i32 %20, i32* %21, align 4
+  store i32 1, i32* %swapped, align 4
+  br label %if.end5
+
+if.end5:                                          ; preds = %if.then4, %for.body
+  br label %for.inc
+
+for.inc:                                          ; preds = %if.end5
+  %22 = load i32*, i32** %p, align 4
+  %incdec.ptr6 = getelementptr inbounds i32, i32* %22, i32 1
+  store i32* %incdec.ptr6, i32** %p, align 4
+  %23 = load i32*, i32** %q, align 4
+  %incdec.ptr7 = getelementptr inbounds i32, i32* %23, i32 -1
+  store i32* %incdec.ptr7, i32** %q, align 4
+  br label %for.cond
+
+for.end:                                          ; preds = %lor.end
+  %24 = load i32, i32* %swapped, align 4
+  %25 = load i32*, i32** %start.addr, align 4
+  %26 = load i32*, i32** %q, align 4
+  %call = call i32 @circle_sort_inner(i32* %25, i32* %26)
+  %or = or i32 %24, %call
+  %27 = load i32*, i32** %p, align 4
+  %28 = load i32*, i32** %end.addr, align 4
+  %call8 = call i32 @circle_sort_inner(i32* %27, i32* %28)
+  %or9 = or i32 %or, %call8
+  store i32 %or9, i32* %retval, align 4
+  br label %return
+
+return:                                           ; preds = %for.end, %if.then
+  %29 = load i32, i32* %retval, align 4
+  ret i32 %29
+}
+
+; Function Attrs: noinline nounwind optnone
+define hidden void @circle_sort(i32* %x, i32 %n) #0 {
+entry:
+  %x.addr = alloca i32*, align 4
+  %n.addr = alloca i32, align 4
+  %i = alloca i32, align 4
+  store i32* %x, i32** %x.addr, align 4
+  store i32 %n, i32* %n.addr, align 4
+  br label %do.body
+
+do.body:                                          ; preds = %do.cond, %entry
+  store i32 0, i32* %i, align 4
+  br label %for.cond
+
+for.cond:                                         ; preds = %for.inc, %do.body
+  %0 = load i32, i32* %i, align 4
+  %1 = load i32, i32* %n.addr, align 4
+  %cmp = icmp slt i32 %0, %1
+  br i1 %cmp, label %for.body, label %for.end
+
+for.body:                                         ; preds = %for.cond
+  %2 = load i32*, i32** %x.addr, align 4
+  %3 = load i32, i32* %i, align 4
+  %arrayidx = getelementptr inbounds i32, i32* %2, i32 %3
+  %4 = load i32, i32* %arrayidx, align 4
+  %call = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([4 x i8], [4 x i8]* @.str, i32 0, i32 0), i32 %4)
+  br label %for.inc
+
+for.inc:                                          ; preds = %for.body
+  %5 = load i32, i32* %i, align 4
+  %inc = add nsw i32 %5, 1
+  store i32 %inc, i32* %i, align 4
+  br label %for.cond
+
+for.end:                                          ; preds = %for.cond
+  %call1 = call i32 @putchar(i32 10)
+  br label %do.cond
+
+do.cond:                                          ; preds = %for.end
+  %6 = load i32*, i32** %x.addr, align 4
+  %7 = load i32*, i32** %x.addr, align 4
+  %8 = load i32, i32* %n.addr, align 4
+  %sub = sub nsw i32 %8, 1
+  %add.ptr = getelementptr inbounds i32, i32* %7, i32 %sub
+  %call2 = call i32 @circle_sort_inner(i32* %6, i32* %add.ptr)
+  %tobool = icmp ne i32 %call2, 0
+  br i1 %tobool, label %do.body, label %do.end
+
+do.end:                                           ; preds = %do.cond
+  ret void
+}
+
+declare i32 @printf(i8* %0, ...) #1
+
+declare i32 @putchar(i32 %0) #1
+
+; Function Attrs: noinline nounwind optnone
+define hidden i32 @main() #0 {
+entry:
+  %retval = alloca i32, align 4
+  %x = alloca [10 x i32], align 16
+  store i32 0, i32* %retval, align 4
+  %0 = bitcast [10 x i32]* %x to i8*
+  call void @llvm.memcpy.p0i8.p0i8.i32(i8* align 16 %0, i8* align 16 bitcast ([10 x i32]* @__const.main.x to i8*), i32 40, i1 false)
+  %arraydecay = getelementptr inbounds [10 x i32], [10 x i32]* %x, i32 0, i32 0
+  call void @circle_sort(i32* %arraydecay, i32 10)
+  ret i32 0
+}
+
+; Function Attrs: argmemonly nounwind willreturn
+declare void @llvm.memcpy.p0i8.p0i8.i32(i8* noalias nocapture writeonly %0, i8* noalias nocapture readonly %1, i32 %2, i1 immarg %3) #2
+
+attributes #0 = { noinline nounwind optnone "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "min-legal-vector-width"="0" "no-infs-fp-math"="false" "no-jump-tables"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #1 = { "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #2 = { argmemonly nounwind willreturn }
+
+!llvm.module.flags = !{!0}
+!llvm.ident = !{!1}
+
+!0 = !{i32 1, !"wchar_size", i32 4}
+!1 = !{!"clang version 11.0.0 (https://github.com/Jacarte/llvm-project.git 0f6dea67136cc1e0b3d200eb2bb165628970c44b)"}
+
+; Replacing "  %tobool = icmp ne i32* %incdec.ptr, null"
+; from ""
+; with "i1 true" in:
+"%0:i32 = var (nonZero)
+%1:i1 = ne 0:i32, %0
+cand %1 1:i1
+"
+; with "i1 true"
+
+Module after replacement:
+; ModuleID = './Sorting_Algorithms-Circle_Sort.c.bc'
+source_filename = "./Sorting_Algorithms-Circle_Sort.c"
+target datalayout = "e-m:e-p:32:32-i64:64-n32:64-S128"
+target triple = "wasm32-unknown-wasi"
+
+@.str = private unnamed_addr constant [4 x i8] c"%d \00", align 1
+@__const.main.x = private unnamed_addr constant [10 x i32] [i32 5, i32 -1, i32 101, i32 -4, i32 0, i32 1, i32 8, i32 6, i32 2, i32 3], align 16
+@llvm.used = appending global [1 x i8*] [i8* bitcast (i32 ()* @__main_void to i8*)], section "llvm.metadata"
+
+@__main_void = alias i32 (), i32 ()* @main
+
+; Function Attrs: noinline nounwind optnone
+define hidden i32 @circle_sort_inner(i32* %start, i32* %end) #0 {
+entry:
+  %retval = alloca i32, align 4
+  %start.addr = alloca i32*, align 4
+  %end.addr = alloca i32*, align 4
+  %p = alloca i32*, align 4
+  %q = alloca i32*, align 4
+  %t = alloca i32, align 4
+  %swapped = alloca i32, align 4
+  store i32* %start, i32** %start.addr, align 4
+  store i32* %end, i32** %end.addr, align 4
+  %0 = load i32*, i32** %start.addr, align 4
+  %1 = load i32*, i32** %end.addr, align 4
+  %cmp = icmp eq i32* %0, %1
+  br i1 %cmp, label %if.then, label %if.end
+
+if.then:                                          ; preds = %entry
+  store i32 0, i32* %retval, align 4
+  br label %return
+
+if.end:                                           ; preds = %entry
+  store i32 0, i32* %swapped, align 4
+  %2 = load i32*, i32** %start.addr, align 4
+  store i32* %2, i32** %p, align 4
+  %3 = load i32*, i32** %end.addr, align 4
+  store i32* %3, i32** %q, align 4
+  br label %for.cond
+
+for.cond:                                         ; preds = %for.inc, %if.end
+  %4 = load i32*, i32** %p, align 4
+  %5 = load i32*, i32** %q, align 4
+  %cmp1 = icmp ult i32* %4, %5
+  br i1 %cmp1, label %lor.end, label %lor.rhs
+
+lor.rhs:                                          ; preds = %for.cond
+  %6 = load i32*, i32** %p, align 4
+  %7 = load i32*, i32** %q, align 4
+  %cmp2 = icmp eq i32* %6, %7
+  br i1 %cmp2, label %land.rhs, label %land.end
+
+land.rhs:                                         ; preds = %lor.rhs
+  %8 = load i32*, i32** %q, align 4
+  %incdec.ptr = getelementptr inbounds i32, i32* %8, i32 1
+  store i32* %incdec.ptr, i32** %q, align 4
+  br label %land.end
+
+land.end:                                         ; preds = %land.rhs, %lor.rhs
+  %9 = phi i1 [ false, %lor.rhs ], [ true, %land.rhs ]
+  br label %lor.end
+
+lor.end:                                          ; preds = %land.end, %for.cond
+  %10 = phi i1 [ true, %for.cond ], [ %9, %land.end ]
+  br i1 %10, label %for.body, label %for.end
+
+for.body:                                         ; preds = %lor.end
+  %11 = load i32*, i32** %p, align 4
+  %12 = load i32, i32* %11, align 4
+  %13 = load i32*, i32** %q, align 4
+  %14 = load i32, i32* %13, align 4
+  %cmp3 = icmp sgt i32 %12, %14
+  br i1 %cmp3, label %if.then4, label %if.end5
+
+if.then4:                                         ; preds = %for.body
+  %15 = load i32*, i32** %p, align 4
+  %16 = load i32, i32* %15, align 4
+  store i32 %16, i32* %t, align 4
+  %17 = load i32*, i32** %q, align 4
+  %18 = load i32, i32* %17, align 4
+  %19 = load i32*, i32** %p, align 4
+  store i32 %18, i32* %19, align 4
+  %20 = load i32, i32* %t, align 4
+  %21 = load i32*, i32** %q, align 4
+  store i32 %20, i32* %21, align 4
+  store i32 1, i32* %swapped, align 4
+  br label %if.end5
+
+if.end5:                                          ; preds = %if.then4, %for.body
+  br label %for.inc
+
+for.inc:                                          ; preds = %if.end5
+  %22 = load i32*, i32** %p, align 4
+  %incdec.ptr6 = getelementptr inbounds i32, i32* %22, i32 1
+  store i32* %incdec.ptr6, i32** %p, align 4
+  %23 = load i32*, i32** %q, align 4
+  %incdec.ptr7 = getelementptr inbounds i32, i32* %23, i32 -1
+  store i32* %incdec.ptr7, i32** %q, align 4
+  br label %for.cond
+
+for.end:                                          ; preds = %lor.end
+  %24 = load i32, i32* %swapped, align 4
+  %25 = load i32*, i32** %start.addr, align 4
+  %26 = load i32*, i32** %q, align 4
+  %call = call i32 @circle_sort_inner(i32* %25, i32* %26)
+  %or = or i32 %24, %call
+  %27 = load i32*, i32** %p, align 4
+  %28 = load i32*, i32** %end.addr, align 4
+  %call8 = call i32 @circle_sort_inner(i32* %27, i32* %28)
+  %or9 = or i32 %or, %call8
+  store i32 %or9, i32* %retval, align 4
+  br label %return
+
+return:                                           ; preds = %for.end, %if.then
+  %29 = load i32, i32* %retval, align 4
+  ret i32 %29
+}
+
+; Function Attrs: noinline nounwind optnone
+define hidden void @circle_sort(i32* %x, i32 %n) #0 {
+entry:
+  %x.addr = alloca i32*, align 4
+  %n.addr = alloca i32, align 4
+  %i = alloca i32, align 4
+  store i32* %x, i32** %x.addr, align 4
+  store i32 %n, i32* %n.addr, align 4
+  br label %do.body
+
+do.body:                                          ; preds = %do.cond, %entry
+  store i32 0, i32* %i, align 4
+  br label %for.cond
+
+for.cond:                                         ; preds = %for.inc, %do.body
+  %0 = load i32, i32* %i, align 4
+  %1 = load i32, i32* %n.addr, align 4
+  %cmp = icmp slt i32 %0, %1
+  br i1 %cmp, label %for.body, label %for.end
+
+for.body:                                         ; preds = %for.cond
+  %2 = load i32*, i32** %x.addr, align 4
+  %3 = load i32, i32* %i, align 4
+  %arrayidx = getelementptr inbounds i32, i32* %2, i32 %3
+  %4 = load i32, i32* %arrayidx, align 4
+  %call = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([4 x i8], [4 x i8]* @.str, i32 0, i32 0), i32 %4)
+  br label %for.inc
+
+for.inc:                                          ; preds = %for.body
+  %5 = load i32, i32* %i, align 4
+  %inc = add nsw i32 %5, 1
+  store i32 %inc, i32* %i, align 4
+  br label %for.cond
+
+for.end:                                          ; preds = %for.cond
+  %call1 = call i32 @putchar(i32 10)
+  br label %do.cond
+
+do.cond:                                          ; preds = %for.end
+  %6 = load i32*, i32** %x.addr, align 4
+  %7 = load i32*, i32** %x.addr, align 4
+  %8 = load i32, i32* %n.addr, align 4
+  %sub = sub nsw i32 %8, 1
+  %add.ptr = getelementptr inbounds i32, i32* %7, i32 %sub
+  %call2 = call i32 @circle_sort_inner(i32* %6, i32* %add.ptr)
+  %tobool = icmp ne i32 %call2, 0
+  br i1 %tobool, label %do.body, label %do.end
+
+do.end:                                           ; preds = %do.cond
+  ret void
+}
+
+declare i32 @printf(i8* %0, ...) #1
+
+declare i32 @putchar(i32 %0) #1
+
+; Function Attrs: noinline nounwind optnone
+define hidden i32 @main() #0 {
+entry:
+  %retval = alloca i32, align 4
+  %x = alloca [10 x i32], align 16
+  store i32 0, i32* %retval, align 4
+  %0 = bitcast [10 x i32]* %x to i8*
+  call void @llvm.memcpy.p0i8.p0i8.i32(i8* align 16 %0, i8* align 16 bitcast ([10 x i32]* @__const.main.x to i8*), i32 40, i1 false)
+  %arraydecay = getelementptr inbounds [10 x i32], [10 x i32]* %x, i32 0, i32 0
+  call void @circle_sort(i32* %arraydecay, i32 10)
+  ret i32 0
+}
+
+; Function Attrs: argmemonly nounwind willreturn
+declare void @llvm.memcpy.p0i8.p0i8.i32(i8* noalias nocapture writeonly %0, i8* noalias nocapture readonly %1, i32 %2, i1 immarg %3) #2
+
+attributes #0 = { noinline nounwind optnone "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "min-legal-vector-width"="0" "no-infs-fp-math"="false" "no-jump-tables"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #1 = { "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #2 = { argmemonly nounwind willreturn }
+
+!llvm.module.flags = !{!0}
+!llvm.ident = !{!1}
+
+!0 = !{i32 1, !"wchar_size", i32 4}
+!1 = !{!"clang version 11.0.0 (https://github.com/Jacarte/llvm-project.git 0f6dea67136cc1e0b3d200eb2bb165628970c44b)"}
+
+#########################################################
+; exiting Souper's runOnFunction() for circle_sort_inner()
+rescanning function after transformation was applied
+
+; entering Souper's runOnFunction() for circle_sort_inner()
+
+; ModuleID = './Sorting_Algorithms-Circle_Sort.c.bc'
+source_filename = "./Sorting_Algorithms-Circle_Sort.c"
+target datalayout = "e-m:e-p:32:32-i64:64-n32:64-S128"
+target triple = "wasm32-unknown-wasi"
+
+@.str = private unnamed_addr constant [4 x i8] c"%d \00", align 1
+@__const.main.x = private unnamed_addr constant [10 x i32] [i32 5, i32 -1, i32 101, i32 -4, i32 0, i32 1, i32 8, i32 6, i32 2, i32 3], align 16
+@llvm.used = appending global [1 x i8*] [i8* bitcast (i32 ()* @__main_void to i8*)], section "llvm.metadata"
+
+@__main_void = alias i32 (), i32 ()* @main
+
+; Function Attrs: noinline nounwind optnone
+define hidden i32 @circle_sort_inner(i32* %start, i32* %end) #0 {
+entry:
+  %retval = alloca i32, align 4
+  %start.addr = alloca i32*, align 4
+  %end.addr = alloca i32*, align 4
+  %p = alloca i32*, align 4
+  %q = alloca i32*, align 4
+  %t = alloca i32, align 4
+  %swapped = alloca i32, align 4
+  store i32* %start, i32** %start.addr, align 4
+  store i32* %end, i32** %end.addr, align 4
+  %0 = load i32*, i32** %start.addr, align 4
+  %1 = load i32*, i32** %end.addr, align 4
+  %cmp = icmp eq i32* %0, %1
+  br i1 %cmp, label %if.then, label %if.end
+
+if.then:                                          ; preds = %entry
+  store i32 0, i32* %retval, align 4
+  br label %return
+
+if.end:                                           ; preds = %entry
+  store i32 0, i32* %swapped, align 4
+  %2 = load i32*, i32** %start.addr, align 4
+  store i32* %2, i32** %p, align 4
+  %3 = load i32*, i32** %end.addr, align 4
+  store i32* %3, i32** %q, align 4
+  br label %for.cond
+
+for.cond:                                         ; preds = %for.inc, %if.end
+  %4 = load i32*, i32** %p, align 4
+  %5 = load i32*, i32** %q, align 4
+  %cmp1 = icmp ult i32* %4, %5
+  br i1 %cmp1, label %lor.end, label %lor.rhs
+
+lor.rhs:                                          ; preds = %for.cond
+  %6 = load i32*, i32** %p, align 4
+  %7 = load i32*, i32** %q, align 4
+  %cmp2 = icmp eq i32* %6, %7
+  br i1 %cmp2, label %land.rhs, label %land.end
+
+land.rhs:                                         ; preds = %lor.rhs
+  %8 = load i32*, i32** %q, align 4
+  %incdec.ptr = getelementptr inbounds i32, i32* %8, i32 1
+  store i32* %incdec.ptr, i32** %q, align 4
+  br label %land.end
+
+land.end:                                         ; preds = %land.rhs, %lor.rhs
+  %9 = phi i1 [ false, %lor.rhs ], [ true, %land.rhs ]
+  br label %lor.end
+
+lor.end:                                          ; preds = %land.end, %for.cond
+  %10 = phi i1 [ true, %for.cond ], [ %9, %land.end ]
+  br i1 %10, label %for.body, label %for.end
+
+for.body:                                         ; preds = %lor.end
+  %11 = load i32*, i32** %p, align 4
+  %12 = load i32, i32* %11, align 4
+  %13 = load i32*, i32** %q, align 4
+  %14 = load i32, i32* %13, align 4
+  %cmp3 = icmp sgt i32 %12, %14
+  br i1 %cmp3, label %if.then4, label %if.end5
+
+if.then4:                                         ; preds = %for.body
+  %15 = load i32*, i32** %p, align 4
+  %16 = load i32, i32* %15, align 4
+  store i32 %16, i32* %t, align 4
+  %17 = load i32*, i32** %q, align 4
+  %18 = load i32, i32* %17, align 4
+  %19 = load i32*, i32** %p, align 4
+  store i32 %18, i32* %19, align 4
+  %20 = load i32, i32* %t, align 4
+  %21 = load i32*, i32** %q, align 4
+  store i32 %20, i32* %21, align 4
+  store i32 1, i32* %swapped, align 4
+  br label %if.end5
+
+if.end5:                                          ; preds = %if.then4, %for.body
+  br label %for.inc
+
+for.inc:                                          ; preds = %if.end5
+  %22 = load i32*, i32** %p, align 4
+  %incdec.ptr6 = getelementptr inbounds i32, i32* %22, i32 1
+  store i32* %incdec.ptr6, i32** %p, align 4
+  %23 = load i32*, i32** %q, align 4
+  %incdec.ptr7 = getelementptr inbounds i32, i32* %23, i32 -1
+  store i32* %incdec.ptr7, i32** %q, align 4
+  br label %for.cond
+
+for.end:                                          ; preds = %lor.end
+  %24 = load i32, i32* %swapped, align 4
+  %25 = load i32*, i32** %start.addr, align 4
+  %26 = load i32*, i32** %q, align 4
+  %call = call i32 @circle_sort_inner(i32* %25, i32* %26)
+  %or = or i32 %24, %call
+  %27 = load i32*, i32** %p, align 4
+  %28 = load i32*, i32** %end.addr, align 4
+  %call8 = call i32 @circle_sort_inner(i32* %27, i32* %28)
+  %or9 = or i32 %or, %call8
+  store i32 %or9, i32* %retval, align 4
+  br label %return
+
+return:                                           ; preds = %for.end, %if.then
+  %29 = load i32, i32* %retval, align 4
+  ret i32 %29
+}
+
+; Function Attrs: noinline nounwind optnone
+define hidden void @circle_sort(i32* %x, i32 %n) #0 {
+entry:
+  %x.addr = alloca i32*, align 4
+  %n.addr = alloca i32, align 4
+  %i = alloca i32, align 4
+  store i32* %x, i32** %x.addr, align 4
+  store i32 %n, i32* %n.addr, align 4
+  br label %do.body
+
+do.body:                                          ; preds = %do.cond, %entry
+  store i32 0, i32* %i, align 4
+  br label %for.cond
+
+for.cond:                                         ; preds = %for.inc, %do.body
+  %0 = load i32, i32* %i, align 4
+  %1 = load i32, i32* %n.addr, align 4
+  %cmp = icmp slt i32 %0, %1
+  br i1 %cmp, label %for.body, label %for.end
+
+for.body:                                         ; preds = %for.cond
+  %2 = load i32*, i32** %x.addr, align 4
+  %3 = load i32, i32* %i, align 4
+  %arrayidx = getelementptr inbounds i32, i32* %2, i32 %3
+  %4 = load i32, i32* %arrayidx, align 4
+  %call = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([4 x i8], [4 x i8]* @.str, i32 0, i32 0), i32 %4)
+  br label %for.inc
+
+for.inc:                                          ; preds = %for.body
+  %5 = load i32, i32* %i, align 4
+  %inc = add nsw i32 %5, 1
+  store i32 %inc, i32* %i, align 4
+  br label %for.cond
+
+for.end:                                          ; preds = %for.cond
+  %call1 = call i32 @putchar(i32 10)
+  br label %do.cond
+
+do.cond:                                          ; preds = %for.end
+  %6 = load i32*, i32** %x.addr, align 4
+  %7 = load i32*, i32** %x.addr, align 4
+  %8 = load i32, i32* %n.addr, align 4
+  %sub = sub nsw i32 %8, 1
+  %add.ptr = getelementptr inbounds i32, i32* %7, i32 %sub
+  %call2 = call i32 @circle_sort_inner(i32* %6, i32* %add.ptr)
+  %tobool = icmp ne i32 %call2, 0
+  br i1 %tobool, label %do.body, label %do.end
+
+do.end:                                           ; preds = %do.cond
+  ret void
+}
+
+declare i32 @printf(i8* %0, ...) #1
+
+declare i32 @putchar(i32 %0) #1
+
+; Function Attrs: noinline nounwind optnone
+define hidden i32 @main() #0 {
+entry:
+  %retval = alloca i32, align 4
+  %x = alloca [10 x i32], align 16
+  store i32 0, i32* %retval, align 4
+  %0 = bitcast [10 x i32]* %x to i8*
+  call void @llvm.memcpy.p0i8.p0i8.i32(i8* align 16 %0, i8* align 16 bitcast ([10 x i32]* @__const.main.x to i8*), i32 40, i1 false)
+  %arraydecay = getelementptr inbounds [10 x i32], [10 x i32]* %x, i32 0, i32 0
+  call void @circle_sort(i32* %arraydecay, i32 10)
+  ret i32 0
+}
+
+; Function Attrs: argmemonly nounwind willreturn
+declare void @llvm.memcpy.p0i8.p0i8.i32(i8* noalias nocapture writeonly %0, i8* noalias nocapture readonly %1, i32 %2, i1 immarg %3) #2
+
+attributes #0 = { noinline nounwind optnone "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "min-legal-vector-width"="0" "no-infs-fp-math"="false" "no-jump-tables"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #1 = { "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #2 = { argmemonly nounwind willreturn }
+
+!llvm.module.flags = !{!0}
+!llvm.ident = !{!1}
+
+!0 = !{i32 1, !"wchar_size", i32 4}
+!1 = !{!"clang version 11.0.0 (https://github.com/Jacarte/llvm-project.git 0f6dea67136cc1e0b3d200eb2bb165628970c44b)"}
+
+; extracted candidates
+
+; *****
+; For LLVM instruction:
+;  %cmp = icmp eq i32* %0, %1
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = var
+%2:i1 = eq %0, %1
+infer %2
+
+; *****
+; For LLVM instruction:
+;  %cmp1 = icmp ult i32* %4, %5
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = var
+%2:i1 = ult %0, %1
+infer %2
+
+; *****
+; For LLVM instruction:
+;  %cmp2 = icmp eq i32* %6, %7
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = var
+%2:i1 = eq %0, %1
+infer %2
+
+; *****
+; For LLVM instruction:
+;  %9 = phi i1 [ false, %lor.rhs ], [ true, %land.rhs ]
+; Looking for a replacement for:
+%0:i1 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %10 = phi i1 [ true, %for.cond ], [ %9, %land.end ]
+; Looking for a replacement for:
+%0:i1 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %12 = load i32, i32* %11, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %14 = load i32, i32* %13, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %cmp3 = icmp sgt i32 %12, %14
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = var
+%2:i1 = slt %0, %1
+infer %2
+
+; *****
+; For LLVM instruction:
+;  %16 = load i32, i32* %15, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %18 = load i32, i32* %17, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %20 = load i32, i32* %t, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %24 = load i32, i32* %swapped, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %call = call i32 @circle_sort_inner(i32* %25, i32* %26)
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %or = or i32 %24, %call
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = var
+%2:i32 = or %0, %1
+infer %2
+
+; *****
+; For LLVM instruction:
+;  %call8 = call i32 @circle_sort_inner(i32* %27, i32* %28)
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %or9 = or i32 %or, %call8
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = var
+%2:i32 = var
+%3:i32 = or %1, %2
+%4:i32 = or %0, %3
+infer %4
+
+; *****
+; For LLVM instruction:
+;  %29 = load i32, i32* %retval, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+got 1 candidates from LHS
+
+-------------------------------------------------
+%0:i1 = var
+infer %0
+
+
+--------------------------------
+guess 0
+
+%0:i1 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: -1
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+Dataflow Pruned 0/0
+There are 1 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 1 candidates from LHS
+
+-------------------------------------------------
+%0:i32 = var
+infer %0
+
+
+--------------------------------
+guess 0
+
+%0:i32 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: -1
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+Dataflow Pruned 0/0
+There are 1 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 3 candidates from LHS
+
+-------------------------------------------------
+%0:i32 = var
+%1:i32 = var
+%2:i1 = slt %0, %1
+infer %2
+
+
+--------------------------------
+guess 0
+
+%0:i1 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: -1
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+Dataflow Pruned 0/0
+There are 1 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 3 candidates from LHS
+
+-------------------------------------------------
+%0:i32 = var
+%1:i32 = var
+%2:i32 = or %0, %1
+infer %2
+
+
+--------------------------------
+guess 0
+
+%0:i32 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: -1
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+
+--------------------------------
+guess 1
+
+%0:i32 = var
+
+Cost = 0
+second query is SAT-- constant doesn't work
+
+--------------------------------
+guess 2
+
+%0:i32 = var
+
+Cost = 0
+second query is SAT-- constant doesn't work
+Dataflow Pruned 0/0
+There are 3 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 5 candidates from LHS
+
+-------------------------------------------------
+%0:i32 = var
+%1:i32 = var
+%2:i32 = var
+%3:i32 = or %1, %2
+%4:i32 = or %0, %3
+infer %4
+
+
+--------------------------------
+guess 0
+
+%0:i32 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: -1
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+
+--------------------------------
+guess 1
+
+%0:i32 = var
+
+Cost = 0
+second query is SAT-- constant doesn't work
+
+--------------------------------
+guess 2
+
+%0:i32 = var
+
+Cost = 0
+second query is SAT-- constant doesn't work
+
+--------------------------------
+guess 3
+
+%0:i32 = var
+
+Cost = 0
+second query is SAT-- constant doesn't work
+
+--------------------------------
+guess 4
+
+%0:i32 = var
+%1:i32 = var
+%2:i32 = or %0, %1
+
+Cost = 1
+second query is SAT-- constant doesn't work
+Dataflow Pruned 0/0
+There are 5 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+#########################################################
+; exiting Souper's runOnFunction() for circle_sort_inner()
+
+; entering Souper's runOnFunction() for circle_sort()
+
+; ModuleID = './Sorting_Algorithms-Circle_Sort.c.bc'
+source_filename = "./Sorting_Algorithms-Circle_Sort.c"
+target datalayout = "e-m:e-p:32:32-i64:64-n32:64-S128"
+target triple = "wasm32-unknown-wasi"
+
+@.str = private unnamed_addr constant [4 x i8] c"%d \00", align 1
+@__const.main.x = private unnamed_addr constant [10 x i32] [i32 5, i32 -1, i32 101, i32 -4, i32 0, i32 1, i32 8, i32 6, i32 2, i32 3], align 16
+@llvm.used = appending global [1 x i8*] [i8* bitcast (i32 ()* @__main_void to i8*)], section "llvm.metadata"
+
+@__main_void = alias i32 (), i32 ()* @main
+
+; Function Attrs: noinline nounwind optnone
+define hidden i32 @circle_sort_inner(i32* %start, i32* %end) #0 {
+entry:
+  %retval = alloca i32, align 4
+  %start.addr = alloca i32*, align 4
+  %end.addr = alloca i32*, align 4
+  %p = alloca i32*, align 4
+  %q = alloca i32*, align 4
+  %t = alloca i32, align 4
+  %swapped = alloca i32, align 4
+  store i32* %start, i32** %start.addr, align 4
+  store i32* %end, i32** %end.addr, align 4
+  %0 = load i32*, i32** %start.addr, align 4
+  %1 = load i32*, i32** %end.addr, align 4
+  %cmp = icmp eq i32* %0, %1
+  br i1 %cmp, label %if.then, label %if.end
+
+if.then:                                          ; preds = %entry
+  store i32 0, i32* %retval, align 4
+  br label %return
+
+if.end:                                           ; preds = %entry
+  store i32 0, i32* %swapped, align 4
+  %2 = load i32*, i32** %start.addr, align 4
+  store i32* %2, i32** %p, align 4
+  %3 = load i32*, i32** %end.addr, align 4
+  store i32* %3, i32** %q, align 4
+  br label %for.cond
+
+for.cond:                                         ; preds = %for.inc, %if.end
+  %4 = load i32*, i32** %p, align 4
+  %5 = load i32*, i32** %q, align 4
+  %cmp1 = icmp ult i32* %4, %5
+  br i1 %cmp1, label %lor.end, label %lor.rhs
+
+lor.rhs:                                          ; preds = %for.cond
+  %6 = load i32*, i32** %p, align 4
+  %7 = load i32*, i32** %q, align 4
+  %cmp2 = icmp eq i32* %6, %7
+  br i1 %cmp2, label %land.rhs, label %land.end
+
+land.rhs:                                         ; preds = %lor.rhs
+  %8 = load i32*, i32** %q, align 4
+  %incdec.ptr = getelementptr inbounds i32, i32* %8, i32 1
+  store i32* %incdec.ptr, i32** %q, align 4
+  br label %land.end
+
+land.end:                                         ; preds = %land.rhs, %lor.rhs
+  %9 = phi i1 [ false, %lor.rhs ], [ true, %land.rhs ]
+  br label %lor.end
+
+lor.end:                                          ; preds = %land.end, %for.cond
+  %10 = phi i1 [ true, %for.cond ], [ %9, %land.end ]
+  br i1 %10, label %for.body, label %for.end
+
+for.body:                                         ; preds = %lor.end
+  %11 = load i32*, i32** %p, align 4
+  %12 = load i32, i32* %11, align 4
+  %13 = load i32*, i32** %q, align 4
+  %14 = load i32, i32* %13, align 4
+  %cmp3 = icmp sgt i32 %12, %14
+  br i1 %cmp3, label %if.then4, label %if.end5
+
+if.then4:                                         ; preds = %for.body
+  %15 = load i32*, i32** %p, align 4
+  %16 = load i32, i32* %15, align 4
+  store i32 %16, i32* %t, align 4
+  %17 = load i32*, i32** %q, align 4
+  %18 = load i32, i32* %17, align 4
+  %19 = load i32*, i32** %p, align 4
+  store i32 %18, i32* %19, align 4
+  %20 = load i32, i32* %t, align 4
+  %21 = load i32*, i32** %q, align 4
+  store i32 %20, i32* %21, align 4
+  store i32 1, i32* %swapped, align 4
+  br label %if.end5
+
+if.end5:                                          ; preds = %if.then4, %for.body
+  br label %for.inc
+
+for.inc:                                          ; preds = %if.end5
+  %22 = load i32*, i32** %p, align 4
+  %incdec.ptr6 = getelementptr inbounds i32, i32* %22, i32 1
+  store i32* %incdec.ptr6, i32** %p, align 4
+  %23 = load i32*, i32** %q, align 4
+  %incdec.ptr7 = getelementptr inbounds i32, i32* %23, i32 -1
+  store i32* %incdec.ptr7, i32** %q, align 4
+  br label %for.cond
+
+for.end:                                          ; preds = %lor.end
+  %24 = load i32, i32* %swapped, align 4
+  %25 = load i32*, i32** %start.addr, align 4
+  %26 = load i32*, i32** %q, align 4
+  %call = call i32 @circle_sort_inner(i32* %25, i32* %26)
+  %or = or i32 %24, %call
+  %27 = load i32*, i32** %p, align 4
+  %28 = load i32*, i32** %end.addr, align 4
+  %call8 = call i32 @circle_sort_inner(i32* %27, i32* %28)
+  %or9 = or i32 %or, %call8
+  store i32 %or9, i32* %retval, align 4
+  br label %return
+
+return:                                           ; preds = %for.end, %if.then
+  %29 = load i32, i32* %retval, align 4
+  ret i32 %29
+}
+
+; Function Attrs: noinline nounwind optnone
+define hidden void @circle_sort(i32* %x, i32 %n) #0 {
+entry:
+  %x.addr = alloca i32*, align 4
+  %n.addr = alloca i32, align 4
+  %i = alloca i32, align 4
+  store i32* %x, i32** %x.addr, align 4
+  store i32 %n, i32* %n.addr, align 4
+  br label %do.body
+
+do.body:                                          ; preds = %do.cond, %entry
+  store i32 0, i32* %i, align 4
+  br label %for.cond
+
+for.cond:                                         ; preds = %for.inc, %do.body
+  %0 = load i32, i32* %i, align 4
+  %1 = load i32, i32* %n.addr, align 4
+  %cmp = icmp slt i32 %0, %1
+  br i1 %cmp, label %for.body, label %for.end
+
+for.body:                                         ; preds = %for.cond
+  %2 = load i32*, i32** %x.addr, align 4
+  %3 = load i32, i32* %i, align 4
+  %arrayidx = getelementptr inbounds i32, i32* %2, i32 %3
+  %4 = load i32, i32* %arrayidx, align 4
+  %call = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([4 x i8], [4 x i8]* @.str, i32 0, i32 0), i32 %4)
+  br label %for.inc
+
+for.inc:                                          ; preds = %for.body
+  %5 = load i32, i32* %i, align 4
+  %inc = add nsw i32 %5, 1
+  store i32 %inc, i32* %i, align 4
+  br label %for.cond
+
+for.end:                                          ; preds = %for.cond
+  %call1 = call i32 @putchar(i32 10)
+  br label %do.cond
+
+do.cond:                                          ; preds = %for.end
+  %6 = load i32*, i32** %x.addr, align 4
+  %7 = load i32*, i32** %x.addr, align 4
+  %8 = load i32, i32* %n.addr, align 4
+  %sub = sub nsw i32 %8, 1
+  %add.ptr = getelementptr inbounds i32, i32* %7, i32 %sub
+  %call2 = call i32 @circle_sort_inner(i32* %6, i32* %add.ptr)
+  %tobool = icmp ne i32 %call2, 0
+  br i1 %tobool, label %do.body, label %do.end
+
+do.end:                                           ; preds = %do.cond
+  ret void
+}
+
+declare i32 @printf(i8* %0, ...) #1
+
+declare i32 @putchar(i32 %0) #1
+
+; Function Attrs: noinline nounwind optnone
+define hidden i32 @main() #0 {
+entry:
+  %retval = alloca i32, align 4
+  %x = alloca [10 x i32], align 16
+  store i32 0, i32* %retval, align 4
+  %0 = bitcast [10 x i32]* %x to i8*
+  call void @llvm.memcpy.p0i8.p0i8.i32(i8* align 16 %0, i8* align 16 bitcast ([10 x i32]* @__const.main.x to i8*), i32 40, i1 false)
+  %arraydecay = getelementptr inbounds [10 x i32], [10 x i32]* %x, i32 0, i32 0
+  call void @circle_sort(i32* %arraydecay, i32 10)
+  ret i32 0
+}
+
+; Function Attrs: argmemonly nounwind willreturn
+declare void @llvm.memcpy.p0i8.p0i8.i32(i8* noalias nocapture writeonly %0, i8* noalias nocapture readonly %1, i32 %2, i1 immarg %3) #2
+
+attributes #0 = { noinline nounwind optnone "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "min-legal-vector-width"="0" "no-infs-fp-math"="false" "no-jump-tables"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #1 = { "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #2 = { argmemonly nounwind willreturn }
+
+!llvm.module.flags = !{!0}
+!llvm.ident = !{!1}
+
+!0 = !{i32 1, !"wchar_size", i32 4}
+!1 = !{!"clang version 11.0.0 (https://github.com/Jacarte/llvm-project.git 0f6dea67136cc1e0b3d200eb2bb165628970c44b)"}
+
+; extracted candidates
+
+; *****
+; For LLVM instruction:
+;  %0 = load i32, i32* %i, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %1 = load i32, i32* %n.addr, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %cmp = icmp slt i32 %0, %1
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = var
+%2:i1 = slt %0, %1
+infer %2
+
+; *****
+; For LLVM instruction:
+;  %3 = load i32, i32* %i, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %4 = load i32, i32* %arrayidx, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %5 = load i32, i32* %i, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %inc = add nsw i32 %5, 1
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = addnsw 1:i32, %0
+infer %1
+
+; *****
+; For LLVM instruction:
+;  %8 = load i32, i32* %n.addr, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %sub = sub nsw i32 %8, 1
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = subnsw %0, 1:i32
+infer %1
+
+; *****
+; For LLVM instruction:
+;  %call2 = call i32 @circle_sort_inner(i32* %6, i32* %add.ptr)
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %tobool = icmp ne i32 %call2, 0
+; Looking for a replacement for:
+%0:i32 = var
+%1:i1 = ne 0:i32, %0
+infer %1
+got 2 candidates from LHS
+
+-------------------------------------------------
+%0:i32 = var
+%1:i32 = addnsw 1:i32, %0
+infer %1
+
+
+--------------------------------
+guess 0
+
+%0:i32 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 1
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: 268435457
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+
+--------------------------------
+guess 1
+
+%0:i32 = var
+
+Cost = 0
+second query is SAT-- constant doesn't work
+Dataflow Pruned 0/0
+There are 2 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 2 candidates from LHS
+
+-------------------------------------------------
+%0:i32 = var
+%1:i32 = subnsw %0, 1:i32
+infer %1
+
+
+--------------------------------
+guess 0
+
+%0:i32 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: -1
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: 536870911
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+
+--------------------------------
+guess 1
+
+%0:i32 = var
+
+Cost = 0
+second query is SAT-- constant doesn't work
+Dataflow Pruned 0/0
+There are 2 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 2 candidates from LHS
+
+-------------------------------------------------
+%0:i32 = var
+%1:i1 = ne 0:i32, %0
+infer %1
+
+
+--------------------------------
+guess 0
+
+%0:i1 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: -1
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+Dataflow Pruned 0/0
+There are 1 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+#########################################################
+; exiting Souper's runOnFunction() for circle_sort()
+
+; entering Souper's runOnFunction() for main()
+
+; ModuleID = './Sorting_Algorithms-Circle_Sort.c.bc'
+source_filename = "./Sorting_Algorithms-Circle_Sort.c"
+target datalayout = "e-m:e-p:32:32-i64:64-n32:64-S128"
+target triple = "wasm32-unknown-wasi"
+
+@.str = private unnamed_addr constant [4 x i8] c"%d \00", align 1
+@__const.main.x = private unnamed_addr constant [10 x i32] [i32 5, i32 -1, i32 101, i32 -4, i32 0, i32 1, i32 8, i32 6, i32 2, i32 3], align 16
+@llvm.used = appending global [1 x i8*] [i8* bitcast (i32 ()* @__main_void to i8*)], section "llvm.metadata"
+
+@__main_void = alias i32 (), i32 ()* @main
+
+; Function Attrs: noinline nounwind optnone
+define hidden i32 @circle_sort_inner(i32* %start, i32* %end) #0 {
+entry:
+  %retval = alloca i32, align 4
+  %start.addr = alloca i32*, align 4
+  %end.addr = alloca i32*, align 4
+  %p = alloca i32*, align 4
+  %q = alloca i32*, align 4
+  %t = alloca i32, align 4
+  %swapped = alloca i32, align 4
+  store i32* %start, i32** %start.addr, align 4
+  store i32* %end, i32** %end.addr, align 4
+  %0 = load i32*, i32** %start.addr, align 4
+  %1 = load i32*, i32** %end.addr, align 4
+  %cmp = icmp eq i32* %0, %1
+  br i1 %cmp, label %if.then, label %if.end
+
+if.then:                                          ; preds = %entry
+  store i32 0, i32* %retval, align 4
+  br label %return
+
+if.end:                                           ; preds = %entry
+  store i32 0, i32* %swapped, align 4
+  %2 = load i32*, i32** %start.addr, align 4
+  store i32* %2, i32** %p, align 4
+  %3 = load i32*, i32** %end.addr, align 4
+  store i32* %3, i32** %q, align 4
+  br label %for.cond
+
+for.cond:                                         ; preds = %for.inc, %if.end
+  %4 = load i32*, i32** %p, align 4
+  %5 = load i32*, i32** %q, align 4
+  %cmp1 = icmp ult i32* %4, %5
+  br i1 %cmp1, label %lor.end, label %lor.rhs
+
+lor.rhs:                                          ; preds = %for.cond
+  %6 = load i32*, i32** %p, align 4
+  %7 = load i32*, i32** %q, align 4
+  %cmp2 = icmp eq i32* %6, %7
+  br i1 %cmp2, label %land.rhs, label %land.end
+
+land.rhs:                                         ; preds = %lor.rhs
+  %8 = load i32*, i32** %q, align 4
+  %incdec.ptr = getelementptr inbounds i32, i32* %8, i32 1
+  store i32* %incdec.ptr, i32** %q, align 4
+  br label %land.end
+
+land.end:                                         ; preds = %land.rhs, %lor.rhs
+  %9 = phi i1 [ false, %lor.rhs ], [ true, %land.rhs ]
+  br label %lor.end
+
+lor.end:                                          ; preds = %land.end, %for.cond
+  %10 = phi i1 [ true, %for.cond ], [ %9, %land.end ]
+  br i1 %10, label %for.body, label %for.end
+
+for.body:                                         ; preds = %lor.end
+  %11 = load i32*, i32** %p, align 4
+  %12 = load i32, i32* %11, align 4
+  %13 = load i32*, i32** %q, align 4
+  %14 = load i32, i32* %13, align 4
+  %cmp3 = icmp sgt i32 %12, %14
+  br i1 %cmp3, label %if.then4, label %if.end5
+
+if.then4:                                         ; preds = %for.body
+  %15 = load i32*, i32** %p, align 4
+  %16 = load i32, i32* %15, align 4
+  store i32 %16, i32* %t, align 4
+  %17 = load i32*, i32** %q, align 4
+  %18 = load i32, i32* %17, align 4
+  %19 = load i32*, i32** %p, align 4
+  store i32 %18, i32* %19, align 4
+  %20 = load i32, i32* %t, align 4
+  %21 = load i32*, i32** %q, align 4
+  store i32 %20, i32* %21, align 4
+  store i32 1, i32* %swapped, align 4
+  br label %if.end5
+
+if.end5:                                          ; preds = %if.then4, %for.body
+  br label %for.inc
+
+for.inc:                                          ; preds = %if.end5
+  %22 = load i32*, i32** %p, align 4
+  %incdec.ptr6 = getelementptr inbounds i32, i32* %22, i32 1
+  store i32* %incdec.ptr6, i32** %p, align 4
+  %23 = load i32*, i32** %q, align 4
+  %incdec.ptr7 = getelementptr inbounds i32, i32* %23, i32 -1
+  store i32* %incdec.ptr7, i32** %q, align 4
+  br label %for.cond
+
+for.end:                                          ; preds = %lor.end
+  %24 = load i32, i32* %swapped, align 4
+  %25 = load i32*, i32** %start.addr, align 4
+  %26 = load i32*, i32** %q, align 4
+  %call = call i32 @circle_sort_inner(i32* %25, i32* %26)
+  %or = or i32 %24, %call
+  %27 = load i32*, i32** %p, align 4
+  %28 = load i32*, i32** %end.addr, align 4
+  %call8 = call i32 @circle_sort_inner(i32* %27, i32* %28)
+  %or9 = or i32 %or, %call8
+  store i32 %or9, i32* %retval, align 4
+  br label %return
+
+return:                                           ; preds = %for.end, %if.then
+  %29 = load i32, i32* %retval, align 4
+  ret i32 %29
+}
+
+; Function Attrs: noinline nounwind optnone
+define hidden void @circle_sort(i32* %x, i32 %n) #0 {
+entry:
+  %x.addr = alloca i32*, align 4
+  %n.addr = alloca i32, align 4
+  %i = alloca i32, align 4
+  store i32* %x, i32** %x.addr, align 4
+  store i32 %n, i32* %n.addr, align 4
+  br label %do.body
+
+do.body:                                          ; preds = %do.cond, %entry
+  store i32 0, i32* %i, align 4
+  br label %for.cond
+
+for.cond:                                         ; preds = %for.inc, %do.body
+  %0 = load i32, i32* %i, align 4
+  %1 = load i32, i32* %n.addr, align 4
+  %cmp = icmp slt i32 %0, %1
+  br i1 %cmp, label %for.body, label %for.end
+
+for.body:                                         ; preds = %for.cond
+  %2 = load i32*, i32** %x.addr, align 4
+  %3 = load i32, i32* %i, align 4
+  %arrayidx = getelementptr inbounds i32, i32* %2, i32 %3
+  %4 = load i32, i32* %arrayidx, align 4
+  %call = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([4 x i8], [4 x i8]* @.str, i32 0, i32 0), i32 %4)
+  br label %for.inc
+
+for.inc:                                          ; preds = %for.body
+  %5 = load i32, i32* %i, align 4
+  %inc = add nsw i32 %5, 1
+  store i32 %inc, i32* %i, align 4
+  br label %for.cond
+
+for.end:                                          ; preds = %for.cond
+  %call1 = call i32 @putchar(i32 10)
+  br label %do.cond
+
+do.cond:                                          ; preds = %for.end
+  %6 = load i32*, i32** %x.addr, align 4
+  %7 = load i32*, i32** %x.addr, align 4
+  %8 = load i32, i32* %n.addr, align 4
+  %sub = sub nsw i32 %8, 1
+  %add.ptr = getelementptr inbounds i32, i32* %7, i32 %sub
+  %call2 = call i32 @circle_sort_inner(i32* %6, i32* %add.ptr)
+  %tobool = icmp ne i32 %call2, 0
+  br i1 %tobool, label %do.body, label %do.end
+
+do.end:                                           ; preds = %do.cond
+  ret void
+}
+
+declare i32 @printf(i8* %0, ...) #1
+
+declare i32 @putchar(i32 %0) #1
+
+; Function Attrs: noinline nounwind optnone
+define hidden i32 @main() #0 {
+entry:
+  %retval = alloca i32, align 4
+  %x = alloca [10 x i32], align 16
+  store i32 0, i32* %retval, align 4
+  %0 = bitcast [10 x i32]* %x to i8*
+  call void @llvm.memcpy.p0i8.p0i8.i32(i8* align 16 %0, i8* align 16 bitcast ([10 x i32]* @__const.main.x to i8*), i32 40, i1 false)
+  %arraydecay = getelementptr inbounds [10 x i32], [10 x i32]* %x, i32 0, i32 0
+  call void @circle_sort(i32* %arraydecay, i32 10)
+  ret i32 0
+}
+
+; Function Attrs: argmemonly nounwind willreturn
+declare void @llvm.memcpy.p0i8.p0i8.i32(i8* noalias nocapture writeonly %0, i8* noalias nocapture readonly %1, i32 %2, i1 immarg %3) #2
+
+attributes #0 = { noinline nounwind optnone "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "min-legal-vector-width"="0" "no-infs-fp-math"="false" "no-jump-tables"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #1 = { "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #2 = { argmemonly nounwind willreturn }
+
+!llvm.module.flags = !{!0}
+!llvm.ident = !{!1}
+
+!0 = !{i32 1, !"wchar_size", i32 4}
+!1 = !{!"clang version 11.0.0 (https://github.com/Jacarte/llvm-project.git 0f6dea67136cc1e0b3d200eb2bb165628970c44b)"}
+
+; extracted candidates
+#########################################################
+; exiting Souper's runOnFunction() for main()
+Total of 1 replacements done on this module
+Total of 1 replacements candidates on this module

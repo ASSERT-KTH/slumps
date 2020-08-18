@@ -1,0 +1,126 @@
+; entering Souper's runOnFunction() for crypto_aead_aes256gcm_encrypt_detached_afternm()
+
+; ModuleID = './aead_aes256gcm_aesni.c.bc'
+source_filename = "crypto_aead/aes256gcm/aesni/aead_aes256gcm_aesni.c"
+target datalayout = "e-m:e-p:32:32-i64:64-n32:64-S128"
+target triple = "wasm32-unknown-wasi"
+
+%struct.crypto_aead_aes256gcm_state_ = type { [512 x i8] }
+
+@errno = external thread_local local_unnamed_addr global i32, align 4
+
+; Function Attrs: nofree norecurse nounwind writeonly
+define i32 @crypto_aead_aes256gcm_encrypt_detached(i8* nocapture nonnull readnone %0, i8* nocapture nonnull readnone %1, i64* nocapture readnone %2, i8* nocapture readnone %3, i64 %4, i8* nocapture readnone %5, i64 %6, i8* nocapture readnone %7, i8* nocapture nonnull readnone %8, i8* nocapture nonnull readnone %9) local_unnamed_addr #0 {
+  store i32 52, i32* @errno, align 4
+  ret i32 -1
+}
+
+; Function Attrs: nofree norecurse nounwind writeonly
+define i32 @crypto_aead_aes256gcm_encrypt(i8* nocapture nonnull readnone %0, i64* nocapture readnone %1, i8* nocapture readnone %2, i64 %3, i8* nocapture readnone %4, i64 %5, i8* nocapture readnone %6, i8* nocapture nonnull readnone %7, i8* nocapture nonnull readnone %8) local_unnamed_addr #0 {
+  store i32 52, i32* @errno, align 4
+  ret i32 -1
+}
+
+; Function Attrs: nofree norecurse nounwind writeonly
+define i32 @crypto_aead_aes256gcm_decrypt_detached(i8* nocapture readnone %0, i8* nocapture readnone %1, i8* nocapture nonnull readnone %2, i64 %3, i8* nocapture nonnull readnone %4, i8* nocapture readnone %5, i64 %6, i8* nocapture nonnull readnone %7, i8* nocapture nonnull readnone %8) local_unnamed_addr #0 {
+  store i32 52, i32* @errno, align 4
+  ret i32 -1
+}
+
+; Function Attrs: nofree norecurse nounwind writeonly
+define i32 @crypto_aead_aes256gcm_decrypt(i8* nocapture readnone %0, i64* nocapture readnone %1, i8* nocapture readnone %2, i8* nocapture nonnull readnone %3, i64 %4, i8* nocapture readnone %5, i64 %6, i8* nocapture nonnull readnone %7, i8* nocapture nonnull readnone %8) local_unnamed_addr #0 {
+  store i32 52, i32* @errno, align 4
+  ret i32 -1
+}
+
+; Function Attrs: nofree norecurse nounwind writeonly
+define i32 @crypto_aead_aes256gcm_beforenm(%struct.crypto_aead_aes256gcm_state_* nocapture nonnull readnone %0, i8* nocapture nonnull readnone %1) local_unnamed_addr #0 {
+  store i32 52, i32* @errno, align 4
+  ret i32 -1
+}
+
+; Function Attrs: nofree norecurse nounwind writeonly
+define i32 @crypto_aead_aes256gcm_encrypt_detached_afternm(i8* nocapture nonnull readnone %0, i8* nocapture nonnull readnone %1, i64* nocapture readnone %2, i8* nocapture readnone %3, i64 %4, i8* nocapture readnone %5, i64 %6, i8* nocapture readnone %7, i8* nocapture nonnull readnone %8, %struct.crypto_aead_aes256gcm_state_* nocapture nonnull readnone %9) local_unnamed_addr #0 {
+  store i32 52, i32* @errno, align 4
+  ret i32 -1
+}
+
+; Function Attrs: nofree norecurse nounwind writeonly
+define i32 @crypto_aead_aes256gcm_encrypt_afternm(i8* nocapture nonnull readnone %0, i64* nocapture readnone %1, i8* nocapture readnone %2, i64 %3, i8* nocapture readnone %4, i64 %5, i8* nocapture readnone %6, i8* nocapture nonnull readnone %7, %struct.crypto_aead_aes256gcm_state_* nocapture nonnull readnone %8) local_unnamed_addr #0 {
+  store i32 52, i32* @errno, align 4
+  ret i32 -1
+}
+
+; Function Attrs: nofree norecurse nounwind writeonly
+define i32 @crypto_aead_aes256gcm_decrypt_detached_afternm(i8* nocapture readnone %0, i8* nocapture readnone %1, i8* nocapture nonnull readnone %2, i64 %3, i8* nocapture nonnull readnone %4, i8* nocapture readnone %5, i64 %6, i8* nocapture nonnull readnone %7, %struct.crypto_aead_aes256gcm_state_* nocapture nonnull readnone %8) local_unnamed_addr #0 {
+  store i32 52, i32* @errno, align 4
+  ret i32 -1
+}
+
+; Function Attrs: nofree norecurse nounwind writeonly
+define i32 @crypto_aead_aes256gcm_decrypt_afternm(i8* nocapture readnone %0, i64* nocapture readnone %1, i8* nocapture readnone %2, i8* nocapture nonnull readnone %3, i64 %4, i8* nocapture readnone %5, i64 %6, i8* nocapture nonnull readnone %7, %struct.crypto_aead_aes256gcm_state_* nocapture nonnull readnone %8) local_unnamed_addr #0 {
+  store i32 52, i32* @errno, align 4
+  ret i32 -1
+}
+
+; Function Attrs: norecurse nounwind readnone
+define i32 @crypto_aead_aes256gcm_is_available() local_unnamed_addr #1 {
+  ret i32 0
+}
+
+; Function Attrs: norecurse nounwind readnone
+define i32 @crypto_aead_aes256gcm_keybytes() local_unnamed_addr #1 {
+  ret i32 32
+}
+
+; Function Attrs: norecurse nounwind readnone
+define i32 @crypto_aead_aes256gcm_nsecbytes() local_unnamed_addr #1 {
+  ret i32 0
+}
+
+; Function Attrs: norecurse nounwind readnone
+define i32 @crypto_aead_aes256gcm_npubbytes() local_unnamed_addr #1 {
+  ret i32 12
+}
+
+; Function Attrs: norecurse nounwind readnone
+define i32 @crypto_aead_aes256gcm_abytes() local_unnamed_addr #1 {
+  ret i32 16
+}
+
+; Function Attrs: norecurse nounwind readnone
+define i32 @crypto_aead_aes256gcm_statebytes() local_unnamed_addr #1 {
+  ret i32 512
+}
+
+; Function Attrs: norecurse nounwind readnone
+define i32 @crypto_aead_aes256gcm_messagebytes_max() local_unnamed_addr #1 {
+  ret i32 -17
+}
+
+; Function Attrs: nounwind
+define void @crypto_aead_aes256gcm_keygen(i8* nonnull %0) local_unnamed_addr #2 {
+  tail call void @randombytes_buf(i8* nonnull %0, i32 32) #4
+  ret void
+}
+
+declare void @randombytes_buf(i8* %0, i32 %1) local_unnamed_addr #3
+
+attributes #0 = { nofree norecurse nounwind writeonly "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "min-legal-vector-width"="0" "no-infs-fp-math"="false" "no-jump-tables"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="false" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #1 = { norecurse nounwind readnone "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "min-legal-vector-width"="0" "no-infs-fp-math"="false" "no-jump-tables"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="false" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #2 = { nounwind "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "min-legal-vector-width"="0" "no-infs-fp-math"="false" "no-jump-tables"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="false" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #3 = { "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="false" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #4 = { nounwind }
+
+!llvm.module.flags = !{!0, !1, !2}
+!llvm.ident = !{!3}
+
+!0 = !{i32 1, !"wchar_size", i32 4}
+!1 = !{i32 7, !"PIC Level", i32 2}
+!2 = !{i32 7, !"PIE Level", i32 2}
+!3 = !{!"clang version 10.0.0 (https://github.com/llvm/llvm-project d32170dbd5b0d54436537b6b75beaf44324e0c28)"}
+
+; extracted candidates
+#########################################################
+; exiting Souper's runOnFunction() for crypto_aead_aes256gcm_encrypt_detached_afternm()
+
