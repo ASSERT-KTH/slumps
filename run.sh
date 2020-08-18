@@ -11,8 +11,8 @@ MAX=$1
 
 for port in $(seq 1 1 $MAX)
 do
-	redis-server --port $((6490 + $port)) &
-	PORTS=$PORTS","$((6490 + $port))
+	redis-server --port $((6790 + $port)) &
+	PORTS=$PORTS","$((6790 + $port))
 done
 
 echo "Opening redis servers in" $PORTS

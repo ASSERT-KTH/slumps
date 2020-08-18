@@ -26,8 +26,11 @@ import traceback
 BASE_DIR = os.path.dirname(__file__)
 RUNTIME_CONFIG = dict(USE_REDIS=False)
 
+OUT_FOLDER = config["DEFAULT"]["outfolder"]
 
 class ContentToTmpFile(object):
+
+    LOG_LEVEL = 0
 
     def __init__(self, content=None, name=None, ext=None, persist=False):
         tmp = createTmpFile(ext) if not name else name
@@ -54,14 +57,13 @@ class ContentToTmpFile(object):
             if not self.persist:
                 os.remove(self.file)
         except Exception as e:
-            LOGGER.error(self.tmpF, traceback.format_exc())
-            raise e
+            if self.LOG_LEVEL > 1:
+                LOGGER.error(self.tmpF, traceback.format_exc())
 
 
 def updatesettings(argvs):
 
-    SLUMPS_DIR = os.path.dirname(os.path.abspath(
-        os.path.dirname(os.path.dirname(__file__))))
+    SLUMPS_DIR = os.path.dirname(os.path.dirname(__file__))
 
     print("Slumps dir...%s" % SLUMPS_DIR)
     config["DEFAULT"]["slumpspath"] = SLUMPS_DIR
@@ -79,8 +81,8 @@ def updatesettings(argvs):
         
     pairs = []
     for index, a in enumerate(argvs):
-        if a.startswith("-"):
-            if index + 1 < len(argvs) and not argvs[index + 1].startswith("-"):
+        if a.startswith("%"):
+            if index + 1 < len(argvs) and not argvs[index + 1].startswith("%"):
                 pairs.append([a, argvs[index + 1]])
             else:
                 raise Exception(
@@ -91,7 +93,8 @@ def updatesettings(argvs):
 
     with open(f"{BASE_DIR}/settings/config.ini", 'w') as configFile:
         config.write(configFile)
-
+        
+    OUT_FOLDER = config["DEFAULT"]["outfolder"]
 
 def processOptionValuePair(pair):
     option, value = pair
@@ -114,7 +117,6 @@ def processOptionValuePair(pair):
     print(namespace, key, value)
 
 
-OUT_FOLDER = config["DEFAULT"]["outfolder"]
 
 
 def getIteratorByName(name: str):

@@ -4,6 +4,9 @@
 ### Intellij ###
 .idea
 
+### VSCode ###
+.metals
+
 ### Python ###
 venv
 *.pyc
@@ -20,3 +23,8 @@ dist
 *egg-info
 traces
 utils/reports
+
+### Wasm-Fuzzer ###
+wasm-fuzzer/fuzzing-client-afl/afl_out
+wasm-fuzzer/fuzzing-client-afl/cpp_out
+wasm-fuzzer/logs/*

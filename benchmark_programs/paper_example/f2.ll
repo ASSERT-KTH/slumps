@@ -1,13 +1,14 @@
 ; ModuleID = 'f2.c'
 source_filename = "f2.c"
 target datalayout = "e-m:o-p270:32:32-p271:32:32-p272:64:64-i64:64-f80:128-n8:16:32:64-S128"
-target triple = "x86_64-apple-macosx10.14.0"
+target triple = "wasm32-unknown-unknown"
 
 ; Function Attrs: norecurse nounwind readnone ssp uwtable
 define i32 @f(i32 %x) local_unnamed_addr #0 {
 entry:
-  %add = mul nsw i32 %x, 3
-  ret i32 %add
+  %add = mul nsw i32 %x, 2
+  %mul = add nsw i32 %add, %x
+  ret i32 %mul
 }
 
 ; Function Attrs: norecurse nounwind readnone ssp uwtable

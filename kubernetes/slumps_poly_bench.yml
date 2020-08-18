@@ -1,0 +1,63 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Workflow
+metadata:
+  generateName: slumps-rosseta-
+spec:
+  entrypoint: slumps-distributed
+  parallelism: 30
+  arguments:
+    parameters:
+    - name: source
+    - name: folder
+    - name: file_name
+  templates:
+  - name: slumps-distributed
+    steps:
+    - - name: download-programs
+        template: download-template
+    - - name: slumpsfy
+        template: slumps-template
+        arguments:
+          parameters:
+          - name: program
+            value: "{{item}}"
+        withParam: "{{steps.download-programs.outputs.parameters.programs}}"
+        continueOn:
+          failed: true
+  - name: download-template
+    script:
+      image: madshansen/docker-git-ftp
+      command: [bash]
+      source: |
+        apt-get update && apt-get install -y python wget unzip && wget "{{workflow.parameters.source}}" && unzip "{{workflow.parameters.file_name}}" -d . && ls -l "{{workflow.parameters.folder}}" | wc -l && python -c "import json,os;  print(json.dumps([f for f in os.listdir('{{workflow.parameters.folder}}') if f.endswith('.c') and f != 'polybench.c']))" > /out.txt && cat /out.txt
+    outputs:
+      parameters:
+        - name: programs
+          valueFrom: 
+            path: "/out.txt"
+  - name: slumps-template
+    retryStrategy:
+      limit: 6
+      retryPolicy: "Always"
+      backoff:
+        duration: "2m"      # Must be a string. Default unit is seconds. Could also be a Duration, e.g.: "2m", "6h", "1d"
+        factor: 4
+        maxDuration: "1h"
+    inputs:
+      parameters:
+      - name: program
+    outputs:
+      artifacts:
+      - name: slumps
+        path: /slumps/crow/out
+      - name: logs
+        path: /slumps/crow/logs
+    script:
+      image: "jacarte/slumps:crow"
+      command: [/bin/bash]
+      source: |
+        apt-get update && apt-get install -y wget unzip && wget "{{workflow.parameters.source}}" && unzip "{{workflow.parameters.file_name}}" -d /inputs && ls /inputs &&  cd /slumps/crow && ./start_poly_bench.sh %DEFAULT.timeout 36000 %DEFAULT.link-wasi True %DEFAULT.exploration-timeout 18000 %DEFAULT.outfolder /slumps/crow/out /inputs/{{inputs.parameters.program}}
+      resources:
+        requests:
+          memory: 8G
+          cpu: 1.5
