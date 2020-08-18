@@ -18,3 +18,5 @@ crow_out
 
 dist
 *egg-info
+traces
+utils/reports
