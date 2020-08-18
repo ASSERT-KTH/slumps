@@ -1,5 +1,13 @@
 # pipeline
 
+
+## Intro to superoptimization
+
+Given a C program compiled to WASM, SLUMPs superoptimizer generates a new WASM program which is smaller in size, and potentially faster, as we show in the image below.
+
+![pass](docs/pass.png)
+
+
 ### Execute
 ```bash
 pipeline.sh <program.c> 4 #CEGIS
