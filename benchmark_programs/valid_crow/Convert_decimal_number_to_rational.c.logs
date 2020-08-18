@@ -1,0 +1,2167 @@
+
+Entering the Souper pass's runOnModule()
+
+
+; entering Souper's runOnFunction() for rat_approx()
+
+; ModuleID = './Convert_decimal_number_to_rational.c.bc'
+source_filename = "./Convert_decimal_number_to_rational.c"
+target datalayout = "e-m:e-p:32:32-i64:64-n32:64-S128"
+target triple = "wasm32-unknown-wasi"
+
+@__const.rat_approx.h = private unnamed_addr constant [3 x i64] [i64 0, i64 1, i64 0], align 16
+@__const.rat_approx.k = private unnamed_addr constant [3 x i64] [i64 1, i64 0, i64 0], align 16
+@.str = private unnamed_addr constant [13 x i8] c"f = %16.14f\0A\00", align 1
+@.str.1 = private unnamed_addr constant [14 x i8] c"denom <= %d: \00", align 1
+@.str.2 = private unnamed_addr constant [11 x i8] c"%lld/%lld\0A\00", align 1
+@.str.3 = private unnamed_addr constant [14 x i8] c"\0Af = %16.14f\0A\00", align 1
+@llvm.used = appending global [1 x i8*] [i8* bitcast (i32 ()* @__main_void to i8*)], section "llvm.metadata"
+
+@__main_void = alias i32 (), i32 ()* @main
+
+; Function Attrs: noinline nounwind optnone
+define hidden void @rat_approx(double %f, i64 %md, i64* %num, i64* %denom) #0 {
+entry:
+  %f.addr = alloca double, align 8
+  %md.addr = alloca i64, align 8
+  %num.addr = alloca i64*, align 4
+  %denom.addr = alloca i64*, align 4
+  %a = alloca i64, align 8
+  %h = alloca [3 x i64], align 16
+  %k = alloca [3 x i64], align 16
+  %x = alloca i64, align 8
+  %d = alloca i64, align 8
+  %n = alloca i64, align 8
+  %i = alloca i32, align 4
+  %neg = alloca i32, align 4
+  store double %f, double* %f.addr, align 8
+  store i64 %md, i64* %md.addr, align 8
+  store i64* %num, i64** %num.addr, align 4
+  store i64* %denom, i64** %denom.addr, align 4
+  %0 = bitcast [3 x i64]* %h to i8*
+  call void @llvm.memcpy.p0i8.p0i8.i32(i8* align 16 %0, i8* align 16 bitcast ([3 x i64]* @__const.rat_approx.h to i8*), i32 24, i1 false)
+  %1 = bitcast [3 x i64]* %k to i8*
+  call void @llvm.memcpy.p0i8.p0i8.i32(i8* align 16 %1, i8* align 16 bitcast ([3 x i64]* @__const.rat_approx.k to i8*), i32 24, i1 false)
+  store i64 1, i64* %n, align 8
+  store i32 0, i32* %neg, align 4
+  %2 = load i64, i64* %md.addr, align 8
+  %cmp = icmp sle i64 %2, 1
+  br i1 %cmp, label %if.then, label %if.end
+
+if.then:                                          ; preds = %entry
+  %3 = load i64*, i64** %denom.addr, align 4
+  store i64 1, i64* %3, align 8
+  %4 = load double, double* %f.addr, align 8
+  %conv = fptosi double %4 to i64
+  %5 = load i64*, i64** %num.addr, align 4
+  store i64 %conv, i64* %5, align 8
+  br label %return
+
+if.end:                                           ; preds = %entry
+  %6 = load double, double* %f.addr, align 8
+  %cmp1 = fcmp olt double %6, 0.000000e+00
+  br i1 %cmp1, label %if.then3, label %if.end4
+
+if.then3:                                         ; preds = %if.end
+  store i32 1, i32* %neg, align 4
+  %7 = load double, double* %f.addr, align 8
+  %fneg = fneg double %7
+  store double %fneg, double* %f.addr, align 8
+  br label %if.end4
+
+if.end4:                                          ; preds = %if.then3, %if.end
+  br label %while.cond
+
+while.cond:                                       ; preds = %while.body, %if.end4
+  %8 = load double, double* %f.addr, align 8
+  %9 = load double, double* %f.addr, align 8
+  %10 = call double @llvm.floor.f64(double %9)
+  %cmp5 = fcmp une double %8, %10
+  br i1 %cmp5, label %while.body, label %while.end
+
+while.body:                                       ; preds = %while.cond
+  %11 = load i64, i64* %n, align 8
+  %shl = shl i64 %11, 1
+  store i64 %shl, i64* %n, align 8
+  %12 = load double, double* %f.addr, align 8
+  %mul = fmul double %12, 2.000000e+00
+  store double %mul, double* %f.addr, align 8
+  br label %while.cond
+
+while.end:                                        ; preds = %while.cond
+  %13 = load double, double* %f.addr, align 8
+  %conv7 = fptosi double %13 to i64
+  store i64 %conv7, i64* %d, align 8
+  store i32 0, i32* %i, align 4
+  br label %for.cond
+
+for.cond:                                         ; preds = %for.inc, %while.end
+  %14 = load i32, i32* %i, align 4
+  %cmp8 = icmp slt i32 %14, 64
+  br i1 %cmp8, label %for.body, label %for.end
+
+for.body:                                         ; preds = %for.cond
+  %15 = load i64, i64* %n, align 8
+  %tobool = icmp ne i64 %15, 0
+  br i1 %tobool, label %cond.true, label %cond.false
+
+cond.true:                                        ; preds = %for.body
+  %16 = load i64, i64* %d, align 8
+  %17 = load i64, i64* %n, align 8
+  %div = sdiv i64 %16, %17
+  br label %cond.end
+
+cond.false:                                       ; preds = %for.body
+  br label %cond.end
+
+cond.end:                                         ; preds = %cond.false, %cond.true
+  %cond = phi i64 [ %div, %cond.true ], [ 0, %cond.false ]
+  store i64 %cond, i64* %a, align 8
+  %18 = load i32, i32* %i, align 4
+  %tobool10 = icmp ne i32 %18, 0
+  br i1 %tobool10, label %land.lhs.true, label %if.end13
+
+land.lhs.true:                                    ; preds = %cond.end
+  %19 = load i64, i64* %a, align 8
+  %tobool11 = icmp ne i64 %19, 0
+  br i1 %tobool11, label %if.end13, label %if.then12
+
+if.then12:                                        ; preds = %land.lhs.true
+  br label %for.end
+
+if.end13:                                         ; preds = %land.lhs.true, %cond.end
+  %20 = load i64, i64* %d, align 8
+  store i64 %20, i64* %x, align 8
+  %21 = load i64, i64* %n, align 8
+  store i64 %21, i64* %d, align 8
+  %22 = load i64, i64* %x, align 8
+  %23 = load i64, i64* %n, align 8
+  %rem = srem i64 %22, %23
+  store i64 %rem, i64* %n, align 8
+  %24 = load i64, i64* %a, align 8
+  store i64 %24, i64* %x, align 8
+  %arrayidx = getelementptr inbounds [3 x i64], [3 x i64]* %k, i32 0, i32 1
+  %25 = load i64, i64* %arrayidx, align 8
+  %26 = load i64, i64* %a, align 8
+  %mul14 = mul nsw i64 %25, %26
+  %arrayidx15 = getelementptr inbounds [3 x i64], [3 x i64]* %k, i32 0, i32 0
+  %27 = load i64, i64* %arrayidx15, align 16
+  %add = add nsw i64 %mul14, %27
+  %28 = load i64, i64* %md.addr, align 8
+  %cmp16 = icmp sge i64 %add, %28
+  br i1 %cmp16, label %if.then18, label %if.end30
+
+if.then18:                                        ; preds = %if.end13
+  %29 = load i64, i64* %md.addr, align 8
+  %arrayidx19 = getelementptr inbounds [3 x i64], [3 x i64]* %k, i32 0, i32 0
+  %30 = load i64, i64* %arrayidx19, align 16
+  %sub = sub nsw i64 %29, %30
+  %arrayidx20 = getelementptr inbounds [3 x i64], [3 x i64]* %k, i32 0, i32 1
+  %31 = load i64, i64* %arrayidx20, align 8
+  %div21 = sdiv i64 %sub, %31
+  store i64 %div21, i64* %x, align 8
+  %32 = load i64, i64* %x, align 8
+  %mul22 = mul nsw i64 %32, 2
+  %33 = load i64, i64* %a, align 8
+  %cmp23 = icmp sge i64 %mul22, %33
+  br i1 %cmp23, label %if.then28, label %lor.lhs.false
+
+lor.lhs.false:                                    ; preds = %if.then18
+  %arrayidx25 = getelementptr inbounds [3 x i64], [3 x i64]* %k, i32 0, i32 1
+  %34 = load i64, i64* %arrayidx25, align 8
+  %35 = load i64, i64* %md.addr, align 8
+  %cmp26 = icmp sge i64 %34, %35
+  br i1 %cmp26, label %if.then28, label %if.else
+
+if.then28:                                        ; preds = %lor.lhs.false, %if.then18
+  store i32 65, i32* %i, align 4
+  br label %if.end29
+
+if.else:                                          ; preds = %lor.lhs.false
+  br label %for.end
+
+if.end29:                                         ; preds = %if.then28
+  br label %if.end30
+
+if.end30:                                         ; preds = %if.end29, %if.end13
+  %36 = load i64, i64* %x, align 8
+  %arrayidx31 = getelementptr inbounds [3 x i64], [3 x i64]* %h, i32 0, i32 1
+  %37 = load i64, i64* %arrayidx31, align 8
+  %mul32 = mul nsw i64 %36, %37
+  %arrayidx33 = getelementptr inbounds [3 x i64], [3 x i64]* %h, i32 0, i32 0
+  %38 = load i64, i64* %arrayidx33, align 16
+  %add34 = add nsw i64 %mul32, %38
+  %arrayidx35 = getelementptr inbounds [3 x i64], [3 x i64]* %h, i32 0, i32 2
+  store i64 %add34, i64* %arrayidx35, align 16
+  %arrayidx36 = getelementptr inbounds [3 x i64], [3 x i64]* %h, i32 0, i32 1
+  %39 = load i64, i64* %arrayidx36, align 8
+  %arrayidx37 = getelementptr inbounds [3 x i64], [3 x i64]* %h, i32 0, i32 0
+  store i64 %39, i64* %arrayidx37, align 16
+  %arrayidx38 = getelementptr inbounds [3 x i64], [3 x i64]* %h, i32 0, i32 2
+  %40 = load i64, i64* %arrayidx38, align 16
+  %arrayidx39 = getelementptr inbounds [3 x i64], [3 x i64]* %h, i32 0, i32 1
+  store i64 %40, i64* %arrayidx39, align 8
+  %41 = load i64, i64* %x, align 8
+  %arrayidx40 = getelementptr inbounds [3 x i64], [3 x i64]* %k, i32 0, i32 1
+  %42 = load i64, i64* %arrayidx40, align 8
+  %mul41 = mul nsw i64 %41, %42
+  %arrayidx42 = getelementptr inbounds [3 x i64], [3 x i64]* %k, i32 0, i32 0
+  %43 = load i64, i64* %arrayidx42, align 16
+  %add43 = add nsw i64 %mul41, %43
+  %arrayidx44 = getelementptr inbounds [3 x i64], [3 x i64]* %k, i32 0, i32 2
+  store i64 %add43, i64* %arrayidx44, align 16
+  %arrayidx45 = getelementptr inbounds [3 x i64], [3 x i64]* %k, i32 0, i32 1
+  %44 = load i64, i64* %arrayidx45, align 8
+  %arrayidx46 = getelementptr inbounds [3 x i64], [3 x i64]* %k, i32 0, i32 0
+  store i64 %44, i64* %arrayidx46, align 16
+  %arrayidx47 = getelementptr inbounds [3 x i64], [3 x i64]* %k, i32 0, i32 2
+  %45 = load i64, i64* %arrayidx47, align 16
+  %arrayidx48 = getelementptr inbounds [3 x i64], [3 x i64]* %k, i32 0, i32 1
+  store i64 %45, i64* %arrayidx48, align 8
+  br label %for.inc
+
+for.inc:                                          ; preds = %if.end30
+  %46 = load i32, i32* %i, align 4
+  %inc = add nsw i32 %46, 1
+  store i32 %inc, i32* %i, align 4
+  br label %for.cond
+
+for.end:                                          ; preds = %if.else, %if.then12, %for.cond
+  %arrayidx49 = getelementptr inbounds [3 x i64], [3 x i64]* %k, i32 0, i32 1
+  %47 = load i64, i64* %arrayidx49, align 8
+  %48 = load i64*, i64** %denom.addr, align 4
+  store i64 %47, i64* %48, align 8
+  %49 = load i32, i32* %neg, align 4
+  %tobool50 = icmp ne i32 %49, 0
+  br i1 %tobool50, label %cond.true51, label %cond.false54
+
+cond.true51:                                      ; preds = %for.end
+  %arrayidx52 = getelementptr inbounds [3 x i64], [3 x i64]* %h, i32 0, i32 1
+  %50 = load i64, i64* %arrayidx52, align 8
+  %sub53 = sub nsw i64 0, %50
+  br label %cond.end56
+
+cond.false54:                                     ; preds = %for.end
+  %arrayidx55 = getelementptr inbounds [3 x i64], [3 x i64]* %h, i32 0, i32 1
+  %51 = load i64, i64* %arrayidx55, align 8
+  br label %cond.end56
+
+cond.end56:                                       ; preds = %cond.false54, %cond.true51
+  %cond57 = phi i64 [ %sub53, %cond.true51 ], [ %51, %cond.false54 ]
+  %52 = load i64*, i64** %num.addr, align 4
+  store i64 %cond57, i64* %52, align 8
+  br label %return
+
+return:                                           ; preds = %cond.end56, %if.then
+  ret void
+}
+
+; Function Attrs: argmemonly nounwind willreturn
+declare void @llvm.memcpy.p0i8.p0i8.i32(i8* noalias nocapture writeonly %0, i8* noalias nocapture readonly %1, i32 %2, i1 immarg %3) #1
+
+; Function Attrs: nounwind readnone speculatable willreturn
+declare double @llvm.floor.f64(double %0) #2
+
+; Function Attrs: noinline nounwind optnone
+define hidden i32 @main() #0 {
+entry:
+  %retval = alloca i32, align 4
+  %i = alloca i32, align 4
+  %d = alloca i64, align 8
+  %n = alloca i64, align 8
+  %f = alloca double, align 8
+  store i32 0, i32* %retval, align 4
+  store double 0x3FC2492492492492, double* %f, align 8
+  %call = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([13 x i8], [13 x i8]* @.str, i32 0, i32 0), double 0x3FC2492492492492)
+  store i32 1, i32* %i, align 4
+  br label %for.cond
+
+for.cond:                                         ; preds = %for.inc, %entry
+  %0 = load i32, i32* %i, align 4
+  %cmp = icmp sle i32 %0, 20000000
+  br i1 %cmp, label %for.body, label %for.end
+
+for.body:                                         ; preds = %for.cond
+  %1 = load i32, i32* %i, align 4
+  %call1 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([14 x i8], [14 x i8]* @.str.1, i32 0, i32 0), i32 %1)
+  %2 = load double, double* %f, align 8
+  %3 = load i32, i32* %i, align 4
+  %conv = sext i32 %3 to i64
+  call void @rat_approx(double %2, i64 %conv, i64* %n, i64* %d)
+  %4 = load i64, i64* %n, align 8
+  %5 = load i64, i64* %d, align 8
+  %call2 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([11 x i8], [11 x i8]* @.str.2, i32 0, i32 0), i64 %4, i64 %5)
+  br label %for.inc
+
+for.inc:                                          ; preds = %for.body
+  %6 = load i32, i32* %i, align 4
+  %mul = mul nsw i32 %6, 16
+  store i32 %mul, i32* %i, align 4
+  br label %for.cond
+
+for.end:                                          ; preds = %for.cond
+  %call3 = call double @atan2(double 1.000000e+00, double 1.000000e+00) #5
+  %mul4 = fmul double %call3, 4.000000e+00
+  store double %mul4, double* %f, align 8
+  %call5 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([14 x i8], [14 x i8]* @.str.3, i32 0, i32 0), double %mul4)
+  store i32 1, i32* %i, align 4
+  br label %for.cond6
+
+for.cond6:                                        ; preds = %for.inc13, %for.end
+  %7 = load i32, i32* %i, align 4
+  %cmp7 = icmp sle i32 %7, 20000000
+  br i1 %cmp7, label %for.body9, label %for.end15
+
+for.body9:                                        ; preds = %for.cond6
+  %8 = load i32, i32* %i, align 4
+  %call10 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([14 x i8], [14 x i8]* @.str.1, i32 0, i32 0), i32 %8)
+  %9 = load double, double* %f, align 8
+  %10 = load i32, i32* %i, align 4
+  %conv11 = sext i32 %10 to i64
+  call void @rat_approx(double %9, i64 %conv11, i64* %n, i64* %d)
+  %11 = load i64, i64* %n, align 8
+  %12 = load i64, i64* %d, align 8
+  %call12 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([11 x i8], [11 x i8]* @.str.2, i32 0, i32 0), i64 %11, i64 %12)
+  br label %for.inc13
+
+for.inc13:                                        ; preds = %for.body9
+  %13 = load i32, i32* %i, align 4
+  %mul14 = mul nsw i32 %13, 16
+  store i32 %mul14, i32* %i, align 4
+  br label %for.cond6
+
+for.end15:                                        ; preds = %for.cond6
+  ret i32 0
+}
+
+declare i32 @printf(i8* %0, ...) #3
+
+; Function Attrs: nounwind readnone
+declare double @atan2(double %0, double %1) #4
+
+attributes #0 = { noinline nounwind optnone "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "min-legal-vector-width"="0" "no-infs-fp-math"="false" "no-jump-tables"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #1 = { argmemonly nounwind willreturn }
+attributes #2 = { nounwind readnone speculatable willreturn }
+attributes #3 = { "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #4 = { nounwind readnone "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #5 = { nounwind readnone }
+
+!llvm.module.flags = !{!0}
+!llvm.ident = !{!1}
+
+!0 = !{i32 1, !"wchar_size", i32 4}
+!1 = !{!"clang version 11.0.0 (https://github.com/Jacarte/llvm-project.git 0f6dea67136cc1e0b3d200eb2bb165628970c44b)"}
+
+; extracted candidates
+
+; *****
+; For LLVM instruction:
+;  %2 = load i64, i64* %md.addr, align 8
+; Looking for a replacement for:
+%0:i64 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %cmp = icmp sle i64 %2, 1
+; Looking for a replacement for:
+%0:i64 = var
+%1:i1 = sle %0, 1:i64
+infer %1
+
+; *****
+; For LLVM instruction:
+;  %conv = fptosi double %4 to i64
+; Looking for a replacement for:
+%0:i64 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %cmp1 = fcmp olt double %6, 0.000000e+00
+; Looking for a replacement for:
+%0:i1 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %cmp5 = fcmp une double %8, %10
+; Looking for a replacement for:
+%0:i1 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %11 = load i64, i64* %n, align 8
+; Looking for a replacement for:
+%0:i64 = var
+infer %0 (demandedBits=0111111111111111111111111111111111111111111111111111111111111111)
+
+; *****
+; For LLVM instruction:
+;  %shl = shl i64 %11, 1
+; Looking for a replacement for:
+%0:i64 = var
+%1:i64 = shl %0, 1:i64
+infer %1
+
+; *****
+; For LLVM instruction:
+;  %conv7 = fptosi double %13 to i64
+; Looking for a replacement for:
+%0:i64 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %14 = load i32, i32* %i, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %cmp8 = icmp slt i32 %14, 64
+; Looking for a replacement for:
+%0:i32 = var
+%1:i1 = slt %0, 64:i32
+infer %1
+
+; *****
+; For LLVM instruction:
+;  %15 = load i64, i64* %n, align 8
+; Looking for a replacement for:
+%0:i64 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %tobool = icmp ne i64 %15, 0
+; Looking for a replacement for:
+%0:i64 = var
+%1:i1 = ne 0:i64, %0
+infer %1
+
+; *****
+; For LLVM instruction:
+;  %16 = load i64, i64* %d, align 8
+; Looking for a replacement for:
+%0:i64 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %17 = load i64, i64* %n, align 8
+; Looking for a replacement for:
+%0:i64 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %div = sdiv i64 %16, %17
+; Looking for a replacement for:
+%0:i64 = var
+%1:i64 = var
+%2:i64 = sdiv %0, %1
+infer %2
+
+; *****
+; For LLVM instruction:
+;  %cond = phi i64 [ %div, %cond.true ], [ 0, %cond.false ]
+; Looking for a replacement for:
+%0:i64 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %18 = load i32, i32* %i, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %tobool10 = icmp ne i32 %18, 0
+; Looking for a replacement for:
+%0:i32 = var
+%1:i1 = ne 0:i32, %0
+infer %1
+
+; *****
+; For LLVM instruction:
+;  %19 = load i64, i64* %a, align 8
+; Looking for a replacement for:
+%0:i64 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %tobool11 = icmp ne i64 %19, 0
+; Looking for a replacement for:
+%0:i64 = var
+%1:i1 = ne 0:i64, %0
+infer %1
+
+; *****
+; For LLVM instruction:
+;  %20 = load i64, i64* %d, align 8
+; Looking for a replacement for:
+%0:i64 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %21 = load i64, i64* %n, align 8
+; Looking for a replacement for:
+%0:i64 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %22 = load i64, i64* %x, align 8
+; Looking for a replacement for:
+%0:i64 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %23 = load i64, i64* %n, align 8
+; Looking for a replacement for:
+%0:i64 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %rem = srem i64 %22, %23
+; Looking for a replacement for:
+%0:i64 = var
+%1:i64 = var
+%2:i64 = srem %0, %1
+infer %2
+
+; *****
+; For LLVM instruction:
+;  %24 = load i64, i64* %a, align 8
+; Looking for a replacement for:
+%0:i64 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %25 = load i64, i64* %arrayidx, align 8
+; Looking for a replacement for:
+%0:i64 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %26 = load i64, i64* %a, align 8
+; Looking for a replacement for:
+%0:i64 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %mul14 = mul nsw i64 %25, %26
+; Looking for a replacement for:
+%0:i64 = var
+%1:i64 = var
+%2:i64 = mulnsw %0, %1
+infer %2
+
+; *****
+; For LLVM instruction:
+;  %27 = load i64, i64* %arrayidx15, align 16
+; Looking for a replacement for:
+%0:i64 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %add = add nsw i64 %mul14, %27
+; Looking for a replacement for:
+%0:i64 = var
+%1:i64 = var
+%2:i64 = var
+%3:i64 = mulnsw %1, %2
+%4:i64 = addnsw %0, %3
+infer %4
+
+; *****
+; For LLVM instruction:
+;  %28 = load i64, i64* %md.addr, align 8
+; Looking for a replacement for:
+%0:i64 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %cmp16 = icmp sge i64 %add, %28
+; Looking for a replacement for:
+%0:i64 = var
+%1:i64 = var
+%2:i64 = var
+%3:i64 = var
+%4:i64 = mulnsw %2, %3
+%5:i64 = addnsw %1, %4
+%6:i1 = sle %0, %5
+infer %6
+
+; *****
+; For LLVM instruction:
+;  %29 = load i64, i64* %md.addr, align 8
+; Looking for a replacement for:
+%0:i64 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %30 = load i64, i64* %arrayidx19, align 16
+; Looking for a replacement for:
+%0:i64 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %sub = sub nsw i64 %29, %30
+; Looking for a replacement for:
+%0:i64 = var
+%1:i64 = var
+%2:i64 = subnsw %0, %1
+infer %2
+
+; *****
+; For LLVM instruction:
+;  %31 = load i64, i64* %arrayidx20, align 8
+; Looking for a replacement for:
+%0:i64 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %div21 = sdiv i64 %sub, %31
+; Looking for a replacement for:
+%0:i64 = var
+%1:i64 = var
+%2:i64 = subnsw %0, %1
+%3:i64 = var
+%4:i64 = sdiv %2, %3
+infer %4
+
+; *****
+; For LLVM instruction:
+;  %32 = load i64, i64* %x, align 8
+; Looking for a replacement for:
+%0:i64 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %mul22 = mul nsw i64 %32, 2
+; Looking for a replacement for:
+%0:i64 = var
+%1:i64 = mulnsw 2:i64, %0
+infer %1
+
+; *****
+; For LLVM instruction:
+;  %33 = load i64, i64* %a, align 8
+; Looking for a replacement for:
+%0:i64 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %cmp23 = icmp sge i64 %mul22, %33
+; Looking for a replacement for:
+%0:i64 = var
+%1:i64 = var
+%2:i64 = mulnsw 2:i64, %1
+%3:i1 = sle %0, %2
+infer %3
+
+; *****
+; For LLVM instruction:
+;  %34 = load i64, i64* %arrayidx25, align 8
+; Looking for a replacement for:
+%0:i64 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %35 = load i64, i64* %md.addr, align 8
+; Looking for a replacement for:
+%0:i64 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %cmp26 = icmp sge i64 %34, %35
+; Looking for a replacement for:
+%0:i64 = var
+%1:i64 = var
+%2:i1 = sle %0, %1
+infer %2
+
+; *****
+; For LLVM instruction:
+;  %36 = load i64, i64* %x, align 8
+; Looking for a replacement for:
+%0:i64 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %37 = load i64, i64* %arrayidx31, align 8
+; Looking for a replacement for:
+%0:i64 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %mul32 = mul nsw i64 %36, %37
+; Looking for a replacement for:
+%0:i64 = var
+%1:i64 = var
+%2:i64 = mulnsw %0, %1
+infer %2
+
+; *****
+; For LLVM instruction:
+;  %38 = load i64, i64* %arrayidx33, align 16
+; Looking for a replacement for:
+%0:i64 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %add34 = add nsw i64 %mul32, %38
+; Looking for a replacement for:
+%0:i64 = var
+%1:i64 = var
+%2:i64 = var
+%3:i64 = mulnsw %1, %2
+%4:i64 = addnsw %0, %3
+infer %4
+
+; *****
+; For LLVM instruction:
+;  %39 = load i64, i64* %arrayidx36, align 8
+; Looking for a replacement for:
+%0:i64 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %40 = load i64, i64* %arrayidx38, align 16
+; Looking for a replacement for:
+%0:i64 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %41 = load i64, i64* %x, align 8
+; Looking for a replacement for:
+%0:i64 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %42 = load i64, i64* %arrayidx40, align 8
+; Looking for a replacement for:
+%0:i64 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %mul41 = mul nsw i64 %41, %42
+; Looking for a replacement for:
+%0:i64 = var
+%1:i64 = var
+%2:i64 = mulnsw %0, %1
+infer %2
+
+; *****
+; For LLVM instruction:
+;  %43 = load i64, i64* %arrayidx42, align 16
+; Looking for a replacement for:
+%0:i64 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %add43 = add nsw i64 %mul41, %43
+; Looking for a replacement for:
+%0:i64 = var
+%1:i64 = var
+%2:i64 = var
+%3:i64 = mulnsw %1, %2
+%4:i64 = addnsw %0, %3
+infer %4
+
+; *****
+; For LLVM instruction:
+;  %44 = load i64, i64* %arrayidx45, align 8
+; Looking for a replacement for:
+%0:i64 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %45 = load i64, i64* %arrayidx47, align 16
+; Looking for a replacement for:
+%0:i64 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %46 = load i32, i32* %i, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %inc = add nsw i32 %46, 1
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = addnsw 1:i32, %0
+infer %1
+
+; *****
+; For LLVM instruction:
+;  %47 = load i64, i64* %arrayidx49, align 8
+; Looking for a replacement for:
+%0:i64 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %49 = load i32, i32* %neg, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %tobool50 = icmp ne i32 %49, 0
+; Looking for a replacement for:
+%0:i32 = var
+%1:i1 = ne 0:i32, %0
+infer %1
+
+; *****
+; For LLVM instruction:
+;  %50 = load i64, i64* %arrayidx52, align 8
+; Looking for a replacement for:
+%0:i64 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %sub53 = sub nsw i64 0, %50
+; Looking for a replacement for:
+%0:i64 = var
+%1:i64 = subnsw 0:i64, %0
+infer %1
+
+; *****
+; For LLVM instruction:
+;  %51 = load i64, i64* %arrayidx55, align 8
+; Looking for a replacement for:
+%0:i64 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %cond57 = phi i64 [ %sub53, %cond.true51 ], [ %51, %cond.false54 ]
+; Looking for a replacement for:
+%0 = block 2
+%1:i64 = var
+%2:i64 = subnsw 0:i64, %1
+%3:i64 = var
+%4:i64 = phi %0, %2, %3
+infer %4
+got 1 candidates from LHS
+
+-------------------------------------------------
+%0:i64 = var
+infer %0
+
+
+--------------------------------
+guess 0
+
+%0:i64 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: -1
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+Dataflow Pruned 0/0
+There are 1 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 2 candidates from LHS
+
+-------------------------------------------------
+%0:i64 = var
+%1:i1 = sle %0, 1:i64
+infer %1
+
+
+--------------------------------
+guess 0
+
+%0:i1 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: -1
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: 0
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+Dataflow Pruned 0/0
+There are 1 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 1 candidates from LHS
+
+-------------------------------------------------
+%0:i1 = var
+infer %0
+
+
+--------------------------------
+guess 0
+
+%0:i1 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: -1
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+Dataflow Pruned 0/0
+There are 1 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 1 candidates from LHS
+
+-------------------------------------------------
+%0:i64 = var
+infer %0 (demandedBits=0111111111111111111111111111111111111111111111111111111111111111)
+
+
+--------------------------------
+guess 0
+
+%0:i64 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: 9223372036854775807
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+Dataflow Pruned 0/0
+There are 1 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 2 candidates from LHS
+
+-------------------------------------------------
+%0:i64 = var
+%1:i64 = shl %0, 1:i64
+infer %1
+
+
+--------------------------------
+guess 0
+
+%0:i64 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: -2
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+
+--------------------------------
+guess 1
+
+%0:i64 = var
+
+Cost = 0
+second query is SAT-- constant doesn't work
+Dataflow Pruned 0/0
+There are 2 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 1 candidates from LHS
+
+-------------------------------------------------
+%0:i32 = var
+infer %0
+
+
+--------------------------------
+guess 0
+
+%0:i32 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: -1
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+Dataflow Pruned 0/0
+There are 1 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 2 candidates from LHS
+
+-------------------------------------------------
+%0:i32 = var
+%1:i1 = slt %0, 64:i32
+infer %1
+
+
+--------------------------------
+guess 0
+
+%0:i1 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: -1
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: 0
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+Dataflow Pruned 0/0
+There are 1 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 2 candidates from LHS
+
+-------------------------------------------------
+%0:i64 = var
+%1:i1 = ne 0:i64, %0
+infer %1
+
+
+--------------------------------
+guess 0
+
+%0:i1 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: -1
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+Dataflow Pruned 0/0
+There are 1 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 3 candidates from LHS
+
+-------------------------------------------------
+%0:i64 = var
+%1:i64 = var
+%2:i64 = sdiv %0, %1
+infer %2
+
+
+--------------------------------
+guess 0
+
+%0:i64 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: -1
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: 0
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+
+--------------------------------
+guess 1
+
+%0:i64 = var
+
+Cost = 0
+second query is SAT-- constant doesn't work
+
+--------------------------------
+guess 2
+
+%0:i64 = var
+
+Cost = 0
+second query is SAT-- constant doesn't work
+Dataflow Pruned 0/0
+There are 3 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 2 candidates from LHS
+
+-------------------------------------------------
+%0:i32 = var
+%1:i1 = ne 0:i32, %0
+infer %1
+
+
+--------------------------------
+guess 0
+
+%0:i1 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: -1
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+Dataflow Pruned 0/0
+There are 1 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 3 candidates from LHS
+
+-------------------------------------------------
+%0:i64 = var
+%1:i64 = var
+%2:i64 = srem %0, %1
+infer %2
+
+
+--------------------------------
+guess 0
+
+%0:i64 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: -3489617844
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+
+--------------------------------
+guess 1
+
+%0:i64 = var
+
+Cost = 0
+second query is SAT-- constant doesn't work
+
+--------------------------------
+guess 2
+
+%0:i64 = var
+
+Cost = 0
+second query is SAT-- constant doesn't work
+Dataflow Pruned 0/0
+There are 3 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 3 candidates from LHS
+
+-------------------------------------------------
+%0:i64 = var
+%1:i64 = var
+%2:i64 = mulnsw %0, %1
+infer %2
+
+
+--------------------------------
+guess 0
+
+%0:i64 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+ConstantSynthesis: solver returns error on second query
+
+--------------------------------
+guess 1
+
+%0:i64 = var
+
+Cost = 0
+verification query failed!
+Dataflow Pruned 0/0
+There are 3 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 5 candidates from LHS
+
+-------------------------------------------------
+%0:i64 = var
+%1:i64 = var
+%2:i64 = var
+%3:i64 = mulnsw %1, %2
+%4:i64 = addnsw %0, %3
+infer %4
+
+
+--------------------------------
+guess 0
+
+%0:i64 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+ConstantSynthesis: solver returns error on second query
+
+--------------------------------
+guess 1
+
+%0:i64 = var
+
+Cost = 0
+verification query failed!
+Dataflow Pruned 0/0
+There are 5 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 7 candidates from LHS
+
+-------------------------------------------------
+%0:i64 = var
+%1:i64 = var
+%2:i64 = var
+%3:i64 = var
+%4:i64 = mulnsw %2, %3
+%5:i64 = addnsw %1, %4
+%6:i1 = sle %0, %5
+infer %6
+
+
+--------------------------------
+guess 0
+
+%0:i1 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: -1
+ConstantSynthesis: solver returns error on second query
+Dataflow Pruned 0/0
+There are 1 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 3 candidates from LHS
+
+-------------------------------------------------
+%0:i64 = var
+%1:i64 = var
+%2:i64 = subnsw %0, %1
+infer %2
+
+
+--------------------------------
+guess 0
+
+%0:i64 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: 9223372036846387200
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+
+--------------------------------
+guess 1
+
+%0:i64 = var
+
+Cost = 0
+second query is SAT-- constant doesn't work
+
+--------------------------------
+guess 2
+
+%0:i64 = var
+
+Cost = 0
+second query is SAT-- constant doesn't work
+Dataflow Pruned 0/0
+There are 3 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 5 candidates from LHS
+
+-------------------------------------------------
+%0:i64 = var
+%1:i64 = var
+%2:i64 = subnsw %0, %1
+%3:i64 = var
+%4:i64 = sdiv %2, %3
+infer %4
+
+
+--------------------------------
+guess 0
+
+%0:i64 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: -1
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: -21
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+
+--------------------------------
+guess 1
+
+%0:i64 = var
+
+Cost = 0
+second query is SAT-- constant doesn't work
+
+--------------------------------
+guess 2
+
+%0:i64 = var
+
+Cost = 0
+second query is SAT-- constant doesn't work
+
+--------------------------------
+guess 3
+
+%0:i64 = var
+
+Cost = 0
+second query is SAT-- constant doesn't work
+
+--------------------------------
+guess 4
+
+%0:i64 = var
+%1:i64 = var
+%2:i64 = subnsw %0, %1
+
+Cost = 1
+second query is SAT-- constant doesn't work
+Dataflow Pruned 0/0
+There are 5 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 2 candidates from LHS
+
+-------------------------------------------------
+%0:i64 = var
+%1:i64 = mulnsw 2:i64, %0
+infer %1
+
+
+--------------------------------
+guess 0
+
+%0:i64 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: 4611686018427387904
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+
+--------------------------------
+guess 1
+
+%0:i64 = var
+
+Cost = 0
+second query is SAT-- constant doesn't work
+Dataflow Pruned 0/0
+There are 2 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 4 candidates from LHS
+
+-------------------------------------------------
+%0:i64 = var
+%1:i64 = var
+%2:i64 = mulnsw 2:i64, %1
+%3:i1 = sle %0, %2
+infer %3
+
+
+--------------------------------
+guess 0
+
+%0:i1 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: -1
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: 0
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+Dataflow Pruned 0/0
+There are 1 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 3 candidates from LHS
+
+-------------------------------------------------
+%0:i64 = var
+%1:i64 = var
+%2:i1 = sle %0, %1
+infer %2
+
+
+--------------------------------
+guess 0
+
+%0:i1 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: -1
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: 0
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+Dataflow Pruned 0/0
+There are 1 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 2 candidates from LHS
+
+-------------------------------------------------
+%0:i32 = var
+%1:i32 = addnsw 1:i32, %0
+infer %1
+
+
+--------------------------------
+guess 0
+
+%0:i32 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 1
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: 268435457
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+
+--------------------------------
+guess 1
+
+%0:i32 = var
+
+Cost = 0
+second query is SAT-- constant doesn't work
+Dataflow Pruned 0/0
+There are 2 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 2 candidates from LHS
+
+-------------------------------------------------
+%0:i64 = var
+%1:i64 = subnsw 0:i64, %0
+infer %1
+
+
+--------------------------------
+guess 0
+
+%0:i64 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: -2305843009213693952
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+
+--------------------------------
+guess 1
+
+%0:i64 = var
+
+Cost = 0
+second query is SAT-- constant doesn't work
+Dataflow Pruned 0/0
+There are 2 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 4 candidates from LHS
+
+-------------------------------------------------
+%0 = block 2
+%1:i64 = var
+%2:i64 = subnsw 0:i64, %1
+%3:i64 = var
+%4:i64 = phi %0, %2, %3
+infer %4
+
+
+--------------------------------
+guess 0
+
+%0:i64 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: -9223372036854775808
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+
+--------------------------------
+guess 1
+
+%0:i64 = var
+
+Cost = 0
+second query is SAT-- constant doesn't work
+
+--------------------------------
+guess 2
+
+%0:i64 = var
+
+Cost = 0
+second query is SAT-- constant doesn't work
+
+--------------------------------
+guess 3
+
+%0:i64 = var
+%1:i64 = subnsw 0:i64, %0
+
+Cost = 1
+second query is SAT-- constant doesn't work
+Dataflow Pruned 0/0
+There are 4 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+#########################################################
+; exiting Souper's runOnFunction() for rat_approx()
+
+; entering Souper's runOnFunction() for main()
+
+; ModuleID = './Convert_decimal_number_to_rational.c.bc'
+source_filename = "./Convert_decimal_number_to_rational.c"
+target datalayout = "e-m:e-p:32:32-i64:64-n32:64-S128"
+target triple = "wasm32-unknown-wasi"
+
+@__const.rat_approx.h = private unnamed_addr constant [3 x i64] [i64 0, i64 1, i64 0], align 16
+@__const.rat_approx.k = private unnamed_addr constant [3 x i64] [i64 1, i64 0, i64 0], align 16
+@.str = private unnamed_addr constant [13 x i8] c"f = %16.14f\0A\00", align 1
+@.str.1 = private unnamed_addr constant [14 x i8] c"denom <= %d: \00", align 1
+@.str.2 = private unnamed_addr constant [11 x i8] c"%lld/%lld\0A\00", align 1
+@.str.3 = private unnamed_addr constant [14 x i8] c"\0Af = %16.14f\0A\00", align 1
+@llvm.used = appending global [1 x i8*] [i8* bitcast (i32 ()* @__main_void to i8*)], section "llvm.metadata"
+
+@__main_void = alias i32 (), i32 ()* @main
+
+; Function Attrs: noinline nounwind optnone
+define hidden void @rat_approx(double %f, i64 %md, i64* %num, i64* %denom) #0 {
+entry:
+  %f.addr = alloca double, align 8
+  %md.addr = alloca i64, align 8
+  %num.addr = alloca i64*, align 4
+  %denom.addr = alloca i64*, align 4
+  %a = alloca i64, align 8
+  %h = alloca [3 x i64], align 16
+  %k = alloca [3 x i64], align 16
+  %x = alloca i64, align 8
+  %d = alloca i64, align 8
+  %n = alloca i64, align 8
+  %i = alloca i32, align 4
+  %neg = alloca i32, align 4
+  store double %f, double* %f.addr, align 8
+  store i64 %md, i64* %md.addr, align 8
+  store i64* %num, i64** %num.addr, align 4
+  store i64* %denom, i64** %denom.addr, align 4
+  %0 = bitcast [3 x i64]* %h to i8*
+  call void @llvm.memcpy.p0i8.p0i8.i32(i8* align 16 %0, i8* align 16 bitcast ([3 x i64]* @__const.rat_approx.h to i8*), i32 24, i1 false)
+  %1 = bitcast [3 x i64]* %k to i8*
+  call void @llvm.memcpy.p0i8.p0i8.i32(i8* align 16 %1, i8* align 16 bitcast ([3 x i64]* @__const.rat_approx.k to i8*), i32 24, i1 false)
+  store i64 1, i64* %n, align 8
+  store i32 0, i32* %neg, align 4
+  %2 = load i64, i64* %md.addr, align 8
+  %cmp = icmp sle i64 %2, 1
+  br i1 %cmp, label %if.then, label %if.end
+
+if.then:                                          ; preds = %entry
+  %3 = load i64*, i64** %denom.addr, align 4
+  store i64 1, i64* %3, align 8
+  %4 = load double, double* %f.addr, align 8
+  %conv = fptosi double %4 to i64
+  %5 = load i64*, i64** %num.addr, align 4
+  store i64 %conv, i64* %5, align 8
+  br label %return
+
+if.end:                                           ; preds = %entry
+  %6 = load double, double* %f.addr, align 8
+  %cmp1 = fcmp olt double %6, 0.000000e+00
+  br i1 %cmp1, label %if.then3, label %if.end4
+
+if.then3:                                         ; preds = %if.end
+  store i32 1, i32* %neg, align 4
+  %7 = load double, double* %f.addr, align 8
+  %fneg = fneg double %7
+  store double %fneg, double* %f.addr, align 8
+  br label %if.end4
+
+if.end4:                                          ; preds = %if.then3, %if.end
+  br label %while.cond
+
+while.cond:                                       ; preds = %while.body, %if.end4
+  %8 = load double, double* %f.addr, align 8
+  %9 = load double, double* %f.addr, align 8
+  %10 = call double @llvm.floor.f64(double %9)
+  %cmp5 = fcmp une double %8, %10
+  br i1 %cmp5, label %while.body, label %while.end
+
+while.body:                                       ; preds = %while.cond
+  %11 = load i64, i64* %n, align 8
+  %shl = shl i64 %11, 1
+  store i64 %shl, i64* %n, align 8
+  %12 = load double, double* %f.addr, align 8
+  %mul = fmul double %12, 2.000000e+00
+  store double %mul, double* %f.addr, align 8
+  br label %while.cond
+
+while.end:                                        ; preds = %while.cond
+  %13 = load double, double* %f.addr, align 8
+  %conv7 = fptosi double %13 to i64
+  store i64 %conv7, i64* %d, align 8
+  store i32 0, i32* %i, align 4
+  br label %for.cond
+
+for.cond:                                         ; preds = %for.inc, %while.end
+  %14 = load i32, i32* %i, align 4
+  %cmp8 = icmp slt i32 %14, 64
+  br i1 %cmp8, label %for.body, label %for.end
+
+for.body:                                         ; preds = %for.cond
+  %15 = load i64, i64* %n, align 8
+  %tobool = icmp ne i64 %15, 0
+  br i1 %tobool, label %cond.true, label %cond.false
+
+cond.true:                                        ; preds = %for.body
+  %16 = load i64, i64* %d, align 8
+  %17 = load i64, i64* %n, align 8
+  %div = sdiv i64 %16, %17
+  br label %cond.end
+
+cond.false:                                       ; preds = %for.body
+  br label %cond.end
+
+cond.end:                                         ; preds = %cond.false, %cond.true
+  %cond = phi i64 [ %div, %cond.true ], [ 0, %cond.false ]
+  store i64 %cond, i64* %a, align 8
+  %18 = load i32, i32* %i, align 4
+  %tobool10 = icmp ne i32 %18, 0
+  br i1 %tobool10, label %land.lhs.true, label %if.end13
+
+land.lhs.true:                                    ; preds = %cond.end
+  %19 = load i64, i64* %a, align 8
+  %tobool11 = icmp ne i64 %19, 0
+  br i1 %tobool11, label %if.end13, label %if.then12
+
+if.then12:                                        ; preds = %land.lhs.true
+  br label %for.end
+
+if.end13:                                         ; preds = %land.lhs.true, %cond.end
+  %20 = load i64, i64* %d, align 8
+  store i64 %20, i64* %x, align 8
+  %21 = load i64, i64* %n, align 8
+  store i64 %21, i64* %d, align 8
+  %22 = load i64, i64* %x, align 8
+  %23 = load i64, i64* %n, align 8
+  %rem = srem i64 %22, %23
+  store i64 %rem, i64* %n, align 8
+  %24 = load i64, i64* %a, align 8
+  store i64 %24, i64* %x, align 8
+  %arrayidx = getelementptr inbounds [3 x i64], [3 x i64]* %k, i32 0, i32 1
+  %25 = load i64, i64* %arrayidx, align 8
+  %26 = load i64, i64* %a, align 8
+  %mul14 = mul nsw i64 %25, %26
+  %arrayidx15 = getelementptr inbounds [3 x i64], [3 x i64]* %k, i32 0, i32 0
+  %27 = load i64, i64* %arrayidx15, align 16
+  %add = add nsw i64 %mul14, %27
+  %28 = load i64, i64* %md.addr, align 8
+  %cmp16 = icmp sge i64 %add, %28
+  br i1 %cmp16, label %if.then18, label %if.end30
+
+if.then18:                                        ; preds = %if.end13
+  %29 = load i64, i64* %md.addr, align 8
+  %arrayidx19 = getelementptr inbounds [3 x i64], [3 x i64]* %k, i32 0, i32 0
+  %30 = load i64, i64* %arrayidx19, align 16
+  %sub = sub nsw i64 %29, %30
+  %arrayidx20 = getelementptr inbounds [3 x i64], [3 x i64]* %k, i32 0, i32 1
+  %31 = load i64, i64* %arrayidx20, align 8
+  %div21 = sdiv i64 %sub, %31
+  store i64 %div21, i64* %x, align 8
+  %32 = load i64, i64* %x, align 8
+  %mul22 = mul nsw i64 %32, 2
+  %33 = load i64, i64* %a, align 8
+  %cmp23 = icmp sge i64 %mul22, %33
+  br i1 %cmp23, label %if.then28, label %lor.lhs.false
+
+lor.lhs.false:                                    ; preds = %if.then18
+  %arrayidx25 = getelementptr inbounds [3 x i64], [3 x i64]* %k, i32 0, i32 1
+  %34 = load i64, i64* %arrayidx25, align 8
+  %35 = load i64, i64* %md.addr, align 8
+  %cmp26 = icmp sge i64 %34, %35
+  br i1 %cmp26, label %if.then28, label %if.else
+
+if.then28:                                        ; preds = %lor.lhs.false, %if.then18
+  store i32 65, i32* %i, align 4
+  br label %if.end29
+
+if.else:                                          ; preds = %lor.lhs.false
+  br label %for.end
+
+if.end29:                                         ; preds = %if.then28
+  br label %if.end30
+
+if.end30:                                         ; preds = %if.end29, %if.end13
+  %36 = load i64, i64* %x, align 8
+  %arrayidx31 = getelementptr inbounds [3 x i64], [3 x i64]* %h, i32 0, i32 1
+  %37 = load i64, i64* %arrayidx31, align 8
+  %mul32 = mul nsw i64 %36, %37
+  %arrayidx33 = getelementptr inbounds [3 x i64], [3 x i64]* %h, i32 0, i32 0
+  %38 = load i64, i64* %arrayidx33, align 16
+  %add34 = add nsw i64 %mul32, %38
+  %arrayidx35 = getelementptr inbounds [3 x i64], [3 x i64]* %h, i32 0, i32 2
+  store i64 %add34, i64* %arrayidx35, align 16
+  %arrayidx36 = getelementptr inbounds [3 x i64], [3 x i64]* %h, i32 0, i32 1
+  %39 = load i64, i64* %arrayidx36, align 8
+  %arrayidx37 = getelementptr inbounds [3 x i64], [3 x i64]* %h, i32 0, i32 0
+  store i64 %39, i64* %arrayidx37, align 16
+  %arrayidx38 = getelementptr inbounds [3 x i64], [3 x i64]* %h, i32 0, i32 2
+  %40 = load i64, i64* %arrayidx38, align 16
+  %arrayidx39 = getelementptr inbounds [3 x i64], [3 x i64]* %h, i32 0, i32 1
+  store i64 %40, i64* %arrayidx39, align 8
+  %41 = load i64, i64* %x, align 8
+  %arrayidx40 = getelementptr inbounds [3 x i64], [3 x i64]* %k, i32 0, i32 1
+  %42 = load i64, i64* %arrayidx40, align 8
+  %mul41 = mul nsw i64 %41, %42
+  %arrayidx42 = getelementptr inbounds [3 x i64], [3 x i64]* %k, i32 0, i32 0
+  %43 = load i64, i64* %arrayidx42, align 16
+  %add43 = add nsw i64 %mul41, %43
+  %arrayidx44 = getelementptr inbounds [3 x i64], [3 x i64]* %k, i32 0, i32 2
+  store i64 %add43, i64* %arrayidx44, align 16
+  %arrayidx45 = getelementptr inbounds [3 x i64], [3 x i64]* %k, i32 0, i32 1
+  %44 = load i64, i64* %arrayidx45, align 8
+  %arrayidx46 = getelementptr inbounds [3 x i64], [3 x i64]* %k, i32 0, i32 0
+  store i64 %44, i64* %arrayidx46, align 16
+  %arrayidx47 = getelementptr inbounds [3 x i64], [3 x i64]* %k, i32 0, i32 2
+  %45 = load i64, i64* %arrayidx47, align 16
+  %arrayidx48 = getelementptr inbounds [3 x i64], [3 x i64]* %k, i32 0, i32 1
+  store i64 %45, i64* %arrayidx48, align 8
+  br label %for.inc
+
+for.inc:                                          ; preds = %if.end30
+  %46 = load i32, i32* %i, align 4
+  %inc = add nsw i32 %46, 1
+  store i32 %inc, i32* %i, align 4
+  br label %for.cond
+
+for.end:                                          ; preds = %if.else, %if.then12, %for.cond
+  %arrayidx49 = getelementptr inbounds [3 x i64], [3 x i64]* %k, i32 0, i32 1
+  %47 = load i64, i64* %arrayidx49, align 8
+  %48 = load i64*, i64** %denom.addr, align 4
+  store i64 %47, i64* %48, align 8
+  %49 = load i32, i32* %neg, align 4
+  %tobool50 = icmp ne i32 %49, 0
+  br i1 %tobool50, label %cond.true51, label %cond.false54
+
+cond.true51:                                      ; preds = %for.end
+  %arrayidx52 = getelementptr inbounds [3 x i64], [3 x i64]* %h, i32 0, i32 1
+  %50 = load i64, i64* %arrayidx52, align 8
+  %sub53 = sub nsw i64 0, %50
+  br label %cond.end56
+
+cond.false54:                                     ; preds = %for.end
+  %arrayidx55 = getelementptr inbounds [3 x i64], [3 x i64]* %h, i32 0, i32 1
+  %51 = load i64, i64* %arrayidx55, align 8
+  br label %cond.end56
+
+cond.end56:                                       ; preds = %cond.false54, %cond.true51
+  %cond57 = phi i64 [ %sub53, %cond.true51 ], [ %51, %cond.false54 ]
+  %52 = load i64*, i64** %num.addr, align 4
+  store i64 %cond57, i64* %52, align 8
+  br label %return
+
+return:                                           ; preds = %cond.end56, %if.then
+  ret void
+}
+
+; Function Attrs: argmemonly nounwind willreturn
+declare void @llvm.memcpy.p0i8.p0i8.i32(i8* noalias nocapture writeonly %0, i8* noalias nocapture readonly %1, i32 %2, i1 immarg %3) #1
+
+; Function Attrs: nounwind readnone speculatable willreturn
+declare double @llvm.floor.f64(double %0) #2
+
+; Function Attrs: noinline nounwind optnone
+define hidden i32 @main() #0 {
+entry:
+  %retval = alloca i32, align 4
+  %i = alloca i32, align 4
+  %d = alloca i64, align 8
+  %n = alloca i64, align 8
+  %f = alloca double, align 8
+  store i32 0, i32* %retval, align 4
+  store double 0x3FC2492492492492, double* %f, align 8
+  %call = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([13 x i8], [13 x i8]* @.str, i32 0, i32 0), double 0x3FC2492492492492)
+  store i32 1, i32* %i, align 4
+  br label %for.cond
+
+for.cond:                                         ; preds = %for.inc, %entry
+  %0 = load i32, i32* %i, align 4
+  %cmp = icmp sle i32 %0, 20000000
+  br i1 %cmp, label %for.body, label %for.end
+
+for.body:                                         ; preds = %for.cond
+  %1 = load i32, i32* %i, align 4
+  %call1 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([14 x i8], [14 x i8]* @.str.1, i32 0, i32 0), i32 %1)
+  %2 = load double, double* %f, align 8
+  %3 = load i32, i32* %i, align 4
+  %conv = sext i32 %3 to i64
+  call void @rat_approx(double %2, i64 %conv, i64* %n, i64* %d)
+  %4 = load i64, i64* %n, align 8
+  %5 = load i64, i64* %d, align 8
+  %call2 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([11 x i8], [11 x i8]* @.str.2, i32 0, i32 0), i64 %4, i64 %5)
+  br label %for.inc
+
+for.inc:                                          ; preds = %for.body
+  %6 = load i32, i32* %i, align 4
+  %mul = mul nsw i32 %6, 16
+  store i32 %mul, i32* %i, align 4
+  br label %for.cond
+
+for.end:                                          ; preds = %for.cond
+  %call3 = call double @atan2(double 1.000000e+00, double 1.000000e+00) #5
+  %mul4 = fmul double %call3, 4.000000e+00
+  store double %mul4, double* %f, align 8
+  %call5 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([14 x i8], [14 x i8]* @.str.3, i32 0, i32 0), double %mul4)
+  store i32 1, i32* %i, align 4
+  br label %for.cond6
+
+for.cond6:                                        ; preds = %for.inc13, %for.end
+  %7 = load i32, i32* %i, align 4
+  %cmp7 = icmp sle i32 %7, 20000000
+  br i1 %cmp7, label %for.body9, label %for.end15
+
+for.body9:                                        ; preds = %for.cond6
+  %8 = load i32, i32* %i, align 4
+  %call10 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([14 x i8], [14 x i8]* @.str.1, i32 0, i32 0), i32 %8)
+  %9 = load double, double* %f, align 8
+  %10 = load i32, i32* %i, align 4
+  %conv11 = sext i32 %10 to i64
+  call void @rat_approx(double %9, i64 %conv11, i64* %n, i64* %d)
+  %11 = load i64, i64* %n, align 8
+  %12 = load i64, i64* %d, align 8
+  %call12 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([11 x i8], [11 x i8]* @.str.2, i32 0, i32 0), i64 %11, i64 %12)
+  br label %for.inc13
+
+for.inc13:                                        ; preds = %for.body9
+  %13 = load i32, i32* %i, align 4
+  %mul14 = mul nsw i32 %13, 16
+  store i32 %mul14, i32* %i, align 4
+  br label %for.cond6
+
+for.end15:                                        ; preds = %for.cond6
+  ret i32 0
+}
+
+declare i32 @printf(i8* %0, ...) #3
+
+; Function Attrs: nounwind readnone
+declare double @atan2(double %0, double %1) #4
+
+attributes #0 = { noinline nounwind optnone "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "min-legal-vector-width"="0" "no-infs-fp-math"="false" "no-jump-tables"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #1 = { argmemonly nounwind willreturn }
+attributes #2 = { nounwind readnone speculatable willreturn }
+attributes #3 = { "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #4 = { nounwind readnone "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #5 = { nounwind readnone }
+
+!llvm.module.flags = !{!0}
+!llvm.ident = !{!1}
+
+!0 = !{i32 1, !"wchar_size", i32 4}
+!1 = !{!"clang version 11.0.0 (https://github.com/Jacarte/llvm-project.git 0f6dea67136cc1e0b3d200eb2bb165628970c44b)"}
+
+; extracted candidates
+
+; *****
+; For LLVM instruction:
+;  %0 = load i32, i32* %i, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %cmp = icmp sle i32 %0, 20000000
+; Looking for a replacement for:
+%0:i32 = var
+%1:i1 = sle %0, 20000000:i32
+infer %1
+
+; *****
+; For LLVM instruction:
+;  %1 = load i32, i32* %i, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %3 = load i32, i32* %i, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %conv = sext i32 %3 to i64
+; Looking for a replacement for:
+%0:i32 = var
+%1:i64 = sext %0
+infer %1
+
+; *****
+; For LLVM instruction:
+;  %4 = load i64, i64* %n, align 8
+; Looking for a replacement for:
+%0:i64 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %5 = load i64, i64* %d, align 8
+; Looking for a replacement for:
+%0:i64 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %6 = load i32, i32* %i, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %mul = mul nsw i32 %6, 16
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = mulnsw 16:i32, %0
+infer %1
+
+; *****
+; For LLVM instruction:
+;  %7 = load i32, i32* %i, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %cmp7 = icmp sle i32 %7, 20000000
+; Looking for a replacement for:
+%0:i32 = var
+%1:i1 = sle %0, 20000000:i32
+infer %1
+
+; *****
+; For LLVM instruction:
+;  %8 = load i32, i32* %i, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %10 = load i32, i32* %i, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %conv11 = sext i32 %10 to i64
+; Looking for a replacement for:
+%0:i32 = var
+%1:i64 = sext %0
+infer %1
+
+; *****
+; For LLVM instruction:
+;  %11 = load i64, i64* %n, align 8
+; Looking for a replacement for:
+%0:i64 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %12 = load i64, i64* %d, align 8
+; Looking for a replacement for:
+%0:i64 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %13 = load i32, i32* %i, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %mul14 = mul nsw i32 %13, 16
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = mulnsw 16:i32, %0
+infer %1
+got 2 candidates from LHS
+
+-------------------------------------------------
+%0:i32 = var
+%1:i1 = sle %0, 20000000:i32
+infer %1
+
+
+--------------------------------
+guess 0
+
+%0:i1 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: -1
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: 0
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+Dataflow Pruned 0/0
+There are 1 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 2 candidates from LHS
+
+-------------------------------------------------
+%0:i32 = var
+%1:i64 = sext %0
+infer %1
+
+
+--------------------------------
+guess 0
+
+%0:i64 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: -1
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+Dataflow Pruned 0/0
+There are 1 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 2 candidates from LHS
+
+-------------------------------------------------
+%0:i32 = var
+%1:i32 = mulnsw 16:i32, %0
+infer %1
+
+
+--------------------------------
+guess 0
+
+%0:i32 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: 1073741824
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+
+--------------------------------
+guess 1
+
+%0:i32 = var
+
+Cost = 0
+second query is SAT-- constant doesn't work
+Dataflow Pruned 0/0
+There are 2 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+#########################################################
+; exiting Souper's runOnFunction() for main()
+Total of 0 replacements done on this module
+Total of 0 replacements candidates on this module

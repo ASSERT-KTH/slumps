@@ -1,0 +1,981 @@
+; entering Souper's runOnFunction() for sodium_increment()
+
+; ModuleID = './utils.c.bc'
+source_filename = "sodium/utils.c"
+target datalayout = "e-m:e-p:32:32-i64:64-n32:64-S128"
+target triple = "wasm32-unknown-wasi"
+
+@page_size = internal unnamed_addr global i32 65536, align 4
+@canary = internal global [16 x i8] zeroinitializer, align 16
+@errno = external thread_local local_unnamed_addr global i32, align 4
+@.str = private unnamed_addr constant [60 x i8] c"_unprotected_ptr_from_user_ptr(user_ptr) == unprotected_ptr\00", align 1
+@.str.1 = private unnamed_addr constant [15 x i8] c"sodium/utils.c\00", align 1
+@__func__._sodium_malloc = private unnamed_addr constant [15 x i8] c"_sodium_malloc\00", align 1
+
+; Function Attrs: nounwind
+define void @sodium_memzero(i8* %0, i32 %1) local_unnamed_addr #0 {
+  tail call void @explicit_bzero(i8* %0, i32 %1) #11
+  ret void
+}
+
+declare void @explicit_bzero(i8* %0, i32 %1) local_unnamed_addr #1
+
+; Function Attrs: nounwind
+define void @sodium_stackzero(i32 %0) local_unnamed_addr #0 {
+  %2 = alloca i8, i32 %0, align 16
+  call void @explicit_bzero(i8* nonnull %2, i32 %0) #11
+  ret void
+}
+
+; Function Attrs: nounwind
+define i32 @sodium_memcmp(i8* %0, i8* %1, i32 %2) local_unnamed_addr #0 {
+  %4 = alloca i8*, align 4
+  %5 = alloca i8*, align 4
+  %6 = alloca i8, align 1
+  %7 = bitcast i8** %4 to i8*
+  call void @llvm.lifetime.start.p0i8(i64 4, i8* nonnull %7)
+  store volatile i8* %0, i8** %4, align 4
+  %8 = bitcast i8** %5 to i8*
+  call void @llvm.lifetime.start.p0i8(i64 4, i8* nonnull %8)
+  store volatile i8* %1, i8** %5, align 4
+  call void @llvm.lifetime.start.p0i8(i64 1, i8* nonnull %6)
+  store volatile i8 0, i8* %6, align 1
+  %9 = icmp eq i32 %2, 0
+  br i1 %9, label %23, label %10
+
+10:                                               ; preds = %3, %10
+  %11 = phi i32 [ %21, %10 ], [ 0, %3 ]
+  %12 = load volatile i8*, i8** %4, align 4
+  %13 = getelementptr i8, i8* %12, i32 %11
+  %14 = load volatile i8, i8* %13, align 1
+  %15 = load volatile i8*, i8** %5, align 4
+  %16 = getelementptr i8, i8* %15, i32 %11
+  %17 = load volatile i8, i8* %16, align 1
+  %18 = xor i8 %17, %14
+  %19 = load volatile i8, i8* %6, align 1
+  %20 = or i8 %19, %18
+  store volatile i8 %20, i8* %6, align 1
+  %21 = add nuw i32 %11, 1
+  %22 = icmp eq i32 %21, %2
+  br i1 %22, label %23, label %10
+
+23:                                               ; preds = %10, %3
+  %24 = load volatile i8, i8* %6, align 1
+  %25 = zext i8 %24 to i32
+  %26 = add nuw nsw i32 %25, 511
+  %27 = lshr i32 %26, 8
+  %28 = and i32 %27, 1
+  %29 = add nsw i32 %28, -1
+  call void @llvm.lifetime.end.p0i8(i64 1, i8* nonnull %6)
+  call void @llvm.lifetime.end.p0i8(i64 4, i8* nonnull %8)
+  call void @llvm.lifetime.end.p0i8(i64 4, i8* nonnull %7)
+  ret i32 %29
+}
+
+; Function Attrs: argmemonly nounwind willreturn
+declare void @llvm.lifetime.start.p0i8(i64 immarg %0, i8* nocapture %1) #2
+
+; Function Attrs: argmemonly nounwind willreturn
+declare void @llvm.lifetime.end.p0i8(i64 immarg %0, i8* nocapture %1) #2
+
+; Function Attrs: nounwind
+define i32 @sodium_compare(i8* %0, i8* %1, i32 %2) local_unnamed_addr #0 {
+  %4 = alloca i8*, align 4
+  %5 = alloca i8*, align 4
+  %6 = alloca i8, align 1
+  %7 = alloca i8, align 1
+  %8 = bitcast i8** %4 to i8*
+  call void @llvm.lifetime.start.p0i8(i64 4, i8* nonnull %8)
+  store volatile i8* %0, i8** %4, align 4
+  %9 = bitcast i8** %5 to i8*
+  call void @llvm.lifetime.start.p0i8(i64 4, i8* nonnull %9)
+  store volatile i8* %1, i8** %5, align 4
+  call void @llvm.lifetime.start.p0i8(i64 1, i8* nonnull %6)
+  store volatile i8 0, i8* %6, align 1
+  call void @llvm.lifetime.start.p0i8(i64 1, i8* nonnull %7)
+  store volatile i8 1, i8* %7, align 1
+  %10 = icmp eq i32 %2, 0
+  br i1 %10, label %37, label %11
+
+11:                                               ; preds = %3, %11
+  %12 = phi i32 [ %13, %11 ], [ %2, %3 ]
+  %13 = add i32 %12, -1
+  %14 = load volatile i8*, i8** %4, align 4
+  %15 = getelementptr i8, i8* %14, i32 %13
+  %16 = load volatile i8, i8* %15, align 1
+  %17 = load volatile i8*, i8** %5, align 4
+  %18 = getelementptr i8, i8* %17, i32 %13
+  %19 = load volatile i8, i8* %18, align 1
+  %20 = zext i8 %19 to i32
+  %21 = zext i8 %16 to i32
+  %22 = sub nsw i32 %20, %21
+  %23 = ashr i32 %22, 8
+  %24 = load volatile i8, i8* %7, align 1
+  %25 = load volatile i8, i8* %6, align 1
+  %26 = trunc i32 %23 to i8
+  %27 = and i8 %24, %26
+  %28 = or i8 %27, %25
+  store volatile i8 %28, i8* %6, align 1
+  %29 = xor i8 %19, %16
+  %30 = zext i8 %29 to i32
+  %31 = add nuw nsw i32 %30, 65535
+  %32 = lshr i32 %31, 8
+  %33 = load volatile i8, i8* %7, align 1
+  %34 = trunc i32 %32 to i8
+  %35 = and i8 %33, %34
+  store volatile i8 %35, i8* %7, align 1
+  %36 = icmp eq i32 %13, 0
+  br i1 %36, label %37, label %11
+
+37:                                               ; preds = %11, %3
+  %38 = load volatile i8, i8* %6, align 1
+  %39 = zext i8 %38 to i32
+  %40 = load volatile i8, i8* %6, align 1
+  %41 = zext i8 %40 to i32
+  %42 = load volatile i8, i8* %7, align 1
+  %43 = zext i8 %42 to i32
+  %44 = add nsw i32 %39, -1
+  %45 = add nsw i32 %44, %41
+  %46 = add nsw i32 %45, %43
+  call void @llvm.lifetime.end.p0i8(i64 1, i8* nonnull %7)
+  call void @llvm.lifetime.end.p0i8(i64 1, i8* nonnull %6)
+  call void @llvm.lifetime.end.p0i8(i64 4, i8* nonnull %9)
+  call void @llvm.lifetime.end.p0i8(i64 4, i8* nonnull %8)
+  ret i32 %46
+}
+
+; Function Attrs: nounwind
+define i32 @sodium_is_zero(i8* nocapture readonly %0, i32 %1) local_unnamed_addr #0 {
+  %3 = alloca i8, align 1
+  call void @llvm.lifetime.start.p0i8(i64 1, i8* nonnull %3)
+  store volatile i8 0, i8* %3, align 1
+  %4 = icmp eq i32 %1, 0
+  br i1 %4, label %13, label %5
+
+5:                                                ; preds = %2, %5
+  %6 = phi i32 [ %11, %5 ], [ 0, %2 ]
+  %7 = getelementptr i8, i8* %0, i32 %6
+  %8 = load i8, i8* %7, align 1
+  %9 = load volatile i8, i8* %3, align 1
+  %10 = or i8 %9, %8
+  store volatile i8 %10, i8* %3, align 1
+  %11 = add nuw i32 %6, 1
+  %12 = icmp eq i32 %11, %1
+  br i1 %12, label %13, label %5
+
+13:                                               ; preds = %5, %2
+  %14 = load volatile i8, i8* %3, align 1
+  %15 = zext i8 %14 to i32
+  %16 = add nuw nsw i32 %15, 511
+  %17 = lshr i32 %16, 8
+  %18 = and i32 %17, 1
+  call void @llvm.lifetime.end.p0i8(i64 1, i8* nonnull %3)
+  ret i32 %18
+}
+
+; Function Attrs: nofree norecurse nounwind
+define void @sodium_increment(i8* nocapture %0, i32 %1) local_unnamed_addr #3 {
+  %3 = icmp eq i32 %1, 0
+  br i1 %3, label %15, label %4
+
+4:                                                ; preds = %2, %4
+  %5 = phi i32 [ %12, %4 ], [ 1, %2 ]
+  %6 = phi i32 [ %13, %4 ], [ 0, %2 ]
+  %7 = getelementptr i8, i8* %0, i32 %6
+  %8 = load i8, i8* %7, align 1
+  %9 = zext i8 %8 to i32
+  %10 = add nuw nsw i32 %5, %9
+  %11 = trunc i32 %10 to i8
+  store i8 %11, i8* %7, align 1
+  %12 = lshr i32 %10, 8
+  %13 = add nuw i32 %6, 1
+  %14 = icmp eq i32 %13, %1
+  br i1 %14, label %15, label %4
+
+15:                                               ; preds = %4, %2
+  ret void
+}
+
+; Function Attrs: nofree norecurse nounwind
+define void @sodium_add(i8* nocapture %0, i8* nocapture readonly %1, i32 %2) local_unnamed_addr #3 {
+  %4 = icmp eq i32 %2, 0
+  br i1 %4, label %20, label %5
+
+5:                                                ; preds = %3, %5
+  %6 = phi i32 [ %17, %5 ], [ 0, %3 ]
+  %7 = phi i32 [ %18, %5 ], [ 0, %3 ]
+  %8 = getelementptr i8, i8* %0, i32 %7
+  %9 = load i8, i8* %8, align 1
+  %10 = zext i8 %9 to i32
+  %11 = getelementptr i8, i8* %1, i32 %7
+  %12 = load i8, i8* %11, align 1
+  %13 = zext i8 %12 to i32
+  %14 = add nuw nsw i32 %6, %10
+  %15 = add nuw nsw i32 %14, %13
+  %16 = trunc i32 %15 to i8
+  store i8 %16, i8* %8, align 1
+  %17 = lshr i32 %15, 8
+  %18 = add nuw i32 %7, 1
+  %19 = icmp eq i32 %18, %2
+  br i1 %19, label %20, label %5
+
+20:                                               ; preds = %5, %3
+  ret void
+}
+
+; Function Attrs: nofree norecurse nounwind
+define void @sodium_sub(i8* nocapture %0, i8* nocapture readonly %1, i32 %2) local_unnamed_addr #3 {
+  %4 = icmp eq i32 %2, 0
+  br i1 %4, label %21, label %5
+
+5:                                                ; preds = %3, %5
+  %6 = phi i32 [ %19, %5 ], [ 0, %3 ]
+  %7 = phi i32 [ %18, %5 ], [ 0, %3 ]
+  %8 = getelementptr i8, i8* %0, i32 %6
+  %9 = load i8, i8* %8, align 1
+  %10 = zext i8 %9 to i32
+  %11 = getelementptr i8, i8* %1, i32 %6
+  %12 = load i8, i8* %11, align 1
+  %13 = zext i8 %12 to i32
+  %14 = sub nsw i32 %10, %13
+  %15 = sub nsw i32 %14, %7
+  %16 = trunc i32 %15 to i8
+  store i8 %16, i8* %8, align 1
+  %17 = lshr i32 %15, 8
+  %18 = and i32 %17, 1
+  %19 = add nuw i32 %6, 1
+  %20 = icmp eq i32 %19, %2
+  br i1 %20, label %21, label %5
+
+21:                                               ; preds = %5, %3
+  ret void
+}
+
+; Function Attrs: nounwind
+define hidden i32 @_sodium_alloc_init() local_unnamed_addr #0 {
+  %1 = tail call i32 @sysconf(i32 30) #11
+  %2 = icmp sgt i32 %1, 0
+  br i1 %2, label %3, label %4
+
+3:                                                ; preds = %0
+  store i32 %1, i32* @page_size, align 4
+  br label %6
+
+4:                                                ; preds = %0
+  %5 = load i32, i32* @page_size, align 4
+  br label %6
+
+6:                                                ; preds = %4, %3
+  %7 = phi i32 [ %5, %4 ], [ %1, %3 ]
+  %8 = icmp ult i32 %7, 16
+  br i1 %8, label %9, label %10
+
+9:                                                ; preds = %6
+  tail call void @sodium_misuse() #12
+  unreachable
+
+10:                                               ; preds = %6
+  tail call void @randombytes_buf(i8* getelementptr inbounds ([16 x i8], [16 x i8]* @canary, i32 0, i32 0), i32 16) #11
+  ret i32 0
+}
+
+declare i32 @sysconf(i32 %0) local_unnamed_addr #1
+
+; Function Attrs: noreturn
+declare void @sodium_misuse() local_unnamed_addr #4
+
+declare void @randombytes_buf(i8* %0, i32 %1) local_unnamed_addr #1
+
+; Function Attrs: nofree norecurse nounwind writeonly
+define i32 @sodium_mlock(i8* nocapture nonnull readnone %0, i32 %1) local_unnamed_addr #5 {
+  store i32 52, i32* @errno, align 4
+  ret i32 -1
+}
+
+; Function Attrs: nounwind
+define i32 @sodium_munlock(i8* nonnull %0, i32 %1) local_unnamed_addr #0 {
+  tail call void @explicit_bzero(i8* nonnull %0, i32 %1) #11
+  store i32 52, i32* @errno, align 4
+  ret i32 -1
+}
+
+; Function Attrs: nounwind
+define noalias i8* @sodium_malloc(i32 %0) local_unnamed_addr #0 {
+  %2 = alloca i8*, align 4
+  %3 = load i32, i32* @page_size, align 4
+  %4 = shl i32 %3, 2
+  %5 = xor i32 %4, -1
+  %6 = icmp ugt i32 %5, %0
+  br i1 %6, label %8, label %7
+
+7:                                                ; preds = %1
+  store i32 48, i32* @errno, align 4
+  br label %53
+
+8:                                                ; preds = %1
+  %9 = icmp ult i32 %3, 17
+  br i1 %9, label %10, label %11
+
+10:                                               ; preds = %8
+  tail call void @sodium_misuse() #12
+  unreachable
+
+11:                                               ; preds = %8
+  %12 = add i32 %0, 15
+  %13 = add i32 %3, %12
+  %14 = sub i32 0, %3
+  %15 = and i32 %13, %14
+  %16 = mul i32 %3, 3
+  %17 = add i32 %15, %16
+  %18 = bitcast i8** %2 to i8*
+  call void @llvm.lifetime.start.p0i8(i64 4, i8* nonnull %18) #11
+  %19 = call i32 @posix_memalign(i8** nonnull %2, i32 %3, i32 %17) #11
+  %20 = icmp eq i32 %19, 0
+  br i1 %20, label %22, label %21
+
+21:                                               ; preds = %11
+  call void @llvm.lifetime.end.p0i8(i64 4, i8* nonnull %18) #11
+  br label %53
+
+22:                                               ; preds = %11
+  %23 = load i8*, i8** %2, align 4
+  call void @llvm.lifetime.end.p0i8(i64 4, i8* nonnull %18) #11
+  %24 = icmp eq i8* %23, null
+  br i1 %24, label %53, label %25
+
+25:                                               ; preds = %22
+  %26 = load i32, i32* @page_size, align 4
+  %27 = shl i32 %26, 1
+  %28 = getelementptr i8, i8* %23, i32 %27
+  %29 = getelementptr i8, i8* %28, i32 %15
+  call void @llvm.memcpy.p0i8.p0i8.i32(i8* nonnull align 1 dereferenceable(16) %29, i8* nonnull align 16 dereferenceable(16) getelementptr inbounds ([16 x i8], [16 x i8]* @canary, i32 0, i32 0), i32 16, i1 false) #11
+  %30 = add i32 %26, %12
+  %31 = sub i32 0, %26
+  %32 = and i32 %30, %31
+  %33 = getelementptr i8, i8* %28, i32 %32
+  %34 = sub i32 -16, %0
+  %35 = getelementptr i8, i8* %33, i32 %34
+  %36 = getelementptr i8, i8* %35, i32 16
+  call void @llvm.memcpy.p0i8.p0i8.i32(i8* nonnull align 1 dereferenceable(16) %35, i8* nonnull align 16 dereferenceable(16) getelementptr inbounds ([16 x i8], [16 x i8]* @canary, i32 0, i32 0), i32 16, i1 false) #11
+  %37 = bitcast i8* %23 to i32*
+  store i32 %15, i32* %37, align 1
+  store i32 52, i32* @errno, align 4
+  %38 = getelementptr i8, i8* %36, i32 -16
+  %39 = load i32, i32* @page_size, align 4
+  %40 = ptrtoint i8* %38 to i32
+  %41 = sub i32 0, %39
+  %42 = and i32 %40, %41
+  %43 = shl i32 %39, 1
+  %44 = icmp ugt i32 %42, %43
+  br i1 %44, label %46, label %45
+
+45:                                               ; preds = %25
+  call void @sodium_misuse() #12
+  unreachable
+
+46:                                               ; preds = %25
+  %47 = inttoptr i32 %42 to i8*
+  %48 = icmp eq i8* %28, %47
+  br i1 %48, label %50, label %49
+
+49:                                               ; preds = %46
+  call void @__assert_fail(i8* getelementptr inbounds ([60 x i8], [60 x i8]* @.str, i32 0, i32 0), i8* getelementptr inbounds ([15 x i8], [15 x i8]* @.str.1, i32 0, i32 0), i32 620, i8* getelementptr inbounds ([15 x i8], [15 x i8]* @__func__._sodium_malloc, i32 0, i32 0)) #12
+  unreachable
+
+50:                                               ; preds = %46
+  %51 = icmp eq i8* %36, null
+  br i1 %51, label %53, label %52
+
+52:                                               ; preds = %50
+  call void @llvm.memset.p0i8.i32(i8* nonnull align 1 %36, i8 -37, i32 %0, i1 false)
+  br label %53
+
+53:                                               ; preds = %21, %22, %7, %50, %52
+  %54 = phi i8* [ %36, %52 ], [ null, %50 ], [ null, %7 ], [ null, %22 ], [ null, %21 ]
+  ret i8* %54
+}
+
+; Function Attrs: argmemonly nounwind willreturn writeonly
+declare void @llvm.memset.p0i8.i32(i8* nocapture writeonly %0, i8 %1, i32 %2, i1 immarg %3) #6
+
+; Function Attrs: nounwind
+define noalias i8* @sodium_allocarray(i32 %0, i32 %1) local_unnamed_addr #0 {
+  %3 = icmp eq i32 %0, 0
+  br i1 %3, label %8, label %4
+
+4:                                                ; preds = %2
+  %5 = udiv i32 -1, %0
+  %6 = icmp ugt i32 %5, %1
+  br i1 %6, label %8, label %7
+
+7:                                                ; preds = %4
+  store i32 48, i32* @errno, align 4
+  br label %11
+
+8:                                                ; preds = %4, %2
+  %9 = mul i32 %1, %0
+  %10 = tail call noalias i8* @sodium_malloc(i32 %9)
+  br label %11
+
+11:                                               ; preds = %8, %7
+  %12 = phi i8* [ null, %7 ], [ %10, %8 ]
+  ret i8* %12
+}
+
+; Function Attrs: nounwind
+define void @sodium_free(i8* %0) local_unnamed_addr #0 {
+  %2 = alloca i8*, align 4
+  %3 = alloca i8*, align 4
+  %4 = alloca i8, align 1
+  %5 = alloca i8*, align 4
+  %6 = alloca i8*, align 4
+  %7 = alloca i8, align 1
+  %8 = icmp eq i8* %0, null
+  br i1 %8, label %71, label %9
+
+9:                                                ; preds = %1
+  %10 = getelementptr i8, i8* %0, i32 -16
+  %11 = load i32, i32* @page_size, align 4
+  %12 = ptrtoint i8* %10 to i32
+  %13 = sub i32 0, %11
+  %14 = and i32 %13, %12
+  %15 = shl i32 %11, 1
+  %16 = icmp ugt i32 %14, %15
+  br i1 %16, label %18, label %17
+
+17:                                               ; preds = %9
+  tail call void @sodium_misuse() #12
+  unreachable
+
+18:                                               ; preds = %9
+  %19 = inttoptr i32 %14 to i8*
+  %20 = sub i32 0, %15
+  %21 = getelementptr i8, i8* %19, i32 %20
+  %22 = bitcast i8* %21 to i32*
+  %23 = load i32, i32* %22, align 1
+  store i32 52, i32* @errno, align 4
+  %24 = bitcast i8** %5 to i8*
+  call void @llvm.lifetime.start.p0i8(i64 4, i8* nonnull %24)
+  store volatile i8* %10, i8** %5, align 4
+  %25 = bitcast i8** %6 to i8*
+  call void @llvm.lifetime.start.p0i8(i64 4, i8* nonnull %25)
+  store volatile i8* getelementptr inbounds ([16 x i8], [16 x i8]* @canary, i32 0, i32 0), i8** %6, align 4
+  call void @llvm.lifetime.start.p0i8(i64 1, i8* nonnull %7)
+  store volatile i8 0, i8* %7, align 1
+  br label %26
+
+26:                                               ; preds = %26, %18
+  %27 = phi i32 [ %37, %26 ], [ 0, %18 ]
+  %28 = load volatile i8*, i8** %5, align 4
+  %29 = getelementptr i8, i8* %28, i32 %27
+  %30 = load volatile i8, i8* %29, align 1
+  %31 = load volatile i8*, i8** %6, align 4
+  %32 = getelementptr i8, i8* %31, i32 %27
+  %33 = load volatile i8, i8* %32, align 1
+  %34 = xor i8 %33, %30
+  %35 = load volatile i8, i8* %7, align 1
+  %36 = or i8 %35, %34
+  store volatile i8 %36, i8* %7, align 1
+  %37 = add nuw nsw i32 %27, 1
+  %38 = icmp eq i32 %37, 16
+  br i1 %38, label %39, label %26
+
+39:                                               ; preds = %26
+  %40 = load volatile i8, i8* %7, align 1
+  %41 = zext i8 %40 to i32
+  %42 = add nuw nsw i32 %41, 511
+  %43 = and i32 %42, 256
+  call void @llvm.lifetime.end.p0i8(i64 1, i8* nonnull %7)
+  call void @llvm.lifetime.end.p0i8(i64 4, i8* nonnull %25)
+  call void @llvm.lifetime.end.p0i8(i64 4, i8* nonnull %24)
+  %44 = icmp eq i32 %43, 0
+  br i1 %44, label %45, label %46
+
+45:                                               ; preds = %39
+  tail call fastcc void @_out_of_bounds() #13
+  unreachable
+
+46:                                               ; preds = %39
+  %47 = getelementptr i8, i8* %19, i32 %23
+  %48 = bitcast i8** %2 to i8*
+  call void @llvm.lifetime.start.p0i8(i64 4, i8* nonnull %48)
+  store volatile i8* %47, i8** %2, align 4
+  %49 = bitcast i8** %3 to i8*
+  call void @llvm.lifetime.start.p0i8(i64 4, i8* nonnull %49)
+  store volatile i8* getelementptr inbounds ([16 x i8], [16 x i8]* @canary, i32 0, i32 0), i8** %3, align 4
+  call void @llvm.lifetime.start.p0i8(i64 1, i8* nonnull %4)
+  store volatile i8 0, i8* %4, align 1
+  br label %50
+
+50:                                               ; preds = %50, %46
+  %51 = phi i32 [ %61, %50 ], [ 0, %46 ]
+  %52 = load volatile i8*, i8** %2, align 4
+  %53 = getelementptr i8, i8* %52, i32 %51
+  %54 = load volatile i8, i8* %53, align 1
+  %55 = load volatile i8*, i8** %3, align 4
+  %56 = getelementptr i8, i8* %55, i32 %51
+  %57 = load volatile i8, i8* %56, align 1
+  %58 = xor i8 %57, %54
+  %59 = load volatile i8, i8* %4, align 1
+  %60 = or i8 %59, %58
+  store volatile i8 %60, i8* %4, align 1
+  %61 = add nuw nsw i32 %51, 1
+  %62 = icmp eq i32 %61, 16
+  br i1 %62, label %63, label %50
+
+63:                                               ; preds = %50
+  %64 = load volatile i8, i8* %4, align 1
+  %65 = zext i8 %64 to i32
+  %66 = add nuw nsw i32 %65, 511
+  %67 = and i32 %66, 256
+  call void @llvm.lifetime.end.p0i8(i64 1, i8* nonnull %4)
+  call void @llvm.lifetime.end.p0i8(i64 4, i8* nonnull %49)
+  call void @llvm.lifetime.end.p0i8(i64 4, i8* nonnull %48)
+  %68 = icmp eq i32 %67, 0
+  br i1 %68, label %69, label %70
+
+69:                                               ; preds = %63
+  tail call fastcc void @_out_of_bounds() #13
+  unreachable
+
+70:                                               ; preds = %63
+  tail call void @explicit_bzero(i8* nonnull %19, i32 %23) #11
+  store i32 52, i32* @errno, align 4
+  tail call void @free(i8* %21) #11
+  br label %71
+
+71:                                               ; preds = %1, %70
+  ret void
+}
+
+; Function Attrs: argmemonly nounwind willreturn
+declare void @llvm.memcpy.p0i8.p0i8.i32(i8* noalias nocapture writeonly %0, i8* noalias nocapture readonly %1, i32 %2, i1 immarg %3) #2
+
+; Function Attrs: noreturn nounwind
+define internal fastcc void @_out_of_bounds() unnamed_addr #7 {
+  tail call void @abort() #12
+  unreachable
+}
+
+; Function Attrs: nofree norecurse nounwind writeonly
+define i32 @sodium_mprotect_noaccess(i8* nocapture nonnull readnone %0) local_unnamed_addr #5 {
+  store i32 52, i32* @errno, align 4
+  ret i32 -1
+}
+
+; Function Attrs: nofree norecurse nounwind writeonly
+define i32 @sodium_mprotect_readonly(i8* nocapture nonnull readnone %0) local_unnamed_addr #5 {
+  store i32 52, i32* @errno, align 4
+  ret i32 -1
+}
+
+; Function Attrs: nofree norecurse nounwind writeonly
+define i32 @sodium_mprotect_readwrite(i8* nocapture nonnull readnone %0) local_unnamed_addr #5 {
+  store i32 52, i32* @errno, align 4
+  ret i32 -1
+}
+
+; Function Attrs: nounwind
+define i32 @sodium_pad(i32* %0, i8* nocapture nonnull %1, i32 %2, i32 %3, i32 %4) local_unnamed_addr #0 {
+  %6 = alloca i8, align 1
+  call void @llvm.lifetime.start.p0i8(i64 1, i8* nonnull %6)
+  %7 = icmp eq i32 %3, 0
+  br i1 %7, label %48, label %8
+
+8:                                                ; preds = %5
+  %9 = add i32 %3, -1
+  %10 = tail call i32 @llvm.ctpop.i32(i32 %3), !range !4
+  %11 = icmp ult i32 %10, 2
+  br i1 %11, label %12, label %14
+
+12:                                               ; preds = %8
+  %13 = and i32 %9, %2
+  br label %16
+
+14:                                               ; preds = %8
+  %15 = urem i32 %2, %3
+  br label %16
+
+16:                                               ; preds = %14, %12
+  %17 = phi i32 [ %13, %12 ], [ %15, %14 ]
+  %18 = sub i32 %9, %17
+  %19 = xor i32 %2, -1
+  %20 = icmp ult i32 %18, %19
+  br i1 %20, label %22, label %21
+
+21:                                               ; preds = %16
+  tail call void @sodium_misuse() #12
+  unreachable
+
+22:                                               ; preds = %16
+  %23 = add i32 %18, %2
+  %24 = icmp ult i32 %23, %4
+  br i1 %24, label %25, label %48
+
+25:                                               ; preds = %22
+  %26 = getelementptr i8, i8* %1, i32 %23
+  %27 = icmp eq i32* %0, null
+  br i1 %27, label %30, label %28
+
+28:                                               ; preds = %25
+  %29 = add nuw i32 %23, 1
+  store i32 %29, i32* %0, align 4
+  br label %30
+
+30:                                               ; preds = %28, %25
+  store volatile i8 0, i8* %6, align 1
+  br label %31
+
+31:                                               ; preds = %30, %31
+  %32 = phi i32 [ %46, %31 ], [ 0, %30 ]
+  %33 = xor i32 %32, %18
+  %34 = add i32 %33, -1
+  %35 = lshr i32 %34, 24
+  %36 = sub i32 0, %32
+  %37 = getelementptr i8, i8* %26, i32 %36
+  %38 = load i8, i8* %37, align 1
+  %39 = load volatile i8, i8* %6, align 1
+  %40 = and i8 %39, %38
+  %41 = trunc i32 %35 to i8
+  %42 = and i8 %41, -128
+  %43 = or i8 %40, %42
+  store i8 %43, i8* %37, align 1
+  %44 = load volatile i8, i8* %6, align 1
+  %45 = or i8 %44, %41
+  store volatile i8 %45, i8* %6, align 1
+  %46 = add nuw i32 %32, 1
+  %47 = icmp ult i32 %46, %3
+  br i1 %47, label %31, label %48
+
+48:                                               ; preds = %31, %22, %5
+  %49 = phi i32 [ -1, %5 ], [ -1, %22 ], [ 0, %31 ]
+  call void @llvm.lifetime.end.p0i8(i64 1, i8* nonnull %6)
+  ret i32 %49
+}
+
+; Function Attrs: nounwind
+define i32 @sodium_unpad(i32* nocapture %0, i8* nocapture nonnull readonly %1, i32 %2, i32 %3) local_unnamed_addr #0 {
+  %5 = alloca i32, align 4
+  %6 = bitcast i32* %5 to i8*
+  call void @llvm.lifetime.start.p0i8(i64 4, i8* nonnull %6)
+  store volatile i32 0, i32* %5, align 4
+  %7 = add i32 %3, -1
+  %8 = icmp ult i32 %7, %2
+  br i1 %8, label %9, label %41
+
+9:                                                ; preds = %4
+  %10 = add i32 %2, -1
+  %11 = getelementptr i8, i8* %1, i32 %10
+  br label %12
+
+12:                                               ; preds = %12, %9
+  %13 = phi i32 [ %35, %12 ], [ 0, %9 ]
+  %14 = phi i32 [ %34, %12 ], [ 0, %9 ]
+  %15 = phi i32 [ %29, %12 ], [ 0, %9 ]
+  %16 = sub i32 0, %13
+  %17 = getelementptr i8, i8* %11, i32 %16
+  %18 = load i8, i8* %17, align 1
+  %19 = add nuw nsw i32 %15, 511
+  %20 = load volatile i32, i32* %5, align 4
+  %21 = add i32 %20, 511
+  %22 = and i32 %21, %19
+  %23 = zext i8 %18 to i32
+  %24 = xor i32 %23, 128
+  %25 = add nuw nsw i32 %24, 511
+  %26 = and i32 %22, %25
+  %27 = lshr i32 %26, 8
+  %28 = and i32 %27, 1
+  %29 = or i32 %15, %23
+  %30 = sub nsw i32 0, %28
+  %31 = and i32 %13, %30
+  %32 = load volatile i32, i32* %5, align 4
+  %33 = or i32 %31, %32
+  store volatile i32 %33, i32* %5, align 4
+  %34 = or i32 %28, %14
+  %35 = add nuw i32 %13, 1
+  %36 = icmp eq i32 %35, %3
+  br i1 %36, label %37, label %12
+
+37:                                               ; preds = %12
+  %38 = add i32 %34, -1
+  %39 = load volatile i32, i32* %5, align 4
+  %40 = sub i32 %10, %39
+  store i32 %40, i32* %0, align 4
+  br label %41
+
+41:                                               ; preds = %4, %37
+  %42 = phi i32 [ %38, %37 ], [ -1, %4 ]
+  call void @llvm.lifetime.end.p0i8(i64 4, i8* nonnull %6)
+  ret i32 %42
+}
+
+; Function Attrs: noreturn
+declare void @__assert_fail(i8* %0, i8* %1, i32 %2, i8* %3) local_unnamed_addr #4
+
+; Function Attrs: nofree
+declare i32 @posix_memalign(i8** %0, i32 %1, i32 %2) local_unnamed_addr #8
+
+; Function Attrs: noreturn
+declare void @abort() local_unnamed_addr #4
+
+; Function Attrs: nounwind
+declare void @free(i8* nocapture %0) local_unnamed_addr #9
+
+; Function Attrs: nounwind readnone speculatable willreturn
+declare i32 @llvm.ctpop.i32(i32 %0) #10
+
+attributes #0 = { nounwind "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "min-legal-vector-width"="0" "no-infs-fp-math"="false" "no-jump-tables"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="false" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #1 = { "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="false" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #2 = { argmemonly nounwind willreturn }
+attributes #3 = { nofree norecurse nounwind "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "min-legal-vector-width"="0" "no-infs-fp-math"="false" "no-jump-tables"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="false" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #4 = { noreturn "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="false" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #5 = { nofree norecurse nounwind writeonly "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "min-legal-vector-width"="0" "no-infs-fp-math"="false" "no-jump-tables"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="false" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #6 = { argmemonly nounwind willreturn writeonly }
+attributes #7 = { noreturn nounwind "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "min-legal-vector-width"="0" "no-infs-fp-math"="false" "no-jump-tables"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="false" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #8 = { nofree "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="false" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #9 = { nounwind "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="false" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #10 = { nounwind readnone speculatable willreturn }
+attributes #11 = { nounwind }
+attributes #12 = { noreturn nounwind }
+attributes #13 = { noreturn }
+
+!llvm.module.flags = !{!0, !1, !2}
+!llvm.ident = !{!3}
+
+!0 = !{i32 1, !"wchar_size", i32 4}
+!1 = !{i32 7, !"PIC Level", i32 2}
+!2 = !{i32 7, !"PIE Level", i32 2}
+!3 = !{!"clang version 10.0.0 (https://github.com/llvm/llvm-project d32170dbd5b0d54436537b6b75beaf44324e0c28)"}
+!4 = !{i32 0, i32 33}
+
+; extracted candidates
+
+; *****
+; For LLVM instruction:
+;  %3 = icmp eq i32 %1, 0
+; Looking for a replacement for:
+%0:i32 = var
+%1:i1 = eq 0:i32, %0
+infer %1
+
+; *****
+; For LLVM instruction:
+;  %5 = phi i32 [ %12, %4 ], [ 1, %2 ]
+; Looking for a replacement for:
+%0:i32 = var (knownBits=00000000xxxxxxxxxxxxxxxxxxxxxxxx) (nonNegative) (signBits=15) (range=[0,65537))
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %6 = phi i32 [ %13, %4 ], [ 0, %2 ]
+; Looking for a replacement for:
+%0:i32 = var (range=[0,-1))
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %8 = load i8, i8* %7, align 1
+; Looking for a replacement for:
+%0:i8 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %9 = zext i8 %8 to i32
+; Looking for a replacement for:
+%0:i8 = var
+%1:i32 = zext %0
+infer %1
+
+; *****
+; For LLVM instruction:
+;  %10 = add nuw nsw i32 %5, %9
+; Looking for a replacement for:
+%0:i32 = var (knownBits=00000000xxxxxxxxxxxxxxxxxxxxxxxx) (nonNegative) (signBits=15) (range=[0,65537))
+%1:i8 = var
+%2:i32 = zext %1
+%3:i32 = addnw %0, %2
+infer %3
+
+; *****
+; For LLVM instruction:
+;  %11 = trunc i32 %10 to i8
+; Looking for a replacement for:
+%0:i32 = var (knownBits=00000000xxxxxxxxxxxxxxxxxxxxxxxx) (nonNegative) (signBits=15) (range=[0,65537))
+%1:i8 = var
+%2:i32 = zext %1
+%3:i32 = addnw %0, %2 (hasExternalUses)
+%4:i8 = trunc %3
+infer %4
+
+; *****
+; For LLVM instruction:
+;  %12 = lshr i32 %10, 8
+; Looking for a replacement for:
+%0:i32 = var (knownBits=00000000xxxxxxxxxxxxxxxxxxxxxxxx) (nonNegative) (signBits=15) (range=[0,65537))
+%1:i8 = var
+%2:i32 = zext %1
+%3:i32 = addnw %0, %2 (hasExternalUses)
+%4:i32 = lshr %3, 8:i32
+infer %4
+
+; *****
+; For LLVM instruction:
+;  %13 = add nuw i32 %6, 1
+; Looking for a replacement for:
+%0:i32 = var (range=[0,-1))
+%1:i32 = addnuw 1:i32, %0
+infer %1
+
+; *****
+; For LLVM instruction:
+;  %14 = icmp eq i32 %13, %1
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = var (range=[0,-1))
+%2:i32 = addnuw 1:i32, %1 (hasExternalUses)
+%3:i1 = eq %0, %2
+infer %3
+got 1 candidates from LHS
+
+-------------------------------------------------
+%0:i32 = var (knownBits=00000000xxxxxxxxxxxxxxxxxxxxxxxx) (nonNegative) (signBits=15) (range=[0,65537))
+infer %0
+
+
+--------------------------------
+guess 0
+
+%0:i32 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: 32768
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+Dataflow Pruned 0/0
+There are 1 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 4 candidates from LHS
+
+-------------------------------------------------
+%0:i32 = var (knownBits=00000000xxxxxxxxxxxxxxxxxxxxxxxx) (nonNegative) (signBits=15) (range=[0,65537))
+%1:i8 = var
+%2:i32 = zext %1
+%3:i32 = addnw %0, %2
+infer %3
+
+
+--------------------------------
+guess 0
+
+%0:i32 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: 128
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+
+--------------------------------
+guess 1
+
+%0:i32 = var (knownBits=00000000xxxxxxxxxxxxxxxxxxxxxxxx) (nonNegative) (signBits=15) (range=[0,65537))
+
+Cost = 0
+second query is SAT-- constant doesn't work
+
+--------------------------------
+guess 2
+
+%0:i8 = var
+%1:i32 = zext %0
+
+Cost = 1
+second query is SAT-- constant doesn't work
+Dataflow Pruned 0/0
+There are 3 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 5 candidates from LHS
+
+-------------------------------------------------
+%0:i32 = var (knownBits=00000000xxxxxxxxxxxxxxxxxxxxxxxx) (nonNegative) (signBits=15) (range=[0,65537))
+%1:i8 = var
+%2:i32 = zext %1
+%3:i32 = addnw %0, %2 (hasExternalUses)
+%4:i8 = trunc %3
+infer %4
+
+
+--------------------------------
+guess 0
+
+%0:i8 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: -128
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+
+--------------------------------
+guess 1
+
+%0:i8 = var
+
+Cost = 0
+second query is SAT-- constant doesn't work
+Dataflow Pruned 0/0
+There are 2 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 5 candidates from LHS
+
+-------------------------------------------------
+%0:i32 = var (knownBits=00000000xxxxxxxxxxxxxxxxxxxxxxxx) (nonNegative) (signBits=15) (range=[0,65537))
+%1:i8 = var
+%2:i32 = zext %1
+%3:i32 = addnw %0, %2 (hasExternalUses)
+%4:i32 = lshr %3, 8:i32
+infer %4
+
+
+--------------------------------
+guess 0
+
+%0:i32 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: 40
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+
+--------------------------------
+guess 1
+
+%0:i32 = var (knownBits=00000000xxxxxxxxxxxxxxxxxxxxxxxx) (nonNegative) (signBits=15) (range=[0,65537))
+
+Cost = 0
+second query is SAT-- constant doesn't work
+Dataflow Pruned 0/0
+There are 2 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+#########################################################
+; exiting Souper's runOnFunction() for sodium_increment()
+

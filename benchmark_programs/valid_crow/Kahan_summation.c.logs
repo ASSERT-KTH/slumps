@@ -1,0 +1,614 @@
+
+Entering the Souper pass's runOnModule()
+
+
+; entering Souper's runOnFunction() for epsilon()
+
+; ModuleID = './Kahan_summation.c.bc'
+source_filename = "./Kahan_summation.c"
+target datalayout = "e-m:e-p:32:32-i64:64-n32:64-S128"
+target triple = "wasm32-unknown-wasi"
+
+@.str = private unnamed_addr constant [22 x i8] c"Epsilon     = %0.12f\0A\00", align 1
+@.str.1 = private unnamed_addr constant [22 x i8] c"(a + b) + c = %0.12f\0A\00", align 1
+@.str.2 = private unnamed_addr constant [22 x i8] c"Kahan sum   = %0.12f\0A\00", align 1
+@llvm.used = appending global [1 x i8*] [i8* bitcast (i32 ()* @__main_void to i8*)], section "llvm.metadata"
+
+@__main_void = alias i32 (), i32 ()* @main
+
+; Function Attrs: noinline nounwind optnone
+define hidden float @epsilon() #0 {
+entry:
+  %eps = alloca float, align 4
+  store float 1.000000e+00, float* %eps, align 4
+  br label %while.cond
+
+while.cond:                                       ; preds = %while.body, %entry
+  %0 = load float, float* %eps, align 4
+  %add = fadd float 1.000000e+00, %0
+  %cmp = fcmp une float %add, 1.000000e+00
+  br i1 %cmp, label %while.body, label %while.end
+
+while.body:                                       ; preds = %while.cond
+  %1 = load float, float* %eps, align 4
+  %div = fdiv float %1, 2.000000e+00
+  store float %div, float* %eps, align 4
+  br label %while.cond
+
+while.end:                                        ; preds = %while.cond
+  %2 = load float, float* %eps, align 4
+  ret float %2
+}
+
+; Function Attrs: noinline nounwind optnone
+define hidden float @kahanSum(float* %nums, i32 %count) #0 {
+entry:
+  %nums.addr = alloca float*, align 4
+  %count.addr = alloca i32, align 4
+  %sum = alloca float, align 4
+  %c = alloca float, align 4
+  %t = alloca float, align 4
+  %y = alloca float, align 4
+  %i = alloca i32, align 4
+  store float* %nums, float** %nums.addr, align 4
+  store i32 %count, i32* %count.addr, align 4
+  store float 0.000000e+00, float* %sum, align 4
+  store float 0.000000e+00, float* %c, align 4
+  store i32 0, i32* %i, align 4
+  br label %for.cond
+
+for.cond:                                         ; preds = %for.inc, %entry
+  %0 = load i32, i32* %i, align 4
+  %1 = load i32, i32* %count.addr, align 4
+  %cmp = icmp slt i32 %0, %1
+  br i1 %cmp, label %for.body, label %for.end
+
+for.body:                                         ; preds = %for.cond
+  %2 = load float*, float** %nums.addr, align 4
+  %3 = load i32, i32* %i, align 4
+  %arrayidx = getelementptr inbounds float, float* %2, i32 %3
+  %4 = load float, float* %arrayidx, align 4
+  %5 = load float, float* %c, align 4
+  %sub = fsub float %4, %5
+  store float %sub, float* %y, align 4
+  %6 = load float, float* %sum, align 4
+  %7 = load float, float* %y, align 4
+  %add = fadd float %6, %7
+  store float %add, float* %t, align 4
+  %8 = load float, float* %t, align 4
+  %9 = load float, float* %sum, align 4
+  %sub1 = fsub float %8, %9
+  %10 = load float, float* %y, align 4
+  %sub2 = fsub float %sub1, %10
+  store float %sub2, float* %c, align 4
+  %11 = load float, float* %t, align 4
+  store float %11, float* %sum, align 4
+  br label %for.inc
+
+for.inc:                                          ; preds = %for.body
+  %12 = load i32, i32* %i, align 4
+  %inc = add nsw i32 %12, 1
+  store i32 %inc, i32* %i, align 4
+  br label %for.cond
+
+for.end:                                          ; preds = %for.cond
+  %13 = load float, float* %sum, align 4
+  ret float %13
+}
+
+; Function Attrs: noinline nounwind optnone
+define hidden i32 @main() #0 {
+entry:
+  %retval = alloca i32, align 4
+  %a = alloca float, align 4
+  %b = alloca float, align 4
+  %c = alloca float, align 4
+  %fa = alloca [3 x float], align 4
+  store i32 0, i32* %retval, align 4
+  store float 1.000000e+00, float* %a, align 4
+  %call = call float @epsilon()
+  store float %call, float* %b, align 4
+  %0 = load float, float* %b, align 4
+  %fneg = fneg float %0
+  store float %fneg, float* %c, align 4
+  %1 = load float, float* %a, align 4
+  %arrayidx = getelementptr inbounds [3 x float], [3 x float]* %fa, i32 0, i32 0
+  store float %1, float* %arrayidx, align 4
+  %2 = load float, float* %b, align 4
+  %arrayidx1 = getelementptr inbounds [3 x float], [3 x float]* %fa, i32 0, i32 1
+  store float %2, float* %arrayidx1, align 4
+  %3 = load float, float* %c, align 4
+  %arrayidx2 = getelementptr inbounds [3 x float], [3 x float]* %fa, i32 0, i32 2
+  store float %3, float* %arrayidx2, align 4
+  %4 = load float, float* %b, align 4
+  %conv = fpext float %4 to double
+  %call3 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([22 x i8], [22 x i8]* @.str, i32 0, i32 0), double %conv)
+  %5 = load float, float* %a, align 4
+  %6 = load float, float* %b, align 4
+  %add = fadd float %5, %6
+  %7 = load float, float* %c, align 4
+  %add4 = fadd float %add, %7
+  %conv5 = fpext float %add4 to double
+  %call6 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([22 x i8], [22 x i8]* @.str.1, i32 0, i32 0), double %conv5)
+  %arraydecay = getelementptr inbounds [3 x float], [3 x float]* %fa, i32 0, i32 0
+  %call7 = call float @kahanSum(float* %arraydecay, i32 3)
+  %conv8 = fpext float %call7 to double
+  %call9 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([22 x i8], [22 x i8]* @.str.2, i32 0, i32 0), double %conv8)
+  ret i32 0
+}
+
+declare i32 @printf(i8* %0, ...) #1
+
+attributes #0 = { noinline nounwind optnone "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "min-legal-vector-width"="0" "no-infs-fp-math"="false" "no-jump-tables"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #1 = { "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+
+!llvm.module.flags = !{!0}
+!llvm.ident = !{!1}
+
+!0 = !{i32 1, !"wchar_size", i32 4}
+!1 = !{!"clang version 11.0.0 (https://github.com/Jacarte/llvm-project.git 0f6dea67136cc1e0b3d200eb2bb165628970c44b)"}
+
+; extracted candidates
+
+; *****
+; For LLVM instruction:
+;  %cmp = fcmp une float %add, 1.000000e+00
+; Looking for a replacement for:
+%0:i1 = var
+infer %0
+got 1 candidates from LHS
+
+-------------------------------------------------
+%0:i1 = var
+infer %0
+
+
+--------------------------------
+guess 0
+
+%0:i1 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: -1
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+Dataflow Pruned 0/0
+There are 1 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+#########################################################
+; exiting Souper's runOnFunction() for epsilon()
+
+; entering Souper's runOnFunction() for kahanSum()
+
+; ModuleID = './Kahan_summation.c.bc'
+source_filename = "./Kahan_summation.c"
+target datalayout = "e-m:e-p:32:32-i64:64-n32:64-S128"
+target triple = "wasm32-unknown-wasi"
+
+@.str = private unnamed_addr constant [22 x i8] c"Epsilon     = %0.12f\0A\00", align 1
+@.str.1 = private unnamed_addr constant [22 x i8] c"(a + b) + c = %0.12f\0A\00", align 1
+@.str.2 = private unnamed_addr constant [22 x i8] c"Kahan sum   = %0.12f\0A\00", align 1
+@llvm.used = appending global [1 x i8*] [i8* bitcast (i32 ()* @__main_void to i8*)], section "llvm.metadata"
+
+@__main_void = alias i32 (), i32 ()* @main
+
+; Function Attrs: noinline nounwind optnone
+define hidden float @epsilon() #0 {
+entry:
+  %eps = alloca float, align 4
+  store float 1.000000e+00, float* %eps, align 4
+  br label %while.cond
+
+while.cond:                                       ; preds = %while.body, %entry
+  %0 = load float, float* %eps, align 4
+  %add = fadd float 1.000000e+00, %0
+  %cmp = fcmp une float %add, 1.000000e+00
+  br i1 %cmp, label %while.body, label %while.end
+
+while.body:                                       ; preds = %while.cond
+  %1 = load float, float* %eps, align 4
+  %div = fdiv float %1, 2.000000e+00
+  store float %div, float* %eps, align 4
+  br label %while.cond
+
+while.end:                                        ; preds = %while.cond
+  %2 = load float, float* %eps, align 4
+  ret float %2
+}
+
+; Function Attrs: noinline nounwind optnone
+define hidden float @kahanSum(float* %nums, i32 %count) #0 {
+entry:
+  %nums.addr = alloca float*, align 4
+  %count.addr = alloca i32, align 4
+  %sum = alloca float, align 4
+  %c = alloca float, align 4
+  %t = alloca float, align 4
+  %y = alloca float, align 4
+  %i = alloca i32, align 4
+  store float* %nums, float** %nums.addr, align 4
+  store i32 %count, i32* %count.addr, align 4
+  store float 0.000000e+00, float* %sum, align 4
+  store float 0.000000e+00, float* %c, align 4
+  store i32 0, i32* %i, align 4
+  br label %for.cond
+
+for.cond:                                         ; preds = %for.inc, %entry
+  %0 = load i32, i32* %i, align 4
+  %1 = load i32, i32* %count.addr, align 4
+  %cmp = icmp slt i32 %0, %1
+  br i1 %cmp, label %for.body, label %for.end
+
+for.body:                                         ; preds = %for.cond
+  %2 = load float*, float** %nums.addr, align 4
+  %3 = load i32, i32* %i, align 4
+  %arrayidx = getelementptr inbounds float, float* %2, i32 %3
+  %4 = load float, float* %arrayidx, align 4
+  %5 = load float, float* %c, align 4
+  %sub = fsub float %4, %5
+  store float %sub, float* %y, align 4
+  %6 = load float, float* %sum, align 4
+  %7 = load float, float* %y, align 4
+  %add = fadd float %6, %7
+  store float %add, float* %t, align 4
+  %8 = load float, float* %t, align 4
+  %9 = load float, float* %sum, align 4
+  %sub1 = fsub float %8, %9
+  %10 = load float, float* %y, align 4
+  %sub2 = fsub float %sub1, %10
+  store float %sub2, float* %c, align 4
+  %11 = load float, float* %t, align 4
+  store float %11, float* %sum, align 4
+  br label %for.inc
+
+for.inc:                                          ; preds = %for.body
+  %12 = load i32, i32* %i, align 4
+  %inc = add nsw i32 %12, 1
+  store i32 %inc, i32* %i, align 4
+  br label %for.cond
+
+for.end:                                          ; preds = %for.cond
+  %13 = load float, float* %sum, align 4
+  ret float %13
+}
+
+; Function Attrs: noinline nounwind optnone
+define hidden i32 @main() #0 {
+entry:
+  %retval = alloca i32, align 4
+  %a = alloca float, align 4
+  %b = alloca float, align 4
+  %c = alloca float, align 4
+  %fa = alloca [3 x float], align 4
+  store i32 0, i32* %retval, align 4
+  store float 1.000000e+00, float* %a, align 4
+  %call = call float @epsilon()
+  store float %call, float* %b, align 4
+  %0 = load float, float* %b, align 4
+  %fneg = fneg float %0
+  store float %fneg, float* %c, align 4
+  %1 = load float, float* %a, align 4
+  %arrayidx = getelementptr inbounds [3 x float], [3 x float]* %fa, i32 0, i32 0
+  store float %1, float* %arrayidx, align 4
+  %2 = load float, float* %b, align 4
+  %arrayidx1 = getelementptr inbounds [3 x float], [3 x float]* %fa, i32 0, i32 1
+  store float %2, float* %arrayidx1, align 4
+  %3 = load float, float* %c, align 4
+  %arrayidx2 = getelementptr inbounds [3 x float], [3 x float]* %fa, i32 0, i32 2
+  store float %3, float* %arrayidx2, align 4
+  %4 = load float, float* %b, align 4
+  %conv = fpext float %4 to double
+  %call3 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([22 x i8], [22 x i8]* @.str, i32 0, i32 0), double %conv)
+  %5 = load float, float* %a, align 4
+  %6 = load float, float* %b, align 4
+  %add = fadd float %5, %6
+  %7 = load float, float* %c, align 4
+  %add4 = fadd float %add, %7
+  %conv5 = fpext float %add4 to double
+  %call6 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([22 x i8], [22 x i8]* @.str.1, i32 0, i32 0), double %conv5)
+  %arraydecay = getelementptr inbounds [3 x float], [3 x float]* %fa, i32 0, i32 0
+  %call7 = call float @kahanSum(float* %arraydecay, i32 3)
+  %conv8 = fpext float %call7 to double
+  %call9 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([22 x i8], [22 x i8]* @.str.2, i32 0, i32 0), double %conv8)
+  ret i32 0
+}
+
+declare i32 @printf(i8* %0, ...) #1
+
+attributes #0 = { noinline nounwind optnone "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "min-legal-vector-width"="0" "no-infs-fp-math"="false" "no-jump-tables"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #1 = { "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+
+!llvm.module.flags = !{!0}
+!llvm.ident = !{!1}
+
+!0 = !{i32 1, !"wchar_size", i32 4}
+!1 = !{!"clang version 11.0.0 (https://github.com/Jacarte/llvm-project.git 0f6dea67136cc1e0b3d200eb2bb165628970c44b)"}
+
+; extracted candidates
+
+; *****
+; For LLVM instruction:
+;  %0 = load i32, i32* %i, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %1 = load i32, i32* %count.addr, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %cmp = icmp slt i32 %0, %1
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = var
+%2:i1 = slt %0, %1
+infer %2
+
+; *****
+; For LLVM instruction:
+;  %3 = load i32, i32* %i, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %12 = load i32, i32* %i, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %inc = add nsw i32 %12, 1
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = addnsw 1:i32, %0
+infer %1
+got 1 candidates from LHS
+
+-------------------------------------------------
+%0:i32 = var
+infer %0
+
+
+--------------------------------
+guess 0
+
+%0:i32 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: -1
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+Dataflow Pruned 0/0
+There are 1 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 3 candidates from LHS
+
+-------------------------------------------------
+%0:i32 = var
+%1:i32 = var
+%2:i1 = slt %0, %1
+infer %2
+
+
+--------------------------------
+guess 0
+
+%0:i1 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: -1
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+Dataflow Pruned 0/0
+There are 1 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 2 candidates from LHS
+
+-------------------------------------------------
+%0:i32 = var
+%1:i32 = addnsw 1:i32, %0
+infer %1
+
+
+--------------------------------
+guess 0
+
+%0:i32 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 1
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: 268435457
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+
+--------------------------------
+guess 1
+
+%0:i32 = var
+
+Cost = 0
+second query is SAT-- constant doesn't work
+Dataflow Pruned 0/0
+There are 2 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+#########################################################
+; exiting Souper's runOnFunction() for kahanSum()
+
+; entering Souper's runOnFunction() for main()
+
+; ModuleID = './Kahan_summation.c.bc'
+source_filename = "./Kahan_summation.c"
+target datalayout = "e-m:e-p:32:32-i64:64-n32:64-S128"
+target triple = "wasm32-unknown-wasi"
+
+@.str = private unnamed_addr constant [22 x i8] c"Epsilon     = %0.12f\0A\00", align 1
+@.str.1 = private unnamed_addr constant [22 x i8] c"(a + b) + c = %0.12f\0A\00", align 1
+@.str.2 = private unnamed_addr constant [22 x i8] c"Kahan sum   = %0.12f\0A\00", align 1
+@llvm.used = appending global [1 x i8*] [i8* bitcast (i32 ()* @__main_void to i8*)], section "llvm.metadata"
+
+@__main_void = alias i32 (), i32 ()* @main
+
+; Function Attrs: noinline nounwind optnone
+define hidden float @epsilon() #0 {
+entry:
+  %eps = alloca float, align 4
+  store float 1.000000e+00, float* %eps, align 4
+  br label %while.cond
+
+while.cond:                                       ; preds = %while.body, %entry
+  %0 = load float, float* %eps, align 4
+  %add = fadd float 1.000000e+00, %0
+  %cmp = fcmp une float %add, 1.000000e+00
+  br i1 %cmp, label %while.body, label %while.end
+
+while.body:                                       ; preds = %while.cond
+  %1 = load float, float* %eps, align 4
+  %div = fdiv float %1, 2.000000e+00
+  store float %div, float* %eps, align 4
+  br label %while.cond
+
+while.end:                                        ; preds = %while.cond
+  %2 = load float, float* %eps, align 4
+  ret float %2
+}
+
+; Function Attrs: noinline nounwind optnone
+define hidden float @kahanSum(float* %nums, i32 %count) #0 {
+entry:
+  %nums.addr = alloca float*, align 4
+  %count.addr = alloca i32, align 4
+  %sum = alloca float, align 4
+  %c = alloca float, align 4
+  %t = alloca float, align 4
+  %y = alloca float, align 4
+  %i = alloca i32, align 4
+  store float* %nums, float** %nums.addr, align 4
+  store i32 %count, i32* %count.addr, align 4
+  store float 0.000000e+00, float* %sum, align 4
+  store float 0.000000e+00, float* %c, align 4
+  store i32 0, i32* %i, align 4
+  br label %for.cond
+
+for.cond:                                         ; preds = %for.inc, %entry
+  %0 = load i32, i32* %i, align 4
+  %1 = load i32, i32* %count.addr, align 4
+  %cmp = icmp slt i32 %0, %1
+  br i1 %cmp, label %for.body, label %for.end
+
+for.body:                                         ; preds = %for.cond
+  %2 = load float*, float** %nums.addr, align 4
+  %3 = load i32, i32* %i, align 4
+  %arrayidx = getelementptr inbounds float, float* %2, i32 %3
+  %4 = load float, float* %arrayidx, align 4
+  %5 = load float, float* %c, align 4
+  %sub = fsub float %4, %5
+  store float %sub, float* %y, align 4
+  %6 = load float, float* %sum, align 4
+  %7 = load float, float* %y, align 4
+  %add = fadd float %6, %7
+  store float %add, float* %t, align 4
+  %8 = load float, float* %t, align 4
+  %9 = load float, float* %sum, align 4
+  %sub1 = fsub float %8, %9
+  %10 = load float, float* %y, align 4
+  %sub2 = fsub float %sub1, %10
+  store float %sub2, float* %c, align 4
+  %11 = load float, float* %t, align 4
+  store float %11, float* %sum, align 4
+  br label %for.inc
+
+for.inc:                                          ; preds = %for.body
+  %12 = load i32, i32* %i, align 4
+  %inc = add nsw i32 %12, 1
+  store i32 %inc, i32* %i, align 4
+  br label %for.cond
+
+for.end:                                          ; preds = %for.cond
+  %13 = load float, float* %sum, align 4
+  ret float %13
+}
+
+; Function Attrs: noinline nounwind optnone
+define hidden i32 @main() #0 {
+entry:
+  %retval = alloca i32, align 4
+  %a = alloca float, align 4
+  %b = alloca float, align 4
+  %c = alloca float, align 4
+  %fa = alloca [3 x float], align 4
+  store i32 0, i32* %retval, align 4
+  store float 1.000000e+00, float* %a, align 4
+  %call = call float @epsilon()
+  store float %call, float* %b, align 4
+  %0 = load float, float* %b, align 4
+  %fneg = fneg float %0
+  store float %fneg, float* %c, align 4
+  %1 = load float, float* %a, align 4
+  %arrayidx = getelementptr inbounds [3 x float], [3 x float]* %fa, i32 0, i32 0
+  store float %1, float* %arrayidx, align 4
+  %2 = load float, float* %b, align 4
+  %arrayidx1 = getelementptr inbounds [3 x float], [3 x float]* %fa, i32 0, i32 1
+  store float %2, float* %arrayidx1, align 4
+  %3 = load float, float* %c, align 4
+  %arrayidx2 = getelementptr inbounds [3 x float], [3 x float]* %fa, i32 0, i32 2
+  store float %3, float* %arrayidx2, align 4
+  %4 = load float, float* %b, align 4
+  %conv = fpext float %4 to double
+  %call3 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([22 x i8], [22 x i8]* @.str, i32 0, i32 0), double %conv)
+  %5 = load float, float* %a, align 4
+  %6 = load float, float* %b, align 4
+  %add = fadd float %5, %6
+  %7 = load float, float* %c, align 4
+  %add4 = fadd float %add, %7
+  %conv5 = fpext float %add4 to double
+  %call6 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([22 x i8], [22 x i8]* @.str.1, i32 0, i32 0), double %conv5)
+  %arraydecay = getelementptr inbounds [3 x float], [3 x float]* %fa, i32 0, i32 0
+  %call7 = call float @kahanSum(float* %arraydecay, i32 3)
+  %conv8 = fpext float %call7 to double
+  %call9 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([22 x i8], [22 x i8]* @.str.2, i32 0, i32 0), double %conv8)
+  ret i32 0
+}
+
+declare i32 @printf(i8* %0, ...) #1
+
+attributes #0 = { noinline nounwind optnone "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "min-legal-vector-width"="0" "no-infs-fp-math"="false" "no-jump-tables"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #1 = { "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+
+!llvm.module.flags = !{!0}
+!llvm.ident = !{!1}
+
+!0 = !{i32 1, !"wchar_size", i32 4}
+!1 = !{!"clang version 11.0.0 (https://github.com/Jacarte/llvm-project.git 0f6dea67136cc1e0b3d200eb2bb165628970c44b)"}
+
+; extracted candidates
+#########################################################
+; exiting Souper's runOnFunction() for main()
+Total of 0 replacements done on this module
+Total of 0 replacements candidates on this module

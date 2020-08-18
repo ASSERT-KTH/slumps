@@ -1,0 +1,3524 @@
+
+Entering the Souper pass's runOnModule()
+
+
+; entering Souper's runOnFunction() for lege_coef()
+
+; ModuleID = './Numerical_integration-Gauss-Legendre_Quadrature.c.bc'
+source_filename = "./Numerical_integration-Gauss-Legendre_Quadrature.c"
+target datalayout = "e-m:e-p:32:32-i64:64-n32:64-S128"
+target triple = "wasm32-unknown-wasi"
+
+@lcoef = hidden global [6 x [6 x double]] zeroinitializer, align 16
+@Pi = hidden global double 0.000000e+00, align 8
+@lroots = hidden global [5 x double] zeroinitializer, align 16
+@weight = hidden global [5 x double] zeroinitializer, align 16
+@.str = private unnamed_addr constant [8 x i8] c"Roots: \00", align 1
+@.str.1 = private unnamed_addr constant [4 x i8] c" %g\00", align 1
+@.str.2 = private unnamed_addr constant [9 x i8] c"\0AWeight:\00", align 1
+@.str.3 = private unnamed_addr constant [70 x i8] c"\0Aintegrating Exp(x) over [-3, 3]:\0A\09%10.8f,\0Acompred to actual\0A\09%10.8f\0A\00", align 1
+@llvm.used = appending global [1 x i8*] [i8* bitcast (i32 ()* @__main_void to i8*)], section "llvm.metadata"
+
+@__main_void = alias i32 (), i32 ()* @main
+
+; Function Attrs: noinline nounwind optnone
+define hidden void @lege_coef() #0 {
+entry:
+  %n = alloca i32, align 4
+  %i = alloca i32, align 4
+  store double 1.000000e+00, double* getelementptr inbounds ([6 x [6 x double]], [6 x [6 x double]]* @lcoef, i32 0, i32 1, i32 1), align 8
+  store double 1.000000e+00, double* getelementptr inbounds ([6 x [6 x double]], [6 x [6 x double]]* @lcoef, i32 0, i32 0, i32 0), align 16
+  store i32 2, i32* %n, align 4
+  br label %for.cond
+
+for.cond:                                         ; preds = %for.inc30, %entry
+  %0 = load i32, i32* %n, align 4
+  %cmp = icmp sle i32 %0, 5
+  br i1 %cmp, label %for.body, label %for.end32
+
+for.body:                                         ; preds = %for.cond
+  %1 = load i32, i32* %n, align 4
+  %sub = sub nsw i32 %1, 1
+  %sub1 = sub nsw i32 0, %sub
+  %conv = sitofp i32 %sub1 to double
+  %2 = load i32, i32* %n, align 4
+  %sub2 = sub nsw i32 %2, 2
+  %arrayidx = getelementptr inbounds [6 x [6 x double]], [6 x [6 x double]]* @lcoef, i32 0, i32 %sub2
+  %arrayidx3 = getelementptr inbounds [6 x double], [6 x double]* %arrayidx, i32 0, i32 0
+  %3 = load double, double* %arrayidx3, align 16
+  %mul = fmul double %conv, %3
+  %4 = load i32, i32* %n, align 4
+  %conv4 = sitofp i32 %4 to double
+  %div = fdiv double %mul, %conv4
+  %5 = load i32, i32* %n, align 4
+  %arrayidx5 = getelementptr inbounds [6 x [6 x double]], [6 x [6 x double]]* @lcoef, i32 0, i32 %5
+  %arrayidx6 = getelementptr inbounds [6 x double], [6 x double]* %arrayidx5, i32 0, i32 0
+  store double %div, double* %arrayidx6, align 16
+  store i32 1, i32* %i, align 4
+  br label %for.cond7
+
+for.cond7:                                        ; preds = %for.inc, %for.body
+  %6 = load i32, i32* %i, align 4
+  %7 = load i32, i32* %n, align 4
+  %cmp8 = icmp sle i32 %6, %7
+  br i1 %cmp8, label %for.body10, label %for.end
+
+for.body10:                                       ; preds = %for.cond7
+  %8 = load i32, i32* %n, align 4
+  %mul11 = mul nsw i32 2, %8
+  %sub12 = sub nsw i32 %mul11, 1
+  %conv13 = sitofp i32 %sub12 to double
+  %9 = load i32, i32* %n, align 4
+  %sub14 = sub nsw i32 %9, 1
+  %arrayidx15 = getelementptr inbounds [6 x [6 x double]], [6 x [6 x double]]* @lcoef, i32 0, i32 %sub14
+  %10 = load i32, i32* %i, align 4
+  %sub16 = sub nsw i32 %10, 1
+  %arrayidx17 = getelementptr inbounds [6 x double], [6 x double]* %arrayidx15, i32 0, i32 %sub16
+  %11 = load double, double* %arrayidx17, align 8
+  %mul18 = fmul double %conv13, %11
+  %12 = load i32, i32* %n, align 4
+  %sub19 = sub nsw i32 %12, 1
+  %conv20 = sitofp i32 %sub19 to double
+  %13 = load i32, i32* %n, align 4
+  %sub21 = sub nsw i32 %13, 2
+  %arrayidx22 = getelementptr inbounds [6 x [6 x double]], [6 x [6 x double]]* @lcoef, i32 0, i32 %sub21
+  %14 = load i32, i32* %i, align 4
+  %arrayidx23 = getelementptr inbounds [6 x double], [6 x double]* %arrayidx22, i32 0, i32 %14
+  %15 = load double, double* %arrayidx23, align 8
+  %mul24 = fmul double %conv20, %15
+  %sub25 = fsub double %mul18, %mul24
+  %16 = load i32, i32* %n, align 4
+  %conv26 = sitofp i32 %16 to double
+  %div27 = fdiv double %sub25, %conv26
+  %17 = load i32, i32* %n, align 4
+  %arrayidx28 = getelementptr inbounds [6 x [6 x double]], [6 x [6 x double]]* @lcoef, i32 0, i32 %17
+  %18 = load i32, i32* %i, align 4
+  %arrayidx29 = getelementptr inbounds [6 x double], [6 x double]* %arrayidx28, i32 0, i32 %18
+  store double %div27, double* %arrayidx29, align 8
+  br label %for.inc
+
+for.inc:                                          ; preds = %for.body10
+  %19 = load i32, i32* %i, align 4
+  %inc = add nsw i32 %19, 1
+  store i32 %inc, i32* %i, align 4
+  br label %for.cond7
+
+for.end:                                          ; preds = %for.cond7
+  br label %for.inc30
+
+for.inc30:                                        ; preds = %for.end
+  %20 = load i32, i32* %n, align 4
+  %inc31 = add nsw i32 %20, 1
+  store i32 %inc31, i32* %n, align 4
+  br label %for.cond
+
+for.end32:                                        ; preds = %for.cond
+  ret void
+}
+
+; Function Attrs: noinline nounwind optnone
+define hidden double @lege_eval(i32 %n, double %x) #0 {
+entry:
+  %n.addr = alloca i32, align 4
+  %x.addr = alloca double, align 8
+  %i = alloca i32, align 4
+  %s = alloca double, align 8
+  store i32 %n, i32* %n.addr, align 4
+  store double %x, double* %x.addr, align 8
+  %0 = load i32, i32* %n.addr, align 4
+  %arrayidx = getelementptr inbounds [6 x [6 x double]], [6 x [6 x double]]* @lcoef, i32 0, i32 %0
+  %1 = load i32, i32* %n.addr, align 4
+  %arrayidx1 = getelementptr inbounds [6 x double], [6 x double]* %arrayidx, i32 0, i32 %1
+  %2 = load double, double* %arrayidx1, align 8
+  store double %2, double* %s, align 8
+  %3 = load i32, i32* %n.addr, align 4
+  store i32 %3, i32* %i, align 4
+  br label %for.cond
+
+for.cond:                                         ; preds = %for.inc, %entry
+  %4 = load i32, i32* %i, align 4
+  %tobool = icmp ne i32 %4, 0
+  br i1 %tobool, label %for.body, label %for.end
+
+for.body:                                         ; preds = %for.cond
+  %5 = load double, double* %s, align 8
+  %6 = load double, double* %x.addr, align 8
+  %mul = fmul double %5, %6
+  %7 = load i32, i32* %n.addr, align 4
+  %arrayidx2 = getelementptr inbounds [6 x [6 x double]], [6 x [6 x double]]* @lcoef, i32 0, i32 %7
+  %8 = load i32, i32* %i, align 4
+  %sub = sub nsw i32 %8, 1
+  %arrayidx3 = getelementptr inbounds [6 x double], [6 x double]* %arrayidx2, i32 0, i32 %sub
+  %9 = load double, double* %arrayidx3, align 8
+  %add = fadd double %mul, %9
+  store double %add, double* %s, align 8
+  br label %for.inc
+
+for.inc:                                          ; preds = %for.body
+  %10 = load i32, i32* %i, align 4
+  %dec = add nsw i32 %10, -1
+  store i32 %dec, i32* %i, align 4
+  br label %for.cond
+
+for.end:                                          ; preds = %for.cond
+  %11 = load double, double* %s, align 8
+  ret double %11
+}
+
+; Function Attrs: noinline nounwind optnone
+define hidden double @lege_diff(i32 %n, double %x) #0 {
+entry:
+  %n.addr = alloca i32, align 4
+  %x.addr = alloca double, align 8
+  store i32 %n, i32* %n.addr, align 4
+  store double %x, double* %x.addr, align 8
+  %0 = load i32, i32* %n.addr, align 4
+  %conv = sitofp i32 %0 to double
+  %1 = load double, double* %x.addr, align 8
+  %2 = load i32, i32* %n.addr, align 4
+  %3 = load double, double* %x.addr, align 8
+  %call = call double @lege_eval(i32 %2, double %3)
+  %mul = fmul double %1, %call
+  %4 = load i32, i32* %n.addr, align 4
+  %sub = sub nsw i32 %4, 1
+  %5 = load double, double* %x.addr, align 8
+  %call1 = call double @lege_eval(i32 %sub, double %5)
+  %sub2 = fsub double %mul, %call1
+  %mul3 = fmul double %conv, %sub2
+  %6 = load double, double* %x.addr, align 8
+  %7 = load double, double* %x.addr, align 8
+  %mul4 = fmul double %6, %7
+  %sub5 = fsub double %mul4, 1.000000e+00
+  %div = fdiv double %mul3, %sub5
+  ret double %div
+}
+
+; Function Attrs: noinline nounwind optnone
+define hidden void @lege_roots() #0 {
+entry:
+  %i = alloca i32, align 4
+  %x = alloca double, align 8
+  %x1 = alloca double, align 8
+  store i32 1, i32* %i, align 4
+  br label %for.cond
+
+for.cond:                                         ; preds = %for.inc, %entry
+  %0 = load i32, i32* %i, align 4
+  %cmp = icmp sle i32 %0, 5
+  br i1 %cmp, label %for.body, label %for.end
+
+for.body:                                         ; preds = %for.cond
+  %1 = load double, double* @Pi, align 8
+  %2 = load i32, i32* %i, align 4
+  %conv = sitofp i32 %2 to double
+  %sub = fsub double %conv, 2.500000e-01
+  %mul = fmul double %1, %sub
+  %div = fdiv double %mul, 5.500000e+00
+  %3 = call double @llvm.cos.f64(double %div)
+  store double %3, double* %x, align 8
+  br label %do.body
+
+do.body:                                          ; preds = %do.cond, %for.body
+  %4 = load double, double* %x, align 8
+  store double %4, double* %x1, align 8
+  %5 = load double, double* %x, align 8
+  %call = call double @lege_eval(i32 5, double %5)
+  %6 = load double, double* %x, align 8
+  %call1 = call double @lege_diff(i32 5, double %6)
+  %div2 = fdiv double %call, %call1
+  %7 = load double, double* %x, align 8
+  %sub3 = fsub double %7, %div2
+  store double %sub3, double* %x, align 8
+  br label %do.cond
+
+do.cond:                                          ; preds = %do.body
+  %8 = load double, double* %x, align 8
+  %9 = load double, double* %x1, align 8
+  %call4 = call double @fdim(double %8, double %9) #4
+  %cmp5 = fcmp ogt double %call4, 2.000000e-16
+  br i1 %cmp5, label %do.body, label %do.end
+
+do.end:                                           ; preds = %do.cond
+  %10 = load double, double* %x, align 8
+  %11 = load i32, i32* %i, align 4
+  %sub7 = sub nsw i32 %11, 1
+  %arrayidx = getelementptr inbounds [5 x double], [5 x double]* @lroots, i32 0, i32 %sub7
+  store double %10, double* %arrayidx, align 8
+  %12 = load double, double* %x, align 8
+  %call8 = call double @lege_diff(i32 5, double %12)
+  store double %call8, double* %x1, align 8
+  %13 = load double, double* %x, align 8
+  %14 = load double, double* %x, align 8
+  %mul9 = fmul double %13, %14
+  %sub10 = fsub double 1.000000e+00, %mul9
+  %15 = load double, double* %x1, align 8
+  %mul11 = fmul double %sub10, %15
+  %16 = load double, double* %x1, align 8
+  %mul12 = fmul double %mul11, %16
+  %div13 = fdiv double 2.000000e+00, %mul12
+  %17 = load i32, i32* %i, align 4
+  %sub14 = sub nsw i32 %17, 1
+  %arrayidx15 = getelementptr inbounds [5 x double], [5 x double]* @weight, i32 0, i32 %sub14
+  store double %div13, double* %arrayidx15, align 8
+  br label %for.inc
+
+for.inc:                                          ; preds = %do.end
+  %18 = load i32, i32* %i, align 4
+  %inc = add nsw i32 %18, 1
+  store i32 %inc, i32* %i, align 4
+  br label %for.cond
+
+for.end:                                          ; preds = %for.cond
+  ret void
+}
+
+; Function Attrs: nounwind readnone speculatable willreturn
+declare double @llvm.cos.f64(double %0) #1
+
+; Function Attrs: nounwind readnone
+declare double @fdim(double %0, double %1) #2
+
+; Function Attrs: noinline nounwind optnone
+define hidden double @lege_inte(double (double)* %f, double %a, double %b) #0 {
+entry:
+  %f.addr = alloca double (double)*, align 4
+  %a.addr = alloca double, align 8
+  %b.addr = alloca double, align 8
+  %c1 = alloca double, align 8
+  %c2 = alloca double, align 8
+  %sum = alloca double, align 8
+  %i = alloca i32, align 4
+  store double (double)* %f, double (double)** %f.addr, align 4
+  store double %a, double* %a.addr, align 8
+  store double %b, double* %b.addr, align 8
+  %0 = load double, double* %b.addr, align 8
+  %1 = load double, double* %a.addr, align 8
+  %sub = fsub double %0, %1
+  %div = fdiv double %sub, 2.000000e+00
+  store double %div, double* %c1, align 8
+  %2 = load double, double* %b.addr, align 8
+  %3 = load double, double* %a.addr, align 8
+  %add = fadd double %2, %3
+  %div1 = fdiv double %add, 2.000000e+00
+  store double %div1, double* %c2, align 8
+  store double 0.000000e+00, double* %sum, align 8
+  store i32 0, i32* %i, align 4
+  br label %for.cond
+
+for.cond:                                         ; preds = %for.inc, %entry
+  %4 = load i32, i32* %i, align 4
+  %cmp = icmp slt i32 %4, 5
+  br i1 %cmp, label %for.body, label %for.end
+
+for.body:                                         ; preds = %for.cond
+  %5 = load i32, i32* %i, align 4
+  %arrayidx = getelementptr inbounds [5 x double], [5 x double]* @weight, i32 0, i32 %5
+  %6 = load double, double* %arrayidx, align 8
+  %7 = load double (double)*, double (double)** %f.addr, align 4
+  %8 = load double, double* %c1, align 8
+  %9 = load i32, i32* %i, align 4
+  %arrayidx2 = getelementptr inbounds [5 x double], [5 x double]* @lroots, i32 0, i32 %9
+  %10 = load double, double* %arrayidx2, align 8
+  %mul = fmul double %8, %10
+  %11 = load double, double* %c2, align 8
+  %add3 = fadd double %mul, %11
+  %call = call double %7(double %add3)
+  %mul4 = fmul double %6, %call
+  %12 = load double, double* %sum, align 8
+  %add5 = fadd double %12, %mul4
+  store double %add5, double* %sum, align 8
+  br label %for.inc
+
+for.inc:                                          ; preds = %for.body
+  %13 = load i32, i32* %i, align 4
+  %inc = add nsw i32 %13, 1
+  store i32 %inc, i32* %i, align 4
+  br label %for.cond
+
+for.end:                                          ; preds = %for.cond
+  %14 = load double, double* %c1, align 8
+  %15 = load double, double* %sum, align 8
+  %mul6 = fmul double %14, %15
+  ret double %mul6
+}
+
+; Function Attrs: noinline nounwind optnone
+define hidden i32 @main() #0 {
+entry:
+  %retval = alloca i32, align 4
+  %i = alloca i32, align 4
+  store i32 0, i32* %retval, align 4
+  %call = call double @atan2(double 1.000000e+00, double 1.000000e+00) #4
+  %mul = fmul double %call, 4.000000e+00
+  store double %mul, double* @Pi, align 8
+  call void @lege_coef()
+  call void @lege_roots()
+  %call1 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([8 x i8], [8 x i8]* @.str, i32 0, i32 0))
+  store i32 0, i32* %i, align 4
+  br label %for.cond
+
+for.cond:                                         ; preds = %for.inc, %entry
+  %0 = load i32, i32* %i, align 4
+  %cmp = icmp slt i32 %0, 5
+  br i1 %cmp, label %for.body, label %for.end
+
+for.body:                                         ; preds = %for.cond
+  %1 = load i32, i32* %i, align 4
+  %arrayidx = getelementptr inbounds [5 x double], [5 x double]* @lroots, i32 0, i32 %1
+  %2 = load double, double* %arrayidx, align 8
+  %call2 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([4 x i8], [4 x i8]* @.str.1, i32 0, i32 0), double %2)
+  br label %for.inc
+
+for.inc:                                          ; preds = %for.body
+  %3 = load i32, i32* %i, align 4
+  %inc = add nsw i32 %3, 1
+  store i32 %inc, i32* %i, align 4
+  br label %for.cond
+
+for.end:                                          ; preds = %for.cond
+  %call3 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([9 x i8], [9 x i8]* @.str.2, i32 0, i32 0))
+  store i32 0, i32* %i, align 4
+  br label %for.cond4
+
+for.cond4:                                        ; preds = %for.inc9, %for.end
+  %4 = load i32, i32* %i, align 4
+  %cmp5 = icmp slt i32 %4, 5
+  br i1 %cmp5, label %for.body6, label %for.end11
+
+for.body6:                                        ; preds = %for.cond4
+  %5 = load i32, i32* %i, align 4
+  %arrayidx7 = getelementptr inbounds [5 x double], [5 x double]* @weight, i32 0, i32 %5
+  %6 = load double, double* %arrayidx7, align 8
+  %call8 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([4 x i8], [4 x i8]* @.str.1, i32 0, i32 0), double %6)
+  br label %for.inc9
+
+for.inc9:                                         ; preds = %for.body6
+  %7 = load i32, i32* %i, align 4
+  %inc10 = add nsw i32 %7, 1
+  store i32 %inc10, i32* %i, align 4
+  br label %for.cond4
+
+for.end11:                                        ; preds = %for.cond4
+  %call12 = call double @lege_inte(double (double)* @exp, double -3.000000e+00, double 3.000000e+00)
+  %8 = call double @llvm.exp.f64(double 3.000000e+00)
+  %9 = call double @llvm.exp.f64(double -3.000000e+00)
+  %sub = fsub double %8, %9
+  %call13 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([70 x i8], [70 x i8]* @.str.3, i32 0, i32 0), double %call12, double %sub)
+  ret i32 0
+}
+
+; Function Attrs: nounwind readnone
+declare double @atan2(double %0, double %1) #2
+
+declare i32 @printf(i8* %0, ...) #3
+
+; Function Attrs: nounwind readnone
+declare double @exp(double %0) #2
+
+; Function Attrs: nounwind readnone speculatable willreturn
+declare double @llvm.exp.f64(double %0) #1
+
+attributes #0 = { noinline nounwind optnone "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "min-legal-vector-width"="0" "no-infs-fp-math"="false" "no-jump-tables"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #1 = { nounwind readnone speculatable willreturn }
+attributes #2 = { nounwind readnone "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #3 = { "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #4 = { nounwind readnone }
+
+!llvm.module.flags = !{!0}
+!llvm.ident = !{!1}
+
+!0 = !{i32 1, !"wchar_size", i32 4}
+!1 = !{!"clang version 11.0.0 (https://github.com/Jacarte/llvm-project.git 0f6dea67136cc1e0b3d200eb2bb165628970c44b)"}
+
+; extracted candidates
+
+; *****
+; For LLVM instruction:
+;  %0 = load i32, i32* %n, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %cmp = icmp sle i32 %0, 5
+; Looking for a replacement for:
+%0:i32 = var
+%1:i1 = sle %0, 5:i32
+infer %1
+
+; *****
+; For LLVM instruction:
+;  %1 = load i32, i32* %n, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %sub = sub nsw i32 %1, 1
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = subnsw %0, 1:i32
+infer %1
+
+; *****
+; For LLVM instruction:
+;  %sub1 = sub nsw i32 0, %sub
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = subnsw %0, 1:i32
+%2:i32 = subnsw 0:i32, %1
+infer %2
+
+; *****
+; For LLVM instruction:
+;  %2 = load i32, i32* %n, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %sub2 = sub nsw i32 %2, 2
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = subnsw %0, 2:i32
+infer %1
+
+; *****
+; For LLVM instruction:
+;  %4 = load i32, i32* %n, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %5 = load i32, i32* %n, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %6 = load i32, i32* %i, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %7 = load i32, i32* %n, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %cmp8 = icmp sle i32 %6, %7
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = var
+%2:i1 = sle %0, %1
+infer %2
+
+; *****
+; For LLVM instruction:
+;  %8 = load i32, i32* %n, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %mul11 = mul nsw i32 2, %8
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = mulnsw 2:i32, %0
+infer %1
+
+; *****
+; For LLVM instruction:
+;  %sub12 = sub nsw i32 %mul11, 1
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = mulnsw 2:i32, %0
+%2:i32 = subnsw %1, 1:i32
+infer %2
+
+; *****
+; For LLVM instruction:
+;  %9 = load i32, i32* %n, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %sub14 = sub nsw i32 %9, 1
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = subnsw %0, 1:i32
+infer %1
+
+; *****
+; For LLVM instruction:
+;  %10 = load i32, i32* %i, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %sub16 = sub nsw i32 %10, 1
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = subnsw %0, 1:i32
+infer %1
+
+; *****
+; For LLVM instruction:
+;  %12 = load i32, i32* %n, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %sub19 = sub nsw i32 %12, 1
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = subnsw %0, 1:i32
+infer %1
+
+; *****
+; For LLVM instruction:
+;  %13 = load i32, i32* %n, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %sub21 = sub nsw i32 %13, 2
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = subnsw %0, 2:i32
+infer %1
+
+; *****
+; For LLVM instruction:
+;  %14 = load i32, i32* %i, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %16 = load i32, i32* %n, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %17 = load i32, i32* %n, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %18 = load i32, i32* %i, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %19 = load i32, i32* %i, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %inc = add nsw i32 %19, 1
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = addnsw 1:i32, %0
+infer %1
+
+; *****
+; For LLVM instruction:
+;  %20 = load i32, i32* %n, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %inc31 = add nsw i32 %20, 1
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = addnsw 1:i32, %0
+infer %1
+got 1 candidates from LHS
+
+-------------------------------------------------
+%0:i32 = var
+infer %0
+
+
+--------------------------------
+guess 0
+
+%0:i32 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: -1
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+Dataflow Pruned 0/0
+There are 1 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 2 candidates from LHS
+
+-------------------------------------------------
+%0:i32 = var
+%1:i1 = sle %0, 5:i32
+infer %1
+
+
+--------------------------------
+guess 0
+
+%0:i1 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: -1
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: 0
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+Dataflow Pruned 0/0
+There are 1 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 2 candidates from LHS
+
+-------------------------------------------------
+%0:i32 = var
+%1:i32 = subnsw %0, 1:i32
+infer %1
+
+
+--------------------------------
+guess 0
+
+%0:i32 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: -1
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: 536870911
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+
+--------------------------------
+guess 1
+
+%0:i32 = var
+
+Cost = 0
+second query is SAT-- constant doesn't work
+Dataflow Pruned 0/0
+There are 2 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 3 candidates from LHS
+
+-------------------------------------------------
+%0:i32 = var
+%1:i32 = subnsw %0, 1:i32
+%2:i32 = subnsw 0:i32, %1
+infer %2
+
+
+--------------------------------
+guess 0
+
+%0:i32 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 1
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: -7
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+
+--------------------------------
+guess 1
+
+%0:i32 = var
+
+Cost = 0
+second query is SAT-- constant doesn't work
+
+--------------------------------
+guess 2
+
+%0:i32 = var
+%1:i32 = subnsw %0, 1:i32
+
+Cost = 1
+second query is SAT-- constant doesn't work
+Dataflow Pruned 0/0
+There are 3 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 2 candidates from LHS
+
+-------------------------------------------------
+%0:i32 = var
+%1:i32 = subnsw %0, 2:i32
+infer %1
+
+
+--------------------------------
+guess 0
+
+%0:i32 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: -2
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: 226595190
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+
+--------------------------------
+guess 1
+
+%0:i32 = var
+
+Cost = 0
+second query is SAT-- constant doesn't work
+Dataflow Pruned 0/0
+There are 2 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 3 candidates from LHS
+
+-------------------------------------------------
+%0:i32 = var
+%1:i32 = var
+%2:i1 = sle %0, %1
+infer %2
+
+
+--------------------------------
+guess 0
+
+%0:i1 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: -1
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: 0
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+Dataflow Pruned 0/0
+There are 1 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 2 candidates from LHS
+
+-------------------------------------------------
+%0:i32 = var
+%1:i32 = mulnsw 2:i32, %0
+infer %1
+
+
+--------------------------------
+guess 0
+
+%0:i32 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: 1073741824
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+
+--------------------------------
+guess 1
+
+%0:i32 = var
+
+Cost = 0
+second query is SAT-- constant doesn't work
+Dataflow Pruned 0/0
+There are 2 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 3 candidates from LHS
+
+-------------------------------------------------
+%0:i32 = var
+%1:i32 = mulnsw 2:i32, %0
+%2:i32 = subnsw %1, 1:i32
+infer %2
+
+
+--------------------------------
+guess 0
+
+%0:i32 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: -1
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: 536870911
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+
+--------------------------------
+guess 1
+
+%0:i32 = var
+
+Cost = 0
+second query is SAT-- constant doesn't work
+
+--------------------------------
+guess 2
+
+%0:i32 = var
+%1:i32 = mulnsw 2:i32, %0
+
+Cost = 1
+second query is SAT-- constant doesn't work
+Dataflow Pruned 0/0
+There are 3 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 2 candidates from LHS
+
+-------------------------------------------------
+%0:i32 = var
+%1:i32 = addnsw 1:i32, %0
+infer %1
+
+
+--------------------------------
+guess 0
+
+%0:i32 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 1
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: 268435457
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+
+--------------------------------
+guess 1
+
+%0:i32 = var
+
+Cost = 0
+second query is SAT-- constant doesn't work
+Dataflow Pruned 0/0
+There are 2 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+#########################################################
+; exiting Souper's runOnFunction() for lege_coef()
+
+; entering Souper's runOnFunction() for lege_eval()
+
+; ModuleID = './Numerical_integration-Gauss-Legendre_Quadrature.c.bc'
+source_filename = "./Numerical_integration-Gauss-Legendre_Quadrature.c"
+target datalayout = "e-m:e-p:32:32-i64:64-n32:64-S128"
+target triple = "wasm32-unknown-wasi"
+
+@lcoef = hidden global [6 x [6 x double]] zeroinitializer, align 16
+@Pi = hidden global double 0.000000e+00, align 8
+@lroots = hidden global [5 x double] zeroinitializer, align 16
+@weight = hidden global [5 x double] zeroinitializer, align 16
+@.str = private unnamed_addr constant [8 x i8] c"Roots: \00", align 1
+@.str.1 = private unnamed_addr constant [4 x i8] c" %g\00", align 1
+@.str.2 = private unnamed_addr constant [9 x i8] c"\0AWeight:\00", align 1
+@.str.3 = private unnamed_addr constant [70 x i8] c"\0Aintegrating Exp(x) over [-3, 3]:\0A\09%10.8f,\0Acompred to actual\0A\09%10.8f\0A\00", align 1
+@llvm.used = appending global [1 x i8*] [i8* bitcast (i32 ()* @__main_void to i8*)], section "llvm.metadata"
+
+@__main_void = alias i32 (), i32 ()* @main
+
+; Function Attrs: noinline nounwind optnone
+define hidden void @lege_coef() #0 {
+entry:
+  %n = alloca i32, align 4
+  %i = alloca i32, align 4
+  store double 1.000000e+00, double* getelementptr inbounds ([6 x [6 x double]], [6 x [6 x double]]* @lcoef, i32 0, i32 1, i32 1), align 8
+  store double 1.000000e+00, double* getelementptr inbounds ([6 x [6 x double]], [6 x [6 x double]]* @lcoef, i32 0, i32 0, i32 0), align 16
+  store i32 2, i32* %n, align 4
+  br label %for.cond
+
+for.cond:                                         ; preds = %for.inc30, %entry
+  %0 = load i32, i32* %n, align 4
+  %cmp = icmp sle i32 %0, 5
+  br i1 %cmp, label %for.body, label %for.end32
+
+for.body:                                         ; preds = %for.cond
+  %1 = load i32, i32* %n, align 4
+  %sub = sub nsw i32 %1, 1
+  %sub1 = sub nsw i32 0, %sub
+  %conv = sitofp i32 %sub1 to double
+  %2 = load i32, i32* %n, align 4
+  %sub2 = sub nsw i32 %2, 2
+  %arrayidx = getelementptr inbounds [6 x [6 x double]], [6 x [6 x double]]* @lcoef, i32 0, i32 %sub2
+  %arrayidx3 = getelementptr inbounds [6 x double], [6 x double]* %arrayidx, i32 0, i32 0
+  %3 = load double, double* %arrayidx3, align 16
+  %mul = fmul double %conv, %3
+  %4 = load i32, i32* %n, align 4
+  %conv4 = sitofp i32 %4 to double
+  %div = fdiv double %mul, %conv4
+  %5 = load i32, i32* %n, align 4
+  %arrayidx5 = getelementptr inbounds [6 x [6 x double]], [6 x [6 x double]]* @lcoef, i32 0, i32 %5
+  %arrayidx6 = getelementptr inbounds [6 x double], [6 x double]* %arrayidx5, i32 0, i32 0
+  store double %div, double* %arrayidx6, align 16
+  store i32 1, i32* %i, align 4
+  br label %for.cond7
+
+for.cond7:                                        ; preds = %for.inc, %for.body
+  %6 = load i32, i32* %i, align 4
+  %7 = load i32, i32* %n, align 4
+  %cmp8 = icmp sle i32 %6, %7
+  br i1 %cmp8, label %for.body10, label %for.end
+
+for.body10:                                       ; preds = %for.cond7
+  %8 = load i32, i32* %n, align 4
+  %mul11 = mul nsw i32 2, %8
+  %sub12 = sub nsw i32 %mul11, 1
+  %conv13 = sitofp i32 %sub12 to double
+  %9 = load i32, i32* %n, align 4
+  %sub14 = sub nsw i32 %9, 1
+  %arrayidx15 = getelementptr inbounds [6 x [6 x double]], [6 x [6 x double]]* @lcoef, i32 0, i32 %sub14
+  %10 = load i32, i32* %i, align 4
+  %sub16 = sub nsw i32 %10, 1
+  %arrayidx17 = getelementptr inbounds [6 x double], [6 x double]* %arrayidx15, i32 0, i32 %sub16
+  %11 = load double, double* %arrayidx17, align 8
+  %mul18 = fmul double %conv13, %11
+  %12 = load i32, i32* %n, align 4
+  %sub19 = sub nsw i32 %12, 1
+  %conv20 = sitofp i32 %sub19 to double
+  %13 = load i32, i32* %n, align 4
+  %sub21 = sub nsw i32 %13, 2
+  %arrayidx22 = getelementptr inbounds [6 x [6 x double]], [6 x [6 x double]]* @lcoef, i32 0, i32 %sub21
+  %14 = load i32, i32* %i, align 4
+  %arrayidx23 = getelementptr inbounds [6 x double], [6 x double]* %arrayidx22, i32 0, i32 %14
+  %15 = load double, double* %arrayidx23, align 8
+  %mul24 = fmul double %conv20, %15
+  %sub25 = fsub double %mul18, %mul24
+  %16 = load i32, i32* %n, align 4
+  %conv26 = sitofp i32 %16 to double
+  %div27 = fdiv double %sub25, %conv26
+  %17 = load i32, i32* %n, align 4
+  %arrayidx28 = getelementptr inbounds [6 x [6 x double]], [6 x [6 x double]]* @lcoef, i32 0, i32 %17
+  %18 = load i32, i32* %i, align 4
+  %arrayidx29 = getelementptr inbounds [6 x double], [6 x double]* %arrayidx28, i32 0, i32 %18
+  store double %div27, double* %arrayidx29, align 8
+  br label %for.inc
+
+for.inc:                                          ; preds = %for.body10
+  %19 = load i32, i32* %i, align 4
+  %inc = add nsw i32 %19, 1
+  store i32 %inc, i32* %i, align 4
+  br label %for.cond7
+
+for.end:                                          ; preds = %for.cond7
+  br label %for.inc30
+
+for.inc30:                                        ; preds = %for.end
+  %20 = load i32, i32* %n, align 4
+  %inc31 = add nsw i32 %20, 1
+  store i32 %inc31, i32* %n, align 4
+  br label %for.cond
+
+for.end32:                                        ; preds = %for.cond
+  ret void
+}
+
+; Function Attrs: noinline nounwind optnone
+define hidden double @lege_eval(i32 %n, double %x) #0 {
+entry:
+  %n.addr = alloca i32, align 4
+  %x.addr = alloca double, align 8
+  %i = alloca i32, align 4
+  %s = alloca double, align 8
+  store i32 %n, i32* %n.addr, align 4
+  store double %x, double* %x.addr, align 8
+  %0 = load i32, i32* %n.addr, align 4
+  %arrayidx = getelementptr inbounds [6 x [6 x double]], [6 x [6 x double]]* @lcoef, i32 0, i32 %0
+  %1 = load i32, i32* %n.addr, align 4
+  %arrayidx1 = getelementptr inbounds [6 x double], [6 x double]* %arrayidx, i32 0, i32 %1
+  %2 = load double, double* %arrayidx1, align 8
+  store double %2, double* %s, align 8
+  %3 = load i32, i32* %n.addr, align 4
+  store i32 %3, i32* %i, align 4
+  br label %for.cond
+
+for.cond:                                         ; preds = %for.inc, %entry
+  %4 = load i32, i32* %i, align 4
+  %tobool = icmp ne i32 %4, 0
+  br i1 %tobool, label %for.body, label %for.end
+
+for.body:                                         ; preds = %for.cond
+  %5 = load double, double* %s, align 8
+  %6 = load double, double* %x.addr, align 8
+  %mul = fmul double %5, %6
+  %7 = load i32, i32* %n.addr, align 4
+  %arrayidx2 = getelementptr inbounds [6 x [6 x double]], [6 x [6 x double]]* @lcoef, i32 0, i32 %7
+  %8 = load i32, i32* %i, align 4
+  %sub = sub nsw i32 %8, 1
+  %arrayidx3 = getelementptr inbounds [6 x double], [6 x double]* %arrayidx2, i32 0, i32 %sub
+  %9 = load double, double* %arrayidx3, align 8
+  %add = fadd double %mul, %9
+  store double %add, double* %s, align 8
+  br label %for.inc
+
+for.inc:                                          ; preds = %for.body
+  %10 = load i32, i32* %i, align 4
+  %dec = add nsw i32 %10, -1
+  store i32 %dec, i32* %i, align 4
+  br label %for.cond
+
+for.end:                                          ; preds = %for.cond
+  %11 = load double, double* %s, align 8
+  ret double %11
+}
+
+; Function Attrs: noinline nounwind optnone
+define hidden double @lege_diff(i32 %n, double %x) #0 {
+entry:
+  %n.addr = alloca i32, align 4
+  %x.addr = alloca double, align 8
+  store i32 %n, i32* %n.addr, align 4
+  store double %x, double* %x.addr, align 8
+  %0 = load i32, i32* %n.addr, align 4
+  %conv = sitofp i32 %0 to double
+  %1 = load double, double* %x.addr, align 8
+  %2 = load i32, i32* %n.addr, align 4
+  %3 = load double, double* %x.addr, align 8
+  %call = call double @lege_eval(i32 %2, double %3)
+  %mul = fmul double %1, %call
+  %4 = load i32, i32* %n.addr, align 4
+  %sub = sub nsw i32 %4, 1
+  %5 = load double, double* %x.addr, align 8
+  %call1 = call double @lege_eval(i32 %sub, double %5)
+  %sub2 = fsub double %mul, %call1
+  %mul3 = fmul double %conv, %sub2
+  %6 = load double, double* %x.addr, align 8
+  %7 = load double, double* %x.addr, align 8
+  %mul4 = fmul double %6, %7
+  %sub5 = fsub double %mul4, 1.000000e+00
+  %div = fdiv double %mul3, %sub5
+  ret double %div
+}
+
+; Function Attrs: noinline nounwind optnone
+define hidden void @lege_roots() #0 {
+entry:
+  %i = alloca i32, align 4
+  %x = alloca double, align 8
+  %x1 = alloca double, align 8
+  store i32 1, i32* %i, align 4
+  br label %for.cond
+
+for.cond:                                         ; preds = %for.inc, %entry
+  %0 = load i32, i32* %i, align 4
+  %cmp = icmp sle i32 %0, 5
+  br i1 %cmp, label %for.body, label %for.end
+
+for.body:                                         ; preds = %for.cond
+  %1 = load double, double* @Pi, align 8
+  %2 = load i32, i32* %i, align 4
+  %conv = sitofp i32 %2 to double
+  %sub = fsub double %conv, 2.500000e-01
+  %mul = fmul double %1, %sub
+  %div = fdiv double %mul, 5.500000e+00
+  %3 = call double @llvm.cos.f64(double %div)
+  store double %3, double* %x, align 8
+  br label %do.body
+
+do.body:                                          ; preds = %do.cond, %for.body
+  %4 = load double, double* %x, align 8
+  store double %4, double* %x1, align 8
+  %5 = load double, double* %x, align 8
+  %call = call double @lege_eval(i32 5, double %5)
+  %6 = load double, double* %x, align 8
+  %call1 = call double @lege_diff(i32 5, double %6)
+  %div2 = fdiv double %call, %call1
+  %7 = load double, double* %x, align 8
+  %sub3 = fsub double %7, %div2
+  store double %sub3, double* %x, align 8
+  br label %do.cond
+
+do.cond:                                          ; preds = %do.body
+  %8 = load double, double* %x, align 8
+  %9 = load double, double* %x1, align 8
+  %call4 = call double @fdim(double %8, double %9) #4
+  %cmp5 = fcmp ogt double %call4, 2.000000e-16
+  br i1 %cmp5, label %do.body, label %do.end
+
+do.end:                                           ; preds = %do.cond
+  %10 = load double, double* %x, align 8
+  %11 = load i32, i32* %i, align 4
+  %sub7 = sub nsw i32 %11, 1
+  %arrayidx = getelementptr inbounds [5 x double], [5 x double]* @lroots, i32 0, i32 %sub7
+  store double %10, double* %arrayidx, align 8
+  %12 = load double, double* %x, align 8
+  %call8 = call double @lege_diff(i32 5, double %12)
+  store double %call8, double* %x1, align 8
+  %13 = load double, double* %x, align 8
+  %14 = load double, double* %x, align 8
+  %mul9 = fmul double %13, %14
+  %sub10 = fsub double 1.000000e+00, %mul9
+  %15 = load double, double* %x1, align 8
+  %mul11 = fmul double %sub10, %15
+  %16 = load double, double* %x1, align 8
+  %mul12 = fmul double %mul11, %16
+  %div13 = fdiv double 2.000000e+00, %mul12
+  %17 = load i32, i32* %i, align 4
+  %sub14 = sub nsw i32 %17, 1
+  %arrayidx15 = getelementptr inbounds [5 x double], [5 x double]* @weight, i32 0, i32 %sub14
+  store double %div13, double* %arrayidx15, align 8
+  br label %for.inc
+
+for.inc:                                          ; preds = %do.end
+  %18 = load i32, i32* %i, align 4
+  %inc = add nsw i32 %18, 1
+  store i32 %inc, i32* %i, align 4
+  br label %for.cond
+
+for.end:                                          ; preds = %for.cond
+  ret void
+}
+
+; Function Attrs: nounwind readnone speculatable willreturn
+declare double @llvm.cos.f64(double %0) #1
+
+; Function Attrs: nounwind readnone
+declare double @fdim(double %0, double %1) #2
+
+; Function Attrs: noinline nounwind optnone
+define hidden double @lege_inte(double (double)* %f, double %a, double %b) #0 {
+entry:
+  %f.addr = alloca double (double)*, align 4
+  %a.addr = alloca double, align 8
+  %b.addr = alloca double, align 8
+  %c1 = alloca double, align 8
+  %c2 = alloca double, align 8
+  %sum = alloca double, align 8
+  %i = alloca i32, align 4
+  store double (double)* %f, double (double)** %f.addr, align 4
+  store double %a, double* %a.addr, align 8
+  store double %b, double* %b.addr, align 8
+  %0 = load double, double* %b.addr, align 8
+  %1 = load double, double* %a.addr, align 8
+  %sub = fsub double %0, %1
+  %div = fdiv double %sub, 2.000000e+00
+  store double %div, double* %c1, align 8
+  %2 = load double, double* %b.addr, align 8
+  %3 = load double, double* %a.addr, align 8
+  %add = fadd double %2, %3
+  %div1 = fdiv double %add, 2.000000e+00
+  store double %div1, double* %c2, align 8
+  store double 0.000000e+00, double* %sum, align 8
+  store i32 0, i32* %i, align 4
+  br label %for.cond
+
+for.cond:                                         ; preds = %for.inc, %entry
+  %4 = load i32, i32* %i, align 4
+  %cmp = icmp slt i32 %4, 5
+  br i1 %cmp, label %for.body, label %for.end
+
+for.body:                                         ; preds = %for.cond
+  %5 = load i32, i32* %i, align 4
+  %arrayidx = getelementptr inbounds [5 x double], [5 x double]* @weight, i32 0, i32 %5
+  %6 = load double, double* %arrayidx, align 8
+  %7 = load double (double)*, double (double)** %f.addr, align 4
+  %8 = load double, double* %c1, align 8
+  %9 = load i32, i32* %i, align 4
+  %arrayidx2 = getelementptr inbounds [5 x double], [5 x double]* @lroots, i32 0, i32 %9
+  %10 = load double, double* %arrayidx2, align 8
+  %mul = fmul double %8, %10
+  %11 = load double, double* %c2, align 8
+  %add3 = fadd double %mul, %11
+  %call = call double %7(double %add3)
+  %mul4 = fmul double %6, %call
+  %12 = load double, double* %sum, align 8
+  %add5 = fadd double %12, %mul4
+  store double %add5, double* %sum, align 8
+  br label %for.inc
+
+for.inc:                                          ; preds = %for.body
+  %13 = load i32, i32* %i, align 4
+  %inc = add nsw i32 %13, 1
+  store i32 %inc, i32* %i, align 4
+  br label %for.cond
+
+for.end:                                          ; preds = %for.cond
+  %14 = load double, double* %c1, align 8
+  %15 = load double, double* %sum, align 8
+  %mul6 = fmul double %14, %15
+  ret double %mul6
+}
+
+; Function Attrs: noinline nounwind optnone
+define hidden i32 @main() #0 {
+entry:
+  %retval = alloca i32, align 4
+  %i = alloca i32, align 4
+  store i32 0, i32* %retval, align 4
+  %call = call double @atan2(double 1.000000e+00, double 1.000000e+00) #4
+  %mul = fmul double %call, 4.000000e+00
+  store double %mul, double* @Pi, align 8
+  call void @lege_coef()
+  call void @lege_roots()
+  %call1 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([8 x i8], [8 x i8]* @.str, i32 0, i32 0))
+  store i32 0, i32* %i, align 4
+  br label %for.cond
+
+for.cond:                                         ; preds = %for.inc, %entry
+  %0 = load i32, i32* %i, align 4
+  %cmp = icmp slt i32 %0, 5
+  br i1 %cmp, label %for.body, label %for.end
+
+for.body:                                         ; preds = %for.cond
+  %1 = load i32, i32* %i, align 4
+  %arrayidx = getelementptr inbounds [5 x double], [5 x double]* @lroots, i32 0, i32 %1
+  %2 = load double, double* %arrayidx, align 8
+  %call2 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([4 x i8], [4 x i8]* @.str.1, i32 0, i32 0), double %2)
+  br label %for.inc
+
+for.inc:                                          ; preds = %for.body
+  %3 = load i32, i32* %i, align 4
+  %inc = add nsw i32 %3, 1
+  store i32 %inc, i32* %i, align 4
+  br label %for.cond
+
+for.end:                                          ; preds = %for.cond
+  %call3 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([9 x i8], [9 x i8]* @.str.2, i32 0, i32 0))
+  store i32 0, i32* %i, align 4
+  br label %for.cond4
+
+for.cond4:                                        ; preds = %for.inc9, %for.end
+  %4 = load i32, i32* %i, align 4
+  %cmp5 = icmp slt i32 %4, 5
+  br i1 %cmp5, label %for.body6, label %for.end11
+
+for.body6:                                        ; preds = %for.cond4
+  %5 = load i32, i32* %i, align 4
+  %arrayidx7 = getelementptr inbounds [5 x double], [5 x double]* @weight, i32 0, i32 %5
+  %6 = load double, double* %arrayidx7, align 8
+  %call8 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([4 x i8], [4 x i8]* @.str.1, i32 0, i32 0), double %6)
+  br label %for.inc9
+
+for.inc9:                                         ; preds = %for.body6
+  %7 = load i32, i32* %i, align 4
+  %inc10 = add nsw i32 %7, 1
+  store i32 %inc10, i32* %i, align 4
+  br label %for.cond4
+
+for.end11:                                        ; preds = %for.cond4
+  %call12 = call double @lege_inte(double (double)* @exp, double -3.000000e+00, double 3.000000e+00)
+  %8 = call double @llvm.exp.f64(double 3.000000e+00)
+  %9 = call double @llvm.exp.f64(double -3.000000e+00)
+  %sub = fsub double %8, %9
+  %call13 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([70 x i8], [70 x i8]* @.str.3, i32 0, i32 0), double %call12, double %sub)
+  ret i32 0
+}
+
+; Function Attrs: nounwind readnone
+declare double @atan2(double %0, double %1) #2
+
+declare i32 @printf(i8* %0, ...) #3
+
+; Function Attrs: nounwind readnone
+declare double @exp(double %0) #2
+
+; Function Attrs: nounwind readnone speculatable willreturn
+declare double @llvm.exp.f64(double %0) #1
+
+attributes #0 = { noinline nounwind optnone "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "min-legal-vector-width"="0" "no-infs-fp-math"="false" "no-jump-tables"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #1 = { nounwind readnone speculatable willreturn }
+attributes #2 = { nounwind readnone "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #3 = { "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #4 = { nounwind readnone }
+
+!llvm.module.flags = !{!0}
+!llvm.ident = !{!1}
+
+!0 = !{i32 1, !"wchar_size", i32 4}
+!1 = !{!"clang version 11.0.0 (https://github.com/Jacarte/llvm-project.git 0f6dea67136cc1e0b3d200eb2bb165628970c44b)"}
+
+; extracted candidates
+
+; *****
+; For LLVM instruction:
+;  %0 = load i32, i32* %n.addr, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %1 = load i32, i32* %n.addr, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %3 = load i32, i32* %n.addr, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %4 = load i32, i32* %i, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %tobool = icmp ne i32 %4, 0
+; Looking for a replacement for:
+%0:i32 = var
+%1:i1 = ne 0:i32, %0
+infer %1
+
+; *****
+; For LLVM instruction:
+;  %7 = load i32, i32* %n.addr, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %8 = load i32, i32* %i, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %sub = sub nsw i32 %8, 1
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = subnsw %0, 1:i32
+infer %1
+
+; *****
+; For LLVM instruction:
+;  %10 = load i32, i32* %i, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %dec = add nsw i32 %10, -1
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = addnsw 4294967295:i32, %0
+infer %1
+got 2 candidates from LHS
+
+-------------------------------------------------
+%0:i32 = var
+%1:i1 = ne 0:i32, %0
+infer %1
+
+
+--------------------------------
+guess 0
+
+%0:i1 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: -1
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+Dataflow Pruned 0/0
+There are 1 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 2 candidates from LHS
+
+-------------------------------------------------
+%0:i32 = var
+%1:i32 = addnsw 4294967295:i32, %0
+infer %1
+
+
+--------------------------------
+guess 0
+
+%0:i32 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: -1
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: 536870911
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+
+--------------------------------
+guess 1
+
+%0:i32 = var
+
+Cost = 0
+second query is SAT-- constant doesn't work
+Dataflow Pruned 0/0
+There are 2 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+#########################################################
+; exiting Souper's runOnFunction() for lege_eval()
+
+; entering Souper's runOnFunction() for lege_diff()
+
+; ModuleID = './Numerical_integration-Gauss-Legendre_Quadrature.c.bc'
+source_filename = "./Numerical_integration-Gauss-Legendre_Quadrature.c"
+target datalayout = "e-m:e-p:32:32-i64:64-n32:64-S128"
+target triple = "wasm32-unknown-wasi"
+
+@lcoef = hidden global [6 x [6 x double]] zeroinitializer, align 16
+@Pi = hidden global double 0.000000e+00, align 8
+@lroots = hidden global [5 x double] zeroinitializer, align 16
+@weight = hidden global [5 x double] zeroinitializer, align 16
+@.str = private unnamed_addr constant [8 x i8] c"Roots: \00", align 1
+@.str.1 = private unnamed_addr constant [4 x i8] c" %g\00", align 1
+@.str.2 = private unnamed_addr constant [9 x i8] c"\0AWeight:\00", align 1
+@.str.3 = private unnamed_addr constant [70 x i8] c"\0Aintegrating Exp(x) over [-3, 3]:\0A\09%10.8f,\0Acompred to actual\0A\09%10.8f\0A\00", align 1
+@llvm.used = appending global [1 x i8*] [i8* bitcast (i32 ()* @__main_void to i8*)], section "llvm.metadata"
+
+@__main_void = alias i32 (), i32 ()* @main
+
+; Function Attrs: noinline nounwind optnone
+define hidden void @lege_coef() #0 {
+entry:
+  %n = alloca i32, align 4
+  %i = alloca i32, align 4
+  store double 1.000000e+00, double* getelementptr inbounds ([6 x [6 x double]], [6 x [6 x double]]* @lcoef, i32 0, i32 1, i32 1), align 8
+  store double 1.000000e+00, double* getelementptr inbounds ([6 x [6 x double]], [6 x [6 x double]]* @lcoef, i32 0, i32 0, i32 0), align 16
+  store i32 2, i32* %n, align 4
+  br label %for.cond
+
+for.cond:                                         ; preds = %for.inc30, %entry
+  %0 = load i32, i32* %n, align 4
+  %cmp = icmp sle i32 %0, 5
+  br i1 %cmp, label %for.body, label %for.end32
+
+for.body:                                         ; preds = %for.cond
+  %1 = load i32, i32* %n, align 4
+  %sub = sub nsw i32 %1, 1
+  %sub1 = sub nsw i32 0, %sub
+  %conv = sitofp i32 %sub1 to double
+  %2 = load i32, i32* %n, align 4
+  %sub2 = sub nsw i32 %2, 2
+  %arrayidx = getelementptr inbounds [6 x [6 x double]], [6 x [6 x double]]* @lcoef, i32 0, i32 %sub2
+  %arrayidx3 = getelementptr inbounds [6 x double], [6 x double]* %arrayidx, i32 0, i32 0
+  %3 = load double, double* %arrayidx3, align 16
+  %mul = fmul double %conv, %3
+  %4 = load i32, i32* %n, align 4
+  %conv4 = sitofp i32 %4 to double
+  %div = fdiv double %mul, %conv4
+  %5 = load i32, i32* %n, align 4
+  %arrayidx5 = getelementptr inbounds [6 x [6 x double]], [6 x [6 x double]]* @lcoef, i32 0, i32 %5
+  %arrayidx6 = getelementptr inbounds [6 x double], [6 x double]* %arrayidx5, i32 0, i32 0
+  store double %div, double* %arrayidx6, align 16
+  store i32 1, i32* %i, align 4
+  br label %for.cond7
+
+for.cond7:                                        ; preds = %for.inc, %for.body
+  %6 = load i32, i32* %i, align 4
+  %7 = load i32, i32* %n, align 4
+  %cmp8 = icmp sle i32 %6, %7
+  br i1 %cmp8, label %for.body10, label %for.end
+
+for.body10:                                       ; preds = %for.cond7
+  %8 = load i32, i32* %n, align 4
+  %mul11 = mul nsw i32 2, %8
+  %sub12 = sub nsw i32 %mul11, 1
+  %conv13 = sitofp i32 %sub12 to double
+  %9 = load i32, i32* %n, align 4
+  %sub14 = sub nsw i32 %9, 1
+  %arrayidx15 = getelementptr inbounds [6 x [6 x double]], [6 x [6 x double]]* @lcoef, i32 0, i32 %sub14
+  %10 = load i32, i32* %i, align 4
+  %sub16 = sub nsw i32 %10, 1
+  %arrayidx17 = getelementptr inbounds [6 x double], [6 x double]* %arrayidx15, i32 0, i32 %sub16
+  %11 = load double, double* %arrayidx17, align 8
+  %mul18 = fmul double %conv13, %11
+  %12 = load i32, i32* %n, align 4
+  %sub19 = sub nsw i32 %12, 1
+  %conv20 = sitofp i32 %sub19 to double
+  %13 = load i32, i32* %n, align 4
+  %sub21 = sub nsw i32 %13, 2
+  %arrayidx22 = getelementptr inbounds [6 x [6 x double]], [6 x [6 x double]]* @lcoef, i32 0, i32 %sub21
+  %14 = load i32, i32* %i, align 4
+  %arrayidx23 = getelementptr inbounds [6 x double], [6 x double]* %arrayidx22, i32 0, i32 %14
+  %15 = load double, double* %arrayidx23, align 8
+  %mul24 = fmul double %conv20, %15
+  %sub25 = fsub double %mul18, %mul24
+  %16 = load i32, i32* %n, align 4
+  %conv26 = sitofp i32 %16 to double
+  %div27 = fdiv double %sub25, %conv26
+  %17 = load i32, i32* %n, align 4
+  %arrayidx28 = getelementptr inbounds [6 x [6 x double]], [6 x [6 x double]]* @lcoef, i32 0, i32 %17
+  %18 = load i32, i32* %i, align 4
+  %arrayidx29 = getelementptr inbounds [6 x double], [6 x double]* %arrayidx28, i32 0, i32 %18
+  store double %div27, double* %arrayidx29, align 8
+  br label %for.inc
+
+for.inc:                                          ; preds = %for.body10
+  %19 = load i32, i32* %i, align 4
+  %inc = add nsw i32 %19, 1
+  store i32 %inc, i32* %i, align 4
+  br label %for.cond7
+
+for.end:                                          ; preds = %for.cond7
+  br label %for.inc30
+
+for.inc30:                                        ; preds = %for.end
+  %20 = load i32, i32* %n, align 4
+  %inc31 = add nsw i32 %20, 1
+  store i32 %inc31, i32* %n, align 4
+  br label %for.cond
+
+for.end32:                                        ; preds = %for.cond
+  ret void
+}
+
+; Function Attrs: noinline nounwind optnone
+define hidden double @lege_eval(i32 %n, double %x) #0 {
+entry:
+  %n.addr = alloca i32, align 4
+  %x.addr = alloca double, align 8
+  %i = alloca i32, align 4
+  %s = alloca double, align 8
+  store i32 %n, i32* %n.addr, align 4
+  store double %x, double* %x.addr, align 8
+  %0 = load i32, i32* %n.addr, align 4
+  %arrayidx = getelementptr inbounds [6 x [6 x double]], [6 x [6 x double]]* @lcoef, i32 0, i32 %0
+  %1 = load i32, i32* %n.addr, align 4
+  %arrayidx1 = getelementptr inbounds [6 x double], [6 x double]* %arrayidx, i32 0, i32 %1
+  %2 = load double, double* %arrayidx1, align 8
+  store double %2, double* %s, align 8
+  %3 = load i32, i32* %n.addr, align 4
+  store i32 %3, i32* %i, align 4
+  br label %for.cond
+
+for.cond:                                         ; preds = %for.inc, %entry
+  %4 = load i32, i32* %i, align 4
+  %tobool = icmp ne i32 %4, 0
+  br i1 %tobool, label %for.body, label %for.end
+
+for.body:                                         ; preds = %for.cond
+  %5 = load double, double* %s, align 8
+  %6 = load double, double* %x.addr, align 8
+  %mul = fmul double %5, %6
+  %7 = load i32, i32* %n.addr, align 4
+  %arrayidx2 = getelementptr inbounds [6 x [6 x double]], [6 x [6 x double]]* @lcoef, i32 0, i32 %7
+  %8 = load i32, i32* %i, align 4
+  %sub = sub nsw i32 %8, 1
+  %arrayidx3 = getelementptr inbounds [6 x double], [6 x double]* %arrayidx2, i32 0, i32 %sub
+  %9 = load double, double* %arrayidx3, align 8
+  %add = fadd double %mul, %9
+  store double %add, double* %s, align 8
+  br label %for.inc
+
+for.inc:                                          ; preds = %for.body
+  %10 = load i32, i32* %i, align 4
+  %dec = add nsw i32 %10, -1
+  store i32 %dec, i32* %i, align 4
+  br label %for.cond
+
+for.end:                                          ; preds = %for.cond
+  %11 = load double, double* %s, align 8
+  ret double %11
+}
+
+; Function Attrs: noinline nounwind optnone
+define hidden double @lege_diff(i32 %n, double %x) #0 {
+entry:
+  %n.addr = alloca i32, align 4
+  %x.addr = alloca double, align 8
+  store i32 %n, i32* %n.addr, align 4
+  store double %x, double* %x.addr, align 8
+  %0 = load i32, i32* %n.addr, align 4
+  %conv = sitofp i32 %0 to double
+  %1 = load double, double* %x.addr, align 8
+  %2 = load i32, i32* %n.addr, align 4
+  %3 = load double, double* %x.addr, align 8
+  %call = call double @lege_eval(i32 %2, double %3)
+  %mul = fmul double %1, %call
+  %4 = load i32, i32* %n.addr, align 4
+  %sub = sub nsw i32 %4, 1
+  %5 = load double, double* %x.addr, align 8
+  %call1 = call double @lege_eval(i32 %sub, double %5)
+  %sub2 = fsub double %mul, %call1
+  %mul3 = fmul double %conv, %sub2
+  %6 = load double, double* %x.addr, align 8
+  %7 = load double, double* %x.addr, align 8
+  %mul4 = fmul double %6, %7
+  %sub5 = fsub double %mul4, 1.000000e+00
+  %div = fdiv double %mul3, %sub5
+  ret double %div
+}
+
+; Function Attrs: noinline nounwind optnone
+define hidden void @lege_roots() #0 {
+entry:
+  %i = alloca i32, align 4
+  %x = alloca double, align 8
+  %x1 = alloca double, align 8
+  store i32 1, i32* %i, align 4
+  br label %for.cond
+
+for.cond:                                         ; preds = %for.inc, %entry
+  %0 = load i32, i32* %i, align 4
+  %cmp = icmp sle i32 %0, 5
+  br i1 %cmp, label %for.body, label %for.end
+
+for.body:                                         ; preds = %for.cond
+  %1 = load double, double* @Pi, align 8
+  %2 = load i32, i32* %i, align 4
+  %conv = sitofp i32 %2 to double
+  %sub = fsub double %conv, 2.500000e-01
+  %mul = fmul double %1, %sub
+  %div = fdiv double %mul, 5.500000e+00
+  %3 = call double @llvm.cos.f64(double %div)
+  store double %3, double* %x, align 8
+  br label %do.body
+
+do.body:                                          ; preds = %do.cond, %for.body
+  %4 = load double, double* %x, align 8
+  store double %4, double* %x1, align 8
+  %5 = load double, double* %x, align 8
+  %call = call double @lege_eval(i32 5, double %5)
+  %6 = load double, double* %x, align 8
+  %call1 = call double @lege_diff(i32 5, double %6)
+  %div2 = fdiv double %call, %call1
+  %7 = load double, double* %x, align 8
+  %sub3 = fsub double %7, %div2
+  store double %sub3, double* %x, align 8
+  br label %do.cond
+
+do.cond:                                          ; preds = %do.body
+  %8 = load double, double* %x, align 8
+  %9 = load double, double* %x1, align 8
+  %call4 = call double @fdim(double %8, double %9) #4
+  %cmp5 = fcmp ogt double %call4, 2.000000e-16
+  br i1 %cmp5, label %do.body, label %do.end
+
+do.end:                                           ; preds = %do.cond
+  %10 = load double, double* %x, align 8
+  %11 = load i32, i32* %i, align 4
+  %sub7 = sub nsw i32 %11, 1
+  %arrayidx = getelementptr inbounds [5 x double], [5 x double]* @lroots, i32 0, i32 %sub7
+  store double %10, double* %arrayidx, align 8
+  %12 = load double, double* %x, align 8
+  %call8 = call double @lege_diff(i32 5, double %12)
+  store double %call8, double* %x1, align 8
+  %13 = load double, double* %x, align 8
+  %14 = load double, double* %x, align 8
+  %mul9 = fmul double %13, %14
+  %sub10 = fsub double 1.000000e+00, %mul9
+  %15 = load double, double* %x1, align 8
+  %mul11 = fmul double %sub10, %15
+  %16 = load double, double* %x1, align 8
+  %mul12 = fmul double %mul11, %16
+  %div13 = fdiv double 2.000000e+00, %mul12
+  %17 = load i32, i32* %i, align 4
+  %sub14 = sub nsw i32 %17, 1
+  %arrayidx15 = getelementptr inbounds [5 x double], [5 x double]* @weight, i32 0, i32 %sub14
+  store double %div13, double* %arrayidx15, align 8
+  br label %for.inc
+
+for.inc:                                          ; preds = %do.end
+  %18 = load i32, i32* %i, align 4
+  %inc = add nsw i32 %18, 1
+  store i32 %inc, i32* %i, align 4
+  br label %for.cond
+
+for.end:                                          ; preds = %for.cond
+  ret void
+}
+
+; Function Attrs: nounwind readnone speculatable willreturn
+declare double @llvm.cos.f64(double %0) #1
+
+; Function Attrs: nounwind readnone
+declare double @fdim(double %0, double %1) #2
+
+; Function Attrs: noinline nounwind optnone
+define hidden double @lege_inte(double (double)* %f, double %a, double %b) #0 {
+entry:
+  %f.addr = alloca double (double)*, align 4
+  %a.addr = alloca double, align 8
+  %b.addr = alloca double, align 8
+  %c1 = alloca double, align 8
+  %c2 = alloca double, align 8
+  %sum = alloca double, align 8
+  %i = alloca i32, align 4
+  store double (double)* %f, double (double)** %f.addr, align 4
+  store double %a, double* %a.addr, align 8
+  store double %b, double* %b.addr, align 8
+  %0 = load double, double* %b.addr, align 8
+  %1 = load double, double* %a.addr, align 8
+  %sub = fsub double %0, %1
+  %div = fdiv double %sub, 2.000000e+00
+  store double %div, double* %c1, align 8
+  %2 = load double, double* %b.addr, align 8
+  %3 = load double, double* %a.addr, align 8
+  %add = fadd double %2, %3
+  %div1 = fdiv double %add, 2.000000e+00
+  store double %div1, double* %c2, align 8
+  store double 0.000000e+00, double* %sum, align 8
+  store i32 0, i32* %i, align 4
+  br label %for.cond
+
+for.cond:                                         ; preds = %for.inc, %entry
+  %4 = load i32, i32* %i, align 4
+  %cmp = icmp slt i32 %4, 5
+  br i1 %cmp, label %for.body, label %for.end
+
+for.body:                                         ; preds = %for.cond
+  %5 = load i32, i32* %i, align 4
+  %arrayidx = getelementptr inbounds [5 x double], [5 x double]* @weight, i32 0, i32 %5
+  %6 = load double, double* %arrayidx, align 8
+  %7 = load double (double)*, double (double)** %f.addr, align 4
+  %8 = load double, double* %c1, align 8
+  %9 = load i32, i32* %i, align 4
+  %arrayidx2 = getelementptr inbounds [5 x double], [5 x double]* @lroots, i32 0, i32 %9
+  %10 = load double, double* %arrayidx2, align 8
+  %mul = fmul double %8, %10
+  %11 = load double, double* %c2, align 8
+  %add3 = fadd double %mul, %11
+  %call = call double %7(double %add3)
+  %mul4 = fmul double %6, %call
+  %12 = load double, double* %sum, align 8
+  %add5 = fadd double %12, %mul4
+  store double %add5, double* %sum, align 8
+  br label %for.inc
+
+for.inc:                                          ; preds = %for.body
+  %13 = load i32, i32* %i, align 4
+  %inc = add nsw i32 %13, 1
+  store i32 %inc, i32* %i, align 4
+  br label %for.cond
+
+for.end:                                          ; preds = %for.cond
+  %14 = load double, double* %c1, align 8
+  %15 = load double, double* %sum, align 8
+  %mul6 = fmul double %14, %15
+  ret double %mul6
+}
+
+; Function Attrs: noinline nounwind optnone
+define hidden i32 @main() #0 {
+entry:
+  %retval = alloca i32, align 4
+  %i = alloca i32, align 4
+  store i32 0, i32* %retval, align 4
+  %call = call double @atan2(double 1.000000e+00, double 1.000000e+00) #4
+  %mul = fmul double %call, 4.000000e+00
+  store double %mul, double* @Pi, align 8
+  call void @lege_coef()
+  call void @lege_roots()
+  %call1 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([8 x i8], [8 x i8]* @.str, i32 0, i32 0))
+  store i32 0, i32* %i, align 4
+  br label %for.cond
+
+for.cond:                                         ; preds = %for.inc, %entry
+  %0 = load i32, i32* %i, align 4
+  %cmp = icmp slt i32 %0, 5
+  br i1 %cmp, label %for.body, label %for.end
+
+for.body:                                         ; preds = %for.cond
+  %1 = load i32, i32* %i, align 4
+  %arrayidx = getelementptr inbounds [5 x double], [5 x double]* @lroots, i32 0, i32 %1
+  %2 = load double, double* %arrayidx, align 8
+  %call2 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([4 x i8], [4 x i8]* @.str.1, i32 0, i32 0), double %2)
+  br label %for.inc
+
+for.inc:                                          ; preds = %for.body
+  %3 = load i32, i32* %i, align 4
+  %inc = add nsw i32 %3, 1
+  store i32 %inc, i32* %i, align 4
+  br label %for.cond
+
+for.end:                                          ; preds = %for.cond
+  %call3 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([9 x i8], [9 x i8]* @.str.2, i32 0, i32 0))
+  store i32 0, i32* %i, align 4
+  br label %for.cond4
+
+for.cond4:                                        ; preds = %for.inc9, %for.end
+  %4 = load i32, i32* %i, align 4
+  %cmp5 = icmp slt i32 %4, 5
+  br i1 %cmp5, label %for.body6, label %for.end11
+
+for.body6:                                        ; preds = %for.cond4
+  %5 = load i32, i32* %i, align 4
+  %arrayidx7 = getelementptr inbounds [5 x double], [5 x double]* @weight, i32 0, i32 %5
+  %6 = load double, double* %arrayidx7, align 8
+  %call8 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([4 x i8], [4 x i8]* @.str.1, i32 0, i32 0), double %6)
+  br label %for.inc9
+
+for.inc9:                                         ; preds = %for.body6
+  %7 = load i32, i32* %i, align 4
+  %inc10 = add nsw i32 %7, 1
+  store i32 %inc10, i32* %i, align 4
+  br label %for.cond4
+
+for.end11:                                        ; preds = %for.cond4
+  %call12 = call double @lege_inte(double (double)* @exp, double -3.000000e+00, double 3.000000e+00)
+  %8 = call double @llvm.exp.f64(double 3.000000e+00)
+  %9 = call double @llvm.exp.f64(double -3.000000e+00)
+  %sub = fsub double %8, %9
+  %call13 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([70 x i8], [70 x i8]* @.str.3, i32 0, i32 0), double %call12, double %sub)
+  ret i32 0
+}
+
+; Function Attrs: nounwind readnone
+declare double @atan2(double %0, double %1) #2
+
+declare i32 @printf(i8* %0, ...) #3
+
+; Function Attrs: nounwind readnone
+declare double @exp(double %0) #2
+
+; Function Attrs: nounwind readnone speculatable willreturn
+declare double @llvm.exp.f64(double %0) #1
+
+attributes #0 = { noinline nounwind optnone "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "min-legal-vector-width"="0" "no-infs-fp-math"="false" "no-jump-tables"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #1 = { nounwind readnone speculatable willreturn }
+attributes #2 = { nounwind readnone "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #3 = { "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #4 = { nounwind readnone }
+
+!llvm.module.flags = !{!0}
+!llvm.ident = !{!1}
+
+!0 = !{i32 1, !"wchar_size", i32 4}
+!1 = !{!"clang version 11.0.0 (https://github.com/Jacarte/llvm-project.git 0f6dea67136cc1e0b3d200eb2bb165628970c44b)"}
+
+; extracted candidates
+
+; *****
+; For LLVM instruction:
+;  %0 = load i32, i32* %n.addr, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %2 = load i32, i32* %n.addr, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %4 = load i32, i32* %n.addr, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %sub = sub nsw i32 %4, 1
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = subnsw %0, 1:i32
+infer %1
+#########################################################
+; exiting Souper's runOnFunction() for lege_diff()
+
+; entering Souper's runOnFunction() for lege_roots()
+
+; ModuleID = './Numerical_integration-Gauss-Legendre_Quadrature.c.bc'
+source_filename = "./Numerical_integration-Gauss-Legendre_Quadrature.c"
+target datalayout = "e-m:e-p:32:32-i64:64-n32:64-S128"
+target triple = "wasm32-unknown-wasi"
+
+@lcoef = hidden global [6 x [6 x double]] zeroinitializer, align 16
+@Pi = hidden global double 0.000000e+00, align 8
+@lroots = hidden global [5 x double] zeroinitializer, align 16
+@weight = hidden global [5 x double] zeroinitializer, align 16
+@.str = private unnamed_addr constant [8 x i8] c"Roots: \00", align 1
+@.str.1 = private unnamed_addr constant [4 x i8] c" %g\00", align 1
+@.str.2 = private unnamed_addr constant [9 x i8] c"\0AWeight:\00", align 1
+@.str.3 = private unnamed_addr constant [70 x i8] c"\0Aintegrating Exp(x) over [-3, 3]:\0A\09%10.8f,\0Acompred to actual\0A\09%10.8f\0A\00", align 1
+@llvm.used = appending global [1 x i8*] [i8* bitcast (i32 ()* @__main_void to i8*)], section "llvm.metadata"
+
+@__main_void = alias i32 (), i32 ()* @main
+
+; Function Attrs: noinline nounwind optnone
+define hidden void @lege_coef() #0 {
+entry:
+  %n = alloca i32, align 4
+  %i = alloca i32, align 4
+  store double 1.000000e+00, double* getelementptr inbounds ([6 x [6 x double]], [6 x [6 x double]]* @lcoef, i32 0, i32 1, i32 1), align 8
+  store double 1.000000e+00, double* getelementptr inbounds ([6 x [6 x double]], [6 x [6 x double]]* @lcoef, i32 0, i32 0, i32 0), align 16
+  store i32 2, i32* %n, align 4
+  br label %for.cond
+
+for.cond:                                         ; preds = %for.inc30, %entry
+  %0 = load i32, i32* %n, align 4
+  %cmp = icmp sle i32 %0, 5
+  br i1 %cmp, label %for.body, label %for.end32
+
+for.body:                                         ; preds = %for.cond
+  %1 = load i32, i32* %n, align 4
+  %sub = sub nsw i32 %1, 1
+  %sub1 = sub nsw i32 0, %sub
+  %conv = sitofp i32 %sub1 to double
+  %2 = load i32, i32* %n, align 4
+  %sub2 = sub nsw i32 %2, 2
+  %arrayidx = getelementptr inbounds [6 x [6 x double]], [6 x [6 x double]]* @lcoef, i32 0, i32 %sub2
+  %arrayidx3 = getelementptr inbounds [6 x double], [6 x double]* %arrayidx, i32 0, i32 0
+  %3 = load double, double* %arrayidx3, align 16
+  %mul = fmul double %conv, %3
+  %4 = load i32, i32* %n, align 4
+  %conv4 = sitofp i32 %4 to double
+  %div = fdiv double %mul, %conv4
+  %5 = load i32, i32* %n, align 4
+  %arrayidx5 = getelementptr inbounds [6 x [6 x double]], [6 x [6 x double]]* @lcoef, i32 0, i32 %5
+  %arrayidx6 = getelementptr inbounds [6 x double], [6 x double]* %arrayidx5, i32 0, i32 0
+  store double %div, double* %arrayidx6, align 16
+  store i32 1, i32* %i, align 4
+  br label %for.cond7
+
+for.cond7:                                        ; preds = %for.inc, %for.body
+  %6 = load i32, i32* %i, align 4
+  %7 = load i32, i32* %n, align 4
+  %cmp8 = icmp sle i32 %6, %7
+  br i1 %cmp8, label %for.body10, label %for.end
+
+for.body10:                                       ; preds = %for.cond7
+  %8 = load i32, i32* %n, align 4
+  %mul11 = mul nsw i32 2, %8
+  %sub12 = sub nsw i32 %mul11, 1
+  %conv13 = sitofp i32 %sub12 to double
+  %9 = load i32, i32* %n, align 4
+  %sub14 = sub nsw i32 %9, 1
+  %arrayidx15 = getelementptr inbounds [6 x [6 x double]], [6 x [6 x double]]* @lcoef, i32 0, i32 %sub14
+  %10 = load i32, i32* %i, align 4
+  %sub16 = sub nsw i32 %10, 1
+  %arrayidx17 = getelementptr inbounds [6 x double], [6 x double]* %arrayidx15, i32 0, i32 %sub16
+  %11 = load double, double* %arrayidx17, align 8
+  %mul18 = fmul double %conv13, %11
+  %12 = load i32, i32* %n, align 4
+  %sub19 = sub nsw i32 %12, 1
+  %conv20 = sitofp i32 %sub19 to double
+  %13 = load i32, i32* %n, align 4
+  %sub21 = sub nsw i32 %13, 2
+  %arrayidx22 = getelementptr inbounds [6 x [6 x double]], [6 x [6 x double]]* @lcoef, i32 0, i32 %sub21
+  %14 = load i32, i32* %i, align 4
+  %arrayidx23 = getelementptr inbounds [6 x double], [6 x double]* %arrayidx22, i32 0, i32 %14
+  %15 = load double, double* %arrayidx23, align 8
+  %mul24 = fmul double %conv20, %15
+  %sub25 = fsub double %mul18, %mul24
+  %16 = load i32, i32* %n, align 4
+  %conv26 = sitofp i32 %16 to double
+  %div27 = fdiv double %sub25, %conv26
+  %17 = load i32, i32* %n, align 4
+  %arrayidx28 = getelementptr inbounds [6 x [6 x double]], [6 x [6 x double]]* @lcoef, i32 0, i32 %17
+  %18 = load i32, i32* %i, align 4
+  %arrayidx29 = getelementptr inbounds [6 x double], [6 x double]* %arrayidx28, i32 0, i32 %18
+  store double %div27, double* %arrayidx29, align 8
+  br label %for.inc
+
+for.inc:                                          ; preds = %for.body10
+  %19 = load i32, i32* %i, align 4
+  %inc = add nsw i32 %19, 1
+  store i32 %inc, i32* %i, align 4
+  br label %for.cond7
+
+for.end:                                          ; preds = %for.cond7
+  br label %for.inc30
+
+for.inc30:                                        ; preds = %for.end
+  %20 = load i32, i32* %n, align 4
+  %inc31 = add nsw i32 %20, 1
+  store i32 %inc31, i32* %n, align 4
+  br label %for.cond
+
+for.end32:                                        ; preds = %for.cond
+  ret void
+}
+
+; Function Attrs: noinline nounwind optnone
+define hidden double @lege_eval(i32 %n, double %x) #0 {
+entry:
+  %n.addr = alloca i32, align 4
+  %x.addr = alloca double, align 8
+  %i = alloca i32, align 4
+  %s = alloca double, align 8
+  store i32 %n, i32* %n.addr, align 4
+  store double %x, double* %x.addr, align 8
+  %0 = load i32, i32* %n.addr, align 4
+  %arrayidx = getelementptr inbounds [6 x [6 x double]], [6 x [6 x double]]* @lcoef, i32 0, i32 %0
+  %1 = load i32, i32* %n.addr, align 4
+  %arrayidx1 = getelementptr inbounds [6 x double], [6 x double]* %arrayidx, i32 0, i32 %1
+  %2 = load double, double* %arrayidx1, align 8
+  store double %2, double* %s, align 8
+  %3 = load i32, i32* %n.addr, align 4
+  store i32 %3, i32* %i, align 4
+  br label %for.cond
+
+for.cond:                                         ; preds = %for.inc, %entry
+  %4 = load i32, i32* %i, align 4
+  %tobool = icmp ne i32 %4, 0
+  br i1 %tobool, label %for.body, label %for.end
+
+for.body:                                         ; preds = %for.cond
+  %5 = load double, double* %s, align 8
+  %6 = load double, double* %x.addr, align 8
+  %mul = fmul double %5, %6
+  %7 = load i32, i32* %n.addr, align 4
+  %arrayidx2 = getelementptr inbounds [6 x [6 x double]], [6 x [6 x double]]* @lcoef, i32 0, i32 %7
+  %8 = load i32, i32* %i, align 4
+  %sub = sub nsw i32 %8, 1
+  %arrayidx3 = getelementptr inbounds [6 x double], [6 x double]* %arrayidx2, i32 0, i32 %sub
+  %9 = load double, double* %arrayidx3, align 8
+  %add = fadd double %mul, %9
+  store double %add, double* %s, align 8
+  br label %for.inc
+
+for.inc:                                          ; preds = %for.body
+  %10 = load i32, i32* %i, align 4
+  %dec = add nsw i32 %10, -1
+  store i32 %dec, i32* %i, align 4
+  br label %for.cond
+
+for.end:                                          ; preds = %for.cond
+  %11 = load double, double* %s, align 8
+  ret double %11
+}
+
+; Function Attrs: noinline nounwind optnone
+define hidden double @lege_diff(i32 %n, double %x) #0 {
+entry:
+  %n.addr = alloca i32, align 4
+  %x.addr = alloca double, align 8
+  store i32 %n, i32* %n.addr, align 4
+  store double %x, double* %x.addr, align 8
+  %0 = load i32, i32* %n.addr, align 4
+  %conv = sitofp i32 %0 to double
+  %1 = load double, double* %x.addr, align 8
+  %2 = load i32, i32* %n.addr, align 4
+  %3 = load double, double* %x.addr, align 8
+  %call = call double @lege_eval(i32 %2, double %3)
+  %mul = fmul double %1, %call
+  %4 = load i32, i32* %n.addr, align 4
+  %sub = sub nsw i32 %4, 1
+  %5 = load double, double* %x.addr, align 8
+  %call1 = call double @lege_eval(i32 %sub, double %5)
+  %sub2 = fsub double %mul, %call1
+  %mul3 = fmul double %conv, %sub2
+  %6 = load double, double* %x.addr, align 8
+  %7 = load double, double* %x.addr, align 8
+  %mul4 = fmul double %6, %7
+  %sub5 = fsub double %mul4, 1.000000e+00
+  %div = fdiv double %mul3, %sub5
+  ret double %div
+}
+
+; Function Attrs: noinline nounwind optnone
+define hidden void @lege_roots() #0 {
+entry:
+  %i = alloca i32, align 4
+  %x = alloca double, align 8
+  %x1 = alloca double, align 8
+  store i32 1, i32* %i, align 4
+  br label %for.cond
+
+for.cond:                                         ; preds = %for.inc, %entry
+  %0 = load i32, i32* %i, align 4
+  %cmp = icmp sle i32 %0, 5
+  br i1 %cmp, label %for.body, label %for.end
+
+for.body:                                         ; preds = %for.cond
+  %1 = load double, double* @Pi, align 8
+  %2 = load i32, i32* %i, align 4
+  %conv = sitofp i32 %2 to double
+  %sub = fsub double %conv, 2.500000e-01
+  %mul = fmul double %1, %sub
+  %div = fdiv double %mul, 5.500000e+00
+  %3 = call double @llvm.cos.f64(double %div)
+  store double %3, double* %x, align 8
+  br label %do.body
+
+do.body:                                          ; preds = %do.cond, %for.body
+  %4 = load double, double* %x, align 8
+  store double %4, double* %x1, align 8
+  %5 = load double, double* %x, align 8
+  %call = call double @lege_eval(i32 5, double %5)
+  %6 = load double, double* %x, align 8
+  %call1 = call double @lege_diff(i32 5, double %6)
+  %div2 = fdiv double %call, %call1
+  %7 = load double, double* %x, align 8
+  %sub3 = fsub double %7, %div2
+  store double %sub3, double* %x, align 8
+  br label %do.cond
+
+do.cond:                                          ; preds = %do.body
+  %8 = load double, double* %x, align 8
+  %9 = load double, double* %x1, align 8
+  %call4 = call double @fdim(double %8, double %9) #4
+  %cmp5 = fcmp ogt double %call4, 2.000000e-16
+  br i1 %cmp5, label %do.body, label %do.end
+
+do.end:                                           ; preds = %do.cond
+  %10 = load double, double* %x, align 8
+  %11 = load i32, i32* %i, align 4
+  %sub7 = sub nsw i32 %11, 1
+  %arrayidx = getelementptr inbounds [5 x double], [5 x double]* @lroots, i32 0, i32 %sub7
+  store double %10, double* %arrayidx, align 8
+  %12 = load double, double* %x, align 8
+  %call8 = call double @lege_diff(i32 5, double %12)
+  store double %call8, double* %x1, align 8
+  %13 = load double, double* %x, align 8
+  %14 = load double, double* %x, align 8
+  %mul9 = fmul double %13, %14
+  %sub10 = fsub double 1.000000e+00, %mul9
+  %15 = load double, double* %x1, align 8
+  %mul11 = fmul double %sub10, %15
+  %16 = load double, double* %x1, align 8
+  %mul12 = fmul double %mul11, %16
+  %div13 = fdiv double 2.000000e+00, %mul12
+  %17 = load i32, i32* %i, align 4
+  %sub14 = sub nsw i32 %17, 1
+  %arrayidx15 = getelementptr inbounds [5 x double], [5 x double]* @weight, i32 0, i32 %sub14
+  store double %div13, double* %arrayidx15, align 8
+  br label %for.inc
+
+for.inc:                                          ; preds = %do.end
+  %18 = load i32, i32* %i, align 4
+  %inc = add nsw i32 %18, 1
+  store i32 %inc, i32* %i, align 4
+  br label %for.cond
+
+for.end:                                          ; preds = %for.cond
+  ret void
+}
+
+; Function Attrs: nounwind readnone speculatable willreturn
+declare double @llvm.cos.f64(double %0) #1
+
+; Function Attrs: nounwind readnone
+declare double @fdim(double %0, double %1) #2
+
+; Function Attrs: noinline nounwind optnone
+define hidden double @lege_inte(double (double)* %f, double %a, double %b) #0 {
+entry:
+  %f.addr = alloca double (double)*, align 4
+  %a.addr = alloca double, align 8
+  %b.addr = alloca double, align 8
+  %c1 = alloca double, align 8
+  %c2 = alloca double, align 8
+  %sum = alloca double, align 8
+  %i = alloca i32, align 4
+  store double (double)* %f, double (double)** %f.addr, align 4
+  store double %a, double* %a.addr, align 8
+  store double %b, double* %b.addr, align 8
+  %0 = load double, double* %b.addr, align 8
+  %1 = load double, double* %a.addr, align 8
+  %sub = fsub double %0, %1
+  %div = fdiv double %sub, 2.000000e+00
+  store double %div, double* %c1, align 8
+  %2 = load double, double* %b.addr, align 8
+  %3 = load double, double* %a.addr, align 8
+  %add = fadd double %2, %3
+  %div1 = fdiv double %add, 2.000000e+00
+  store double %div1, double* %c2, align 8
+  store double 0.000000e+00, double* %sum, align 8
+  store i32 0, i32* %i, align 4
+  br label %for.cond
+
+for.cond:                                         ; preds = %for.inc, %entry
+  %4 = load i32, i32* %i, align 4
+  %cmp = icmp slt i32 %4, 5
+  br i1 %cmp, label %for.body, label %for.end
+
+for.body:                                         ; preds = %for.cond
+  %5 = load i32, i32* %i, align 4
+  %arrayidx = getelementptr inbounds [5 x double], [5 x double]* @weight, i32 0, i32 %5
+  %6 = load double, double* %arrayidx, align 8
+  %7 = load double (double)*, double (double)** %f.addr, align 4
+  %8 = load double, double* %c1, align 8
+  %9 = load i32, i32* %i, align 4
+  %arrayidx2 = getelementptr inbounds [5 x double], [5 x double]* @lroots, i32 0, i32 %9
+  %10 = load double, double* %arrayidx2, align 8
+  %mul = fmul double %8, %10
+  %11 = load double, double* %c2, align 8
+  %add3 = fadd double %mul, %11
+  %call = call double %7(double %add3)
+  %mul4 = fmul double %6, %call
+  %12 = load double, double* %sum, align 8
+  %add5 = fadd double %12, %mul4
+  store double %add5, double* %sum, align 8
+  br label %for.inc
+
+for.inc:                                          ; preds = %for.body
+  %13 = load i32, i32* %i, align 4
+  %inc = add nsw i32 %13, 1
+  store i32 %inc, i32* %i, align 4
+  br label %for.cond
+
+for.end:                                          ; preds = %for.cond
+  %14 = load double, double* %c1, align 8
+  %15 = load double, double* %sum, align 8
+  %mul6 = fmul double %14, %15
+  ret double %mul6
+}
+
+; Function Attrs: noinline nounwind optnone
+define hidden i32 @main() #0 {
+entry:
+  %retval = alloca i32, align 4
+  %i = alloca i32, align 4
+  store i32 0, i32* %retval, align 4
+  %call = call double @atan2(double 1.000000e+00, double 1.000000e+00) #4
+  %mul = fmul double %call, 4.000000e+00
+  store double %mul, double* @Pi, align 8
+  call void @lege_coef()
+  call void @lege_roots()
+  %call1 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([8 x i8], [8 x i8]* @.str, i32 0, i32 0))
+  store i32 0, i32* %i, align 4
+  br label %for.cond
+
+for.cond:                                         ; preds = %for.inc, %entry
+  %0 = load i32, i32* %i, align 4
+  %cmp = icmp slt i32 %0, 5
+  br i1 %cmp, label %for.body, label %for.end
+
+for.body:                                         ; preds = %for.cond
+  %1 = load i32, i32* %i, align 4
+  %arrayidx = getelementptr inbounds [5 x double], [5 x double]* @lroots, i32 0, i32 %1
+  %2 = load double, double* %arrayidx, align 8
+  %call2 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([4 x i8], [4 x i8]* @.str.1, i32 0, i32 0), double %2)
+  br label %for.inc
+
+for.inc:                                          ; preds = %for.body
+  %3 = load i32, i32* %i, align 4
+  %inc = add nsw i32 %3, 1
+  store i32 %inc, i32* %i, align 4
+  br label %for.cond
+
+for.end:                                          ; preds = %for.cond
+  %call3 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([9 x i8], [9 x i8]* @.str.2, i32 0, i32 0))
+  store i32 0, i32* %i, align 4
+  br label %for.cond4
+
+for.cond4:                                        ; preds = %for.inc9, %for.end
+  %4 = load i32, i32* %i, align 4
+  %cmp5 = icmp slt i32 %4, 5
+  br i1 %cmp5, label %for.body6, label %for.end11
+
+for.body6:                                        ; preds = %for.cond4
+  %5 = load i32, i32* %i, align 4
+  %arrayidx7 = getelementptr inbounds [5 x double], [5 x double]* @weight, i32 0, i32 %5
+  %6 = load double, double* %arrayidx7, align 8
+  %call8 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([4 x i8], [4 x i8]* @.str.1, i32 0, i32 0), double %6)
+  br label %for.inc9
+
+for.inc9:                                         ; preds = %for.body6
+  %7 = load i32, i32* %i, align 4
+  %inc10 = add nsw i32 %7, 1
+  store i32 %inc10, i32* %i, align 4
+  br label %for.cond4
+
+for.end11:                                        ; preds = %for.cond4
+  %call12 = call double @lege_inte(double (double)* @exp, double -3.000000e+00, double 3.000000e+00)
+  %8 = call double @llvm.exp.f64(double 3.000000e+00)
+  %9 = call double @llvm.exp.f64(double -3.000000e+00)
+  %sub = fsub double %8, %9
+  %call13 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([70 x i8], [70 x i8]* @.str.3, i32 0, i32 0), double %call12, double %sub)
+  ret i32 0
+}
+
+; Function Attrs: nounwind readnone
+declare double @atan2(double %0, double %1) #2
+
+declare i32 @printf(i8* %0, ...) #3
+
+; Function Attrs: nounwind readnone
+declare double @exp(double %0) #2
+
+; Function Attrs: nounwind readnone speculatable willreturn
+declare double @llvm.exp.f64(double %0) #1
+
+attributes #0 = { noinline nounwind optnone "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "min-legal-vector-width"="0" "no-infs-fp-math"="false" "no-jump-tables"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #1 = { nounwind readnone speculatable willreturn }
+attributes #2 = { nounwind readnone "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #3 = { "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #4 = { nounwind readnone }
+
+!llvm.module.flags = !{!0}
+!llvm.ident = !{!1}
+
+!0 = !{i32 1, !"wchar_size", i32 4}
+!1 = !{!"clang version 11.0.0 (https://github.com/Jacarte/llvm-project.git 0f6dea67136cc1e0b3d200eb2bb165628970c44b)"}
+
+; extracted candidates
+
+; *****
+; For LLVM instruction:
+;  %0 = load i32, i32* %i, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %cmp = icmp sle i32 %0, 5
+; Looking for a replacement for:
+%0:i32 = var
+%1:i1 = sle %0, 5:i32
+infer %1
+
+; *****
+; For LLVM instruction:
+;  %2 = load i32, i32* %i, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %cmp5 = fcmp ogt double %call4, 2.000000e-16
+; Looking for a replacement for:
+%0:i1 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %11 = load i32, i32* %i, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %sub7 = sub nsw i32 %11, 1
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = subnsw %0, 1:i32
+infer %1
+
+; *****
+; For LLVM instruction:
+;  %17 = load i32, i32* %i, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %sub14 = sub nsw i32 %17, 1
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = subnsw %0, 1:i32
+infer %1
+
+; *****
+; For LLVM instruction:
+;  %18 = load i32, i32* %i, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %inc = add nsw i32 %18, 1
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = addnsw 1:i32, %0
+infer %1
+got 1 candidates from LHS
+
+-------------------------------------------------
+%0:i1 = var
+infer %0
+
+
+--------------------------------
+guess 0
+
+%0:i1 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: -1
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+Dataflow Pruned 0/0
+There are 1 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+#########################################################
+; exiting Souper's runOnFunction() for lege_roots()
+
+; entering Souper's runOnFunction() for lege_inte()
+
+; ModuleID = './Numerical_integration-Gauss-Legendre_Quadrature.c.bc'
+source_filename = "./Numerical_integration-Gauss-Legendre_Quadrature.c"
+target datalayout = "e-m:e-p:32:32-i64:64-n32:64-S128"
+target triple = "wasm32-unknown-wasi"
+
+@lcoef = hidden global [6 x [6 x double]] zeroinitializer, align 16
+@Pi = hidden global double 0.000000e+00, align 8
+@lroots = hidden global [5 x double] zeroinitializer, align 16
+@weight = hidden global [5 x double] zeroinitializer, align 16
+@.str = private unnamed_addr constant [8 x i8] c"Roots: \00", align 1
+@.str.1 = private unnamed_addr constant [4 x i8] c" %g\00", align 1
+@.str.2 = private unnamed_addr constant [9 x i8] c"\0AWeight:\00", align 1
+@.str.3 = private unnamed_addr constant [70 x i8] c"\0Aintegrating Exp(x) over [-3, 3]:\0A\09%10.8f,\0Acompred to actual\0A\09%10.8f\0A\00", align 1
+@llvm.used = appending global [1 x i8*] [i8* bitcast (i32 ()* @__main_void to i8*)], section "llvm.metadata"
+
+@__main_void = alias i32 (), i32 ()* @main
+
+; Function Attrs: noinline nounwind optnone
+define hidden void @lege_coef() #0 {
+entry:
+  %n = alloca i32, align 4
+  %i = alloca i32, align 4
+  store double 1.000000e+00, double* getelementptr inbounds ([6 x [6 x double]], [6 x [6 x double]]* @lcoef, i32 0, i32 1, i32 1), align 8
+  store double 1.000000e+00, double* getelementptr inbounds ([6 x [6 x double]], [6 x [6 x double]]* @lcoef, i32 0, i32 0, i32 0), align 16
+  store i32 2, i32* %n, align 4
+  br label %for.cond
+
+for.cond:                                         ; preds = %for.inc30, %entry
+  %0 = load i32, i32* %n, align 4
+  %cmp = icmp sle i32 %0, 5
+  br i1 %cmp, label %for.body, label %for.end32
+
+for.body:                                         ; preds = %for.cond
+  %1 = load i32, i32* %n, align 4
+  %sub = sub nsw i32 %1, 1
+  %sub1 = sub nsw i32 0, %sub
+  %conv = sitofp i32 %sub1 to double
+  %2 = load i32, i32* %n, align 4
+  %sub2 = sub nsw i32 %2, 2
+  %arrayidx = getelementptr inbounds [6 x [6 x double]], [6 x [6 x double]]* @lcoef, i32 0, i32 %sub2
+  %arrayidx3 = getelementptr inbounds [6 x double], [6 x double]* %arrayidx, i32 0, i32 0
+  %3 = load double, double* %arrayidx3, align 16
+  %mul = fmul double %conv, %3
+  %4 = load i32, i32* %n, align 4
+  %conv4 = sitofp i32 %4 to double
+  %div = fdiv double %mul, %conv4
+  %5 = load i32, i32* %n, align 4
+  %arrayidx5 = getelementptr inbounds [6 x [6 x double]], [6 x [6 x double]]* @lcoef, i32 0, i32 %5
+  %arrayidx6 = getelementptr inbounds [6 x double], [6 x double]* %arrayidx5, i32 0, i32 0
+  store double %div, double* %arrayidx6, align 16
+  store i32 1, i32* %i, align 4
+  br label %for.cond7
+
+for.cond7:                                        ; preds = %for.inc, %for.body
+  %6 = load i32, i32* %i, align 4
+  %7 = load i32, i32* %n, align 4
+  %cmp8 = icmp sle i32 %6, %7
+  br i1 %cmp8, label %for.body10, label %for.end
+
+for.body10:                                       ; preds = %for.cond7
+  %8 = load i32, i32* %n, align 4
+  %mul11 = mul nsw i32 2, %8
+  %sub12 = sub nsw i32 %mul11, 1
+  %conv13 = sitofp i32 %sub12 to double
+  %9 = load i32, i32* %n, align 4
+  %sub14 = sub nsw i32 %9, 1
+  %arrayidx15 = getelementptr inbounds [6 x [6 x double]], [6 x [6 x double]]* @lcoef, i32 0, i32 %sub14
+  %10 = load i32, i32* %i, align 4
+  %sub16 = sub nsw i32 %10, 1
+  %arrayidx17 = getelementptr inbounds [6 x double], [6 x double]* %arrayidx15, i32 0, i32 %sub16
+  %11 = load double, double* %arrayidx17, align 8
+  %mul18 = fmul double %conv13, %11
+  %12 = load i32, i32* %n, align 4
+  %sub19 = sub nsw i32 %12, 1
+  %conv20 = sitofp i32 %sub19 to double
+  %13 = load i32, i32* %n, align 4
+  %sub21 = sub nsw i32 %13, 2
+  %arrayidx22 = getelementptr inbounds [6 x [6 x double]], [6 x [6 x double]]* @lcoef, i32 0, i32 %sub21
+  %14 = load i32, i32* %i, align 4
+  %arrayidx23 = getelementptr inbounds [6 x double], [6 x double]* %arrayidx22, i32 0, i32 %14
+  %15 = load double, double* %arrayidx23, align 8
+  %mul24 = fmul double %conv20, %15
+  %sub25 = fsub double %mul18, %mul24
+  %16 = load i32, i32* %n, align 4
+  %conv26 = sitofp i32 %16 to double
+  %div27 = fdiv double %sub25, %conv26
+  %17 = load i32, i32* %n, align 4
+  %arrayidx28 = getelementptr inbounds [6 x [6 x double]], [6 x [6 x double]]* @lcoef, i32 0, i32 %17
+  %18 = load i32, i32* %i, align 4
+  %arrayidx29 = getelementptr inbounds [6 x double], [6 x double]* %arrayidx28, i32 0, i32 %18
+  store double %div27, double* %arrayidx29, align 8
+  br label %for.inc
+
+for.inc:                                          ; preds = %for.body10
+  %19 = load i32, i32* %i, align 4
+  %inc = add nsw i32 %19, 1
+  store i32 %inc, i32* %i, align 4
+  br label %for.cond7
+
+for.end:                                          ; preds = %for.cond7
+  br label %for.inc30
+
+for.inc30:                                        ; preds = %for.end
+  %20 = load i32, i32* %n, align 4
+  %inc31 = add nsw i32 %20, 1
+  store i32 %inc31, i32* %n, align 4
+  br label %for.cond
+
+for.end32:                                        ; preds = %for.cond
+  ret void
+}
+
+; Function Attrs: noinline nounwind optnone
+define hidden double @lege_eval(i32 %n, double %x) #0 {
+entry:
+  %n.addr = alloca i32, align 4
+  %x.addr = alloca double, align 8
+  %i = alloca i32, align 4
+  %s = alloca double, align 8
+  store i32 %n, i32* %n.addr, align 4
+  store double %x, double* %x.addr, align 8
+  %0 = load i32, i32* %n.addr, align 4
+  %arrayidx = getelementptr inbounds [6 x [6 x double]], [6 x [6 x double]]* @lcoef, i32 0, i32 %0
+  %1 = load i32, i32* %n.addr, align 4
+  %arrayidx1 = getelementptr inbounds [6 x double], [6 x double]* %arrayidx, i32 0, i32 %1
+  %2 = load double, double* %arrayidx1, align 8
+  store double %2, double* %s, align 8
+  %3 = load i32, i32* %n.addr, align 4
+  store i32 %3, i32* %i, align 4
+  br label %for.cond
+
+for.cond:                                         ; preds = %for.inc, %entry
+  %4 = load i32, i32* %i, align 4
+  %tobool = icmp ne i32 %4, 0
+  br i1 %tobool, label %for.body, label %for.end
+
+for.body:                                         ; preds = %for.cond
+  %5 = load double, double* %s, align 8
+  %6 = load double, double* %x.addr, align 8
+  %mul = fmul double %5, %6
+  %7 = load i32, i32* %n.addr, align 4
+  %arrayidx2 = getelementptr inbounds [6 x [6 x double]], [6 x [6 x double]]* @lcoef, i32 0, i32 %7
+  %8 = load i32, i32* %i, align 4
+  %sub = sub nsw i32 %8, 1
+  %arrayidx3 = getelementptr inbounds [6 x double], [6 x double]* %arrayidx2, i32 0, i32 %sub
+  %9 = load double, double* %arrayidx3, align 8
+  %add = fadd double %mul, %9
+  store double %add, double* %s, align 8
+  br label %for.inc
+
+for.inc:                                          ; preds = %for.body
+  %10 = load i32, i32* %i, align 4
+  %dec = add nsw i32 %10, -1
+  store i32 %dec, i32* %i, align 4
+  br label %for.cond
+
+for.end:                                          ; preds = %for.cond
+  %11 = load double, double* %s, align 8
+  ret double %11
+}
+
+; Function Attrs: noinline nounwind optnone
+define hidden double @lege_diff(i32 %n, double %x) #0 {
+entry:
+  %n.addr = alloca i32, align 4
+  %x.addr = alloca double, align 8
+  store i32 %n, i32* %n.addr, align 4
+  store double %x, double* %x.addr, align 8
+  %0 = load i32, i32* %n.addr, align 4
+  %conv = sitofp i32 %0 to double
+  %1 = load double, double* %x.addr, align 8
+  %2 = load i32, i32* %n.addr, align 4
+  %3 = load double, double* %x.addr, align 8
+  %call = call double @lege_eval(i32 %2, double %3)
+  %mul = fmul double %1, %call
+  %4 = load i32, i32* %n.addr, align 4
+  %sub = sub nsw i32 %4, 1
+  %5 = load double, double* %x.addr, align 8
+  %call1 = call double @lege_eval(i32 %sub, double %5)
+  %sub2 = fsub double %mul, %call1
+  %mul3 = fmul double %conv, %sub2
+  %6 = load double, double* %x.addr, align 8
+  %7 = load double, double* %x.addr, align 8
+  %mul4 = fmul double %6, %7
+  %sub5 = fsub double %mul4, 1.000000e+00
+  %div = fdiv double %mul3, %sub5
+  ret double %div
+}
+
+; Function Attrs: noinline nounwind optnone
+define hidden void @lege_roots() #0 {
+entry:
+  %i = alloca i32, align 4
+  %x = alloca double, align 8
+  %x1 = alloca double, align 8
+  store i32 1, i32* %i, align 4
+  br label %for.cond
+
+for.cond:                                         ; preds = %for.inc, %entry
+  %0 = load i32, i32* %i, align 4
+  %cmp = icmp sle i32 %0, 5
+  br i1 %cmp, label %for.body, label %for.end
+
+for.body:                                         ; preds = %for.cond
+  %1 = load double, double* @Pi, align 8
+  %2 = load i32, i32* %i, align 4
+  %conv = sitofp i32 %2 to double
+  %sub = fsub double %conv, 2.500000e-01
+  %mul = fmul double %1, %sub
+  %div = fdiv double %mul, 5.500000e+00
+  %3 = call double @llvm.cos.f64(double %div)
+  store double %3, double* %x, align 8
+  br label %do.body
+
+do.body:                                          ; preds = %do.cond, %for.body
+  %4 = load double, double* %x, align 8
+  store double %4, double* %x1, align 8
+  %5 = load double, double* %x, align 8
+  %call = call double @lege_eval(i32 5, double %5)
+  %6 = load double, double* %x, align 8
+  %call1 = call double @lege_diff(i32 5, double %6)
+  %div2 = fdiv double %call, %call1
+  %7 = load double, double* %x, align 8
+  %sub3 = fsub double %7, %div2
+  store double %sub3, double* %x, align 8
+  br label %do.cond
+
+do.cond:                                          ; preds = %do.body
+  %8 = load double, double* %x, align 8
+  %9 = load double, double* %x1, align 8
+  %call4 = call double @fdim(double %8, double %9) #4
+  %cmp5 = fcmp ogt double %call4, 2.000000e-16
+  br i1 %cmp5, label %do.body, label %do.end
+
+do.end:                                           ; preds = %do.cond
+  %10 = load double, double* %x, align 8
+  %11 = load i32, i32* %i, align 4
+  %sub7 = sub nsw i32 %11, 1
+  %arrayidx = getelementptr inbounds [5 x double], [5 x double]* @lroots, i32 0, i32 %sub7
+  store double %10, double* %arrayidx, align 8
+  %12 = load double, double* %x, align 8
+  %call8 = call double @lege_diff(i32 5, double %12)
+  store double %call8, double* %x1, align 8
+  %13 = load double, double* %x, align 8
+  %14 = load double, double* %x, align 8
+  %mul9 = fmul double %13, %14
+  %sub10 = fsub double 1.000000e+00, %mul9
+  %15 = load double, double* %x1, align 8
+  %mul11 = fmul double %sub10, %15
+  %16 = load double, double* %x1, align 8
+  %mul12 = fmul double %mul11, %16
+  %div13 = fdiv double 2.000000e+00, %mul12
+  %17 = load i32, i32* %i, align 4
+  %sub14 = sub nsw i32 %17, 1
+  %arrayidx15 = getelementptr inbounds [5 x double], [5 x double]* @weight, i32 0, i32 %sub14
+  store double %div13, double* %arrayidx15, align 8
+  br label %for.inc
+
+for.inc:                                          ; preds = %do.end
+  %18 = load i32, i32* %i, align 4
+  %inc = add nsw i32 %18, 1
+  store i32 %inc, i32* %i, align 4
+  br label %for.cond
+
+for.end:                                          ; preds = %for.cond
+  ret void
+}
+
+; Function Attrs: nounwind readnone speculatable willreturn
+declare double @llvm.cos.f64(double %0) #1
+
+; Function Attrs: nounwind readnone
+declare double @fdim(double %0, double %1) #2
+
+; Function Attrs: noinline nounwind optnone
+define hidden double @lege_inte(double (double)* %f, double %a, double %b) #0 {
+entry:
+  %f.addr = alloca double (double)*, align 4
+  %a.addr = alloca double, align 8
+  %b.addr = alloca double, align 8
+  %c1 = alloca double, align 8
+  %c2 = alloca double, align 8
+  %sum = alloca double, align 8
+  %i = alloca i32, align 4
+  store double (double)* %f, double (double)** %f.addr, align 4
+  store double %a, double* %a.addr, align 8
+  store double %b, double* %b.addr, align 8
+  %0 = load double, double* %b.addr, align 8
+  %1 = load double, double* %a.addr, align 8
+  %sub = fsub double %0, %1
+  %div = fdiv double %sub, 2.000000e+00
+  store double %div, double* %c1, align 8
+  %2 = load double, double* %b.addr, align 8
+  %3 = load double, double* %a.addr, align 8
+  %add = fadd double %2, %3
+  %div1 = fdiv double %add, 2.000000e+00
+  store double %div1, double* %c2, align 8
+  store double 0.000000e+00, double* %sum, align 8
+  store i32 0, i32* %i, align 4
+  br label %for.cond
+
+for.cond:                                         ; preds = %for.inc, %entry
+  %4 = load i32, i32* %i, align 4
+  %cmp = icmp slt i32 %4, 5
+  br i1 %cmp, label %for.body, label %for.end
+
+for.body:                                         ; preds = %for.cond
+  %5 = load i32, i32* %i, align 4
+  %arrayidx = getelementptr inbounds [5 x double], [5 x double]* @weight, i32 0, i32 %5
+  %6 = load double, double* %arrayidx, align 8
+  %7 = load double (double)*, double (double)** %f.addr, align 4
+  %8 = load double, double* %c1, align 8
+  %9 = load i32, i32* %i, align 4
+  %arrayidx2 = getelementptr inbounds [5 x double], [5 x double]* @lroots, i32 0, i32 %9
+  %10 = load double, double* %arrayidx2, align 8
+  %mul = fmul double %8, %10
+  %11 = load double, double* %c2, align 8
+  %add3 = fadd double %mul, %11
+  %call = call double %7(double %add3)
+  %mul4 = fmul double %6, %call
+  %12 = load double, double* %sum, align 8
+  %add5 = fadd double %12, %mul4
+  store double %add5, double* %sum, align 8
+  br label %for.inc
+
+for.inc:                                          ; preds = %for.body
+  %13 = load i32, i32* %i, align 4
+  %inc = add nsw i32 %13, 1
+  store i32 %inc, i32* %i, align 4
+  br label %for.cond
+
+for.end:                                          ; preds = %for.cond
+  %14 = load double, double* %c1, align 8
+  %15 = load double, double* %sum, align 8
+  %mul6 = fmul double %14, %15
+  ret double %mul6
+}
+
+; Function Attrs: noinline nounwind optnone
+define hidden i32 @main() #0 {
+entry:
+  %retval = alloca i32, align 4
+  %i = alloca i32, align 4
+  store i32 0, i32* %retval, align 4
+  %call = call double @atan2(double 1.000000e+00, double 1.000000e+00) #4
+  %mul = fmul double %call, 4.000000e+00
+  store double %mul, double* @Pi, align 8
+  call void @lege_coef()
+  call void @lege_roots()
+  %call1 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([8 x i8], [8 x i8]* @.str, i32 0, i32 0))
+  store i32 0, i32* %i, align 4
+  br label %for.cond
+
+for.cond:                                         ; preds = %for.inc, %entry
+  %0 = load i32, i32* %i, align 4
+  %cmp = icmp slt i32 %0, 5
+  br i1 %cmp, label %for.body, label %for.end
+
+for.body:                                         ; preds = %for.cond
+  %1 = load i32, i32* %i, align 4
+  %arrayidx = getelementptr inbounds [5 x double], [5 x double]* @lroots, i32 0, i32 %1
+  %2 = load double, double* %arrayidx, align 8
+  %call2 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([4 x i8], [4 x i8]* @.str.1, i32 0, i32 0), double %2)
+  br label %for.inc
+
+for.inc:                                          ; preds = %for.body
+  %3 = load i32, i32* %i, align 4
+  %inc = add nsw i32 %3, 1
+  store i32 %inc, i32* %i, align 4
+  br label %for.cond
+
+for.end:                                          ; preds = %for.cond
+  %call3 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([9 x i8], [9 x i8]* @.str.2, i32 0, i32 0))
+  store i32 0, i32* %i, align 4
+  br label %for.cond4
+
+for.cond4:                                        ; preds = %for.inc9, %for.end
+  %4 = load i32, i32* %i, align 4
+  %cmp5 = icmp slt i32 %4, 5
+  br i1 %cmp5, label %for.body6, label %for.end11
+
+for.body6:                                        ; preds = %for.cond4
+  %5 = load i32, i32* %i, align 4
+  %arrayidx7 = getelementptr inbounds [5 x double], [5 x double]* @weight, i32 0, i32 %5
+  %6 = load double, double* %arrayidx7, align 8
+  %call8 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([4 x i8], [4 x i8]* @.str.1, i32 0, i32 0), double %6)
+  br label %for.inc9
+
+for.inc9:                                         ; preds = %for.body6
+  %7 = load i32, i32* %i, align 4
+  %inc10 = add nsw i32 %7, 1
+  store i32 %inc10, i32* %i, align 4
+  br label %for.cond4
+
+for.end11:                                        ; preds = %for.cond4
+  %call12 = call double @lege_inte(double (double)* @exp, double -3.000000e+00, double 3.000000e+00)
+  %8 = call double @llvm.exp.f64(double 3.000000e+00)
+  %9 = call double @llvm.exp.f64(double -3.000000e+00)
+  %sub = fsub double %8, %9
+  %call13 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([70 x i8], [70 x i8]* @.str.3, i32 0, i32 0), double %call12, double %sub)
+  ret i32 0
+}
+
+; Function Attrs: nounwind readnone
+declare double @atan2(double %0, double %1) #2
+
+declare i32 @printf(i8* %0, ...) #3
+
+; Function Attrs: nounwind readnone
+declare double @exp(double %0) #2
+
+; Function Attrs: nounwind readnone speculatable willreturn
+declare double @llvm.exp.f64(double %0) #1
+
+attributes #0 = { noinline nounwind optnone "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "min-legal-vector-width"="0" "no-infs-fp-math"="false" "no-jump-tables"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #1 = { nounwind readnone speculatable willreturn }
+attributes #2 = { nounwind readnone "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #3 = { "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #4 = { nounwind readnone }
+
+!llvm.module.flags = !{!0}
+!llvm.ident = !{!1}
+
+!0 = !{i32 1, !"wchar_size", i32 4}
+!1 = !{!"clang version 11.0.0 (https://github.com/Jacarte/llvm-project.git 0f6dea67136cc1e0b3d200eb2bb165628970c44b)"}
+
+; extracted candidates
+
+; *****
+; For LLVM instruction:
+;  %4 = load i32, i32* %i, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %cmp = icmp slt i32 %4, 5
+; Looking for a replacement for:
+%0:i32 = var
+%1:i1 = slt %0, 5:i32
+infer %1
+
+; *****
+; For LLVM instruction:
+;  %5 = load i32, i32* %i, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %9 = load i32, i32* %i, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %13 = load i32, i32* %i, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %inc = add nsw i32 %13, 1
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = addnsw 1:i32, %0
+infer %1
+got 2 candidates from LHS
+
+-------------------------------------------------
+%0:i32 = var
+%1:i1 = slt %0, 5:i32
+infer %1
+
+
+--------------------------------
+guess 0
+
+%0:i1 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: -1
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: 0
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+Dataflow Pruned 0/0
+There are 1 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+#########################################################
+; exiting Souper's runOnFunction() for lege_inte()
+
+; entering Souper's runOnFunction() for main()
+
+; ModuleID = './Numerical_integration-Gauss-Legendre_Quadrature.c.bc'
+source_filename = "./Numerical_integration-Gauss-Legendre_Quadrature.c"
+target datalayout = "e-m:e-p:32:32-i64:64-n32:64-S128"
+target triple = "wasm32-unknown-wasi"
+
+@lcoef = hidden global [6 x [6 x double]] zeroinitializer, align 16
+@Pi = hidden global double 0.000000e+00, align 8
+@lroots = hidden global [5 x double] zeroinitializer, align 16
+@weight = hidden global [5 x double] zeroinitializer, align 16
+@.str = private unnamed_addr constant [8 x i8] c"Roots: \00", align 1
+@.str.1 = private unnamed_addr constant [4 x i8] c" %g\00", align 1
+@.str.2 = private unnamed_addr constant [9 x i8] c"\0AWeight:\00", align 1
+@.str.3 = private unnamed_addr constant [70 x i8] c"\0Aintegrating Exp(x) over [-3, 3]:\0A\09%10.8f,\0Acompred to actual\0A\09%10.8f\0A\00", align 1
+@llvm.used = appending global [1 x i8*] [i8* bitcast (i32 ()* @__main_void to i8*)], section "llvm.metadata"
+
+@__main_void = alias i32 (), i32 ()* @main
+
+; Function Attrs: noinline nounwind optnone
+define hidden void @lege_coef() #0 {
+entry:
+  %n = alloca i32, align 4
+  %i = alloca i32, align 4
+  store double 1.000000e+00, double* getelementptr inbounds ([6 x [6 x double]], [6 x [6 x double]]* @lcoef, i32 0, i32 1, i32 1), align 8
+  store double 1.000000e+00, double* getelementptr inbounds ([6 x [6 x double]], [6 x [6 x double]]* @lcoef, i32 0, i32 0, i32 0), align 16
+  store i32 2, i32* %n, align 4
+  br label %for.cond
+
+for.cond:                                         ; preds = %for.inc30, %entry
+  %0 = load i32, i32* %n, align 4
+  %cmp = icmp sle i32 %0, 5
+  br i1 %cmp, label %for.body, label %for.end32
+
+for.body:                                         ; preds = %for.cond
+  %1 = load i32, i32* %n, align 4
+  %sub = sub nsw i32 %1, 1
+  %sub1 = sub nsw i32 0, %sub
+  %conv = sitofp i32 %sub1 to double
+  %2 = load i32, i32* %n, align 4
+  %sub2 = sub nsw i32 %2, 2
+  %arrayidx = getelementptr inbounds [6 x [6 x double]], [6 x [6 x double]]* @lcoef, i32 0, i32 %sub2
+  %arrayidx3 = getelementptr inbounds [6 x double], [6 x double]* %arrayidx, i32 0, i32 0
+  %3 = load double, double* %arrayidx3, align 16
+  %mul = fmul double %conv, %3
+  %4 = load i32, i32* %n, align 4
+  %conv4 = sitofp i32 %4 to double
+  %div = fdiv double %mul, %conv4
+  %5 = load i32, i32* %n, align 4
+  %arrayidx5 = getelementptr inbounds [6 x [6 x double]], [6 x [6 x double]]* @lcoef, i32 0, i32 %5
+  %arrayidx6 = getelementptr inbounds [6 x double], [6 x double]* %arrayidx5, i32 0, i32 0
+  store double %div, double* %arrayidx6, align 16
+  store i32 1, i32* %i, align 4
+  br label %for.cond7
+
+for.cond7:                                        ; preds = %for.inc, %for.body
+  %6 = load i32, i32* %i, align 4
+  %7 = load i32, i32* %n, align 4
+  %cmp8 = icmp sle i32 %6, %7
+  br i1 %cmp8, label %for.body10, label %for.end
+
+for.body10:                                       ; preds = %for.cond7
+  %8 = load i32, i32* %n, align 4
+  %mul11 = mul nsw i32 2, %8
+  %sub12 = sub nsw i32 %mul11, 1
+  %conv13 = sitofp i32 %sub12 to double
+  %9 = load i32, i32* %n, align 4
+  %sub14 = sub nsw i32 %9, 1
+  %arrayidx15 = getelementptr inbounds [6 x [6 x double]], [6 x [6 x double]]* @lcoef, i32 0, i32 %sub14
+  %10 = load i32, i32* %i, align 4
+  %sub16 = sub nsw i32 %10, 1
+  %arrayidx17 = getelementptr inbounds [6 x double], [6 x double]* %arrayidx15, i32 0, i32 %sub16
+  %11 = load double, double* %arrayidx17, align 8
+  %mul18 = fmul double %conv13, %11
+  %12 = load i32, i32* %n, align 4
+  %sub19 = sub nsw i32 %12, 1
+  %conv20 = sitofp i32 %sub19 to double
+  %13 = load i32, i32* %n, align 4
+  %sub21 = sub nsw i32 %13, 2
+  %arrayidx22 = getelementptr inbounds [6 x [6 x double]], [6 x [6 x double]]* @lcoef, i32 0, i32 %sub21
+  %14 = load i32, i32* %i, align 4
+  %arrayidx23 = getelementptr inbounds [6 x double], [6 x double]* %arrayidx22, i32 0, i32 %14
+  %15 = load double, double* %arrayidx23, align 8
+  %mul24 = fmul double %conv20, %15
+  %sub25 = fsub double %mul18, %mul24
+  %16 = load i32, i32* %n, align 4
+  %conv26 = sitofp i32 %16 to double
+  %div27 = fdiv double %sub25, %conv26
+  %17 = load i32, i32* %n, align 4
+  %arrayidx28 = getelementptr inbounds [6 x [6 x double]], [6 x [6 x double]]* @lcoef, i32 0, i32 %17
+  %18 = load i32, i32* %i, align 4
+  %arrayidx29 = getelementptr inbounds [6 x double], [6 x double]* %arrayidx28, i32 0, i32 %18
+  store double %div27, double* %arrayidx29, align 8
+  br label %for.inc
+
+for.inc:                                          ; preds = %for.body10
+  %19 = load i32, i32* %i, align 4
+  %inc = add nsw i32 %19, 1
+  store i32 %inc, i32* %i, align 4
+  br label %for.cond7
+
+for.end:                                          ; preds = %for.cond7
+  br label %for.inc30
+
+for.inc30:                                        ; preds = %for.end
+  %20 = load i32, i32* %n, align 4
+  %inc31 = add nsw i32 %20, 1
+  store i32 %inc31, i32* %n, align 4
+  br label %for.cond
+
+for.end32:                                        ; preds = %for.cond
+  ret void
+}
+
+; Function Attrs: noinline nounwind optnone
+define hidden double @lege_eval(i32 %n, double %x) #0 {
+entry:
+  %n.addr = alloca i32, align 4
+  %x.addr = alloca double, align 8
+  %i = alloca i32, align 4
+  %s = alloca double, align 8
+  store i32 %n, i32* %n.addr, align 4
+  store double %x, double* %x.addr, align 8
+  %0 = load i32, i32* %n.addr, align 4
+  %arrayidx = getelementptr inbounds [6 x [6 x double]], [6 x [6 x double]]* @lcoef, i32 0, i32 %0
+  %1 = load i32, i32* %n.addr, align 4
+  %arrayidx1 = getelementptr inbounds [6 x double], [6 x double]* %arrayidx, i32 0, i32 %1
+  %2 = load double, double* %arrayidx1, align 8
+  store double %2, double* %s, align 8
+  %3 = load i32, i32* %n.addr, align 4
+  store i32 %3, i32* %i, align 4
+  br label %for.cond
+
+for.cond:                                         ; preds = %for.inc, %entry
+  %4 = load i32, i32* %i, align 4
+  %tobool = icmp ne i32 %4, 0
+  br i1 %tobool, label %for.body, label %for.end
+
+for.body:                                         ; preds = %for.cond
+  %5 = load double, double* %s, align 8
+  %6 = load double, double* %x.addr, align 8
+  %mul = fmul double %5, %6
+  %7 = load i32, i32* %n.addr, align 4
+  %arrayidx2 = getelementptr inbounds [6 x [6 x double]], [6 x [6 x double]]* @lcoef, i32 0, i32 %7
+  %8 = load i32, i32* %i, align 4
+  %sub = sub nsw i32 %8, 1
+  %arrayidx3 = getelementptr inbounds [6 x double], [6 x double]* %arrayidx2, i32 0, i32 %sub
+  %9 = load double, double* %arrayidx3, align 8
+  %add = fadd double %mul, %9
+  store double %add, double* %s, align 8
+  br label %for.inc
+
+for.inc:                                          ; preds = %for.body
+  %10 = load i32, i32* %i, align 4
+  %dec = add nsw i32 %10, -1
+  store i32 %dec, i32* %i, align 4
+  br label %for.cond
+
+for.end:                                          ; preds = %for.cond
+  %11 = load double, double* %s, align 8
+  ret double %11
+}
+
+; Function Attrs: noinline nounwind optnone
+define hidden double @lege_diff(i32 %n, double %x) #0 {
+entry:
+  %n.addr = alloca i32, align 4
+  %x.addr = alloca double, align 8
+  store i32 %n, i32* %n.addr, align 4
+  store double %x, double* %x.addr, align 8
+  %0 = load i32, i32* %n.addr, align 4
+  %conv = sitofp i32 %0 to double
+  %1 = load double, double* %x.addr, align 8
+  %2 = load i32, i32* %n.addr, align 4
+  %3 = load double, double* %x.addr, align 8
+  %call = call double @lege_eval(i32 %2, double %3)
+  %mul = fmul double %1, %call
+  %4 = load i32, i32* %n.addr, align 4
+  %sub = sub nsw i32 %4, 1
+  %5 = load double, double* %x.addr, align 8
+  %call1 = call double @lege_eval(i32 %sub, double %5)
+  %sub2 = fsub double %mul, %call1
+  %mul3 = fmul double %conv, %sub2
+  %6 = load double, double* %x.addr, align 8
+  %7 = load double, double* %x.addr, align 8
+  %mul4 = fmul double %6, %7
+  %sub5 = fsub double %mul4, 1.000000e+00
+  %div = fdiv double %mul3, %sub5
+  ret double %div
+}
+
+; Function Attrs: noinline nounwind optnone
+define hidden void @lege_roots() #0 {
+entry:
+  %i = alloca i32, align 4
+  %x = alloca double, align 8
+  %x1 = alloca double, align 8
+  store i32 1, i32* %i, align 4
+  br label %for.cond
+
+for.cond:                                         ; preds = %for.inc, %entry
+  %0 = load i32, i32* %i, align 4
+  %cmp = icmp sle i32 %0, 5
+  br i1 %cmp, label %for.body, label %for.end
+
+for.body:                                         ; preds = %for.cond
+  %1 = load double, double* @Pi, align 8
+  %2 = load i32, i32* %i, align 4
+  %conv = sitofp i32 %2 to double
+  %sub = fsub double %conv, 2.500000e-01
+  %mul = fmul double %1, %sub
+  %div = fdiv double %mul, 5.500000e+00
+  %3 = call double @llvm.cos.f64(double %div)
+  store double %3, double* %x, align 8
+  br label %do.body
+
+do.body:                                          ; preds = %do.cond, %for.body
+  %4 = load double, double* %x, align 8
+  store double %4, double* %x1, align 8
+  %5 = load double, double* %x, align 8
+  %call = call double @lege_eval(i32 5, double %5)
+  %6 = load double, double* %x, align 8
+  %call1 = call double @lege_diff(i32 5, double %6)
+  %div2 = fdiv double %call, %call1
+  %7 = load double, double* %x, align 8
+  %sub3 = fsub double %7, %div2
+  store double %sub3, double* %x, align 8
+  br label %do.cond
+
+do.cond:                                          ; preds = %do.body
+  %8 = load double, double* %x, align 8
+  %9 = load double, double* %x1, align 8
+  %call4 = call double @fdim(double %8, double %9) #4
+  %cmp5 = fcmp ogt double %call4, 2.000000e-16
+  br i1 %cmp5, label %do.body, label %do.end
+
+do.end:                                           ; preds = %do.cond
+  %10 = load double, double* %x, align 8
+  %11 = load i32, i32* %i, align 4
+  %sub7 = sub nsw i32 %11, 1
+  %arrayidx = getelementptr inbounds [5 x double], [5 x double]* @lroots, i32 0, i32 %sub7
+  store double %10, double* %arrayidx, align 8
+  %12 = load double, double* %x, align 8
+  %call8 = call double @lege_diff(i32 5, double %12)
+  store double %call8, double* %x1, align 8
+  %13 = load double, double* %x, align 8
+  %14 = load double, double* %x, align 8
+  %mul9 = fmul double %13, %14
+  %sub10 = fsub double 1.000000e+00, %mul9
+  %15 = load double, double* %x1, align 8
+  %mul11 = fmul double %sub10, %15
+  %16 = load double, double* %x1, align 8
+  %mul12 = fmul double %mul11, %16
+  %div13 = fdiv double 2.000000e+00, %mul12
+  %17 = load i32, i32* %i, align 4
+  %sub14 = sub nsw i32 %17, 1
+  %arrayidx15 = getelementptr inbounds [5 x double], [5 x double]* @weight, i32 0, i32 %sub14
+  store double %div13, double* %arrayidx15, align 8
+  br label %for.inc
+
+for.inc:                                          ; preds = %do.end
+  %18 = load i32, i32* %i, align 4
+  %inc = add nsw i32 %18, 1
+  store i32 %inc, i32* %i, align 4
+  br label %for.cond
+
+for.end:                                          ; preds = %for.cond
+  ret void
+}
+
+; Function Attrs: nounwind readnone speculatable willreturn
+declare double @llvm.cos.f64(double %0) #1
+
+; Function Attrs: nounwind readnone
+declare double @fdim(double %0, double %1) #2
+
+; Function Attrs: noinline nounwind optnone
+define hidden double @lege_inte(double (double)* %f, double %a, double %b) #0 {
+entry:
+  %f.addr = alloca double (double)*, align 4
+  %a.addr = alloca double, align 8
+  %b.addr = alloca double, align 8
+  %c1 = alloca double, align 8
+  %c2 = alloca double, align 8
+  %sum = alloca double, align 8
+  %i = alloca i32, align 4
+  store double (double)* %f, double (double)** %f.addr, align 4
+  store double %a, double* %a.addr, align 8
+  store double %b, double* %b.addr, align 8
+  %0 = load double, double* %b.addr, align 8
+  %1 = load double, double* %a.addr, align 8
+  %sub = fsub double %0, %1
+  %div = fdiv double %sub, 2.000000e+00
+  store double %div, double* %c1, align 8
+  %2 = load double, double* %b.addr, align 8
+  %3 = load double, double* %a.addr, align 8
+  %add = fadd double %2, %3
+  %div1 = fdiv double %add, 2.000000e+00
+  store double %div1, double* %c2, align 8
+  store double 0.000000e+00, double* %sum, align 8
+  store i32 0, i32* %i, align 4
+  br label %for.cond
+
+for.cond:                                         ; preds = %for.inc, %entry
+  %4 = load i32, i32* %i, align 4
+  %cmp = icmp slt i32 %4, 5
+  br i1 %cmp, label %for.body, label %for.end
+
+for.body:                                         ; preds = %for.cond
+  %5 = load i32, i32* %i, align 4
+  %arrayidx = getelementptr inbounds [5 x double], [5 x double]* @weight, i32 0, i32 %5
+  %6 = load double, double* %arrayidx, align 8
+  %7 = load double (double)*, double (double)** %f.addr, align 4
+  %8 = load double, double* %c1, align 8
+  %9 = load i32, i32* %i, align 4
+  %arrayidx2 = getelementptr inbounds [5 x double], [5 x double]* @lroots, i32 0, i32 %9
+  %10 = load double, double* %arrayidx2, align 8
+  %mul = fmul double %8, %10
+  %11 = load double, double* %c2, align 8
+  %add3 = fadd double %mul, %11
+  %call = call double %7(double %add3)
+  %mul4 = fmul double %6, %call
+  %12 = load double, double* %sum, align 8
+  %add5 = fadd double %12, %mul4
+  store double %add5, double* %sum, align 8
+  br label %for.inc
+
+for.inc:                                          ; preds = %for.body
+  %13 = load i32, i32* %i, align 4
+  %inc = add nsw i32 %13, 1
+  store i32 %inc, i32* %i, align 4
+  br label %for.cond
+
+for.end:                                          ; preds = %for.cond
+  %14 = load double, double* %c1, align 8
+  %15 = load double, double* %sum, align 8
+  %mul6 = fmul double %14, %15
+  ret double %mul6
+}
+
+; Function Attrs: noinline nounwind optnone
+define hidden i32 @main() #0 {
+entry:
+  %retval = alloca i32, align 4
+  %i = alloca i32, align 4
+  store i32 0, i32* %retval, align 4
+  %call = call double @atan2(double 1.000000e+00, double 1.000000e+00) #4
+  %mul = fmul double %call, 4.000000e+00
+  store double %mul, double* @Pi, align 8
+  call void @lege_coef()
+  call void @lege_roots()
+  %call1 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([8 x i8], [8 x i8]* @.str, i32 0, i32 0))
+  store i32 0, i32* %i, align 4
+  br label %for.cond
+
+for.cond:                                         ; preds = %for.inc, %entry
+  %0 = load i32, i32* %i, align 4
+  %cmp = icmp slt i32 %0, 5
+  br i1 %cmp, label %for.body, label %for.end
+
+for.body:                                         ; preds = %for.cond
+  %1 = load i32, i32* %i, align 4
+  %arrayidx = getelementptr inbounds [5 x double], [5 x double]* @lroots, i32 0, i32 %1
+  %2 = load double, double* %arrayidx, align 8
+  %call2 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([4 x i8], [4 x i8]* @.str.1, i32 0, i32 0), double %2)
+  br label %for.inc
+
+for.inc:                                          ; preds = %for.body
+  %3 = load i32, i32* %i, align 4
+  %inc = add nsw i32 %3, 1
+  store i32 %inc, i32* %i, align 4
+  br label %for.cond
+
+for.end:                                          ; preds = %for.cond
+  %call3 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([9 x i8], [9 x i8]* @.str.2, i32 0, i32 0))
+  store i32 0, i32* %i, align 4
+  br label %for.cond4
+
+for.cond4:                                        ; preds = %for.inc9, %for.end
+  %4 = load i32, i32* %i, align 4
+  %cmp5 = icmp slt i32 %4, 5
+  br i1 %cmp5, label %for.body6, label %for.end11
+
+for.body6:                                        ; preds = %for.cond4
+  %5 = load i32, i32* %i, align 4
+  %arrayidx7 = getelementptr inbounds [5 x double], [5 x double]* @weight, i32 0, i32 %5
+  %6 = load double, double* %arrayidx7, align 8
+  %call8 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([4 x i8], [4 x i8]* @.str.1, i32 0, i32 0), double %6)
+  br label %for.inc9
+
+for.inc9:                                         ; preds = %for.body6
+  %7 = load i32, i32* %i, align 4
+  %inc10 = add nsw i32 %7, 1
+  store i32 %inc10, i32* %i, align 4
+  br label %for.cond4
+
+for.end11:                                        ; preds = %for.cond4
+  %call12 = call double @lege_inte(double (double)* @exp, double -3.000000e+00, double 3.000000e+00)
+  %8 = call double @llvm.exp.f64(double 3.000000e+00)
+  %9 = call double @llvm.exp.f64(double -3.000000e+00)
+  %sub = fsub double %8, %9
+  %call13 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([70 x i8], [70 x i8]* @.str.3, i32 0, i32 0), double %call12, double %sub)
+  ret i32 0
+}
+
+; Function Attrs: nounwind readnone
+declare double @atan2(double %0, double %1) #2
+
+declare i32 @printf(i8* %0, ...) #3
+
+; Function Attrs: nounwind readnone
+declare double @exp(double %0) #2
+
+; Function Attrs: nounwind readnone speculatable willreturn
+declare double @llvm.exp.f64(double %0) #1
+
+attributes #0 = { noinline nounwind optnone "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "min-legal-vector-width"="0" "no-infs-fp-math"="false" "no-jump-tables"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #1 = { nounwind readnone speculatable willreturn }
+attributes #2 = { nounwind readnone "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #3 = { "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #4 = { nounwind readnone }
+
+!llvm.module.flags = !{!0}
+!llvm.ident = !{!1}
+
+!0 = !{i32 1, !"wchar_size", i32 4}
+!1 = !{!"clang version 11.0.0 (https://github.com/Jacarte/llvm-project.git 0f6dea67136cc1e0b3d200eb2bb165628970c44b)"}
+
+; extracted candidates
+
+; *****
+; For LLVM instruction:
+;  %0 = load i32, i32* %i, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %cmp = icmp slt i32 %0, 5
+; Looking for a replacement for:
+%0:i32 = var
+%1:i1 = slt %0, 5:i32
+infer %1
+
+; *****
+; For LLVM instruction:
+;  %1 = load i32, i32* %i, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %3 = load i32, i32* %i, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %inc = add nsw i32 %3, 1
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = addnsw 1:i32, %0
+infer %1
+
+; *****
+; For LLVM instruction:
+;  %4 = load i32, i32* %i, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %cmp5 = icmp slt i32 %4, 5
+; Looking for a replacement for:
+%0:i32 = var
+%1:i1 = slt %0, 5:i32
+infer %1
+
+; *****
+; For LLVM instruction:
+;  %5 = load i32, i32* %i, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %7 = load i32, i32* %i, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %inc10 = add nsw i32 %7, 1
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = addnsw 1:i32, %0
+infer %1
+#########################################################
+; exiting Souper's runOnFunction() for main()
+Total of 0 replacements done on this module
+Total of 0 replacements candidates on this module

@@ -18,9 +18,17 @@ out
 *.slumps.log
 crow_out
 
+utils/reports
 
 dist
 *egg-info
+
+payload*
+traces
+.vscode
+.metals
+traces
+utils/reports
 
 ### Wasm-Fuzzer ###
 wasm-fuzzer/fuzzing-client-afl/afl_out

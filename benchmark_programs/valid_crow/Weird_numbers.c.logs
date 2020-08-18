@@ -1,0 +1,4207 @@
+
+Entering the Souper pass's runOnModule()
+
+
+; entering Souper's runOnFunction() for divisors()
+
+; ModuleID = './Weird_numbers.c.bc'
+source_filename = "./Weird_numbers.c"
+target datalayout = "e-m:e-p:32:32-i64:64-n32:64-S128"
+target triple = "wasm32-unknown-wasi"
+
+%struct.int_a = type { i32*, i32 }
+
+@.str = private unnamed_addr constant [29 x i8] c"The first 25 weird numbers:\0A\00", align 1
+@.str.1 = private unnamed_addr constant [4 x i8] c"%d \00", align 1
+@.str.2 = private unnamed_addr constant [2 x i8] c"\0A\00", align 1
+@llvm.used = appending global [1 x i8*] [i8* bitcast (i32 ()* @__main_void to i8*)], section "llvm.metadata"
+
+@__main_void = alias i32 (), i32 ()* @main
+
+; Function Attrs: noinline nounwind optnone
+define hidden void @divisors(%struct.int_a* noalias sret align 4 %agg.result, i32 %n) #0 {
+entry:
+  %n.addr = alloca i32, align 4
+  %divs = alloca i32*, align 4
+  %divs2 = alloca i32*, align 4
+  %out = alloca i32*, align 4
+  %i = alloca i32, align 4
+  %j = alloca i32, align 4
+  %c1 = alloca i32, align 4
+  %c2 = alloca i32, align 4
+  %i17 = alloca i32, align 4
+  %i26 = alloca i32, align 4
+  store i32 %n, i32* %n.addr, align 4
+  store i32 0, i32* %c1, align 4
+  store i32 0, i32* %c2, align 4
+  %0 = load i32, i32* %n.addr, align 4
+  %mul = mul i32 %0, 4
+  %div = udiv i32 %mul, 2
+  %call = call noalias i8* @malloc(i32 %div)
+  %1 = bitcast i8* %call to i32*
+  store i32* %1, i32** %divs, align 4
+  %2 = load i32, i32* %n.addr, align 4
+  %mul1 = mul i32 %2, 4
+  %div2 = udiv i32 %mul1, 2
+  %call3 = call noalias i8* @malloc(i32 %div2)
+  %3 = bitcast i8* %call3 to i32*
+  store i32* %3, i32** %divs2, align 4
+  %4 = load i32*, i32** %divs, align 4
+  %5 = load i32, i32* %c1, align 4
+  %inc = add nsw i32 %5, 1
+  store i32 %inc, i32* %c1, align 4
+  %arrayidx = getelementptr inbounds i32, i32* %4, i32 %5
+  store i32 1, i32* %arrayidx, align 4
+  store i32 2, i32* %i, align 4
+  br label %for.cond
+
+for.cond:                                         ; preds = %for.inc, %entry
+  %6 = load i32, i32* %i, align 4
+  %7 = load i32, i32* %i, align 4
+  %mul4 = mul nsw i32 %6, %7
+  %8 = load i32, i32* %n.addr, align 4
+  %cmp = icmp sle i32 %mul4, %8
+  br i1 %cmp, label %for.body, label %for.end
+
+for.body:                                         ; preds = %for.cond
+  %9 = load i32, i32* %n.addr, align 4
+  %10 = load i32, i32* %i, align 4
+  %rem = srem i32 %9, %10
+  %cmp5 = icmp eq i32 %rem, 0
+  br i1 %cmp5, label %if.then, label %if.end13
+
+if.then:                                          ; preds = %for.body
+  %11 = load i32, i32* %n.addr, align 4
+  %12 = load i32, i32* %i, align 4
+  %div6 = sdiv i32 %11, %12
+  store i32 %div6, i32* %j, align 4
+  %13 = load i32, i32* %i, align 4
+  %14 = load i32*, i32** %divs, align 4
+  %15 = load i32, i32* %c1, align 4
+  %inc7 = add nsw i32 %15, 1
+  store i32 %inc7, i32* %c1, align 4
+  %arrayidx8 = getelementptr inbounds i32, i32* %14, i32 %15
+  store i32 %13, i32* %arrayidx8, align 4
+  %16 = load i32, i32* %i, align 4
+  %17 = load i32, i32* %j, align 4
+  %cmp9 = icmp ne i32 %16, %17
+  br i1 %cmp9, label %if.then10, label %if.end
+
+if.then10:                                        ; preds = %if.then
+  %18 = load i32, i32* %j, align 4
+  %19 = load i32*, i32** %divs2, align 4
+  %20 = load i32, i32* %c2, align 4
+  %inc11 = add nsw i32 %20, 1
+  store i32 %inc11, i32* %c2, align 4
+  %arrayidx12 = getelementptr inbounds i32, i32* %19, i32 %20
+  store i32 %18, i32* %arrayidx12, align 4
+  br label %if.end
+
+if.end:                                           ; preds = %if.then10, %if.then
+  br label %if.end13
+
+if.end13:                                         ; preds = %if.end, %for.body
+  br label %for.inc
+
+for.inc:                                          ; preds = %if.end13
+  %21 = load i32, i32* %i, align 4
+  %inc14 = add nsw i32 %21, 1
+  store i32 %inc14, i32* %i, align 4
+  br label %for.cond
+
+for.end:                                          ; preds = %for.cond
+  %22 = load i32, i32* %c1, align 4
+  %23 = load i32, i32* %c2, align 4
+  %add = add nsw i32 %22, %23
+  %mul15 = mul i32 %add, 4
+  %call16 = call noalias i8* @malloc(i32 %mul15)
+  %24 = bitcast i8* %call16 to i32*
+  store i32* %24, i32** %out, align 4
+  store i32 0, i32* %i17, align 4
+  br label %for.cond18
+
+for.cond18:                                       ; preds = %for.inc23, %for.end
+  %25 = load i32, i32* %i17, align 4
+  %26 = load i32, i32* %c2, align 4
+  %cmp19 = icmp slt i32 %25, %26
+  br i1 %cmp19, label %for.body20, label %for.end25
+
+for.body20:                                       ; preds = %for.cond18
+  %27 = load i32*, i32** %divs2, align 4
+  %28 = load i32, i32* %i17, align 4
+  %arrayidx21 = getelementptr inbounds i32, i32* %27, i32 %28
+  %29 = load i32, i32* %arrayidx21, align 4
+  %30 = load i32*, i32** %out, align 4
+  %31 = load i32, i32* %i17, align 4
+  %arrayidx22 = getelementptr inbounds i32, i32* %30, i32 %31
+  store i32 %29, i32* %arrayidx22, align 4
+  br label %for.inc23
+
+for.inc23:                                        ; preds = %for.body20
+  %32 = load i32, i32* %i17, align 4
+  %inc24 = add nsw i32 %32, 1
+  store i32 %inc24, i32* %i17, align 4
+  br label %for.cond18
+
+for.end25:                                        ; preds = %for.cond18
+  store i32 0, i32* %i26, align 4
+  br label %for.cond27
+
+for.cond27:                                       ; preds = %for.inc34, %for.end25
+  %33 = load i32, i32* %i26, align 4
+  %34 = load i32, i32* %c1, align 4
+  %cmp28 = icmp slt i32 %33, %34
+  br i1 %cmp28, label %for.body29, label %for.end36
+
+for.body29:                                       ; preds = %for.cond27
+  %35 = load i32*, i32** %divs, align 4
+  %36 = load i32, i32* %c1, align 4
+  %37 = load i32, i32* %i26, align 4
+  %sub = sub nsw i32 %36, %37
+  %sub30 = sub nsw i32 %sub, 1
+  %arrayidx31 = getelementptr inbounds i32, i32* %35, i32 %sub30
+  %38 = load i32, i32* %arrayidx31, align 4
+  %39 = load i32*, i32** %out, align 4
+  %40 = load i32, i32* %c2, align 4
+  %41 = load i32, i32* %i26, align 4
+  %add32 = add nsw i32 %40, %41
+  %arrayidx33 = getelementptr inbounds i32, i32* %39, i32 %add32
+  store i32 %38, i32* %arrayidx33, align 4
+  br label %for.inc34
+
+for.inc34:                                        ; preds = %for.body29
+  %42 = load i32, i32* %i26, align 4
+  %inc35 = add nsw i32 %42, 1
+  store i32 %inc35, i32* %i26, align 4
+  br label %for.cond27
+
+for.end36:                                        ; preds = %for.cond27
+  %43 = load i32*, i32** %out, align 4
+  %ptr = getelementptr inbounds %struct.int_a, %struct.int_a* %agg.result, i32 0, i32 0
+  store i32* %43, i32** %ptr, align 4
+  %44 = load i32, i32* %c1, align 4
+  %45 = load i32, i32* %c2, align 4
+  %add37 = add nsw i32 %44, %45
+  %size = getelementptr inbounds %struct.int_a, %struct.int_a* %agg.result, i32 0, i32 1
+  store i32 %add37, i32* %size, align 4
+  %46 = load i32*, i32** %divs, align 4
+  %47 = bitcast i32* %46 to i8*
+  call void @free(i8* %47)
+  %48 = load i32*, i32** %divs2, align 4
+  %49 = bitcast i32* %48 to i8*
+  call void @free(i8* %49)
+  ret void
+}
+
+declare noalias i8* @malloc(i32 %0) #1
+
+declare void @free(i8* %0) #1
+
+; Function Attrs: noinline nounwind optnone
+define hidden zeroext i1 @abundant(i32 %n, %struct.int_a* byval(%struct.int_a) align 4 %divs) #0 {
+entry:
+  %n.addr = alloca i32, align 4
+  %sum = alloca i32, align 4
+  %i = alloca i32, align 4
+  store i32 %n, i32* %n.addr, align 4
+  store i32 0, i32* %sum, align 4
+  store i32 0, i32* %i, align 4
+  br label %for.cond
+
+for.cond:                                         ; preds = %for.inc, %entry
+  %0 = load i32, i32* %i, align 4
+  %size = getelementptr inbounds %struct.int_a, %struct.int_a* %divs, i32 0, i32 1
+  %1 = load i32, i32* %size, align 4
+  %cmp = icmp ult i32 %0, %1
+  br i1 %cmp, label %for.body, label %for.end
+
+for.body:                                         ; preds = %for.cond
+  %ptr = getelementptr inbounds %struct.int_a, %struct.int_a* %divs, i32 0, i32 0
+  %2 = load i32*, i32** %ptr, align 4
+  %3 = load i32, i32* %i, align 4
+  %arrayidx = getelementptr inbounds i32, i32* %2, i32 %3
+  %4 = load i32, i32* %arrayidx, align 4
+  %5 = load i32, i32* %sum, align 4
+  %add = add nsw i32 %5, %4
+  store i32 %add, i32* %sum, align 4
+  br label %for.inc
+
+for.inc:                                          ; preds = %for.body
+  %6 = load i32, i32* %i, align 4
+  %inc = add nsw i32 %6, 1
+  store i32 %inc, i32* %i, align 4
+  br label %for.cond
+
+for.end:                                          ; preds = %for.cond
+  %7 = load i32, i32* %sum, align 4
+  %8 = load i32, i32* %n.addr, align 4
+  %cmp1 = icmp sgt i32 %7, %8
+  ret i1 %cmp1
+}
+
+; Function Attrs: noinline nounwind optnone
+define hidden zeroext i1 @semiperfect(i32 %n, %struct.int_a* byval(%struct.int_a) align 4 %divs) #0 {
+entry:
+  %retval = alloca i1, align 1
+  %n.addr = alloca i32, align 4
+  %h = alloca i32, align 4
+  %t = alloca i32*, align 4
+  %ta = alloca %struct.int_a, align 4
+  store i32 %n, i32* %n.addr, align 4
+  %size = getelementptr inbounds %struct.int_a, %struct.int_a* %divs, i32 0, i32 1
+  %0 = load i32, i32* %size, align 4
+  %cmp = icmp ugt i32 %0, 0
+  br i1 %cmp, label %if.then, label %if.else11
+
+if.then:                                          ; preds = %entry
+  %ptr = getelementptr inbounds %struct.int_a, %struct.int_a* %divs, i32 0, i32 0
+  %1 = load i32*, i32** %ptr, align 4
+  %2 = load i32, i32* %1, align 4
+  store i32 %2, i32* %h, align 4
+  %ptr1 = getelementptr inbounds %struct.int_a, %struct.int_a* %divs, i32 0, i32 0
+  %3 = load i32*, i32** %ptr1, align 4
+  %add.ptr = getelementptr inbounds i32, i32* %3, i32 1
+  store i32* %add.ptr, i32** %t, align 4
+  %4 = load i32*, i32** %t, align 4
+  %ptr2 = getelementptr inbounds %struct.int_a, %struct.int_a* %ta, i32 0, i32 0
+  store i32* %4, i32** %ptr2, align 4
+  %size3 = getelementptr inbounds %struct.int_a, %struct.int_a* %divs, i32 0, i32 1
+  %5 = load i32, i32* %size3, align 4
+  %sub = sub i32 %5, 1
+  %size4 = getelementptr inbounds %struct.int_a, %struct.int_a* %ta, i32 0, i32 1
+  store i32 %sub, i32* %size4, align 4
+  %6 = load i32, i32* %n.addr, align 4
+  %7 = load i32, i32* %h, align 4
+  %cmp5 = icmp slt i32 %6, %7
+  br i1 %cmp5, label %if.then6, label %if.else
+
+if.then6:                                         ; preds = %if.then
+  %8 = load i32, i32* %n.addr, align 4
+  %call = call zeroext i1 @semiperfect(i32 %8, %struct.int_a* byval(%struct.int_a) align 4 %ta)
+  store i1 %call, i1* %retval, align 1
+  br label %return
+
+if.else:                                          ; preds = %if.then
+  %9 = load i32, i32* %n.addr, align 4
+  %10 = load i32, i32* %h, align 4
+  %cmp7 = icmp eq i32 %9, %10
+  br i1 %cmp7, label %lor.end, label %lor.lhs.false
+
+lor.lhs.false:                                    ; preds = %if.else
+  %11 = load i32, i32* %n.addr, align 4
+  %12 = load i32, i32* %h, align 4
+  %sub8 = sub nsw i32 %11, %12
+  %call9 = call zeroext i1 @semiperfect(i32 %sub8, %struct.int_a* byval(%struct.int_a) align 4 %ta)
+  br i1 %call9, label %lor.end, label %lor.rhs
+
+lor.rhs:                                          ; preds = %lor.lhs.false
+  %13 = load i32, i32* %n.addr, align 4
+  %call10 = call zeroext i1 @semiperfect(i32 %13, %struct.int_a* byval(%struct.int_a) align 4 %ta)
+  br label %lor.end
+
+lor.end:                                          ; preds = %lor.rhs, %lor.lhs.false, %if.else
+  %14 = phi i1 [ true, %lor.lhs.false ], [ true, %if.else ], [ %call10, %lor.rhs ]
+  store i1 %14, i1* %retval, align 1
+  br label %return
+
+if.else11:                                        ; preds = %entry
+  store i1 false, i1* %retval, align 1
+  br label %return
+
+return:                                           ; preds = %if.else11, %lor.end, %if.then6
+  %15 = load i1, i1* %retval, align 1
+  ret i1 %15
+}
+
+; Function Attrs: noinline nounwind optnone
+define hidden i8* @sieve(i32 %limit) #0 {
+entry:
+  %limit.addr = alloca i32, align 4
+  %w = alloca i8*, align 4
+  %divs = alloca %struct.int_a, align 4
+  %i = alloca i32, align 4
+  %j = alloca i32, align 4
+  %tmp = alloca %struct.int_a, align 4
+  store i32 %limit, i32* %limit.addr, align 4
+  %0 = load i32, i32* %limit.addr, align 4
+  %call = call noalias i8* @calloc(i32 %0, i32 1)
+  store i8* %call, i8** %w, align 4
+  store i32 2, i32* %i, align 4
+  br label %for.cond
+
+for.cond:                                         ; preds = %for.inc12, %entry
+  %1 = load i32, i32* %i, align 4
+  %2 = load i32, i32* %limit.addr, align 4
+  %cmp = icmp slt i32 %1, %2
+  br i1 %cmp, label %for.body, label %for.end14
+
+for.body:                                         ; preds = %for.cond
+  %3 = load i8*, i8** %w, align 4
+  %4 = load i32, i32* %i, align 4
+  %arrayidx = getelementptr inbounds i8, i8* %3, i32 %4
+  %5 = load i8, i8* %arrayidx, align 1
+  %tobool = trunc i8 %5 to i1
+  br i1 %tobool, label %if.then, label %if.end
+
+if.then:                                          ; preds = %for.body
+  br label %for.inc12
+
+if.end:                                           ; preds = %for.body
+  %6 = load i32, i32* %i, align 4
+  call void @divisors(%struct.int_a* sret align 4 %tmp, i32 %6)
+  %7 = bitcast %struct.int_a* %divs to i8*
+  %8 = bitcast %struct.int_a* %tmp to i8*
+  call void @llvm.memcpy.p0i8.p0i8.i32(i8* align 4 %7, i8* align 4 %8, i32 8, i1 false)
+  %9 = load i32, i32* %i, align 4
+  %call1 = call zeroext i1 @abundant(i32 %9, %struct.int_a* byval(%struct.int_a) align 4 %divs)
+  br i1 %call1, label %if.else, label %if.then2
+
+if.then2:                                         ; preds = %if.end
+  %10 = load i8*, i8** %w, align 4
+  %11 = load i32, i32* %i, align 4
+  %arrayidx3 = getelementptr inbounds i8, i8* %10, i32 %11
+  store i8 1, i8* %arrayidx3, align 1
+  br label %if.end11
+
+if.else:                                          ; preds = %if.end
+  %12 = load i32, i32* %i, align 4
+  %call4 = call zeroext i1 @semiperfect(i32 %12, %struct.int_a* byval(%struct.int_a) align 4 %divs)
+  br i1 %call4, label %if.then5, label %if.end10
+
+if.then5:                                         ; preds = %if.else
+  %13 = load i32, i32* %i, align 4
+  store i32 %13, i32* %j, align 4
+  br label %for.cond6
+
+for.cond6:                                        ; preds = %for.inc, %if.then5
+  %14 = load i32, i32* %j, align 4
+  %15 = load i32, i32* %limit.addr, align 4
+  %cmp7 = icmp slt i32 %14, %15
+  br i1 %cmp7, label %for.body8, label %for.end
+
+for.body8:                                        ; preds = %for.cond6
+  %16 = load i8*, i8** %w, align 4
+  %17 = load i32, i32* %j, align 4
+  %arrayidx9 = getelementptr inbounds i8, i8* %16, i32 %17
+  store i8 1, i8* %arrayidx9, align 1
+  br label %for.inc
+
+for.inc:                                          ; preds = %for.body8
+  %18 = load i32, i32* %i, align 4
+  %19 = load i32, i32* %j, align 4
+  %add = add nsw i32 %19, %18
+  store i32 %add, i32* %j, align 4
+  br label %for.cond6
+
+for.end:                                          ; preds = %for.cond6
+  br label %if.end10
+
+if.end10:                                         ; preds = %for.end, %if.else
+  br label %if.end11
+
+if.end11:                                         ; preds = %if.end10, %if.then2
+  br label %for.inc12
+
+for.inc12:                                        ; preds = %if.end11, %if.then
+  %20 = load i32, i32* %i, align 4
+  %add13 = add nsw i32 %20, 2
+  store i32 %add13, i32* %i, align 4
+  br label %for.cond
+
+for.end14:                                        ; preds = %for.cond
+  %ptr = getelementptr inbounds %struct.int_a, %struct.int_a* %divs, i32 0, i32 0
+  %21 = load i32*, i32** %ptr, align 4
+  %22 = bitcast i32* %21 to i8*
+  call void @free(i8* %22)
+  %23 = load i8*, i8** %w, align 4
+  ret i8* %23
+}
+
+declare noalias i8* @calloc(i32 %0, i32 %1) #1
+
+; Function Attrs: argmemonly nounwind willreturn
+declare void @llvm.memcpy.p0i8.p0i8.i32(i8* noalias nocapture writeonly %0, i8* noalias nocapture readonly %1, i32 %2, i1 immarg %3) #2
+
+; Function Attrs: noinline nounwind optnone
+define hidden i32 @main() #0 {
+entry:
+  %retval = alloca i32, align 4
+  %w = alloca i8*, align 4
+  %count = alloca i32, align 4
+  %max = alloca i32, align 4
+  %n = alloca i32, align 4
+  store i32 0, i32* %retval, align 4
+  %call = call i8* @sieve(i32 17000)
+  store i8* %call, i8** %w, align 4
+  store i32 0, i32* %count, align 4
+  store i32 25, i32* %max, align 4
+  %call1 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([29 x i8], [29 x i8]* @.str, i32 0, i32 0))
+  store i32 2, i32* %n, align 4
+  br label %for.cond
+
+for.cond:                                         ; preds = %for.inc, %entry
+  %0 = load i32, i32* %count, align 4
+  %1 = load i32, i32* %max, align 4
+  %cmp = icmp slt i32 %0, %1
+  br i1 %cmp, label %for.body, label %for.end
+
+for.body:                                         ; preds = %for.cond
+  %2 = load i8*, i8** %w, align 4
+  %3 = load i32, i32* %n, align 4
+  %arrayidx = getelementptr inbounds i8, i8* %2, i32 %3
+  %4 = load i8, i8* %arrayidx, align 1
+  %tobool = trunc i8 %4 to i1
+  br i1 %tobool, label %if.end, label %if.then
+
+if.then:                                          ; preds = %for.body
+  %5 = load i32, i32* %n, align 4
+  %call2 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([4 x i8], [4 x i8]* @.str.1, i32 0, i32 0), i32 %5)
+  %6 = load i32, i32* %count, align 4
+  %inc = add nsw i32 %6, 1
+  store i32 %inc, i32* %count, align 4
+  br label %if.end
+
+if.end:                                           ; preds = %if.then, %for.body
+  br label %for.inc
+
+for.inc:                                          ; preds = %if.end
+  %7 = load i32, i32* %n, align 4
+  %add = add nsw i32 %7, 2
+  store i32 %add, i32* %n, align 4
+  br label %for.cond
+
+for.end:                                          ; preds = %for.cond
+  %call3 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([2 x i8], [2 x i8]* @.str.2, i32 0, i32 0))
+  %8 = load i8*, i8** %w, align 4
+  call void @free(i8* %8)
+  ret i32 0
+}
+
+declare i32 @printf(i8* %0, ...) #1
+
+attributes #0 = { noinline nounwind optnone "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "min-legal-vector-width"="0" "no-infs-fp-math"="false" "no-jump-tables"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #1 = { "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #2 = { argmemonly nounwind willreturn }
+
+!llvm.module.flags = !{!0}
+!llvm.ident = !{!1}
+
+!0 = !{i32 1, !"wchar_size", i32 4}
+!1 = !{!"clang version 11.0.0 (https://github.com/Jacarte/llvm-project.git 0f6dea67136cc1e0b3d200eb2bb165628970c44b)"}
+
+; extracted candidates
+
+; *****
+; For LLVM instruction:
+;  %0 = load i32, i32* %n.addr, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %mul = mul i32 %0, 4
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = mul 4:i32, %0
+infer %1
+
+; *****
+; For LLVM instruction:
+;  %div = udiv i32 %mul, 2
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = mul 4:i32, %0
+%2:i32 = udiv %1, 2:i32
+infer %2
+
+; *****
+; For LLVM instruction:
+;  %2 = load i32, i32* %n.addr, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %mul1 = mul i32 %2, 4
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = mul 4:i32, %0
+infer %1
+
+; *****
+; For LLVM instruction:
+;  %div2 = udiv i32 %mul1, 2
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = mul 4:i32, %0
+%2:i32 = udiv %1, 2:i32
+infer %2
+
+; *****
+; For LLVM instruction:
+;  %5 = load i32, i32* %c1, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %inc = add nsw i32 %5, 1
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = addnsw 1:i32, %0
+infer %1
+
+; *****
+; For LLVM instruction:
+;  %6 = load i32, i32* %i, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %7 = load i32, i32* %i, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %mul4 = mul nsw i32 %6, %7
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = var
+%2:i32 = mulnsw %0, %1
+infer %2
+
+; *****
+; For LLVM instruction:
+;  %8 = load i32, i32* %n.addr, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %cmp = icmp sle i32 %mul4, %8
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = var
+%2:i32 = mulnsw %0, %1
+%3:i32 = var
+%4:i1 = sle %2, %3
+infer %4
+
+; *****
+; For LLVM instruction:
+;  %9 = load i32, i32* %n.addr, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %10 = load i32, i32* %i, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %rem = srem i32 %9, %10
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = var
+%2:i32 = srem %0, %1
+infer %2
+
+; *****
+; For LLVM instruction:
+;  %cmp5 = icmp eq i32 %rem, 0
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = var
+%2:i32 = srem %0, %1
+%3:i1 = eq 0:i32, %2
+infer %3
+
+; *****
+; For LLVM instruction:
+;  %11 = load i32, i32* %n.addr, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %12 = load i32, i32* %i, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %div6 = sdiv i32 %11, %12
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = var
+%2:i32 = sdiv %0, %1
+infer %2
+
+; *****
+; For LLVM instruction:
+;  %13 = load i32, i32* %i, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %15 = load i32, i32* %c1, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %inc7 = add nsw i32 %15, 1
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = addnsw 1:i32, %0
+infer %1
+
+; *****
+; For LLVM instruction:
+;  %16 = load i32, i32* %i, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %17 = load i32, i32* %j, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %cmp9 = icmp ne i32 %16, %17
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = var
+%2:i1 = ne %0, %1
+infer %2
+
+; *****
+; For LLVM instruction:
+;  %18 = load i32, i32* %j, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %20 = load i32, i32* %c2, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %inc11 = add nsw i32 %20, 1
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = addnsw 1:i32, %0
+infer %1
+
+; *****
+; For LLVM instruction:
+;  %21 = load i32, i32* %i, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %inc14 = add nsw i32 %21, 1
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = addnsw 1:i32, %0
+infer %1
+
+; *****
+; For LLVM instruction:
+;  %22 = load i32, i32* %c1, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %23 = load i32, i32* %c2, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %add = add nsw i32 %22, %23
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = var
+%2:i32 = addnsw %0, %1
+infer %2
+
+; *****
+; For LLVM instruction:
+;  %mul15 = mul i32 %add, 4
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = var
+%2:i32 = addnsw %0, %1
+%3:i32 = mul 4:i32, %2
+infer %3
+
+; *****
+; For LLVM instruction:
+;  %25 = load i32, i32* %i17, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %26 = load i32, i32* %c2, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %cmp19 = icmp slt i32 %25, %26
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = var
+%2:i1 = slt %0, %1
+infer %2
+
+; *****
+; For LLVM instruction:
+;  %28 = load i32, i32* %i17, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %29 = load i32, i32* %arrayidx21, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %31 = load i32, i32* %i17, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %32 = load i32, i32* %i17, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %inc24 = add nsw i32 %32, 1
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = addnsw 1:i32, %0
+infer %1
+
+; *****
+; For LLVM instruction:
+;  %33 = load i32, i32* %i26, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %34 = load i32, i32* %c1, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %cmp28 = icmp slt i32 %33, %34
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = var
+%2:i1 = slt %0, %1
+infer %2
+
+; *****
+; For LLVM instruction:
+;  %36 = load i32, i32* %c1, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %37 = load i32, i32* %i26, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %sub = sub nsw i32 %36, %37
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = var
+%2:i32 = subnsw %0, %1
+infer %2
+
+; *****
+; For LLVM instruction:
+;  %sub30 = sub nsw i32 %sub, 1
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = var
+%2:i32 = subnsw %0, %1
+%3:i32 = subnsw %2, 1:i32
+infer %3
+
+; *****
+; For LLVM instruction:
+;  %38 = load i32, i32* %arrayidx31, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %40 = load i32, i32* %c2, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %41 = load i32, i32* %i26, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %add32 = add nsw i32 %40, %41
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = var
+%2:i32 = addnsw %0, %1
+infer %2
+
+; *****
+; For LLVM instruction:
+;  %42 = load i32, i32* %i26, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %inc35 = add nsw i32 %42, 1
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = addnsw 1:i32, %0
+infer %1
+
+; *****
+; For LLVM instruction:
+;  %44 = load i32, i32* %c1, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %45 = load i32, i32* %c2, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %add37 = add nsw i32 %44, %45
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = var
+%2:i32 = addnsw %0, %1
+infer %2
+got 1 candidates from LHS
+
+-------------------------------------------------
+%0:i32 = var
+infer %0
+
+
+--------------------------------
+guess 0
+
+%0:i32 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: -1
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+Dataflow Pruned 0/0
+There are 1 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 2 candidates from LHS
+
+-------------------------------------------------
+%0:i32 = var
+%1:i32 = mul 4:i32, %0
+infer %1
+
+
+--------------------------------
+guess 0
+
+%0:i32 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: 1073741824
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+
+--------------------------------
+guess 1
+
+%0:i32 = var
+
+Cost = 0
+second query is SAT-- constant doesn't work
+Dataflow Pruned 0/0
+There are 2 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 3 candidates from LHS
+
+-------------------------------------------------
+%0:i32 = var
+%1:i32 = mul 4:i32, %0
+%2:i32 = udiv %1, 2:i32
+infer %2
+
+
+--------------------------------
+guess 0
+
+%0:i32 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: 536870912
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+
+--------------------------------
+guess 1
+
+%0:i32 = var
+
+Cost = 0
+second query is SAT-- constant doesn't work
+
+--------------------------------
+guess 2
+
+%0:i32 = var
+%1:i32 = mul 4:i32, %0
+
+Cost = 1
+second query is SAT-- constant doesn't work
+Dataflow Pruned 0/0
+There are 3 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 2 candidates from LHS
+
+-------------------------------------------------
+%0:i32 = var
+%1:i32 = addnsw 1:i32, %0
+infer %1
+
+
+--------------------------------
+guess 0
+
+%0:i32 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 1
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: 268435457
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+
+--------------------------------
+guess 1
+
+%0:i32 = var
+
+Cost = 0
+second query is SAT-- constant doesn't work
+Dataflow Pruned 0/0
+There are 2 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 3 candidates from LHS
+
+-------------------------------------------------
+%0:i32 = var
+%1:i32 = var
+%2:i32 = mulnsw %0, %1
+infer %2
+
+
+--------------------------------
+guess 0
+
+%0:i32 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+ConstantSynthesis: solver returns error on second query
+
+--------------------------------
+guess 1
+
+%0:i32 = var
+
+Cost = 0
+verification query failed!
+Dataflow Pruned 0/0
+There are 3 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 5 candidates from LHS
+
+-------------------------------------------------
+%0:i32 = var
+%1:i32 = var
+%2:i32 = mulnsw %0, %1
+%3:i32 = var
+%4:i1 = sle %2, %3
+infer %4
+
+
+--------------------------------
+guess 0
+
+%0:i1 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: -1
+ConstantSynthesis: solver returns error on second query
+Dataflow Pruned 0/0
+There are 1 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 3 candidates from LHS
+
+-------------------------------------------------
+%0:i32 = var
+%1:i32 = var
+%2:i32 = srem %0, %1
+infer %2
+
+
+--------------------------------
+guess 0
+
+%0:i32 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: -120454654
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+
+--------------------------------
+guess 1
+
+%0:i32 = var
+
+Cost = 0
+second query is SAT-- constant doesn't work
+
+--------------------------------
+guess 2
+
+%0:i32 = var
+
+Cost = 0
+second query is SAT-- constant doesn't work
+Dataflow Pruned 0/0
+There are 3 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 4 candidates from LHS
+
+-------------------------------------------------
+%0:i32 = var
+%1:i32 = var
+%2:i32 = srem %0, %1
+%3:i1 = eq 0:i32, %2
+infer %3
+
+
+--------------------------------
+guess 0
+
+%0:i1 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: -1
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: 0
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+Dataflow Pruned 0/0
+There are 1 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 3 candidates from LHS
+
+-------------------------------------------------
+%0:i32 = var
+%1:i32 = var
+%2:i32 = sdiv %0, %1
+infer %2
+
+
+--------------------------------
+guess 0
+
+%0:i32 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: -1
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: 0
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+
+--------------------------------
+guess 1
+
+%0:i32 = var
+
+Cost = 0
+second query is SAT-- constant doesn't work
+
+--------------------------------
+guess 2
+
+%0:i32 = var
+
+Cost = 0
+second query is SAT-- constant doesn't work
+Dataflow Pruned 0/0
+There are 3 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 3 candidates from LHS
+
+-------------------------------------------------
+%0:i32 = var
+%1:i32 = var
+%2:i1 = ne %0, %1
+infer %2
+
+
+--------------------------------
+guess 0
+
+%0:i1 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: -1
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+Dataflow Pruned 0/0
+There are 1 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 3 candidates from LHS
+
+-------------------------------------------------
+%0:i32 = var
+%1:i32 = var
+%2:i32 = addnsw %0, %1
+infer %2
+
+
+--------------------------------
+guess 0
+
+%0:i32 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: -2
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+
+--------------------------------
+guess 1
+
+%0:i32 = var
+
+Cost = 0
+second query is SAT-- constant doesn't work
+
+--------------------------------
+guess 2
+
+%0:i32 = var
+
+Cost = 0
+second query is SAT-- constant doesn't work
+Dataflow Pruned 0/0
+There are 3 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 4 candidates from LHS
+
+-------------------------------------------------
+%0:i32 = var
+%1:i32 = var
+%2:i32 = addnsw %0, %1
+%3:i32 = mul 4:i32, %2
+infer %3
+
+
+--------------------------------
+guess 0
+
+%0:i32 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: -2147483648
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+
+--------------------------------
+guess 1
+
+%0:i32 = var
+
+Cost = 0
+second query is SAT-- constant doesn't work
+
+--------------------------------
+guess 2
+
+%0:i32 = var
+
+Cost = 0
+second query is SAT-- constant doesn't work
+
+--------------------------------
+guess 3
+
+%0:i32 = var
+%1:i32 = var
+%2:i32 = addnsw %0, %1
+
+Cost = 1
+second query is SAT-- constant doesn't work
+Dataflow Pruned 0/0
+There are 4 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 3 candidates from LHS
+
+-------------------------------------------------
+%0:i32 = var
+%1:i32 = var
+%2:i1 = slt %0, %1
+infer %2
+
+
+--------------------------------
+guess 0
+
+%0:i1 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: -1
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+Dataflow Pruned 0/0
+There are 1 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 3 candidates from LHS
+
+-------------------------------------------------
+%0:i32 = var
+%1:i32 = var
+%2:i32 = subnsw %0, %1
+infer %2
+
+
+--------------------------------
+guess 0
+
+%0:i32 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: 2147418112
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+
+--------------------------------
+guess 1
+
+%0:i32 = var
+
+Cost = 0
+second query is SAT-- constant doesn't work
+
+--------------------------------
+guess 2
+
+%0:i32 = var
+
+Cost = 0
+second query is SAT-- constant doesn't work
+Dataflow Pruned 0/0
+There are 3 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 4 candidates from LHS
+
+-------------------------------------------------
+%0:i32 = var
+%1:i32 = var
+%2:i32 = subnsw %0, %1
+%3:i32 = subnsw %2, 1:i32
+infer %3
+
+
+--------------------------------
+guess 0
+
+%0:i32 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: -1
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: 2065637807
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+
+--------------------------------
+guess 1
+
+%0:i32 = var
+
+Cost = 0
+second query is SAT-- constant doesn't work
+
+--------------------------------
+guess 2
+
+%0:i32 = var
+
+Cost = 0
+second query is SAT-- constant doesn't work
+
+--------------------------------
+guess 3
+
+%0:i32 = var
+%1:i32 = var
+%2:i32 = subnsw %0, %1
+
+Cost = 1
+second query is SAT-- constant doesn't work
+Dataflow Pruned 0/0
+There are 4 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+#########################################################
+; exiting Souper's runOnFunction() for divisors()
+
+; entering Souper's runOnFunction() for abundant()
+
+; ModuleID = './Weird_numbers.c.bc'
+source_filename = "./Weird_numbers.c"
+target datalayout = "e-m:e-p:32:32-i64:64-n32:64-S128"
+target triple = "wasm32-unknown-wasi"
+
+%struct.int_a = type { i32*, i32 }
+
+@.str = private unnamed_addr constant [29 x i8] c"The first 25 weird numbers:\0A\00", align 1
+@.str.1 = private unnamed_addr constant [4 x i8] c"%d \00", align 1
+@.str.2 = private unnamed_addr constant [2 x i8] c"\0A\00", align 1
+@llvm.used = appending global [1 x i8*] [i8* bitcast (i32 ()* @__main_void to i8*)], section "llvm.metadata"
+
+@__main_void = alias i32 (), i32 ()* @main
+
+; Function Attrs: noinline nounwind optnone
+define hidden void @divisors(%struct.int_a* noalias sret align 4 %agg.result, i32 %n) #0 {
+entry:
+  %n.addr = alloca i32, align 4
+  %divs = alloca i32*, align 4
+  %divs2 = alloca i32*, align 4
+  %out = alloca i32*, align 4
+  %i = alloca i32, align 4
+  %j = alloca i32, align 4
+  %c1 = alloca i32, align 4
+  %c2 = alloca i32, align 4
+  %i17 = alloca i32, align 4
+  %i26 = alloca i32, align 4
+  store i32 %n, i32* %n.addr, align 4
+  store i32 0, i32* %c1, align 4
+  store i32 0, i32* %c2, align 4
+  %0 = load i32, i32* %n.addr, align 4
+  %mul = mul i32 %0, 4
+  %div = udiv i32 %mul, 2
+  %call = call noalias i8* @malloc(i32 %div)
+  %1 = bitcast i8* %call to i32*
+  store i32* %1, i32** %divs, align 4
+  %2 = load i32, i32* %n.addr, align 4
+  %mul1 = mul i32 %2, 4
+  %div2 = udiv i32 %mul1, 2
+  %call3 = call noalias i8* @malloc(i32 %div2)
+  %3 = bitcast i8* %call3 to i32*
+  store i32* %3, i32** %divs2, align 4
+  %4 = load i32*, i32** %divs, align 4
+  %5 = load i32, i32* %c1, align 4
+  %inc = add nsw i32 %5, 1
+  store i32 %inc, i32* %c1, align 4
+  %arrayidx = getelementptr inbounds i32, i32* %4, i32 %5
+  store i32 1, i32* %arrayidx, align 4
+  store i32 2, i32* %i, align 4
+  br label %for.cond
+
+for.cond:                                         ; preds = %for.inc, %entry
+  %6 = load i32, i32* %i, align 4
+  %7 = load i32, i32* %i, align 4
+  %mul4 = mul nsw i32 %6, %7
+  %8 = load i32, i32* %n.addr, align 4
+  %cmp = icmp sle i32 %mul4, %8
+  br i1 %cmp, label %for.body, label %for.end
+
+for.body:                                         ; preds = %for.cond
+  %9 = load i32, i32* %n.addr, align 4
+  %10 = load i32, i32* %i, align 4
+  %rem = srem i32 %9, %10
+  %cmp5 = icmp eq i32 %rem, 0
+  br i1 %cmp5, label %if.then, label %if.end13
+
+if.then:                                          ; preds = %for.body
+  %11 = load i32, i32* %n.addr, align 4
+  %12 = load i32, i32* %i, align 4
+  %div6 = sdiv i32 %11, %12
+  store i32 %div6, i32* %j, align 4
+  %13 = load i32, i32* %i, align 4
+  %14 = load i32*, i32** %divs, align 4
+  %15 = load i32, i32* %c1, align 4
+  %inc7 = add nsw i32 %15, 1
+  store i32 %inc7, i32* %c1, align 4
+  %arrayidx8 = getelementptr inbounds i32, i32* %14, i32 %15
+  store i32 %13, i32* %arrayidx8, align 4
+  %16 = load i32, i32* %i, align 4
+  %17 = load i32, i32* %j, align 4
+  %cmp9 = icmp ne i32 %16, %17
+  br i1 %cmp9, label %if.then10, label %if.end
+
+if.then10:                                        ; preds = %if.then
+  %18 = load i32, i32* %j, align 4
+  %19 = load i32*, i32** %divs2, align 4
+  %20 = load i32, i32* %c2, align 4
+  %inc11 = add nsw i32 %20, 1
+  store i32 %inc11, i32* %c2, align 4
+  %arrayidx12 = getelementptr inbounds i32, i32* %19, i32 %20
+  store i32 %18, i32* %arrayidx12, align 4
+  br label %if.end
+
+if.end:                                           ; preds = %if.then10, %if.then
+  br label %if.end13
+
+if.end13:                                         ; preds = %if.end, %for.body
+  br label %for.inc
+
+for.inc:                                          ; preds = %if.end13
+  %21 = load i32, i32* %i, align 4
+  %inc14 = add nsw i32 %21, 1
+  store i32 %inc14, i32* %i, align 4
+  br label %for.cond
+
+for.end:                                          ; preds = %for.cond
+  %22 = load i32, i32* %c1, align 4
+  %23 = load i32, i32* %c2, align 4
+  %add = add nsw i32 %22, %23
+  %mul15 = mul i32 %add, 4
+  %call16 = call noalias i8* @malloc(i32 %mul15)
+  %24 = bitcast i8* %call16 to i32*
+  store i32* %24, i32** %out, align 4
+  store i32 0, i32* %i17, align 4
+  br label %for.cond18
+
+for.cond18:                                       ; preds = %for.inc23, %for.end
+  %25 = load i32, i32* %i17, align 4
+  %26 = load i32, i32* %c2, align 4
+  %cmp19 = icmp slt i32 %25, %26
+  br i1 %cmp19, label %for.body20, label %for.end25
+
+for.body20:                                       ; preds = %for.cond18
+  %27 = load i32*, i32** %divs2, align 4
+  %28 = load i32, i32* %i17, align 4
+  %arrayidx21 = getelementptr inbounds i32, i32* %27, i32 %28
+  %29 = load i32, i32* %arrayidx21, align 4
+  %30 = load i32*, i32** %out, align 4
+  %31 = load i32, i32* %i17, align 4
+  %arrayidx22 = getelementptr inbounds i32, i32* %30, i32 %31
+  store i32 %29, i32* %arrayidx22, align 4
+  br label %for.inc23
+
+for.inc23:                                        ; preds = %for.body20
+  %32 = load i32, i32* %i17, align 4
+  %inc24 = add nsw i32 %32, 1
+  store i32 %inc24, i32* %i17, align 4
+  br label %for.cond18
+
+for.end25:                                        ; preds = %for.cond18
+  store i32 0, i32* %i26, align 4
+  br label %for.cond27
+
+for.cond27:                                       ; preds = %for.inc34, %for.end25
+  %33 = load i32, i32* %i26, align 4
+  %34 = load i32, i32* %c1, align 4
+  %cmp28 = icmp slt i32 %33, %34
+  br i1 %cmp28, label %for.body29, label %for.end36
+
+for.body29:                                       ; preds = %for.cond27
+  %35 = load i32*, i32** %divs, align 4
+  %36 = load i32, i32* %c1, align 4
+  %37 = load i32, i32* %i26, align 4
+  %sub = sub nsw i32 %36, %37
+  %sub30 = sub nsw i32 %sub, 1
+  %arrayidx31 = getelementptr inbounds i32, i32* %35, i32 %sub30
+  %38 = load i32, i32* %arrayidx31, align 4
+  %39 = load i32*, i32** %out, align 4
+  %40 = load i32, i32* %c2, align 4
+  %41 = load i32, i32* %i26, align 4
+  %add32 = add nsw i32 %40, %41
+  %arrayidx33 = getelementptr inbounds i32, i32* %39, i32 %add32
+  store i32 %38, i32* %arrayidx33, align 4
+  br label %for.inc34
+
+for.inc34:                                        ; preds = %for.body29
+  %42 = load i32, i32* %i26, align 4
+  %inc35 = add nsw i32 %42, 1
+  store i32 %inc35, i32* %i26, align 4
+  br label %for.cond27
+
+for.end36:                                        ; preds = %for.cond27
+  %43 = load i32*, i32** %out, align 4
+  %ptr = getelementptr inbounds %struct.int_a, %struct.int_a* %agg.result, i32 0, i32 0
+  store i32* %43, i32** %ptr, align 4
+  %44 = load i32, i32* %c1, align 4
+  %45 = load i32, i32* %c2, align 4
+  %add37 = add nsw i32 %44, %45
+  %size = getelementptr inbounds %struct.int_a, %struct.int_a* %agg.result, i32 0, i32 1
+  store i32 %add37, i32* %size, align 4
+  %46 = load i32*, i32** %divs, align 4
+  %47 = bitcast i32* %46 to i8*
+  call void @free(i8* %47)
+  %48 = load i32*, i32** %divs2, align 4
+  %49 = bitcast i32* %48 to i8*
+  call void @free(i8* %49)
+  ret void
+}
+
+declare noalias i8* @malloc(i32 %0) #1
+
+declare void @free(i8* %0) #1
+
+; Function Attrs: noinline nounwind optnone
+define hidden zeroext i1 @abundant(i32 %n, %struct.int_a* byval(%struct.int_a) align 4 %divs) #0 {
+entry:
+  %n.addr = alloca i32, align 4
+  %sum = alloca i32, align 4
+  %i = alloca i32, align 4
+  store i32 %n, i32* %n.addr, align 4
+  store i32 0, i32* %sum, align 4
+  store i32 0, i32* %i, align 4
+  br label %for.cond
+
+for.cond:                                         ; preds = %for.inc, %entry
+  %0 = load i32, i32* %i, align 4
+  %size = getelementptr inbounds %struct.int_a, %struct.int_a* %divs, i32 0, i32 1
+  %1 = load i32, i32* %size, align 4
+  %cmp = icmp ult i32 %0, %1
+  br i1 %cmp, label %for.body, label %for.end
+
+for.body:                                         ; preds = %for.cond
+  %ptr = getelementptr inbounds %struct.int_a, %struct.int_a* %divs, i32 0, i32 0
+  %2 = load i32*, i32** %ptr, align 4
+  %3 = load i32, i32* %i, align 4
+  %arrayidx = getelementptr inbounds i32, i32* %2, i32 %3
+  %4 = load i32, i32* %arrayidx, align 4
+  %5 = load i32, i32* %sum, align 4
+  %add = add nsw i32 %5, %4
+  store i32 %add, i32* %sum, align 4
+  br label %for.inc
+
+for.inc:                                          ; preds = %for.body
+  %6 = load i32, i32* %i, align 4
+  %inc = add nsw i32 %6, 1
+  store i32 %inc, i32* %i, align 4
+  br label %for.cond
+
+for.end:                                          ; preds = %for.cond
+  %7 = load i32, i32* %sum, align 4
+  %8 = load i32, i32* %n.addr, align 4
+  %cmp1 = icmp sgt i32 %7, %8
+  ret i1 %cmp1
+}
+
+; Function Attrs: noinline nounwind optnone
+define hidden zeroext i1 @semiperfect(i32 %n, %struct.int_a* byval(%struct.int_a) align 4 %divs) #0 {
+entry:
+  %retval = alloca i1, align 1
+  %n.addr = alloca i32, align 4
+  %h = alloca i32, align 4
+  %t = alloca i32*, align 4
+  %ta = alloca %struct.int_a, align 4
+  store i32 %n, i32* %n.addr, align 4
+  %size = getelementptr inbounds %struct.int_a, %struct.int_a* %divs, i32 0, i32 1
+  %0 = load i32, i32* %size, align 4
+  %cmp = icmp ugt i32 %0, 0
+  br i1 %cmp, label %if.then, label %if.else11
+
+if.then:                                          ; preds = %entry
+  %ptr = getelementptr inbounds %struct.int_a, %struct.int_a* %divs, i32 0, i32 0
+  %1 = load i32*, i32** %ptr, align 4
+  %2 = load i32, i32* %1, align 4
+  store i32 %2, i32* %h, align 4
+  %ptr1 = getelementptr inbounds %struct.int_a, %struct.int_a* %divs, i32 0, i32 0
+  %3 = load i32*, i32** %ptr1, align 4
+  %add.ptr = getelementptr inbounds i32, i32* %3, i32 1
+  store i32* %add.ptr, i32** %t, align 4
+  %4 = load i32*, i32** %t, align 4
+  %ptr2 = getelementptr inbounds %struct.int_a, %struct.int_a* %ta, i32 0, i32 0
+  store i32* %4, i32** %ptr2, align 4
+  %size3 = getelementptr inbounds %struct.int_a, %struct.int_a* %divs, i32 0, i32 1
+  %5 = load i32, i32* %size3, align 4
+  %sub = sub i32 %5, 1
+  %size4 = getelementptr inbounds %struct.int_a, %struct.int_a* %ta, i32 0, i32 1
+  store i32 %sub, i32* %size4, align 4
+  %6 = load i32, i32* %n.addr, align 4
+  %7 = load i32, i32* %h, align 4
+  %cmp5 = icmp slt i32 %6, %7
+  br i1 %cmp5, label %if.then6, label %if.else
+
+if.then6:                                         ; preds = %if.then
+  %8 = load i32, i32* %n.addr, align 4
+  %call = call zeroext i1 @semiperfect(i32 %8, %struct.int_a* byval(%struct.int_a) align 4 %ta)
+  store i1 %call, i1* %retval, align 1
+  br label %return
+
+if.else:                                          ; preds = %if.then
+  %9 = load i32, i32* %n.addr, align 4
+  %10 = load i32, i32* %h, align 4
+  %cmp7 = icmp eq i32 %9, %10
+  br i1 %cmp7, label %lor.end, label %lor.lhs.false
+
+lor.lhs.false:                                    ; preds = %if.else
+  %11 = load i32, i32* %n.addr, align 4
+  %12 = load i32, i32* %h, align 4
+  %sub8 = sub nsw i32 %11, %12
+  %call9 = call zeroext i1 @semiperfect(i32 %sub8, %struct.int_a* byval(%struct.int_a) align 4 %ta)
+  br i1 %call9, label %lor.end, label %lor.rhs
+
+lor.rhs:                                          ; preds = %lor.lhs.false
+  %13 = load i32, i32* %n.addr, align 4
+  %call10 = call zeroext i1 @semiperfect(i32 %13, %struct.int_a* byval(%struct.int_a) align 4 %ta)
+  br label %lor.end
+
+lor.end:                                          ; preds = %lor.rhs, %lor.lhs.false, %if.else
+  %14 = phi i1 [ true, %lor.lhs.false ], [ true, %if.else ], [ %call10, %lor.rhs ]
+  store i1 %14, i1* %retval, align 1
+  br label %return
+
+if.else11:                                        ; preds = %entry
+  store i1 false, i1* %retval, align 1
+  br label %return
+
+return:                                           ; preds = %if.else11, %lor.end, %if.then6
+  %15 = load i1, i1* %retval, align 1
+  ret i1 %15
+}
+
+; Function Attrs: noinline nounwind optnone
+define hidden i8* @sieve(i32 %limit) #0 {
+entry:
+  %limit.addr = alloca i32, align 4
+  %w = alloca i8*, align 4
+  %divs = alloca %struct.int_a, align 4
+  %i = alloca i32, align 4
+  %j = alloca i32, align 4
+  %tmp = alloca %struct.int_a, align 4
+  store i32 %limit, i32* %limit.addr, align 4
+  %0 = load i32, i32* %limit.addr, align 4
+  %call = call noalias i8* @calloc(i32 %0, i32 1)
+  store i8* %call, i8** %w, align 4
+  store i32 2, i32* %i, align 4
+  br label %for.cond
+
+for.cond:                                         ; preds = %for.inc12, %entry
+  %1 = load i32, i32* %i, align 4
+  %2 = load i32, i32* %limit.addr, align 4
+  %cmp = icmp slt i32 %1, %2
+  br i1 %cmp, label %for.body, label %for.end14
+
+for.body:                                         ; preds = %for.cond
+  %3 = load i8*, i8** %w, align 4
+  %4 = load i32, i32* %i, align 4
+  %arrayidx = getelementptr inbounds i8, i8* %3, i32 %4
+  %5 = load i8, i8* %arrayidx, align 1
+  %tobool = trunc i8 %5 to i1
+  br i1 %tobool, label %if.then, label %if.end
+
+if.then:                                          ; preds = %for.body
+  br label %for.inc12
+
+if.end:                                           ; preds = %for.body
+  %6 = load i32, i32* %i, align 4
+  call void @divisors(%struct.int_a* sret align 4 %tmp, i32 %6)
+  %7 = bitcast %struct.int_a* %divs to i8*
+  %8 = bitcast %struct.int_a* %tmp to i8*
+  call void @llvm.memcpy.p0i8.p0i8.i32(i8* align 4 %7, i8* align 4 %8, i32 8, i1 false)
+  %9 = load i32, i32* %i, align 4
+  %call1 = call zeroext i1 @abundant(i32 %9, %struct.int_a* byval(%struct.int_a) align 4 %divs)
+  br i1 %call1, label %if.else, label %if.then2
+
+if.then2:                                         ; preds = %if.end
+  %10 = load i8*, i8** %w, align 4
+  %11 = load i32, i32* %i, align 4
+  %arrayidx3 = getelementptr inbounds i8, i8* %10, i32 %11
+  store i8 1, i8* %arrayidx3, align 1
+  br label %if.end11
+
+if.else:                                          ; preds = %if.end
+  %12 = load i32, i32* %i, align 4
+  %call4 = call zeroext i1 @semiperfect(i32 %12, %struct.int_a* byval(%struct.int_a) align 4 %divs)
+  br i1 %call4, label %if.then5, label %if.end10
+
+if.then5:                                         ; preds = %if.else
+  %13 = load i32, i32* %i, align 4
+  store i32 %13, i32* %j, align 4
+  br label %for.cond6
+
+for.cond6:                                        ; preds = %for.inc, %if.then5
+  %14 = load i32, i32* %j, align 4
+  %15 = load i32, i32* %limit.addr, align 4
+  %cmp7 = icmp slt i32 %14, %15
+  br i1 %cmp7, label %for.body8, label %for.end
+
+for.body8:                                        ; preds = %for.cond6
+  %16 = load i8*, i8** %w, align 4
+  %17 = load i32, i32* %j, align 4
+  %arrayidx9 = getelementptr inbounds i8, i8* %16, i32 %17
+  store i8 1, i8* %arrayidx9, align 1
+  br label %for.inc
+
+for.inc:                                          ; preds = %for.body8
+  %18 = load i32, i32* %i, align 4
+  %19 = load i32, i32* %j, align 4
+  %add = add nsw i32 %19, %18
+  store i32 %add, i32* %j, align 4
+  br label %for.cond6
+
+for.end:                                          ; preds = %for.cond6
+  br label %if.end10
+
+if.end10:                                         ; preds = %for.end, %if.else
+  br label %if.end11
+
+if.end11:                                         ; preds = %if.end10, %if.then2
+  br label %for.inc12
+
+for.inc12:                                        ; preds = %if.end11, %if.then
+  %20 = load i32, i32* %i, align 4
+  %add13 = add nsw i32 %20, 2
+  store i32 %add13, i32* %i, align 4
+  br label %for.cond
+
+for.end14:                                        ; preds = %for.cond
+  %ptr = getelementptr inbounds %struct.int_a, %struct.int_a* %divs, i32 0, i32 0
+  %21 = load i32*, i32** %ptr, align 4
+  %22 = bitcast i32* %21 to i8*
+  call void @free(i8* %22)
+  %23 = load i8*, i8** %w, align 4
+  ret i8* %23
+}
+
+declare noalias i8* @calloc(i32 %0, i32 %1) #1
+
+; Function Attrs: argmemonly nounwind willreturn
+declare void @llvm.memcpy.p0i8.p0i8.i32(i8* noalias nocapture writeonly %0, i8* noalias nocapture readonly %1, i32 %2, i1 immarg %3) #2
+
+; Function Attrs: noinline nounwind optnone
+define hidden i32 @main() #0 {
+entry:
+  %retval = alloca i32, align 4
+  %w = alloca i8*, align 4
+  %count = alloca i32, align 4
+  %max = alloca i32, align 4
+  %n = alloca i32, align 4
+  store i32 0, i32* %retval, align 4
+  %call = call i8* @sieve(i32 17000)
+  store i8* %call, i8** %w, align 4
+  store i32 0, i32* %count, align 4
+  store i32 25, i32* %max, align 4
+  %call1 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([29 x i8], [29 x i8]* @.str, i32 0, i32 0))
+  store i32 2, i32* %n, align 4
+  br label %for.cond
+
+for.cond:                                         ; preds = %for.inc, %entry
+  %0 = load i32, i32* %count, align 4
+  %1 = load i32, i32* %max, align 4
+  %cmp = icmp slt i32 %0, %1
+  br i1 %cmp, label %for.body, label %for.end
+
+for.body:                                         ; preds = %for.cond
+  %2 = load i8*, i8** %w, align 4
+  %3 = load i32, i32* %n, align 4
+  %arrayidx = getelementptr inbounds i8, i8* %2, i32 %3
+  %4 = load i8, i8* %arrayidx, align 1
+  %tobool = trunc i8 %4 to i1
+  br i1 %tobool, label %if.end, label %if.then
+
+if.then:                                          ; preds = %for.body
+  %5 = load i32, i32* %n, align 4
+  %call2 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([4 x i8], [4 x i8]* @.str.1, i32 0, i32 0), i32 %5)
+  %6 = load i32, i32* %count, align 4
+  %inc = add nsw i32 %6, 1
+  store i32 %inc, i32* %count, align 4
+  br label %if.end
+
+if.end:                                           ; preds = %if.then, %for.body
+  br label %for.inc
+
+for.inc:                                          ; preds = %if.end
+  %7 = load i32, i32* %n, align 4
+  %add = add nsw i32 %7, 2
+  store i32 %add, i32* %n, align 4
+  br label %for.cond
+
+for.end:                                          ; preds = %for.cond
+  %call3 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([2 x i8], [2 x i8]* @.str.2, i32 0, i32 0))
+  %8 = load i8*, i8** %w, align 4
+  call void @free(i8* %8)
+  ret i32 0
+}
+
+declare i32 @printf(i8* %0, ...) #1
+
+attributes #0 = { noinline nounwind optnone "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "min-legal-vector-width"="0" "no-infs-fp-math"="false" "no-jump-tables"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #1 = { "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #2 = { argmemonly nounwind willreturn }
+
+!llvm.module.flags = !{!0}
+!llvm.ident = !{!1}
+
+!0 = !{i32 1, !"wchar_size", i32 4}
+!1 = !{!"clang version 11.0.0 (https://github.com/Jacarte/llvm-project.git 0f6dea67136cc1e0b3d200eb2bb165628970c44b)"}
+
+; extracted candidates
+
+; *****
+; For LLVM instruction:
+;  %0 = load i32, i32* %i, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %1 = load i32, i32* %size, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %cmp = icmp ult i32 %0, %1
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = var
+%2:i1 = ult %0, %1
+infer %2
+
+; *****
+; For LLVM instruction:
+;  %3 = load i32, i32* %i, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %4 = load i32, i32* %arrayidx, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %5 = load i32, i32* %sum, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %add = add nsw i32 %5, %4
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = var
+%2:i32 = addnsw %0, %1
+infer %2
+
+; *****
+; For LLVM instruction:
+;  %6 = load i32, i32* %i, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %inc = add nsw i32 %6, 1
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = addnsw 1:i32, %0
+infer %1
+
+; *****
+; For LLVM instruction:
+;  %7 = load i32, i32* %sum, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %8 = load i32, i32* %n.addr, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %cmp1 = icmp sgt i32 %7, %8
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = var
+%2:i1 = slt %0, %1
+infer %2
+got 3 candidates from LHS
+
+-------------------------------------------------
+%0:i32 = var
+%1:i32 = var
+%2:i1 = ult %0, %1
+infer %2
+
+
+--------------------------------
+guess 0
+
+%0:i1 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: -1
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+Dataflow Pruned 0/0
+There are 1 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+#########################################################
+; exiting Souper's runOnFunction() for abundant()
+
+; entering Souper's runOnFunction() for semiperfect()
+
+; ModuleID = './Weird_numbers.c.bc'
+source_filename = "./Weird_numbers.c"
+target datalayout = "e-m:e-p:32:32-i64:64-n32:64-S128"
+target triple = "wasm32-unknown-wasi"
+
+%struct.int_a = type { i32*, i32 }
+
+@.str = private unnamed_addr constant [29 x i8] c"The first 25 weird numbers:\0A\00", align 1
+@.str.1 = private unnamed_addr constant [4 x i8] c"%d \00", align 1
+@.str.2 = private unnamed_addr constant [2 x i8] c"\0A\00", align 1
+@llvm.used = appending global [1 x i8*] [i8* bitcast (i32 ()* @__main_void to i8*)], section "llvm.metadata"
+
+@__main_void = alias i32 (), i32 ()* @main
+
+; Function Attrs: noinline nounwind optnone
+define hidden void @divisors(%struct.int_a* noalias sret align 4 %agg.result, i32 %n) #0 {
+entry:
+  %n.addr = alloca i32, align 4
+  %divs = alloca i32*, align 4
+  %divs2 = alloca i32*, align 4
+  %out = alloca i32*, align 4
+  %i = alloca i32, align 4
+  %j = alloca i32, align 4
+  %c1 = alloca i32, align 4
+  %c2 = alloca i32, align 4
+  %i17 = alloca i32, align 4
+  %i26 = alloca i32, align 4
+  store i32 %n, i32* %n.addr, align 4
+  store i32 0, i32* %c1, align 4
+  store i32 0, i32* %c2, align 4
+  %0 = load i32, i32* %n.addr, align 4
+  %mul = mul i32 %0, 4
+  %div = udiv i32 %mul, 2
+  %call = call noalias i8* @malloc(i32 %div)
+  %1 = bitcast i8* %call to i32*
+  store i32* %1, i32** %divs, align 4
+  %2 = load i32, i32* %n.addr, align 4
+  %mul1 = mul i32 %2, 4
+  %div2 = udiv i32 %mul1, 2
+  %call3 = call noalias i8* @malloc(i32 %div2)
+  %3 = bitcast i8* %call3 to i32*
+  store i32* %3, i32** %divs2, align 4
+  %4 = load i32*, i32** %divs, align 4
+  %5 = load i32, i32* %c1, align 4
+  %inc = add nsw i32 %5, 1
+  store i32 %inc, i32* %c1, align 4
+  %arrayidx = getelementptr inbounds i32, i32* %4, i32 %5
+  store i32 1, i32* %arrayidx, align 4
+  store i32 2, i32* %i, align 4
+  br label %for.cond
+
+for.cond:                                         ; preds = %for.inc, %entry
+  %6 = load i32, i32* %i, align 4
+  %7 = load i32, i32* %i, align 4
+  %mul4 = mul nsw i32 %6, %7
+  %8 = load i32, i32* %n.addr, align 4
+  %cmp = icmp sle i32 %mul4, %8
+  br i1 %cmp, label %for.body, label %for.end
+
+for.body:                                         ; preds = %for.cond
+  %9 = load i32, i32* %n.addr, align 4
+  %10 = load i32, i32* %i, align 4
+  %rem = srem i32 %9, %10
+  %cmp5 = icmp eq i32 %rem, 0
+  br i1 %cmp5, label %if.then, label %if.end13
+
+if.then:                                          ; preds = %for.body
+  %11 = load i32, i32* %n.addr, align 4
+  %12 = load i32, i32* %i, align 4
+  %div6 = sdiv i32 %11, %12
+  store i32 %div6, i32* %j, align 4
+  %13 = load i32, i32* %i, align 4
+  %14 = load i32*, i32** %divs, align 4
+  %15 = load i32, i32* %c1, align 4
+  %inc7 = add nsw i32 %15, 1
+  store i32 %inc7, i32* %c1, align 4
+  %arrayidx8 = getelementptr inbounds i32, i32* %14, i32 %15
+  store i32 %13, i32* %arrayidx8, align 4
+  %16 = load i32, i32* %i, align 4
+  %17 = load i32, i32* %j, align 4
+  %cmp9 = icmp ne i32 %16, %17
+  br i1 %cmp9, label %if.then10, label %if.end
+
+if.then10:                                        ; preds = %if.then
+  %18 = load i32, i32* %j, align 4
+  %19 = load i32*, i32** %divs2, align 4
+  %20 = load i32, i32* %c2, align 4
+  %inc11 = add nsw i32 %20, 1
+  store i32 %inc11, i32* %c2, align 4
+  %arrayidx12 = getelementptr inbounds i32, i32* %19, i32 %20
+  store i32 %18, i32* %arrayidx12, align 4
+  br label %if.end
+
+if.end:                                           ; preds = %if.then10, %if.then
+  br label %if.end13
+
+if.end13:                                         ; preds = %if.end, %for.body
+  br label %for.inc
+
+for.inc:                                          ; preds = %if.end13
+  %21 = load i32, i32* %i, align 4
+  %inc14 = add nsw i32 %21, 1
+  store i32 %inc14, i32* %i, align 4
+  br label %for.cond
+
+for.end:                                          ; preds = %for.cond
+  %22 = load i32, i32* %c1, align 4
+  %23 = load i32, i32* %c2, align 4
+  %add = add nsw i32 %22, %23
+  %mul15 = mul i32 %add, 4
+  %call16 = call noalias i8* @malloc(i32 %mul15)
+  %24 = bitcast i8* %call16 to i32*
+  store i32* %24, i32** %out, align 4
+  store i32 0, i32* %i17, align 4
+  br label %for.cond18
+
+for.cond18:                                       ; preds = %for.inc23, %for.end
+  %25 = load i32, i32* %i17, align 4
+  %26 = load i32, i32* %c2, align 4
+  %cmp19 = icmp slt i32 %25, %26
+  br i1 %cmp19, label %for.body20, label %for.end25
+
+for.body20:                                       ; preds = %for.cond18
+  %27 = load i32*, i32** %divs2, align 4
+  %28 = load i32, i32* %i17, align 4
+  %arrayidx21 = getelementptr inbounds i32, i32* %27, i32 %28
+  %29 = load i32, i32* %arrayidx21, align 4
+  %30 = load i32*, i32** %out, align 4
+  %31 = load i32, i32* %i17, align 4
+  %arrayidx22 = getelementptr inbounds i32, i32* %30, i32 %31
+  store i32 %29, i32* %arrayidx22, align 4
+  br label %for.inc23
+
+for.inc23:                                        ; preds = %for.body20
+  %32 = load i32, i32* %i17, align 4
+  %inc24 = add nsw i32 %32, 1
+  store i32 %inc24, i32* %i17, align 4
+  br label %for.cond18
+
+for.end25:                                        ; preds = %for.cond18
+  store i32 0, i32* %i26, align 4
+  br label %for.cond27
+
+for.cond27:                                       ; preds = %for.inc34, %for.end25
+  %33 = load i32, i32* %i26, align 4
+  %34 = load i32, i32* %c1, align 4
+  %cmp28 = icmp slt i32 %33, %34
+  br i1 %cmp28, label %for.body29, label %for.end36
+
+for.body29:                                       ; preds = %for.cond27
+  %35 = load i32*, i32** %divs, align 4
+  %36 = load i32, i32* %c1, align 4
+  %37 = load i32, i32* %i26, align 4
+  %sub = sub nsw i32 %36, %37
+  %sub30 = sub nsw i32 %sub, 1
+  %arrayidx31 = getelementptr inbounds i32, i32* %35, i32 %sub30
+  %38 = load i32, i32* %arrayidx31, align 4
+  %39 = load i32*, i32** %out, align 4
+  %40 = load i32, i32* %c2, align 4
+  %41 = load i32, i32* %i26, align 4
+  %add32 = add nsw i32 %40, %41
+  %arrayidx33 = getelementptr inbounds i32, i32* %39, i32 %add32
+  store i32 %38, i32* %arrayidx33, align 4
+  br label %for.inc34
+
+for.inc34:                                        ; preds = %for.body29
+  %42 = load i32, i32* %i26, align 4
+  %inc35 = add nsw i32 %42, 1
+  store i32 %inc35, i32* %i26, align 4
+  br label %for.cond27
+
+for.end36:                                        ; preds = %for.cond27
+  %43 = load i32*, i32** %out, align 4
+  %ptr = getelementptr inbounds %struct.int_a, %struct.int_a* %agg.result, i32 0, i32 0
+  store i32* %43, i32** %ptr, align 4
+  %44 = load i32, i32* %c1, align 4
+  %45 = load i32, i32* %c2, align 4
+  %add37 = add nsw i32 %44, %45
+  %size = getelementptr inbounds %struct.int_a, %struct.int_a* %agg.result, i32 0, i32 1
+  store i32 %add37, i32* %size, align 4
+  %46 = load i32*, i32** %divs, align 4
+  %47 = bitcast i32* %46 to i8*
+  call void @free(i8* %47)
+  %48 = load i32*, i32** %divs2, align 4
+  %49 = bitcast i32* %48 to i8*
+  call void @free(i8* %49)
+  ret void
+}
+
+declare noalias i8* @malloc(i32 %0) #1
+
+declare void @free(i8* %0) #1
+
+; Function Attrs: noinline nounwind optnone
+define hidden zeroext i1 @abundant(i32 %n, %struct.int_a* byval(%struct.int_a) align 4 %divs) #0 {
+entry:
+  %n.addr = alloca i32, align 4
+  %sum = alloca i32, align 4
+  %i = alloca i32, align 4
+  store i32 %n, i32* %n.addr, align 4
+  store i32 0, i32* %sum, align 4
+  store i32 0, i32* %i, align 4
+  br label %for.cond
+
+for.cond:                                         ; preds = %for.inc, %entry
+  %0 = load i32, i32* %i, align 4
+  %size = getelementptr inbounds %struct.int_a, %struct.int_a* %divs, i32 0, i32 1
+  %1 = load i32, i32* %size, align 4
+  %cmp = icmp ult i32 %0, %1
+  br i1 %cmp, label %for.body, label %for.end
+
+for.body:                                         ; preds = %for.cond
+  %ptr = getelementptr inbounds %struct.int_a, %struct.int_a* %divs, i32 0, i32 0
+  %2 = load i32*, i32** %ptr, align 4
+  %3 = load i32, i32* %i, align 4
+  %arrayidx = getelementptr inbounds i32, i32* %2, i32 %3
+  %4 = load i32, i32* %arrayidx, align 4
+  %5 = load i32, i32* %sum, align 4
+  %add = add nsw i32 %5, %4
+  store i32 %add, i32* %sum, align 4
+  br label %for.inc
+
+for.inc:                                          ; preds = %for.body
+  %6 = load i32, i32* %i, align 4
+  %inc = add nsw i32 %6, 1
+  store i32 %inc, i32* %i, align 4
+  br label %for.cond
+
+for.end:                                          ; preds = %for.cond
+  %7 = load i32, i32* %sum, align 4
+  %8 = load i32, i32* %n.addr, align 4
+  %cmp1 = icmp sgt i32 %7, %8
+  ret i1 %cmp1
+}
+
+; Function Attrs: noinline nounwind optnone
+define hidden zeroext i1 @semiperfect(i32 %n, %struct.int_a* byval(%struct.int_a) align 4 %divs) #0 {
+entry:
+  %retval = alloca i1, align 1
+  %n.addr = alloca i32, align 4
+  %h = alloca i32, align 4
+  %t = alloca i32*, align 4
+  %ta = alloca %struct.int_a, align 4
+  store i32 %n, i32* %n.addr, align 4
+  %size = getelementptr inbounds %struct.int_a, %struct.int_a* %divs, i32 0, i32 1
+  %0 = load i32, i32* %size, align 4
+  %cmp = icmp ugt i32 %0, 0
+  br i1 %cmp, label %if.then, label %if.else11
+
+if.then:                                          ; preds = %entry
+  %ptr = getelementptr inbounds %struct.int_a, %struct.int_a* %divs, i32 0, i32 0
+  %1 = load i32*, i32** %ptr, align 4
+  %2 = load i32, i32* %1, align 4
+  store i32 %2, i32* %h, align 4
+  %ptr1 = getelementptr inbounds %struct.int_a, %struct.int_a* %divs, i32 0, i32 0
+  %3 = load i32*, i32** %ptr1, align 4
+  %add.ptr = getelementptr inbounds i32, i32* %3, i32 1
+  store i32* %add.ptr, i32** %t, align 4
+  %4 = load i32*, i32** %t, align 4
+  %ptr2 = getelementptr inbounds %struct.int_a, %struct.int_a* %ta, i32 0, i32 0
+  store i32* %4, i32** %ptr2, align 4
+  %size3 = getelementptr inbounds %struct.int_a, %struct.int_a* %divs, i32 0, i32 1
+  %5 = load i32, i32* %size3, align 4
+  %sub = sub i32 %5, 1
+  %size4 = getelementptr inbounds %struct.int_a, %struct.int_a* %ta, i32 0, i32 1
+  store i32 %sub, i32* %size4, align 4
+  %6 = load i32, i32* %n.addr, align 4
+  %7 = load i32, i32* %h, align 4
+  %cmp5 = icmp slt i32 %6, %7
+  br i1 %cmp5, label %if.then6, label %if.else
+
+if.then6:                                         ; preds = %if.then
+  %8 = load i32, i32* %n.addr, align 4
+  %call = call zeroext i1 @semiperfect(i32 %8, %struct.int_a* byval(%struct.int_a) align 4 %ta)
+  store i1 %call, i1* %retval, align 1
+  br label %return
+
+if.else:                                          ; preds = %if.then
+  %9 = load i32, i32* %n.addr, align 4
+  %10 = load i32, i32* %h, align 4
+  %cmp7 = icmp eq i32 %9, %10
+  br i1 %cmp7, label %lor.end, label %lor.lhs.false
+
+lor.lhs.false:                                    ; preds = %if.else
+  %11 = load i32, i32* %n.addr, align 4
+  %12 = load i32, i32* %h, align 4
+  %sub8 = sub nsw i32 %11, %12
+  %call9 = call zeroext i1 @semiperfect(i32 %sub8, %struct.int_a* byval(%struct.int_a) align 4 %ta)
+  br i1 %call9, label %lor.end, label %lor.rhs
+
+lor.rhs:                                          ; preds = %lor.lhs.false
+  %13 = load i32, i32* %n.addr, align 4
+  %call10 = call zeroext i1 @semiperfect(i32 %13, %struct.int_a* byval(%struct.int_a) align 4 %ta)
+  br label %lor.end
+
+lor.end:                                          ; preds = %lor.rhs, %lor.lhs.false, %if.else
+  %14 = phi i1 [ true, %lor.lhs.false ], [ true, %if.else ], [ %call10, %lor.rhs ]
+  store i1 %14, i1* %retval, align 1
+  br label %return
+
+if.else11:                                        ; preds = %entry
+  store i1 false, i1* %retval, align 1
+  br label %return
+
+return:                                           ; preds = %if.else11, %lor.end, %if.then6
+  %15 = load i1, i1* %retval, align 1
+  ret i1 %15
+}
+
+; Function Attrs: noinline nounwind optnone
+define hidden i8* @sieve(i32 %limit) #0 {
+entry:
+  %limit.addr = alloca i32, align 4
+  %w = alloca i8*, align 4
+  %divs = alloca %struct.int_a, align 4
+  %i = alloca i32, align 4
+  %j = alloca i32, align 4
+  %tmp = alloca %struct.int_a, align 4
+  store i32 %limit, i32* %limit.addr, align 4
+  %0 = load i32, i32* %limit.addr, align 4
+  %call = call noalias i8* @calloc(i32 %0, i32 1)
+  store i8* %call, i8** %w, align 4
+  store i32 2, i32* %i, align 4
+  br label %for.cond
+
+for.cond:                                         ; preds = %for.inc12, %entry
+  %1 = load i32, i32* %i, align 4
+  %2 = load i32, i32* %limit.addr, align 4
+  %cmp = icmp slt i32 %1, %2
+  br i1 %cmp, label %for.body, label %for.end14
+
+for.body:                                         ; preds = %for.cond
+  %3 = load i8*, i8** %w, align 4
+  %4 = load i32, i32* %i, align 4
+  %arrayidx = getelementptr inbounds i8, i8* %3, i32 %4
+  %5 = load i8, i8* %arrayidx, align 1
+  %tobool = trunc i8 %5 to i1
+  br i1 %tobool, label %if.then, label %if.end
+
+if.then:                                          ; preds = %for.body
+  br label %for.inc12
+
+if.end:                                           ; preds = %for.body
+  %6 = load i32, i32* %i, align 4
+  call void @divisors(%struct.int_a* sret align 4 %tmp, i32 %6)
+  %7 = bitcast %struct.int_a* %divs to i8*
+  %8 = bitcast %struct.int_a* %tmp to i8*
+  call void @llvm.memcpy.p0i8.p0i8.i32(i8* align 4 %7, i8* align 4 %8, i32 8, i1 false)
+  %9 = load i32, i32* %i, align 4
+  %call1 = call zeroext i1 @abundant(i32 %9, %struct.int_a* byval(%struct.int_a) align 4 %divs)
+  br i1 %call1, label %if.else, label %if.then2
+
+if.then2:                                         ; preds = %if.end
+  %10 = load i8*, i8** %w, align 4
+  %11 = load i32, i32* %i, align 4
+  %arrayidx3 = getelementptr inbounds i8, i8* %10, i32 %11
+  store i8 1, i8* %arrayidx3, align 1
+  br label %if.end11
+
+if.else:                                          ; preds = %if.end
+  %12 = load i32, i32* %i, align 4
+  %call4 = call zeroext i1 @semiperfect(i32 %12, %struct.int_a* byval(%struct.int_a) align 4 %divs)
+  br i1 %call4, label %if.then5, label %if.end10
+
+if.then5:                                         ; preds = %if.else
+  %13 = load i32, i32* %i, align 4
+  store i32 %13, i32* %j, align 4
+  br label %for.cond6
+
+for.cond6:                                        ; preds = %for.inc, %if.then5
+  %14 = load i32, i32* %j, align 4
+  %15 = load i32, i32* %limit.addr, align 4
+  %cmp7 = icmp slt i32 %14, %15
+  br i1 %cmp7, label %for.body8, label %for.end
+
+for.body8:                                        ; preds = %for.cond6
+  %16 = load i8*, i8** %w, align 4
+  %17 = load i32, i32* %j, align 4
+  %arrayidx9 = getelementptr inbounds i8, i8* %16, i32 %17
+  store i8 1, i8* %arrayidx9, align 1
+  br label %for.inc
+
+for.inc:                                          ; preds = %for.body8
+  %18 = load i32, i32* %i, align 4
+  %19 = load i32, i32* %j, align 4
+  %add = add nsw i32 %19, %18
+  store i32 %add, i32* %j, align 4
+  br label %for.cond6
+
+for.end:                                          ; preds = %for.cond6
+  br label %if.end10
+
+if.end10:                                         ; preds = %for.end, %if.else
+  br label %if.end11
+
+if.end11:                                         ; preds = %if.end10, %if.then2
+  br label %for.inc12
+
+for.inc12:                                        ; preds = %if.end11, %if.then
+  %20 = load i32, i32* %i, align 4
+  %add13 = add nsw i32 %20, 2
+  store i32 %add13, i32* %i, align 4
+  br label %for.cond
+
+for.end14:                                        ; preds = %for.cond
+  %ptr = getelementptr inbounds %struct.int_a, %struct.int_a* %divs, i32 0, i32 0
+  %21 = load i32*, i32** %ptr, align 4
+  %22 = bitcast i32* %21 to i8*
+  call void @free(i8* %22)
+  %23 = load i8*, i8** %w, align 4
+  ret i8* %23
+}
+
+declare noalias i8* @calloc(i32 %0, i32 %1) #1
+
+; Function Attrs: argmemonly nounwind willreturn
+declare void @llvm.memcpy.p0i8.p0i8.i32(i8* noalias nocapture writeonly %0, i8* noalias nocapture readonly %1, i32 %2, i1 immarg %3) #2
+
+; Function Attrs: noinline nounwind optnone
+define hidden i32 @main() #0 {
+entry:
+  %retval = alloca i32, align 4
+  %w = alloca i8*, align 4
+  %count = alloca i32, align 4
+  %max = alloca i32, align 4
+  %n = alloca i32, align 4
+  store i32 0, i32* %retval, align 4
+  %call = call i8* @sieve(i32 17000)
+  store i8* %call, i8** %w, align 4
+  store i32 0, i32* %count, align 4
+  store i32 25, i32* %max, align 4
+  %call1 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([29 x i8], [29 x i8]* @.str, i32 0, i32 0))
+  store i32 2, i32* %n, align 4
+  br label %for.cond
+
+for.cond:                                         ; preds = %for.inc, %entry
+  %0 = load i32, i32* %count, align 4
+  %1 = load i32, i32* %max, align 4
+  %cmp = icmp slt i32 %0, %1
+  br i1 %cmp, label %for.body, label %for.end
+
+for.body:                                         ; preds = %for.cond
+  %2 = load i8*, i8** %w, align 4
+  %3 = load i32, i32* %n, align 4
+  %arrayidx = getelementptr inbounds i8, i8* %2, i32 %3
+  %4 = load i8, i8* %arrayidx, align 1
+  %tobool = trunc i8 %4 to i1
+  br i1 %tobool, label %if.end, label %if.then
+
+if.then:                                          ; preds = %for.body
+  %5 = load i32, i32* %n, align 4
+  %call2 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([4 x i8], [4 x i8]* @.str.1, i32 0, i32 0), i32 %5)
+  %6 = load i32, i32* %count, align 4
+  %inc = add nsw i32 %6, 1
+  store i32 %inc, i32* %count, align 4
+  br label %if.end
+
+if.end:                                           ; preds = %if.then, %for.body
+  br label %for.inc
+
+for.inc:                                          ; preds = %if.end
+  %7 = load i32, i32* %n, align 4
+  %add = add nsw i32 %7, 2
+  store i32 %add, i32* %n, align 4
+  br label %for.cond
+
+for.end:                                          ; preds = %for.cond
+  %call3 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([2 x i8], [2 x i8]* @.str.2, i32 0, i32 0))
+  %8 = load i8*, i8** %w, align 4
+  call void @free(i8* %8)
+  ret i32 0
+}
+
+declare i32 @printf(i8* %0, ...) #1
+
+attributes #0 = { noinline nounwind optnone "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "min-legal-vector-width"="0" "no-infs-fp-math"="false" "no-jump-tables"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #1 = { "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #2 = { argmemonly nounwind willreturn }
+
+!llvm.module.flags = !{!0}
+!llvm.ident = !{!1}
+
+!0 = !{i32 1, !"wchar_size", i32 4}
+!1 = !{!"clang version 11.0.0 (https://github.com/Jacarte/llvm-project.git 0f6dea67136cc1e0b3d200eb2bb165628970c44b)"}
+
+; extracted candidates
+
+; *****
+; For LLVM instruction:
+;  %0 = load i32, i32* %size, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %cmp = icmp ugt i32 %0, 0
+; Looking for a replacement for:
+%0:i32 = var
+%1:i1 = ult 0:i32, %0
+infer %1
+
+; *****
+; For LLVM instruction:
+;  %2 = load i32, i32* %1, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %5 = load i32, i32* %size3, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %sub = sub i32 %5, 1
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = sub %0, 1:i32
+infer %1
+
+; *****
+; For LLVM instruction:
+;  %6 = load i32, i32* %n.addr, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %7 = load i32, i32* %h, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %cmp5 = icmp slt i32 %6, %7
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = var
+%2:i1 = slt %0, %1
+infer %2
+
+; *****
+; For LLVM instruction:
+;  %8 = load i32, i32* %n.addr, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %call = call zeroext i1 @semiperfect(i32 %8, %struct.int_a* byval(%struct.int_a) align 4 %ta)
+; Looking for a replacement for:
+%0:i1 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %9 = load i32, i32* %n.addr, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %10 = load i32, i32* %h, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %cmp7 = icmp eq i32 %9, %10
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = var
+%2:i1 = eq %0, %1
+infer %2
+
+; *****
+; For LLVM instruction:
+;  %11 = load i32, i32* %n.addr, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %12 = load i32, i32* %h, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %sub8 = sub nsw i32 %11, %12
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = var
+%2:i32 = subnsw %0, %1
+infer %2
+
+; *****
+; For LLVM instruction:
+;  %call9 = call zeroext i1 @semiperfect(i32 %sub8, %struct.int_a* byval(%struct.int_a) align 4 %ta)
+; Looking for a replacement for:
+%0:i1 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %13 = load i32, i32* %n.addr, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %call10 = call zeroext i1 @semiperfect(i32 %13, %struct.int_a* byval(%struct.int_a) align 4 %ta)
+; Looking for a replacement for:
+%0:i1 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %14 = phi i1 [ true, %lor.lhs.false ], [ true, %if.else ], [ %call10, %lor.rhs ]
+; Looking for a replacement for:
+%0 = block 3
+%1:i1 = var
+%2:i1 = phi %0, 1:i1, 1:i1, %1
+infer %2
+
+; *****
+; For LLVM instruction:
+;  %15 = load i1, i1* %retval, align 1
+; Looking for a replacement for:
+%0:i1 = var
+infer %0
+got 2 candidates from LHS
+
+-------------------------------------------------
+%0:i32 = var
+%1:i1 = ult 0:i32, %0
+infer %1
+
+
+--------------------------------
+guess 0
+
+%0:i1 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: -1
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+Dataflow Pruned 0/0
+There are 1 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 2 candidates from LHS
+
+-------------------------------------------------
+%0:i32 = var
+%1:i32 = sub %0, 1:i32
+infer %1
+
+
+--------------------------------
+guess 0
+
+%0:i32 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: -1
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: -2
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+
+--------------------------------
+guess 1
+
+%0:i32 = var
+
+Cost = 0
+second query is SAT-- constant doesn't work
+Dataflow Pruned 0/0
+There are 2 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 1 candidates from LHS
+
+-------------------------------------------------
+%0:i1 = var
+infer %0
+
+
+--------------------------------
+guess 0
+
+%0:i1 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: -1
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+Dataflow Pruned 0/0
+There are 1 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 3 candidates from LHS
+
+-------------------------------------------------
+%0:i32 = var
+%1:i32 = var
+%2:i1 = eq %0, %1
+infer %2
+
+
+--------------------------------
+guess 0
+
+%0:i1 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: -1
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: 0
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+Dataflow Pruned 0/0
+There are 1 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 2 candidates from LHS
+
+-------------------------------------------------
+%0 = block 3
+%1:i1 = var
+%2:i1 = phi %0, 1:i1, 1:i1, %1
+infer %2
+
+
+--------------------------------
+guess 0
+
+%0:i1 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: -1
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+
+--------------------------------
+guess 1
+
+%0:i1 = var
+
+Cost = 0
+second query is SAT-- constant doesn't work
+Dataflow Pruned 0/0
+There are 2 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+#########################################################
+; exiting Souper's runOnFunction() for semiperfect()
+
+; entering Souper's runOnFunction() for sieve()
+
+; ModuleID = './Weird_numbers.c.bc'
+source_filename = "./Weird_numbers.c"
+target datalayout = "e-m:e-p:32:32-i64:64-n32:64-S128"
+target triple = "wasm32-unknown-wasi"
+
+%struct.int_a = type { i32*, i32 }
+
+@.str = private unnamed_addr constant [29 x i8] c"The first 25 weird numbers:\0A\00", align 1
+@.str.1 = private unnamed_addr constant [4 x i8] c"%d \00", align 1
+@.str.2 = private unnamed_addr constant [2 x i8] c"\0A\00", align 1
+@llvm.used = appending global [1 x i8*] [i8* bitcast (i32 ()* @__main_void to i8*)], section "llvm.metadata"
+
+@__main_void = alias i32 (), i32 ()* @main
+
+; Function Attrs: noinline nounwind optnone
+define hidden void @divisors(%struct.int_a* noalias sret align 4 %agg.result, i32 %n) #0 {
+entry:
+  %n.addr = alloca i32, align 4
+  %divs = alloca i32*, align 4
+  %divs2 = alloca i32*, align 4
+  %out = alloca i32*, align 4
+  %i = alloca i32, align 4
+  %j = alloca i32, align 4
+  %c1 = alloca i32, align 4
+  %c2 = alloca i32, align 4
+  %i17 = alloca i32, align 4
+  %i26 = alloca i32, align 4
+  store i32 %n, i32* %n.addr, align 4
+  store i32 0, i32* %c1, align 4
+  store i32 0, i32* %c2, align 4
+  %0 = load i32, i32* %n.addr, align 4
+  %mul = mul i32 %0, 4
+  %div = udiv i32 %mul, 2
+  %call = call noalias i8* @malloc(i32 %div)
+  %1 = bitcast i8* %call to i32*
+  store i32* %1, i32** %divs, align 4
+  %2 = load i32, i32* %n.addr, align 4
+  %mul1 = mul i32 %2, 4
+  %div2 = udiv i32 %mul1, 2
+  %call3 = call noalias i8* @malloc(i32 %div2)
+  %3 = bitcast i8* %call3 to i32*
+  store i32* %3, i32** %divs2, align 4
+  %4 = load i32*, i32** %divs, align 4
+  %5 = load i32, i32* %c1, align 4
+  %inc = add nsw i32 %5, 1
+  store i32 %inc, i32* %c1, align 4
+  %arrayidx = getelementptr inbounds i32, i32* %4, i32 %5
+  store i32 1, i32* %arrayidx, align 4
+  store i32 2, i32* %i, align 4
+  br label %for.cond
+
+for.cond:                                         ; preds = %for.inc, %entry
+  %6 = load i32, i32* %i, align 4
+  %7 = load i32, i32* %i, align 4
+  %mul4 = mul nsw i32 %6, %7
+  %8 = load i32, i32* %n.addr, align 4
+  %cmp = icmp sle i32 %mul4, %8
+  br i1 %cmp, label %for.body, label %for.end
+
+for.body:                                         ; preds = %for.cond
+  %9 = load i32, i32* %n.addr, align 4
+  %10 = load i32, i32* %i, align 4
+  %rem = srem i32 %9, %10
+  %cmp5 = icmp eq i32 %rem, 0
+  br i1 %cmp5, label %if.then, label %if.end13
+
+if.then:                                          ; preds = %for.body
+  %11 = load i32, i32* %n.addr, align 4
+  %12 = load i32, i32* %i, align 4
+  %div6 = sdiv i32 %11, %12
+  store i32 %div6, i32* %j, align 4
+  %13 = load i32, i32* %i, align 4
+  %14 = load i32*, i32** %divs, align 4
+  %15 = load i32, i32* %c1, align 4
+  %inc7 = add nsw i32 %15, 1
+  store i32 %inc7, i32* %c1, align 4
+  %arrayidx8 = getelementptr inbounds i32, i32* %14, i32 %15
+  store i32 %13, i32* %arrayidx8, align 4
+  %16 = load i32, i32* %i, align 4
+  %17 = load i32, i32* %j, align 4
+  %cmp9 = icmp ne i32 %16, %17
+  br i1 %cmp9, label %if.then10, label %if.end
+
+if.then10:                                        ; preds = %if.then
+  %18 = load i32, i32* %j, align 4
+  %19 = load i32*, i32** %divs2, align 4
+  %20 = load i32, i32* %c2, align 4
+  %inc11 = add nsw i32 %20, 1
+  store i32 %inc11, i32* %c2, align 4
+  %arrayidx12 = getelementptr inbounds i32, i32* %19, i32 %20
+  store i32 %18, i32* %arrayidx12, align 4
+  br label %if.end
+
+if.end:                                           ; preds = %if.then10, %if.then
+  br label %if.end13
+
+if.end13:                                         ; preds = %if.end, %for.body
+  br label %for.inc
+
+for.inc:                                          ; preds = %if.end13
+  %21 = load i32, i32* %i, align 4
+  %inc14 = add nsw i32 %21, 1
+  store i32 %inc14, i32* %i, align 4
+  br label %for.cond
+
+for.end:                                          ; preds = %for.cond
+  %22 = load i32, i32* %c1, align 4
+  %23 = load i32, i32* %c2, align 4
+  %add = add nsw i32 %22, %23
+  %mul15 = mul i32 %add, 4
+  %call16 = call noalias i8* @malloc(i32 %mul15)
+  %24 = bitcast i8* %call16 to i32*
+  store i32* %24, i32** %out, align 4
+  store i32 0, i32* %i17, align 4
+  br label %for.cond18
+
+for.cond18:                                       ; preds = %for.inc23, %for.end
+  %25 = load i32, i32* %i17, align 4
+  %26 = load i32, i32* %c2, align 4
+  %cmp19 = icmp slt i32 %25, %26
+  br i1 %cmp19, label %for.body20, label %for.end25
+
+for.body20:                                       ; preds = %for.cond18
+  %27 = load i32*, i32** %divs2, align 4
+  %28 = load i32, i32* %i17, align 4
+  %arrayidx21 = getelementptr inbounds i32, i32* %27, i32 %28
+  %29 = load i32, i32* %arrayidx21, align 4
+  %30 = load i32*, i32** %out, align 4
+  %31 = load i32, i32* %i17, align 4
+  %arrayidx22 = getelementptr inbounds i32, i32* %30, i32 %31
+  store i32 %29, i32* %arrayidx22, align 4
+  br label %for.inc23
+
+for.inc23:                                        ; preds = %for.body20
+  %32 = load i32, i32* %i17, align 4
+  %inc24 = add nsw i32 %32, 1
+  store i32 %inc24, i32* %i17, align 4
+  br label %for.cond18
+
+for.end25:                                        ; preds = %for.cond18
+  store i32 0, i32* %i26, align 4
+  br label %for.cond27
+
+for.cond27:                                       ; preds = %for.inc34, %for.end25
+  %33 = load i32, i32* %i26, align 4
+  %34 = load i32, i32* %c1, align 4
+  %cmp28 = icmp slt i32 %33, %34
+  br i1 %cmp28, label %for.body29, label %for.end36
+
+for.body29:                                       ; preds = %for.cond27
+  %35 = load i32*, i32** %divs, align 4
+  %36 = load i32, i32* %c1, align 4
+  %37 = load i32, i32* %i26, align 4
+  %sub = sub nsw i32 %36, %37
+  %sub30 = sub nsw i32 %sub, 1
+  %arrayidx31 = getelementptr inbounds i32, i32* %35, i32 %sub30
+  %38 = load i32, i32* %arrayidx31, align 4
+  %39 = load i32*, i32** %out, align 4
+  %40 = load i32, i32* %c2, align 4
+  %41 = load i32, i32* %i26, align 4
+  %add32 = add nsw i32 %40, %41
+  %arrayidx33 = getelementptr inbounds i32, i32* %39, i32 %add32
+  store i32 %38, i32* %arrayidx33, align 4
+  br label %for.inc34
+
+for.inc34:                                        ; preds = %for.body29
+  %42 = load i32, i32* %i26, align 4
+  %inc35 = add nsw i32 %42, 1
+  store i32 %inc35, i32* %i26, align 4
+  br label %for.cond27
+
+for.end36:                                        ; preds = %for.cond27
+  %43 = load i32*, i32** %out, align 4
+  %ptr = getelementptr inbounds %struct.int_a, %struct.int_a* %agg.result, i32 0, i32 0
+  store i32* %43, i32** %ptr, align 4
+  %44 = load i32, i32* %c1, align 4
+  %45 = load i32, i32* %c2, align 4
+  %add37 = add nsw i32 %44, %45
+  %size = getelementptr inbounds %struct.int_a, %struct.int_a* %agg.result, i32 0, i32 1
+  store i32 %add37, i32* %size, align 4
+  %46 = load i32*, i32** %divs, align 4
+  %47 = bitcast i32* %46 to i8*
+  call void @free(i8* %47)
+  %48 = load i32*, i32** %divs2, align 4
+  %49 = bitcast i32* %48 to i8*
+  call void @free(i8* %49)
+  ret void
+}
+
+declare noalias i8* @malloc(i32 %0) #1
+
+declare void @free(i8* %0) #1
+
+; Function Attrs: noinline nounwind optnone
+define hidden zeroext i1 @abundant(i32 %n, %struct.int_a* byval(%struct.int_a) align 4 %divs) #0 {
+entry:
+  %n.addr = alloca i32, align 4
+  %sum = alloca i32, align 4
+  %i = alloca i32, align 4
+  store i32 %n, i32* %n.addr, align 4
+  store i32 0, i32* %sum, align 4
+  store i32 0, i32* %i, align 4
+  br label %for.cond
+
+for.cond:                                         ; preds = %for.inc, %entry
+  %0 = load i32, i32* %i, align 4
+  %size = getelementptr inbounds %struct.int_a, %struct.int_a* %divs, i32 0, i32 1
+  %1 = load i32, i32* %size, align 4
+  %cmp = icmp ult i32 %0, %1
+  br i1 %cmp, label %for.body, label %for.end
+
+for.body:                                         ; preds = %for.cond
+  %ptr = getelementptr inbounds %struct.int_a, %struct.int_a* %divs, i32 0, i32 0
+  %2 = load i32*, i32** %ptr, align 4
+  %3 = load i32, i32* %i, align 4
+  %arrayidx = getelementptr inbounds i32, i32* %2, i32 %3
+  %4 = load i32, i32* %arrayidx, align 4
+  %5 = load i32, i32* %sum, align 4
+  %add = add nsw i32 %5, %4
+  store i32 %add, i32* %sum, align 4
+  br label %for.inc
+
+for.inc:                                          ; preds = %for.body
+  %6 = load i32, i32* %i, align 4
+  %inc = add nsw i32 %6, 1
+  store i32 %inc, i32* %i, align 4
+  br label %for.cond
+
+for.end:                                          ; preds = %for.cond
+  %7 = load i32, i32* %sum, align 4
+  %8 = load i32, i32* %n.addr, align 4
+  %cmp1 = icmp sgt i32 %7, %8
+  ret i1 %cmp1
+}
+
+; Function Attrs: noinline nounwind optnone
+define hidden zeroext i1 @semiperfect(i32 %n, %struct.int_a* byval(%struct.int_a) align 4 %divs) #0 {
+entry:
+  %retval = alloca i1, align 1
+  %n.addr = alloca i32, align 4
+  %h = alloca i32, align 4
+  %t = alloca i32*, align 4
+  %ta = alloca %struct.int_a, align 4
+  store i32 %n, i32* %n.addr, align 4
+  %size = getelementptr inbounds %struct.int_a, %struct.int_a* %divs, i32 0, i32 1
+  %0 = load i32, i32* %size, align 4
+  %cmp = icmp ugt i32 %0, 0
+  br i1 %cmp, label %if.then, label %if.else11
+
+if.then:                                          ; preds = %entry
+  %ptr = getelementptr inbounds %struct.int_a, %struct.int_a* %divs, i32 0, i32 0
+  %1 = load i32*, i32** %ptr, align 4
+  %2 = load i32, i32* %1, align 4
+  store i32 %2, i32* %h, align 4
+  %ptr1 = getelementptr inbounds %struct.int_a, %struct.int_a* %divs, i32 0, i32 0
+  %3 = load i32*, i32** %ptr1, align 4
+  %add.ptr = getelementptr inbounds i32, i32* %3, i32 1
+  store i32* %add.ptr, i32** %t, align 4
+  %4 = load i32*, i32** %t, align 4
+  %ptr2 = getelementptr inbounds %struct.int_a, %struct.int_a* %ta, i32 0, i32 0
+  store i32* %4, i32** %ptr2, align 4
+  %size3 = getelementptr inbounds %struct.int_a, %struct.int_a* %divs, i32 0, i32 1
+  %5 = load i32, i32* %size3, align 4
+  %sub = sub i32 %5, 1
+  %size4 = getelementptr inbounds %struct.int_a, %struct.int_a* %ta, i32 0, i32 1
+  store i32 %sub, i32* %size4, align 4
+  %6 = load i32, i32* %n.addr, align 4
+  %7 = load i32, i32* %h, align 4
+  %cmp5 = icmp slt i32 %6, %7
+  br i1 %cmp5, label %if.then6, label %if.else
+
+if.then6:                                         ; preds = %if.then
+  %8 = load i32, i32* %n.addr, align 4
+  %call = call zeroext i1 @semiperfect(i32 %8, %struct.int_a* byval(%struct.int_a) align 4 %ta)
+  store i1 %call, i1* %retval, align 1
+  br label %return
+
+if.else:                                          ; preds = %if.then
+  %9 = load i32, i32* %n.addr, align 4
+  %10 = load i32, i32* %h, align 4
+  %cmp7 = icmp eq i32 %9, %10
+  br i1 %cmp7, label %lor.end, label %lor.lhs.false
+
+lor.lhs.false:                                    ; preds = %if.else
+  %11 = load i32, i32* %n.addr, align 4
+  %12 = load i32, i32* %h, align 4
+  %sub8 = sub nsw i32 %11, %12
+  %call9 = call zeroext i1 @semiperfect(i32 %sub8, %struct.int_a* byval(%struct.int_a) align 4 %ta)
+  br i1 %call9, label %lor.end, label %lor.rhs
+
+lor.rhs:                                          ; preds = %lor.lhs.false
+  %13 = load i32, i32* %n.addr, align 4
+  %call10 = call zeroext i1 @semiperfect(i32 %13, %struct.int_a* byval(%struct.int_a) align 4 %ta)
+  br label %lor.end
+
+lor.end:                                          ; preds = %lor.rhs, %lor.lhs.false, %if.else
+  %14 = phi i1 [ true, %lor.lhs.false ], [ true, %if.else ], [ %call10, %lor.rhs ]
+  store i1 %14, i1* %retval, align 1
+  br label %return
+
+if.else11:                                        ; preds = %entry
+  store i1 false, i1* %retval, align 1
+  br label %return
+
+return:                                           ; preds = %if.else11, %lor.end, %if.then6
+  %15 = load i1, i1* %retval, align 1
+  ret i1 %15
+}
+
+; Function Attrs: noinline nounwind optnone
+define hidden i8* @sieve(i32 %limit) #0 {
+entry:
+  %limit.addr = alloca i32, align 4
+  %w = alloca i8*, align 4
+  %divs = alloca %struct.int_a, align 4
+  %i = alloca i32, align 4
+  %j = alloca i32, align 4
+  %tmp = alloca %struct.int_a, align 4
+  store i32 %limit, i32* %limit.addr, align 4
+  %0 = load i32, i32* %limit.addr, align 4
+  %call = call noalias i8* @calloc(i32 %0, i32 1)
+  store i8* %call, i8** %w, align 4
+  store i32 2, i32* %i, align 4
+  br label %for.cond
+
+for.cond:                                         ; preds = %for.inc12, %entry
+  %1 = load i32, i32* %i, align 4
+  %2 = load i32, i32* %limit.addr, align 4
+  %cmp = icmp slt i32 %1, %2
+  br i1 %cmp, label %for.body, label %for.end14
+
+for.body:                                         ; preds = %for.cond
+  %3 = load i8*, i8** %w, align 4
+  %4 = load i32, i32* %i, align 4
+  %arrayidx = getelementptr inbounds i8, i8* %3, i32 %4
+  %5 = load i8, i8* %arrayidx, align 1
+  %tobool = trunc i8 %5 to i1
+  br i1 %tobool, label %if.then, label %if.end
+
+if.then:                                          ; preds = %for.body
+  br label %for.inc12
+
+if.end:                                           ; preds = %for.body
+  %6 = load i32, i32* %i, align 4
+  call void @divisors(%struct.int_a* sret align 4 %tmp, i32 %6)
+  %7 = bitcast %struct.int_a* %divs to i8*
+  %8 = bitcast %struct.int_a* %tmp to i8*
+  call void @llvm.memcpy.p0i8.p0i8.i32(i8* align 4 %7, i8* align 4 %8, i32 8, i1 false)
+  %9 = load i32, i32* %i, align 4
+  %call1 = call zeroext i1 @abundant(i32 %9, %struct.int_a* byval(%struct.int_a) align 4 %divs)
+  br i1 %call1, label %if.else, label %if.then2
+
+if.then2:                                         ; preds = %if.end
+  %10 = load i8*, i8** %w, align 4
+  %11 = load i32, i32* %i, align 4
+  %arrayidx3 = getelementptr inbounds i8, i8* %10, i32 %11
+  store i8 1, i8* %arrayidx3, align 1
+  br label %if.end11
+
+if.else:                                          ; preds = %if.end
+  %12 = load i32, i32* %i, align 4
+  %call4 = call zeroext i1 @semiperfect(i32 %12, %struct.int_a* byval(%struct.int_a) align 4 %divs)
+  br i1 %call4, label %if.then5, label %if.end10
+
+if.then5:                                         ; preds = %if.else
+  %13 = load i32, i32* %i, align 4
+  store i32 %13, i32* %j, align 4
+  br label %for.cond6
+
+for.cond6:                                        ; preds = %for.inc, %if.then5
+  %14 = load i32, i32* %j, align 4
+  %15 = load i32, i32* %limit.addr, align 4
+  %cmp7 = icmp slt i32 %14, %15
+  br i1 %cmp7, label %for.body8, label %for.end
+
+for.body8:                                        ; preds = %for.cond6
+  %16 = load i8*, i8** %w, align 4
+  %17 = load i32, i32* %j, align 4
+  %arrayidx9 = getelementptr inbounds i8, i8* %16, i32 %17
+  store i8 1, i8* %arrayidx9, align 1
+  br label %for.inc
+
+for.inc:                                          ; preds = %for.body8
+  %18 = load i32, i32* %i, align 4
+  %19 = load i32, i32* %j, align 4
+  %add = add nsw i32 %19, %18
+  store i32 %add, i32* %j, align 4
+  br label %for.cond6
+
+for.end:                                          ; preds = %for.cond6
+  br label %if.end10
+
+if.end10:                                         ; preds = %for.end, %if.else
+  br label %if.end11
+
+if.end11:                                         ; preds = %if.end10, %if.then2
+  br label %for.inc12
+
+for.inc12:                                        ; preds = %if.end11, %if.then
+  %20 = load i32, i32* %i, align 4
+  %add13 = add nsw i32 %20, 2
+  store i32 %add13, i32* %i, align 4
+  br label %for.cond
+
+for.end14:                                        ; preds = %for.cond
+  %ptr = getelementptr inbounds %struct.int_a, %struct.int_a* %divs, i32 0, i32 0
+  %21 = load i32*, i32** %ptr, align 4
+  %22 = bitcast i32* %21 to i8*
+  call void @free(i8* %22)
+  %23 = load i8*, i8** %w, align 4
+  ret i8* %23
+}
+
+declare noalias i8* @calloc(i32 %0, i32 %1) #1
+
+; Function Attrs: argmemonly nounwind willreturn
+declare void @llvm.memcpy.p0i8.p0i8.i32(i8* noalias nocapture writeonly %0, i8* noalias nocapture readonly %1, i32 %2, i1 immarg %3) #2
+
+; Function Attrs: noinline nounwind optnone
+define hidden i32 @main() #0 {
+entry:
+  %retval = alloca i32, align 4
+  %w = alloca i8*, align 4
+  %count = alloca i32, align 4
+  %max = alloca i32, align 4
+  %n = alloca i32, align 4
+  store i32 0, i32* %retval, align 4
+  %call = call i8* @sieve(i32 17000)
+  store i8* %call, i8** %w, align 4
+  store i32 0, i32* %count, align 4
+  store i32 25, i32* %max, align 4
+  %call1 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([29 x i8], [29 x i8]* @.str, i32 0, i32 0))
+  store i32 2, i32* %n, align 4
+  br label %for.cond
+
+for.cond:                                         ; preds = %for.inc, %entry
+  %0 = load i32, i32* %count, align 4
+  %1 = load i32, i32* %max, align 4
+  %cmp = icmp slt i32 %0, %1
+  br i1 %cmp, label %for.body, label %for.end
+
+for.body:                                         ; preds = %for.cond
+  %2 = load i8*, i8** %w, align 4
+  %3 = load i32, i32* %n, align 4
+  %arrayidx = getelementptr inbounds i8, i8* %2, i32 %3
+  %4 = load i8, i8* %arrayidx, align 1
+  %tobool = trunc i8 %4 to i1
+  br i1 %tobool, label %if.end, label %if.then
+
+if.then:                                          ; preds = %for.body
+  %5 = load i32, i32* %n, align 4
+  %call2 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([4 x i8], [4 x i8]* @.str.1, i32 0, i32 0), i32 %5)
+  %6 = load i32, i32* %count, align 4
+  %inc = add nsw i32 %6, 1
+  store i32 %inc, i32* %count, align 4
+  br label %if.end
+
+if.end:                                           ; preds = %if.then, %for.body
+  br label %for.inc
+
+for.inc:                                          ; preds = %if.end
+  %7 = load i32, i32* %n, align 4
+  %add = add nsw i32 %7, 2
+  store i32 %add, i32* %n, align 4
+  br label %for.cond
+
+for.end:                                          ; preds = %for.cond
+  %call3 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([2 x i8], [2 x i8]* @.str.2, i32 0, i32 0))
+  %8 = load i8*, i8** %w, align 4
+  call void @free(i8* %8)
+  ret i32 0
+}
+
+declare i32 @printf(i8* %0, ...) #1
+
+attributes #0 = { noinline nounwind optnone "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "min-legal-vector-width"="0" "no-infs-fp-math"="false" "no-jump-tables"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #1 = { "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #2 = { argmemonly nounwind willreturn }
+
+!llvm.module.flags = !{!0}
+!llvm.ident = !{!1}
+
+!0 = !{i32 1, !"wchar_size", i32 4}
+!1 = !{!"clang version 11.0.0 (https://github.com/Jacarte/llvm-project.git 0f6dea67136cc1e0b3d200eb2bb165628970c44b)"}
+
+; extracted candidates
+
+; *****
+; For LLVM instruction:
+;  %0 = load i32, i32* %limit.addr, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %1 = load i32, i32* %i, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %2 = load i32, i32* %limit.addr, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %cmp = icmp slt i32 %1, %2
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = var
+%2:i1 = slt %0, %1
+infer %2
+
+; *****
+; For LLVM instruction:
+;  %4 = load i32, i32* %i, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %5 = load i8, i8* %arrayidx, align 1
+; Looking for a replacement for:
+%0:i8 = var
+infer %0 (demandedBits=00000001)
+
+; *****
+; For LLVM instruction:
+;  %tobool = trunc i8 %5 to i1
+; Looking for a replacement for:
+%0:i8 = var
+%1:i1 = trunc %0
+infer %1
+
+; *****
+; For LLVM instruction:
+;  %6 = load i32, i32* %i, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %9 = load i32, i32* %i, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %call1 = call zeroext i1 @abundant(i32 %9, %struct.int_a* byval(%struct.int_a) align 4 %divs)
+; Looking for a replacement for:
+%0:i1 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %11 = load i32, i32* %i, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %12 = load i32, i32* %i, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %call4 = call zeroext i1 @semiperfect(i32 %12, %struct.int_a* byval(%struct.int_a) align 4 %divs)
+; Looking for a replacement for:
+%0:i1 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %13 = load i32, i32* %i, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %14 = load i32, i32* %j, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %15 = load i32, i32* %limit.addr, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %cmp7 = icmp slt i32 %14, %15
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = var
+%2:i1 = slt %0, %1
+infer %2
+
+; *****
+; For LLVM instruction:
+;  %17 = load i32, i32* %j, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %18 = load i32, i32* %i, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %19 = load i32, i32* %j, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %add = add nsw i32 %19, %18
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = var
+%2:i32 = addnsw %0, %1
+infer %2
+
+; *****
+; For LLVM instruction:
+;  %20 = load i32, i32* %i, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %add13 = add nsw i32 %20, 2
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = addnsw 2:i32, %0
+infer %1
+got 1 candidates from LHS
+
+-------------------------------------------------
+%0:i8 = var
+infer %0 (demandedBits=00000001)
+
+
+--------------------------------
+guess 0
+
+%0:i8 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: 1
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+Dataflow Pruned 0/0
+There are 1 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 2 candidates from LHS
+
+-------------------------------------------------
+%0:i8 = var
+%1:i1 = trunc %0
+infer %1
+
+
+--------------------------------
+guess 0
+
+%0:i1 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 0
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: -1
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+Dataflow Pruned 0/0
+There are 1 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+got 2 candidates from LHS
+
+-------------------------------------------------
+%0:i32 = var
+%1:i32 = addnsw 2:i32, %0
+infer %1
+
+
+--------------------------------
+guess 0
+
+%0:i32 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 2
+0 th attempt: second query is SAT-- constant doesn't work
+first query is SAT, returning the model:
+reservedconst_1: 1073741826
+1 th attempt: second query is SAT-- constant doesn't work
+first query is UNSAT-- no more guesses
+
+--------------------------------
+guess 1
+
+%0:i32 = var
+
+Cost = 0
+second query is SAT-- constant doesn't work
+Dataflow Pruned 0/0
+There are 2 Guesses
+There are 0 RHSs before deduplication
+There are 0 RHSs after deduplication
+#########################################################
+; exiting Souper's runOnFunction() for sieve()
+
+; entering Souper's runOnFunction() for main()
+
+; ModuleID = './Weird_numbers.c.bc'
+source_filename = "./Weird_numbers.c"
+target datalayout = "e-m:e-p:32:32-i64:64-n32:64-S128"
+target triple = "wasm32-unknown-wasi"
+
+%struct.int_a = type { i32*, i32 }
+
+@.str = private unnamed_addr constant [29 x i8] c"The first 25 weird numbers:\0A\00", align 1
+@.str.1 = private unnamed_addr constant [4 x i8] c"%d \00", align 1
+@.str.2 = private unnamed_addr constant [2 x i8] c"\0A\00", align 1
+@llvm.used = appending global [1 x i8*] [i8* bitcast (i32 ()* @__main_void to i8*)], section "llvm.metadata"
+
+@__main_void = alias i32 (), i32 ()* @main
+
+; Function Attrs: noinline nounwind optnone
+define hidden void @divisors(%struct.int_a* noalias sret align 4 %agg.result, i32 %n) #0 {
+entry:
+  %n.addr = alloca i32, align 4
+  %divs = alloca i32*, align 4
+  %divs2 = alloca i32*, align 4
+  %out = alloca i32*, align 4
+  %i = alloca i32, align 4
+  %j = alloca i32, align 4
+  %c1 = alloca i32, align 4
+  %c2 = alloca i32, align 4
+  %i17 = alloca i32, align 4
+  %i26 = alloca i32, align 4
+  store i32 %n, i32* %n.addr, align 4
+  store i32 0, i32* %c1, align 4
+  store i32 0, i32* %c2, align 4
+  %0 = load i32, i32* %n.addr, align 4
+  %mul = mul i32 %0, 4
+  %div = udiv i32 %mul, 2
+  %call = call noalias i8* @malloc(i32 %div)
+  %1 = bitcast i8* %call to i32*
+  store i32* %1, i32** %divs, align 4
+  %2 = load i32, i32* %n.addr, align 4
+  %mul1 = mul i32 %2, 4
+  %div2 = udiv i32 %mul1, 2
+  %call3 = call noalias i8* @malloc(i32 %div2)
+  %3 = bitcast i8* %call3 to i32*
+  store i32* %3, i32** %divs2, align 4
+  %4 = load i32*, i32** %divs, align 4
+  %5 = load i32, i32* %c1, align 4
+  %inc = add nsw i32 %5, 1
+  store i32 %inc, i32* %c1, align 4
+  %arrayidx = getelementptr inbounds i32, i32* %4, i32 %5
+  store i32 1, i32* %arrayidx, align 4
+  store i32 2, i32* %i, align 4
+  br label %for.cond
+
+for.cond:                                         ; preds = %for.inc, %entry
+  %6 = load i32, i32* %i, align 4
+  %7 = load i32, i32* %i, align 4
+  %mul4 = mul nsw i32 %6, %7
+  %8 = load i32, i32* %n.addr, align 4
+  %cmp = icmp sle i32 %mul4, %8
+  br i1 %cmp, label %for.body, label %for.end
+
+for.body:                                         ; preds = %for.cond
+  %9 = load i32, i32* %n.addr, align 4
+  %10 = load i32, i32* %i, align 4
+  %rem = srem i32 %9, %10
+  %cmp5 = icmp eq i32 %rem, 0
+  br i1 %cmp5, label %if.then, label %if.end13
+
+if.then:                                          ; preds = %for.body
+  %11 = load i32, i32* %n.addr, align 4
+  %12 = load i32, i32* %i, align 4
+  %div6 = sdiv i32 %11, %12
+  store i32 %div6, i32* %j, align 4
+  %13 = load i32, i32* %i, align 4
+  %14 = load i32*, i32** %divs, align 4
+  %15 = load i32, i32* %c1, align 4
+  %inc7 = add nsw i32 %15, 1
+  store i32 %inc7, i32* %c1, align 4
+  %arrayidx8 = getelementptr inbounds i32, i32* %14, i32 %15
+  store i32 %13, i32* %arrayidx8, align 4
+  %16 = load i32, i32* %i, align 4
+  %17 = load i32, i32* %j, align 4
+  %cmp9 = icmp ne i32 %16, %17
+  br i1 %cmp9, label %if.then10, label %if.end
+
+if.then10:                                        ; preds = %if.then
+  %18 = load i32, i32* %j, align 4
+  %19 = load i32*, i32** %divs2, align 4
+  %20 = load i32, i32* %c2, align 4
+  %inc11 = add nsw i32 %20, 1
+  store i32 %inc11, i32* %c2, align 4
+  %arrayidx12 = getelementptr inbounds i32, i32* %19, i32 %20
+  store i32 %18, i32* %arrayidx12, align 4
+  br label %if.end
+
+if.end:                                           ; preds = %if.then10, %if.then
+  br label %if.end13
+
+if.end13:                                         ; preds = %if.end, %for.body
+  br label %for.inc
+
+for.inc:                                          ; preds = %if.end13
+  %21 = load i32, i32* %i, align 4
+  %inc14 = add nsw i32 %21, 1
+  store i32 %inc14, i32* %i, align 4
+  br label %for.cond
+
+for.end:                                          ; preds = %for.cond
+  %22 = load i32, i32* %c1, align 4
+  %23 = load i32, i32* %c2, align 4
+  %add = add nsw i32 %22, %23
+  %mul15 = mul i32 %add, 4
+  %call16 = call noalias i8* @malloc(i32 %mul15)
+  %24 = bitcast i8* %call16 to i32*
+  store i32* %24, i32** %out, align 4
+  store i32 0, i32* %i17, align 4
+  br label %for.cond18
+
+for.cond18:                                       ; preds = %for.inc23, %for.end
+  %25 = load i32, i32* %i17, align 4
+  %26 = load i32, i32* %c2, align 4
+  %cmp19 = icmp slt i32 %25, %26
+  br i1 %cmp19, label %for.body20, label %for.end25
+
+for.body20:                                       ; preds = %for.cond18
+  %27 = load i32*, i32** %divs2, align 4
+  %28 = load i32, i32* %i17, align 4
+  %arrayidx21 = getelementptr inbounds i32, i32* %27, i32 %28
+  %29 = load i32, i32* %arrayidx21, align 4
+  %30 = load i32*, i32** %out, align 4
+  %31 = load i32, i32* %i17, align 4
+  %arrayidx22 = getelementptr inbounds i32, i32* %30, i32 %31
+  store i32 %29, i32* %arrayidx22, align 4
+  br label %for.inc23
+
+for.inc23:                                        ; preds = %for.body20
+  %32 = load i32, i32* %i17, align 4
+  %inc24 = add nsw i32 %32, 1
+  store i32 %inc24, i32* %i17, align 4
+  br label %for.cond18
+
+for.end25:                                        ; preds = %for.cond18
+  store i32 0, i32* %i26, align 4
+  br label %for.cond27
+
+for.cond27:                                       ; preds = %for.inc34, %for.end25
+  %33 = load i32, i32* %i26, align 4
+  %34 = load i32, i32* %c1, align 4
+  %cmp28 = icmp slt i32 %33, %34
+  br i1 %cmp28, label %for.body29, label %for.end36
+
+for.body29:                                       ; preds = %for.cond27
+  %35 = load i32*, i32** %divs, align 4
+  %36 = load i32, i32* %c1, align 4
+  %37 = load i32, i32* %i26, align 4
+  %sub = sub nsw i32 %36, %37
+  %sub30 = sub nsw i32 %sub, 1
+  %arrayidx31 = getelementptr inbounds i32, i32* %35, i32 %sub30
+  %38 = load i32, i32* %arrayidx31, align 4
+  %39 = load i32*, i32** %out, align 4
+  %40 = load i32, i32* %c2, align 4
+  %41 = load i32, i32* %i26, align 4
+  %add32 = add nsw i32 %40, %41
+  %arrayidx33 = getelementptr inbounds i32, i32* %39, i32 %add32
+  store i32 %38, i32* %arrayidx33, align 4
+  br label %for.inc34
+
+for.inc34:                                        ; preds = %for.body29
+  %42 = load i32, i32* %i26, align 4
+  %inc35 = add nsw i32 %42, 1
+  store i32 %inc35, i32* %i26, align 4
+  br label %for.cond27
+
+for.end36:                                        ; preds = %for.cond27
+  %43 = load i32*, i32** %out, align 4
+  %ptr = getelementptr inbounds %struct.int_a, %struct.int_a* %agg.result, i32 0, i32 0
+  store i32* %43, i32** %ptr, align 4
+  %44 = load i32, i32* %c1, align 4
+  %45 = load i32, i32* %c2, align 4
+  %add37 = add nsw i32 %44, %45
+  %size = getelementptr inbounds %struct.int_a, %struct.int_a* %agg.result, i32 0, i32 1
+  store i32 %add37, i32* %size, align 4
+  %46 = load i32*, i32** %divs, align 4
+  %47 = bitcast i32* %46 to i8*
+  call void @free(i8* %47)
+  %48 = load i32*, i32** %divs2, align 4
+  %49 = bitcast i32* %48 to i8*
+  call void @free(i8* %49)
+  ret void
+}
+
+declare noalias i8* @malloc(i32 %0) #1
+
+declare void @free(i8* %0) #1
+
+; Function Attrs: noinline nounwind optnone
+define hidden zeroext i1 @abundant(i32 %n, %struct.int_a* byval(%struct.int_a) align 4 %divs) #0 {
+entry:
+  %n.addr = alloca i32, align 4
+  %sum = alloca i32, align 4
+  %i = alloca i32, align 4
+  store i32 %n, i32* %n.addr, align 4
+  store i32 0, i32* %sum, align 4
+  store i32 0, i32* %i, align 4
+  br label %for.cond
+
+for.cond:                                         ; preds = %for.inc, %entry
+  %0 = load i32, i32* %i, align 4
+  %size = getelementptr inbounds %struct.int_a, %struct.int_a* %divs, i32 0, i32 1
+  %1 = load i32, i32* %size, align 4
+  %cmp = icmp ult i32 %0, %1
+  br i1 %cmp, label %for.body, label %for.end
+
+for.body:                                         ; preds = %for.cond
+  %ptr = getelementptr inbounds %struct.int_a, %struct.int_a* %divs, i32 0, i32 0
+  %2 = load i32*, i32** %ptr, align 4
+  %3 = load i32, i32* %i, align 4
+  %arrayidx = getelementptr inbounds i32, i32* %2, i32 %3
+  %4 = load i32, i32* %arrayidx, align 4
+  %5 = load i32, i32* %sum, align 4
+  %add = add nsw i32 %5, %4
+  store i32 %add, i32* %sum, align 4
+  br label %for.inc
+
+for.inc:                                          ; preds = %for.body
+  %6 = load i32, i32* %i, align 4
+  %inc = add nsw i32 %6, 1
+  store i32 %inc, i32* %i, align 4
+  br label %for.cond
+
+for.end:                                          ; preds = %for.cond
+  %7 = load i32, i32* %sum, align 4
+  %8 = load i32, i32* %n.addr, align 4
+  %cmp1 = icmp sgt i32 %7, %8
+  ret i1 %cmp1
+}
+
+; Function Attrs: noinline nounwind optnone
+define hidden zeroext i1 @semiperfect(i32 %n, %struct.int_a* byval(%struct.int_a) align 4 %divs) #0 {
+entry:
+  %retval = alloca i1, align 1
+  %n.addr = alloca i32, align 4
+  %h = alloca i32, align 4
+  %t = alloca i32*, align 4
+  %ta = alloca %struct.int_a, align 4
+  store i32 %n, i32* %n.addr, align 4
+  %size = getelementptr inbounds %struct.int_a, %struct.int_a* %divs, i32 0, i32 1
+  %0 = load i32, i32* %size, align 4
+  %cmp = icmp ugt i32 %0, 0
+  br i1 %cmp, label %if.then, label %if.else11
+
+if.then:                                          ; preds = %entry
+  %ptr = getelementptr inbounds %struct.int_a, %struct.int_a* %divs, i32 0, i32 0
+  %1 = load i32*, i32** %ptr, align 4
+  %2 = load i32, i32* %1, align 4
+  store i32 %2, i32* %h, align 4
+  %ptr1 = getelementptr inbounds %struct.int_a, %struct.int_a* %divs, i32 0, i32 0
+  %3 = load i32*, i32** %ptr1, align 4
+  %add.ptr = getelementptr inbounds i32, i32* %3, i32 1
+  store i32* %add.ptr, i32** %t, align 4
+  %4 = load i32*, i32** %t, align 4
+  %ptr2 = getelementptr inbounds %struct.int_a, %struct.int_a* %ta, i32 0, i32 0
+  store i32* %4, i32** %ptr2, align 4
+  %size3 = getelementptr inbounds %struct.int_a, %struct.int_a* %divs, i32 0, i32 1
+  %5 = load i32, i32* %size3, align 4
+  %sub = sub i32 %5, 1
+  %size4 = getelementptr inbounds %struct.int_a, %struct.int_a* %ta, i32 0, i32 1
+  store i32 %sub, i32* %size4, align 4
+  %6 = load i32, i32* %n.addr, align 4
+  %7 = load i32, i32* %h, align 4
+  %cmp5 = icmp slt i32 %6, %7
+  br i1 %cmp5, label %if.then6, label %if.else
+
+if.then6:                                         ; preds = %if.then
+  %8 = load i32, i32* %n.addr, align 4
+  %call = call zeroext i1 @semiperfect(i32 %8, %struct.int_a* byval(%struct.int_a) align 4 %ta)
+  store i1 %call, i1* %retval, align 1
+  br label %return
+
+if.else:                                          ; preds = %if.then
+  %9 = load i32, i32* %n.addr, align 4
+  %10 = load i32, i32* %h, align 4
+  %cmp7 = icmp eq i32 %9, %10
+  br i1 %cmp7, label %lor.end, label %lor.lhs.false
+
+lor.lhs.false:                                    ; preds = %if.else
+  %11 = load i32, i32* %n.addr, align 4
+  %12 = load i32, i32* %h, align 4
+  %sub8 = sub nsw i32 %11, %12
+  %call9 = call zeroext i1 @semiperfect(i32 %sub8, %struct.int_a* byval(%struct.int_a) align 4 %ta)
+  br i1 %call9, label %lor.end, label %lor.rhs
+
+lor.rhs:                                          ; preds = %lor.lhs.false
+  %13 = load i32, i32* %n.addr, align 4
+  %call10 = call zeroext i1 @semiperfect(i32 %13, %struct.int_a* byval(%struct.int_a) align 4 %ta)
+  br label %lor.end
+
+lor.end:                                          ; preds = %lor.rhs, %lor.lhs.false, %if.else
+  %14 = phi i1 [ true, %lor.lhs.false ], [ true, %if.else ], [ %call10, %lor.rhs ]
+  store i1 %14, i1* %retval, align 1
+  br label %return
+
+if.else11:                                        ; preds = %entry
+  store i1 false, i1* %retval, align 1
+  br label %return
+
+return:                                           ; preds = %if.else11, %lor.end, %if.then6
+  %15 = load i1, i1* %retval, align 1
+  ret i1 %15
+}
+
+; Function Attrs: noinline nounwind optnone
+define hidden i8* @sieve(i32 %limit) #0 {
+entry:
+  %limit.addr = alloca i32, align 4
+  %w = alloca i8*, align 4
+  %divs = alloca %struct.int_a, align 4
+  %i = alloca i32, align 4
+  %j = alloca i32, align 4
+  %tmp = alloca %struct.int_a, align 4
+  store i32 %limit, i32* %limit.addr, align 4
+  %0 = load i32, i32* %limit.addr, align 4
+  %call = call noalias i8* @calloc(i32 %0, i32 1)
+  store i8* %call, i8** %w, align 4
+  store i32 2, i32* %i, align 4
+  br label %for.cond
+
+for.cond:                                         ; preds = %for.inc12, %entry
+  %1 = load i32, i32* %i, align 4
+  %2 = load i32, i32* %limit.addr, align 4
+  %cmp = icmp slt i32 %1, %2
+  br i1 %cmp, label %for.body, label %for.end14
+
+for.body:                                         ; preds = %for.cond
+  %3 = load i8*, i8** %w, align 4
+  %4 = load i32, i32* %i, align 4
+  %arrayidx = getelementptr inbounds i8, i8* %3, i32 %4
+  %5 = load i8, i8* %arrayidx, align 1
+  %tobool = trunc i8 %5 to i1
+  br i1 %tobool, label %if.then, label %if.end
+
+if.then:                                          ; preds = %for.body
+  br label %for.inc12
+
+if.end:                                           ; preds = %for.body
+  %6 = load i32, i32* %i, align 4
+  call void @divisors(%struct.int_a* sret align 4 %tmp, i32 %6)
+  %7 = bitcast %struct.int_a* %divs to i8*
+  %8 = bitcast %struct.int_a* %tmp to i8*
+  call void @llvm.memcpy.p0i8.p0i8.i32(i8* align 4 %7, i8* align 4 %8, i32 8, i1 false)
+  %9 = load i32, i32* %i, align 4
+  %call1 = call zeroext i1 @abundant(i32 %9, %struct.int_a* byval(%struct.int_a) align 4 %divs)
+  br i1 %call1, label %if.else, label %if.then2
+
+if.then2:                                         ; preds = %if.end
+  %10 = load i8*, i8** %w, align 4
+  %11 = load i32, i32* %i, align 4
+  %arrayidx3 = getelementptr inbounds i8, i8* %10, i32 %11
+  store i8 1, i8* %arrayidx3, align 1
+  br label %if.end11
+
+if.else:                                          ; preds = %if.end
+  %12 = load i32, i32* %i, align 4
+  %call4 = call zeroext i1 @semiperfect(i32 %12, %struct.int_a* byval(%struct.int_a) align 4 %divs)
+  br i1 %call4, label %if.then5, label %if.end10
+
+if.then5:                                         ; preds = %if.else
+  %13 = load i32, i32* %i, align 4
+  store i32 %13, i32* %j, align 4
+  br label %for.cond6
+
+for.cond6:                                        ; preds = %for.inc, %if.then5
+  %14 = load i32, i32* %j, align 4
+  %15 = load i32, i32* %limit.addr, align 4
+  %cmp7 = icmp slt i32 %14, %15
+  br i1 %cmp7, label %for.body8, label %for.end
+
+for.body8:                                        ; preds = %for.cond6
+  %16 = load i8*, i8** %w, align 4
+  %17 = load i32, i32* %j, align 4
+  %arrayidx9 = getelementptr inbounds i8, i8* %16, i32 %17
+  store i8 1, i8* %arrayidx9, align 1
+  br label %for.inc
+
+for.inc:                                          ; preds = %for.body8
+  %18 = load i32, i32* %i, align 4
+  %19 = load i32, i32* %j, align 4
+  %add = add nsw i32 %19, %18
+  store i32 %add, i32* %j, align 4
+  br label %for.cond6
+
+for.end:                                          ; preds = %for.cond6
+  br label %if.end10
+
+if.end10:                                         ; preds = %for.end, %if.else
+  br label %if.end11
+
+if.end11:                                         ; preds = %if.end10, %if.then2
+  br label %for.inc12
+
+for.inc12:                                        ; preds = %if.end11, %if.then
+  %20 = load i32, i32* %i, align 4
+  %add13 = add nsw i32 %20, 2
+  store i32 %add13, i32* %i, align 4
+  br label %for.cond
+
+for.end14:                                        ; preds = %for.cond
+  %ptr = getelementptr inbounds %struct.int_a, %struct.int_a* %divs, i32 0, i32 0
+  %21 = load i32*, i32** %ptr, align 4
+  %22 = bitcast i32* %21 to i8*
+  call void @free(i8* %22)
+  %23 = load i8*, i8** %w, align 4
+  ret i8* %23
+}
+
+declare noalias i8* @calloc(i32 %0, i32 %1) #1
+
+; Function Attrs: argmemonly nounwind willreturn
+declare void @llvm.memcpy.p0i8.p0i8.i32(i8* noalias nocapture writeonly %0, i8* noalias nocapture readonly %1, i32 %2, i1 immarg %3) #2
+
+; Function Attrs: noinline nounwind optnone
+define hidden i32 @main() #0 {
+entry:
+  %retval = alloca i32, align 4
+  %w = alloca i8*, align 4
+  %count = alloca i32, align 4
+  %max = alloca i32, align 4
+  %n = alloca i32, align 4
+  store i32 0, i32* %retval, align 4
+  %call = call i8* @sieve(i32 17000)
+  store i8* %call, i8** %w, align 4
+  store i32 0, i32* %count, align 4
+  store i32 25, i32* %max, align 4
+  %call1 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([29 x i8], [29 x i8]* @.str, i32 0, i32 0))
+  store i32 2, i32* %n, align 4
+  br label %for.cond
+
+for.cond:                                         ; preds = %for.inc, %entry
+  %0 = load i32, i32* %count, align 4
+  %1 = load i32, i32* %max, align 4
+  %cmp = icmp slt i32 %0, %1
+  br i1 %cmp, label %for.body, label %for.end
+
+for.body:                                         ; preds = %for.cond
+  %2 = load i8*, i8** %w, align 4
+  %3 = load i32, i32* %n, align 4
+  %arrayidx = getelementptr inbounds i8, i8* %2, i32 %3
+  %4 = load i8, i8* %arrayidx, align 1
+  %tobool = trunc i8 %4 to i1
+  br i1 %tobool, label %if.end, label %if.then
+
+if.then:                                          ; preds = %for.body
+  %5 = load i32, i32* %n, align 4
+  %call2 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([4 x i8], [4 x i8]* @.str.1, i32 0, i32 0), i32 %5)
+  %6 = load i32, i32* %count, align 4
+  %inc = add nsw i32 %6, 1
+  store i32 %inc, i32* %count, align 4
+  br label %if.end
+
+if.end:                                           ; preds = %if.then, %for.body
+  br label %for.inc
+
+for.inc:                                          ; preds = %if.end
+  %7 = load i32, i32* %n, align 4
+  %add = add nsw i32 %7, 2
+  store i32 %add, i32* %n, align 4
+  br label %for.cond
+
+for.end:                                          ; preds = %for.cond
+  %call3 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([2 x i8], [2 x i8]* @.str.2, i32 0, i32 0))
+  %8 = load i8*, i8** %w, align 4
+  call void @free(i8* %8)
+  ret i32 0
+}
+
+declare i32 @printf(i8* %0, ...) #1
+
+attributes #0 = { noinline nounwind optnone "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "min-legal-vector-width"="0" "no-infs-fp-math"="false" "no-jump-tables"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #1 = { "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #2 = { argmemonly nounwind willreturn }
+
+!llvm.module.flags = !{!0}
+!llvm.ident = !{!1}
+
+!0 = !{i32 1, !"wchar_size", i32 4}
+!1 = !{!"clang version 11.0.0 (https://github.com/Jacarte/llvm-project.git 0f6dea67136cc1e0b3d200eb2bb165628970c44b)"}
+
+; extracted candidates
+
+; *****
+; For LLVM instruction:
+;  %0 = load i32, i32* %count, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %1 = load i32, i32* %max, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %cmp = icmp slt i32 %0, %1
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = var
+%2:i1 = slt %0, %1
+infer %2
+
+; *****
+; For LLVM instruction:
+;  %3 = load i32, i32* %n, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %4 = load i8, i8* %arrayidx, align 1
+; Looking for a replacement for:
+%0:i8 = var
+infer %0 (demandedBits=00000001)
+
+; *****
+; For LLVM instruction:
+;  %tobool = trunc i8 %4 to i1
+; Looking for a replacement for:
+%0:i8 = var
+%1:i1 = trunc %0
+infer %1
+
+; *****
+; For LLVM instruction:
+;  %5 = load i32, i32* %n, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %6 = load i32, i32* %count, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %inc = add nsw i32 %6, 1
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = addnsw 1:i32, %0
+infer %1
+
+; *****
+; For LLVM instruction:
+;  %7 = load i32, i32* %n, align 4
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %add = add nsw i32 %7, 2
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = addnsw 2:i32, %0
+infer %1
+#########################################################
+; exiting Souper's runOnFunction() for main()
+Total of 0 replacements done on this module
+Total of 0 replacements candidates on this module

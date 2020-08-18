@@ -1,0 +1,6089 @@
+; entering Souper's runOnFunction() for sodium_bin2base64()
+
+; ModuleID = './codecs.c.bc'
+source_filename = "sodium/codecs.c"
+target datalayout = "e-m:e-p:32:32-i64:64-n32:64-S128"
+target triple = "wasm32-unknown-wasi"
+
+@errno = external thread_local local_unnamed_addr global i32, align 4
+@.str = private unnamed_addr constant [19 x i8] c"b64_pos <= b64_len\00", align 1
+@.str.1 = private unnamed_addr constant [16 x i8] c"sodium/codecs.c\00", align 1
+@__func__.sodium_bin2base64 = private unnamed_addr constant [18 x i8] c"sodium_bin2base64\00", align 1
+
+; Function Attrs: nounwind
+define nonnull i8* @sodium_bin2hex(i8* nonnull returned %0, i32 %1, i8* nocapture readonly %2, i32 %3) local_unnamed_addr #0 {
+  %5 = icmp ult i32 %3, 2147483647
+  %6 = shl i32 %3, 1
+  %7 = icmp ult i32 %6, %1
+  %8 = and i1 %5, %7
+  br i1 %8, label %9, label %11
+
+9:                                                ; preds = %4
+  %10 = icmp eq i32 %3, 0
+  br i1 %10, label %40, label %12
+
+11:                                               ; preds = %4
+  tail call void @sodium_misuse() #5
+  unreachable
+
+12:                                               ; preds = %9, %12
+  %13 = phi i32 [ %36, %12 ], [ 0, %9 ]
+  %14 = getelementptr i8, i8* %2, i32 %13
+  %15 = load i8, i8* %14, align 1
+  %16 = zext i8 %15 to i32
+  %17 = and i32 %16, 15
+  %18 = lshr i32 %16, 4
+  %19 = add nuw nsw i32 %17, 65526
+  %20 = shl nuw nsw i32 %17, 8
+  %21 = add nuw nsw i32 %20, 22272
+  %22 = and i32 %19, 55552
+  %23 = add nuw nsw i32 %21, %22
+  %24 = add nuw nsw i32 %18, 87
+  %25 = add nuw nsw i32 %18, 65526
+  %26 = lshr i32 %25, 8
+  %27 = and i32 %26, 217
+  %28 = add nuw nsw i32 %24, %27
+  %29 = trunc i32 %28 to i8
+  %30 = shl i32 %13, 1
+  %31 = getelementptr i8, i8* %0, i32 %30
+  store i8 %29, i8* %31, align 1
+  %32 = lshr exact i32 %23, 8
+  %33 = trunc i32 %32 to i8
+  %34 = or i32 %30, 1
+  %35 = getelementptr i8, i8* %0, i32 %34
+  store i8 %33, i8* %35, align 1
+  %36 = add nuw i32 %13, 1
+  %37 = icmp eq i32 %36, %3
+  br i1 %37, label %38, label %12
+
+38:                                               ; preds = %12
+  %39 = shl i32 %3, 1
+  br label %40
+
+40:                                               ; preds = %9, %38
+  %41 = phi i32 [ %39, %38 ], [ 0, %9 ]
+  %42 = getelementptr i8, i8* %0, i32 %41
+  store i8 0, i8* %42, align 1
+  ret i8* %0
+}
+
+; Function Attrs: noreturn
+declare void @sodium_misuse() local_unnamed_addr #1
+
+; Function Attrs: nofree nounwind
+define i32 @sodium_hex2bin(i8* nocapture nonnull %0, i32 %1, i8* %2, i32 %3, i8* readonly %4, i32* %5, i8** %6) local_unnamed_addr #2 {
+  %8 = icmp eq i32 %3, 0
+  br i1 %8, label %76, label %9
+
+9:                                                ; preds = %7
+  %10 = icmp ne i8* %4, null
+  br label %11
+
+11:                                               ; preds = %9, %60
+  %12 = phi i8 [ 0, %9 ], [ %63, %60 ]
+  %13 = phi i32 [ 0, %9 ], [ %62, %60 ]
+  %14 = phi i32 [ 0, %9 ], [ %64, %60 ]
+  %15 = phi i8 [ 0, %9 ], [ %61, %60 ]
+  br label %16
+
+16:                                               ; preds = %11, %42
+  %17 = phi i8 [ %12, %11 ], [ 0, %42 ]
+  %18 = phi i32 [ %14, %11 ], [ %43, %42 ]
+  %19 = getelementptr i8, i8* %2, i32 %18
+  %20 = load i8, i8* %19, align 1
+  %21 = zext i8 %20 to i32
+  %22 = xor i8 %20, 48
+  %23 = zext i8 %22 to i32
+  %24 = add nuw nsw i32 %23, 65526
+  %25 = lshr i32 %24, 8
+  %26 = and i8 %20, -33
+  %27 = add i8 %26, -55
+  %28 = zext i8 %27 to i32
+  %29 = add nuw nsw i32 %28, 65526
+  %30 = add nuw nsw i32 %28, 65520
+  %31 = xor i32 %29, %30
+  %32 = lshr i32 %31, 8
+  %33 = or i32 %32, %25
+  %34 = and i32 %33, 255
+  %35 = icmp eq i32 %34, 0
+  br i1 %35, label %36, label %45
+
+36:                                               ; preds = %16
+  %37 = icmp eq i8 %17, 0
+  %38 = and i1 %10, %37
+  br i1 %38, label %39, label %66
+
+39:                                               ; preds = %36
+  %40 = tail call i8* @strchr(i8* nonnull %4, i32 %21)
+  %41 = icmp eq i8* %40, null
+  br i1 %41, label %76, label %42
+
+42:                                               ; preds = %39
+  %43 = add nuw i32 %18, 1
+  %44 = icmp ult i32 %43, %3
+  br i1 %44, label %16, label %76
+
+45:                                               ; preds = %16
+  %46 = icmp ult i32 %13, %1
+  br i1 %46, label %48, label %47
+
+47:                                               ; preds = %45
+  store i32 68, i32* @errno, align 4
+  br label %66
+
+48:                                               ; preds = %45
+  %49 = and i32 %25, %23
+  %50 = and i32 %32, %28
+  %51 = or i32 %50, %49
+  %52 = icmp eq i8 %17, 0
+  %53 = trunc i32 %51 to i8
+  br i1 %52, label %54, label %56
+
+54:                                               ; preds = %48
+  %55 = shl i8 %53, 4
+  br label %60
+
+56:                                               ; preds = %48
+  %57 = or i8 %15, %53
+  %58 = add nuw i32 %13, 1
+  %59 = getelementptr i8, i8* %0, i32 %13
+  store i8 %57, i8* %59, align 1
+  br label %60
+
+60:                                               ; preds = %56, %54
+  %61 = phi i8 [ %55, %54 ], [ %15, %56 ]
+  %62 = phi i32 [ %13, %54 ], [ %58, %56 ]
+  %63 = xor i8 %17, -1
+  %64 = add nuw i32 %18, 1
+  %65 = icmp ult i32 %64, %3
+  br i1 %65, label %11, label %66
+
+66:                                               ; preds = %60, %36, %47
+  %67 = phi i32 [ %13, %47 ], [ %13, %36 ], [ %62, %60 ]
+  %68 = phi i32 [ %18, %47 ], [ %18, %36 ], [ %64, %60 ]
+  %69 = phi i8 [ %17, %47 ], [ %17, %36 ], [ %63, %60 ]
+  %70 = phi i32 [ -1, %47 ], [ 0, %36 ], [ 0, %60 ]
+  %71 = icmp eq i8 %69, 0
+  br i1 %71, label %74, label %72
+
+72:                                               ; preds = %66
+  %73 = add i32 %68, -1
+  store i32 28, i32* @errno, align 4
+  br label %79
+
+74:                                               ; preds = %66
+  %75 = icmp eq i32 %70, 0
+  br i1 %75, label %76, label %79
+
+76:                                               ; preds = %42, %39, %7, %74
+  %77 = phi i32 [ %67, %74 ], [ 0, %7 ], [ %13, %39 ], [ %13, %42 ]
+  %78 = phi i32 [ %68, %74 ], [ 0, %7 ], [ %43, %42 ], [ %18, %39 ]
+  br label %79
+
+79:                                               ; preds = %72, %74, %76
+  %80 = phi i32 [ %78, %76 ], [ %68, %74 ], [ %73, %72 ]
+  %81 = phi i32 [ 0, %76 ], [ -1, %74 ], [ -1, %72 ]
+  %82 = phi i32 [ %77, %76 ], [ 0, %74 ], [ 0, %72 ]
+  %83 = icmp eq i8** %6, null
+  br i1 %83, label %86, label %84
+
+84:                                               ; preds = %79
+  %85 = getelementptr i8, i8* %2, i32 %80
+  store i8* %85, i8** %6, align 4
+  br label %89
+
+86:                                               ; preds = %79
+  %87 = icmp eq i32 %80, %3
+  br i1 %87, label %89, label %88
+
+88:                                               ; preds = %86
+  store i32 28, i32* @errno, align 4
+  br label %89
+
+89:                                               ; preds = %86, %88, %84
+  %90 = phi i32 [ %81, %84 ], [ -1, %88 ], [ %81, %86 ]
+  %91 = icmp eq i32* %5, null
+  br i1 %91, label %93, label %92
+
+92:                                               ; preds = %89
+  store i32 %82, i32* %5, align 4
+  br label %93
+
+93:                                               ; preds = %89, %92
+  ret i32 %90
+}
+
+; Function Attrs: nofree nounwind readonly
+declare i8* @strchr(i8* %0, i32 %1) local_unnamed_addr #3
+
+; Function Attrs: nounwind
+define i32 @sodium_base64_encoded_len(i32 %0, i32 %1) local_unnamed_addr #0 {
+  %3 = and i32 %1, -7
+  %4 = icmp eq i32 %3, 1
+  br i1 %4, label %6, label %5
+
+5:                                                ; preds = %2
+  tail call void @sodium_misuse() #5
+  unreachable
+
+6:                                                ; preds = %2
+  %7 = udiv i32 %0, 3
+  %8 = shl i32 %7, 2
+  %9 = mul i32 %7, -3
+  %10 = add i32 %9, %0
+  %11 = lshr i32 %10, 1
+  %12 = or i32 %11, %10
+  %13 = and i32 %12, 1
+  %14 = lshr i32 %1, 1
+  %15 = and i32 %14, 1
+  %16 = sub nsw i32 0, %15
+  %17 = sub i32 3, %10
+  %18 = and i32 %17, %16
+  %19 = sub i32 4, %18
+  %20 = mul nuw nsw i32 %13, %19
+  %21 = or i32 %8, 1
+  %22 = add i32 %21, %20
+  ret i32 %22
+}
+
+; Function Attrs: nounwind
+define nonnull i8* @sodium_bin2base64(i8* nonnull returned %0, i32 %1, i8* nocapture readonly %2, i32 %3, i32 %4) local_unnamed_addr #0 {
+  %6 = and i32 %4, -7
+  %7 = icmp eq i32 %6, 1
+  br i1 %7, label %9, label %8
+
+8:                                                ; preds = %5
+  tail call void @sodium_misuse() #5
+  unreachable
+
+9:                                                ; preds = %5
+  %10 = udiv i32 %3, 3
+  %11 = mul i32 %10, -3
+  %12 = add i32 %11, %3
+  %13 = shl i32 %10, 2
+  %14 = icmp eq i32 %12, 0
+  br i1 %14, label %24, label %15
+
+15:                                               ; preds = %9
+  %16 = and i32 %4, 2
+  %17 = icmp eq i32 %16, 0
+  br i1 %17, label %18, label %20
+
+18:                                               ; preds = %15
+  %19 = add i32 %13, 4
+  br label %24
+
+20:                                               ; preds = %15
+  %21 = lshr i32 %12, 1
+  %22 = or i32 %13, 2
+  %23 = add i32 %22, %21
+  br label %24
+
+24:                                               ; preds = %9, %18, %20
+  %25 = phi i32 [ %19, %18 ], [ %23, %20 ], [ %13, %9 ]
+  %26 = icmp ult i32 %25, %1
+  br i1 %26, label %28, label %27
+
+27:                                               ; preds = %24
+  tail call void @sodium_misuse() #5
+  unreachable
+
+28:                                               ; preds = %24
+  %29 = and i32 %4, 4
+  %30 = icmp eq i32 %29, 0
+  %31 = icmp ne i32 %3, 0
+  br i1 %30, label %33, label %32
+
+32:                                               ; preds = %28
+  br i1 %31, label %37, label %213
+
+33:                                               ; preds = %28
+  br i1 %31, label %125, label %213
+
+34:                                               ; preds = %48
+  %35 = add nuw i32 %40, 1
+  %36 = icmp eq i32 %35, %3
+  br i1 %36, label %88, label %37
+
+37:                                               ; preds = %32, %34
+  %38 = phi i32 [ %46, %34 ], [ 0, %32 ]
+  %39 = phi i32 [ %51, %34 ], [ 0, %32 ]
+  %40 = phi i32 [ %35, %34 ], [ 0, %32 ]
+  %41 = phi i32 [ %85, %34 ], [ 0, %32 ]
+  %42 = shl i32 %38, 8
+  %43 = getelementptr i8, i8* %2, i32 %40
+  %44 = load i8, i8* %43, align 1
+  %45 = zext i8 %44 to i32
+  %46 = or i32 %42, %45
+  %47 = add nuw nsw i32 %39, 8
+  br label %48
+
+48:                                               ; preds = %37, %48
+  %49 = phi i32 [ %47, %37 ], [ %51, %48 ]
+  %50 = phi i32 [ %41, %37 ], [ %85, %48 ]
+  %51 = add i32 %49, -6
+  %52 = lshr i32 %46, %51
+  %53 = and i32 %52, 63
+  %54 = add nuw nsw i32 %53, 65510
+  %55 = lshr i32 %54, 8
+  %56 = add nuw nsw i32 %53, 65
+  %57 = and i32 %55, %56
+  %58 = xor i32 %55, 255
+  %59 = add nuw nsw i32 %53, 65484
+  %60 = lshr i32 %59, 8
+  %61 = add nuw nsw i32 %53, 71
+  %62 = and i32 %60, %61
+  %63 = and i32 %62, %58
+  %64 = xor i32 %60, 255
+  %65 = add nuw nsw i32 %53, 65474
+  %66 = lshr i32 %65, 8
+  %67 = add nuw nsw i32 %53, 252
+  %68 = and i32 %66, %67
+  %69 = and i32 %68, %64
+  %70 = xor i32 %53, 62
+  %71 = sub nsw i32 0, %70
+  %72 = lshr i32 %71, 8
+  %73 = and i32 %72, 45
+  %74 = xor i32 %73, 45
+  %75 = xor i32 %53, 63
+  %76 = sub nsw i32 0, %75
+  %77 = lshr i32 %76, 8
+  %78 = and i32 %77, 95
+  %79 = xor i32 %78, 95
+  %80 = or i32 %74, %57
+  %81 = or i32 %80, %79
+  %82 = or i32 %81, %63
+  %83 = or i32 %82, %69
+  %84 = trunc i32 %83 to i8
+  %85 = add i32 %50, 1
+  %86 = getelementptr i8, i8* %0, i32 %50
+  store i8 %84, i8* %86, align 1
+  %87 = icmp ugt i32 %51, 5
+  br i1 %87, label %48, label %34
+
+88:                                               ; preds = %34
+  %89 = icmp eq i32 %51, 0
+  br i1 %89, label %213, label %90
+
+90:                                               ; preds = %88
+  %91 = sub i32 12, %49
+  %92 = shl i32 %46, %91
+  %93 = and i32 %92, 63
+  %94 = add nuw nsw i32 %93, 65510
+  %95 = lshr i32 %94, 8
+  %96 = add nuw nsw i32 %93, 65
+  %97 = and i32 %95, %96
+  %98 = xor i32 %95, 255
+  %99 = add nuw nsw i32 %93, 65484
+  %100 = lshr i32 %99, 8
+  %101 = add nuw nsw i32 %93, 71
+  %102 = and i32 %100, %101
+  %103 = and i32 %102, %98
+  %104 = xor i32 %100, 255
+  %105 = add nuw nsw i32 %93, 65474
+  %106 = lshr i32 %105, 8
+  %107 = add nuw nsw i32 %93, 252
+  %108 = and i32 %106, %107
+  %109 = and i32 %108, %104
+  %110 = xor i32 %93, 62
+  %111 = sub nsw i32 0, %110
+  %112 = lshr i32 %111, 8
+  %113 = and i32 %112, 45
+  %114 = xor i32 %113, 45
+  %115 = or i32 %114, %97
+  %116 = or i32 %115, 0
+  %117 = or i32 %116, %103
+  %118 = or i32 %117, %109
+  %119 = trunc i32 %118 to i8
+  %120 = add i32 %50, 2
+  %121 = getelementptr i8, i8* %0, i32 %85
+  store i8 %119, i8* %121, align 1
+  br label %213
+
+122:                                              ; preds = %136
+  %123 = add nuw i32 %128, 1
+  %124 = icmp eq i32 %123, %3
+  br i1 %124, label %176, label %125
+
+125:                                              ; preds = %33, %122
+  %126 = phi i32 [ %134, %122 ], [ 0, %33 ]
+  %127 = phi i32 [ %139, %122 ], [ 0, %33 ]
+  %128 = phi i32 [ %123, %122 ], [ 0, %33 ]
+  %129 = phi i32 [ %173, %122 ], [ 0, %33 ]
+  %130 = shl i32 %126, 8
+  %131 = getelementptr i8, i8* %2, i32 %128
+  %132 = load i8, i8* %131, align 1
+  %133 = zext i8 %132 to i32
+  %134 = or i32 %130, %133
+  %135 = add nuw nsw i32 %127, 8
+  br label %136
+
+136:                                              ; preds = %125, %136
+  %137 = phi i32 [ %135, %125 ], [ %139, %136 ]
+  %138 = phi i32 [ %129, %125 ], [ %173, %136 ]
+  %139 = add i32 %137, -6
+  %140 = lshr i32 %134, %139
+  %141 = and i32 %140, 63
+  %142 = add nuw nsw i32 %141, 65510
+  %143 = lshr i32 %142, 8
+  %144 = add nuw nsw i32 %141, 65
+  %145 = and i32 %143, %144
+  %146 = xor i32 %143, 255
+  %147 = add nuw nsw i32 %141, 65484
+  %148 = lshr i32 %147, 8
+  %149 = add nuw nsw i32 %141, 71
+  %150 = and i32 %148, %149
+  %151 = and i32 %150, %146
+  %152 = xor i32 %148, 255
+  %153 = add nuw nsw i32 %141, 65474
+  %154 = lshr i32 %153, 8
+  %155 = add nuw nsw i32 %141, 252
+  %156 = and i32 %154, %155
+  %157 = and i32 %156, %152
+  %158 = xor i32 %141, 62
+  %159 = sub nsw i32 0, %158
+  %160 = lshr i32 %159, 8
+  %161 = and i32 %160, 43
+  %162 = xor i32 %161, 43
+  %163 = xor i32 %141, 63
+  %164 = sub nsw i32 0, %163
+  %165 = lshr i32 %164, 8
+  %166 = and i32 %165, 47
+  %167 = xor i32 %166, 47
+  %168 = or i32 %162, %145
+  %169 = or i32 %168, %167
+  %170 = or i32 %169, %151
+  %171 = or i32 %170, %157
+  %172 = trunc i32 %171 to i8
+  %173 = add i32 %138, 1
+  %174 = getelementptr i8, i8* %0, i32 %138
+  store i8 %172, i8* %174, align 1
+  %175 = icmp ugt i32 %139, 5
+  br i1 %175, label %136, label %122
+
+176:                                              ; preds = %122
+  %177 = icmp eq i32 %139, 0
+  br i1 %177, label %213, label %178
+
+178:                                              ; preds = %176
+  %179 = sub i32 12, %137
+  %180 = shl i32 %134, %179
+  %181 = and i32 %180, 63
+  %182 = add nuw nsw i32 %181, 65510
+  %183 = lshr i32 %182, 8
+  %184 = add nuw nsw i32 %181, 65
+  %185 = and i32 %183, %184
+  %186 = xor i32 %183, 255
+  %187 = add nuw nsw i32 %181, 65484
+  %188 = lshr i32 %187, 8
+  %189 = add nuw nsw i32 %181, 71
+  %190 = and i32 %188, %189
+  %191 = and i32 %190, %186
+  %192 = xor i32 %188, 255
+  %193 = add nuw nsw i32 %181, 65474
+  %194 = lshr i32 %193, 8
+  %195 = add nuw nsw i32 %181, 252
+  %196 = and i32 %194, %195
+  %197 = and i32 %196, %192
+  %198 = xor i32 %181, 62
+  %199 = sub nsw i32 0, %198
+  %200 = lshr i32 %199, 8
+  %201 = and i32 %200, 43
+  %202 = xor i32 %201, 43
+  %203 = lshr i32 12032, 8
+  %204 = and i32 %203, 47
+  %205 = xor i32 %204, 47
+  %206 = or i32 %202, %185
+  %207 = or i32 %206, %205
+  %208 = or i32 %207, %191
+  %209 = or i32 %208, %197
+  %210 = trunc i32 %209 to i8
+  %211 = add i32 %138, 2
+  %212 = getelementptr i8, i8* %0, i32 %173
+  store i8 %210, i8* %212, align 1
+  br label %213
+
+213:                                              ; preds = %33, %32, %88, %176, %178, %90
+  %214 = phi i32 [ %120, %90 ], [ %85, %88 ], [ %211, %178 ], [ %173, %176 ], [ 0, %32 ], [ 0, %33 ]
+  %215 = icmp ult i32 %25, %214
+  br i1 %215, label %221, label %216
+
+216:                                              ; preds = %213
+  %217 = icmp ugt i32 %25, %214
+  br i1 %217, label %218, label %222
+
+218:                                              ; preds = %216
+  %219 = getelementptr i8, i8* %0, i32 %214
+  %220 = sub i32 %25, %214
+  call void @llvm.memset.p0i8.i32(i8* align 1 %219, i8 61, i32 %220, i1 false)
+  br label %222
+
+221:                                              ; preds = %213
+  tail call void @__assert_fail(i8* getelementptr inbounds ([19 x i8], [19 x i8]* @.str, i32 0, i32 0), i8* getelementptr inbounds ([16 x i8], [16 x i8]* @.str.1, i32 0, i32 0), i32 230, i8* getelementptr inbounds ([18 x i8], [18 x i8]* @__func__.sodium_bin2base64, i32 0, i32 0)) #5
+  unreachable
+
+222:                                              ; preds = %218, %216
+  %223 = phi i32 [ %214, %216 ], [ %25, %218 ]
+  %224 = getelementptr i8, i8* %0, i32 %223
+  %225 = add i32 %223, 1
+  %226 = icmp ult i32 %225, %1
+  %227 = select i1 %226, i32 %1, i32 %225
+  %228 = sub i32 %227, %223
+  call void @llvm.memset.p0i8.i32(i8* align 1 %224, i8 0, i32 %228, i1 false)
+  ret i8* %0
+}
+
+; Function Attrs: noreturn
+declare void @__assert_fail(i8* %0, i8* %1, i32 %2, i8* %3) local_unnamed_addr #1
+
+; Function Attrs: nounwind
+define i32 @sodium_base642bin(i8* nocapture nonnull %0, i32 %1, i8* %2, i32 %3, i8* readonly %4, i32* %5, i8** %6, i32 %7) local_unnamed_addr #0 {
+  %9 = and i32 %7, -7
+  %10 = icmp eq i32 %9, 1
+  br i1 %10, label %12, label %11
+
+11:                                               ; preds = %8
+  tail call void @sodium_misuse() #5
+  unreachable
+
+12:                                               ; preds = %8
+  %13 = icmp eq i32 %3, 0
+  br i1 %13, label %116, label %14
+
+14:                                               ; preds = %12
+  %15 = and i32 %7, 4
+  %16 = icmp eq i32 %15, 0
+  %17 = icmp eq i8* %4, null
+  %18 = select i1 %16, i32 43, i32 45
+  %19 = select i1 %16, i32 47, i32 95
+  br label %20
+
+20:                                               ; preds = %14, %104
+  %21 = phi i32 [ 0, %14 ], [ %106, %104 ]
+  %22 = phi i32 [ 0, %14 ], [ %92, %104 ]
+  %23 = phi i32 [ 0, %14 ], [ %105, %104 ]
+  %24 = phi i32 [ 0, %14 ], [ %107, %104 ]
+  br label %25
+
+25:                                               ; preds = %20, %87
+  %26 = phi i32 [ %24, %20 ], [ %88, %87 ]
+  %27 = getelementptr i8, i8* %2, i32 %26
+  %28 = load i8, i8* %27, align 1
+  %29 = sext i8 %28 to i32
+  %30 = add nsw i32 %29, -65
+  %31 = lshr i32 %30, 8
+  %32 = xor i32 %31, 255
+  %33 = sub nsw i32 90, %29
+  %34 = lshr i32 %33, 8
+  %35 = and i32 %34, 255
+  %36 = xor i32 %35, 255
+  %37 = and i32 %32, %30
+  %38 = and i32 %37, %36
+  %39 = add nsw i32 %29, 65439
+  %40 = lshr i32 %39, 8
+  %41 = xor i32 %40, 255
+  %42 = sub nsw i32 122, %29
+  %43 = lshr i32 %42, 8
+  %44 = and i32 %43, 255
+  %45 = xor i32 %44, 255
+  %46 = add nsw i32 %29, 185
+  %47 = and i32 %41, %46
+  %48 = and i32 %47, %45
+  %49 = add nsw i32 %29, 65488
+  %50 = lshr i32 %49, 8
+  %51 = xor i32 %50, 255
+  %52 = sub nsw i32 57, %29
+  %53 = lshr i32 %52, 8
+  %54 = and i32 %53, 255
+  %55 = xor i32 %54, 255
+  %56 = add nsw i32 %29, 4
+  %57 = and i32 %51, %56
+  %58 = and i32 %57, %55
+  %59 = xor i32 %18, %29
+  %60 = sub nsw i32 0, %59
+  %61 = lshr i32 %60, 8
+  %62 = and i32 %61, 62
+  %63 = xor i32 %62, 62
+  %64 = xor i32 %19, %29
+  %65 = sub nsw i32 0, %64
+  %66 = lshr i32 %65, 8
+  %67 = and i32 %66, 63
+  %68 = xor i32 %67, 63
+  %69 = or i32 %48, %58
+  %70 = or i32 %69, %63
+  %71 = or i32 %70, %68
+  %72 = or i32 %71, %38
+  %73 = sub nsw i32 0, %72
+  %74 = lshr i32 %73, 8
+  %75 = and i32 %74, 255
+  %76 = xor i32 %75, 255
+  %77 = xor i32 %29, 65
+  %78 = sub nsw i32 0, %77
+  %79 = lshr i32 %78, 8
+  %80 = and i32 %76, %79
+  %81 = or i32 %80, %72
+  %82 = icmp eq i32 %81, 255
+  br i1 %82, label %83, label %90
+
+83:                                               ; preds = %25
+  br i1 %17, label %109, label %84
+
+84:                                               ; preds = %83
+  %85 = tail call i8* @strchr(i8* nonnull %4, i32 %29)
+  %86 = icmp eq i8* %85, null
+  br i1 %86, label %109, label %87
+
+87:                                               ; preds = %84
+  %88 = add nuw i32 %26, 1
+  %89 = icmp ult i32 %88, %3
+  br i1 %89, label %25, label %109
+
+90:                                               ; preds = %25
+  %91 = shl i32 %22, 6
+  %92 = add i32 %81, %91
+  %93 = add i32 %21, 6
+  %94 = icmp ugt i32 %93, 7
+  br i1 %94, label %95, label %104
+
+95:                                               ; preds = %90
+  %96 = add i32 %21, -2
+  %97 = icmp ult i32 %23, %1
+  br i1 %97, label %99, label %98
+
+98:                                               ; preds = %95
+  store i32 68, i32* @errno, align 4
+  br label %109
+
+99:                                               ; preds = %95
+  %100 = lshr i32 %92, %96
+  %101 = trunc i32 %100 to i8
+  %102 = add nuw i32 %23, 1
+  %103 = getelementptr i8, i8* %0, i32 %23
+  store i8 %101, i8* %103, align 1
+  br label %104
+
+104:                                              ; preds = %99, %90
+  %105 = phi i32 [ %102, %99 ], [ %23, %90 ]
+  %106 = phi i32 [ %96, %99 ], [ %93, %90 ]
+  %107 = add nuw i32 %26, 1
+  %108 = icmp ult i32 %107, %3
+  br i1 %108, label %20, label %109
+
+109:                                              ; preds = %104, %87, %83, %84, %98
+  %110 = phi i32 [ %23, %98 ], [ %23, %84 ], [ %23, %83 ], [ %23, %87 ], [ %105, %104 ]
+  %111 = phi i32 [ %26, %98 ], [ %88, %87 ], [ %24, %83 ], [ %26, %84 ], [ %107, %104 ]
+  %112 = phi i32 [ -1, %98 ], [ 0, %84 ], [ 0, %83 ], [ 0, %87 ], [ 0, %104 ]
+  %113 = phi i32 [ %92, %98 ], [ %22, %84 ], [ %22, %83 ], [ %22, %87 ], [ %92, %104 ]
+  %114 = phi i32 [ %96, %98 ], [ %21, %84 ], [ %21, %83 ], [ %21, %87 ], [ %106, %104 ]
+  %115 = icmp ugt i32 %114, 4
+  br i1 %115, label %171, label %116
+
+116:                                              ; preds = %12, %109
+  %117 = phi i32 [ %114, %109 ], [ 0, %12 ]
+  %118 = phi i32 [ %113, %109 ], [ 0, %12 ]
+  %119 = phi i32 [ %112, %109 ], [ 0, %12 ]
+  %120 = phi i32 [ %111, %109 ], [ 0, %12 ]
+  %121 = phi i32 [ %110, %109 ], [ 0, %12 ]
+  %122 = shl nsw i32 -1, %117
+  %123 = xor i32 %122, -1
+  %124 = and i32 %118, %123
+  %125 = or i32 %124, %119
+  %126 = icmp eq i32 %125, 0
+  br i1 %126, label %127, label %171
+
+127:                                              ; preds = %116
+  %128 = and i32 %7, 2
+  %129 = icmp eq i32 %128, 0
+  br i1 %129, label %130, label %156
+
+130:                                              ; preds = %127
+  %131 = lshr i32 %117, 1
+  %132 = icmp eq i32 %131, 0
+  br i1 %132, label %156, label %133
+
+133:                                              ; preds = %130
+  %134 = icmp eq i8* %4, null
+  br label %135
+
+135:                                              ; preds = %152, %133
+  %136 = phi i32 [ %120, %133 ], [ %154, %152 ]
+  %137 = phi i32 [ %131, %133 ], [ %153, %152 ]
+  %138 = icmp ult i32 %136, %3
+  br i1 %138, label %140, label %139
+
+139:                                              ; preds = %135
+  store i32 68, i32* @errno, align 4
+  br label %171
+
+140:                                              ; preds = %135
+  %141 = getelementptr i8, i8* %2, i32 %136
+  %142 = load i8, i8* %141, align 1
+  %143 = sext i8 %142 to i32
+  %144 = icmp eq i8 %142, 61
+  br i1 %144, label %145, label %147
+
+145:                                              ; preds = %140
+  %146 = add i32 %137, -1
+  br label %152
+
+147:                                              ; preds = %140
+  br i1 %134, label %151, label %148
+
+148:                                              ; preds = %147
+  %149 = tail call i8* @strchr(i8* nonnull %4, i32 %143) #6
+  %150 = icmp eq i8* %149, null
+  br i1 %150, label %151, label %152
+
+151:                                              ; preds = %148, %147
+  store i32 28, i32* @errno, align 4
+  br label %171
+
+152:                                              ; preds = %148, %145
+  %153 = phi i32 [ %146, %145 ], [ %137, %148 ]
+  %154 = add nuw i32 %136, 1
+  %155 = icmp eq i32 %153, 0
+  br i1 %155, label %156, label %135
+
+156:                                              ; preds = %152, %127, %130
+  %157 = phi i32 [ %120, %127 ], [ %120, %130 ], [ %154, %152 ]
+  %158 = icmp ne i8* %4, null
+  %159 = icmp ult i32 %157, %3
+  %160 = and i1 %158, %159
+  br i1 %160, label %161, label %171
+
+161:                                              ; preds = %156, %168
+  %162 = phi i32 [ %169, %168 ], [ %157, %156 ]
+  %163 = getelementptr i8, i8* %2, i32 %162
+  %164 = load i8, i8* %163, align 1
+  %165 = sext i8 %164 to i32
+  %166 = tail call i8* @strchr(i8* nonnull %4, i32 %165)
+  %167 = icmp eq i8* %166, null
+  br i1 %167, label %171, label %168
+
+168:                                              ; preds = %161
+  %169 = add i32 %162, 1
+  %170 = icmp eq i32 %169, %3
+  br i1 %170, label %171, label %161
+
+171:                                              ; preds = %161, %168, %156, %151, %139, %109, %116
+  %172 = phi i32 [ 0, %156 ], [ -1, %151 ], [ -1, %139 ], [ -1, %109 ], [ -1, %116 ], [ 0, %168 ], [ 0, %161 ]
+  %173 = phi i32 [ %157, %156 ], [ %136, %151 ], [ %136, %139 ], [ %111, %109 ], [ %120, %116 ], [ %162, %161 ], [ %3, %168 ]
+  %174 = phi i32 [ %121, %156 ], [ 0, %151 ], [ 0, %139 ], [ 0, %109 ], [ 0, %116 ], [ %121, %168 ], [ %121, %161 ]
+  %175 = icmp eq i8** %6, null
+  br i1 %175, label %178, label %176
+
+176:                                              ; preds = %171
+  %177 = getelementptr i8, i8* %2, i32 %173
+  store i8* %177, i8** %6, align 4
+  br label %181
+
+178:                                              ; preds = %171
+  %179 = icmp eq i32 %173, %3
+  br i1 %179, label %181, label %180
+
+180:                                              ; preds = %178
+  store i32 28, i32* @errno, align 4
+  br label %181
+
+181:                                              ; preds = %178, %180, %176
+  %182 = phi i32 [ %172, %176 ], [ -1, %180 ], [ %172, %178 ]
+  %183 = icmp eq i32* %5, null
+  br i1 %183, label %185, label %184
+
+184:                                              ; preds = %181
+  store i32 %174, i32* %5, align 4
+  br label %185
+
+185:                                              ; preds = %181, %184
+  ret i32 %182
+}
+
+; Function Attrs: argmemonly nounwind willreturn writeonly
+declare void @llvm.memset.p0i8.i32(i8* nocapture writeonly %0, i8 %1, i32 %2, i1 immarg %3) #4
+
+attributes #0 = { nounwind "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "min-legal-vector-width"="0" "no-infs-fp-math"="false" "no-jump-tables"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="false" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #1 = { noreturn "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="false" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #2 = { nofree nounwind "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "min-legal-vector-width"="0" "no-infs-fp-math"="false" "no-jump-tables"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="false" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #3 = { nofree nounwind readonly "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="false" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #4 = { argmemonly nounwind willreturn writeonly }
+attributes #5 = { noreturn nounwind }
+attributes #6 = { nounwind }
+
+!llvm.module.flags = !{!0, !1, !2}
+!llvm.ident = !{!3}
+
+!0 = !{i32 1, !"wchar_size", i32 4}
+!1 = !{i32 7, !"PIC Level", i32 2}
+!2 = !{i32 7, !"PIE Level", i32 2}
+!3 = !{!"clang version 10.0.0 (https://github.com/llvm/llvm-project d32170dbd5b0d54436537b6b75beaf44324e0c28)"}
+
+; extracted candidates
+
+; *****
+; For LLVM instruction:
+;  %6 = and i32 %4, -7
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = and 4294967289:i32, %0
+infer %1
+
+; *****
+; For LLVM instruction:
+;  %7 = icmp eq i32 %6, 1
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = and 4294967289:i32, %0
+%2:i1 = eq 1:i32, %1
+infer %2
+
+; *****
+; For LLVM instruction:
+;  %10 = udiv i32 %3, 3
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = udiv %0, 3:i32
+infer %1
+
+; *****
+; For LLVM instruction:
+;  %11 = mul i32 %10, -3
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = udiv %0, 3:i32 (hasExternalUses)
+%2:i32 = mul 4294967293:i32, %1
+infer %2
+
+; *****
+; For LLVM instruction:
+;  %12 = add i32 %11, %3
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = udiv %0, 3:i32 (hasExternalUses)
+%2:i32 = mul 4294967293:i32, %1
+%3:i32 = add %0, %2
+infer %3
+
+; *****
+; For LLVM instruction:
+;  %13 = shl i32 %10, 2
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = udiv %0, 3:i32 (hasExternalUses)
+%2:i32 = shl %1, 2:i32
+infer %2
+
+; *****
+; For LLVM instruction:
+;  %14 = icmp eq i32 %12, 0
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = udiv %0, 3:i32 (hasExternalUses)
+%2:i32 = mul 4294967293:i32, %1
+%3:i32 = add %0, %2 (hasExternalUses)
+%4:i1 = eq 0:i32, %3
+infer %4
+
+; *****
+; For LLVM instruction:
+;  %16 = and i32 %4, 2
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = and 4294967289:i32, %0
+%2:i1 = eq 1:i32, %1
+pc %2 1:i1
+%3:i32 = and 2:i32, %0
+infer %3
+
+; *****
+; For LLVM instruction:
+;  %17 = icmp eq i32 %16, 0
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = and 4294967289:i32, %0
+%2:i1 = eq 1:i32, %1
+pc %2 1:i1
+%3:i32 = and 2:i32, %0
+%4:i1 = eq 0:i32, %3
+infer %4
+
+; *****
+; For LLVM instruction:
+;  %19 = add i32 %13, 4
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = udiv %0, 3:i32 (hasExternalUses)
+%2:i32 = mul 4294967293:i32, %1
+%3:i32 = add %0, %2 (hasExternalUses)
+%4:i1 = eq 0:i32, %3
+pc %4 0:i1
+%5:i32 = shl %1, 2:i32 (hasExternalUses)
+%6:i32 = add 4:i32, %5
+infer %6
+
+; *****
+; For LLVM instruction:
+;  %21 = lshr i32 %12, 1
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = udiv %0, 3:i32 (hasExternalUses)
+%2:i32 = mul 4294967293:i32, %1
+%3:i32 = add %0, %2 (hasExternalUses)
+%4:i1 = eq 0:i32, %3
+pc %4 0:i1
+%5:i32 = lshr %3, 1:i32
+infer %5
+
+; *****
+; For LLVM instruction:
+;  %22 = or i32 %13, 2
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = udiv %0, 3:i32 (hasExternalUses)
+%2:i32 = mul 4294967293:i32, %1
+%3:i32 = add %0, %2 (hasExternalUses)
+%4:i1 = eq 0:i32, %3
+pc %4 0:i1
+%5:i32 = shl %1, 2:i32 (hasExternalUses)
+%6:i32 = or 2:i32, %5
+infer %6
+
+; *****
+; For LLVM instruction:
+;  %23 = add i32 %22, %21
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = udiv %0, 3:i32 (hasExternalUses)
+%2:i32 = mul 4294967293:i32, %1
+%3:i32 = add %0, %2 (hasExternalUses)
+%4:i1 = eq 0:i32, %3
+pc %4 0:i1
+%5:i32 = shl %1, 2:i32 (hasExternalUses)
+%6:i32 = or 2:i32, %5
+%7:i32 = lshr %3, 1:i32
+%8:i32 = add %6, %7
+infer %8
+
+; *****
+; For LLVM instruction:
+;  %25 = phi i32 [ %19, %18 ], [ %23, %20 ], [ %13, %9 ]
+; Looking for a replacement for:
+%0 = block 3
+%1:i32 = var
+%2:i32 = udiv %1, 3:i32
+%3:i32 = shl %2, 2:i32
+%4:i32 = add 4:i32, %3
+%5:i32 = or 2:i32, %3
+%6:i32 = mul 4294967293:i32, %2
+%7:i32 = add %1, %6 (hasExternalUses)
+%8:i32 = lshr %7, 1:i32
+%9:i32 = add %5, %8
+%10:i32 = phi %0, %4, %9, %3
+infer %10
+
+; *****
+; For LLVM instruction:
+;  %26 = icmp ult i32 %25, %1
+; Looking for a replacement for:
+%0 = block 3
+%1:i32 = var
+%2:i32 = udiv %1, 3:i32
+%3:i32 = shl %2, 2:i32
+%4:i32 = add 4:i32, %3
+%5:i32 = or 2:i32, %3
+%6:i32 = mul 4294967293:i32, %2
+%7:i32 = add %1, %6
+%8:i32 = lshr %7, 1:i32
+%9:i32 = add %5, %8
+%10:i32 = phi %0, %4, %9, %3
+%11:i32 = var
+%12:i1 = ult %10, %11
+infer %12
+
+; *****
+; For LLVM instruction:
+;  %29 = and i32 %4, 4
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = and 4:i32, %0
+infer %1
+
+; *****
+; For LLVM instruction:
+;  %30 = icmp eq i32 %29, 0
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = and 4:i32, %0
+%2:i1 = eq 0:i32, %1
+infer %2
+
+; *****
+; For LLVM instruction:
+;  %31 = icmp ne i32 %3, 0
+; Looking for a replacement for:
+%0 = block 3
+%1:i32 = var
+%2:i32 = udiv %1, 3:i32
+%3:i32 = shl %2, 2:i32
+%4:i32 = add 4:i32, %3
+%5:i32 = or 2:i32, %3
+%6:i32 = mul 4294967293:i32, %2
+%7:i32 = add %1, %6
+%8:i32 = lshr %7, 1:i32
+%9:i32 = add %5, %8
+%10:i32 = phi %0, %4, %9, %3
+%11:i32 = var
+%12:i1 = ult %10, %11
+pc %12 1:i1
+%13:i1 = ne 0:i32, %1
+infer %13
+
+; *****
+; For LLVM instruction:
+;  %35 = add nuw i32 %40, 1
+; Looking for a replacement for:
+%0:i32 = var (range=[0,-1))
+%1:i32 = addnuw 1:i32, %0
+infer %1
+
+; *****
+; For LLVM instruction:
+;  %36 = icmp eq i32 %35, %3
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = var (range=[0,-1))
+%2:i32 = addnuw 1:i32, %1 (hasExternalUses)
+%3:i1 = eq %0, %2
+infer %3
+
+; *****
+; For LLVM instruction:
+;  %38 = phi i32 [ %46, %34 ], [ 0, %32 ]
+; Looking for a replacement for:
+%0:i32 = var
+infer %0 (demandedBits=00000000111111111111111111111111)
+
+; *****
+; For LLVM instruction:
+;  %39 = phi i32 [ %51, %34 ], [ 0, %32 ]
+; Looking for a replacement for:
+%0:i32 = var (range=[0,6))
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %40 = phi i32 [ %35, %34 ], [ 0, %32 ]
+; Looking for a replacement for:
+%0:i32 = var (range=[0,-1))
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %41 = phi i32 [ %85, %34 ], [ 0, %32 ]
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %42 = shl i32 %38, 8
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = shl %0, 8:i32
+infer %1
+
+; *****
+; For LLVM instruction:
+;  %44 = load i8, i8* %43, align 1
+; Looking for a replacement for:
+%0:i8 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %45 = zext i8 %44 to i32
+; Looking for a replacement for:
+%0:i8 = var
+%1:i32 = zext %0
+infer %1
+
+; *****
+; For LLVM instruction:
+;  %46 = or i32 %42, %45
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = shl %0, 8:i32
+%2:i8 = var
+%3:i32 = zext %2
+%4:i32 = or %1, %3
+infer %4
+
+; *****
+; For LLVM instruction:
+;  %47 = add nuw nsw i32 %39, 8
+; Looking for a replacement for:
+%0:i32 = var (range=[0,6))
+%1:i32 = addnw 8:i32, %0
+infer %1
+
+; *****
+; For LLVM instruction:
+;  %49 = phi i32 [ %47, %37 ], [ %51, %48 ]
+; Looking for a replacement for:
+%0:i32 = var (range=[6,0))
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %50 = phi i32 [ %41, %37 ], [ %85, %48 ]
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %51 = add i32 %49, -6
+; Looking for a replacement for:
+%0:i32 = var (range=[6,0))
+%1:i32 = add 4294967290:i32, %0
+infer %1
+
+; *****
+; For LLVM instruction:
+;  %52 = lshr i32 %46, %51
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = shl %0, 8:i32
+%2:i8 = var
+%3:i32 = zext %2
+%4:i32 = or %1, %3 (hasExternalUses)
+%5:i32 = var (range=[6,0))
+%6:i32 = add 4294967290:i32, %5 (hasExternalUses)
+%7:i32 = lshr %4, %6
+infer %7 (demandedBits=00000000000000000000000000111111)
+
+; *****
+; For LLVM instruction:
+;  %53 = and i32 %52, 63
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = shl %0, 8:i32
+%2:i8 = var
+%3:i32 = zext %2
+%4:i32 = or %1, %3 (hasExternalUses)
+%5:i32 = var (range=[6,0))
+%6:i32 = add 4294967290:i32, %5 (hasExternalUses)
+%7:i32 = lshr %4, %6
+%8:i32 = and 63:i32, %7
+infer %8 (demandedBits=00000000000000001111111111111111)
+
+; *****
+; For LLVM instruction:
+;  %54 = add nuw nsw i32 %53, 65510
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = shl %0, 8:i32
+%2:i8 = var
+%3:i32 = zext %2
+%4:i32 = or %1, %3 (hasExternalUses)
+%5:i32 = var (range=[6,0))
+%6:i32 = add 4294967290:i32, %5 (hasExternalUses)
+%7:i32 = lshr %4, %6
+%8:i32 = and 63:i32, %7 (hasExternalUses)
+%9:i32 = addnw 65510:i32, %8
+infer %9 (demandedBits=00000000000000001111111100000000)
+
+; *****
+; For LLVM instruction:
+;  %55 = lshr i32 %54, 8
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = shl %0, 8:i32
+%2:i8 = var
+%3:i32 = zext %2
+%4:i32 = or %1, %3 (hasExternalUses)
+%5:i32 = var (range=[6,0))
+%6:i32 = add 4294967290:i32, %5 (hasExternalUses)
+%7:i32 = lshr %4, %6
+%8:i32 = and 63:i32, %7 (hasExternalUses)
+%9:i32 = addnw 65510:i32, %8
+%10:i32 = lshr %9, 8:i32
+infer %10 (demandedBits=00000000000000000000000011111111)
+
+; *****
+; For LLVM instruction:
+;  %56 = add nuw nsw i32 %53, 65
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = shl %0, 8:i32
+%2:i8 = var
+%3:i32 = zext %2
+%4:i32 = or %1, %3 (hasExternalUses)
+%5:i32 = var (range=[6,0))
+%6:i32 = add 4294967290:i32, %5 (hasExternalUses)
+%7:i32 = lshr %4, %6
+%8:i32 = and 63:i32, %7 (hasExternalUses)
+%9:i32 = addnw 65:i32, %8
+infer %9 (demandedBits=00000000000000000000000011111111)
+
+; *****
+; For LLVM instruction:
+;  %57 = and i32 %55, %56
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = shl %0, 8:i32
+%2:i8 = var
+%3:i32 = zext %2
+%4:i32 = or %1, %3 (hasExternalUses)
+%5:i32 = var (range=[6,0))
+%6:i32 = add 4294967290:i32, %5 (hasExternalUses)
+%7:i32 = lshr %4, %6
+%8:i32 = and 63:i32, %7 (hasExternalUses)
+%9:i32 = addnw 65:i32, %8
+%10:i32 = addnw 65510:i32, %8
+%11:i32 = lshr %10, 8:i32 (hasExternalUses)
+%12:i32 = and %9, %11
+infer %12 (demandedBits=00000000000000000000000011111111)
+
+; *****
+; For LLVM instruction:
+;  %58 = xor i32 %55, 255
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = shl %0, 8:i32
+%2:i8 = var
+%3:i32 = zext %2
+%4:i32 = or %1, %3 (hasExternalUses)
+%5:i32 = var (range=[6,0))
+%6:i32 = add 4294967290:i32, %5 (hasExternalUses)
+%7:i32 = lshr %4, %6
+%8:i32 = and 63:i32, %7 (hasExternalUses)
+%9:i32 = addnw 65510:i32, %8
+%10:i32 = lshr %9, 8:i32 (hasExternalUses)
+%11:i32 = xor 255:i32, %10
+infer %11 (demandedBits=00000000000000000000000011111111)
+
+; *****
+; For LLVM instruction:
+;  %59 = add nuw nsw i32 %53, 65484
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = shl %0, 8:i32
+%2:i8 = var
+%3:i32 = zext %2
+%4:i32 = or %1, %3 (hasExternalUses)
+%5:i32 = var (range=[6,0))
+%6:i32 = add 4294967290:i32, %5 (hasExternalUses)
+%7:i32 = lshr %4, %6
+%8:i32 = and 63:i32, %7 (hasExternalUses)
+%9:i32 = addnw 65484:i32, %8
+infer %9 (demandedBits=00000000000000001111111100000000)
+
+; *****
+; For LLVM instruction:
+;  %60 = lshr i32 %59, 8
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = shl %0, 8:i32
+%2:i8 = var
+%3:i32 = zext %2
+%4:i32 = or %1, %3 (hasExternalUses)
+%5:i32 = var (range=[6,0))
+%6:i32 = add 4294967290:i32, %5 (hasExternalUses)
+%7:i32 = lshr %4, %6
+%8:i32 = and 63:i32, %7 (hasExternalUses)
+%9:i32 = addnw 65484:i32, %8
+%10:i32 = lshr %9, 8:i32
+infer %10 (demandedBits=00000000000000000000000011111111)
+
+; *****
+; For LLVM instruction:
+;  %61 = add nuw nsw i32 %53, 71
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = shl %0, 8:i32
+%2:i8 = var
+%3:i32 = zext %2
+%4:i32 = or %1, %3 (hasExternalUses)
+%5:i32 = var (range=[6,0))
+%6:i32 = add 4294967290:i32, %5 (hasExternalUses)
+%7:i32 = lshr %4, %6
+%8:i32 = and 63:i32, %7 (hasExternalUses)
+%9:i32 = addnw 71:i32, %8
+infer %9 (demandedBits=00000000000000000000000011111111)
+
+; *****
+; For LLVM instruction:
+;  %62 = and i32 %60, %61
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = shl %0, 8:i32
+%2:i8 = var
+%3:i32 = zext %2
+%4:i32 = or %1, %3 (hasExternalUses)
+%5:i32 = var (range=[6,0))
+%6:i32 = add 4294967290:i32, %5 (hasExternalUses)
+%7:i32 = lshr %4, %6
+%8:i32 = and 63:i32, %7 (hasExternalUses)
+%9:i32 = addnw 71:i32, %8
+%10:i32 = addnw 65484:i32, %8
+%11:i32 = lshr %10, 8:i32 (hasExternalUses)
+%12:i32 = and %9, %11
+infer %12 (demandedBits=00000000000000000000000011111111)
+
+; *****
+; For LLVM instruction:
+;  %63 = and i32 %62, %58
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = shl %0, 8:i32
+%2:i8 = var
+%3:i32 = zext %2
+%4:i32 = or %1, %3 (hasExternalUses)
+%5:i32 = var (range=[6,0))
+%6:i32 = add 4294967290:i32, %5 (hasExternalUses)
+%7:i32 = lshr %4, %6
+%8:i32 = and 63:i32, %7 (hasExternalUses)
+%9:i32 = addnw 71:i32, %8
+%10:i32 = addnw 65484:i32, %8
+%11:i32 = lshr %10, 8:i32 (hasExternalUses)
+%12:i32 = and %9, %11
+%13:i32 = addnw 65510:i32, %8
+%14:i32 = lshr %13, 8:i32 (hasExternalUses)
+%15:i32 = xor 255:i32, %14
+%16:i32 = and %12, %15
+infer %16 (demandedBits=00000000000000000000000011111111)
+
+; *****
+; For LLVM instruction:
+;  %64 = xor i32 %60, 255
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = shl %0, 8:i32
+%2:i8 = var
+%3:i32 = zext %2
+%4:i32 = or %1, %3 (hasExternalUses)
+%5:i32 = var (range=[6,0))
+%6:i32 = add 4294967290:i32, %5 (hasExternalUses)
+%7:i32 = lshr %4, %6
+%8:i32 = and 63:i32, %7 (hasExternalUses)
+%9:i32 = addnw 65484:i32, %8
+%10:i32 = lshr %9, 8:i32 (hasExternalUses)
+%11:i32 = xor 255:i32, %10
+infer %11 (demandedBits=00000000000000000000000011111111)
+
+; *****
+; For LLVM instruction:
+;  %65 = add nuw nsw i32 %53, 65474
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = shl %0, 8:i32
+%2:i8 = var
+%3:i32 = zext %2
+%4:i32 = or %1, %3 (hasExternalUses)
+%5:i32 = var (range=[6,0))
+%6:i32 = add 4294967290:i32, %5 (hasExternalUses)
+%7:i32 = lshr %4, %6
+%8:i32 = and 63:i32, %7 (hasExternalUses)
+%9:i32 = addnw 65474:i32, %8
+infer %9 (demandedBits=00000000000000001111111100000000)
+
+; *****
+; For LLVM instruction:
+;  %66 = lshr i32 %65, 8
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = shl %0, 8:i32
+%2:i8 = var
+%3:i32 = zext %2
+%4:i32 = or %1, %3 (hasExternalUses)
+%5:i32 = var (range=[6,0))
+%6:i32 = add 4294967290:i32, %5 (hasExternalUses)
+%7:i32 = lshr %4, %6
+%8:i32 = and 63:i32, %7 (hasExternalUses)
+%9:i32 = addnw 65474:i32, %8
+%10:i32 = lshr %9, 8:i32
+infer %10 (demandedBits=00000000000000000000000011111111)
+
+; *****
+; For LLVM instruction:
+;  %67 = add nuw nsw i32 %53, 252
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = shl %0, 8:i32
+%2:i8 = var
+%3:i32 = zext %2
+%4:i32 = or %1, %3 (hasExternalUses)
+%5:i32 = var (range=[6,0))
+%6:i32 = add 4294967290:i32, %5 (hasExternalUses)
+%7:i32 = lshr %4, %6
+%8:i32 = and 63:i32, %7 (hasExternalUses)
+%9:i32 = addnw 252:i32, %8
+infer %9 (demandedBits=00000000000000000000000011111111)
+
+; *****
+; For LLVM instruction:
+;  %68 = and i32 %66, %67
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = shl %0, 8:i32
+%2:i8 = var
+%3:i32 = zext %2
+%4:i32 = or %1, %3 (hasExternalUses)
+%5:i32 = var (range=[6,0))
+%6:i32 = add 4294967290:i32, %5 (hasExternalUses)
+%7:i32 = lshr %4, %6
+%8:i32 = and 63:i32, %7 (hasExternalUses)
+%9:i32 = addnw 252:i32, %8
+%10:i32 = addnw 65474:i32, %8
+%11:i32 = lshr %10, 8:i32
+%12:i32 = and %9, %11
+infer %12 (demandedBits=00000000000000000000000011111111)
+
+; *****
+; For LLVM instruction:
+;  %69 = and i32 %68, %64
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = shl %0, 8:i32
+%2:i8 = var
+%3:i32 = zext %2
+%4:i32 = or %1, %3 (hasExternalUses)
+%5:i32 = var (range=[6,0))
+%6:i32 = add 4294967290:i32, %5 (hasExternalUses)
+%7:i32 = lshr %4, %6
+%8:i32 = and 63:i32, %7 (hasExternalUses)
+%9:i32 = addnw 252:i32, %8
+%10:i32 = addnw 65474:i32, %8
+%11:i32 = lshr %10, 8:i32
+%12:i32 = and %9, %11
+%13:i32 = addnw 65484:i32, %8
+%14:i32 = lshr %13, 8:i32 (hasExternalUses)
+%15:i32 = xor 255:i32, %14
+%16:i32 = and %12, %15
+infer %16 (demandedBits=00000000000000000000000011111111)
+
+; *****
+; For LLVM instruction:
+;  %70 = xor i32 %53, 62
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = shl %0, 8:i32
+%2:i8 = var
+%3:i32 = zext %2
+%4:i32 = or %1, %3 (hasExternalUses)
+%5:i32 = var (range=[6,0))
+%6:i32 = add 4294967290:i32, %5 (hasExternalUses)
+%7:i32 = lshr %4, %6
+%8:i32 = and 63:i32, %7 (hasExternalUses)
+%9:i32 = xor 62:i32, %8
+infer %9 (demandedBits=00000000000000000011111111111111)
+
+; *****
+; For LLVM instruction:
+;  %71 = sub nsw i32 0, %70
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = shl %0, 8:i32
+%2:i8 = var
+%3:i32 = zext %2
+%4:i32 = or %1, %3 (hasExternalUses)
+%5:i32 = var (range=[6,0))
+%6:i32 = add 4294967290:i32, %5 (hasExternalUses)
+%7:i32 = lshr %4, %6
+%8:i32 = and 63:i32, %7 (hasExternalUses)
+%9:i32 = xor 62:i32, %8
+%10:i32 = subnsw 0:i32, %9
+infer %10 (demandedBits=00000000000000000010110100000000)
+
+; *****
+; For LLVM instruction:
+;  %72 = lshr i32 %71, 8
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = shl %0, 8:i32
+%2:i8 = var
+%3:i32 = zext %2
+%4:i32 = or %1, %3 (hasExternalUses)
+%5:i32 = var (range=[6,0))
+%6:i32 = add 4294967290:i32, %5 (hasExternalUses)
+%7:i32 = lshr %4, %6
+%8:i32 = and 63:i32, %7 (hasExternalUses)
+%9:i32 = xor 62:i32, %8
+%10:i32 = subnsw 0:i32, %9
+%11:i32 = lshr %10, 8:i32
+infer %11 (demandedBits=00000000000000000000000000101101)
+
+; *****
+; For LLVM instruction:
+;  %73 = and i32 %72, 45
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = shl %0, 8:i32
+%2:i8 = var
+%3:i32 = zext %2
+%4:i32 = or %1, %3 (hasExternalUses)
+%5:i32 = var (range=[6,0))
+%6:i32 = add 4294967290:i32, %5 (hasExternalUses)
+%7:i32 = lshr %4, %6
+%8:i32 = and 63:i32, %7 (hasExternalUses)
+%9:i32 = xor 62:i32, %8
+%10:i32 = subnsw 0:i32, %9
+%11:i32 = lshr %10, 8:i32
+%12:i32 = and 45:i32, %11
+infer %12 (demandedBits=00000000000000000000000011111111)
+
+; *****
+; For LLVM instruction:
+;  %74 = xor i32 %73, 45
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = shl %0, 8:i32
+%2:i8 = var
+%3:i32 = zext %2
+%4:i32 = or %1, %3 (hasExternalUses)
+%5:i32 = var (range=[6,0))
+%6:i32 = add 4294967290:i32, %5 (hasExternalUses)
+%7:i32 = lshr %4, %6
+%8:i32 = and 63:i32, %7 (hasExternalUses)
+%9:i32 = xor 62:i32, %8
+%10:i32 = subnsw 0:i32, %9
+%11:i32 = lshr %10, 8:i32
+%12:i32 = and 45:i32, %11
+%13:i32 = xor 45:i32, %12
+infer %13 (demandedBits=00000000000000000000000011111111)
+
+; *****
+; For LLVM instruction:
+;  %75 = xor i32 %53, 63
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = shl %0, 8:i32
+%2:i8 = var
+%3:i32 = zext %2
+%4:i32 = or %1, %3 (hasExternalUses)
+%5:i32 = var (range=[6,0))
+%6:i32 = add 4294967290:i32, %5 (hasExternalUses)
+%7:i32 = lshr %4, %6
+%8:i32 = and 63:i32, %7 (hasExternalUses)
+%9:i32 = xor 63:i32, %8
+infer %9 (demandedBits=00000000000000000111111111111111)
+
+; *****
+; For LLVM instruction:
+;  %76 = sub nsw i32 0, %75
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = shl %0, 8:i32
+%2:i8 = var
+%3:i32 = zext %2
+%4:i32 = or %1, %3 (hasExternalUses)
+%5:i32 = var (range=[6,0))
+%6:i32 = add 4294967290:i32, %5 (hasExternalUses)
+%7:i32 = lshr %4, %6
+%8:i32 = and 63:i32, %7 (hasExternalUses)
+%9:i32 = xor 63:i32, %8
+%10:i32 = subnsw 0:i32, %9
+infer %10 (demandedBits=00000000000000000101111100000000)
+
+; *****
+; For LLVM instruction:
+;  %77 = lshr i32 %76, 8
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = shl %0, 8:i32
+%2:i8 = var
+%3:i32 = zext %2
+%4:i32 = or %1, %3 (hasExternalUses)
+%5:i32 = var (range=[6,0))
+%6:i32 = add 4294967290:i32, %5 (hasExternalUses)
+%7:i32 = lshr %4, %6
+%8:i32 = and 63:i32, %7 (hasExternalUses)
+%9:i32 = xor 63:i32, %8
+%10:i32 = subnsw 0:i32, %9
+%11:i32 = lshr %10, 8:i32
+infer %11 (demandedBits=00000000000000000000000001011111)
+
+; *****
+; For LLVM instruction:
+;  %78 = and i32 %77, 95
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = shl %0, 8:i32
+%2:i8 = var
+%3:i32 = zext %2
+%4:i32 = or %1, %3 (hasExternalUses)
+%5:i32 = var (range=[6,0))
+%6:i32 = add 4294967290:i32, %5 (hasExternalUses)
+%7:i32 = lshr %4, %6
+%8:i32 = and 63:i32, %7 (hasExternalUses)
+%9:i32 = xor 63:i32, %8
+%10:i32 = subnsw 0:i32, %9
+%11:i32 = lshr %10, 8:i32
+%12:i32 = and 95:i32, %11
+infer %12 (demandedBits=00000000000000000000000011111111)
+
+; *****
+; For LLVM instruction:
+;  %79 = xor i32 %78, 95
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = shl %0, 8:i32
+%2:i8 = var
+%3:i32 = zext %2
+%4:i32 = or %1, %3 (hasExternalUses)
+%5:i32 = var (range=[6,0))
+%6:i32 = add 4294967290:i32, %5 (hasExternalUses)
+%7:i32 = lshr %4, %6
+%8:i32 = and 63:i32, %7 (hasExternalUses)
+%9:i32 = xor 63:i32, %8
+%10:i32 = subnsw 0:i32, %9
+%11:i32 = lshr %10, 8:i32
+%12:i32 = and 95:i32, %11
+%13:i32 = xor 95:i32, %12
+infer %13 (demandedBits=00000000000000000000000011111111)
+
+; *****
+; For LLVM instruction:
+;  %80 = or i32 %74, %57
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = shl %0, 8:i32
+%2:i8 = var
+%3:i32 = zext %2
+%4:i32 = or %1, %3 (hasExternalUses)
+%5:i32 = var (range=[6,0))
+%6:i32 = add 4294967290:i32, %5 (hasExternalUses)
+%7:i32 = lshr %4, %6
+%8:i32 = and 63:i32, %7 (hasExternalUses)
+%9:i32 = addnw 65:i32, %8
+%10:i32 = addnw 65510:i32, %8
+%11:i32 = lshr %10, 8:i32 (hasExternalUses)
+%12:i32 = and %9, %11
+%13:i32 = xor 62:i32, %8
+%14:i32 = subnsw 0:i32, %13
+%15:i32 = lshr %14, 8:i32
+%16:i32 = and 45:i32, %15
+%17:i32 = xor 45:i32, %16
+%18:i32 = or %12, %17
+infer %18 (demandedBits=00000000000000000000000011111111)
+
+; *****
+; For LLVM instruction:
+;  %81 = or i32 %80, %79
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = shl %0, 8:i32
+%2:i8 = var
+%3:i32 = zext %2
+%4:i32 = or %1, %3 (hasExternalUses)
+%5:i32 = var (range=[6,0))
+%6:i32 = add 4294967290:i32, %5 (hasExternalUses)
+%7:i32 = lshr %4, %6
+%8:i32 = and 63:i32, %7 (hasExternalUses)
+%9:i32 = addnw 65:i32, %8
+%10:i32 = addnw 65510:i32, %8
+%11:i32 = lshr %10, 8:i32 (hasExternalUses)
+%12:i32 = and %9, %11
+%13:i32 = xor 62:i32, %8
+%14:i32 = subnsw 0:i32, %13
+%15:i32 = lshr %14, 8:i32
+%16:i32 = and 45:i32, %15
+%17:i32 = xor 45:i32, %16
+%18:i32 = or %12, %17
+%19:i32 = xor 63:i32, %8
+%20:i32 = subnsw 0:i32, %19
+%21:i32 = lshr %20, 8:i32
+%22:i32 = and 95:i32, %21
+%23:i32 = xor 95:i32, %22
+%24:i32 = or %18, %23
+infer %24 (demandedBits=00000000000000000000000011111111)
+
+; *****
+; For LLVM instruction:
+;  %82 = or i32 %81, %63
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = shl %0, 8:i32
+%2:i8 = var
+%3:i32 = zext %2
+%4:i32 = or %1, %3 (hasExternalUses)
+%5:i32 = var (range=[6,0))
+%6:i32 = add 4294967290:i32, %5 (hasExternalUses)
+%7:i32 = lshr %4, %6
+%8:i32 = and 63:i32, %7 (hasExternalUses)
+%9:i32 = addnw 71:i32, %8
+%10:i32 = addnw 65484:i32, %8
+%11:i32 = lshr %10, 8:i32 (hasExternalUses)
+%12:i32 = and %9, %11
+%13:i32 = addnw 65510:i32, %8
+%14:i32 = lshr %13, 8:i32
+%15:i32 = xor 255:i32, %14
+%16:i32 = and %12, %15
+%17:i32 = addnw 65:i32, %8
+%18:i32 = and %17, %14
+%19:i32 = xor 62:i32, %8
+%20:i32 = subnsw 0:i32, %19
+%21:i32 = lshr %20, 8:i32
+%22:i32 = and 45:i32, %21
+%23:i32 = xor 45:i32, %22
+%24:i32 = or %18, %23
+%25:i32 = xor 63:i32, %8
+%26:i32 = subnsw 0:i32, %25
+%27:i32 = lshr %26, 8:i32
+%28:i32 = and 95:i32, %27
+%29:i32 = xor 95:i32, %28
+%30:i32 = or %24, %29
+%31:i32 = or %16, %30
+infer %31 (demandedBits=00000000000000000000000011111111)
+
+; *****
+; For LLVM instruction:
+;  %83 = or i32 %82, %69
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = shl %0, 8:i32
+%2:i8 = var
+%3:i32 = zext %2
+%4:i32 = or %1, %3 (hasExternalUses)
+%5:i32 = var (range=[6,0))
+%6:i32 = add 4294967290:i32, %5 (hasExternalUses)
+%7:i32 = lshr %4, %6
+%8:i32 = and 63:i32, %7
+%9:i32 = addnw 252:i32, %8
+%10:i32 = addnw 65474:i32, %8
+%11:i32 = lshr %10, 8:i32
+%12:i32 = and %9, %11
+%13:i32 = addnw 65484:i32, %8
+%14:i32 = lshr %13, 8:i32
+%15:i32 = xor 255:i32, %14
+%16:i32 = and %12, %15
+%17:i32 = addnw 71:i32, %8
+%18:i32 = and %17, %14
+%19:i32 = addnw 65510:i32, %8
+%20:i32 = lshr %19, 8:i32
+%21:i32 = xor 255:i32, %20
+%22:i32 = and %18, %21
+%23:i32 = addnw 65:i32, %8
+%24:i32 = and %23, %20
+%25:i32 = xor 62:i32, %8
+%26:i32 = subnsw 0:i32, %25
+%27:i32 = lshr %26, 8:i32
+%28:i32 = and 45:i32, %27
+%29:i32 = xor 45:i32, %28
+%30:i32 = or %24, %29
+%31:i32 = xor 63:i32, %8
+%32:i32 = subnsw 0:i32, %31
+%33:i32 = lshr %32, 8:i32
+%34:i32 = and 95:i32, %33
+%35:i32 = xor 95:i32, %34
+%36:i32 = or %30, %35
+%37:i32 = or %22, %36
+%38:i32 = or %16, %37
+infer %38 (demandedBits=00000000000000000000000011111111)
+
+; *****
+; For LLVM instruction:
+;  %84 = trunc i32 %83 to i8
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = shl %0, 8:i32
+%2:i8 = var
+%3:i32 = zext %2
+%4:i32 = or %1, %3 (hasExternalUses)
+%5:i32 = var (range=[6,0))
+%6:i32 = add 4294967290:i32, %5 (hasExternalUses)
+%7:i32 = lshr %4, %6
+%8:i32 = and 63:i32, %7
+%9:i32 = addnw 252:i32, %8
+%10:i32 = addnw 65474:i32, %8
+%11:i32 = lshr %10, 8:i32
+%12:i32 = and %9, %11
+%13:i32 = addnw 65484:i32, %8
+%14:i32 = lshr %13, 8:i32
+%15:i32 = xor 255:i32, %14
+%16:i32 = and %12, %15
+%17:i32 = addnw 71:i32, %8
+%18:i32 = and %17, %14
+%19:i32 = addnw 65510:i32, %8
+%20:i32 = lshr %19, 8:i32
+%21:i32 = xor 255:i32, %20
+%22:i32 = and %18, %21
+%23:i32 = addnw 65:i32, %8
+%24:i32 = and %23, %20
+%25:i32 = xor 62:i32, %8
+%26:i32 = subnsw 0:i32, %25
+%27:i32 = lshr %26, 8:i32
+%28:i32 = and 45:i32, %27
+%29:i32 = xor 45:i32, %28
+%30:i32 = or %24, %29
+%31:i32 = xor 63:i32, %8
+%32:i32 = subnsw 0:i32, %31
+%33:i32 = lshr %32, 8:i32
+%34:i32 = and 95:i32, %33
+%35:i32 = xor 95:i32, %34
+%36:i32 = or %30, %35
+%37:i32 = or %22, %36
+%38:i32 = or %16, %37
+%39:i8 = trunc %38
+infer %39
+
+; *****
+; For LLVM instruction:
+;  %85 = add i32 %50, 1
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = add 1:i32, %0
+infer %1
+
+; *****
+; For LLVM instruction:
+;  %87 = icmp ugt i32 %51, 5
+; Looking for a replacement for:
+%0:i32 = var (range=[6,0))
+%1:i32 = add 4294967290:i32, %0 (hasExternalUses)
+%2:i1 = ult 5:i32, %1
+infer %2
+
+; *****
+; For LLVM instruction:
+;  %89 = icmp eq i32 %51, 0
+; Looking for a replacement for:
+%0:i32 = var (range=[6,0))
+%1:i32 = add 4294967290:i32, %0 (hasExternalUses)
+%2:i1 = ult 5:i32, %1
+pc %2 0:i1
+%3:i1 = eq 0:i32, %1
+infer %3
+
+; *****
+; For LLVM instruction:
+;  %91 = sub i32 12, %49
+; Looking for a replacement for:
+%0:i32 = var (range=[6,0))
+%1:i32 = add 4294967290:i32, %0 (hasExternalUses)
+%2:i1 = ult 5:i32, %1
+pc %2 0:i1
+%3:i1 = eq 0:i32, %1
+pc %3 0:i1
+%4:i32 = sub 12:i32, %0
+infer %4
+
+; *****
+; For LLVM instruction:
+;  %92 = shl i32 %46, %91
+; Looking for a replacement for:
+%0:i32 = var (range=[6,0))
+%1:i32 = add 4294967290:i32, %0 (hasExternalUses)
+%2:i1 = ult 5:i32, %1
+pc %2 0:i1
+%3:i1 = eq 0:i32, %1
+pc %3 0:i1
+%4:i32 = var
+%5:i32 = shl %4, 8:i32
+%6:i8 = var
+%7:i32 = zext %6
+%8:i32 = or %5, %7 (hasExternalUses)
+%9:i32 = sub 12:i32, %0
+%10:i32 = shl %8, %9
+infer %10 (demandedBits=00000000000000000000000000111111)
+
+; *****
+; For LLVM instruction:
+;  %93 = and i32 %92, 63
+; Looking for a replacement for:
+%0:i32 = var (range=[6,0))
+%1:i32 = add 4294967290:i32, %0 (hasExternalUses)
+%2:i1 = ult 5:i32, %1
+pc %2 0:i1
+%3:i1 = eq 0:i32, %1
+pc %3 0:i1
+%4:i32 = var
+%5:i32 = shl %4, 8:i32
+%6:i8 = var
+%7:i32 = zext %6
+%8:i32 = or %5, %7 (hasExternalUses)
+%9:i32 = sub 12:i32, %0
+%10:i32 = shl %8, %9
+%11:i32 = and 63:i32, %10
+infer %11 (demandedBits=00000000000000001111111111111111)
+
+; *****
+; For LLVM instruction:
+;  %94 = add nuw nsw i32 %93, 65510
+; Looking for a replacement for:
+%0:i32 = var (range=[6,0))
+%1:i32 = add 4294967290:i32, %0 (hasExternalUses)
+%2:i1 = ult 5:i32, %1
+pc %2 0:i1
+%3:i1 = eq 0:i32, %1
+pc %3 0:i1
+%4:i32 = var
+%5:i32 = shl %4, 8:i32
+%6:i8 = var
+%7:i32 = zext %6
+%8:i32 = or %5, %7 (hasExternalUses)
+%9:i32 = sub 12:i32, %0
+%10:i32 = shl %8, %9
+%11:i32 = and 63:i32, %10 (hasExternalUses)
+%12:i32 = addnw 65510:i32, %11
+infer %12 (demandedBits=00000000000000001111111100000000)
+
+; *****
+; For LLVM instruction:
+;  %95 = lshr i32 %94, 8
+; Looking for a replacement for:
+%0:i32 = var (range=[6,0))
+%1:i32 = add 4294967290:i32, %0 (hasExternalUses)
+%2:i1 = ult 5:i32, %1
+pc %2 0:i1
+%3:i1 = eq 0:i32, %1
+pc %3 0:i1
+%4:i32 = var
+%5:i32 = shl %4, 8:i32
+%6:i8 = var
+%7:i32 = zext %6
+%8:i32 = or %5, %7 (hasExternalUses)
+%9:i32 = sub 12:i32, %0
+%10:i32 = shl %8, %9
+%11:i32 = and 63:i32, %10 (hasExternalUses)
+%12:i32 = addnw 65510:i32, %11
+%13:i32 = lshr %12, 8:i32
+infer %13 (demandedBits=00000000000000000000000011111111)
+
+; *****
+; For LLVM instruction:
+;  %96 = add nuw nsw i32 %93, 65
+; Looking for a replacement for:
+%0:i32 = var (range=[6,0))
+%1:i32 = add 4294967290:i32, %0 (hasExternalUses)
+%2:i1 = ult 5:i32, %1
+pc %2 0:i1
+%3:i1 = eq 0:i32, %1
+pc %3 0:i1
+%4:i32 = var
+%5:i32 = shl %4, 8:i32
+%6:i8 = var
+%7:i32 = zext %6
+%8:i32 = or %5, %7 (hasExternalUses)
+%9:i32 = sub 12:i32, %0
+%10:i32 = shl %8, %9
+%11:i32 = and 63:i32, %10 (hasExternalUses)
+%12:i32 = addnw 65:i32, %11
+infer %12 (demandedBits=00000000000000000000000011111111)
+
+; *****
+; For LLVM instruction:
+;  %97 = and i32 %95, %96
+; Looking for a replacement for:
+%0:i32 = var (range=[6,0))
+%1:i32 = add 4294967290:i32, %0 (hasExternalUses)
+%2:i1 = ult 5:i32, %1
+pc %2 0:i1
+%3:i1 = eq 0:i32, %1
+pc %3 0:i1
+%4:i32 = var
+%5:i32 = shl %4, 8:i32
+%6:i8 = var
+%7:i32 = zext %6
+%8:i32 = or %5, %7 (hasExternalUses)
+%9:i32 = sub 12:i32, %0
+%10:i32 = shl %8, %9
+%11:i32 = and 63:i32, %10 (hasExternalUses)
+%12:i32 = addnw 65:i32, %11
+%13:i32 = addnw 65510:i32, %11
+%14:i32 = lshr %13, 8:i32 (hasExternalUses)
+%15:i32 = and %12, %14
+infer %15 (demandedBits=00000000000000000000000011111111)
+
+; *****
+; For LLVM instruction:
+;  %98 = xor i32 %95, 255
+; Looking for a replacement for:
+%0:i32 = var (range=[6,0))
+%1:i32 = add 4294967290:i32, %0 (hasExternalUses)
+%2:i1 = ult 5:i32, %1
+pc %2 0:i1
+%3:i1 = eq 0:i32, %1
+pc %3 0:i1
+%4:i32 = var
+%5:i32 = shl %4, 8:i32
+%6:i8 = var
+%7:i32 = zext %6
+%8:i32 = or %5, %7 (hasExternalUses)
+%9:i32 = sub 12:i32, %0
+%10:i32 = shl %8, %9
+%11:i32 = and 63:i32, %10 (hasExternalUses)
+%12:i32 = addnw 65510:i32, %11
+%13:i32 = lshr %12, 8:i32 (hasExternalUses)
+%14:i32 = xor 255:i32, %13
+infer %14 (demandedBits=00000000000000000000000011111111)
+
+; *****
+; For LLVM instruction:
+;  %99 = add nuw nsw i32 %93, 65484
+; Looking for a replacement for:
+%0:i32 = var (range=[6,0))
+%1:i32 = add 4294967290:i32, %0 (hasExternalUses)
+%2:i1 = ult 5:i32, %1
+pc %2 0:i1
+%3:i1 = eq 0:i32, %1
+pc %3 0:i1
+%4:i32 = var
+%5:i32 = shl %4, 8:i32
+%6:i8 = var
+%7:i32 = zext %6
+%8:i32 = or %5, %7 (hasExternalUses)
+%9:i32 = sub 12:i32, %0
+%10:i32 = shl %8, %9
+%11:i32 = and 63:i32, %10 (hasExternalUses)
+%12:i32 = addnw 65484:i32, %11
+infer %12 (demandedBits=00000000000000001111111100000000)
+
+; *****
+; For LLVM instruction:
+;  %100 = lshr i32 %99, 8
+; Looking for a replacement for:
+%0:i32 = var (range=[6,0))
+%1:i32 = add 4294967290:i32, %0 (hasExternalUses)
+%2:i1 = ult 5:i32, %1
+pc %2 0:i1
+%3:i1 = eq 0:i32, %1
+pc %3 0:i1
+%4:i32 = var
+%5:i32 = shl %4, 8:i32
+%6:i8 = var
+%7:i32 = zext %6
+%8:i32 = or %5, %7 (hasExternalUses)
+%9:i32 = sub 12:i32, %0
+%10:i32 = shl %8, %9
+%11:i32 = and 63:i32, %10 (hasExternalUses)
+%12:i32 = addnw 65484:i32, %11
+%13:i32 = lshr %12, 8:i32
+infer %13 (demandedBits=00000000000000000000000011111111)
+
+; *****
+; For LLVM instruction:
+;  %101 = add nuw nsw i32 %93, 71
+; Looking for a replacement for:
+%0:i32 = var (range=[6,0))
+%1:i32 = add 4294967290:i32, %0 (hasExternalUses)
+%2:i1 = ult 5:i32, %1
+pc %2 0:i1
+%3:i1 = eq 0:i32, %1
+pc %3 0:i1
+%4:i32 = var
+%5:i32 = shl %4, 8:i32
+%6:i8 = var
+%7:i32 = zext %6
+%8:i32 = or %5, %7 (hasExternalUses)
+%9:i32 = sub 12:i32, %0
+%10:i32 = shl %8, %9
+%11:i32 = and 63:i32, %10 (hasExternalUses)
+%12:i32 = addnw 71:i32, %11
+infer %12 (demandedBits=00000000000000000000000011111111)
+
+; *****
+; For LLVM instruction:
+;  %102 = and i32 %100, %101
+; Looking for a replacement for:
+%0:i32 = var (range=[6,0))
+%1:i32 = add 4294967290:i32, %0 (hasExternalUses)
+%2:i1 = ult 5:i32, %1
+pc %2 0:i1
+%3:i1 = eq 0:i32, %1
+pc %3 0:i1
+%4:i32 = var
+%5:i32 = shl %4, 8:i32
+%6:i8 = var
+%7:i32 = zext %6
+%8:i32 = or %5, %7 (hasExternalUses)
+%9:i32 = sub 12:i32, %0
+%10:i32 = shl %8, %9
+%11:i32 = and 63:i32, %10 (hasExternalUses)
+%12:i32 = addnw 71:i32, %11
+%13:i32 = addnw 65484:i32, %11
+%14:i32 = lshr %13, 8:i32 (hasExternalUses)
+%15:i32 = and %12, %14
+infer %15 (demandedBits=00000000000000000000000011111111)
+
+; *****
+; For LLVM instruction:
+;  %103 = and i32 %102, %98
+; Looking for a replacement for:
+%0:i32 = var (range=[6,0))
+%1:i32 = add 4294967290:i32, %0 (hasExternalUses)
+%2:i1 = ult 5:i32, %1
+pc %2 0:i1
+%3:i1 = eq 0:i32, %1
+pc %3 0:i1
+%4:i32 = var
+%5:i32 = shl %4, 8:i32
+%6:i8 = var
+%7:i32 = zext %6
+%8:i32 = or %5, %7 (hasExternalUses)
+%9:i32 = sub 12:i32, %0
+%10:i32 = shl %8, %9
+%11:i32 = and 63:i32, %10 (hasExternalUses)
+%12:i32 = addnw 71:i32, %11
+%13:i32 = addnw 65484:i32, %11
+%14:i32 = lshr %13, 8:i32 (hasExternalUses)
+%15:i32 = and %12, %14
+%16:i32 = addnw 65510:i32, %11
+%17:i32 = lshr %16, 8:i32 (hasExternalUses)
+%18:i32 = xor 255:i32, %17
+%19:i32 = and %15, %18
+infer %19 (demandedBits=00000000000000000000000011111111)
+
+; *****
+; For LLVM instruction:
+;  %104 = xor i32 %100, 255
+; Looking for a replacement for:
+%0:i32 = var (range=[6,0))
+%1:i32 = add 4294967290:i32, %0 (hasExternalUses)
+%2:i1 = ult 5:i32, %1
+pc %2 0:i1
+%3:i1 = eq 0:i32, %1
+pc %3 0:i1
+%4:i32 = var
+%5:i32 = shl %4, 8:i32
+%6:i8 = var
+%7:i32 = zext %6
+%8:i32 = or %5, %7 (hasExternalUses)
+%9:i32 = sub 12:i32, %0
+%10:i32 = shl %8, %9
+%11:i32 = and 63:i32, %10 (hasExternalUses)
+%12:i32 = addnw 65484:i32, %11
+%13:i32 = lshr %12, 8:i32 (hasExternalUses)
+%14:i32 = xor 255:i32, %13
+infer %14 (demandedBits=00000000000000000000000011111111)
+
+; *****
+; For LLVM instruction:
+;  %105 = add nuw nsw i32 %93, 65474
+; Looking for a replacement for:
+%0:i32 = var (range=[6,0))
+%1:i32 = add 4294967290:i32, %0 (hasExternalUses)
+%2:i1 = ult 5:i32, %1
+pc %2 0:i1
+%3:i1 = eq 0:i32, %1
+pc %3 0:i1
+%4:i32 = var
+%5:i32 = shl %4, 8:i32
+%6:i8 = var
+%7:i32 = zext %6
+%8:i32 = or %5, %7 (hasExternalUses)
+%9:i32 = sub 12:i32, %0
+%10:i32 = shl %8, %9
+%11:i32 = and 63:i32, %10 (hasExternalUses)
+%12:i32 = addnw 65474:i32, %11
+infer %12 (demandedBits=00000000000000001111111100000000)
+
+; *****
+; For LLVM instruction:
+;  %106 = lshr i32 %105, 8
+; Looking for a replacement for:
+%0:i32 = var (range=[6,0))
+%1:i32 = add 4294967290:i32, %0 (hasExternalUses)
+%2:i1 = ult 5:i32, %1
+pc %2 0:i1
+%3:i1 = eq 0:i32, %1
+pc %3 0:i1
+%4:i32 = var
+%5:i32 = shl %4, 8:i32
+%6:i8 = var
+%7:i32 = zext %6
+%8:i32 = or %5, %7 (hasExternalUses)
+%9:i32 = sub 12:i32, %0
+%10:i32 = shl %8, %9
+%11:i32 = and 63:i32, %10 (hasExternalUses)
+%12:i32 = addnw 65474:i32, %11
+%13:i32 = lshr %12, 8:i32
+infer %13 (demandedBits=00000000000000000000000011111111)
+
+; *****
+; For LLVM instruction:
+;  %107 = add nuw nsw i32 %93, 252
+; Looking for a replacement for:
+%0:i32 = var (range=[6,0))
+%1:i32 = add 4294967290:i32, %0 (hasExternalUses)
+%2:i1 = ult 5:i32, %1
+pc %2 0:i1
+%3:i1 = eq 0:i32, %1
+pc %3 0:i1
+%4:i32 = var
+%5:i32 = shl %4, 8:i32
+%6:i8 = var
+%7:i32 = zext %6
+%8:i32 = or %5, %7 (hasExternalUses)
+%9:i32 = sub 12:i32, %0
+%10:i32 = shl %8, %9
+%11:i32 = and 63:i32, %10 (hasExternalUses)
+%12:i32 = addnw 252:i32, %11
+infer %12 (demandedBits=00000000000000000000000011111111)
+
+; *****
+; For LLVM instruction:
+;  %108 = and i32 %106, %107
+; Looking for a replacement for:
+%0:i32 = var (range=[6,0))
+%1:i32 = add 4294967290:i32, %0 (hasExternalUses)
+%2:i1 = ult 5:i32, %1
+pc %2 0:i1
+%3:i1 = eq 0:i32, %1
+pc %3 0:i1
+%4:i32 = var
+%5:i32 = shl %4, 8:i32
+%6:i8 = var
+%7:i32 = zext %6
+%8:i32 = or %5, %7 (hasExternalUses)
+%9:i32 = sub 12:i32, %0
+%10:i32 = shl %8, %9
+%11:i32 = and 63:i32, %10 (hasExternalUses)
+%12:i32 = addnw 252:i32, %11
+%13:i32 = addnw 65474:i32, %11
+%14:i32 = lshr %13, 8:i32
+%15:i32 = and %12, %14
+infer %15 (demandedBits=00000000000000000000000011111111)
+
+; *****
+; For LLVM instruction:
+;  %109 = and i32 %108, %104
+; Looking for a replacement for:
+%0:i32 = var (range=[6,0))
+%1:i32 = add 4294967290:i32, %0 (hasExternalUses)
+%2:i1 = ult 5:i32, %1
+pc %2 0:i1
+%3:i1 = eq 0:i32, %1
+pc %3 0:i1
+%4:i32 = var
+%5:i32 = shl %4, 8:i32
+%6:i8 = var
+%7:i32 = zext %6
+%8:i32 = or %5, %7 (hasExternalUses)
+%9:i32 = sub 12:i32, %0
+%10:i32 = shl %8, %9
+%11:i32 = and 63:i32, %10 (hasExternalUses)
+%12:i32 = addnw 252:i32, %11
+%13:i32 = addnw 65474:i32, %11
+%14:i32 = lshr %13, 8:i32
+%15:i32 = and %12, %14
+%16:i32 = addnw 65484:i32, %11
+%17:i32 = lshr %16, 8:i32 (hasExternalUses)
+%18:i32 = xor 255:i32, %17
+%19:i32 = and %15, %18
+infer %19 (demandedBits=00000000000000000000000011111111)
+
+; *****
+; For LLVM instruction:
+;  %110 = xor i32 %93, 62
+; Looking for a replacement for:
+%0:i32 = var (range=[6,0))
+%1:i32 = add 4294967290:i32, %0 (hasExternalUses)
+%2:i1 = ult 5:i32, %1
+pc %2 0:i1
+%3:i1 = eq 0:i32, %1
+pc %3 0:i1
+%4:i32 = var
+%5:i32 = shl %4, 8:i32
+%6:i8 = var
+%7:i32 = zext %6
+%8:i32 = or %5, %7 (hasExternalUses)
+%9:i32 = sub 12:i32, %0
+%10:i32 = shl %8, %9
+%11:i32 = and 63:i32, %10 (hasExternalUses)
+%12:i32 = xor 62:i32, %11
+infer %12 (demandedBits=00000000000000000011111111111111)
+
+; *****
+; For LLVM instruction:
+;  %111 = sub nsw i32 0, %110
+; Looking for a replacement for:
+%0:i32 = var (range=[6,0))
+%1:i32 = add 4294967290:i32, %0 (hasExternalUses)
+%2:i1 = ult 5:i32, %1
+pc %2 0:i1
+%3:i1 = eq 0:i32, %1
+pc %3 0:i1
+%4:i32 = var
+%5:i32 = shl %4, 8:i32
+%6:i8 = var
+%7:i32 = zext %6
+%8:i32 = or %5, %7 (hasExternalUses)
+%9:i32 = sub 12:i32, %0
+%10:i32 = shl %8, %9
+%11:i32 = and 63:i32, %10 (hasExternalUses)
+%12:i32 = xor 62:i32, %11
+%13:i32 = subnsw 0:i32, %12
+infer %13 (demandedBits=00000000000000000010110100000000)
+
+; *****
+; For LLVM instruction:
+;  %112 = lshr i32 %111, 8
+; Looking for a replacement for:
+%0:i32 = var (range=[6,0))
+%1:i32 = add 4294967290:i32, %0 (hasExternalUses)
+%2:i1 = ult 5:i32, %1
+pc %2 0:i1
+%3:i1 = eq 0:i32, %1
+pc %3 0:i1
+%4:i32 = var
+%5:i32 = shl %4, 8:i32
+%6:i8 = var
+%7:i32 = zext %6
+%8:i32 = or %5, %7 (hasExternalUses)
+%9:i32 = sub 12:i32, %0
+%10:i32 = shl %8, %9
+%11:i32 = and 63:i32, %10 (hasExternalUses)
+%12:i32 = xor 62:i32, %11
+%13:i32 = subnsw 0:i32, %12
+%14:i32 = lshr %13, 8:i32
+infer %14 (demandedBits=00000000000000000000000000101101)
+
+; *****
+; For LLVM instruction:
+;  %113 = and i32 %112, 45
+; Looking for a replacement for:
+%0:i32 = var (range=[6,0))
+%1:i32 = add 4294967290:i32, %0 (hasExternalUses)
+%2:i1 = ult 5:i32, %1
+pc %2 0:i1
+%3:i1 = eq 0:i32, %1
+pc %3 0:i1
+%4:i32 = var
+%5:i32 = shl %4, 8:i32
+%6:i8 = var
+%7:i32 = zext %6
+%8:i32 = or %5, %7 (hasExternalUses)
+%9:i32 = sub 12:i32, %0
+%10:i32 = shl %8, %9
+%11:i32 = and 63:i32, %10 (hasExternalUses)
+%12:i32 = xor 62:i32, %11
+%13:i32 = subnsw 0:i32, %12
+%14:i32 = lshr %13, 8:i32
+%15:i32 = and 45:i32, %14
+infer %15 (demandedBits=00000000000000000000000011111111)
+
+; *****
+; For LLVM instruction:
+;  %114 = xor i32 %113, 45
+; Looking for a replacement for:
+%0:i32 = var (range=[6,0))
+%1:i32 = add 4294967290:i32, %0 (hasExternalUses)
+%2:i1 = ult 5:i32, %1
+pc %2 0:i1
+%3:i1 = eq 0:i32, %1
+pc %3 0:i1
+%4:i32 = var
+%5:i32 = shl %4, 8:i32
+%6:i8 = var
+%7:i32 = zext %6
+%8:i32 = or %5, %7 (hasExternalUses)
+%9:i32 = sub 12:i32, %0
+%10:i32 = shl %8, %9
+%11:i32 = and 63:i32, %10 (hasExternalUses)
+%12:i32 = xor 62:i32, %11
+%13:i32 = subnsw 0:i32, %12
+%14:i32 = lshr %13, 8:i32
+%15:i32 = and 45:i32, %14
+%16:i32 = xor 45:i32, %15
+infer %16 (demandedBits=00000000000000000000000011111111)
+
+; *****
+; For LLVM instruction:
+;  %115 = or i32 %114, %97
+; Looking for a replacement for:
+%0:i32 = var (range=[6,0))
+%1:i32 = add 4294967290:i32, %0 (hasExternalUses)
+%2:i1 = ult 5:i32, %1
+pc %2 0:i1
+%3:i1 = eq 0:i32, %1
+pc %3 0:i1
+%4:i32 = var
+%5:i32 = shl %4, 8:i32
+%6:i8 = var
+%7:i32 = zext %6
+%8:i32 = or %5, %7 (hasExternalUses)
+%9:i32 = sub 12:i32, %0
+%10:i32 = shl %8, %9
+%11:i32 = and 63:i32, %10 (hasExternalUses)
+%12:i32 = addnw 65:i32, %11
+%13:i32 = addnw 65510:i32, %11
+%14:i32 = lshr %13, 8:i32 (hasExternalUses)
+%15:i32 = and %12, %14
+%16:i32 = xor 62:i32, %11
+%17:i32 = subnsw 0:i32, %16
+%18:i32 = lshr %17, 8:i32
+%19:i32 = and 45:i32, %18
+%20:i32 = xor 45:i32, %19
+%21:i32 = or %15, %20
+infer %21 (demandedBits=00000000000000000000000011111111)
+
+; *****
+; For LLVM instruction:
+;  %116 = or i32 %115, 0
+; Looking for a replacement for:
+%0:i32 = var (range=[6,0))
+%1:i32 = add 4294967290:i32, %0 (hasExternalUses)
+%2:i1 = ult 5:i32, %1
+pc %2 0:i1
+%3:i1 = eq 0:i32, %1
+pc %3 0:i1
+%4:i32 = var
+%5:i32 = shl %4, 8:i32
+%6:i8 = var
+%7:i32 = zext %6
+%8:i32 = or %5, %7 (hasExternalUses)
+%9:i32 = sub 12:i32, %0
+%10:i32 = shl %8, %9
+%11:i32 = and 63:i32, %10 (hasExternalUses)
+%12:i32 = addnw 65:i32, %11
+%13:i32 = addnw 65510:i32, %11
+%14:i32 = lshr %13, 8:i32 (hasExternalUses)
+%15:i32 = and %12, %14
+%16:i32 = xor 62:i32, %11
+%17:i32 = subnsw 0:i32, %16
+%18:i32 = lshr %17, 8:i32
+%19:i32 = and 45:i32, %18
+%20:i32 = xor 45:i32, %19
+%21:i32 = or %15, %20
+%22:i32 = or 0:i32, %21
+infer %22 (demandedBits=00000000000000000000000011111111)
+
+; *****
+; For LLVM instruction:
+;  %117 = or i32 %116, %103
+; Looking for a replacement for:
+%0:i32 = var (range=[6,0))
+%1:i32 = add 4294967290:i32, %0 (hasExternalUses)
+%2:i1 = ult 5:i32, %1
+pc %2 0:i1
+%3:i1 = eq 0:i32, %1
+pc %3 0:i1
+%4:i32 = var
+%5:i32 = shl %4, 8:i32
+%6:i8 = var
+%7:i32 = zext %6
+%8:i32 = or %5, %7 (hasExternalUses)
+%9:i32 = sub 12:i32, %0
+%10:i32 = shl %8, %9
+%11:i32 = and 63:i32, %10 (hasExternalUses)
+%12:i32 = addnw 71:i32, %11
+%13:i32 = addnw 65484:i32, %11
+%14:i32 = lshr %13, 8:i32 (hasExternalUses)
+%15:i32 = and %12, %14
+%16:i32 = addnw 65510:i32, %11
+%17:i32 = lshr %16, 8:i32
+%18:i32 = xor 255:i32, %17
+%19:i32 = and %15, %18
+%20:i32 = addnw 65:i32, %11
+%21:i32 = and %20, %17
+%22:i32 = xor 62:i32, %11
+%23:i32 = subnsw 0:i32, %22
+%24:i32 = lshr %23, 8:i32
+%25:i32 = and 45:i32, %24
+%26:i32 = xor 45:i32, %25
+%27:i32 = or %21, %26
+%28:i32 = or 0:i32, %27
+%29:i32 = or %19, %28
+infer %29 (demandedBits=00000000000000000000000011111111)
+
+; *****
+; For LLVM instruction:
+;  %118 = or i32 %117, %109
+; Looking for a replacement for:
+%0:i32 = var (range=[6,0))
+%1:i32 = add 4294967290:i32, %0 (hasExternalUses)
+%2:i1 = ult 5:i32, %1
+pc %2 0:i1
+%3:i1 = eq 0:i32, %1
+pc %3 0:i1
+%4:i32 = var
+%5:i32 = shl %4, 8:i32
+%6:i8 = var
+%7:i32 = zext %6
+%8:i32 = or %5, %7 (hasExternalUses)
+%9:i32 = sub 12:i32, %0
+%10:i32 = shl %8, %9
+%11:i32 = and 63:i32, %10
+%12:i32 = addnw 252:i32, %11
+%13:i32 = addnw 65474:i32, %11
+%14:i32 = lshr %13, 8:i32
+%15:i32 = and %12, %14
+%16:i32 = addnw 65484:i32, %11
+%17:i32 = lshr %16, 8:i32
+%18:i32 = xor 255:i32, %17
+%19:i32 = and %15, %18
+%20:i32 = addnw 71:i32, %11
+%21:i32 = and %20, %17
+%22:i32 = addnw 65510:i32, %11
+%23:i32 = lshr %22, 8:i32
+%24:i32 = xor 255:i32, %23
+%25:i32 = and %21, %24
+%26:i32 = addnw 65:i32, %11
+%27:i32 = and %26, %23
+%28:i32 = xor 62:i32, %11
+%29:i32 = subnsw 0:i32, %28
+%30:i32 = lshr %29, 8:i32
+%31:i32 = and 45:i32, %30
+%32:i32 = xor 45:i32, %31
+%33:i32 = or %27, %32
+%34:i32 = or 0:i32, %33
+%35:i32 = or %25, %34
+%36:i32 = or %19, %35
+infer %36 (demandedBits=00000000000000000000000011111111)
+
+; *****
+; For LLVM instruction:
+;  %119 = trunc i32 %118 to i8
+; Looking for a replacement for:
+%0:i32 = var (range=[6,0))
+%1:i32 = add 4294967290:i32, %0 (hasExternalUses)
+%2:i1 = ult 5:i32, %1
+pc %2 0:i1
+%3:i1 = eq 0:i32, %1
+pc %3 0:i1
+%4:i32 = var
+%5:i32 = shl %4, 8:i32
+%6:i8 = var
+%7:i32 = zext %6
+%8:i32 = or %5, %7 (hasExternalUses)
+%9:i32 = sub 12:i32, %0
+%10:i32 = shl %8, %9
+%11:i32 = and 63:i32, %10
+%12:i32 = addnw 252:i32, %11
+%13:i32 = addnw 65474:i32, %11
+%14:i32 = lshr %13, 8:i32
+%15:i32 = and %12, %14
+%16:i32 = addnw 65484:i32, %11
+%17:i32 = lshr %16, 8:i32
+%18:i32 = xor 255:i32, %17
+%19:i32 = and %15, %18
+%20:i32 = addnw 71:i32, %11
+%21:i32 = and %20, %17
+%22:i32 = addnw 65510:i32, %11
+%23:i32 = lshr %22, 8:i32
+%24:i32 = xor 255:i32, %23
+%25:i32 = and %21, %24
+%26:i32 = addnw 65:i32, %11
+%27:i32 = and %26, %23
+%28:i32 = xor 62:i32, %11
+%29:i32 = subnsw 0:i32, %28
+%30:i32 = lshr %29, 8:i32
+%31:i32 = and 45:i32, %30
+%32:i32 = xor 45:i32, %31
+%33:i32 = or %27, %32
+%34:i32 = or 0:i32, %33
+%35:i32 = or %25, %34
+%36:i32 = or %19, %35
+%37:i8 = trunc %36
+infer %37
+
+; *****
+; For LLVM instruction:
+;  %120 = add i32 %50, 2
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = add 2:i32, %0
+infer %1
+
+; *****
+; For LLVM instruction:
+;  %123 = add nuw i32 %128, 1
+; Looking for a replacement for:
+%0:i32 = var (range=[0,-1))
+%1:i32 = addnuw 1:i32, %0
+infer %1
+
+; *****
+; For LLVM instruction:
+;  %124 = icmp eq i32 %123, %3
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = var (range=[0,-1))
+%2:i32 = addnuw 1:i32, %1 (hasExternalUses)
+%3:i1 = eq %0, %2
+infer %3
+
+; *****
+; For LLVM instruction:
+;  %126 = phi i32 [ %134, %122 ], [ 0, %33 ]
+; Looking for a replacement for:
+%0:i32 = var
+infer %0 (demandedBits=00000000111111111111111111111111)
+
+; *****
+; For LLVM instruction:
+;  %127 = phi i32 [ %139, %122 ], [ 0, %33 ]
+; Looking for a replacement for:
+%0:i32 = var (range=[0,6))
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %128 = phi i32 [ %123, %122 ], [ 0, %33 ]
+; Looking for a replacement for:
+%0:i32 = var (range=[0,-1))
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %129 = phi i32 [ %173, %122 ], [ 0, %33 ]
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %130 = shl i32 %126, 8
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = shl %0, 8:i32
+infer %1
+
+; *****
+; For LLVM instruction:
+;  %132 = load i8, i8* %131, align 1
+; Looking for a replacement for:
+%0:i8 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %133 = zext i8 %132 to i32
+; Looking for a replacement for:
+%0:i8 = var
+%1:i32 = zext %0
+infer %1
+
+; *****
+; For LLVM instruction:
+;  %134 = or i32 %130, %133
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = shl %0, 8:i32
+%2:i8 = var
+%3:i32 = zext %2
+%4:i32 = or %1, %3
+infer %4
+
+; *****
+; For LLVM instruction:
+;  %135 = add nuw nsw i32 %127, 8
+; Looking for a replacement for:
+%0:i32 = var (range=[0,6))
+%1:i32 = addnw 8:i32, %0
+infer %1
+
+; *****
+; For LLVM instruction:
+;  %137 = phi i32 [ %135, %125 ], [ %139, %136 ]
+; Looking for a replacement for:
+%0:i32 = var (range=[6,0))
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %138 = phi i32 [ %129, %125 ], [ %173, %136 ]
+; Looking for a replacement for:
+%0:i32 = var
+infer %0
+
+; *****
+; For LLVM instruction:
+;  %139 = add i32 %137, -6
+; Looking for a replacement for:
+%0:i32 = var (range=[6,0))
+%1:i32 = add 4294967290:i32, %0
+infer %1
+
+; *****
+; For LLVM instruction:
+;  %140 = lshr i32 %134, %139
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = shl %0, 8:i32
+%2:i8 = var
+%3:i32 = zext %2
+%4:i32 = or %1, %3 (hasExternalUses)
+%5:i32 = var (range=[6,0))
+%6:i32 = add 4294967290:i32, %5 (hasExternalUses)
+%7:i32 = lshr %4, %6
+infer %7 (demandedBits=00000000000000000000000000111111)
+
+; *****
+; For LLVM instruction:
+;  %141 = and i32 %140, 63
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = shl %0, 8:i32
+%2:i8 = var
+%3:i32 = zext %2
+%4:i32 = or %1, %3 (hasExternalUses)
+%5:i32 = var (range=[6,0))
+%6:i32 = add 4294967290:i32, %5 (hasExternalUses)
+%7:i32 = lshr %4, %6
+%8:i32 = and 63:i32, %7
+infer %8 (demandedBits=00000000000000001111111111111111)
+
+; *****
+; For LLVM instruction:
+;  %142 = add nuw nsw i32 %141, 65510
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = shl %0, 8:i32
+%2:i8 = var
+%3:i32 = zext %2
+%4:i32 = or %1, %3 (hasExternalUses)
+%5:i32 = var (range=[6,0))
+%6:i32 = add 4294967290:i32, %5 (hasExternalUses)
+%7:i32 = lshr %4, %6
+%8:i32 = and 63:i32, %7 (hasExternalUses)
+%9:i32 = addnw 65510:i32, %8
+infer %9 (demandedBits=00000000000000001111111100000000)
+
+; *****
+; For LLVM instruction:
+;  %143 = lshr i32 %142, 8
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = shl %0, 8:i32
+%2:i8 = var
+%3:i32 = zext %2
+%4:i32 = or %1, %3 (hasExternalUses)
+%5:i32 = var (range=[6,0))
+%6:i32 = add 4294967290:i32, %5 (hasExternalUses)
+%7:i32 = lshr %4, %6
+%8:i32 = and 63:i32, %7 (hasExternalUses)
+%9:i32 = addnw 65510:i32, %8
+%10:i32 = lshr %9, 8:i32
+infer %10 (demandedBits=00000000000000000000000011111111)
+
+; *****
+; For LLVM instruction:
+;  %144 = add nuw nsw i32 %141, 65
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = shl %0, 8:i32
+%2:i8 = var
+%3:i32 = zext %2
+%4:i32 = or %1, %3 (hasExternalUses)
+%5:i32 = var (range=[6,0))
+%6:i32 = add 4294967290:i32, %5 (hasExternalUses)
+%7:i32 = lshr %4, %6
+%8:i32 = and 63:i32, %7 (hasExternalUses)
+%9:i32 = addnw 65:i32, %8
+infer %9 (demandedBits=00000000000000000000000011111111)
+
+; *****
+; For LLVM instruction:
+;  %145 = and i32 %143, %144
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = shl %0, 8:i32
+%2:i8 = var
+%3:i32 = zext %2
+%4:i32 = or %1, %3 (hasExternalUses)
+%5:i32 = var (range=[6,0))
+%6:i32 = add 4294967290:i32, %5 (hasExternalUses)
+%7:i32 = lshr %4, %6
+%8:i32 = and 63:i32, %7 (hasExternalUses)
+%9:i32 = addnw 65:i32, %8
+%10:i32 = addnw 65510:i32, %8
+%11:i32 = lshr %10, 8:i32 (hasExternalUses)
+%12:i32 = and %9, %11
+infer %12 (demandedBits=00000000000000000000000011111111)
+
+; *****
+; For LLVM instruction:
+;  %146 = xor i32 %143, 255
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = shl %0, 8:i32
+%2:i8 = var
+%3:i32 = zext %2
+%4:i32 = or %1, %3 (hasExternalUses)
+%5:i32 = var (range=[6,0))
+%6:i32 = add 4294967290:i32, %5 (hasExternalUses)
+%7:i32 = lshr %4, %6
+%8:i32 = and 63:i32, %7 (hasExternalUses)
+%9:i32 = addnw 65510:i32, %8
+%10:i32 = lshr %9, 8:i32 (hasExternalUses)
+%11:i32 = xor 255:i32, %10
+infer %11 (demandedBits=00000000000000000000000011111111)
+
+; *****
+; For LLVM instruction:
+;  %147 = add nuw nsw i32 %141, 65484
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = shl %0, 8:i32
+%2:i8 = var
+%3:i32 = zext %2
+%4:i32 = or %1, %3 (hasExternalUses)
+%5:i32 = var (range=[6,0))
+%6:i32 = add 4294967290:i32, %5 (hasExternalUses)
+%7:i32 = lshr %4, %6
+%8:i32 = and 63:i32, %7 (hasExternalUses)
+%9:i32 = addnw 65484:i32, %8
+infer %9 (demandedBits=00000000000000001111111100000000)
+
+; *****
+; For LLVM instruction:
+;  %148 = lshr i32 %147, 8
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = shl %0, 8:i32
+%2:i8 = var
+%3:i32 = zext %2
+%4:i32 = or %1, %3 (hasExternalUses)
+%5:i32 = var (range=[6,0))
+%6:i32 = add 4294967290:i32, %5 (hasExternalUses)
+%7:i32 = lshr %4, %6
+%8:i32 = and 63:i32, %7 (hasExternalUses)
+%9:i32 = addnw 65484:i32, %8
+%10:i32 = lshr %9, 8:i32
+infer %10 (demandedBits=00000000000000000000000011111111)
+
+; *****
+; For LLVM instruction:
+;  %149 = add nuw nsw i32 %141, 71
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = shl %0, 8:i32
+%2:i8 = var
+%3:i32 = zext %2
+%4:i32 = or %1, %3 (hasExternalUses)
+%5:i32 = var (range=[6,0))
+%6:i32 = add 4294967290:i32, %5 (hasExternalUses)
+%7:i32 = lshr %4, %6
+%8:i32 = and 63:i32, %7 (hasExternalUses)
+%9:i32 = addnw 71:i32, %8
+infer %9 (demandedBits=00000000000000000000000011111111)
+
+; *****
+; For LLVM instruction:
+;  %150 = and i32 %148, %149
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = shl %0, 8:i32
+%2:i8 = var
+%3:i32 = zext %2
+%4:i32 = or %1, %3 (hasExternalUses)
+%5:i32 = var (range=[6,0))
+%6:i32 = add 4294967290:i32, %5 (hasExternalUses)
+%7:i32 = lshr %4, %6
+%8:i32 = and 63:i32, %7 (hasExternalUses)
+%9:i32 = addnw 71:i32, %8
+%10:i32 = addnw 65484:i32, %8
+%11:i32 = lshr %10, 8:i32 (hasExternalUses)
+%12:i32 = and %9, %11
+infer %12 (demandedBits=00000000000000000000000011111111)
+
+; *****
+; For LLVM instruction:
+;  %151 = and i32 %150, %146
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = shl %0, 8:i32
+%2:i8 = var
+%3:i32 = zext %2
+%4:i32 = or %1, %3 (hasExternalUses)
+%5:i32 = var (range=[6,0))
+%6:i32 = add 4294967290:i32, %5 (hasExternalUses)
+%7:i32 = lshr %4, %6
+%8:i32 = and 63:i32, %7 (hasExternalUses)
+%9:i32 = addnw 71:i32, %8
+%10:i32 = addnw 65484:i32, %8
+%11:i32 = lshr %10, 8:i32 (hasExternalUses)
+%12:i32 = and %9, %11
+%13:i32 = addnw 65510:i32, %8
+%14:i32 = lshr %13, 8:i32 (hasExternalUses)
+%15:i32 = xor 255:i32, %14
+%16:i32 = and %12, %15
+infer %16 (demandedBits=00000000000000000000000011111111)
+
+; *****
+; For LLVM instruction:
+;  %152 = xor i32 %148, 255
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = shl %0, 8:i32
+%2:i8 = var
+%3:i32 = zext %2
+%4:i32 = or %1, %3 (hasExternalUses)
+%5:i32 = var (range=[6,0))
+%6:i32 = add 4294967290:i32, %5 (hasExternalUses)
+%7:i32 = lshr %4, %6
+%8:i32 = and 63:i32, %7 (hasExternalUses)
+%9:i32 = addnw 65484:i32, %8
+%10:i32 = lshr %9, 8:i32 (hasExternalUses)
+%11:i32 = xor 255:i32, %10
+infer %11 (demandedBits=00000000000000000000000011111111)
+
+; *****
+; For LLVM instruction:
+;  %153 = add nuw nsw i32 %141, 65474
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = shl %0, 8:i32
+%2:i8 = var
+%3:i32 = zext %2
+%4:i32 = or %1, %3 (hasExternalUses)
+%5:i32 = var (range=[6,0))
+%6:i32 = add 4294967290:i32, %5 (hasExternalUses)
+%7:i32 = lshr %4, %6
+%8:i32 = and 63:i32, %7 (hasExternalUses)
+%9:i32 = addnw 65474:i32, %8
+infer %9 (demandedBits=00000000000000001111111100000000)
+
+; *****
+; For LLVM instruction:
+;  %154 = lshr i32 %153, 8
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = shl %0, 8:i32
+%2:i8 = var
+%3:i32 = zext %2
+%4:i32 = or %1, %3 (hasExternalUses)
+%5:i32 = var (range=[6,0))
+%6:i32 = add 4294967290:i32, %5 (hasExternalUses)
+%7:i32 = lshr %4, %6
+%8:i32 = and 63:i32, %7 (hasExternalUses)
+%9:i32 = addnw 65474:i32, %8
+%10:i32 = lshr %9, 8:i32
+infer %10 (demandedBits=00000000000000000000000011111111)
+
+; *****
+; For LLVM instruction:
+;  %155 = add nuw nsw i32 %141, 252
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = shl %0, 8:i32
+%2:i8 = var
+%3:i32 = zext %2
+%4:i32 = or %1, %3 (hasExternalUses)
+%5:i32 = var (range=[6,0))
+%6:i32 = add 4294967290:i32, %5 (hasExternalUses)
+%7:i32 = lshr %4, %6
+%8:i32 = and 63:i32, %7 (hasExternalUses)
+%9:i32 = addnw 252:i32, %8
+infer %9 (demandedBits=00000000000000000000000011111111)
+
+; *****
+; For LLVM instruction:
+;  %156 = and i32 %154, %155
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = shl %0, 8:i32
+%2:i8 = var
+%3:i32 = zext %2
+%4:i32 = or %1, %3 (hasExternalUses)
+%5:i32 = var (range=[6,0))
+%6:i32 = add 4294967290:i32, %5 (hasExternalUses)
+%7:i32 = lshr %4, %6
+%8:i32 = and 63:i32, %7 (hasExternalUses)
+%9:i32 = addnw 252:i32, %8
+%10:i32 = addnw 65474:i32, %8
+%11:i32 = lshr %10, 8:i32
+%12:i32 = and %9, %11
+infer %12 (demandedBits=00000000000000000000000011111111)
+
+; *****
+; For LLVM instruction:
+;  %157 = and i32 %156, %152
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = shl %0, 8:i32
+%2:i8 = var
+%3:i32 = zext %2
+%4:i32 = or %1, %3 (hasExternalUses)
+%5:i32 = var (range=[6,0))
+%6:i32 = add 4294967290:i32, %5 (hasExternalUses)
+%7:i32 = lshr %4, %6
+%8:i32 = and 63:i32, %7 (hasExternalUses)
+%9:i32 = addnw 252:i32, %8
+%10:i32 = addnw 65474:i32, %8
+%11:i32 = lshr %10, 8:i32
+%12:i32 = and %9, %11
+%13:i32 = addnw 65484:i32, %8
+%14:i32 = lshr %13, 8:i32 (hasExternalUses)
+%15:i32 = xor 255:i32, %14
+%16:i32 = and %12, %15
+infer %16 (demandedBits=00000000000000000000000011111111)
+
+; *****
+; For LLVM instruction:
+;  %158 = xor i32 %141, 62
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = shl %0, 8:i32
+%2:i8 = var
+%3:i32 = zext %2
+%4:i32 = or %1, %3 (hasExternalUses)
+%5:i32 = var (range=[6,0))
+%6:i32 = add 4294967290:i32, %5 (hasExternalUses)
+%7:i32 = lshr %4, %6
+%8:i32 = and 63:i32, %7 (hasExternalUses)
+%9:i32 = xor 62:i32, %8
+infer %9 (demandedBits=00000000000000000011111111111111)
+
+; *****
+; For LLVM instruction:
+;  %159 = sub nsw i32 0, %158
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = shl %0, 8:i32
+%2:i8 = var
+%3:i32 = zext %2
+%4:i32 = or %1, %3 (hasExternalUses)
+%5:i32 = var (range=[6,0))
+%6:i32 = add 4294967290:i32, %5 (hasExternalUses)
+%7:i32 = lshr %4, %6
+%8:i32 = and 63:i32, %7 (hasExternalUses)
+%9:i32 = xor 62:i32, %8
+%10:i32 = subnsw 0:i32, %9
+infer %10 (demandedBits=00000000000000000010101100000000)
+
+; *****
+; For LLVM instruction:
+;  %160 = lshr i32 %159, 8
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = shl %0, 8:i32
+%2:i8 = var
+%3:i32 = zext %2
+%4:i32 = or %1, %3 (hasExternalUses)
+%5:i32 = var (range=[6,0))
+%6:i32 = add 4294967290:i32, %5 (hasExternalUses)
+%7:i32 = lshr %4, %6
+%8:i32 = and 63:i32, %7 (hasExternalUses)
+%9:i32 = xor 62:i32, %8
+%10:i32 = subnsw 0:i32, %9
+%11:i32 = lshr %10, 8:i32
+infer %11 (demandedBits=00000000000000000000000000101011)
+
+; *****
+; For LLVM instruction:
+;  %161 = and i32 %160, 43
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = shl %0, 8:i32
+%2:i8 = var
+%3:i32 = zext %2
+%4:i32 = or %1, %3 (hasExternalUses)
+%5:i32 = var (range=[6,0))
+%6:i32 = add 4294967290:i32, %5 (hasExternalUses)
+%7:i32 = lshr %4, %6
+%8:i32 = and 63:i32, %7 (hasExternalUses)
+%9:i32 = xor 62:i32, %8
+%10:i32 = subnsw 0:i32, %9
+%11:i32 = lshr %10, 8:i32
+%12:i32 = and 43:i32, %11
+infer %12 (demandedBits=00000000000000000000000011111111)
+
+; *****
+; For LLVM instruction:
+;  %162 = xor i32 %161, 43
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = shl %0, 8:i32
+%2:i8 = var
+%3:i32 = zext %2
+%4:i32 = or %1, %3 (hasExternalUses)
+%5:i32 = var (range=[6,0))
+%6:i32 = add 4294967290:i32, %5 (hasExternalUses)
+%7:i32 = lshr %4, %6
+%8:i32 = and 63:i32, %7 (hasExternalUses)
+%9:i32 = xor 62:i32, %8
+%10:i32 = subnsw 0:i32, %9
+%11:i32 = lshr %10, 8:i32
+%12:i32 = and 43:i32, %11
+%13:i32 = xor 43:i32, %12
+infer %13 (demandedBits=00000000000000000000000011111111)
+
+; *****
+; For LLVM instruction:
+;  %163 = xor i32 %141, 63
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = shl %0, 8:i32
+%2:i8 = var
+%3:i32 = zext %2
+%4:i32 = or %1, %3 (hasExternalUses)
+%5:i32 = var (range=[6,0))
+%6:i32 = add 4294967290:i32, %5 (hasExternalUses)
+%7:i32 = lshr %4, %6
+%8:i32 = and 63:i32, %7 (hasExternalUses)
+%9:i32 = xor 63:i32, %8
+infer %9 (demandedBits=00000000000000000011111111111111)
+
+; *****
+; For LLVM instruction:
+;  %164 = sub nsw i32 0, %163
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = shl %0, 8:i32
+%2:i8 = var
+%3:i32 = zext %2
+%4:i32 = or %1, %3 (hasExternalUses)
+%5:i32 = var (range=[6,0))
+%6:i32 = add 4294967290:i32, %5 (hasExternalUses)
+%7:i32 = lshr %4, %6
+%8:i32 = and 63:i32, %7 (hasExternalUses)
+%9:i32 = xor 63:i32, %8
+%10:i32 = subnsw 0:i32, %9
+infer %10 (demandedBits=00000000000000000010111100000000)
+
+; *****
+; For LLVM instruction:
+;  %165 = lshr i32 %164, 8
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = shl %0, 8:i32
+%2:i8 = var
+%3:i32 = zext %2
+%4:i32 = or %1, %3 (hasExternalUses)
+%5:i32 = var (range=[6,0))
+%6:i32 = add 4294967290:i32, %5 (hasExternalUses)
+%7:i32 = lshr %4, %6
+%8:i32 = and 63:i32, %7 (hasExternalUses)
+%9:i32 = xor 63:i32, %8
+%10:i32 = subnsw 0:i32, %9
+%11:i32 = lshr %10, 8:i32
+infer %11 (demandedBits=00000000000000000000000000101111)
+
+; *****
+; For LLVM instruction:
+;  %166 = and i32 %165, 47
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = shl %0, 8:i32
+%2:i8 = var
+%3:i32 = zext %2
+%4:i32 = or %1, %3 (hasExternalUses)
+%5:i32 = var (range=[6,0))
+%6:i32 = add 4294967290:i32, %5 (hasExternalUses)
+%7:i32 = lshr %4, %6
+%8:i32 = and 63:i32, %7 (hasExternalUses)
+%9:i32 = xor 63:i32, %8
+%10:i32 = subnsw 0:i32, %9
+%11:i32 = lshr %10, 8:i32
+%12:i32 = and 47:i32, %11
+infer %12 (demandedBits=00000000000000000000000011111111)
+
+; *****
+; For LLVM instruction:
+;  %167 = xor i32 %166, 47
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = shl %0, 8:i32
+%2:i8 = var
+%3:i32 = zext %2
+%4:i32 = or %1, %3 (hasExternalUses)
+%5:i32 = var (range=[6,0))
+%6:i32 = add 4294967290:i32, %5 (hasExternalUses)
+%7:i32 = lshr %4, %6
+%8:i32 = and 63:i32, %7 (hasExternalUses)
+%9:i32 = xor 63:i32, %8
+%10:i32 = subnsw 0:i32, %9
+%11:i32 = lshr %10, 8:i32
+%12:i32 = and 47:i32, %11
+%13:i32 = xor 47:i32, %12
+infer %13 (demandedBits=00000000000000000000000011111111)
+
+; *****
+; For LLVM instruction:
+;  %168 = or i32 %162, %145
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = shl %0, 8:i32
+%2:i8 = var
+%3:i32 = zext %2
+%4:i32 = or %1, %3 (hasExternalUses)
+%5:i32 = var (range=[6,0))
+%6:i32 = add 4294967290:i32, %5 (hasExternalUses)
+%7:i32 = lshr %4, %6
+%8:i32 = and 63:i32, %7 (hasExternalUses)
+%9:i32 = addnw 65:i32, %8
+%10:i32 = addnw 65510:i32, %8
+%11:i32 = lshr %10, 8:i32 (hasExternalUses)
+%12:i32 = and %9, %11
+%13:i32 = xor 62:i32, %8
+%14:i32 = subnsw 0:i32, %13
+%15:i32 = lshr %14, 8:i32
+%16:i32 = and 43:i32, %15
+%17:i32 = xor 43:i32, %16
+%18:i32 = or %12, %17
+infer %18 (demandedBits=00000000000000000000000011111111)
+
+; *****
+; For LLVM instruction:
+;  %169 = or i32 %168, %167
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = shl %0, 8:i32
+%2:i8 = var
+%3:i32 = zext %2
+%4:i32 = or %1, %3 (hasExternalUses)
+%5:i32 = var (range=[6,0))
+%6:i32 = add 4294967290:i32, %5 (hasExternalUses)
+%7:i32 = lshr %4, %6
+%8:i32 = and 63:i32, %7 (hasExternalUses)
+%9:i32 = addnw 65:i32, %8
+%10:i32 = addnw 65510:i32, %8
+%11:i32 = lshr %10, 8:i32 (hasExternalUses)
+%12:i32 = and %9, %11
+%13:i32 = xor 62:i32, %8
+%14:i32 = subnsw 0:i32, %13
+%15:i32 = lshr %14, 8:i32
+%16:i32 = and 43:i32, %15
+%17:i32 = xor 43:i32, %16
+%18:i32 = or %12, %17
+%19:i32 = xor 63:i32, %8
+%20:i32 = subnsw 0:i32, %19
+%21:i32 = lshr %20, 8:i32
+%22:i32 = and 47:i32, %21
+%23:i32 = xor 47:i32, %22
+%24:i32 = or %18, %23
+infer %24 (demandedBits=00000000000000000000000011111111)
+
+; *****
+; For LLVM instruction:
+;  %170 = or i32 %169, %151
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = shl %0, 8:i32
+%2:i8 = var
+%3:i32 = zext %2
+%4:i32 = or %1, %3 (hasExternalUses)
+%5:i32 = var (range=[6,0))
+%6:i32 = add 4294967290:i32, %5 (hasExternalUses)
+%7:i32 = lshr %4, %6
+%8:i32 = and 63:i32, %7 (hasExternalUses)
+%9:i32 = addnw 71:i32, %8
+%10:i32 = addnw 65484:i32, %8
+%11:i32 = lshr %10, 8:i32 (hasExternalUses)
+%12:i32 = and %9, %11
+%13:i32 = addnw 65510:i32, %8
+%14:i32 = lshr %13, 8:i32
+%15:i32 = xor 255:i32, %14
+%16:i32 = and %12, %15
+%17:i32 = addnw 65:i32, %8
+%18:i32 = and %17, %14
+%19:i32 = xor 62:i32, %8
+%20:i32 = subnsw 0:i32, %19
+%21:i32 = lshr %20, 8:i32
+%22:i32 = and 43:i32, %21
+%23:i32 = xor 43:i32, %22
+%24:i32 = or %18, %23
+%25:i32 = xor 63:i32, %8
+%26:i32 = subnsw 0:i32, %25
+%27:i32 = lshr %26, 8:i32
+%28:i32 = and 47:i32, %27
+%29:i32 = xor 47:i32, %28
+%30:i32 = or %24, %29
+%31:i32 = or %16, %30
+infer %31 (demandedBits=00000000000000000000000011111111)
+
+; *****
+; For LLVM instruction:
+;  %171 = or i32 %170, %157
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = shl %0, 8:i32
+%2:i8 = var
+%3:i32 = zext %2
+%4:i32 = or %1, %3 (hasExternalUses)
+%5:i32 = var (range=[6,0))
+%6:i32 = add 4294967290:i32, %5 (hasExternalUses)
+%7:i32 = lshr %4, %6
+%8:i32 = and 63:i32, %7
+%9:i32 = addnw 252:i32, %8
+%10:i32 = addnw 65474:i32, %8
+%11:i32 = lshr %10, 8:i32
+%12:i32 = and %9, %11
+%13:i32 = addnw 65484:i32, %8
+%14:i32 = lshr %13, 8:i32
+%15:i32 = xor 255:i32, %14
+%16:i32 = and %12, %15
+%17:i32 = addnw 71:i32, %8
+%18:i32 = and %17, %14
+%19:i32 = addnw 65510:i32, %8
+%20:i32 = lshr %19, 8:i32
+%21:i32 = xor 255:i32, %20
+%22:i32 = and %18, %21
+%23:i32 = addnw 65:i32, %8
+%24:i32 = and %23, %20
+%25:i32 = xor 62:i32, %8
+%26:i32 = subnsw 0:i32, %25
+%27:i32 = lshr %26, 8:i32
+%28:i32 = and 43:i32, %27
+%29:i32 = xor 43:i32, %28
+%30:i32 = or %24, %29
+%31:i32 = xor 63:i32, %8
+%32:i32 = subnsw 0:i32, %31
+%33:i32 = lshr %32, 8:i32
+%34:i32 = and 47:i32, %33
+%35:i32 = xor 47:i32, %34
+%36:i32 = or %30, %35
+%37:i32 = or %22, %36
+%38:i32 = or %16, %37
+infer %38 (demandedBits=00000000000000000000000011111111)
+
+; *****
+; For LLVM instruction:
+;  %172 = trunc i32 %171 to i8
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = shl %0, 8:i32
+%2:i8 = var
+%3:i32 = zext %2
+%4:i32 = or %1, %3 (hasExternalUses)
+%5:i32 = var (range=[6,0))
+%6:i32 = add 4294967290:i32, %5 (hasExternalUses)
+%7:i32 = lshr %4, %6
+%8:i32 = and 63:i32, %7
+%9:i32 = addnw 252:i32, %8
+%10:i32 = addnw 65474:i32, %8
+%11:i32 = lshr %10, 8:i32
+%12:i32 = and %9, %11
+%13:i32 = addnw 65484:i32, %8
+%14:i32 = lshr %13, 8:i32
+%15:i32 = xor 255:i32, %14
+%16:i32 = and %12, %15
+%17:i32 = addnw 71:i32, %8
+%18:i32 = and %17, %14
+%19:i32 = addnw 65510:i32, %8
+%20:i32 = lshr %19, 8:i32
+%21:i32 = xor 255:i32, %20
+%22:i32 = and %18, %21
+%23:i32 = addnw 65:i32, %8
+%24:i32 = and %23, %20
+%25:i32 = xor 62:i32, %8
+%26:i32 = subnsw 0:i32, %25
+%27:i32 = lshr %26, 8:i32
+%28:i32 = and 43:i32, %27
+%29:i32 = xor 43:i32, %28
+%30:i32 = or %24, %29
+%31:i32 = xor 63:i32, %8
+%32:i32 = subnsw 0:i32, %31
+%33:i32 = lshr %32, 8:i32
+%34:i32 = and 47:i32, %33
+%35:i32 = xor 47:i32, %34
+%36:i32 = or %30, %35
+%37:i32 = or %22, %36
+%38:i32 = or %16, %37
+%39:i8 = trunc %38
+infer %39
+
+; *****
+; For LLVM instruction:
+;  %173 = add i32 %138, 1
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = add 1:i32, %0
+infer %1
+
+; *****
+; For LLVM instruction:
+;  %175 = icmp ugt i32 %139, 5
+; Looking for a replacement for:
+%0:i32 = var (range=[6,0))
+%1:i32 = add 4294967290:i32, %0 (hasExternalUses)
+%2:i1 = ult 5:i32, %1
+infer %2
+
+; *****
+; For LLVM instruction:
+;  %177 = icmp eq i32 %139, 0
+; Looking for a replacement for:
+%0:i32 = var (range=[6,0))
+%1:i32 = add 4294967290:i32, %0 (hasExternalUses)
+%2:i1 = ult 5:i32, %1
+pc %2 0:i1
+%3:i1 = eq 0:i32, %1
+infer %3
+
+; *****
+; For LLVM instruction:
+;  %179 = sub i32 12, %137
+; Looking for a replacement for:
+%0:i32 = var (range=[6,0))
+%1:i32 = add 4294967290:i32, %0 (hasExternalUses)
+%2:i1 = ult 5:i32, %1
+pc %2 0:i1
+%3:i1 = eq 0:i32, %1
+pc %3 0:i1
+%4:i32 = sub 12:i32, %0
+infer %4
+
+; *****
+; For LLVM instruction:
+;  %180 = shl i32 %134, %179
+; Looking for a replacement for:
+%0:i32 = var (range=[6,0))
+%1:i32 = add 4294967290:i32, %0 (hasExternalUses)
+%2:i1 = ult 5:i32, %1
+pc %2 0:i1
+%3:i1 = eq 0:i32, %1
+pc %3 0:i1
+%4:i32 = var
+%5:i32 = shl %4, 8:i32
+%6:i8 = var
+%7:i32 = zext %6
+%8:i32 = or %5, %7 (hasExternalUses)
+%9:i32 = sub 12:i32, %0
+%10:i32 = shl %8, %9
+infer %10 (demandedBits=00000000000000000000000000111111)
+
+; *****
+; For LLVM instruction:
+;  %181 = and i32 %180, 63
+; Looking for a replacement for:
+%0:i32 = var (range=[6,0))
+%1:i32 = add 4294967290:i32, %0 (hasExternalUses)
+%2:i1 = ult 5:i32, %1
+pc %2 0:i1
+%3:i1 = eq 0:i32, %1
+pc %3 0:i1
+%4:i32 = var
+%5:i32 = shl %4, 8:i32
+%6:i8 = var
+%7:i32 = zext %6
+%8:i32 = or %5, %7 (hasExternalUses)
+%9:i32 = sub 12:i32, %0
+%10:i32 = shl %8, %9
+%11:i32 = and 63:i32, %10
+infer %11 (demandedBits=00000000000000001111111111111111)
+
+; *****
+; For LLVM instruction:
+;  %182 = add nuw nsw i32 %181, 65510
+; Looking for a replacement for:
+%0:i32 = var (range=[6,0))
+%1:i32 = add 4294967290:i32, %0 (hasExternalUses)
+%2:i1 = ult 5:i32, %1
+pc %2 0:i1
+%3:i1 = eq 0:i32, %1
+pc %3 0:i1
+%4:i32 = var
+%5:i32 = shl %4, 8:i32
+%6:i8 = var
+%7:i32 = zext %6
+%8:i32 = or %5, %7 (hasExternalUses)
+%9:i32 = sub 12:i32, %0
+%10:i32 = shl %8, %9
+%11:i32 = and 63:i32, %10 (hasExternalUses)
+%12:i32 = addnw 65510:i32, %11
+infer %12 (demandedBits=00000000000000001111111100000000)
+
+; *****
+; For LLVM instruction:
+;  %183 = lshr i32 %182, 8
+; Looking for a replacement for:
+%0:i32 = var (range=[6,0))
+%1:i32 = add 4294967290:i32, %0 (hasExternalUses)
+%2:i1 = ult 5:i32, %1
+pc %2 0:i1
+%3:i1 = eq 0:i32, %1
+pc %3 0:i1
+%4:i32 = var
+%5:i32 = shl %4, 8:i32
+%6:i8 = var
+%7:i32 = zext %6
+%8:i32 = or %5, %7 (hasExternalUses)
+%9:i32 = sub 12:i32, %0
+%10:i32 = shl %8, %9
+%11:i32 = and 63:i32, %10 (hasExternalUses)
+%12:i32 = addnw 65510:i32, %11
+%13:i32 = lshr %12, 8:i32
+infer %13 (demandedBits=00000000000000000000000011111111)
+
+; *****
+; For LLVM instruction:
+;  %184 = add nuw nsw i32 %181, 65
+; Looking for a replacement for:
+%0:i32 = var (range=[6,0))
+%1:i32 = add 4294967290:i32, %0 (hasExternalUses)
+%2:i1 = ult 5:i32, %1
+pc %2 0:i1
+%3:i1 = eq 0:i32, %1
+pc %3 0:i1
+%4:i32 = var
+%5:i32 = shl %4, 8:i32
+%6:i8 = var
+%7:i32 = zext %6
+%8:i32 = or %5, %7 (hasExternalUses)
+%9:i32 = sub 12:i32, %0
+%10:i32 = shl %8, %9
+%11:i32 = and 63:i32, %10 (hasExternalUses)
+%12:i32 = addnw 65:i32, %11
+infer %12 (demandedBits=00000000000000000000000011111111)
+
+; *****
+; For LLVM instruction:
+;  %185 = and i32 %183, %184
+; Looking for a replacement for:
+%0:i32 = var (range=[6,0))
+%1:i32 = add 4294967290:i32, %0 (hasExternalUses)
+%2:i1 = ult 5:i32, %1
+pc %2 0:i1
+%3:i1 = eq 0:i32, %1
+pc %3 0:i1
+%4:i32 = var
+%5:i32 = shl %4, 8:i32
+%6:i8 = var
+%7:i32 = zext %6
+%8:i32 = or %5, %7 (hasExternalUses)
+%9:i32 = sub 12:i32, %0
+%10:i32 = shl %8, %9
+%11:i32 = and 63:i32, %10 (hasExternalUses)
+%12:i32 = addnw 65:i32, %11
+%13:i32 = addnw 65510:i32, %11
+%14:i32 = lshr %13, 8:i32 (hasExternalUses)
+%15:i32 = and %12, %14
+infer %15 (demandedBits=00000000000000000000000011111111)
+
+; *****
+; For LLVM instruction:
+;  %186 = xor i32 %183, 255
+; Looking for a replacement for:
+%0:i32 = var (range=[6,0))
+%1:i32 = add 4294967290:i32, %0 (hasExternalUses)
+%2:i1 = ult 5:i32, %1
+pc %2 0:i1
+%3:i1 = eq 0:i32, %1
+pc %3 0:i1
+%4:i32 = var
+%5:i32 = shl %4, 8:i32
+%6:i8 = var
+%7:i32 = zext %6
+%8:i32 = or %5, %7 (hasExternalUses)
+%9:i32 = sub 12:i32, %0
+%10:i32 = shl %8, %9
+%11:i32 = and 63:i32, %10 (hasExternalUses)
+%12:i32 = addnw 65510:i32, %11
+%13:i32 = lshr %12, 8:i32 (hasExternalUses)
+%14:i32 = xor 255:i32, %13
+infer %14 (demandedBits=00000000000000000000000011111111)
+
+; *****
+; For LLVM instruction:
+;  %187 = add nuw nsw i32 %181, 65484
+; Looking for a replacement for:
+%0:i32 = var (range=[6,0))
+%1:i32 = add 4294967290:i32, %0 (hasExternalUses)
+%2:i1 = ult 5:i32, %1
+pc %2 0:i1
+%3:i1 = eq 0:i32, %1
+pc %3 0:i1
+%4:i32 = var
+%5:i32 = shl %4, 8:i32
+%6:i8 = var
+%7:i32 = zext %6
+%8:i32 = or %5, %7 (hasExternalUses)
+%9:i32 = sub 12:i32, %0
+%10:i32 = shl %8, %9
+%11:i32 = and 63:i32, %10 (hasExternalUses)
+%12:i32 = addnw 65484:i32, %11
+infer %12 (demandedBits=00000000000000001111111100000000)
+
+; *****
+; For LLVM instruction:
+;  %188 = lshr i32 %187, 8
+; Looking for a replacement for:
+%0:i32 = var (range=[6,0))
+%1:i32 = add 4294967290:i32, %0 (hasExternalUses)
+%2:i1 = ult 5:i32, %1
+pc %2 0:i1
+%3:i1 = eq 0:i32, %1
+pc %3 0:i1
+%4:i32 = var
+%5:i32 = shl %4, 8:i32
+%6:i8 = var
+%7:i32 = zext %6
+%8:i32 = or %5, %7 (hasExternalUses)
+%9:i32 = sub 12:i32, %0
+%10:i32 = shl %8, %9
+%11:i32 = and 63:i32, %10 (hasExternalUses)
+%12:i32 = addnw 65484:i32, %11
+%13:i32 = lshr %12, 8:i32
+infer %13 (demandedBits=00000000000000000000000011111111)
+
+; *****
+; For LLVM instruction:
+;  %189 = add nuw nsw i32 %181, 71
+; Looking for a replacement for:
+%0:i32 = var (range=[6,0))
+%1:i32 = add 4294967290:i32, %0 (hasExternalUses)
+%2:i1 = ult 5:i32, %1
+pc %2 0:i1
+%3:i1 = eq 0:i32, %1
+pc %3 0:i1
+%4:i32 = var
+%5:i32 = shl %4, 8:i32
+%6:i8 = var
+%7:i32 = zext %6
+%8:i32 = or %5, %7 (hasExternalUses)
+%9:i32 = sub 12:i32, %0
+%10:i32 = shl %8, %9
+%11:i32 = and 63:i32, %10 (hasExternalUses)
+%12:i32 = addnw 71:i32, %11
+infer %12 (demandedBits=00000000000000000000000011111111)
+
+; *****
+; For LLVM instruction:
+;  %190 = and i32 %188, %189
+; Looking for a replacement for:
+%0:i32 = var (range=[6,0))
+%1:i32 = add 4294967290:i32, %0 (hasExternalUses)
+%2:i1 = ult 5:i32, %1
+pc %2 0:i1
+%3:i1 = eq 0:i32, %1
+pc %3 0:i1
+%4:i32 = var
+%5:i32 = shl %4, 8:i32
+%6:i8 = var
+%7:i32 = zext %6
+%8:i32 = or %5, %7 (hasExternalUses)
+%9:i32 = sub 12:i32, %0
+%10:i32 = shl %8, %9
+%11:i32 = and 63:i32, %10 (hasExternalUses)
+%12:i32 = addnw 71:i32, %11
+%13:i32 = addnw 65484:i32, %11
+%14:i32 = lshr %13, 8:i32 (hasExternalUses)
+%15:i32 = and %12, %14
+infer %15 (demandedBits=00000000000000000000000011111111)
+
+; *****
+; For LLVM instruction:
+;  %191 = and i32 %190, %186
+; Looking for a replacement for:
+%0:i32 = var (range=[6,0))
+%1:i32 = add 4294967290:i32, %0 (hasExternalUses)
+%2:i1 = ult 5:i32, %1
+pc %2 0:i1
+%3:i1 = eq 0:i32, %1
+pc %3 0:i1
+%4:i32 = var
+%5:i32 = shl %4, 8:i32
+%6:i8 = var
+%7:i32 = zext %6
+%8:i32 = or %5, %7 (hasExternalUses)
+%9:i32 = sub 12:i32, %0
+%10:i32 = shl %8, %9
+%11:i32 = and 63:i32, %10 (hasExternalUses)
+%12:i32 = addnw 71:i32, %11
+%13:i32 = addnw 65484:i32, %11
+%14:i32 = lshr %13, 8:i32 (hasExternalUses)
+%15:i32 = and %12, %14
+%16:i32 = addnw 65510:i32, %11
+%17:i32 = lshr %16, 8:i32 (hasExternalUses)
+%18:i32 = xor 255:i32, %17
+%19:i32 = and %15, %18
+infer %19 (demandedBits=00000000000000000000000011111111)
+
+; *****
+; For LLVM instruction:
+;  %192 = xor i32 %188, 255
+; Looking for a replacement for:
+%0:i32 = var (range=[6,0))
+%1:i32 = add 4294967290:i32, %0 (hasExternalUses)
+%2:i1 = ult 5:i32, %1
+pc %2 0:i1
+%3:i1 = eq 0:i32, %1
+pc %3 0:i1
+%4:i32 = var
+%5:i32 = shl %4, 8:i32
+%6:i8 = var
+%7:i32 = zext %6
+%8:i32 = or %5, %7 (hasExternalUses)
+%9:i32 = sub 12:i32, %0
+%10:i32 = shl %8, %9
+%11:i32 = and 63:i32, %10 (hasExternalUses)
+%12:i32 = addnw 65484:i32, %11
+%13:i32 = lshr %12, 8:i32 (hasExternalUses)
+%14:i32 = xor 255:i32, %13
+infer %14 (demandedBits=00000000000000000000000011111111)
+
+; *****
+; For LLVM instruction:
+;  %193 = add nuw nsw i32 %181, 65474
+; Looking for a replacement for:
+%0:i32 = var (range=[6,0))
+%1:i32 = add 4294967290:i32, %0 (hasExternalUses)
+%2:i1 = ult 5:i32, %1
+pc %2 0:i1
+%3:i1 = eq 0:i32, %1
+pc %3 0:i1
+%4:i32 = var
+%5:i32 = shl %4, 8:i32
+%6:i8 = var
+%7:i32 = zext %6
+%8:i32 = or %5, %7 (hasExternalUses)
+%9:i32 = sub 12:i32, %0
+%10:i32 = shl %8, %9
+%11:i32 = and 63:i32, %10 (hasExternalUses)
+%12:i32 = addnw 65474:i32, %11
+infer %12 (demandedBits=00000000000000001111111100000000)
+
+; *****
+; For LLVM instruction:
+;  %194 = lshr i32 %193, 8
+; Looking for a replacement for:
+%0:i32 = var (range=[6,0))
+%1:i32 = add 4294967290:i32, %0 (hasExternalUses)
+%2:i1 = ult 5:i32, %1
+pc %2 0:i1
+%3:i1 = eq 0:i32, %1
+pc %3 0:i1
+%4:i32 = var
+%5:i32 = shl %4, 8:i32
+%6:i8 = var
+%7:i32 = zext %6
+%8:i32 = or %5, %7 (hasExternalUses)
+%9:i32 = sub 12:i32, %0
+%10:i32 = shl %8, %9
+%11:i32 = and 63:i32, %10 (hasExternalUses)
+%12:i32 = addnw 65474:i32, %11
+%13:i32 = lshr %12, 8:i32
+infer %13 (demandedBits=00000000000000000000000011111111)
+
+; *****
+; For LLVM instruction:
+;  %195 = add nuw nsw i32 %181, 252
+; Looking for a replacement for:
+%0:i32 = var (range=[6,0))
+%1:i32 = add 4294967290:i32, %0 (hasExternalUses)
+%2:i1 = ult 5:i32, %1
+pc %2 0:i1
+%3:i1 = eq 0:i32, %1
+pc %3 0:i1
+%4:i32 = var
+%5:i32 = shl %4, 8:i32
+%6:i8 = var
+%7:i32 = zext %6
+%8:i32 = or %5, %7 (hasExternalUses)
+%9:i32 = sub 12:i32, %0
+%10:i32 = shl %8, %9
+%11:i32 = and 63:i32, %10 (hasExternalUses)
+%12:i32 = addnw 252:i32, %11
+infer %12 (demandedBits=00000000000000000000000011111111)
+
+; *****
+; For LLVM instruction:
+;  %196 = and i32 %194, %195
+; Looking for a replacement for:
+%0:i32 = var (range=[6,0))
+%1:i32 = add 4294967290:i32, %0 (hasExternalUses)
+%2:i1 = ult 5:i32, %1
+pc %2 0:i1
+%3:i1 = eq 0:i32, %1
+pc %3 0:i1
+%4:i32 = var
+%5:i32 = shl %4, 8:i32
+%6:i8 = var
+%7:i32 = zext %6
+%8:i32 = or %5, %7 (hasExternalUses)
+%9:i32 = sub 12:i32, %0
+%10:i32 = shl %8, %9
+%11:i32 = and 63:i32, %10 (hasExternalUses)
+%12:i32 = addnw 252:i32, %11
+%13:i32 = addnw 65474:i32, %11
+%14:i32 = lshr %13, 8:i32
+%15:i32 = and %12, %14
+infer %15 (demandedBits=00000000000000000000000011111111)
+
+; *****
+; For LLVM instruction:
+;  %197 = and i32 %196, %192
+; Looking for a replacement for:
+%0:i32 = var (range=[6,0))
+%1:i32 = add 4294967290:i32, %0 (hasExternalUses)
+%2:i1 = ult 5:i32, %1
+pc %2 0:i1
+%3:i1 = eq 0:i32, %1
+pc %3 0:i1
+%4:i32 = var
+%5:i32 = shl %4, 8:i32
+%6:i8 = var
+%7:i32 = zext %6
+%8:i32 = or %5, %7 (hasExternalUses)
+%9:i32 = sub 12:i32, %0
+%10:i32 = shl %8, %9
+%11:i32 = and 63:i32, %10 (hasExternalUses)
+%12:i32 = addnw 252:i32, %11
+%13:i32 = addnw 65474:i32, %11
+%14:i32 = lshr %13, 8:i32
+%15:i32 = and %12, %14
+%16:i32 = addnw 65484:i32, %11
+%17:i32 = lshr %16, 8:i32 (hasExternalUses)
+%18:i32 = xor 255:i32, %17
+%19:i32 = and %15, %18
+infer %19 (demandedBits=00000000000000000000000011111111)
+
+; *****
+; For LLVM instruction:
+;  %198 = xor i32 %181, 62
+; Looking for a replacement for:
+%0:i32 = var (range=[6,0))
+%1:i32 = add 4294967290:i32, %0 (hasExternalUses)
+%2:i1 = ult 5:i32, %1
+pc %2 0:i1
+%3:i1 = eq 0:i32, %1
+pc %3 0:i1
+%4:i32 = var
+%5:i32 = shl %4, 8:i32
+%6:i8 = var
+%7:i32 = zext %6
+%8:i32 = or %5, %7 (hasExternalUses)
+%9:i32 = sub 12:i32, %0
+%10:i32 = shl %8, %9
+%11:i32 = and 63:i32, %10 (hasExternalUses)
+%12:i32 = xor 62:i32, %11
+infer %12 (demandedBits=00000000000000000011111111111111)
+
+; *****
+; For LLVM instruction:
+;  %199 = sub nsw i32 0, %198
+; Looking for a replacement for:
+%0:i32 = var (range=[6,0))
+%1:i32 = add 4294967290:i32, %0 (hasExternalUses)
+%2:i1 = ult 5:i32, %1
+pc %2 0:i1
+%3:i1 = eq 0:i32, %1
+pc %3 0:i1
+%4:i32 = var
+%5:i32 = shl %4, 8:i32
+%6:i8 = var
+%7:i32 = zext %6
+%8:i32 = or %5, %7 (hasExternalUses)
+%9:i32 = sub 12:i32, %0
+%10:i32 = shl %8, %9
+%11:i32 = and 63:i32, %10 (hasExternalUses)
+%12:i32 = xor 62:i32, %11
+%13:i32 = subnsw 0:i32, %12
+infer %13 (demandedBits=00000000000000000010101100000000)
+
+; *****
+; For LLVM instruction:
+;  %200 = lshr i32 %199, 8
+; Looking for a replacement for:
+%0:i32 = var (range=[6,0))
+%1:i32 = add 4294967290:i32, %0 (hasExternalUses)
+%2:i1 = ult 5:i32, %1
+pc %2 0:i1
+%3:i1 = eq 0:i32, %1
+pc %3 0:i1
+%4:i32 = var
+%5:i32 = shl %4, 8:i32
+%6:i8 = var
+%7:i32 = zext %6
+%8:i32 = or %5, %7 (hasExternalUses)
+%9:i32 = sub 12:i32, %0
+%10:i32 = shl %8, %9
+%11:i32 = and 63:i32, %10 (hasExternalUses)
+%12:i32 = xor 62:i32, %11
+%13:i32 = subnsw 0:i32, %12
+%14:i32 = lshr %13, 8:i32
+infer %14 (demandedBits=00000000000000000000000000101011)
+
+; *****
+; For LLVM instruction:
+;  %201 = and i32 %200, 43
+; Looking for a replacement for:
+%0:i32 = var (range=[6,0))
+%1:i32 = add 4294967290:i32, %0 (hasExternalUses)
+%2:i1 = ult 5:i32, %1
+pc %2 0:i1
+%3:i1 = eq 0:i32, %1
+pc %3 0:i1
+%4:i32 = var
+%5:i32 = shl %4, 8:i32
+%6:i8 = var
+%7:i32 = zext %6
+%8:i32 = or %5, %7 (hasExternalUses)
+%9:i32 = sub 12:i32, %0
+%10:i32 = shl %8, %9
+%11:i32 = and 63:i32, %10 (hasExternalUses)
+%12:i32 = xor 62:i32, %11
+%13:i32 = subnsw 0:i32, %12
+%14:i32 = lshr %13, 8:i32
+%15:i32 = and 43:i32, %14
+infer %15 (demandedBits=00000000000000000000000011111111)
+
+; *****
+; For LLVM instruction:
+;  %202 = xor i32 %201, 43
+; Looking for a replacement for:
+%0:i32 = var (range=[6,0))
+%1:i32 = add 4294967290:i32, %0 (hasExternalUses)
+%2:i1 = ult 5:i32, %1
+pc %2 0:i1
+%3:i1 = eq 0:i32, %1
+pc %3 0:i1
+%4:i32 = var
+%5:i32 = shl %4, 8:i32
+%6:i8 = var
+%7:i32 = zext %6
+%8:i32 = or %5, %7 (hasExternalUses)
+%9:i32 = sub 12:i32, %0
+%10:i32 = shl %8, %9
+%11:i32 = and 63:i32, %10 (hasExternalUses)
+%12:i32 = xor 62:i32, %11
+%13:i32 = subnsw 0:i32, %12
+%14:i32 = lshr %13, 8:i32
+%15:i32 = and 43:i32, %14
+%16:i32 = xor 43:i32, %15
+infer %16 (demandedBits=00000000000000000000000011111111)
+
+; *****
+; For LLVM instruction:
+;  %203 = lshr i32 12032, 8
+; Looking for a replacement for:
+%0:i32 = lshr 12032:i32, 8:i32
+infer %0 (demandedBits=00000000000000000000000000101111)
+
+; *****
+; For LLVM instruction:
+;  %204 = and i32 %203, 47
+; Looking for a replacement for:
+%0:i32 = lshr 12032:i32, 8:i32
+%1:i32 = and 47:i32, %0
+infer %1 (demandedBits=00000000000000000000000011111111)
+
+; *****
+; For LLVM instruction:
+;  %205 = xor i32 %204, 47
+; Looking for a replacement for:
+%0:i32 = lshr 12032:i32, 8:i32
+%1:i32 = and 47:i32, %0
+%2:i32 = xor 47:i32, %1
+infer %2 (demandedBits=00000000000000000000000011111111)
+
+; *****
+; For LLVM instruction:
+;  %206 = or i32 %202, %185
+; Looking for a replacement for:
+%0:i32 = var (range=[6,0))
+%1:i32 = add 4294967290:i32, %0 (hasExternalUses)
+%2:i1 = ult 5:i32, %1
+pc %2 0:i1
+%3:i1 = eq 0:i32, %1
+pc %3 0:i1
+%4:i32 = var
+%5:i32 = shl %4, 8:i32
+%6:i8 = var
+%7:i32 = zext %6
+%8:i32 = or %5, %7 (hasExternalUses)
+%9:i32 = sub 12:i32, %0
+%10:i32 = shl %8, %9
+%11:i32 = and 63:i32, %10 (hasExternalUses)
+%12:i32 = addnw 65:i32, %11
+%13:i32 = addnw 65510:i32, %11
+%14:i32 = lshr %13, 8:i32 (hasExternalUses)
+%15:i32 = and %12, %14
+%16:i32 = xor 62:i32, %11
+%17:i32 = subnsw 0:i32, %16
+%18:i32 = lshr %17, 8:i32
+%19:i32 = and 43:i32, %18
+%20:i32 = xor 43:i32, %19
+%21:i32 = or %15, %20
+infer %21 (demandedBits=00000000000000000000000011111111)
+
+; *****
+; For LLVM instruction:
+;  %207 = or i32 %206, %205
+; Looking for a replacement for:
+%0:i32 = var (range=[6,0))
+%1:i32 = add 4294967290:i32, %0 (hasExternalUses)
+%2:i1 = ult 5:i32, %1
+pc %2 0:i1
+%3:i1 = eq 0:i32, %1
+pc %3 0:i1
+%4:i32 = var
+%5:i32 = shl %4, 8:i32
+%6:i8 = var
+%7:i32 = zext %6
+%8:i32 = or %5, %7 (hasExternalUses)
+%9:i32 = sub 12:i32, %0
+%10:i32 = shl %8, %9
+%11:i32 = and 63:i32, %10 (hasExternalUses)
+%12:i32 = addnw 65:i32, %11
+%13:i32 = addnw 65510:i32, %11
+%14:i32 = lshr %13, 8:i32 (hasExternalUses)
+%15:i32 = and %12, %14
+%16:i32 = xor 62:i32, %11
+%17:i32 = subnsw 0:i32, %16
+%18:i32 = lshr %17, 8:i32
+%19:i32 = and 43:i32, %18
+%20:i32 = xor 43:i32, %19
+%21:i32 = or %15, %20
+%22:i32 = lshr 12032:i32, 8:i32
+%23:i32 = and 47:i32, %22
+%24:i32 = xor 47:i32, %23
+%25:i32 = or %21, %24
+infer %25 (demandedBits=00000000000000000000000011111111)
+
+; *****
+; For LLVM instruction:
+;  %208 = or i32 %207, %191
+; Looking for a replacement for:
+%0:i32 = var (range=[6,0))
+%1:i32 = add 4294967290:i32, %0 (hasExternalUses)
+%2:i1 = ult 5:i32, %1
+pc %2 0:i1
+%3:i1 = eq 0:i32, %1
+pc %3 0:i1
+%4:i32 = var
+%5:i32 = shl %4, 8:i32
+%6:i8 = var
+%7:i32 = zext %6
+%8:i32 = or %5, %7 (hasExternalUses)
+%9:i32 = sub 12:i32, %0
+%10:i32 = shl %8, %9
+%11:i32 = and 63:i32, %10 (hasExternalUses)
+%12:i32 = addnw 71:i32, %11
+%13:i32 = addnw 65484:i32, %11
+%14:i32 = lshr %13, 8:i32 (hasExternalUses)
+%15:i32 = and %12, %14
+%16:i32 = addnw 65510:i32, %11
+%17:i32 = lshr %16, 8:i32
+%18:i32 = xor 255:i32, %17
+%19:i32 = and %15, %18
+%20:i32 = addnw 65:i32, %11
+%21:i32 = and %20, %17
+%22:i32 = xor 62:i32, %11
+%23:i32 = subnsw 0:i32, %22
+%24:i32 = lshr %23, 8:i32
+%25:i32 = and 43:i32, %24
+%26:i32 = xor 43:i32, %25
+%27:i32 = or %21, %26
+%28:i32 = lshr 12032:i32, 8:i32
+%29:i32 = and 47:i32, %28
+%30:i32 = xor 47:i32, %29
+%31:i32 = or %27, %30
+%32:i32 = or %19, %31
+infer %32 (demandedBits=00000000000000000000000011111111)
+
+; *****
+; For LLVM instruction:
+;  %209 = or i32 %208, %197
+; Looking for a replacement for:
+%0:i32 = var (range=[6,0))
+%1:i32 = add 4294967290:i32, %0 (hasExternalUses)
+%2:i1 = ult 5:i32, %1
+pc %2 0:i1
+%3:i1 = eq 0:i32, %1
+pc %3 0:i1
+%4:i32 = var
+%5:i32 = shl %4, 8:i32
+%6:i8 = var
+%7:i32 = zext %6
+%8:i32 = or %5, %7 (hasExternalUses)
+%9:i32 = sub 12:i32, %0
+%10:i32 = shl %8, %9
+%11:i32 = and 63:i32, %10
+%12:i32 = addnw 252:i32, %11
+%13:i32 = addnw 65474:i32, %11
+%14:i32 = lshr %13, 8:i32
+%15:i32 = and %12, %14
+%16:i32 = addnw 65484:i32, %11
+%17:i32 = lshr %16, 8:i32
+%18:i32 = xor 255:i32, %17
+%19:i32 = and %15, %18
+%20:i32 = addnw 71:i32, %11
+%21:i32 = and %20, %17
+%22:i32 = addnw 65510:i32, %11
+%23:i32 = lshr %22, 8:i32
+%24:i32 = xor 255:i32, %23
+%25:i32 = and %21, %24
+%26:i32 = addnw 65:i32, %11
+%27:i32 = and %26, %23
+%28:i32 = xor 62:i32, %11
+%29:i32 = subnsw 0:i32, %28
+%30:i32 = lshr %29, 8:i32
+%31:i32 = and 43:i32, %30
+%32:i32 = xor 43:i32, %31
+%33:i32 = or %27, %32
+%34:i32 = lshr 12032:i32, 8:i32
+%35:i32 = and 47:i32, %34
+%36:i32 = xor 47:i32, %35
+%37:i32 = or %33, %36
+%38:i32 = or %25, %37
+%39:i32 = or %19, %38
+infer %39 (demandedBits=00000000000000000000000011111111)
+
+; *****
+; For LLVM instruction:
+;  %210 = trunc i32 %209 to i8
+; Looking for a replacement for:
+%0:i32 = var (range=[6,0))
+%1:i32 = add 4294967290:i32, %0 (hasExternalUses)
+%2:i1 = ult 5:i32, %1
+pc %2 0:i1
+%3:i1 = eq 0:i32, %1
+pc %3 0:i1
+%4:i32 = var
+%5:i32 = shl %4, 8:i32
+%6:i8 = var
+%7:i32 = zext %6
+%8:i32 = or %5, %7 (hasExternalUses)
+%9:i32 = sub 12:i32, %0
+%10:i32 = shl %8, %9
+%11:i32 = and 63:i32, %10
+%12:i32 = addnw 252:i32, %11
+%13:i32 = addnw 65474:i32, %11
+%14:i32 = lshr %13, 8:i32
+%15:i32 = and %12, %14
+%16:i32 = addnw 65484:i32, %11
+%17:i32 = lshr %16, 8:i32
+%18:i32 = xor 255:i32, %17
+%19:i32 = and %15, %18
+%20:i32 = addnw 71:i32, %11
+%21:i32 = and %20, %17
+%22:i32 = addnw 65510:i32, %11
+%23:i32 = lshr %22, 8:i32
+%24:i32 = xor 255:i32, %23
+%25:i32 = and %21, %24
+%26:i32 = addnw 65:i32, %11
+%27:i32 = and %26, %23
+%28:i32 = xor 62:i32, %11
+%29:i32 = subnsw 0:i32, %28
+%30:i32 = lshr %29, 8:i32
+%31:i32 = and 43:i32, %30
+%32:i32 = xor 43:i32, %31
+%33:i32 = or %27, %32
+%34:i32 = lshr 12032:i32, 8:i32
+%35:i32 = and 47:i32, %34
+%36:i32 = xor 47:i32, %35
+%37:i32 = or %33, %36
+%38:i32 = or %25, %37
+%39:i32 = or %19, %38
+%40:i8 = trunc %39
+infer %40
+
+; *****
+; For LLVM instruction:
+;  %211 = add i32 %138, 2
+; Looking for a replacement for:
+%0:i32 = var
+%1:i32 = add 2:i32, %0
+infer %1
+
+; *****
+; For LLVM instruction:
+;  %214 = phi i32 [ %120, %90 ], [ %85, %88 ], [ %211, %178 ], [ %173, %176 ], [ 0, %32 ], [ 0, %33 ]
+; Looking for a replacement for:
+%0 = block 6
+%1:i32 = var
+%2:i32 = add 2:i32, %1
+%3:i32 = add 1:i32, %1 (hasExternalUses)
+%4:i32 = var
+%5:i32 = add 2:i32, %4
+%6:i32 = add 1:i32, %4 (hasExternalUses)
+%7:i32 = phi %0, %2, %3, %5, %6, 0:i32, 0:i32
+infer %7
+
+; *****
+; For LLVM instruction:
+;  %215 = icmp ult i32 %25, %214
+; Looking for a replacement for:
+%0 = block 3
+%1:i32 = var
+%2:i32 = udiv %1, 3:i32
+%3:i32 = shl %2, 2:i32
+%4:i32 = add 4:i32, %3
+%5:i32 = or 2:i32, %3
+%6:i32 = mul 4294967293:i32, %2
+%7:i32 = add %1, %6
+%8:i32 = lshr %7, 1:i32
+%9:i32 = add %5, %8
+%10:i32 = phi %0, %4, %9, %3
+%11 = block 6
+%12:i32 = var
+%13:i32 = add 2:i32, %12
+%14:i32 = add 1:i32, %12
+%15:i32 = var
+%16:i32 = add 2:i32, %15
+%17:i32 = add 1:i32, %15
+%18:i32 = phi %11, %13, %14, %16, %17, 0:i32, 0:i32
+%19:i1 = ult %10, %18
+infer %19
+
+; *****
+; For LLVM instruction:
+;  %217 = icmp ugt i32 %25, %214
+; Looking for a replacement for:
+%0 = block 3
+%1:i32 = var
+%2:i32 = udiv %1, 3:i32
+%3:i32 = shl %2, 2:i32
+%4:i32 = add 4:i32, %3
+%5:i32 = or 2:i32, %3
+%6:i32 = mul 4294967293:i32, %2
+%7:i32 = add %1, %6
+%8:i32 = lshr %7, 1:i32
+%9:i32 = add %5, %8
+%10:i32 = phi %0, %4, %9, %3
+%11 = block 6
+%12:i32 = var
+%13:i32 = add 2:i32, %12
+%14:i32 = add 1:i32, %12
+%15:i32 = var
+%16:i32 = add 2:i32, %15
+%17:i32 = add 1:i32, %15
+%18:i32 = phi %11, %13, %14, %16, %17, 0:i32, 0:i32
+%19:i1 = ult %10, %18
+pc %19 0:i1
+%20:i1 = ult %18, %10
+infer %20
+
+; *****
+; For LLVM instruction:
+;  %220 = sub i32 %25, %214
+; Looking for a replacement for:
+%0 = block 3
+%1:i32 = var
+%2:i32 = udiv %1, 3:i32
+%3:i32 = shl %2, 2:i32
+%4:i32 = add 4:i32, %3
+%5:i32 = or 2:i32, %3
+%6:i32 = mul 4294967293:i32, %2
+%7:i32 = add %1, %6
+%8:i32 = lshr %7, 1:i32
+%9:i32 = add %5, %8
+%10:i32 = phi %0, %4, %9, %3
+%11 = block 6
+%12:i32 = var
+%13:i32 = add 2:i32, %12
+%14:i32 = add 1:i32, %12
+%15:i32 = var
+%16:i32 = add 2:i32, %15
+%17:i32 = add 1:i32, %15
+%18:i32 = phi %11, %13, %14, %16, %17, 0:i32, 0:i32
+%19:i1 = ult %10, %18
+pc %19 0:i1
+%20:i1 = ult %18, %10
+pc %20 1:i1
+%21:i32 = sub %10, %18
+infer %21
+
+; *****
+; For LLVM instruction:
+;  %223 = phi i32 [ %214, %216 ], [ %25, %218 ]
+; Looking for a replacement for:
+%0 = block 2
+%1 = block 6
+%2:i32 = var
+%3:i32 = add 2:i32, %2
+%4:i32 = add 1:i32, %2
+%5:i32 = var
+%6:i32 = add 2:i32, %5
+%7:i32 = add 1:i32, %5
+%8:i32 = phi %1, %3, %4, %6, %7, 0:i32, 0:i32
+%9 = block 3
+%10:i32 = var
+%11:i32 = udiv %10, 3:i32
+%12:i32 = shl %11, 2:i32
+%13:i32 = add 4:i32, %12
+%14:i32 = or 2:i32, %12
+%15:i32 = mul 4294967293:i32, %11
+%16:i32 = add %10, %15
+%17:i32 = lshr %16, 1:i32
+%18:i32 = add %14, %17
+%19:i32 = phi %9, %13, %18, %12
+%20:i32 = phi %0, %8, %19
+infer %20
+
+; *****
+; For LLVM instruction:
+;  %225 = add i32 %223, 1
+; Looking for a replacement for:
+%0 = block 2
+%1 = block 6
+%2:i32 = var
+%3:i32 = add 2:i32, %2
+%4:i32 = add 1:i32, %2
+%5:i32 = var
+%6:i32 = add 2:i32, %5
+%7:i32 = add 1:i32, %5
+%8:i32 = phi %1, %3, %4, %6, %7, 0:i32, 0:i32
+%9 = block 3
+%10:i32 = var
+%11:i32 = udiv %10, 3:i32
+%12:i32 = shl %11, 2:i32
+%13:i32 = add 4:i32, %12
+%14:i32 = or 2:i32, %12
+%15:i32 = mul 4294967293:i32, %11
+%16:i32 = add %10, %15
+%17:i32 = lshr %16, 1:i32
+%18:i32 = add %14, %17
+%19:i32 = phi %9, %13, %18, %12
+%20:i32 = phi %0, %8, %19
+%21:i32 = add 1:i32, %20
+infer %21
+
+; *****
+; For LLVM instruction:
+;  %226 = icmp ult i32 %225, %1
+; Looking for a replacement for:
+%0 = block 2
+%1 = block 6
+%2:i32 = var
+%3:i32 = add 2:i32, %2
+%4:i32 = add 1:i32, %2
+%5:i32 = var
+%6:i32 = add 2:i32, %5
+%7:i32 = add 1:i32, %5
+%8:i32 = phi %1, %3, %4, %6, %7, 0:i32, 0:i32
+%9 = block 3
+%10:i32 = var
+%11:i32 = udiv %10, 3:i32
+%12:i32 = shl %11, 2:i32
+%13:i32 = add 4:i32, %12
+%14:i32 = or 2:i32, %12
+%15:i32 = mul 4294967293:i32, %11
+%16:i32 = add %10, %15
+%17:i32 = lshr %16, 1:i32
+%18:i32 = add %14, %17
+%19:i32 = phi %9, %13, %18, %12
+%20:i32 = phi %0, %8, %19
+%21:i32 = add 1:i32, %20 (hasExternalUses)
+%22:i32 = var
+%23:i1 = ult %21, %22
+infer %23
+
+; *****
+; For LLVM instruction:
+;  %227 = select i1 %226, i32 %1, i32 %225
+; Looking for a replacement for:
+%0 = block 2
+%1 = block 6
+%2:i32 = var
+%3:i32 = add 2:i32, %2
+%4:i32 = add 1:i32, %2
+%5:i32 = var
+%6:i32 = add 2:i32, %5
+%7:i32 = add 1:i32, %5
+%8:i32 = phi %1, %3, %4, %6, %7, 0:i32, 0:i32
+%9 = block 3
+%10:i32 = var
+%11:i32 = udiv %10, 3:i32
+%12:i32 = shl %11, 2:i32
+%13:i32 = add 4:i32, %12
+%14:i32 = or 2:i32, %12
+%15:i32 = mul 4294967293:i32, %11
+%16:i32 = add %10, %15
+%17:i32 = lshr %16, 1:i32
+%18:i32 = add %14, %17
+%19:i32 = phi %9, %13, %18, %12
+%20:i32 = phi %0, %8, %19
+%21:i32 = add 1:i32, %20
+%22:i32 = var
+%23:i1 = ult %21, %22
+%24:i32 = select %23, %22, %21
+infer %24
+
+; *****
+; For LLVM instruction:
+;  %228 = sub i32 %227, %223
+; Looking for a replacement for:
+%0 = block 2
+%1 = block 6
+%2:i32 = var
+%3:i32 = add 2:i32, %2
+%4:i32 = add 1:i32, %2
+%5:i32 = var
+%6:i32 = add 2:i32, %5
+%7:i32 = add 1:i32, %5
+%8:i32 = phi %1, %3, %4, %6, %7, 0:i32, 0:i32
+%9 = block 3
+%10:i32 = var
+%11:i32 = udiv %10, 3:i32
+%12:i32 = shl %11, 2:i32
+%13:i32 = add 4:i32, %12
+%14:i32 = or 2:i32, %12
+%15:i32 = mul 4294967293:i32, %11
+%16:i32 = add %10, %15
+%17:i32 = lshr %16, 1:i32
+%18:i32 = add %14, %17
+%19:i32 = phi %9, %13, %18, %12
+%20:i32 = phi %0, %8, %19
+%21:i32 = add 1:i32, %20
+%22:i32 = var
+%23:i1 = ult %21, %22
+%24:i32 = select %23, %22, %21
+%25:i32 = sub %24, %20
+infer %25
+got 1 candidates from LHS
+
+-------------------------------------------------
+%0:i32 = lshr 12032:i32, 8:i32
+infer %0 (demandedBits=00000000000000000000000000101111)
+
+
+--------------------------------
+guess 0
+
+%0:i32 = var ; reservedconst_1
+
+Cost = 0
+first query is SAT, returning the model:
+reservedconst_1: 47
+second query is UNSAT-- this guess works
+Dataflow Pruned 0/0
+There are 1 Guesses
+There are 1 RHSs before deduplication
+There are 1 RHSs after deduplication
+"
+; No valid RHS in the list
+#########################################################
+
+Module before replacement:
+; ModuleID = './codecs.c.bc'
+source_filename = "sodium/codecs.c"
+target datalayout = "e-m:e-p:32:32-i64:64-n32:64-S128"
+target triple = "wasm32-unknown-wasi"
+
+@errno = external thread_local local_unnamed_addr global i32, align 4
+@.str = private unnamed_addr constant [19 x i8] c"b64_pos <= b64_len\00", align 1
+@.str.1 = private unnamed_addr constant [16 x i8] c"sodium/codecs.c\00", align 1
+@__func__.sodium_bin2base64 = private unnamed_addr constant [18 x i8] c"sodium_bin2base64\00", align 1
+
+; Function Attrs: nounwind
+define nonnull i8* @sodium_bin2hex(i8* nonnull returned %0, i32 %1, i8* nocapture readonly %2, i32 %3) local_unnamed_addr #0 {
+  %5 = icmp ult i32 %3, 2147483647
+  %6 = shl i32 %3, 1
+  %7 = icmp ult i32 %6, %1
+  %8 = and i1 %5, %7
+  br i1 %8, label %9, label %11
+
+9:                                                ; preds = %4
+  %10 = icmp eq i32 %3, 0
+  br i1 %10, label %40, label %12
+
+11:                                               ; preds = %4
+  tail call void @sodium_misuse() #5
+  unreachable
+
+12:                                               ; preds = %9, %12
+  %13 = phi i32 [ %36, %12 ], [ 0, %9 ]
+  %14 = getelementptr i8, i8* %2, i32 %13
+  %15 = load i8, i8* %14, align 1
+  %16 = zext i8 %15 to i32
+  %17 = and i32 %16, 15
+  %18 = lshr i32 %16, 4
+  %19 = add nuw nsw i32 %17, 65526
+  %20 = shl nuw nsw i32 %17, 8
+  %21 = add nuw nsw i32 %20, 22272
+  %22 = and i32 %19, 55552
+  %23 = add nuw nsw i32 %21, %22
+  %24 = add nuw nsw i32 %18, 87
+  %25 = add nuw nsw i32 %18, 65526
+  %26 = lshr i32 %25, 8
+  %27 = and i32 %26, 217
+  %28 = add nuw nsw i32 %24, %27
+  %29 = trunc i32 %28 to i8
+  %30 = shl i32 %13, 1
+  %31 = getelementptr i8, i8* %0, i32 %30
+  store i8 %29, i8* %31, align 1
+  %32 = lshr exact i32 %23, 8
+  %33 = trunc i32 %32 to i8
+  %34 = or i32 %30, 1
+  %35 = getelementptr i8, i8* %0, i32 %34
+  store i8 %33, i8* %35, align 1
+  %36 = add nuw i32 %13, 1
+  %37 = icmp eq i32 %36, %3
+  br i1 %37, label %38, label %12
+
+38:                                               ; preds = %12
+  %39 = shl i32 %3, 1
+  br label %40
+
+40:                                               ; preds = %9, %38
+  %41 = phi i32 [ %39, %38 ], [ 0, %9 ]
+  %42 = getelementptr i8, i8* %0, i32 %41
+  store i8 0, i8* %42, align 1
+  ret i8* %0
+}
+
+; Function Attrs: noreturn
+declare void @sodium_misuse() local_unnamed_addr #1
+
+; Function Attrs: nofree nounwind
+define i32 @sodium_hex2bin(i8* nocapture nonnull %0, i32 %1, i8* %2, i32 %3, i8* readonly %4, i32* %5, i8** %6) local_unnamed_addr #2 {
+  %8 = icmp eq i32 %3, 0
+  br i1 %8, label %76, label %9
+
+9:                                                ; preds = %7
+  %10 = icmp ne i8* %4, null
+  br label %11
+
+11:                                               ; preds = %9, %60
+  %12 = phi i8 [ 0, %9 ], [ %63, %60 ]
+  %13 = phi i32 [ 0, %9 ], [ %62, %60 ]
+  %14 = phi i32 [ 0, %9 ], [ %64, %60 ]
+  %15 = phi i8 [ 0, %9 ], [ %61, %60 ]
+  br label %16
+
+16:                                               ; preds = %11, %42
+  %17 = phi i8 [ %12, %11 ], [ 0, %42 ]
+  %18 = phi i32 [ %14, %11 ], [ %43, %42 ]
+  %19 = getelementptr i8, i8* %2, i32 %18
+  %20 = load i8, i8* %19, align 1
+  %21 = zext i8 %20 to i32
+  %22 = xor i8 %20, 48
+  %23 = zext i8 %22 to i32
+  %24 = add nuw nsw i32 %23, 65526
+  %25 = lshr i32 %24, 8
+  %26 = and i8 %20, -33
+  %27 = add i8 %26, -55
+  %28 = zext i8 %27 to i32
+  %29 = add nuw nsw i32 %28, 65526
+  %30 = add nuw nsw i32 %28, 65520
+  %31 = xor i32 %29, %30
+  %32 = lshr i32 %31, 8
+  %33 = or i32 %32, %25
+  %34 = and i32 %33, 255
+  %35 = icmp eq i32 %34, 0
+  br i1 %35, label %36, label %45
+
+36:                                               ; preds = %16
+  %37 = icmp eq i8 %17, 0
+  %38 = and i1 %10, %37
+  br i1 %38, label %39, label %66
+
+39:                                               ; preds = %36
+  %40 = tail call i8* @strchr(i8* nonnull %4, i32 %21)
+  %41 = icmp eq i8* %40, null
+  br i1 %41, label %76, label %42
+
+42:                                               ; preds = %39
+  %43 = add nuw i32 %18, 1
+  %44 = icmp ult i32 %43, %3
+  br i1 %44, label %16, label %76
+
+45:                                               ; preds = %16
+  %46 = icmp ult i32 %13, %1
+  br i1 %46, label %48, label %47
+
+47:                                               ; preds = %45
+  store i32 68, i32* @errno, align 4
+  br label %66
+
+48:                                               ; preds = %45
+  %49 = and i32 %25, %23
+  %50 = and i32 %32, %28
+  %51 = or i32 %50, %49
+  %52 = icmp eq i8 %17, 0
+  %53 = trunc i32 %51 to i8
+  br i1 %52, label %54, label %56
+
+54:                                               ; preds = %48
+  %55 = shl i8 %53, 4
+  br label %60
+
+56:                                               ; preds = %48
+  %57 = or i8 %15, %53
+  %58 = add nuw i32 %13, 1
+  %59 = getelementptr i8, i8* %0, i32 %13
+  store i8 %57, i8* %59, align 1
+  br label %60
+
+60:                                               ; preds = %56, %54
+  %61 = phi i8 [ %55, %54 ], [ %15, %56 ]
+  %62 = phi i32 [ %13, %54 ], [ %58, %56 ]
+  %63 = xor i8 %17, -1
+  %64 = add nuw i32 %18, 1
+  %65 = icmp ult i32 %64, %3
+  br i1 %65, label %11, label %66
+
+66:                                               ; preds = %60, %36, %47
+  %67 = phi i32 [ %13, %47 ], [ %13, %36 ], [ %62, %60 ]
+  %68 = phi i32 [ %18, %47 ], [ %18, %36 ], [ %64, %60 ]
+  %69 = phi i8 [ %17, %47 ], [ %17, %36 ], [ %63, %60 ]
+  %70 = phi i32 [ -1, %47 ], [ 0, %36 ], [ 0, %60 ]
+  %71 = icmp eq i8 %69, 0
+  br i1 %71, label %74, label %72
+
+72:                                               ; preds = %66
+  %73 = add i32 %68, -1
+  store i32 28, i32* @errno, align 4
+  br label %79
+
+74:                                               ; preds = %66
+  %75 = icmp eq i32 %70, 0
+  br i1 %75, label %76, label %79
+
+76:                                               ; preds = %42, %39, %7, %74
+  %77 = phi i32 [ %67, %74 ], [ 0, %7 ], [ %13, %39 ], [ %13, %42 ]
+  %78 = phi i32 [ %68, %74 ], [ 0, %7 ], [ %43, %42 ], [ %18, %39 ]
+  br label %79
+
+79:                                               ; preds = %72, %74, %76
+  %80 = phi i32 [ %78, %76 ], [ %68, %74 ], [ %73, %72 ]
+  %81 = phi i32 [ 0, %76 ], [ -1, %74 ], [ -1, %72 ]
+  %82 = phi i32 [ %77, %76 ], [ 0, %74 ], [ 0, %72 ]
+  %83 = icmp eq i8** %6, null
+  br i1 %83, label %86, label %84
+
+84:                                               ; preds = %79
+  %85 = getelementptr i8, i8* %2, i32 %80
+  store i8* %85, i8** %6, align 4
+  br label %89
+
+86:                                               ; preds = %79
+  %87 = icmp eq i32 %80, %3
+  br i1 %87, label %89, label %88
+
+88:                                               ; preds = %86
+  store i32 28, i32* @errno, align 4
+  br label %89
+
+89:                                               ; preds = %86, %88, %84
+  %90 = phi i32 [ %81, %84 ], [ -1, %88 ], [ %81, %86 ]
+  %91 = icmp eq i32* %5, null
+  br i1 %91, label %93, label %92
+
+92:                                               ; preds = %89
+  store i32 %82, i32* %5, align 4
+  br label %93
+
+93:                                               ; preds = %89, %92
+  ret i32 %90
+}
+
+; Function Attrs: nofree nounwind readonly
+declare i8* @strchr(i8* %0, i32 %1) local_unnamed_addr #3
+
+; Function Attrs: nounwind
+define i32 @sodium_base64_encoded_len(i32 %0, i32 %1) local_unnamed_addr #0 {
+  %3 = and i32 %1, -7
+  %4 = icmp eq i32 %3, 1
+  br i1 %4, label %6, label %5
+
+5:                                                ; preds = %2
+  tail call void @sodium_misuse() #5
+  unreachable
+
+6:                                                ; preds = %2
+  %7 = udiv i32 %0, 3
+  %8 = shl i32 %7, 2
+  %9 = mul i32 %7, -3
+  %10 = add i32 %9, %0
+  %11 = lshr i32 %10, 1
+  %12 = or i32 %11, %10
+  %13 = and i32 %12, 1
+  %14 = lshr i32 %1, 1
+  %15 = and i32 %14, 1
+  %16 = sub nsw i32 0, %15
+  %17 = sub i32 3, %10
+  %18 = and i32 %17, %16
+  %19 = sub i32 4, %18
+  %20 = mul nuw nsw i32 %13, %19
+  %21 = or i32 %8, 1
+  %22 = add i32 %21, %20
+  ret i32 %22
+}
+
+; Function Attrs: nounwind
+define nonnull i8* @sodium_bin2base64(i8* nonnull returned %0, i32 %1, i8* nocapture readonly %2, i32 %3, i32 %4) local_unnamed_addr #0 {
+  %6 = and i32 %4, -7
+  %7 = icmp eq i32 %6, 1
+  br i1 %7, label %9, label %8
+
+8:                                                ; preds = %5
+  tail call void @sodium_misuse() #5
+  unreachable
+
+9:                                                ; preds = %5
+  %10 = udiv i32 %3, 3
+  %11 = mul i32 %10, -3
+  %12 = add i32 %11, %3
+  %13 = shl i32 %10, 2
+  %14 = icmp eq i32 %12, 0
+  br i1 %14, label %24, label %15
+
+15:                                               ; preds = %9
+  %16 = and i32 %4, 2
+  %17 = icmp eq i32 %16, 0
+  br i1 %17, label %18, label %20
+
+18:                                               ; preds = %15
+  %19 = add i32 %13, 4
+  br label %24
+
+20:                                               ; preds = %15
+  %21 = lshr i32 %12, 1
+  %22 = or i32 %13, 2
+  %23 = add i32 %22, %21
+  br label %24
+
+24:                                               ; preds = %9, %18, %20
+  %25 = phi i32 [ %19, %18 ], [ %23, %20 ], [ %13, %9 ]
+  %26 = icmp ult i32 %25, %1
+  br i1 %26, label %28, label %27
+
+27:                                               ; preds = %24
+  tail call void @sodium_misuse() #5
+  unreachable
+
+28:                                               ; preds = %24
+  %29 = and i32 %4, 4
+  %30 = icmp eq i32 %29, 0
+  %31 = icmp ne i32 %3, 0
+  br i1 %30, label %33, label %32
+
+32:                                               ; preds = %28
+  br i1 %31, label %37, label %213
+
+33:                                               ; preds = %28
+  br i1 %31, label %125, label %213
+
+34:                                               ; preds = %48
+  %35 = add nuw i32 %40, 1
+  %36 = icmp eq i32 %35, %3
+  br i1 %36, label %88, label %37
+
+37:                                               ; preds = %32, %34
+  %38 = phi i32 [ %46, %34 ], [ 0, %32 ]
+  %39 = phi i32 [ %51, %34 ], [ 0, %32 ]
+  %40 = phi i32 [ %35, %34 ], [ 0, %32 ]
+  %41 = phi i32 [ %85, %34 ], [ 0, %32 ]
+  %42 = shl i32 %38, 8
+  %43 = getelementptr i8, i8* %2, i32 %40
+  %44 = load i8, i8* %43, align 1
+  %45 = zext i8 %44 to i32
+  %46 = or i32 %42, %45
+  %47 = add nuw nsw i32 %39, 8
+  br label %48
+
+48:                                               ; preds = %37, %48
+  %49 = phi i32 [ %47, %37 ], [ %51, %48 ]
+  %50 = phi i32 [ %41, %37 ], [ %85, %48 ]
+  %51 = add i32 %49, -6
+  %52 = lshr i32 %46, %51
+  %53 = and i32 %52, 63
+  %54 = add nuw nsw i32 %53, 65510
+  %55 = lshr i32 %54, 8
+  %56 = add nuw nsw i32 %53, 65
+  %57 = and i32 %55, %56
+  %58 = xor i32 %55, 255
+  %59 = add nuw nsw i32 %53, 65484
+  %60 = lshr i32 %59, 8
+  %61 = add nuw nsw i32 %53, 71
+  %62 = and i32 %60, %61
+  %63 = and i32 %62, %58
+  %64 = xor i32 %60, 255
+  %65 = add nuw nsw i32 %53, 65474
+  %66 = lshr i32 %65, 8
+  %67 = add nuw nsw i32 %53, 252
+  %68 = and i32 %66, %67
+  %69 = and i32 %68, %64
+  %70 = xor i32 %53, 62
+  %71 = sub nsw i32 0, %70
+  %72 = lshr i32 %71, 8
+  %73 = and i32 %72, 45
+  %74 = xor i32 %73, 45
+  %75 = xor i32 %53, 63
+  %76 = sub nsw i32 0, %75
+  %77 = lshr i32 %76, 8
+  %78 = and i32 %77, 95
+  %79 = xor i32 %78, 95
+  %80 = or i32 %74, %57
+  %81 = or i32 %80, %79
+  %82 = or i32 %81, %63
+  %83 = or i32 %82, %69
+  %84 = trunc i32 %83 to i8
+  %85 = add i32 %50, 1
+  %86 = getelementptr i8, i8* %0, i32 %50
+  store i8 %84, i8* %86, align 1
+  %87 = icmp ugt i32 %51, 5
+  br i1 %87, label %48, label %34
+
+88:                                               ; preds = %34
+  %89 = icmp eq i32 %51, 0
+  br i1 %89, label %213, label %90
+
+90:                                               ; preds = %88
+  %91 = sub i32 12, %49
+  %92 = shl i32 %46, %91
+  %93 = and i32 %92, 63
+  %94 = add nuw nsw i32 %93, 65510
+  %95 = lshr i32 %94, 8
+  %96 = add nuw nsw i32 %93, 65
+  %97 = and i32 %95, %96
+  %98 = xor i32 %95, 255
+  %99 = add nuw nsw i32 %93, 65484
+  %100 = lshr i32 %99, 8
+  %101 = add nuw nsw i32 %93, 71
+  %102 = and i32 %100, %101
+  %103 = and i32 %102, %98
+  %104 = xor i32 %100, 255
+  %105 = add nuw nsw i32 %93, 65474
+  %106 = lshr i32 %105, 8
+  %107 = add nuw nsw i32 %93, 252
+  %108 = and i32 %106, %107
+  %109 = and i32 %108, %104
+  %110 = xor i32 %93, 62
+  %111 = sub nsw i32 0, %110
+  %112 = lshr i32 %111, 8
+  %113 = and i32 %112, 45
+  %114 = xor i32 %113, 45
+  %115 = or i32 %114, %97
+  %116 = or i32 %115, 0
+  %117 = or i32 %116, %103
+  %118 = or i32 %117, %109
+  %119 = trunc i32 %118 to i8
+  %120 = add i32 %50, 2
+  %121 = getelementptr i8, i8* %0, i32 %85
+  store i8 %119, i8* %121, align 1
+  br label %213
+
+122:                                              ; preds = %136
+  %123 = add nuw i32 %128, 1
+  %124 = icmp eq i32 %123, %3
+  br i1 %124, label %176, label %125
+
+125:                                              ; preds = %33, %122
+  %126 = phi i32 [ %134, %122 ], [ 0, %33 ]
+  %127 = phi i32 [ %139, %122 ], [ 0, %33 ]
+  %128 = phi i32 [ %123, %122 ], [ 0, %33 ]
+  %129 = phi i32 [ %173, %122 ], [ 0, %33 ]
+  %130 = shl i32 %126, 8
+  %131 = getelementptr i8, i8* %2, i32 %128
+  %132 = load i8, i8* %131, align 1
+  %133 = zext i8 %132 to i32
+  %134 = or i32 %130, %133
+  %135 = add nuw nsw i32 %127, 8
+  br label %136
+
+136:                                              ; preds = %125, %136
+  %137 = phi i32 [ %135, %125 ], [ %139, %136 ]
+  %138 = phi i32 [ %129, %125 ], [ %173, %136 ]
+  %139 = add i32 %137, -6
+  %140 = lshr i32 %134, %139
+  %141 = and i32 %140, 63
+  %142 = add nuw nsw i32 %141, 65510
+  %143 = lshr i32 %142, 8
+  %144 = add nuw nsw i32 %141, 65
+  %145 = and i32 %143, %144
+  %146 = xor i32 %143, 255
+  %147 = add nuw nsw i32 %141, 65484
+  %148 = lshr i32 %147, 8
+  %149 = add nuw nsw i32 %141, 71
+  %150 = and i32 %148, %149
+  %151 = and i32 %150, %146
+  %152 = xor i32 %148, 255
+  %153 = add nuw nsw i32 %141, 65474
+  %154 = lshr i32 %153, 8
+  %155 = add nuw nsw i32 %141, 252
+  %156 = and i32 %154, %155
+  %157 = and i32 %156, %152
+  %158 = xor i32 %141, 62
+  %159 = sub nsw i32 0, %158
+  %160 = lshr i32 %159, 8
+  %161 = and i32 %160, 43
+  %162 = xor i32 %161, 43
+  %163 = xor i32 %141, 63
+  %164 = sub nsw i32 0, %163
+  %165 = lshr i32 %164, 8
+  %166 = and i32 %165, 47
+  %167 = xor i32 %166, 47
+  %168 = or i32 %162, %145
+  %169 = or i32 %168, %167
+  %170 = or i32 %169, %151
+  %171 = or i32 %170, %157
+  %172 = trunc i32 %171 to i8
+  %173 = add i32 %138, 1
+  %174 = getelementptr i8, i8* %0, i32 %138
+  store i8 %172, i8* %174, align 1
+  %175 = icmp ugt i32 %139, 5
+  br i1 %175, label %136, label %122
+
+176:                                              ; preds = %122
+  %177 = icmp eq i32 %139, 0
+  br i1 %177, label %213, label %178
+
+178:                                              ; preds = %176
+  %179 = sub i32 12, %137
+  %180 = shl i32 %134, %179
+  %181 = and i32 %180, 63
+  %182 = add nuw nsw i32 %181, 65510
+  %183 = lshr i32 %182, 8
+  %184 = add nuw nsw i32 %181, 65
+  %185 = and i32 %183, %184
+  %186 = xor i32 %183, 255
+  %187 = add nuw nsw i32 %181, 65484
+  %188 = lshr i32 %187, 8
+  %189 = add nuw nsw i32 %181, 71
+  %190 = and i32 %188, %189
+  %191 = and i32 %190, %186
+  %192 = xor i32 %188, 255
+  %193 = add nuw nsw i32 %181, 65474
+  %194 = lshr i32 %193, 8
+  %195 = add nuw nsw i32 %181, 252
+  %196 = and i32 %194, %195
+  %197 = and i32 %196, %192
+  %198 = xor i32 %181, 62
+  %199 = sub nsw i32 0, %198
+  %200 = lshr i32 %199, 8
+  %201 = and i32 %200, 43
+  %202 = xor i32 %201, 43
+  %203 = lshr i32 12032, 8
+  %204 = and i32 %203, 47
+  %205 = xor i32 %204, 47
+  %206 = or i32 %202, %185
+  %207 = or i32 %206, %205
+  %208 = or i32 %207, %191
+  %209 = or i32 %208, %197
+  %210 = trunc i32 %209 to i8
+  %211 = add i32 %138, 2
+  %212 = getelementptr i8, i8* %0, i32 %173
+  store i8 %210, i8* %212, align 1
+  br label %213
+
+213:                                              ; preds = %33, %32, %88, %176, %178, %90
+  %214 = phi i32 [ %120, %90 ], [ %85, %88 ], [ %211, %178 ], [ %173, %176 ], [ 0, %32 ], [ 0, %33 ]
+  %215 = icmp ult i32 %25, %214
+  br i1 %215, label %221, label %216
+
+216:                                              ; preds = %213
+  %217 = icmp ugt i32 %25, %214
+  br i1 %217, label %218, label %222
+
+218:                                              ; preds = %216
+  %219 = getelementptr i8, i8* %0, i32 %214
+  %220 = sub i32 %25, %214
+  call void @llvm.memset.p0i8.i32(i8* align 1 %219, i8 61, i32 %220, i1 false)
+  br label %222
+
+221:                                              ; preds = %213
+  tail call void @__assert_fail(i8* getelementptr inbounds ([19 x i8], [19 x i8]* @.str, i32 0, i32 0), i8* getelementptr inbounds ([16 x i8], [16 x i8]* @.str.1, i32 0, i32 0), i32 230, i8* getelementptr inbounds ([18 x i8], [18 x i8]* @__func__.sodium_bin2base64, i32 0, i32 0)) #5
+  unreachable
+
+222:                                              ; preds = %218, %216
+  %223 = phi i32 [ %214, %216 ], [ %25, %218 ]
+  %224 = getelementptr i8, i8* %0, i32 %223
+  %225 = add i32 %223, 1
+  %226 = icmp ult i32 %225, %1
+  %227 = select i1 %226, i32 %1, i32 %225
+  %228 = sub i32 %227, %223
+  call void @llvm.memset.p0i8.i32(i8* align 1 %224, i8 0, i32 %228, i1 false)
+  ret i8* %0
+}
+
+; Function Attrs: noreturn
+declare void @__assert_fail(i8* %0, i8* %1, i32 %2, i8* %3) local_unnamed_addr #1
+
+; Function Attrs: nounwind
+define i32 @sodium_base642bin(i8* nocapture nonnull %0, i32 %1, i8* %2, i32 %3, i8* readonly %4, i32* %5, i8** %6, i32 %7) local_unnamed_addr #0 {
+  %9 = and i32 %7, -7
+  %10 = icmp eq i32 %9, 1
+  br i1 %10, label %12, label %11
+
+11:                                               ; preds = %8
+  tail call void @sodium_misuse() #5
+  unreachable
+
+12:                                               ; preds = %8
+  %13 = icmp eq i32 %3, 0
+  br i1 %13, label %116, label %14
+
+14:                                               ; preds = %12
+  %15 = and i32 %7, 4
+  %16 = icmp eq i32 %15, 0
+  %17 = icmp eq i8* %4, null
+  %18 = select i1 %16, i32 43, i32 45
+  %19 = select i1 %16, i32 47, i32 95
+  br label %20
+
+20:                                               ; preds = %14, %104
+  %21 = phi i32 [ 0, %14 ], [ %106, %104 ]
+  %22 = phi i32 [ 0, %14 ], [ %92, %104 ]
+  %23 = phi i32 [ 0, %14 ], [ %105, %104 ]
+  %24 = phi i32 [ 0, %14 ], [ %107, %104 ]
+  br label %25
+
+25:                                               ; preds = %20, %87
+  %26 = phi i32 [ %24, %20 ], [ %88, %87 ]
+  %27 = getelementptr i8, i8* %2, i32 %26
+  %28 = load i8, i8* %27, align 1
+  %29 = sext i8 %28 to i32
+  %30 = add nsw i32 %29, -65
+  %31 = lshr i32 %30, 8
+  %32 = xor i32 %31, 255
+  %33 = sub nsw i32 90, %29
+  %34 = lshr i32 %33, 8
+  %35 = and i32 %34, 255
+  %36 = xor i32 %35, 255
+  %37 = and i32 %32, %30
+  %38 = and i32 %37, %36
+  %39 = add nsw i32 %29, 65439
+  %40 = lshr i32 %39, 8
+  %41 = xor i32 %40, 255
+  %42 = sub nsw i32 122, %29
+  %43 = lshr i32 %42, 8
+  %44 = and i32 %43, 255
+  %45 = xor i32 %44, 255
+  %46 = add nsw i32 %29, 185
+  %47 = and i32 %41, %46
+  %48 = and i32 %47, %45
+  %49 = add nsw i32 %29, 65488
+  %50 = lshr i32 %49, 8
+  %51 = xor i32 %50, 255
+  %52 = sub nsw i32 57, %29
+  %53 = lshr i32 %52, 8
+  %54 = and i32 %53, 255
+  %55 = xor i32 %54, 255
+  %56 = add nsw i32 %29, 4
+  %57 = and i32 %51, %56
+  %58 = and i32 %57, %55
+  %59 = xor i32 %18, %29
+  %60 = sub nsw i32 0, %59
+  %61 = lshr i32 %60, 8
+  %62 = and i32 %61, 62
+  %63 = xor i32 %62, 62
+  %64 = xor i32 %19, %29
+  %65 = sub nsw i32 0, %64
+  %66 = lshr i32 %65, 8
+  %67 = and i32 %66, 63
+  %68 = xor i32 %67, 63
+  %69 = or i32 %48, %58
+  %70 = or i32 %69, %63
+  %71 = or i32 %70, %68
+  %72 = or i32 %71, %38
+  %73 = sub nsw i32 0, %72
+  %74 = lshr i32 %73, 8
+  %75 = and i32 %74, 255
+  %76 = xor i32 %75, 255
+  %77 = xor i32 %29, 65
+  %78 = sub nsw i32 0, %77
+  %79 = lshr i32 %78, 8
+  %80 = and i32 %76, %79
+  %81 = or i32 %80, %72
+  %82 = icmp eq i32 %81, 255
+  br i1 %82, label %83, label %90
+
+83:                                               ; preds = %25
+  br i1 %17, label %109, label %84
+
+84:                                               ; preds = %83
+  %85 = tail call i8* @strchr(i8* nonnull %4, i32 %29)
+  %86 = icmp eq i8* %85, null
+  br i1 %86, label %109, label %87
+
+87:                                               ; preds = %84
+  %88 = add nuw i32 %26, 1
+  %89 = icmp ult i32 %88, %3
+  br i1 %89, label %25, label %109
+
+90:                                               ; preds = %25
+  %91 = shl i32 %22, 6
+  %92 = add i32 %81, %91
+  %93 = add i32 %21, 6
+  %94 = icmp ugt i32 %93, 7
+  br i1 %94, label %95, label %104
+
+95:                                               ; preds = %90
+  %96 = add i32 %21, -2
+  %97 = icmp ult i32 %23, %1
+  br i1 %97, label %99, label %98
+
+98:                                               ; preds = %95
+  store i32 68, i32* @errno, align 4
+  br label %109
+
+99:                                               ; preds = %95
+  %100 = lshr i32 %92, %96
+  %101 = trunc i32 %100 to i8
+  %102 = add nuw i32 %23, 1
+  %103 = getelementptr i8, i8* %0, i32 %23
+  store i8 %101, i8* %103, align 1
+  br label %104
+
+104:                                              ; preds = %99, %90
+  %105 = phi i32 [ %102, %99 ], [ %23, %90 ]
+  %106 = phi i32 [ %96, %99 ], [ %93, %90 ]
+  %107 = add nuw i32 %26, 1
+  %108 = icmp ult i32 %107, %3
+  br i1 %108, label %20, label %109
+
+109:                                              ; preds = %104, %87, %83, %84, %98
+  %110 = phi i32 [ %23, %98 ], [ %23, %84 ], [ %23, %83 ], [ %23, %87 ], [ %105, %104 ]
+  %111 = phi i32 [ %26, %98 ], [ %88, %87 ], [ %24, %83 ], [ %26, %84 ], [ %107, %104 ]
+  %112 = phi i32 [ -1, %98 ], [ 0, %84 ], [ 0, %83 ], [ 0, %87 ], [ 0, %104 ]
+  %113 = phi i32 [ %92, %98 ], [ %22, %84 ], [ %22, %83 ], [ %22, %87 ], [ %92, %104 ]
+  %114 = phi i32 [ %96, %98 ], [ %21, %84 ], [ %21, %83 ], [ %21, %87 ], [ %106, %104 ]
+  %115 = icmp ugt i32 %114, 4
+  br i1 %115, label %171, label %116
+
+116:                                              ; preds = %12, %109
+  %117 = phi i32 [ %114, %109 ], [ 0, %12 ]
+  %118 = phi i32 [ %113, %109 ], [ 0, %12 ]
+  %119 = phi i32 [ %112, %109 ], [ 0, %12 ]
+  %120 = phi i32 [ %111, %109 ], [ 0, %12 ]
+  %121 = phi i32 [ %110, %109 ], [ 0, %12 ]
+  %122 = shl nsw i32 -1, %117
+  %123 = xor i32 %122, -1
+  %124 = and i32 %118, %123
+  %125 = or i32 %124, %119
+  %126 = icmp eq i32 %125, 0
+  br i1 %126, label %127, label %171
+
+127:                                              ; preds = %116
+  %128 = and i32 %7, 2
+  %129 = icmp eq i32 %128, 0
+  br i1 %129, label %130, label %156
+
+130:                                              ; preds = %127
+  %131 = lshr i32 %117, 1
+  %132 = icmp eq i32 %131, 0
+  br i1 %132, label %156, label %133
+
+133:                                              ; preds = %130
+  %134 = icmp eq i8* %4, null
+  br label %135
+
+135:                                              ; preds = %152, %133
+  %136 = phi i32 [ %120, %133 ], [ %154, %152 ]
+  %137 = phi i32 [ %131, %133 ], [ %153, %152 ]
+  %138 = icmp ult i32 %136, %3
+  br i1 %138, label %140, label %139
+
+139:                                              ; preds = %135
+  store i32 68, i32* @errno, align 4
+  br label %171
+
+140:                                              ; preds = %135
+  %141 = getelementptr i8, i8* %2, i32 %136
+  %142 = load i8, i8* %141, align 1
+  %143 = sext i8 %142 to i32
+  %144 = icmp eq i8 %142, 61
+  br i1 %144, label %145, label %147
+
+145:                                              ; preds = %140
+  %146 = add i32 %137, -1
+  br label %152
+
+147:                                              ; preds = %140
+  br i1 %134, label %151, label %148
+
+148:                                              ; preds = %147
+  %149 = tail call i8* @strchr(i8* nonnull %4, i32 %143) #6
+  %150 = icmp eq i8* %149, null
+  br i1 %150, label %151, label %152
+
+151:                                              ; preds = %148, %147
+  store i32 28, i32* @errno, align 4
+  br label %171
+
+152:                                              ; preds = %148, %145
+  %153 = phi i32 [ %146, %145 ], [ %137, %148 ]
+  %154 = add nuw i32 %136, 1
+  %155 = icmp eq i32 %153, 0
+  br i1 %155, label %156, label %135
+
+156:                                              ; preds = %152, %127, %130
+  %157 = phi i32 [ %120, %127 ], [ %120, %130 ], [ %154, %152 ]
+  %158 = icmp ne i8* %4, null
+  %159 = icmp ult i32 %157, %3
+  %160 = and i1 %158, %159
+  br i1 %160, label %161, label %171
+
+161:                                              ; preds = %156, %168
+  %162 = phi i32 [ %169, %168 ], [ %157, %156 ]
+  %163 = getelementptr i8, i8* %2, i32 %162
+  %164 = load i8, i8* %163, align 1
+  %165 = sext i8 %164 to i32
+  %166 = tail call i8* @strchr(i8* nonnull %4, i32 %165)
+  %167 = icmp eq i8* %166, null
+  br i1 %167, label %171, label %168
+
+168:                                              ; preds = %161
+  %169 = add i32 %162, 1
+  %170 = icmp eq i32 %169, %3
+  br i1 %170, label %171, label %161
+
+171:                                              ; preds = %161, %168, %156, %151, %139, %109, %116
+  %172 = phi i32 [ 0, %156 ], [ -1, %151 ], [ -1, %139 ], [ -1, %109 ], [ -1, %116 ], [ 0, %168 ], [ 0, %161 ]
+  %173 = phi i32 [ %157, %156 ], [ %136, %151 ], [ %136, %139 ], [ %111, %109 ], [ %120, %116 ], [ %162, %161 ], [ %3, %168 ]
+  %174 = phi i32 [ %121, %156 ], [ 0, %151 ], [ 0, %139 ], [ 0, %109 ], [ 0, %116 ], [ %121, %168 ], [ %121, %161 ]
+  %175 = icmp eq i8** %6, null
+  br i1 %175, label %178, label %176
+
+176:                                              ; preds = %171
+  %177 = getelementptr i8, i8* %2, i32 %173
+  store i8* %177, i8** %6, align 4
+  br label %181
+
+178:                                              ; preds = %171
+  %179 = icmp eq i32 %173, %3
+  br i1 %179, label %181, label %180
+
+180:                                              ; preds = %178
+  store i32 28, i32* @errno, align 4
+  br label %181
+
+181:                                              ; preds = %178, %180, %176
+  %182 = phi i32 [ %172, %176 ], [ -1, %180 ], [ %172, %178 ]
+  %183 = icmp eq i32* %5, null
+  br i1 %183, label %185, label %184
+
+184:                                              ; preds = %181
+  store i32 %174, i32* %5, align 4
+  br label %185
+
+185:                                              ; preds = %181, %184
+  ret i32 %182
+}
+
+; Function Attrs: argmemonly nounwind willreturn writeonly
+declare void @llvm.memset.p0i8.i32(i8* nocapture writeonly %0, i8 %1, i32 %2, i1 immarg %3) #4
+
+attributes #0 = { nounwind "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "min-legal-vector-width"="0" "no-infs-fp-math"="false" "no-jump-tables"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="false" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #1 = { noreturn "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="false" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #2 = { nofree nounwind "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "min-legal-vector-width"="0" "no-infs-fp-math"="false" "no-jump-tables"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="false" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #3 = { nofree nounwind readonly "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="false" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #4 = { argmemonly nounwind willreturn writeonly }
+attributes #5 = { noreturn nounwind }
+attributes #6 = { nounwind }
+
+!llvm.module.flags = !{!0, !1, !2}
+!llvm.ident = !{!3}
+
+!0 = !{i32 1, !"wchar_size", i32 4}
+!1 = !{i32 7, !"PIC Level", i32 2}
+!2 = !{i32 7, !"PIE Level", i32 2}
+!3 = !{!"clang version 10.0.0 (https://github.com/llvm/llvm-project d32170dbd5b0d54436537b6b75beaf44324e0c28)"}
+
+; Replacing "  %203 = lshr i32 12032, 8"
+; from ""
+; with "i32 47" in:
+"%0:i32 = lshr 12032:i32, 8:i32
+cand %0 47:i32 (demandedBits=00000000000000000000000000101111)
+"
+; with "i32 47"
+
+Module after replacement:
+; ModuleID = './codecs.c.bc'
+source_filename = "sodium/codecs.c"
+target datalayout = "e-m:e-p:32:32-i64:64-n32:64-S128"
+target triple = "wasm32-unknown-wasi"
+
+@errno = external thread_local local_unnamed_addr global i32, align 4
+@.str = private unnamed_addr constant [19 x i8] c"b64_pos <= b64_len\00", align 1
+@.str.1 = private unnamed_addr constant [16 x i8] c"sodium/codecs.c\00", align 1
+@__func__.sodium_bin2base64 = private unnamed_addr constant [18 x i8] c"sodium_bin2base64\00", align 1
+
+; Function Attrs: nounwind
+define nonnull i8* @sodium_bin2hex(i8* nonnull returned %0, i32 %1, i8* nocapture readonly %2, i32 %3) local_unnamed_addr #0 {
+  %5 = icmp ult i32 %3, 2147483647
+  %6 = shl i32 %3, 1
+  %7 = icmp ult i32 %6, %1
+  %8 = and i1 %5, %7
+  br i1 %8, label %9, label %11
+
+9:                                                ; preds = %4
+  %10 = icmp eq i32 %3, 0
+  br i1 %10, label %40, label %12
+
+11:                                               ; preds = %4
+  tail call void @sodium_misuse() #5
+  unreachable
+
+12:                                               ; preds = %9, %12
+  %13 = phi i32 [ %36, %12 ], [ 0, %9 ]
+  %14 = getelementptr i8, i8* %2, i32 %13
+  %15 = load i8, i8* %14, align 1
+  %16 = zext i8 %15 to i32
+  %17 = and i32 %16, 15
+  %18 = lshr i32 %16, 4
+  %19 = add nuw nsw i32 %17, 65526
+  %20 = shl nuw nsw i32 %17, 8
+  %21 = add nuw nsw i32 %20, 22272
+  %22 = and i32 %19, 55552
+  %23 = add nuw nsw i32 %21, %22
+  %24 = add nuw nsw i32 %18, 87
+  %25 = add nuw nsw i32 %18, 65526
+  %26 = lshr i32 %25, 8
+  %27 = and i32 %26, 217
+  %28 = add nuw nsw i32 %24, %27
+  %29 = trunc i32 %28 to i8
+  %30 = shl i32 %13, 1
+  %31 = getelementptr i8, i8* %0, i32 %30
+  store i8 %29, i8* %31, align 1
+  %32 = lshr exact i32 %23, 8
+  %33 = trunc i32 %32 to i8
+  %34 = or i32 %30, 1
+  %35 = getelementptr i8, i8* %0, i32 %34
+  store i8 %33, i8* %35, align 1
+  %36 = add nuw i32 %13, 1
+  %37 = icmp eq i32 %36, %3
+  br i1 %37, label %38, label %12
+
+38:                                               ; preds = %12
+  %39 = shl i32 %3, 1
+  br label %40
+
+40:                                               ; preds = %9, %38
+  %41 = phi i32 [ %39, %38 ], [ 0, %9 ]
+  %42 = getelementptr i8, i8* %0, i32 %41
+  store i8 0, i8* %42, align 1
+  ret i8* %0
+}
+
+; Function Attrs: noreturn
+declare void @sodium_misuse() local_unnamed_addr #1
+
+; Function Attrs: nofree nounwind
+define i32 @sodium_hex2bin(i8* nocapture nonnull %0, i32 %1, i8* %2, i32 %3, i8* readonly %4, i32* %5, i8** %6) local_unnamed_addr #2 {
+  %8 = icmp eq i32 %3, 0
+  br i1 %8, label %76, label %9
+
+9:                                                ; preds = %7
+  %10 = icmp ne i8* %4, null
+  br label %11
+
+11:                                               ; preds = %9, %60
+  %12 = phi i8 [ 0, %9 ], [ %63, %60 ]
+  %13 = phi i32 [ 0, %9 ], [ %62, %60 ]
+  %14 = phi i32 [ 0, %9 ], [ %64, %60 ]
+  %15 = phi i8 [ 0, %9 ], [ %61, %60 ]
+  br label %16
+
+16:                                               ; preds = %11, %42
+  %17 = phi i8 [ %12, %11 ], [ 0, %42 ]
+  %18 = phi i32 [ %14, %11 ], [ %43, %42 ]
+  %19 = getelementptr i8, i8* %2, i32 %18
+  %20 = load i8, i8* %19, align 1
+  %21 = zext i8 %20 to i32
+  %22 = xor i8 %20, 48
+  %23 = zext i8 %22 to i32
+  %24 = add nuw nsw i32 %23, 65526
+  %25 = lshr i32 %24, 8
+  %26 = and i8 %20, -33
+  %27 = add i8 %26, -55
+  %28 = zext i8 %27 to i32
+  %29 = add nuw nsw i32 %28, 65526
+  %30 = add nuw nsw i32 %28, 65520
+  %31 = xor i32 %29, %30
+  %32 = lshr i32 %31, 8
+  %33 = or i32 %32, %25
+  %34 = and i32 %33, 255
+  %35 = icmp eq i32 %34, 0
+  br i1 %35, label %36, label %45
+
+36:                                               ; preds = %16
+  %37 = icmp eq i8 %17, 0
+  %38 = and i1 %10, %37
+  br i1 %38, label %39, label %66
+
+39:                                               ; preds = %36
+  %40 = tail call i8* @strchr(i8* nonnull %4, i32 %21)
+  %41 = icmp eq i8* %40, null
+  br i1 %41, label %76, label %42
+
+42:                                               ; preds = %39
+  %43 = add nuw i32 %18, 1
+  %44 = icmp ult i32 %43, %3
+  br i1 %44, label %16, label %76
+
+45:                                               ; preds = %16
+  %46 = icmp ult i32 %13, %1
+  br i1 %46, label %48, label %47
+
+47:                                               ; preds = %45
+  store i32 68, i32* @errno, align 4
+  br label %66
+
+48:                                               ; preds = %45
+  %49 = and i32 %25, %23
+  %50 = and i32 %32, %28
+  %51 = or i32 %50, %49
+  %52 = icmp eq i8 %17, 0
+  %53 = trunc i32 %51 to i8
+  br i1 %52, label %54, label %56
+
+54:                                               ; preds = %48
+  %55 = shl i8 %53, 4
+  br label %60
+
+56:                                               ; preds = %48
+  %57 = or i8 %15, %53
+  %58 = add nuw i32 %13, 1
+  %59 = getelementptr i8, i8* %0, i32 %13
+  store i8 %57, i8* %59, align 1
+  br label %60
+
+60:                                               ; preds = %56, %54
+  %61 = phi i8 [ %55, %54 ], [ %15, %56 ]
+  %62 = phi i32 [ %13, %54 ], [ %58, %56 ]
+  %63 = xor i8 %17, -1
+  %64 = add nuw i32 %18, 1
+  %65 = icmp ult i32 %64, %3
+  br i1 %65, label %11, label %66
+
+66:                                               ; preds = %60, %36, %47
+  %67 = phi i32 [ %13, %47 ], [ %13, %36 ], [ %62, %60 ]
+  %68 = phi i32 [ %18, %47 ], [ %18, %36 ], [ %64, %60 ]
+  %69 = phi i8 [ %17, %47 ], [ %17, %36 ], [ %63, %60 ]
+  %70 = phi i32 [ -1, %47 ], [ 0, %36 ], [ 0, %60 ]
+  %71 = icmp eq i8 %69, 0
+  br i1 %71, label %74, label %72
+
+72:                                               ; preds = %66
+  %73 = add i32 %68, -1
+  store i32 28, i32* @errno, align 4
+  br label %79
+
+74:                                               ; preds = %66
+  %75 = icmp eq i32 %70, 0
+  br i1 %75, label %76, label %79
+
+76:                                               ; preds = %42, %39, %7, %74
+  %77 = phi i32 [ %67, %74 ], [ 0, %7 ], [ %13, %39 ], [ %13, %42 ]
+  %78 = phi i32 [ %68, %74 ], [ 0, %7 ], [ %43, %42 ], [ %18, %39 ]
+  br label %79
+
+79:                                               ; preds = %72, %74, %76
+  %80 = phi i32 [ %78, %76 ], [ %68, %74 ], [ %73, %72 ]
+  %81 = phi i32 [ 0, %76 ], [ -1, %74 ], [ -1, %72 ]
+  %82 = phi i32 [ %77, %76 ], [ 0, %74 ], [ 0, %72 ]
+  %83 = icmp eq i8** %6, null
+  br i1 %83, label %86, label %84
+
+84:                                               ; preds = %79
+  %85 = getelementptr i8, i8* %2, i32 %80
+  store i8* %85, i8** %6, align 4
+  br label %89
+
+86:                                               ; preds = %79
+  %87 = icmp eq i32 %80, %3
+  br i1 %87, label %89, label %88
+
+88:                                               ; preds = %86
+  store i32 28, i32* @errno, align 4
+  br label %89
+
+89:                                               ; preds = %86, %88, %84
+  %90 = phi i32 [ %81, %84 ], [ -1, %88 ], [ %81, %86 ]
+  %91 = icmp eq i32* %5, null
+  br i1 %91, label %93, label %92
+
+92:                                               ; preds = %89
+  store i32 %82, i32* %5, align 4
+  br label %93
+
+93:                                               ; preds = %89, %92
+  ret i32 %90
+}
+
+; Function Attrs: nofree nounwind readonly
+declare i8* @strchr(i8* %0, i32 %1) local_unnamed_addr #3
+
+; Function Attrs: nounwind
+define i32 @sodium_base64_encoded_len(i32 %0, i32 %1) local_unnamed_addr #0 {
+  %3 = and i32 %1, -7
+  %4 = icmp eq i32 %3, 1
+  br i1 %4, label %6, label %5
+
+5:                                                ; preds = %2
+  tail call void @sodium_misuse() #5
+  unreachable
+
+6:                                                ; preds = %2
+  %7 = udiv i32 %0, 3
+  %8 = shl i32 %7, 2
+  %9 = mul i32 %7, -3
+  %10 = add i32 %9, %0
+  %11 = lshr i32 %10, 1
+  %12 = or i32 %11, %10
+  %13 = and i32 %12, 1
+  %14 = lshr i32 %1, 1
+  %15 = and i32 %14, 1
+  %16 = sub nsw i32 0, %15
+  %17 = sub i32 3, %10
+  %18 = and i32 %17, %16
+  %19 = sub i32 4, %18
+  %20 = mul nuw nsw i32 %13, %19
+  %21 = or i32 %8, 1
+  %22 = add i32 %21, %20
+  ret i32 %22
+}
+
+; Function Attrs: nounwind
+define nonnull i8* @sodium_bin2base64(i8* nonnull returned %0, i32 %1, i8* nocapture readonly %2, i32 %3, i32 %4) local_unnamed_addr #0 {
+  %6 = and i32 %4, -7
+  %7 = icmp eq i32 %6, 1
+  br i1 %7, label %9, label %8
+
+8:                                                ; preds = %5
+  tail call void @sodium_misuse() #5
+  unreachable
+
+9:                                                ; preds = %5
+  %10 = udiv i32 %3, 3
+  %11 = mul i32 %10, -3
+  %12 = add i32 %11, %3
+  %13 = shl i32 %10, 2
+  %14 = icmp eq i32 %12, 0
+  br i1 %14, label %24, label %15
+
+15:                                               ; preds = %9
+  %16 = and i32 %4, 2
+  %17 = icmp eq i32 %16, 0
+  br i1 %17, label %18, label %20
+
+18:                                               ; preds = %15
+  %19 = add i32 %13, 4
+  br label %24
+
+20:                                               ; preds = %15
+  %21 = lshr i32 %12, 1
+  %22 = or i32 %13, 2
+  %23 = add i32 %22, %21
+  br label %24
+
+24:                                               ; preds = %9, %18, %20
+  %25 = phi i32 [ %19, %18 ], [ %23, %20 ], [ %13, %9 ]
+  %26 = icmp ult i32 %25, %1
+  br i1 %26, label %28, label %27
+
+27:                                               ; preds = %24
+  tail call void @sodium_misuse() #5
+  unreachable
+
+28:                                               ; preds = %24
+  %29 = and i32 %4, 4
+  %30 = icmp eq i32 %29, 0
+  %31 = icmp ne i32 %3, 0
+  br i1 %30, label %33, label %32
+
+32:                                               ; preds = %28
+  br i1 %31, label %37, label %212
+
+33:                                               ; preds = %28
+  br i1 %31, label %125, label %212
+
+34:                                               ; preds = %48
+  %35 = add nuw i32 %40, 1
+  %36 = icmp eq i32 %35, %3
+  br i1 %36, label %88, label %37
+
+37:                                               ; preds = %32, %34
+  %38 = phi i32 [ %46, %34 ], [ 0, %32 ]
+  %39 = phi i32 [ %51, %34 ], [ 0, %32 ]
+  %40 = phi i32 [ %35, %34 ], [ 0, %32 ]
+  %41 = phi i32 [ %85, %34 ], [ 0, %32 ]
+  %42 = shl i32 %38, 8
+  %43 = getelementptr i8, i8* %2, i32 %40
+  %44 = load i8, i8* %43, align 1
+  %45 = zext i8 %44 to i32
+  %46 = or i32 %42, %45
+  %47 = add nuw nsw i32 %39, 8
+  br label %48
+
+48:                                               ; preds = %37, %48
+  %49 = phi i32 [ %47, %37 ], [ %51, %48 ]
+  %50 = phi i32 [ %41, %37 ], [ %85, %48 ]
+  %51 = add i32 %49, -6
+  %52 = lshr i32 %46, %51
+  %53 = and i32 %52, 63
+  %54 = add nuw nsw i32 %53, 65510
+  %55 = lshr i32 %54, 8
+  %56 = add nuw nsw i32 %53, 65
+  %57 = and i32 %55, %56
+  %58 = xor i32 %55, 255
+  %59 = add nuw nsw i32 %53, 65484
+  %60 = lshr i32 %59, 8
+  %61 = add nuw nsw i32 %53, 71
+  %62 = and i32 %60, %61
+  %63 = and i32 %62, %58
+  %64 = xor i32 %60, 255
+  %65 = add nuw nsw i32 %53, 65474
+  %66 = lshr i32 %65, 8
+  %67 = add nuw nsw i32 %53, 252
+  %68 = and i32 %66, %67
+  %69 = and i32 %68, %64
+  %70 = xor i32 %53, 62
+  %71 = sub nsw i32 0, %70
+  %72 = lshr i32 %71, 8
+  %73 = and i32 %72, 45
+  %74 = xor i32 %73, 45
+  %75 = xor i32 %53, 63
+  %76 = sub nsw i32 0, %75
+  %77 = lshr i32 %76, 8
+  %78 = and i32 %77, 95
+  %79 = xor i32 %78, 95
+  %80 = or i32 %74, %57
+  %81 = or i32 %80, %79
+  %82 = or i32 %81, %63
+  %83 = or i32 %82, %69
+  %84 = trunc i32 %83 to i8
+  %85 = add i32 %50, 1
+  %86 = getelementptr i8, i8* %0, i32 %50
+  store i8 %84, i8* %86, align 1
+  %87 = icmp ugt i32 %51, 5
+  br i1 %87, label %48, label %34
+
+88:                                               ; preds = %34
+  %89 = icmp eq i32 %51, 0
+  br i1 %89, label %212, label %90
+
+90:                                               ; preds = %88
+  %91 = sub i32 12, %49
+  %92 = shl i32 %46, %91
+  %93 = and i32 %92, 63
+  %94 = add nuw nsw i32 %93, 65510
+  %95 = lshr i32 %94, 8
+  %96 = add nuw nsw i32 %93, 65
+  %97 = and i32 %95, %96
+  %98 = xor i32 %95, 255
+  %99 = add nuw nsw i32 %93, 65484
+  %100 = lshr i32 %99, 8
+  %101 = add nuw nsw i32 %93, 71
+  %102 = and i32 %100, %101
+  %103 = and i32 %102, %98
+  %104 = xor i32 %100, 255
+  %105 = add nuw nsw i32 %93, 65474
+  %106 = lshr i32 %105, 8
+  %107 = add nuw nsw i32 %93, 252
+  %108 = and i32 %106, %107
+  %109 = and i32 %108, %104
+  %110 = xor i32 %93, 62
+  %111 = sub nsw i32 0, %110
+  %112 = lshr i32 %111, 8
+  %113 = and i32 %112, 45
+  %114 = xor i32 %113, 45
+  %115 = or i32 %114, %97
+  %116 = or i32 %115, 0
+  %117 = or i32 %116, %103
+  %118 = or i32 %117, %109
+  %119 = trunc i32 %118 to i8
+  %120 = add i32 %50, 2
+  %121 = getelementptr i8, i8* %0, i32 %85
+  store i8 %119, i8* %121, align 1
+  br label %212
+
+122:                                              ; preds = %136
+  %123 = add nuw i32 %128, 1
+  %124 = icmp eq i32 %123, %3
+  br i1 %124, label %176, label %125
+
+125:                                              ; preds = %33, %122
+  %126 = phi i32 [ %134, %122 ], [ 0, %33 ]
+  %127 = phi i32 [ %139, %122 ], [ 0, %33 ]
+  %128 = phi i32 [ %123, %122 ], [ 0, %33 ]
+  %129 = phi i32 [ %173, %122 ], [ 0, %33 ]
+  %130 = shl i32 %126, 8
+  %131 = getelementptr i8, i8* %2, i32 %128
+  %132 = load i8, i8* %131, align 1
+  %133 = zext i8 %132 to i32
+  %134 = or i32 %130, %133
+  %135 = add nuw nsw i32 %127, 8
+  br label %136
+
+136:                                              ; preds = %125, %136
+  %137 = phi i32 [ %135, %125 ], [ %139, %136 ]
+  %138 = phi i32 [ %129, %125 ], [ %173, %136 ]
+  %139 = add i32 %137, -6
+  %140 = lshr i32 %134, %139
+  %141 = and i32 %140, 63
+  %142 = add nuw nsw i32 %141, 65510
+  %143 = lshr i32 %142, 8
+  %144 = add nuw nsw i32 %141, 65
+  %145 = and i32 %143, %144
+  %146 = xor i32 %143, 255
+  %147 = add nuw nsw i32 %141, 65484
+  %148 = lshr i32 %147, 8
+  %149 = add nuw nsw i32 %141, 71
+  %150 = and i32 %148, %149
+  %151 = and i32 %150, %146
+  %152 = xor i32 %148, 255
+  %153 = add nuw nsw i32 %141, 65474
+  %154 = lshr i32 %153, 8
+  %155 = add nuw nsw i32 %141, 252
+  %156 = and i32 %154, %155
+  %157 = and i32 %156, %152
+  %158 = xor i32 %141, 62
+  %159 = sub nsw i32 0, %158
+  %160 = lshr i32 %159, 8
+  %161 = and i32 %160, 43
+  %162 = xor i32 %161, 43
+  %163 = xor i32 %141, 63
+  %164 = sub nsw i32 0, %163
+  %165 = lshr i32 %164, 8
+  %166 = and i32 %165, 47
+  %167 = xor i32 %166, 47
+  %168 = or i32 %162, %145
+  %169 = or i32 %168, %167
+  %170 = or i32 %169, %151
+  %171 = or i32 %170, %157
+  %172 = trunc i32 %171 to i8
+  %173 = add i32 %138, 1
+  %174 = getelementptr i8, i8* %0, i32 %138
+  store i8 %172, i8* %174, align 1
+  %175 = icmp ugt i32 %139, 5
+  br i1 %175, label %136, label %122
+
+176:                                              ; preds = %122
+  %177 = icmp eq i32 %139, 0
+  br i1 %177, label %212, label %178
+
+178:                                              ; preds = %176
+  %179 = sub i32 12, %137
+  %180 = shl i32 %134, %179
+  %181 = and i32 %180, 63
+  %182 = add nuw nsw i32 %181, 65510
+  %183 = lshr i32 %182, 8
+  %184 = add nuw nsw i32 %181, 65
+  %185 = and i32 %183, %184
+  %186 = xor i32 %183, 255
+  %187 = add nuw nsw i32 %181, 65484
+  %188 = lshr i32 %187, 8
+  %189 = add nuw nsw i32 %181, 71
+  %190 = and i32 %188, %189
+  %191 = and i32 %190, %186
+  %192 = xor i32 %188, 255
+  %193 = add nuw nsw i32 %181, 65474
+  %194 = lshr i32 %193, 8
+  %195 = add nuw nsw i32 %181, 252
+  %196 = and i32 %194, %195
+  %197 = and i32 %196, %192
+  %198 = xor i32 %181, 62
+  %199 = sub nsw i32 0, %198
+  %200 = lshr i32 %199, 8
+  %201 = and i32 %200, 43
+  %202 = xor i32 %201, 43
+  %203 = and i32 47, 47
+  %204 = xor i32 %203, 47
+  %205 = or i32 %202, %185
+  %206 = or i32 %205, %204
+  %207 = or i32 %206, %191
+  %208 = or i32 %207, %197
+  %209 = trunc i32 %208 to i8
+  %210 = add i32 %138, 2
+  %211 = getelementptr i8, i8* %0, i32 %173
+  store i8 %209, i8* %211, align 1
+  br label %212
+
+212:                                              ; preds = %33, %32, %88, %176, %178, %90
+  %213 = phi i32 [ %120, %90 ], [ %85, %88 ], [ %210, %178 ], [ %173, %176 ], [ 0, %32 ], [ 0, %33 ]
+  %214 = icmp ult i32 %25, %213
+  br i1 %214, label %220, label %215
+
+215:                                              ; preds = %212
+  %216 = icmp ugt i32 %25, %213
+  br i1 %216, label %217, label %221
+
+217:                                              ; preds = %215
+  %218 = getelementptr i8, i8* %0, i32 %213
+  %219 = sub i32 %25, %213
+  call void @llvm.memset.p0i8.i32(i8* align 1 %218, i8 61, i32 %219, i1 false)
+  br label %221
+
+220:                                              ; preds = %212
+  tail call void @__assert_fail(i8* getelementptr inbounds ([19 x i8], [19 x i8]* @.str, i32 0, i32 0), i8* getelementptr inbounds ([16 x i8], [16 x i8]* @.str.1, i32 0, i32 0), i32 230, i8* getelementptr inbounds ([18 x i8], [18 x i8]* @__func__.sodium_bin2base64, i32 0, i32 0)) #5
+  unreachable
+
+221:                                              ; preds = %217, %215
+  %222 = phi i32 [ %213, %215 ], [ %25, %217 ]
+  %223 = getelementptr i8, i8* %0, i32 %222
+  %224 = add i32 %222, 1
+  %225 = icmp ult i32 %224, %1
+  %226 = select i1 %225, i32 %1, i32 %224
+  %227 = sub i32 %226, %222
+  call void @llvm.memset.p0i8.i32(i8* align 1 %223, i8 0, i32 %227, i1 false)
+  ret i8* %0
+}
+
+; Function Attrs: noreturn
+declare void @__assert_fail(i8* %0, i8* %1, i32 %2, i8* %3) local_unnamed_addr #1
+
+; Function Attrs: nounwind
+define i32 @sodium_base642bin(i8* nocapture nonnull %0, i32 %1, i8* %2, i32 %3, i8* readonly %4, i32* %5, i8** %6, i32 %7) local_unnamed_addr #0 {
+  %9 = and i32 %7, -7
+  %10 = icmp eq i32 %9, 1
+  br i1 %10, label %12, label %11
+
+11:                                               ; preds = %8
+  tail call void @sodium_misuse() #5
+  unreachable
+
+12:                                               ; preds = %8
+  %13 = icmp eq i32 %3, 0
+  br i1 %13, label %116, label %14
+
+14:                                               ; preds = %12
+  %15 = and i32 %7, 4
+  %16 = icmp eq i32 %15, 0
+  %17 = icmp eq i8* %4, null
+  %18 = select i1 %16, i32 43, i32 45
+  %19 = select i1 %16, i32 47, i32 95
+  br label %20
+
+20:                                               ; preds = %14, %104
+  %21 = phi i32 [ 0, %14 ], [ %106, %104 ]
+  %22 = phi i32 [ 0, %14 ], [ %92, %104 ]
+  %23 = phi i32 [ 0, %14 ], [ %105, %104 ]
+  %24 = phi i32 [ 0, %14 ], [ %107, %104 ]
+  br label %25
+
+25:                                               ; preds = %20, %87
+  %26 = phi i32 [ %24, %20 ], [ %88, %87 ]
+  %27 = getelementptr i8, i8* %2, i32 %26
+  %28 = load i8, i8* %27, align 1
+  %29 = sext i8 %28 to i32
+  %30 = add nsw i32 %29, -65
+  %31 = lshr i32 %30, 8
+  %32 = xor i32 %31, 255
+  %33 = sub nsw i32 90, %29
+  %34 = lshr i32 %33, 8
+  %35 = and i32 %34, 255
+  %36 = xor i32 %35, 255
+  %37 = and i32 %32, %30
+  %38 = and i32 %37, %36
+  %39 = add nsw i32 %29, 65439
+  %40 = lshr i32 %39, 8
+  %41 = xor i32 %40, 255
+  %42 = sub nsw i32 122, %29
+  %43 = lshr i32 %42, 8
+  %44 = and i32 %43, 255
+  %45 = xor i32 %44, 255
+  %46 = add nsw i32 %29, 185
+  %47 = and i32 %41, %46
+  %48 = and i32 %47, %45
+  %49 = add nsw i32 %29, 65488
+  %50 = lshr i32 %49, 8
+  %51 = xor i32 %50, 255
+  %52 = sub nsw i32 57, %29
+  %53 = lshr i32 %52, 8
+  %54 = and i32 %53, 255
+  %55 = xor i32 %54, 255
+  %56 = add nsw i32 %29, 4
+  %57 = and i32 %51, %56
+  %58 = and i32 %57, %55
+  %59 = xor i32 %18, %29
+  %60 = sub nsw i32 0, %59
+  %61 = lshr i32 %60, 8
+  %62 = and i32 %61, 62
+  %63 = xor i32 %62, 62
+  %64 = xor i32 %19, %29
+  %65 = sub nsw i32 0, %64
+  %66 = lshr i32 %65, 8
+  %67 = and i32 %66, 63
+  %68 = xor i32 %67, 63
+  %69 = or i32 %48, %58
+  %70 = or i32 %69, %63
+  %71 = or i32 %70, %68
+  %72 = or i32 %71, %38
+  %73 = sub nsw i32 0, %72
+  %74 = lshr i32 %73, 8
+  %75 = and i32 %74, 255
+  %76 = xor i32 %75, 255
+  %77 = xor i32 %29, 65
+  %78 = sub nsw i32 0, %77
+  %79 = lshr i32 %78, 8
+  %80 = and i32 %76, %79
+  %81 = or i32 %80, %72
+  %82 = icmp eq i32 %81, 255
+  br i1 %82, label %83, label %90
+
+83:                                               ; preds = %25
+  br i1 %17, label %109, label %84
+
+84:                                               ; preds = %83
+  %85 = tail call i8* @strchr(i8* nonnull %4, i32 %29)
+  %86 = icmp eq i8* %85, null
+  br i1 %86, label %109, label %87
+
+87:                                               ; preds = %84
+  %88 = add nuw i32 %26, 1
+  %89 = icmp ult i32 %88, %3
+  br i1 %89, label %25, label %109
+
+90:                                               ; preds = %25
+  %91 = shl i32 %22, 6
+  %92 = add i32 %81, %91
+  %93 = add i32 %21, 6
+  %94 = icmp ugt i32 %93, 7
+  br i1 %94, label %95, label %104
+
+95:                                               ; preds = %90
+  %96 = add i32 %21, -2
+  %97 = icmp ult i32 %23, %1
+  br i1 %97, label %99, label %98
+
+98:                                               ; preds = %95
+  store i32 68, i32* @errno, align 4
+  br label %109
+
+99:                                               ; preds = %95
+  %100 = lshr i32 %92, %96
+  %101 = trunc i32 %100 to i8
+  %102 = add nuw i32 %23, 1
+  %103 = getelementptr i8, i8* %0, i32 %23
+  store i8 %101, i8* %103, align 1
+  br label %104
+
+104:                                              ; preds = %99, %90
+  %105 = phi i32 [ %102, %99 ], [ %23, %90 ]
+  %106 = phi i32 [ %96, %99 ], [ %93, %90 ]
+  %107 = add nuw i32 %26, 1
+  %108 = icmp ult i32 %107, %3
+  br i1 %108, label %20, label %109
+
+109:                                              ; preds = %104, %87, %83, %84, %98
+  %110 = phi i32 [ %23, %98 ], [ %23, %84 ], [ %23, %83 ], [ %23, %87 ], [ %105, %104 ]
+  %111 = phi i32 [ %26, %98 ], [ %88, %87 ], [ %24, %83 ], [ %26, %84 ], [ %107, %104 ]
+  %112 = phi i32 [ -1, %98 ], [ 0, %84 ], [ 0, %83 ], [ 0, %87 ], [ 0, %104 ]
+  %113 = phi i32 [ %92, %98 ], [ %22, %84 ], [ %22, %83 ], [ %22, %87 ], [ %92, %104 ]
+  %114 = phi i32 [ %96, %98 ], [ %21, %84 ], [ %21, %83 ], [ %21, %87 ], [ %106, %104 ]
+  %115 = icmp ugt i32 %114, 4
+  br i1 %115, label %171, label %116
+
+116:                                              ; preds = %12, %109
+  %117 = phi i32 [ %114, %109 ], [ 0, %12 ]
+  %118 = phi i32 [ %113, %109 ], [ 0, %12 ]
+  %119 = phi i32 [ %112, %109 ], [ 0, %12 ]
+  %120 = phi i32 [ %111, %109 ], [ 0, %12 ]
+  %121 = phi i32 [ %110, %109 ], [ 0, %12 ]
+  %122 = shl nsw i32 -1, %117
+  %123 = xor i32 %122, -1
+  %124 = and i32 %118, %123
+  %125 = or i32 %124, %119
+  %126 = icmp eq i32 %125, 0
+  br i1 %126, label %127, label %171
+
+127:                                              ; preds = %116
+  %128 = and i32 %7, 2
+  %129 = icmp eq i32 %128, 0
+  br i1 %129, label %130, label %156
+
+130:                                              ; preds = %127
+  %131 = lshr i32 %117, 1
+  %132 = icmp eq i32 %131, 0
+  br i1 %132, label %156, label %133
+
+133:                                              ; preds = %130
+  %134 = icmp eq i8* %4, null
+  br label %135
+
+135:                                              ; preds = %152, %133
+  %136 = phi i32 [ %120, %133 ], [ %154, %152 ]
+  %137 = phi i32 [ %131, %133 ], [ %153, %152 ]
+  %138 = icmp ult i32 %136, %3
+  br i1 %138, label %140, label %139
+
+139:                                              ; preds = %135
+  store i32 68, i32* @errno, align 4
+  br label %171
+
+140:                                              ; preds = %135
+  %141 = getelementptr i8, i8* %2, i32 %136
+  %142 = load i8, i8* %141, align 1
+  %143 = sext i8 %142 to i32
+  %144 = icmp eq i8 %142, 61
+  br i1 %144, label %145, label %147
+
+145:                                              ; preds = %140
+  %146 = add i32 %137, -1
+  br label %152
+
+147:                                              ; preds = %140
+  br i1 %134, label %151, label %148
+
+148:                                              ; preds = %147
+  %149 = tail call i8* @strchr(i8* nonnull %4, i32 %143) #6
+  %150 = icmp eq i8* %149, null
+  br i1 %150, label %151, label %152
+
+151:                                              ; preds = %148, %147
+  store i32 28, i32* @errno, align 4
+  br label %171
+
+152:                                              ; preds = %148, %145
+  %153 = phi i32 [ %146, %145 ], [ %137, %148 ]
+  %154 = add nuw i32 %136, 1
+  %155 = icmp eq i32 %153, 0
+  br i1 %155, label %156, label %135
+
+156:                                              ; preds = %152, %127, %130
+  %157 = phi i32 [ %120, %127 ], [ %120, %130 ], [ %154, %152 ]
+  %158 = icmp ne i8* %4, null
+  %159 = icmp ult i32 %157, %3
+  %160 = and i1 %158, %159
+  br i1 %160, label %161, label %171
+
+161:                                              ; preds = %156, %168
+  %162 = phi i32 [ %169, %168 ], [ %157, %156 ]
+  %163 = getelementptr i8, i8* %2, i32 %162
+  %164 = load i8, i8* %163, align 1
+  %165 = sext i8 %164 to i32
+  %166 = tail call i8* @strchr(i8* nonnull %4, i32 %165)
+  %167 = icmp eq i8* %166, null
+  br i1 %167, label %171, label %168
+
+168:                                              ; preds = %161
+  %169 = add i32 %162, 1
+  %170 = icmp eq i32 %169, %3
+  br i1 %170, label %171, label %161
+
+171:                                              ; preds = %161, %168, %156, %151, %139, %109, %116
+  %172 = phi i32 [ 0, %156 ], [ -1, %151 ], [ -1, %139 ], [ -1, %109 ], [ -1, %116 ], [ 0, %168 ], [ 0, %161 ]
+  %173 = phi i32 [ %157, %156 ], [ %136, %151 ], [ %136, %139 ], [ %111, %109 ], [ %120, %116 ], [ %162, %161 ], [ %3, %168 ]
+  %174 = phi i32 [ %121, %156 ], [ 0, %151 ], [ 0, %139 ], [ 0, %109 ], [ 0, %116 ], [ %121, %168 ], [ %121, %161 ]
+  %175 = icmp eq i8** %6, null
+  br i1 %175, label %178, label %176
+
+176:                                              ; preds = %171
+  %177 = getelementptr i8, i8* %2, i32 %173
+  store i8* %177, i8** %6, align 4
+  br label %181
+
+178:                                              ; preds = %171
+  %179 = icmp eq i32 %173, %3
+  br i1 %179, label %181, label %180
+
+180:                                              ; preds = %178
+  store i32 28, i32* @errno, align 4
+  br label %181
+
+181:                                              ; preds = %178, %180, %176
+  %182 = phi i32 [ %172, %176 ], [ -1, %180 ], [ %172, %178 ]
+  %183 = icmp eq i32* %5, null
+  br i1 %183, label %185, label %184
+
+184:                                              ; preds = %181
+  store i32 %174, i32* %5, align 4
+  br label %185
+
+185:                                              ; preds = %181, %184
+  ret i32 %182
+}
+
+; Function Attrs: argmemonly nounwind willreturn writeonly
+declare void @llvm.memset.p0i8.i32(i8* nocapture writeonly %0, i8 %1, i32 %2, i1 immarg %3) #4
+
+attributes #0 = { nounwind "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "min-legal-vector-width"="0" "no-infs-fp-math"="false" "no-jump-tables"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="false" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #1 = { noreturn "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="false" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #2 = { nofree nounwind "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "min-legal-vector-width"="0" "no-infs-fp-math"="false" "no-jump-tables"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="false" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #3 = { nofree nounwind readonly "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="false" "stack-protector-buffer-size"="8" "target-cpu"="generic" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #4 = { argmemonly nounwind willreturn writeonly }
+attributes #5 = { noreturn nounwind }
+attributes #6 = { nounwind }
+
+!llvm.module.flags = !{!0, !1, !2}
+!llvm.ident = !{!3}
+
+!0 = !{i32 1, !"wchar_size", i32 4}
+!1 = !{i32 7, !"PIC Level", i32 2}
+!2 = !{i32 7, !"PIE Level", i32 2}
+!3 = !{!"clang version 10.0.0 (https://github.com/llvm/llvm-project d32170dbd5b0d54436537b6b75beaf44324e0c28)"}
+
+#########################################################
+; exiting Souper's runOnFunction() for sodium_bin2base64()
+rescanning function after transformation was applied
+
