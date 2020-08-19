@@ -73,6 +73,7 @@ void clientRead(int sockfd, char *readBuffer, int sizeBuffer)
     }
 }
 
+// TODO: Use MessagePack object instead of sendBuffer & readBuffer
 void runClient(
     int sizeSendBuffer,
     char *sendBuffer,
