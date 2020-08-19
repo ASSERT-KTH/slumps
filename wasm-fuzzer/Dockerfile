@@ -48,7 +48,7 @@ RUN \
   rm build.sc
 
 ################################
-#### fuzzing-server (SWAM) #####
+##### fuzzing-server-swam ######
 ################################
 
 ENV DOCKER_SWAM_SRC=/home/server/src
@@ -65,7 +65,7 @@ WORKDIR $DOCKER_SWAM_SRC
 # TODO: Find way of installing dependencies with Mill without copying over entire repo
 # See: https://stackoverflow.com/questions/62834693/mill-build-tool-install-dependencies-without-compiling-source-code
 
-ADD ./fuzzing-server $DOCKER_SWAM_SRC
+ADD ./fuzzing-server-swam $DOCKER_SWAM_SRC
 
 RUN chmod +x $DOCKER_SWAM_SRC/entrypoint_mill_server.sh
 
