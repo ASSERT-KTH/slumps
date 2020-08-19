@@ -32,7 +32,7 @@ fi
 for i in $(seq 2 $1)
 do 
     echo "Waiting for previous mill server to compile..."
-    sleep 90s
+    sleep 30s
     echo "Running #${i}"
     docker run --env-file=./.env \
         -e SWAM_SOCKET_HOST=localhost \

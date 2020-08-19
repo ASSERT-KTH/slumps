@@ -8,6 +8,7 @@ and write the resulting number to a file, which then can be accessed and
 manipulated by AFL.
 */
 
+// TODO: Add uInt32, uInt64, etc. and array_Int64, array_uFloat64, etc. and string and bool (== Int32)
 enum TypeOptions
 {
     Option_Invalid,
@@ -30,6 +31,10 @@ TypeOptions resolveOption(std::string input)
     return Option_Invalid;
 }
 
+// TODO: Replace writeNumberToFile() with MsgPack serializer
+// TODO: Parse arrays
+// TODO: Parse strings from <path_to_file>
+// TODO: Parse bools
 void translateArg(std::string arg, std::string argType, std::string pathName)
 {
     std::string::size_type sz; // alias of size_t
@@ -91,6 +96,8 @@ int main(int argc, char *argv[])
     std::string WASM_ARG_TYPES_LIST = parseEnvVariables((char *)"WASM_ARG_TYPES_LIST");
     std::string WASM_ARG_LIST = parseEnvVariables((char *)"WASM_ARG_LIST");
 
+    // TODO: Escape commas that are in arrays
+    // TODO: Delete whitespaces
     std::vector<std::string> typeArray = split(WASM_ARG_TYPES_LIST, ',');
     std::vector<std::string> argArray = split(WASM_ARG_LIST, ',');
 
