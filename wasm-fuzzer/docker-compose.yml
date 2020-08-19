@@ -9,7 +9,7 @@ version: '3.7'
 
 services:
   swam_server:
-    build: ./fuzzing-server
+    build: ./fuzzing-server-swam
     expose:
       - ${SWAM_SOCKET_PORT:?err}
 
