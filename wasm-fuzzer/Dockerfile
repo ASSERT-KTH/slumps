@@ -52,12 +52,10 @@ RUN \
 ################################
 
 ENV DOCKER_SWAM_SRC=/home/server/src
-ENV DOCKER_SWAM_OUTPUT=/home/server/out
 ENV DOCKER_WASM=/home/server/wasm
 
 # Create the appropriate directories
 RUN mkdir -p $DOCKER_SWAM_SRC
-RUN mkdir -p $DOCKER_SWAM_OUTPUT
 RUN mkdir -p $DOCKER_WASM
 
 WORKDIR $DOCKER_SWAM_SRC
