@@ -115,7 +115,7 @@ docker build -t wafl .
 
 ### Multi-processing
 
-AFLplusplus is encouraged to be run with multiple instances if multiple cores are available. More information is available [here](https://github.com/mirrorer/afl/blob/master/docs/parallel_fuzzing.txt). To automatically run multiple instances in their master/secondary configuration, you can run the following command. Do not forget to build the image first!
+AFLplusplus is encouraged to be run with multiple instances if multiple cores are available. More information is available [here](https://github.com/mirrorer/afl/blob/master/docs/parallel_fuzzing.txt). To automatically run multiple instances in their master/secondary configuration, you can run the the script `./multi-processing.sh`. The steps of building the image and configuring the .env file are identical to running only one instance.
 
 ```bash
 # 3 for the number of AFL instances.
@@ -157,9 +157,7 @@ All other setup steps are best documented in:
 
 1. **#PORTABILITY**: Both the SWAM engine and AFLplusplus are dockerized in two separate containers and are given a corresponding service in docker-compose.base.yml setup. All required configuration is to be found in ./.env.
 
-### To Do
-
-1. **#SPEED**: Currently, the socket server is working synchronously and is incapable of handling multiple requests at the same time. There is also no setup built yet for multiple AFL instances to share the same output and work concurrently either.
+1. **#SPEED**: It is possible to run multiple AFL instances in parallel in a Master/Secondary configuration. See section on [Multi-processing](#Multi-processing).
 
 ## Example logs for fibo.wat with docker-compose configuration
 
