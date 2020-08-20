@@ -21,4 +21,4 @@ cd $DOCKER_SWAM_SRC
 # This also compiles the cli package in case source code / dependencies have changed: 
 wget https://github.com/KTH/swam/releases/download/v0.6.0-RC3/cli-0.6.0-RC3.jar
 echo "java -jar cli-0.6.0-RC3.jar run_server $WAT_ARG $WASI_ARG $ALL_ARG_TYPES --main $TARGET_FUNCTION $WASM_OR_WAT_FILE"
-exec java -jar cli-0.6.0-RC3.jar $WAT_ARG $WASI_ARG $ALL_ARG_TYPES --main $TARGET_FUNCTION $WASM_OR_WAT_FILE
+exec java -jar cli-0.6.0-RC3.jar run_server $WAT_ARG $WASI_ARG $ALL_ARG_TYPES --main $TARGET_FUNCTION $WASM_OR_WAT_FILE
