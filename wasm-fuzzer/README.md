@@ -110,7 +110,7 @@ docker build -t wafl .
 3. Run the Docker image.
 
     ```bash
-    docker run -it --env-file=./.env \
+    docker run -it --rm --env-file=./.env \
         -e SWAM_SOCKET_HOST=localhost \
         -v maven_data:/root/.cache/coursier/v1/https/repo1.maven.org/maven2 \
         -v compiled_sources:/home/server/src/out/ \
