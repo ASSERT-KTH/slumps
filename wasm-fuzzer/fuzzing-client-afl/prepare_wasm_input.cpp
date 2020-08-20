@@ -84,7 +84,8 @@ void printResult(std::string filepath)
     printf("Total bytes written: %i\n", fileSize);
     char buffer[fileSize];
     readBinaryToBuffer(buffer, fileSize, filepath);
-    std::reverse(buffer, &buffer[sizeof(buffer)]);
+    // std::reverse(buffer, &buffer[sizeof(buffer)]);
+
     printBuffer(sizeof(buffer), buffer);
     printf("-----------------\n");
 }
@@ -92,6 +93,7 @@ void printResult(std::string filepath)
 int main(int argc, char *argv[])
 {
     std::string filePath = (std::string) argv[1];
+    clearFile(filePath);
 
     std::string WASM_ARG_TYPES_LIST = parseEnvVariables((char *)"WASM_ARG_TYPES_LIST");
     std::string WASM_ARG_LIST = parseEnvVariables((char *)"WASM_ARG_LIST");
@@ -110,6 +112,7 @@ int main(int argc, char *argv[])
     for (int i = 0; i < typeArray.size(); ++i)
     {
         translateArg(argArray[i], typeArray[i], filePath);
+        // printResult(filePath);
     }
 
     printResult(filePath);
