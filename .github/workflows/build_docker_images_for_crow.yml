@@ -20,10 +20,10 @@ jobs:
           sudo apt-get update && docker --version
       - name: Build backend image
         run: |
-          cd crow && sudo docker build -t jacarte/slumps:crow -f Dockerfile .
+          cd crow && sudo docker build -t slumps/crow:latest -f Dockerfile .
       - name: Push images
         run: |
-          docker login -u="$user" -p="$pass" && docker push jacarte/slumps:crow
+          docker login -u="$user" -p="$pass" && docker push slumps/crow:latest
         env:
           user: ${{secrets.DOCKER_USER}}
           pass: ${{secrets.DOCKER_PASS}}
