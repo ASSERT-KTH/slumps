@@ -31,7 +31,7 @@ Since the argument types for the WASM function are written as environmental vari
 
 ## Requirements
 
-To be able to run this on your machine, only Docker is required. If you want to test SWAM's socket server without AFL, see ./fuzzing-server on how to install SWAM.
+To be able to run this on your machine, only Docker is required. If you want to test SWAM's socket server without AFL, see ./fuzzing-server-swam on how to install SWAM.
 
 ## Configuration
 
@@ -41,7 +41,7 @@ All configuration options are visible in the .env file. This is where you specif
 
 ### Building
 
-This tool creates two Docker containers, as specified in the docker-compose.base.yml file - one for the SWAM socket server (Dockerfile in ./fuzzing-server) and one for the AFL socket client (Dockerfile in ./fuzzing-client-afl). The only configuration parameters to building this are currently the SCALA_VERSION and the MILL_VERSION in SWAM's Dockerfile. Nonetheless, it should not be required to change these parameters as they are fitted to the code of this repostory.
+This tool creates two Docker containers, as specified in the docker-compose.base.yml file - one for the SWAM socket server (Dockerfile in ./fuzzing-server-swam) and one for the AFL socket client (Dockerfile in ./fuzzing-client-afl). The only configuration parameters to building this are currently the SCALA_VERSION and the MILL_VERSION in SWAM's Dockerfile. Nonetheless, it should not be required to change these parameters as they are fitted to the code of this repostory.
 
 How to build:
 
@@ -87,7 +87,7 @@ This image uses the [official image of AFLplusplus](https://hub.docker.com/r/afl
 
 ### Building
 
-This build uses the Dockerfile in the root of this directory. It is essentially a merge of the Dockerfiles in ./fuzzing-client-afl and ./fuzzing-server. However, since the SWAM Dockerfile uses openjdk as the base image, the JDK is installed manually in this Dockerfile. It's entrypoint also only references the entrypoints of the client and the server.
+This build uses the Dockerfile in the root of this directory. It is essentially a merge of the Dockerfiles in ./fuzzing-client-afl and ./fuzzing-server-swam. However, since the SWAM Dockerfile uses openjdk as the base image, the JDK is installed manually in this Dockerfile. It's entrypoint also only references the entrypoints of the client and the server.
 
 How to build:
 
@@ -122,7 +122,7 @@ docker build -t wafl .
 
 ### Multi-processing
 
-AFLplusplus is encouraged to be run with multiple instances if multiple cores are available. More information is available [here](https://github.com/mirrorer/afl/blob/master/docs/parallel_fuzzing.txt). To automatically run multiple instances in their master/secondary configuration, you can run the following command. Do not forget to build the image first!
+AFLplusplus is encouraged to be run with multiple instances if multiple cores are available. More information is available [here](https://github.com/mirrorer/afl/blob/master/docs/parallel_fuzzing.txt). To automatically run multiple instances in their master/secondary configuration, you can run the the script `./multi-processing.sh`. The steps of building the image and configuring the .env file are identical to running only one instance.
 
 ```bash
 # 3 for the number of AFL instances.
@@ -131,12 +131,12 @@ AFLplusplus is encouraged to be run with multiple instances if multiple cores ar
 
 ## Building & running without Docker
 
-If you wish to run this tool without using Docker, you will be required to install [AFLplusplus](https://github.com/AFLplusplus/AFLplusplus) and build SWAM with mill (see README ./fuzzing-server). Concerning AFLplusplus, running `make source-only` on the cloned repository along with installing the dependencies should suffice.
+If you wish to run this tool without using Docker, you will be required to install [AFLplusplus](https://github.com/AFLplusplus/AFLplusplus) and build SWAM with mill (see README ./fuzzing-server-swam). Concerning AFLplusplus, running `make source-only` on the cloned repository along with installing the dependencies should suffice.
 
 All other setup steps are best documented in:
 
-- ./fuzzing-server/Dockerfile
-- ./fuzzing-server/entrypoint_mill_server.sh
+- ./fuzzing-server-swam/Dockerfile
+- ./fuzzing-server-swam/entrypoint_mill_server.sh
 - ./fuzzing-client-afl/Dockerfile
 - ./fuzzing-client-afl/entrypoint_afl.sh
 
@@ -164,9 +164,7 @@ All other setup steps are best documented in:
 
 1. **#PORTABILITY**: Both the SWAM engine and AFLplusplus are dockerized in two separate containers and are given a corresponding service in docker-compose.base.yml setup. All required configuration is to be found in ./.env.
 
-### To Do
-
-1. **#SPEED**: Currently, the socket server is working synchronously and is incapable of handling multiple requests at the same time. There is also no setup built yet for multiple AFL instances to share the same output and work concurrently either.
+1. **#SPEED**: It is possible to run multiple AFL instances in parallel in a Master/Secondary configuration. See section on [Multi-processing](#Multi-processing).
 
 ## Example logs for fibo.wat with docker-compose configuration
 
