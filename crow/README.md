@@ -63,7 +63,7 @@ If the LLVM build takes to long or fails due to memory lack in the image buildin
 
 Bothg images are avaiable in the docker [Hub](https://hub.docker.com/repository/docker/jacarte/slumps)
 
-The application can be ported to a docker container too. To execute SLUMPs, enter in the src file and build the docker image. Run the following command to start the application ```docker run -it -v $(pwd)/<logs>:/slumps/src/logs -v $(pwd)/<out folder>:/slumps/src/out jacarte/slumps:app <url to download the program code> <config-options> ```. Slumps will process the fetched code from the arguments, exporting the results to the out folder volumen. You can specify the config parameters, specify the values of ```<config-options>``` as ```-<namespace>.key <value>```. For example, to change the timeout per program use ```<docker_run> -DEFAULT.timeout 3600 <program_url>```, this example changes the timeout to 3600 seconds. The other available options and possible values are listed below.
+The application can be ported to a docker container too. To execute SLUMPs, enter in the src file and build the docker image. Run the following command to start the application ```docker run -it -v $(pwd)/<logs>:/slumps/src/logs -v $(pwd)/<out folder>:/slumps/src/out jacarte/slumps:app <url to download the program code> <config-options> ```. Slumps will process the fetched code from the arguments, exporting the results to the out folder volumen. You can specify the config parameters, specify the values of ```<config-options>``` as ```%<namespace>.key <value>```. For example, to change the timeout per program use ```<docker_run> %DEFAULT.timeout 3600 <program_url>```, this example changes the timeout to 3600 seconds. The other available options and possible values are listed below.
 
 
 |Namespace|Key|Default value|Comments|
@@ -106,6 +106,6 @@ We added some features/options to Souper:
 ## Issues
 
 - Candidates overlapping. For example, in the `bitwise_IO` problem there are only 36 different programs:
-    `Total number of programs 2048. Different sha count 36. Pruned count 2012`
+    `Total number of programs 2048. Different sha count 36`
 
 - LLVM frontend for WASM: This will provide the WASM -> WASM behavior in SLUMPs
