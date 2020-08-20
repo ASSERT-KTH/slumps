@@ -8,7 +8,7 @@ FROM aflplusplus/aflplusplus
 
 RUN yes | apt-get install curl
 RUN apt-get update
-RUN DEBIAN_FRONTEND="noninteractive" apt-get -y install tzdata
+RUN DEBIAN_FRONTEND="noninteractive" apt-get -y install tzdata wget
 RUN yes | apt-get install software-properties-common
 RUN apt-get update
 RUN yes | add-apt-repository ppa:openjdk-r/ppa
@@ -21,13 +21,6 @@ RUN yes | apt-get install openjdk-12-jdk-headless
 
 RUN apt-get install -y supervisor
 
-#########################
-##### Scala & Mill ######
-#########################
-
-# Env variables
-ENV SCALA_VERSION 2.13.2
-ENV MILL_VERSION 0.7.0
 
 # Define working directory
 WORKDIR /root
@@ -52,7 +45,6 @@ WORKDIR $DOCKER_SWAM_SRC
 # See: https://stackoverflow.com/questions/62834693/mill-build-tool-install-dependencies-without-compiling-source-code
 
 ADD ./fuzzing-server-entry/entrypoint_mill_server.sh $DOCKER_SWAM_SRC
-ADD https://github.com/KTH/swam/releases/download/v0.6.0-RC3/cli-0.6.0-RC3.jar $DOCKER_SWAM_SRC
 
 RUN chmod +x $DOCKER_SWAM_SRC/entrypoint_mill_server.sh
 
