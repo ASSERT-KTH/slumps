@@ -20,7 +20,7 @@ jobs:
           sudo apt-get update && docker --version
       - name: Build wafl image
         run: |
-          cd wasm-fuzzer && sudo docker build -t wafl .
+          cd wasm-fuzzer && sudo docker build -t jacarte/slumps:wafl .
       - name: Push images
         run: |
           docker login -u="$user" -p="$pass" && docker push jacarte/slumps:wafl
