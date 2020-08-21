@@ -18,6 +18,8 @@ void readBinaryToBuffer(char *, int, std::string);
 std::string parseEnvVariables(char *);
 std::vector<std::string> split(const std::string &, char);
 
+void clearFile(std::string);
+
 template <typename T>
 void writeNumberToFile(T, std::string);
 
