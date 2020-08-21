@@ -149,7 +149,7 @@ void fork_server(char *fuzzed_input_path, uint8_t *trace_bits, int requiredBytes
     {
         // Wait for AFL by reading from the pipe.
         // This will block until AFL sends us something. Abort if read fails.
-        if (read(198, &status, 1) != 1)
+        if (read(198, &status, 4) != 4)
         {
             LOG("Read failed");
             close(198);
