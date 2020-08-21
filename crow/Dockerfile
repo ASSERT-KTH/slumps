@@ -22,7 +22,7 @@ COPY requirements.txt /slumps/crow/requirements.txt
 COPY start_docker.sh /slumps/crow
 COPY start_docker_no_wget.sh /slumps/crow
 COPY start_poly_bench.sh /slumps/crow
-COPY wasi /slumps/wasi
+# COPY wasi /slumps/wasi
 COPY headers /slumps/headers
 
 RUN mkdir -p /slumps/crow/logs
