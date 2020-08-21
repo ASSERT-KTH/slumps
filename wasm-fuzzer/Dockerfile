@@ -44,6 +44,10 @@ WORKDIR $DOCKER_SWAM_SRC
 
 ADD ./fuzzing-server-entry/entrypoint_mill_server.sh $DOCKER_SWAM_SRC
 
+# DOWNLOAD latest version of SWAM cli jar file
+ADD https://github.com/KTH/swam/releases/download/v0.6.0-RC3/cli-0.6.0-RC3.jar $DOCKER_SWAM_SRC
+
+
 RUN chmod +x $DOCKER_SWAM_SRC/entrypoint_mill_server.sh
 
 #############################
