@@ -4,6 +4,8 @@ cd $DOCKER_INTERFACE_SRC
 
 PREPARED_INPUT_PATH="$DOCKER_AFL_INPUT/prepared_input.dat"
 ./prepare_wasm_input.out $PREPARED_INPUT_PATH
+
+# TODO: Remove everything related to REQUIRED_BYTES
 REQUIRED_BYTES=$(./getFileSize.out $PREPARED_INPUT_PATH)
 
 # Parallel fuzzing: https://github.com/mirrorer/afl/blob/master/docs/parallel_fuzzing.txt
