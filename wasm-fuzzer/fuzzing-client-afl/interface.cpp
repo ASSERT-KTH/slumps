@@ -1,4 +1,5 @@
 #include "interface.h"
+#include <errno.h>
 
 #define AFL_SHM_SIZE 65536
 
@@ -71,8 +72,10 @@ void main_fuzz(
     uint8_t *trace_bits,
     int requiredBytes)
 {
-
+    //LOG("Entering");
+    std::string DOCKER_LOGS = parseEnvVariables((char *)"DOCKER_LOGS");
     std::string DUMMY_TESTING_AFL = parseEnvVariables((char *)"DUMMY_TESTING_AFL");
+
     if (DUMMY_TESTING_AFL == "True")
     {
         fillTraceDummyData(trace_bits);
@@ -80,17 +83,25 @@ void main_fuzz(
     }
 
     // TODO: Replace sendBuffer by 
+
+    //LOG("Buffer to send");
     char sendBuffer[requiredBytes];
     readBinaryToBuffer(sendBuffer, sizeof(sendBuffer), (std::string)fuzzed_input_path);
+
+    //logBuffer(DOCKER_LOGS + "/interface.log", requiredBytes, sendBuffer);
     // std::reverse(sendBuffer, &sendBuffer[sizeof(sendBuffer)]); // Reverse order of tempBuffer
+    LOG("Read buffer");
 
     char readBuffer[AFL_SHM_SIZE + 1]; // + 1 for exit code
+    ///logBuffer(DOCKER_LOGS + "/interface.log", AFL_SHM_SIZE + 1, readBuffer);
 
     std::string SWAM_SOCKET_HOST = parseEnvVariables((char *)"SWAM_SOCKET_HOST");
     std::string SWAM_SOCKET_PORT = parseEnvVariables((char *)"SWAM_SOCKET_PORT");
 
+    LOG("Run client");
     runClient(sizeof(sendBuffer), sendBuffer, sizeof(readBuffer), readBuffer, &SWAM_SOCKET_HOST[0], std::stoi(SWAM_SOCKET_PORT));
 
+    LOG("Passing data to afl...");
     pass_data_to_afl(sizeof(readBuffer), readBuffer, trace_bits);
 
     // Read exit code from readBuffer and exit with same code
@@ -110,13 +121,24 @@ void fork_server(char *fuzzed_input_path, uint8_t *trace_bits, int requiredBytes
     */
 
     int status = 0;
+    LOG("Waiting for fd");
 
     // Starting the 'Fork server handshake'
 
     // Phone home and tell AFL that we're OK
-    if (write(199, &status, 4) != 4)
+    
+    int w = write(199, &status, 4);
+    LOG("writing...");
+    if ( w != 4)
     {
         LOG("Write failed");
+        LOG("Signal status: " + std::to_string(status));
+        LOG("Signal status: " + std::to_string(w));
+        std::string str(strerror(errno));
+        
+        LOG("Errno: " + str);
+        LOG("WTERMSIG(status): " + std::to_string(WTERMSIG(status)));
+        LOG("WSTOPSIG(status): " + std::to_string(WSTOPSIG(status)));
         close(199);
         exit(1);
     }
@@ -127,7 +149,7 @@ void fork_server(char *fuzzed_input_path, uint8_t *trace_bits, int requiredBytes
     {
         // Wait for AFL by reading from the pipe.
         // This will block until AFL sends us something. Abort if read fails.
-        if (read(198, &status, 4) != 4)
+        if (read(198, &status, 1) != 1)
         {
             LOG("Read failed");
             close(198);
@@ -153,6 +175,7 @@ void fork_server(char *fuzzed_input_path, uint8_t *trace_bits, int requiredBytes
             // This is the child process
             close(198);
             close(199);
+            LOG("Calling main fuzz");
             main_fuzz(fuzzed_input_path, trace_bits, requiredBytes);
             exit(0);
         }
