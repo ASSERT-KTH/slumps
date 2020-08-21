@@ -31,12 +31,10 @@ WORKDIR /root
 ################################
 
 ENV DOCKER_SWAM_SRC=/home/server/src
-ENV DOCKER_SWAM_OUTPUT=/home/server/out
 ENV DOCKER_WASM=/home/server/wasm
 
 # Create the appropriate directories
 RUN mkdir -p $DOCKER_SWAM_SRC
-RUN mkdir -p $DOCKER_SWAM_OUTPUT
 RUN mkdir -p $DOCKER_WASM
 
 WORKDIR $DOCKER_SWAM_SRC
@@ -45,6 +43,10 @@ WORKDIR $DOCKER_SWAM_SRC
 # See: https://stackoverflow.com/questions/62834693/mill-build-tool-install-dependencies-without-compiling-source-code
 
 ADD ./fuzzing-server-entry/entrypoint_mill_server.sh $DOCKER_SWAM_SRC
+
+# DOWNLOAD latest version of SWAM cli jar file
+ADD https://github.com/KTH/swam/releases/download/v0.6.0-RC3/cli-0.6.0-RC3.jar $DOCKER_SWAM_SRC
+
 
 RUN chmod +x $DOCKER_SWAM_SRC/entrypoint_mill_server.sh
 

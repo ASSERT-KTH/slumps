@@ -79,9 +79,10 @@ void main_fuzz(
         exit(0);
     }
 
+    // TODO: Replace sendBuffer by 
     char sendBuffer[requiredBytes];
     readBinaryToBuffer(sendBuffer, sizeof(sendBuffer), (std::string)fuzzed_input_path);
-    std::reverse(sendBuffer, &sendBuffer[sizeof(sendBuffer)]); // Reverse order of tempBuffer
+    // std::reverse(sendBuffer, &sendBuffer[sizeof(sendBuffer)]); // Reverse order of tempBuffer
 
     char readBuffer[AFL_SHM_SIZE + 1]; // + 1 for exit code
 
@@ -210,6 +211,7 @@ void log_args(int argc, char *argv[])
 
 int main(int argc, char *argv[])
 {
+    // TODO: Remove everything related to requiredBytes; not necessary anymore
     log_args(argc, argv);
 
     char *fuzzed_input_path = argv[1];

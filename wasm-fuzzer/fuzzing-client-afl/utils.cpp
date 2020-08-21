@@ -6,6 +6,7 @@
 #include <sys/stat.h>
 #include <sstream>
 #include <vector>
+#include <algorithm> 
 
 void log(std::string filename, std::string some_string)
 {
@@ -40,7 +41,7 @@ long getFileSize(std::string filename)
 
 void readBinaryToBuffer(char *buffer, int fileSize, std::string pathToInput)
 {
-    std::ifstream rf(pathToInput, std::ios::out | std::ios::binary);
+    std::ifstream rf(pathToInput, std::ios::binary);
     if (!rf)
     {
         printf("Cannot open %s to read it!\n", pathToInput.c_str());
@@ -80,6 +81,22 @@ std::vector<std::string> split(const std::string &s, char delimiter)
     return tokens;
 }
 
+void clearFile(std::string pathName){
+    std::ofstream wf(pathName, std::ios::out | std::ios::binary);
+    if (!wf)
+    {
+        printf("Cannot open %s to write in it!\n", pathName.c_str());
+        exit(1);
+    }
+    wf.write("", 0);
+    wf.close();
+    if (!wf.good())
+    {
+        printf("Error occurred at writing time!\n");
+        exit(1);
+    }
+}
+
 template void writeNumberToFile<double>(double, std::string);
 template void writeNumberToFile<float>(float, std::string);
 template void writeNumberToFile<long>(long, std::string);
@@ -88,13 +105,19 @@ template void writeNumberToFile<int>(int, std::string);
 template <typename T>
 void writeNumberToFile(T numberToWrite, std::string pathName)
 {
-    std::ofstream wf(pathName, std::ios::out | std::ios::binary);
+    std::ofstream wf(pathName, std::ios::out | std::ios::binary | std::ios::app);
     if (!wf)
     {
         printf("Cannot open %s to write in it!\n", pathName.c_str());
         exit(1);
     }
-    wf.write((char *)&numberToWrite, sizeof(numberToWrite));
+
+    // Scala seems to read the other way around..
+    char *buffer = (char *)&numberToWrite;
+    std::reverse(buffer, &buffer[sizeof(numberToWrite)]);
+    wf.write(buffer, sizeof(numberToWrite));
+    // wf.write((char *)&numberToWrite, sizeof(numberToWrite));
+
     wf.close();
     if (!wf.good())
     {
