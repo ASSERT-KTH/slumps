@@ -2,12 +2,6 @@
 
 #define AFL_SHM_SIZE 65536
 
-void LOG(std::string some_string)
-{
-    std::string DOCKER_LOGS = parseEnvVariables((char *)"DOCKER_LOGS");
-    log(DOCKER_LOGS + "/interface.log", some_string);
-}
-
 std::vector<std::string> readFileToVector(const std::string &filename)
 {
     std::ifstream source;
@@ -26,24 +20,24 @@ void log_file(char *filename)
     std::vector<std::string> vector = readFileToVector(filename);
     for (int i = 0; i < vector.size(); ++i)
     {
-        LOG(vector[i]);
+        log_default(vector[i], DEBUG);
     }
 }
 
 uint8_t *getShm()
 {
     std::string shmStr = parseEnvVariables((char *)"__AFL_SHM_ID");
-    LOG("shmStr: " + shmStr);
+    log_default("shmStr: " + shmStr, INFO);
 
     key_t key = std::stoi(shmStr);
 
     uint8_t *trace_bits = (uint8_t *)shmat(key, 0, 0);
     if (trace_bits == (uint8_t *)-1)
     {
-        LOG("Failed to access shared memory");
+        log_default("Failed to access shared memory", ERROR);
         exit(1);
     }
-    LOG("Shared memory attached.");
+    log_default("Shared memory attached.", INFO);
     return trace_bits;
 }
 
@@ -79,7 +73,6 @@ void main_fuzz(
         exit(0);
     }
 
-    // TODO: Replace sendBuffer by 
     char sendBuffer[requiredBytes];
     readBinaryToBuffer(sendBuffer, sizeof(sendBuffer), (std::string)fuzzed_input_path);
 
@@ -88,7 +81,19 @@ void main_fuzz(
     std::string SWAM_SOCKET_HOST = parseEnvVariables((char *)"SWAM_SOCKET_HOST");
     std::string SWAM_SOCKET_PORT = parseEnvVariables((char *)"SWAM_SOCKET_PORT");
 
-    runClient(sizeof(sendBuffer), sendBuffer, sizeof(readBuffer), readBuffer, &SWAM_SOCKET_HOST[0], std::stoi(SWAM_SOCKET_PORT));
+    while (true)
+    {
+        try
+        {
+            runClient(sizeof(sendBuffer), sendBuffer, sizeof(readBuffer), readBuffer, &SWAM_SOCKET_HOST[0], std::stoi(SWAM_SOCKET_PORT));
+            break;
+        }
+        catch (...)
+        {
+            // TODO: Check what happens if this raises an error due to timeout
+            wait_for_server(&SWAM_SOCKET_HOST[0], std::stoi(SWAM_SOCKET_PORT), 1000, 10000);
+        }
+    }
 
     pass_data_to_afl(sizeof(readBuffer), readBuffer, trace_bits);
 
@@ -115,7 +120,7 @@ void fork_server(char *fuzzed_input_path, uint8_t *trace_bits, int requiredBytes
     // Phone home and tell AFL that we're OK
     if (write(199, &status, 4) != 4)
     {
-        LOG("Write failed");
+        log_default("Write failed", ERROR);
         close(199);
         exit(1);
     }
@@ -128,7 +133,7 @@ void fork_server(char *fuzzed_input_path, uint8_t *trace_bits, int requiredBytes
         // This will block until AFL sends us something. Abort if read fails.
         if (read(198, &status, 4) != 4)
         {
-            LOG("Read failed");
+            log_default("Read failed", ERROR);
             close(198);
             close(199);
             exit(1);
@@ -142,7 +147,7 @@ void fork_server(char *fuzzed_input_path, uint8_t *trace_bits, int requiredBytes
         int pid = fork();
         if (pid < 0)
         {
-            LOG("Fork failed");
+            log_default("Fork failed", ERROR);
             close(198);
             close(199);
             exit(1);
@@ -170,7 +175,7 @@ void fork_server(char *fuzzed_input_path, uint8_t *trace_bits, int requiredBytes
         // Waiting for child
         if (waitpid(pid, &status, 0) <= 0) // Technically only fails at -1; 0 means still running
         {
-            LOG("waitpid() failed.");
+            log_default("waitpid() failed.", ERROR);
             close(198);
             close(199);
             exit(1);
@@ -185,14 +190,14 @@ void fork_server(char *fuzzed_input_path, uint8_t *trace_bits, int requiredBytes
         else if (WIFSIGNALED(status)) // Process was stopped/terminated by signal;
         {
             // TODO: Find out why this branch gets triggered
-            LOG("Signal status: " + std::to_string(status));
-            LOG("WTERMSIG(status): " + std::to_string(WTERMSIG(status)));
-            LOG("WSTOPSIG(status): " + std::to_string(WSTOPSIG(status)));
+            log_default("Signal status: " + std::to_string(status), ERROR);
+            log_default("WTERMSIG(status): " + std::to_string(WTERMSIG(status)), ERROR);
+            log_default("WSTOPSIG(status): " + std::to_string(WSTOPSIG(status)), ERROR);
             write(199, &status, 4);
         }
         else
         {
-            LOG("Weird status: " + std::to_string(status));
+            log_default("Weird status: " + std::to_string(status), ERROR);
             close(198);
             close(199);
             exit(1);
@@ -204,13 +209,12 @@ void log_args(int argc, char *argv[])
 {
     for (int i = 0; i < argc; ++i)
     {
-        LOG("argv[" + std::to_string(i) + "]: " + std::string(argv[i]));
+        log_default("argv[" + std::to_string(i) + "]: " + std::string(argv[i]), INFO);
     }
 }
 
 int main(int argc, char *argv[])
 {
-    // TODO: Remove everything related to requiredBytes; not necessary anymore
     log_args(argc, argv);
 
     char *fuzzed_input_path = argv[1];
