@@ -8,7 +8,6 @@
 #include <vector>
 #include <algorithm>
 
-
 LogEnum getLogLevel()
 {
     std::string DEFAULT_LOG_LEVEL = parseEnvVariables((char *)"LOG_LEVEL");
@@ -24,34 +23,44 @@ LogEnum getLogLevel()
 LogEnum DEFAULT_LOG_LEVEL_ENUM = getLogLevel();
 std::string DOCKER_LOGS_DIR = parseEnvVariables((char *)"DOCKER_LOGS");
 
-void log_default(std::string some_string, LogEnum log_level)
+void log_default(std::string someString, LogEnum log_level)
 {
     std::string actualLog;
+    if ((int)log_level > (int)DEFAULT_LOG_LEVEL_ENUM)
+        return;
+
     switch (log_level)
     {
     case ERROR:
     {
         std::string errorString = std::strerror(errno);
-        actualLog = errorString + " * Error message: * " + some_string.c_str();
+        actualLog = "ERROR      --- " + someString + " * errno: * " + errorString;
         break;
     }
-    default:
+    case WARNING:
     {
-        if ((int) DEFAULT_LOG_LEVEL_ENUM > (int) log_level) {
-            return;
-        }
-        actualLog = some_string;
+        actualLog = "WARNING    --- " + someString;
+        break;
+    }
+    case INFO:
+    {
+        actualLog = "INFO       --- " + someString;
+        break;
+    }
+    case DEBUG:
+    {
+        actualLog = "DEBUG      --- " + someString;
         break;
     }
     }
     log(DOCKER_LOGS_DIR + "/afl.log", actualLog);
 }
 
-void log(std::string filename, std::string some_string)
+void log(std::string filename, std::string someString)
 {
     std::ofstream logfile;
     logfile.open(filename, std::ios_base::app);
-    logfile << some_string + "\n";
+    logfile << someString + "\n";
     logfile.close();
 }
 
