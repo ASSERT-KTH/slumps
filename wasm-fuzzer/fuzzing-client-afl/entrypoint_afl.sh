@@ -33,5 +33,6 @@ fi
 # If you want quick & dirty results right away - akin to zzuf and other 
 # traditional fuzzers - add the -d option to the command line.
 
-echo "afl-fuzz -i $DOCKER_AFL_INPUT -o $DOCKER_AFL_OUTPUT $RANK -d -- ${DOCKER_INTERFACE_SRC}/interface.out @@ $REQUIRED_BYTES"
-exec afl-fuzz -i $DOCKER_AFL_INPUT -o $DOCKER_AFL_OUTPUT $RANK -d -- "${DOCKER_INTERFACE_SRC}/interface.out" @@ $REQUIRED_BYTES
+# TODO: Try to take out timeout again.
+echo "afl-fuzz -i $DOCKER_AFL_INPUT -o $DOCKER_AFL_OUTPUT $RANK -t 12000 -d -- ${DOCKER_INTERFACE_SRC}/interface.out @@ $REQUIRED_BYTES"
+exec afl-fuzz -i $DOCKER_AFL_INPUT -o $DOCKER_AFL_OUTPUT $RANK -t 12000 -d -- "${DOCKER_INTERFACE_SRC}/interface.out" @@ $REQUIRED_BYTES

@@ -63,7 +63,8 @@ void pass_data_to_afl(int sizeReadBuffer, char *readBuffer, uint8_t *trace_bits)
 void main_fuzz(
     char *fuzzed_input_path,
     uint8_t *trace_bits,
-    int requiredBytes)
+    int requiredBytes,
+    pid_t forkServerPID)
 {
 
     std::string DUMMY_TESTING_AFL = parseEnvVariables((char *)"DUMMY_TESTING_AFL");
@@ -90,8 +91,23 @@ void main_fuzz(
         }
         catch (...)
         {
-            // TODO: Check what happens if this raises an error due to timeout
-            wait_for_server(&SWAM_SOCKET_HOST[0], std::stoi(SWAM_SOCKET_PORT), 1000, 10000);
+            try
+            {
+
+                // TODO: AFL explicitly advises not to have it's timeout too high. Therefore think about:
+                //      1) Do this step in the forkserver before every fork
+                //      2) Kill AFL directly and let supervisord restart it. Doesn't work when running locally though.
+                //          However, SWAM won't be restarted anyways locally, so might as well kill AFL entirely as well.
+                //      3) !!! Just do 1 retry without wait_for_server/timeout. If still doesn't work, kill AFL.
+
+                // Be sure that AFL's timeout is larger than here, otherwise there's no point in this:
+                wait_for_server(&SWAM_SOCKET_HOST[0], std::stoi(SWAM_SOCKET_PORT), 1000, 10000);
+            }
+            catch (...)
+            {
+                kill(forkServerPID, 6);
+                exit(1);
+            }
         }
     }
 
@@ -113,6 +129,19 @@ void fork_server(char *fuzzed_input_path, uint8_t *trace_bits, int requiredBytes
     hard-coded by AFL and thereby accessible here.
     */
 
+    // Just for logging:
+    pid_t aflPID = getppid();
+    char aflPIDChar[6];
+    sprintf(aflPIDChar, "%d", aflPID);
+    std::string aflPIDString = aflPIDChar;
+    log_default("AFL's PID: " + aflPIDString, INFO);
+
+    pid_t forkServerPID = getpid();
+    char forkServerPIDChar[6];
+    sprintf(forkServerPIDChar, "%d", forkServerPID);
+    std::string forkServerPIDString = forkServerPIDChar;
+    log_default("Forkserver's PID: " + forkServerPIDString, INFO);
+
     int status = 0;
 
     // Starting the 'Fork server handshake'
@@ -129,6 +158,7 @@ void fork_server(char *fuzzed_input_path, uint8_t *trace_bits, int requiredBytes
     // and is creating forks of itself is called the "fork server".
     while (true)
     {
+
         // Wait for AFL by reading from the pipe.
         // This will block until AFL sends us something. Abort if read fails.
         if (read(198, &status, 4) != 4)
@@ -157,7 +187,7 @@ void fork_server(char *fuzzed_input_path, uint8_t *trace_bits, int requiredBytes
             // This is the child process
             close(198);
             close(199);
-            main_fuzz(fuzzed_input_path, trace_bits, requiredBytes);
+            main_fuzz(fuzzed_input_path, trace_bits, requiredBytes, forkServerPID);
             exit(0);
         }
 
