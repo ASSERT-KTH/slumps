@@ -5,7 +5,7 @@
 // data sent by the client properly
 int main(int argc, char *argv[])
 {
-    std::string inputFile = (std::string) argv[1];
+    std::string inputFile = (std::string)argv[1];
 
     char readBuffer[AFL_SHM_SIZE + 1]; // + 1 for exit code
 
@@ -13,6 +13,6 @@ int main(int argc, char *argv[])
     char sendBuffer[fileSize];
     readBinaryToBuffer(sendBuffer, fileSize, inputFile);
 
-    runClient(sizeof(sendBuffer), sendBuffer, sizeof(readBuffer), readBuffer, "localhost", 9999);
+    runClient(sizeof(sendBuffer), sendBuffer, sizeof(readBuffer), readBuffer, (char *)"localhost", 9999);
     exit(0);
 };
