@@ -73,12 +73,12 @@ void clientRead(int sockfd, char *readBuffer, int sizeBuffer)
     }
 }
 
-void wait_for_server(char *socket_hostname, int socket_port, int wait_milli, double timeout)
+void wait_for_server(char *socket_hostname, int socket_port, int wait_milli, int timeout_milli)
 {
     log_default("Waiting for Swam server...", INFO);
 
-    std::clock_t start = std::clock();
-    double duration;
+    auto t_start = std::chrono::high_resolution_clock::now();
+    int duration_milli;
 
     int sockfd;
     while (true)
@@ -91,13 +91,15 @@ void wait_for_server(char *socket_hostname, int socket_port, int wait_milli, dou
         }
         catch (const std::runtime_error& error)
         {
-            duration = ( std::clock() - start ) / (double) CLOCKS_PER_SEC;
-            if (duration > timeout) {
+            auto t_end = std::chrono::high_resolution_clock::now();
+            duration_milli = std::chrono::duration<double, std::milli>(t_end-t_start).count();
+            if (duration_milli > timeout_milli) {
                 log_default("Timeout reached in wait_for_server", ERROR);
                 throw error; 
             }
             log_default("Trying to connect again in 4 seconds...", INFO);
-            sleep(wait_milli);
+            usleep(wait_milli);
+            std::this_thread::sleep_for(std::chrono::milliseconds(wait_milli));
         }
     }
     log_default("Can connect to Swam!", INFO);
