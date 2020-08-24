@@ -14,11 +14,14 @@
 #include <netdb.h>
 #include <fstream>
 #include <algorithm>
+#include <ctime>
+#include <cstdio>
 
 void error(const char *);
 int connectToServer(char *, int);
-void clientWrite(int, char*, int);
-void clientRead(int, char*, int);
-void runClient(int, char*, int, char*, char *, int);
+void clientWrite(int, char *, int);
+void clientRead(int, char *, int);
+void wait_for_server(char *, int, int = 4000, double = 40000);
+void runClient(int, char *, int, char *, char *, int);
 
 #endif
