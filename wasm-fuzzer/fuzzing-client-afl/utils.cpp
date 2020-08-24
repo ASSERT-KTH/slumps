@@ -6,7 +6,46 @@
 #include <sys/stat.h>
 #include <sstream>
 #include <vector>
-#include <algorithm> 
+#include <algorithm>
+
+
+LogEnum getLogLevel()
+{
+    std::string DEFAULT_LOG_LEVEL = parseEnvVariables((char *)"LOG_LEVEL");
+    if (DEFAULT_LOG_LEVEL == "DEBUG")
+        return DEBUG;
+    if (DEFAULT_LOG_LEVEL == "INFO")
+        return INFO;
+    if (DEFAULT_LOG_LEVEL == "WARNING")
+        return WARNING;
+    return ERROR;
+}
+
+LogEnum DEFAULT_LOG_LEVEL_ENUM = getLogLevel();
+std::string DOCKER_LOGS_DIR = parseEnvVariables((char *)"DOCKER_LOGS");
+
+void log_default(std::string some_string, LogEnum log_level)
+{
+    std::string actualLog;
+    switch (log_level)
+    {
+    case ERROR:
+    {
+        std::string errorString = std::strerror(errno);
+        actualLog = errorString + " * Error message: * " + some_string.c_str();
+        break;
+    }
+    default:
+    {
+        if ((int) DEFAULT_LOG_LEVEL_ENUM > (int) log_level) {
+            return;
+        }
+        actualLog = some_string;
+        break;
+    }
+    }
+    log(DOCKER_LOGS_DIR + "/afl.log", actualLog);
+}
 
 void log(std::string filename, std::string some_string)
 {
@@ -81,7 +120,8 @@ std::vector<std::string> split(const std::string &s, char delimiter)
     return tokens;
 }
 
-void clearFile(std::string pathName){
+void clearFile(std::string pathName)
+{
     std::ofstream wf(pathName, std::ios::out | std::ios::binary);
     if (!wf)
     {
