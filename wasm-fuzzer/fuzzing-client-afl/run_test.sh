@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# TODO: Since now all logging is to a file (using env var DOCKER_LOGS), this script cannot be run locally anymore. Fix this.
+
 # For testing the integration of prepare_wasm_input.cpp and socket_client.cpp.
 
 # Run server in Swam first (example with fibo.wat):

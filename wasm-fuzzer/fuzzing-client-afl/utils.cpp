@@ -6,13 +6,61 @@
 #include <sys/stat.h>
 #include <sstream>
 #include <vector>
-#include <algorithm> 
+#include <algorithm>
 
-void log(std::string filename, std::string some_string)
+LogEnum getLogLevel()
+{
+    std::string DEFAULT_LOG_LEVEL = parseEnvVariables((char *)"LOG_LEVEL");
+    if (DEFAULT_LOG_LEVEL == "DEBUG")
+        return DEBUG;
+    if (DEFAULT_LOG_LEVEL == "INFO")
+        return INFO;
+    if (DEFAULT_LOG_LEVEL == "WARNING")
+        return WARNING;
+    return ERROR;
+}
+
+LogEnum DEFAULT_LOG_LEVEL_ENUM = getLogLevel();
+std::string DOCKER_LOGS_DIR = parseEnvVariables((char *)"DOCKER_LOGS");
+
+void log_default(std::string someString, LogEnum log_level)
+{
+    std::string actualLog;
+    if ((int)log_level > (int)DEFAULT_LOG_LEVEL_ENUM)
+        return;
+
+    switch (log_level)
+    {
+    case ERROR:
+    {
+        std::string errorString = std::strerror(errno);
+        actualLog = "ERROR      --- " + someString + " * errno: * " + errorString;
+        break;
+    }
+    case WARNING:
+    {
+        actualLog = "WARNING    --- " + someString;
+        break;
+    }
+    case INFO:
+    {
+        actualLog = "INFO       --- " + someString;
+        break;
+    }
+    case DEBUG:
+    {
+        actualLog = "DEBUG      --- " + someString;
+        break;
+    }
+    }
+    log(DOCKER_LOGS_DIR + "/afl.log", actualLog);
+}
+
+void log(std::string filename, std::string someString)
 {
     std::ofstream logfile;
     logfile.open(filename, std::ios_base::app);
-    logfile << some_string + "\n";
+    logfile << someString + "\n";
     logfile.close();
 }
 
@@ -81,7 +129,8 @@ std::vector<std::string> split(const std::string &s, char delimiter)
     return tokens;
 }
 
-void clearFile(std::string pathName){
+void clearFile(std::string pathName)
+{
     std::ofstream wf(pathName, std::ios::out | std::ios::binary);
     if (!wf)
     {
