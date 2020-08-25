@@ -38,4 +38,4 @@ fi
 # traditional fuzzers - add the -d option to the command line.
 
 echo "$AFL -i $DOCKER_AFL_INPUT -o $DOCKER_AFL_OUTPUT $RANK -d -- ${DOCKER_INTERFACE_SRC}/interface.out @@ $REQUIRED_BYTES"
-$AFL -i "$DOCKER_AFL_INPUT" -o $DOCKER_AFL_OUTPUT $RANK -d -- "${DOCKER_INTERFACE_SRC}/interface.out" @@ $REQUIRED_BYTES
+$AFL -i "$DOCKER_AFL_INPUT" -o $DOCKER_AFL_OUTPUT $RANK -t 5000 -d -- "${DOCKER_INTERFACE_SRC}/interface.out" @@ $REQUIRED_BYTES
