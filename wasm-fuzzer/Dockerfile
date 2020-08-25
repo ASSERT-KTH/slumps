@@ -8,7 +8,7 @@ FROM aflplusplus/aflplusplus
 
 RUN yes | apt-get install curl
 RUN apt-get update
-RUN DEBIAN_FRONTEND="noninteractive" apt-get -y install tzdata
+RUN DEBIAN_FRONTEND="noninteractive" apt-get -y install tzdata wget
 RUN yes | apt-get install software-properties-common
 RUN apt-get update
 RUN yes | add-apt-repository ppa:openjdk-r/ppa
@@ -21,31 +21,10 @@ RUN yes | apt-get install openjdk-12-jdk-headless
 
 RUN apt-get install -y supervisor
 
-#########################
-##### Scala & Mill ######
-#########################
-
-# Env variables
-ENV SCALA_VERSION 2.13.2
-ENV MILL_VERSION 0.7.0
 
 # Define working directory
 WORKDIR /root
 
-# Install Scala
-## Piping curl directly in tar
-RUN \
-  curl -fsL https://downloads.typesafe.com/scala/$SCALA_VERSION/scala-$SCALA_VERSION.tgz | tar xfz - -C /root/ && \
-  echo >> /root/.bashrc && \
-  echo "export PATH=~/scala-$SCALA_VERSION/bin:$PATH" >> /root/.bashrc
-
-# Install mill
-RUN \
-  curl -L -o /usr/local/bin/mill https://github.com/lihaoyi/mill/releases/download/$MILL_VERSION/$MILL_VERSION && \
-  chmod +x /usr/local/bin/mill && \
-  touch build.sc && \
-  mill -i resolve _ && \
-  rm build.sc
 
 ################################
 ##### fuzzing-server-swam ######
@@ -63,7 +42,11 @@ WORKDIR $DOCKER_SWAM_SRC
 # TODO: Find way of installing dependencies with Mill without copying over entire repo
 # See: https://stackoverflow.com/questions/62834693/mill-build-tool-install-dependencies-without-compiling-source-code
 
-ADD ./fuzzing-server-swam $DOCKER_SWAM_SRC
+ADD ./fuzzing-server-entry/entrypoint_mill_server.sh $DOCKER_SWAM_SRC
+
+# DOWNLOAD latest version of SWAM cli jar file
+ADD https://github.com/KTH/swam/releases/download/v0.6.0-RC3/cli-0.6.0-RC3.jar $DOCKER_SWAM_SRC
+
 
 RUN chmod +x $DOCKER_SWAM_SRC/entrypoint_mill_server.sh
 
