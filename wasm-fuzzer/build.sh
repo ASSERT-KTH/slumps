@@ -9,6 +9,7 @@ fi
 echo "Building SWAM..."
 
 cd fuzzing-server-swam
+git pull
 ./millw cli.assembly
 export SWAM_JAR=$(pwd)/fuzzing-server-swam/out/cli/assembly/dest/out.jar
 echo $SWAM_JAR
