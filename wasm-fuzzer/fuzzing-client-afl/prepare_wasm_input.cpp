@@ -84,7 +84,6 @@ void printResult(std::string filepath)
     printf("Total bytes written: %i\n", fileSize);
     char buffer[fileSize];
     readBinaryToBuffer(buffer, fileSize, filepath);
-    // std::reverse(buffer, &buffer[sizeof(buffer)]);
 
     printBuffer(sizeof(buffer), buffer);
     printf("-----------------\n");

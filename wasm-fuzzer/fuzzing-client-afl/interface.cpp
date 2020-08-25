@@ -3,12 +3,6 @@
 
 #define AFL_SHM_SIZE 65536
 
-void LOG(std::string some_string)
-{
-    std::string DOCKER_LOGS = parseEnvVariables((char *)"DOCKER_LOGS");
-    log(DOCKER_LOGS + "/interface.log", some_string);
-}
-
 std::vector<std::string> readFileToVector(const std::string &filename)
 {
     std::ifstream source;
@@ -27,24 +21,24 @@ void log_file(char *filename)
     std::vector<std::string> vector = readFileToVector(filename);
     for (int i = 0; i < vector.size(); ++i)
     {
-        LOG(vector[i]);
+        log_default(vector[i], DEBUG);
     }
 }
 
 uint8_t *getShm()
 {
     std::string shmStr = parseEnvVariables((char *)"__AFL_SHM_ID");
-    LOG("shmStr: " + shmStr);
+    log_default("shmStr: " + shmStr, INFO);
 
     key_t key = std::stoi(shmStr);
 
     uint8_t *trace_bits = (uint8_t *)shmat(key, 0, 0);
     if (trace_bits == (uint8_t *)-1)
     {
-        LOG("Failed to access shared memory");
+        log_default("Failed to access shared memory", ERROR);
         exit(1);
     }
-    LOG("Shared memory attached.");
+    log_default("Shared memory attached.", INFO);
     return trace_bits;
 }
 
@@ -70,7 +64,8 @@ void pass_data_to_afl(int sizeReadBuffer, char *readBuffer, uint8_t *trace_bits)
 void main_fuzz(
     char *fuzzed_input_path,
     uint8_t *trace_bits,
-    int requiredBytes)
+    int requiredBytes,
+    pid_t forkServerPID)
 {
     //LOG("Entering");
     std::string DOCKER_LOGS = parseEnvVariables((char *)"DOCKER_LOGS");
@@ -81,16 +76,10 @@ void main_fuzz(
         fillTraceDummyData(trace_bits);
         exit(0);
     }
-
-    // TODO: Replace sendBuffer by 
-
-    //LOG("Buffer to send");
+  
     char sendBuffer[requiredBytes];
     readBinaryToBuffer(sendBuffer, sizeof(sendBuffer), (std::string)fuzzed_input_path);
 
-    //logBuffer(DOCKER_LOGS + "/interface.log", requiredBytes, sendBuffer);
-    // std::reverse(sendBuffer, &sendBuffer[sizeof(sendBuffer)]); // Reverse order of tempBuffer
-    LOG("Read buffer");
 
     char readBuffer[AFL_SHM_SIZE + 1]; // + 1 for exit code
     ///logBuffer(DOCKER_LOGS + "/interface.log", AFL_SHM_SIZE + 1, readBuffer);
@@ -98,8 +87,34 @@ void main_fuzz(
     std::string SWAM_SOCKET_HOST = parseEnvVariables((char *)"SWAM_SOCKET_HOST");
     std::string SWAM_SOCKET_PORT = parseEnvVariables((char *)"SWAM_SOCKET_PORT");
 
-    LOG("Run client");
-    runClient(sizeof(sendBuffer), sendBuffer, sizeof(readBuffer), readBuffer, &SWAM_SOCKET_HOST[0], std::stoi(SWAM_SOCKET_PORT));
+    while (true)
+    {
+        try
+        {
+            runClient(sizeof(sendBuffer), sendBuffer, sizeof(readBuffer), readBuffer, &SWAM_SOCKET_HOST[0], std::stoi(SWAM_SOCKET_PORT));
+            break;
+        }
+        catch (...)
+        {
+            try
+            {
+
+                // TODO: AFL explicitly advises not to have it's timeout too high. Therefore think about:
+                //      1) Do this step in the forkserver before every fork
+                //      2) Kill AFL directly and let supervisord restart it. Doesn't work when running locally though.
+                //          However, SWAM won't be restarted anyways locally, so might as well kill AFL entirely as well.
+                //      3) !!! Just do 1 retry without wait_for_server/timeout. If still doesn't work, kill AFL.
+
+                // Be sure that AFL's timeout is larger than here, otherwise there's no point in this:
+                wait_for_server(&SWAM_SOCKET_HOST[0], std::stoi(SWAM_SOCKET_PORT), 1000, 10000);
+            }
+            catch (...)
+            {
+                kill(forkServerPID, 6);
+                exit(1);
+            }
+        }
+    }
 
     LOG("Passing data to afl...");
     pass_data_to_afl(sizeof(readBuffer), readBuffer, trace_bits);
@@ -120,6 +135,19 @@ void fork_server(char *fuzzed_input_path, uint8_t *trace_bits, int requiredBytes
     hard-coded by AFL and thereby accessible here.
     */
 
+    // Just for logging:
+    pid_t aflPID = getppid();
+    char aflPIDChar[6];
+    sprintf(aflPIDChar, "%d", aflPID);
+    std::string aflPIDString = aflPIDChar;
+    log_default("AFL's PID: " + aflPIDString, INFO);
+
+    pid_t forkServerPID = getpid();
+    char forkServerPIDChar[6];
+    sprintf(forkServerPIDChar, "%d", forkServerPID);
+    std::string forkServerPIDString = forkServerPIDChar;
+    log_default("Forkserver's PID: " + forkServerPIDString, INFO);
+
     int status = 0;
     LOG("Waiting for fd");
 
@@ -131,14 +159,7 @@ void fork_server(char *fuzzed_input_path, uint8_t *trace_bits, int requiredBytes
     LOG("writing...");
     if ( w != 4)
     {
-        LOG("Write failed");
-        LOG("Signal status: " + std::to_string(status));
-        LOG("Signal status: " + std::to_string(w));
-        std::string str(strerror(errno));
-        
-        LOG("Errno: " + str);
-        LOG("WTERMSIG(status): " + std::to_string(WTERMSIG(status)));
-        LOG("WSTOPSIG(status): " + std::to_string(WSTOPSIG(status)));
+        log_default("Write failed", ERROR);
         close(199);
         exit(1);
     }
@@ -147,11 +168,12 @@ void fork_server(char *fuzzed_input_path, uint8_t *trace_bits, int requiredBytes
     // and is creating forks of itself is called the "fork server".
     while (true)
     {
+
         // Wait for AFL by reading from the pipe.
         // This will block until AFL sends us something. Abort if read fails.
         if (read(198, &status, 4) != 4)
         {
-            LOG("Read failed");
+            log_default("Read failed", ERROR);
             close(198);
             close(199);
             exit(1);
@@ -165,7 +187,7 @@ void fork_server(char *fuzzed_input_path, uint8_t *trace_bits, int requiredBytes
         int pid = fork();
         if (pid < 0)
         {
-            LOG("Fork failed");
+            log_default("Fork failed", ERROR);
             close(198);
             close(199);
             exit(1);
@@ -175,8 +197,7 @@ void fork_server(char *fuzzed_input_path, uint8_t *trace_bits, int requiredBytes
             // This is the child process
             close(198);
             close(199);
-            LOG("Calling main fuzz");
-            main_fuzz(fuzzed_input_path, trace_bits, requiredBytes);
+            main_fuzz(fuzzed_input_path, trace_bits, requiredBytes, forkServerPID);
             exit(0);
         }
 
@@ -194,7 +215,7 @@ void fork_server(char *fuzzed_input_path, uint8_t *trace_bits, int requiredBytes
         // Waiting for child
         if (waitpid(pid, &status, 0) <= 0) // Technically only fails at -1; 0 means still running
         {
-            LOG("waitpid() failed.");
+            log_default("waitpid() failed.", ERROR);
             close(198);
             close(199);
             exit(1);
@@ -209,14 +230,14 @@ void fork_server(char *fuzzed_input_path, uint8_t *trace_bits, int requiredBytes
         else if (WIFSIGNALED(status)) // Process was stopped/terminated by signal;
         {
             // TODO: Find out why this branch gets triggered
-            LOG("Signal status: " + std::to_string(status));
-            LOG("WTERMSIG(status): " + std::to_string(WTERMSIG(status)));
-            LOG("WSTOPSIG(status): " + std::to_string(WSTOPSIG(status)));
+            log_default("Signal status: " + std::to_string(status), ERROR);
+            log_default("WTERMSIG(status): " + std::to_string(WTERMSIG(status)), ERROR);
+            log_default("WSTOPSIG(status): " + std::to_string(WSTOPSIG(status)), ERROR);
             write(199, &status, 4);
         }
         else
         {
-            LOG("Weird status: " + std::to_string(status));
+            log_default("Weird status: " + std::to_string(status), ERROR);
             close(198);
             close(199);
             exit(1);
@@ -228,13 +249,12 @@ void log_args(int argc, char *argv[])
 {
     for (int i = 0; i < argc; ++i)
     {
-        LOG("argv[" + std::to_string(i) + "]: " + std::string(argv[i]));
+        log_default("argv[" + std::to_string(i) + "]: " + std::string(argv[i]), INFO);
     }
 }
 
 int main(int argc, char *argv[])
 {
-    // TODO: Remove everything related to requiredBytes; not necessary anymore
     log_args(argc, argv);
 
     char *fuzzed_input_path = argv[1];

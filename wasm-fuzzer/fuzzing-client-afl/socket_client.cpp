@@ -2,10 +2,10 @@
 
 // Most code based on: https://www.bogotobogo.com/cplusplus/sockets_server_client.php
 
-void error(const char *msg)
+void errorAndThrow(const char *msg)
 {
-    // fprintf("Socket: %s\n", msg);
-    perror(msg);
+    std::string msgStr = msg;
+    log_default(msgStr, ERROR);
     throw std::runtime_error(msg);
 }
 
@@ -24,15 +24,15 @@ int connectToServer(char *socket_hostname, int socket_port)
     sockfd = socket(AF_INET, SOCK_STREAM, 0);
 
     if (sockfd < 0)
-        error("Error opening socket");
+        errorAndThrow("Error opening socket");
 
     server = gethostbyname(socket_hostname);
 
     if (server == NULL)
     {
-        // fprintf(stderr, "Error, no such host\n");
-        perror("Error, no such host");
-        exit(1);
+        errorAndThrow("Error, no such host");
+        // log_default("Error, no such host", ERROR);
+        // exit(1);
     }
 
     bzero((char *)&serv_addr, sizeof(serv_addr)); // Maybe use memset
@@ -46,7 +46,7 @@ int connectToServer(char *socket_hostname, int socket_port)
     serv_addr.sin_port = htons(socket_port);
 
     if (connect(sockfd, (struct sockaddr *)&serv_addr, sizeof(serv_addr)) < 0)
-        error("Error connecting");
+        errorAndThrow("Error connecting");
 
     return sockfd;
 }
@@ -55,7 +55,7 @@ void clientWrite(int sockfd, char *sendBuffer, int sizeBuffer)
 {
     int n = write(sockfd, sendBuffer, sizeBuffer);
     if (n < 0)
-        error("Error writing to socket");
+        errorAndThrow("Error writing to socket");
 }
 
 void clientRead(int sockfd, char *readBuffer, int sizeBuffer)
@@ -68,12 +68,43 @@ void clientRead(int sockfd, char *readBuffer, int sizeBuffer)
         // is in a loop.
         int nNew = read(sockfd, readBuffer + n, sizeBuffer - n);
         if (nNew < 0)
-            error("Error reading from socket");
+            errorAndThrow("Error reading from socket");
         n = n + nNew;
     }
 }
 
-// TODO: Use MessagePack object instead of sendBuffer & readBuffer
+void wait_for_server(char *socket_hostname, int socket_port, int wait_milli, int timeout_milli)
+{
+    log_default("Waiting for Swam server...", INFO);
+
+    auto t_start = std::chrono::high_resolution_clock::now();
+    int duration_milli;
+
+    int sockfd;
+    while (true)
+    {
+        try
+        {
+            sockfd = connectToServer(socket_hostname, socket_port);
+            close(sockfd);
+            break;
+        }
+        catch (const std::runtime_error& error)
+        {
+            auto t_end = std::chrono::high_resolution_clock::now();
+            duration_milli = std::chrono::duration<double, std::milli>(t_end-t_start).count();
+            if (duration_milli > timeout_milli) {
+                log_default("Timeout reached in wait_for_server", ERROR);
+                throw error; 
+            }
+            log_default("Trying to connect again in 4 seconds...", INFO);
+            usleep(wait_milli);
+            std::this_thread::sleep_for(std::chrono::milliseconds(wait_milli));
+        }
+    }
+    log_default("Can connect to Swam!", INFO);
+}
+
 void runClient(
     int sizeSendBuffer,
     char *sendBuffer,
