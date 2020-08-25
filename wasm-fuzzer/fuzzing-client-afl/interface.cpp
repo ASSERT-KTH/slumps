@@ -116,7 +116,7 @@ void main_fuzz(
         }
     }
 
-    LOG("Passing data to afl...");
+    //LOG("Passing data to afl...");
     pass_data_to_afl(sizeof(readBuffer), readBuffer, trace_bits);
 
     // Read exit code from readBuffer and exit with same code
@@ -149,14 +149,11 @@ void fork_server(char *fuzzed_input_path, uint8_t *trace_bits, int requiredBytes
     log_default("Forkserver's PID: " + forkServerPIDString, INFO);
 
     int status = 0;
-    LOG("Waiting for fd");
-
     // Starting the 'Fork server handshake'
 
     // Phone home and tell AFL that we're OK
     
     int w = write(199, &status, 4);
-    LOG("writing...");
     if ( w != 4)
     {
         log_default("Write failed", ERROR);
