@@ -1,4 +1,11 @@
 
+echo "Cloning swam"
+
+
+if [ ! -d fuzzing-server-swam ]; then
+	git clone --single-branch --branch feature/swam-server https://github.com/KTH/swam.git fuzzing-server-swam
+fi
+
 echo "Building SWAM..."
 
 cd fuzzing-server-swam
