@@ -5,7 +5,7 @@ on:
         - master
       # file paths to consider in the event. Optional; defaults to all.
       paths:
-        - 'crow/**'
+        - 'wasm-fuzzer/**'
         - '.github/**'
      
 
@@ -19,12 +19,12 @@ jobs:
       - name: Install dependencies
         run: |
           sudo apt-get update && docker --version
-      - name: Build backend image
+      - name: Build wafl image
         run: |
-          cd crow && sudo docker build -t slumps/crow:latest -f Dockerfile .
+          cd wasm-fuzzer && sudo docker build -t slumps/wafl:latest .
       - name: Push images
         run: |
-          docker login -u="$user" -p="$pass" && docker push slumps/crow:latest
+          docker login -u="$user" -p="$pass" && docker push slumps/wafl:latest
         env:
           user: ${{secrets.DOCKER_USER}}
           pass: ${{secrets.DOCKER_PASS}}

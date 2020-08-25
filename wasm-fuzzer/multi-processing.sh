@@ -22,7 +22,7 @@ docker run --env-file=./.env \
     -v ${LOCAL_AFL_OUTPUT:?err}:/home/client/out/ \
     -v ${LOCAL_LOGS:?err}:/home/shared/logs/ \
     -d \
-    wafl:latest
+    slumps/wafl:latest
 
 if [ $1 -lt 2 ]
 then
@@ -43,6 +43,6 @@ do
         -v ${LOCAL_AFL_OUTPUT:?err}:/home/client/out/ \
         -v ${LOCAL_LOGS:?err}:/home/shared/logs/ \
         -d \
-        wafl:latest
+        slumps/wafl:latest
 done
 exit 0
