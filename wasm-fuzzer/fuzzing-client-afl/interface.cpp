@@ -68,7 +68,7 @@ void main_fuzz(
     pid_t forkServerPID)
 {
     //LOG("Entering");
-    std::string DOCKER_LOGS = parseEnvVariables((char *)"DOCKER_LOGS");
+    std::string LOGS_DIR = parseEnvVariables((char *)"LOGS_DIR");
     std::string DUMMY_TESTING_AFL = parseEnvVariables((char *)"DUMMY_TESTING_AFL");
 
     if (DUMMY_TESTING_AFL == "True")
@@ -82,7 +82,7 @@ void main_fuzz(
 
 
     char readBuffer[AFL_SHM_SIZE + 1]; // + 1 for exit code
-    ///logBuffer(DOCKER_LOGS + "/interface.log", AFL_SHM_SIZE + 1, readBuffer);
+    ///logBuffer(LOGS_DIR + "/interface.log", AFL_SHM_SIZE + 1, readBuffer);
 
     std::string SWAM_SOCKET_HOST = parseEnvVariables((char *)"SWAM_SOCKET_HOST");
     std::string SWAM_SOCKET_PORT = parseEnvVariables((char *)"SWAM_SOCKET_PORT");

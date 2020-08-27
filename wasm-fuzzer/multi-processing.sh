@@ -14,7 +14,6 @@ set +a
 
 echo "Running #1"
 docker run --env-file=./.env \
-    -e SWAM_SOCKET_HOST=localhost \
     -e MASTER_AFL_NODE=True \
     -v maven_data:/root/.cache/coursier/v1/https/repo1.maven.org/maven2 \
     -v compiled_sources:/home/server/src/out/ \
@@ -35,7 +34,6 @@ do
     sleep 30s
     echo "Running #${i}"
     docker run --env-file=./.env \
-        -e SWAM_SOCKET_HOST=localhost \
         -e MASTER_AFL_NODE=False \
         -v maven_data:/root/.cache/coursier/v1/https/repo1.maven.org/maven2 \
         -v compiled_sources:/home/server/src/out/ \
