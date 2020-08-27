@@ -2,11 +2,10 @@
 
 cd $SRC_INTERFACE_DIR
 
-PREPARED_INPUT_PATH="$INPUT_AFL_DIR/prepared_input.dat"
-./prepare_wasm_input.out $PREPARED_INPUT_PATH
+./prepare_wasm_input.out "$INPUT_AFL_DIR/prepared_input.dat"
 
 # TODO: Remove everything related to REQUIRED_BYTES
-REQUIRED_BYTES=$(./getFileSize.out $PREPARED_INPUT_PATH)
+REQUIRED_BYTES=$(./getFileSize.out $INPUT_AFL_DIR/prepared_input.dat)
 
 # Parallel fuzzing: https://github.com/mirrorer/afl/blob/master/docs/parallel_fuzzing.txt
 # TODO: Refactor this to work in non-Docker environment as well
@@ -40,4 +39,4 @@ fi
 
 
 echo "$BIN_AFL -i $INPUT_AFL_DIR -o $OUTPUT_AFL_DIR $RANK -d -- ${SRC_INTERFACE_DIR}/interface.out @@ $REQUIRED_BYTES"
-$BIN_AFL -i "$INPUT_AFL_DIR" -o $OUTPUT_AFL_DIR $RANK -t 12000 -d -- "${SRC_INTERFACE_DIR}/interface.out" @@ $REQUIRED_BYTES
+$BIN_AFL -i "$INPUT_AFL_DIR" -o $OUTPUT_AFL_DIR $RANK -d -- "${SRC_INTERFACE_DIR}/interface.out" @@ $REQUIRED_BYTES
