@@ -15,11 +15,17 @@ if ! [ -f /.dockerenv ]; then
 
     TEMP_DIR=$CURRENT_DIR/wafl-temp
 
+    mkdir -p $TEMP_DIR/afl-in
+    mkdir -p $TEMP_DIR/afl-out
+    mkdir -p $TEMP_DIR/logs
+
     export SRC_INTERFACE_DIR=$CURRENT_DIR/fuzzing-client-afl
     export SRC_SWAM_DIR=$CURRENT_DIR/fuzzing-server-swam
 
-    export INPUT_AFL_DIR=$TEMP_DIR/afl-input/$currentID
-    export OUTPUT_AFL_DIR=$TEMP_DIR/afl-output/$currentID
+    export OUT_INTERFACE_DIR=$TEMP_DIR/cpp-out
+
+    export INPUT_AFL_DIR=$TEMP_DIR/afl-in/$currentID
+    export OUTPUT_AFL_DIR=$TEMP_DIR/afl-out/$currentID
 
     export LOGS_DIR=$TEMP_DIR/logs/$currentID
 
