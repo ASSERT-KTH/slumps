@@ -9,17 +9,17 @@ REQUIRED_BYTES=$(./getFileSize.out $INPUT_AFL_DIR/prepared_input.dat)
 
 # Parallel fuzzing: https://github.com/mirrorer/afl/blob/master/docs/parallel_fuzzing.txt
 # TODO: Refactor this to work in non-Docker environment as well
-# if [[ ! -z "$MASTER_AFL_NODE" ]]
-# then
-#     DOCKER_CONTAINER_ID=$(</etc/hostname)
-#     if [[ $MASTER_AFL_NODE == "True" ]]
-#     then
-#         RANK="-M $DOCKER_CONTAINER_ID"
-#     elif [[ $MASTER_AFL_NODE == "False" ]]
-#     then
-#         RANK="-S $DOCKER_CONTAINER_ID"
-#     fi
-# fi
+if [[ ! -z "$MASTER_AFL_NODE" ]]
+then
+    DOCKER_CONTAINER_ID=$(</etc/hostname)
+    if [[ $MASTER_AFL_NODE == "True" ]]
+    then
+        RANK="-M $DOCKER_CONTAINER_ID"
+    elif [[ $MASTER_AFL_NODE == "False" ]]
+    then
+        RANK="-S $DOCKER_CONTAINER_ID"
+    fi
+fi
 
 ./wait_for_server.out
 
