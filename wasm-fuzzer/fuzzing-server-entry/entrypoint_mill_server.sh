@@ -1,14 +1,22 @@
 #!/bin/bash
 
-# Get wasm/wat from $DOCKER_WASM directory
-WASM_OR_WAT_FILE=${DOCKER_WASM}/${WASM_EXECUTABLE}
+# TODO: Put this file back into the SWAM repo
+
+# TODO: Put this into entrypoint_afl.sh as well as soon as the server infers the signature itself.
+# So that this script can be run by itself as 
+# well (same commands as wafl.sh)
+if [[ ENV_PREPARED != "True" ]]; then
+    echo "Preparing environment!"
+    source ../prepare_env.sh $@
+fi
+
+# Get wasm/wat from $WASM_DIR directory
 echo "WASM_OR_WAT_FILE: $WASM_OR_WAT_FILE"
 
-# Parse WASM_ARG_TYPES_LIST: "Int64,Int32" to "--argType Int64 --argType Int32"
+# Parse WASM_ARG_TYPES_CSV: "Int64,Int32" to "--argType Int64 --argType Int32"
 ALL_ARG_TYPES=""
-IFS=',' read -r -a array <<< "$WASM_ARG_TYPES_LIST"
-for element in "${array[@]}"
-do
+IFS=',' read -r -a WASM_ARG_TYPES_ARRAY <<<"$WASM_ARG_TYPES_CSV"
+for element in "${WASM_ARG_TYPES_ARRAY[@]}"; do
     ALL_ARG_TYPES="$ALL_ARG_TYPES --argType $element"
 done
 echo "ALL_ARG_TYPES: $ALL_ARG_TYPES"
@@ -17,13 +25,9 @@ if [[ $WASM_OR_WAT_FILE == *.wat ]]; then WAT_ARG="--wat"; fi
 if [[ $WASI == "True" ]]; then WASI_ARG="--wasi"; fi
 if [[ $WASI_FILTER == "True" ]]; then WASI_ARG="$WASI_ARG -r"; fi
 
-cd $DOCKER_SWAM_SRC
+cd $SRC_SWAM_DIR
 
-# This also compiles the cli package in case source code / dependencies have changed: 
+LOGGING_ARG="1> $LOGS_DIR/swam.std.txt 2> $LOGS_DIR/swam.err.txt &"
 
-if [ ! -f cli-0.6.0-RC3.jar ]; then
-    echo "No SWAM jar file !!. Exiting..."
-    exit 1
-fi
-echo "java -jar cli-0.6.0-RC3.jar run_server $WAT_ARG $WASI_ARG $ALL_ARG_TYPES --main $TARGET_FUNCTION $WASM_OR_WAT_FILE" # Avoiding WASI
-exec java -jar cli-0.6.0-RC3.jar run_server  $WAT_ARG $WASI_ARG $ALL_ARG_TYPES --main $TARGET_FUNCTION $WASM_OR_WAT_FILE
+echo "$SWAM_CMD run_server $WASM_OR_WAT_FILE --main $TARGET_FUNCTION $WAT_ARG $WASI_ARG $ALL_ARG_TYPES $LOGGING_ARG"
+exec $SWAM_CMD run_server $WASM_OR_WAT_FILE --main $TARGET_FUNCTION $WAT_ARG $WASI_ARG $ALL_ARG_TYPES $LOGGING_ARG

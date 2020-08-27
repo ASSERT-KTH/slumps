@@ -1,25 +1,26 @@
 #!/bin/bash
 
-cd $DOCKER_INTERFACE_SRC
+cd $SRC_INTERFACE_DIR
 
-PREPARED_INPUT_PATH="$DOCKER_AFL_INPUT/prepared_input.dat"
+PREPARED_INPUT_PATH="$INPUT_AFL_DIR/prepared_input.dat"
 ./prepare_wasm_input.out $PREPARED_INPUT_PATH
 
 # TODO: Remove everything related to REQUIRED_BYTES
 REQUIRED_BYTES=$(./getFileSize.out $PREPARED_INPUT_PATH)
 
 # Parallel fuzzing: https://github.com/mirrorer/afl/blob/master/docs/parallel_fuzzing.txt
-if [[ ! -z "$MASTER_AFL_NODE" ]]
-then
-    DOCKER_CONTAINER_ID=$(</etc/hostname)
-    if [[ $MASTER_AFL_NODE == "True" ]]
-    then
-        RANK="-M $DOCKER_CONTAINER_ID"
-    elif [[ $MASTER_AFL_NODE == "False" ]]
-    then
-        RANK="-S $DOCKER_CONTAINER_ID"
-    fi
-fi
+# TODO: Refactor this to work in non-Docker environment as well
+# if [[ ! -z "$MASTER_AFL_NODE" ]]
+# then
+#     DOCKER_CONTAINER_ID=$(</etc/hostname)
+#     if [[ $MASTER_AFL_NODE == "True" ]]
+#     then
+#         RANK="-M $DOCKER_CONTAINER_ID"
+#     elif [[ $MASTER_AFL_NODE == "False" ]]
+#     then
+#         RANK="-S $DOCKER_CONTAINER_ID"
+#     fi
+# fi
 
 ./wait_for_server.out
 
@@ -27,8 +28,8 @@ if [ $? != 0 ]; then
     exit 1
 fi
 
-if [[ $LOCAL_AFL != "True" ]]; then
-    AFL='afl-fuzz'
+if ! [[ $BIN_AFL ]]; then
+    BIN_AFL='afl-fuzz'
 fi
 
 # AFL Docs:
@@ -38,6 +39,5 @@ fi
 # traditional fuzzers - add the -d option to the command line.
 
 
-echo "$AFL -i $DOCKER_AFL_INPUT -o $DOCKER_AFL_OUTPUT $RANK -d -- ${DOCKER_INTERFACE_SRC}/interface.out @@ $REQUIRED_BYTES"
-$AFL -i "$DOCKER_AFL_INPUT" -o $DOCKER_AFL_OUTPUT $RANK -t 12000 -d -- "${DOCKER_INTERFACE_SRC}/interface.out" @@ $REQUIRED_BYTES
-
+echo "$BIN_AFL -i $INPUT_AFL_DIR -o $OUTPUT_AFL_DIR $RANK -d -- ${SRC_INTERFACE_DIR}/interface.out @@ $REQUIRED_BYTES"
+$BIN_AFL -i "$INPUT_AFL_DIR" -o $OUTPUT_AFL_DIR $RANK -t 12000 -d -- "${SRC_INTERFACE_DIR}/interface.out" @@ $REQUIRED_BYTES
