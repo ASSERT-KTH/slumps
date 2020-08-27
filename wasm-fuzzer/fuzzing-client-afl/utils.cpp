@@ -21,7 +21,7 @@ LogEnum getLogLevel()
 }
 
 LogEnum DEFAULT_LOG_LEVEL_ENUM = getLogLevel();
-std::string DOCKER_LOGS_DIR = parseEnvVariables((char *)"DOCKER_LOGS");
+std::string LOGS_DIR = parseEnvVariables((char *)"LOGS_DIR");
 
 void log_default(std::string someString, LogEnum log_level)
 {
@@ -53,7 +53,7 @@ void log_default(std::string someString, LogEnum log_level)
         break;
     }
     }
-    log(DOCKER_LOGS_DIR + "/afl.log", actualLog);
+    log(LOGS_DIR + "/afl.log", actualLog);
 }
 
 void log(std::string filename, std::string someString)
