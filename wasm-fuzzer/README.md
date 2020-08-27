@@ -110,13 +110,14 @@ docker build -t wafl .
 3. Run the Docker image.
 
     ```bash
-    docker run --rm --env-file=./.env \
+    docker run --env-file=./.env \
         -v maven_data:/root/.cache/coursier/v1/https/repo1.maven.org/maven2 \
         -v compiled_sources:/home/server/src/out/ \
-        -v ${LOCAL_WASM:?err}:/home/server/wasm/ \
-        -v ${LOCAL_AFL_OUTPUT:?err}:/home/client/out/ \
-        -v ${LOCAL_LOGS:?err}:/home/shared/logs/ \
-        wafl:latest
+        -v ${LOCAL_WASM_DIR:?err}:/home/server/wasm/ \
+        -v ${LOCAL_AFL_OUTPUT_DIR:?err}:/home/client/out/ \
+        -v ${LOCAL_LOGS_DIR:?err}:/home/shared/logs/ \
+        wafl:latest \
+        <.wasm/.wat filename> <target function> <seed arguments csv>
     ```
 
 ### Multi-processing
@@ -125,7 +126,7 @@ AFLplusplus is encouraged to be run with multiple instances if multiple cores ar
 
 ```bash
 # 3 for the number of AFL instances.
-./multi-processing.sh 3
+./multi-processing.sh 3 <.wasm/.wat filename> <target function> <seed arguments csv>
 ```
 
 ## Building & running without Docker
