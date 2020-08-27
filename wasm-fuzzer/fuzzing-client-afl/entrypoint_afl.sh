@@ -38,5 +38,5 @@ fi
 # traditional fuzzers - add the -d option to the command line.
 
 
-echo "$BIN_AFL -i $INPUT_AFL_DIR -o $OUTPUT_AFL_DIR $RANK -d -- ${SRC_INTERFACE_DIR}/interface.out @@ $REQUIRED_BYTES"
-$BIN_AFL -i "$INPUT_AFL_DIR" -o $OUTPUT_AFL_DIR $RANK -d -- "${SRC_INTERFACE_DIR}/interface.out" @@ $REQUIRED_BYTES
+echo "$BIN_AFL -i $INPUT_AFL_DIR -o $OUTPUT_AFL_DIR $RANK -d -- ${OUT_INTERFACE_DIR}/interface.out @@ $REQUIRED_BYTES"
+$BIN_AFL -i "$INPUT_AFL_DIR" -o $OUTPUT_AFL_DIR $RANK -d -- "${OUT_INTERFACE_DIR}/interface.out" @@ $REQUIRED_BYTES

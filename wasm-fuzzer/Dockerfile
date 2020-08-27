@@ -55,21 +55,23 @@ RUN chmod +x $SRC_SWAM_DIR/entrypoint_mill_server.sh
 #############################
 
 ENV SRC_INTERFACE_DIR=/home/client/interface
+ENV OUT_INTERFACE_DIR=/home/client/interface/cpp_out
 ENV INPUT_AFL_DIR=/home/client/in
 ENV OUTPUT_AFL_DIR=/home/client/out
 
 # Create the appropriate directories
 RUN mkdir -p $SRC_INTERFACE_DIR
+RUN mkdir -p $OUT_INTERFACE_DIR
 RUN mkdir -p $INPUT_AFL_DIR
 RUN mkdir -p $OUTPUT_AFL_DIR
 WORKDIR $SRC_INTERFACE_DIR
 
 ADD ./fuzzing-client-afl $SRC_INTERFACE_DIR
 
-RUN g++ -o ./prepare_wasm_input.out ./prepare_wasm_input.cpp ./utils.cpp
-RUN g++ -o ./getFileSize.out ./getFileSize.cpp ./utils.cpp
-RUN g++ -o ./wait_for_server.out ./wait_for_server.cpp ./utils.cpp ./socket_client.cpp
-RUN g++ -o ./interface.out ./interface.cpp ./socket_client.cpp ./utils.cpp
+RUN g++ -o $OUT_INTERFACE_DIR/prepare_wasm_input.out ./prepare_wasm_input.cpp ./utils.cpp
+RUN g++ -o $OUT_INTERFACE_DIR/getFileSize.out ./getFileSize.cpp ./utils.cpp
+RUN g++ -o $OUT_INTERFACE_DIR/wait_for_server.out ./wait_for_server.cpp ./utils.cpp ./socket_client.cpp
+RUN g++ -o $OUT_INTERFACE_DIR/interface.out ./interface.cpp ./socket_client.cpp ./utils.cpp
 
 RUN chmod +x $SRC_INTERFACE_DIR/entrypoint_afl.sh
 
