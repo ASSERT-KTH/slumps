@@ -44,7 +44,6 @@ fi
 export WASI_FILTER=True
 export WASI=True
 
-# TODO: Adjust README to add arguments to Docker run
 # TODO: Check if empty
 export TARGET_FUNCTION=$2
 export WASM_ARG_CSV=$3
