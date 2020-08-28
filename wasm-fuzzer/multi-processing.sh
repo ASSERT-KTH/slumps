@@ -21,8 +21,8 @@ docker run --env-file=./.env \
     -v maven_data:/root/.cache/coursier/v1/https/repo1.maven.org/maven2 \
     -v compiled_sources:/home/server/src/out/ \
     -v ${LOCAL_WASM_DIR:?err}:/home/server/wasm/ \
-    -v ${LOCAL_AFL_OUTPUT_DIR:?err}:/home/client/out/ \
-    -v ${LOCAL_LOGS_DIR:?err}/1:/home/shared/logs/ \
+    -v ${pwd}/afl-out:/home/client/out/ \
+    -v ${pwd}/logs/1:/home/shared/logs/ \
     -d slumps/wafl:latest $2 $3 $4
 
 if [ $1 -lt 2 ]; then
@@ -39,8 +39,8 @@ for i in $(seq 2 $1); do
         -v maven_data:/root/.cache/coursier/v1/https/repo1.maven.org/maven2 \
         -v compiled_sources:/home/server/src/out/ \
         -v ${LOCAL_WASM_DIR:?err}:/home/server/wasm/ \
-        -v ${LOCAL_AFL_OUTPUT_DIR:?err}:/home/client/out/ \
-        -v ${LOCAL_LOGS_DIR:?err}/${i}:/home/shared/logs/ \
+        -v ${pwd}/afl-out:/home/client/out/ \
+        -v ${pwd}/logs/${i}:/home/shared/logs/ \
         -d slumps/wafl:latest $2 $3 $4
 done
 exit 0
