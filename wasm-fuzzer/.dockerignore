@@ -1,3 +1,4 @@
 *.out
 *.dat
 ./fuzzing-server-swam/out
+./wafl-temp

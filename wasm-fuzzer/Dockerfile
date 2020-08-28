@@ -43,7 +43,7 @@ WORKDIR $SRC_SWAM_DIR
 # TODO: Find way of installing dependencies with Mill without copying over entire repo
 # See: https://stackoverflow.com/questions/62834693/mill-build-tool-install-dependencies-without-compiling-source-code
 
-ADD ./fuzzing-server-entry/entrypoint_mill_server.sh $SRC_SWAM_DIR
+ADD entrypoint_mill_server.sh $SRC_SWAM_DIR
 
 # DOWNLOAD latest version of SWAM cli jar file
 ADD https://github.com/KTH/swam/releases/download/v0.6.0-RC3/cli-0.6.0-RC3.jar $SRC_SWAM_DIR
