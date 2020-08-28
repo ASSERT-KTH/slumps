@@ -10,4 +10,5 @@ echo "$SWAM_CMD infer $WAT_ARG $WASM_OR_WAT_FILE $TARGET_FUNCTION"
 export WASM_ARG_TYPES_CSV=$($SWAM_CMD infer $WAT_ARG $WASM_OR_WAT_FILE $TARGET_FUNCTION) # Read from signature retriever
 pkill -f out.jar
 
-exec /usr/bin/supervisord -c ${CURRENT_DIR}/supervisord.conf
+SUPERVISORD_BIN=$(which supervisord)
+exec $SUPERVISORD_BIN -c ${CURRENT_DIR}/supervisord.conf

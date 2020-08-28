@@ -4,7 +4,7 @@ currentID=$$
 echo "wafl ID $currentID"
 
 set -a
-source ../.env
+source .env
 set +a
 
 CURRENT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
@@ -21,6 +21,8 @@ if ! [ -f /.dockerenv ]; then
 
     export SRC_INTERFACE_DIR=$CURRENT_DIR/fuzzing-client-afl
     export SRC_SWAM_DIR=$CURRENT_DIR/fuzzing-server-swam
+    export SRC_SWAM_DIR=$CURRENT_DIR/fuzzing-server-swam
+
 
     export OUT_INTERFACE_DIR=$TEMP_DIR/cpp-out
 
