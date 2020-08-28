@@ -1,2 +1,3 @@
 *.out
 *.dat
+./fuzzing-server-swam/out
