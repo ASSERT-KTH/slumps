@@ -42,8 +42,8 @@ else
 
     # Get filename from $1
     export WASM_OR_WAT_FILE=$WASM_DIR/$(basename $1)
-    
-    export SWAM_CMD='mill cli.run'
+    # export SWAM_CMD='mill cli.run'
+    export SWAM_CMD="java -jar $SRC_SWAM_DIR/cli-0.6.0-RC3.jar"
 fi
 
 # TODO: Make this CLI-dependent
