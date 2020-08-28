@@ -19,7 +19,9 @@ Right now, we support fuzzing of four data types as function parameter:
 * int32
 * int64
 * float32
-* float 64
+* float64
+
+Reference documentation in (see part 1, Coverage Measurements): https://github.com/google/AFL/blob/master/docs/technical_details.txt
 
 ## Parsing AFL's fuzzed inputs
 
