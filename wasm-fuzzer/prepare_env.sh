@@ -21,7 +21,6 @@ if ! [ -f /.dockerenv ]; then
 
     export SRC_INTERFACE_DIR=$CURRENT_DIR/fuzzing-client-afl
     export SRC_SWAM_DIR=$CURRENT_DIR/fuzzing-server-swam
-    export SRC_SWAM_DIR=$CURRENT_DIR/fuzzing-server-swam
 
 
     export OUT_INTERFACE_DIR=$TEMP_DIR/cpp-out
