@@ -94,13 +94,13 @@ int main(int argc, char *argv[])
     std::string filePath = (std::string) argv[1];
     clearFile(filePath);
 
-    std::string WASM_ARG_TYPES_LIST = parseEnvVariables((char *)"WASM_ARG_TYPES_LIST");
-    std::string WASM_ARG_LIST = parseEnvVariables((char *)"WASM_ARG_LIST");
+    std::string WASM_ARG_TYPES_CSV = parseEnvVariables((char *)"WASM_ARG_TYPES_CSV");
+    std::string WASM_ARG_CSV = parseEnvVariables((char *)"WASM_ARG_CSV");
 
     // TODO: Escape commas that are in arrays
     // TODO: Delete whitespaces
-    std::vector<std::string> typeArray = split(WASM_ARG_TYPES_LIST, ',');
-    std::vector<std::string> argArray = split(WASM_ARG_LIST, ',');
+    std::vector<std::string> typeArray = split(WASM_ARG_TYPES_CSV, ',');
+    std::vector<std::string> argArray = split(WASM_ARG_CSV, ',');
 
     if (typeArray.size() != argArray.size())
     {
