@@ -1,4 +1,5 @@
 #include "interface.h"
+#include <errno.h>
 
 #define AFL_SHM_SIZE 65536
 
@@ -66,18 +67,22 @@ void main_fuzz(
     int requiredBytes,
     pid_t aflPID)
 {
-
+    //LOG("Entering");
+    std::string LOGS_DIR = parseEnvVariables((char *)"LOGS_DIR");
     std::string DUMMY_TESTING_AFL = parseEnvVariables((char *)"DUMMY_TESTING_AFL");
+
     if (DUMMY_TESTING_AFL == "True")
     {
         fillTraceDummyData(trace_bits);
         exit(0);
     }
-
+  
     char sendBuffer[requiredBytes];
     readBinaryToBuffer(sendBuffer, sizeof(sendBuffer), (std::string)fuzzed_input_path);
 
+
     char readBuffer[AFL_SHM_SIZE + 1]; // + 1 for exit code
+    ///logBuffer(LOGS_DIR + "/interface.log", AFL_SHM_SIZE + 1, readBuffer);
 
     std::string SWAM_SOCKET_HOST = parseEnvVariables((char *)"SWAM_SOCKET_HOST");
     std::string SWAM_SOCKET_PORT = parseEnvVariables((char *)"SWAM_SOCKET_PORT");
@@ -105,6 +110,7 @@ void main_fuzz(
         }
     }
 
+    //LOG("Passing data to afl...");
     pass_data_to_afl(sizeof(readBuffer), readBuffer, trace_bits);
 
     // Read exit code from readBuffer and exit with same code
@@ -137,11 +143,12 @@ void fork_server(char *fuzzed_input_path, uint8_t *trace_bits, int requiredBytes
     log_default("Forkserver's PID: " + forkServerPIDString, INFO);
 
     int status = 0;
-
     // Starting the 'Fork server handshake'
 
     // Phone home and tell AFL that we're OK
-    if (write(199, &status, 4) != 4)
+    
+    int w = write(199, &status, 4);
+    if ( w != 4)
     {
         log_default("Write failed", ERROR);
         close(199);

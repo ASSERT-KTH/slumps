@@ -1,19 +1,22 @@
 #!/bin/bash
 
-cd $DOCKER_INTERFACE_SRC
+cd $SRC_INTERFACE_DIR
 
-PREPARED_INPUT_PATH="$DOCKER_AFL_INPUT/prepared_input.dat"
-./prepare_wasm_input.out $PREPARED_INPUT_PATH
+$OUT_INTERFACE_DIR/prepare_wasm_input.out "$INPUT_AFL_DIR/prepared_input.dat"
 
 # TODO: Remove everything related to REQUIRED_BYTES
-REQUIRED_BYTES=$(./getFileSize.out $PREPARED_INPUT_PATH)
+REQUIRED_BYTES=$($OUT_INTERFACE_DIR/getFileSize.out $INPUT_AFL_DIR/prepared_input.dat)
 
 # Parallel fuzzing: https://github.com/mirrorer/afl/blob/master/docs/parallel_fuzzing.txt
-if [[ ! -z "$MASTER_AFL_NODE" ]]; then
+# TODO: Refactor this to work in non-Docker environment as well
+if [[ ! -z "$MASTER_AFL_NODE" ]]
+then
     DOCKER_CONTAINER_ID=$(</etc/hostname)
-    if [[ $MASTER_AFL_NODE == "True" ]]; then
+    if [[ $MASTER_AFL_NODE == "True" ]]
+    then
         RANK="-M $DOCKER_CONTAINER_ID"
-    elif [[ $MASTER_AFL_NODE == "False" ]]; then
+    elif [[ $MASTER_AFL_NODE == "False" ]]
+    then
         RANK="-S $DOCKER_CONTAINER_ID"
     fi
 fi
@@ -25,19 +28,23 @@ fi
 # dash (-): afl-fuzz -i - -o output -- bin/target -d @@
 
 # Check if AFL has already produced results
-if ! [ "$(ls -A $DOCKER_AFL_OUTPUT)" ]; then
-    echo "$DOCKER_AFL_OUTPUT is empty - starting fresh run!"
+if ! [ "$(ls -A $OUTPUT_AFL_DIR)" ]; then
+    echo "$OUTPUT_AFL_DIR is empty - starting fresh run!"
 elif [ $REUSE_DATA_AFL ]; then
-    echo "$DOCKER_AFL_OUTPUT is not empty & REUSE_DATA_AFL=$REUSE_DATA_AFL, so continuing where we left off!"
-    DOCKER_AFL_INPUT="-"
+    echo "$OUTPUT_AFL_DIR is not empty & REUSE_DATA_AFL=$REUSE_DATA_AFL, so continuing where we left off!"
+    INPUT_AFL_DIR="-"
 else
-    echo "$DOCKER_AFL_OUTPUT is not empty & REUSE_DATA_AFL=$REUSE_DATA_AFL, so deleting old data!"
+    echo "$OUTPUT_AFL_DIR is not empty & REUSE_DATA_AFL=$REUSE_DATA_AFL, so deleting old data!"
 fi
 
-./wait_for_server.out
+$OUT_INTERFACE_DIR/wait_for_server.out
 
 if [ $? != 0 ]; then
     exit 1
+fi
+
+if ! [[ $BIN_AFL ]]; then
+    BIN_AFL='afl-fuzz'
 fi
 
 # AFL Docs:
@@ -46,5 +53,6 @@ fi
 # If you want quick & dirty results right away - akin to zzuf and other
 # traditional fuzzers - add the -d option to the command line.
 
-echo "afl-fuzz -i $DOCKER_AFL_INPUT -o $DOCKER_AFL_OUTPUT $RANK -d -- ${DOCKER_INTERFACE_SRC}/interface.out @@ $REQUIRED_BYTES"
-exec afl-fuzz -i $DOCKER_AFL_INPUT -o $DOCKER_AFL_OUTPUT $RANK -d -- "${DOCKER_INTERFACE_SRC}/interface.out" @@ $REQUIRED_BYTES
+
+echo "$BIN_AFL -i $INPUT_AFL_DIR -o $OUTPUT_AFL_DIR $RANK -d -- ${OUT_INTERFACE_DIR}/interface.out @@ $REQUIRED_BYTES"
+exec $BIN_AFL -i "$INPUT_AFL_DIR" -o $OUTPUT_AFL_DIR $RANK -d -- "${OUT_INTERFACE_DIR}/interface.out" @@ $REQUIRED_BYTES

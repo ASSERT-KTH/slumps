@@ -9,6 +9,7 @@ FROM aflplusplus/aflplusplus
 RUN yes | apt-get install curl
 RUN apt-get update
 RUN DEBIAN_FRONTEND="noninteractive" apt-get -y install tzdata wget
+RUN apt-get update
 RUN yes | apt-get install software-properties-common
 RUN apt-get update
 RUN yes | add-apt-repository ppa:openjdk-r/ppa
@@ -30,58 +31,64 @@ WORKDIR /root
 ##### fuzzing-server-swam ######
 ################################
 
-ENV DOCKER_SWAM_SRC=/home/server/src
-ENV DOCKER_WASM=/home/server/wasm
+ENV SRC_SWAM_DIR=/home/server/src
+ENV WASM_DIR=/home/server/wasm
 
 # Create the appropriate directories
-RUN mkdir -p $DOCKER_SWAM_SRC
-RUN mkdir -p $DOCKER_WASM
+RUN mkdir -p $SRC_SWAM_DIR
+RUN mkdir -p $WASM_DIR
 
-WORKDIR $DOCKER_SWAM_SRC
+WORKDIR $SRC_SWAM_DIR
 
 # TODO: Find way of installing dependencies with Mill without copying over entire repo
 # See: https://stackoverflow.com/questions/62834693/mill-build-tool-install-dependencies-without-compiling-source-code
 
-ADD ./fuzzing-server-entry/entrypoint_mill_server.sh $DOCKER_SWAM_SRC
-
 # DOWNLOAD latest version of SWAM cli jar file
-ADD https://github.com/KTH/swam/releases/download/v0.6.0-RC3/cli-0.6.0-RC3.jar $DOCKER_SWAM_SRC
+ADD https://github.com/KTH/swam/releases/download/v0.6.0-RC3/cli-0.6.0-RC3.jar $SRC_SWAM_DIR
 
-
-RUN chmod +x $DOCKER_SWAM_SRC/entrypoint_mill_server.sh
+ADD entrypoint_mill_server.sh /home
+RUN chmod +x /home/entrypoint_mill_server.sh
 
 #############################
 #### fuzzing-client-afl #####
 #############################
 
-ENV DOCKER_INTERFACE_SRC=/home/client/interface
-ENV DOCKER_AFL_INPUT=/home/client/in
-ENV DOCKER_AFL_OUTPUT=/home/client/out
+ENV SRC_INTERFACE_DIR=/home/client/interface
+ENV OUT_INTERFACE_DIR=/home/client/interface/cpp_out
+ENV INPUT_AFL_DIR=/home/client/in
+ENV OUTPUT_AFL_DIR=/home/client/out
 
 # Create the appropriate directories
-RUN mkdir -p $DOCKER_INTERFACE_SRC
-RUN mkdir -p $DOCKER_AFL_INPUT
-RUN mkdir -p $DOCKER_AFL_OUTPUT
-WORKDIR $DOCKER_INTERFACE_SRC
+RUN mkdir -p $SRC_INTERFACE_DIR
+RUN mkdir -p $OUT_INTERFACE_DIR
+RUN mkdir -p $INPUT_AFL_DIR
+RUN mkdir -p $OUTPUT_AFL_DIR
+WORKDIR $SRC_INTERFACE_DIR
 
-ADD ./fuzzing-client-afl $DOCKER_INTERFACE_SRC
+ADD ./fuzzing-client-afl $SRC_INTERFACE_DIR
 
-RUN g++ -o ./prepare_wasm_input.out ./prepare_wasm_input.cpp ./utils.cpp
-RUN g++ -o ./getFileSize.out ./getFileSize.cpp ./utils.cpp
-RUN g++ -o ./wait_for_server.out ./wait_for_server.cpp ./utils.cpp ./socket_client.cpp
-RUN g++ -o ./interface.out ./interface.cpp ./socket_client.cpp ./utils.cpp
+RUN g++ -o $OUT_INTERFACE_DIR/prepare_wasm_input.out ./prepare_wasm_input.cpp ./utils.cpp
+RUN g++ -o $OUT_INTERFACE_DIR/getFileSize.out ./getFileSize.cpp ./utils.cpp
+RUN g++ -o $OUT_INTERFACE_DIR/wait_for_server.out ./wait_for_server.cpp ./utils.cpp ./socket_client.cpp
+RUN g++ -o $OUT_INTERFACE_DIR/interface.out ./interface.cpp ./socket_client.cpp ./utils.cpp
 
-RUN chmod +x $DOCKER_INTERFACE_SRC/entrypoint_afl.sh
+RUN chmod +x $SRC_INTERFACE_DIR/entrypoint_afl.sh
 
 #########################
 ######## Shared #########
 #########################
 
-ADD supervisord.conf /etc/supervisor/conf.d/supervisord.conf 
+WORKDIR /home
 
-ENV DOCKER_SHARED=/home/shared
-ENV DOCKER_LOGS=$DOCKER_SHARED/logs
+ENV LOGS_DIR=/home/shared/logs
 
-RUN mkdir -p $DOCKER_LOGS
+RUN mkdir -p $LOGS_DIR
 
-ENTRYPOINT ["/usr/bin/supervisord"]
+ADD supervisord.conf /home/supervisord.conf
+ADD wafl.sh /home/wafl.sh
+ADD prepare_env.sh /home/prepare_env.sh
+
+RUN chmod +x /home/wafl.sh
+RUN chmod +x /home/prepare_env.sh
+
+ENTRYPOINT ["/home/wafl.sh"]
