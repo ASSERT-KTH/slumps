@@ -7,7 +7,18 @@
 #include <sys/stat.h>
 #include <sstream>
 #include <vector>
+#include <cerrno>
+#include <cstring>
 
+enum LogEnum
+{
+    ERROR,
+    WARNING,
+    INFO,
+    DEBUG
+};
+
+void log_default(std::string, LogEnum);
 void log(std::string, std::string);
 void printBuffer(int, char *);
 void logBuffer(std::string, int, char *);
