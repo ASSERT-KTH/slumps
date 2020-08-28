@@ -114,8 +114,8 @@ docker build -t wafl .
         -v maven_data:/root/.cache/coursier/v1/https/repo1.maven.org/maven2 \
         -v compiled_sources:/home/server/src/out/ \
         -v ${LOCAL_WASM_DIR:?err}:/home/server/wasm/ \
-        -v ${pwd}/afl-out:/home/client/out/ \
-        -v ${pwd}/logs:/home/shared/logs/ \
+        -v ${PWD}/wafl-temp/afl-out:/home/client/out/ \
+        -v ${PWD}/wafl-temp/logs:/home/shared/logs/ \
         wafl:latest \
         <.wasm/.wat filename> <target function> <seed arguments csv>
     ```

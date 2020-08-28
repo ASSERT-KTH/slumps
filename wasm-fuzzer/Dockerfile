@@ -43,13 +43,11 @@ WORKDIR $SRC_SWAM_DIR
 # TODO: Find way of installing dependencies with Mill without copying over entire repo
 # See: https://stackoverflow.com/questions/62834693/mill-build-tool-install-dependencies-without-compiling-source-code
 
-ADD entrypoint_mill_server.sh $SRC_SWAM_DIR
-
 # DOWNLOAD latest version of SWAM cli jar file
 ADD https://github.com/KTH/swam/releases/download/v0.6.0-RC3/cli-0.6.0-RC3.jar $SRC_SWAM_DIR
 
-
-RUN chmod +x $SRC_SWAM_DIR/entrypoint_mill_server.sh
+ADD entrypoint_mill_server.sh /home
+RUN chmod +x /home/entrypoint_mill_server.sh
 
 #############################
 #### fuzzing-client-afl #####
@@ -79,6 +77,8 @@ RUN chmod +x $SRC_INTERFACE_DIR/entrypoint_afl.sh
 #########################
 ######## Shared #########
 #########################
+
+WORKDIR /home
 
 ENV LOGS_DIR=/home/shared/logs
 
