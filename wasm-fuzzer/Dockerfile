@@ -9,6 +9,7 @@ FROM aflplusplus/aflplusplus
 RUN yes | apt-get install curl
 RUN apt-get update
 RUN DEBIAN_FRONTEND="noninteractive" apt-get -y install tzdata wget
+RUN apt-get update
 RUN yes | apt-get install software-properties-common
 RUN apt-get update
 RUN yes | add-apt-repository ppa:openjdk-r/ppa
@@ -83,9 +84,11 @@ ENV LOGS_DIR=/home/shared/logs
 
 RUN mkdir -p $LOGS_DIR
 
-ADD supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+ADD supervisord.conf /home/supervisord.conf
 ADD wafl.sh /home/wafl.sh
+ADD prepare_env.sh /home/prepare_env.sh
 
 RUN chmod +x /home/wafl.sh
+RUN chmod +x /home/prepare_env.sh
 
 ENTRYPOINT ["/home/wafl.sh"]
