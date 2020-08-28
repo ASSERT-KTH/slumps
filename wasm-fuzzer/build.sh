@@ -4,7 +4,7 @@ CURRENT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 
 echo "Cloning SWAM"
 if [ ! -d fuzzing-server-swam ]; then
-	git clone --single-branch --branch feature/swam-server https://github.com/KTH/swam.git fuzzing-server-swam
+	git clone --single-branch --branch master https://github.com/KTH/swam.git master
 fi
 
 echo "Building SWAM"
