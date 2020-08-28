@@ -21,6 +21,22 @@ then
     fi
 fi
 
+# AFL Docs on re-starting:
+# If you need to stop and re-start the fuzzing, use the same command line
+# options (or even change them by selecting a different power schedule
+# or another mutation mode!) and switch the input directory with a
+# dash (-): afl-fuzz -i - -o output -- bin/target -d @@
+
+# Check if AFL has already produced results
+if ! [ "$(ls -A $OUTPUT_AFL_DIR)" ]; then
+    echo "$OUTPUT_AFL_DIR is empty - starting fresh run!"
+elif [ $REUSE_DATA_AFL ]; then
+    echo "$OUTPUT_AFL_DIR is not empty & REUSE_DATA_AFL=$REUSE_DATA_AFL, so continuing where we left off!"
+    INPUT_AFL_DIR="-"
+else
+    echo "$OUTPUT_AFL_DIR is not empty & REUSE_DATA_AFL=$REUSE_DATA_AFL, so deleting old data!"
+fi
+
 $OUT_INTERFACE_DIR/wait_for_server.out
 
 if [ $? != 0 ]; then
@@ -32,11 +48,11 @@ if ! [[ $BIN_AFL ]]; then
 fi
 
 # AFL Docs:
-# afl-fuzz starts by performing an array of deterministic fuzzing steps, 
-# which can take several days, but tend to produce neat test cases. 
-# If you want quick & dirty results right away - akin to zzuf and other 
+# afl-fuzz starts by performing an array of deterministic fuzzing steps,
+# which can take several days, but tend to produce neat test cases.
+# If you want quick & dirty results right away - akin to zzuf and other
 # traditional fuzzers - add the -d option to the command line.
 
 
 echo "$BIN_AFL -i $INPUT_AFL_DIR -o $OUTPUT_AFL_DIR $RANK -d -- ${OUT_INTERFACE_DIR}/interface.out @@ $REQUIRED_BYTES"
-$BIN_AFL -i "$INPUT_AFL_DIR" -o $OUTPUT_AFL_DIR $RANK -d -- "${OUT_INTERFACE_DIR}/interface.out" @@ $REQUIRED_BYTES
+exec $BIN_AFL -i "$INPUT_AFL_DIR" -o $OUTPUT_AFL_DIR $RANK -d -- "${OUT_INTERFACE_DIR}/interface.out" @@ $REQUIRED_BYTES
