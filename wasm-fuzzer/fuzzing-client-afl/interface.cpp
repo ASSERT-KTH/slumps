@@ -65,7 +65,7 @@ void main_fuzz(
     char *fuzzed_input_path,
     uint8_t *trace_bits,
     int requiredBytes,
-    pid_t forkServerPID)
+    pid_t aflPID)
 {
     //LOG("Entering");
     std::string LOGS_DIR = parseEnvVariables((char *)"LOGS_DIR");
@@ -87,6 +87,7 @@ void main_fuzz(
     std::string SWAM_SOCKET_HOST = parseEnvVariables((char *)"SWAM_SOCKET_HOST");
     std::string SWAM_SOCKET_PORT = parseEnvVariables((char *)"SWAM_SOCKET_PORT");
 
+    int num_tries = 0;
     while (true)
     {
         try
@@ -96,21 +97,14 @@ void main_fuzz(
         }
         catch (...)
         {
-            try
+            num_tries += 1;
+            if (num_tries > 1)
             {
-
-                // TODO: AFL explicitly advises not to have it's timeout too high. Therefore think about:
-                //      1) Do this step in the forkserver before every fork
-                //      2) Kill AFL directly and let supervisord restart it. Doesn't work when running locally though.
-                //          However, SWAM won't be restarted anyways locally, so might as well kill AFL entirely as well.
-                //      3) !!! Just do 1 retry without wait_for_server/timeout. If still doesn't work, kill AFL.
-
-                // Be sure that AFL's timeout is larger than here, otherwise there's no point in this:
-                wait_for_server(&SWAM_SOCKET_HOST[0], std::stoi(SWAM_SOCKET_PORT), 1000, 10000);
-            }
-            catch (...)
-            {
-                kill(forkServerPID, 6);
+                // Failing twice probably means SWAM server is down. Therefore, kill
+                // AFL before AFL kills us due to timeout. Would run here endlessly
+                // otherwise.
+                kill(aflPID, 6);
+                log_default("Killed AFL because server not responding.", WARNING);
                 exit(1);
             }
         }
@@ -194,7 +188,7 @@ void fork_server(char *fuzzed_input_path, uint8_t *trace_bits, int requiredBytes
             // This is the child process
             close(198);
             close(199);
-            main_fuzz(fuzzed_input_path, trace_bits, requiredBytes, forkServerPID);
+            main_fuzz(fuzzed_input_path, trace_bits, requiredBytes, aflPID);
             exit(0);
         }
 
