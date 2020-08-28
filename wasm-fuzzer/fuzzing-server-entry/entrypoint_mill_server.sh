@@ -5,7 +5,7 @@
 # TODO: Put this into entrypoint_afl.sh as well as soon as the server infers the signature itself.
 # So that this script can be run by itself as 
 # well (same commands as wafl.sh)
-if [[ ENV_PREPARED != "True" ]]; then
+if [[ $ENV_PREPARED != "True" ]]; then
     echo "Preparing environment!"
     source ../prepare_env.sh $@
 fi
