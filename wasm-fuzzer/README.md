@@ -19,7 +19,7 @@ Right now, we support fuzzing of four data types as function parameter:
 * int32
 * int64
 * float32
-* float 64
+* float64
 
 Reference documentation in (see part 1, Coverage Measurements): https://github.com/google/AFL/blob/master/docs/technical_details.txt
 
@@ -112,14 +112,14 @@ docker build -t wafl .
 3. Run the Docker image.
 
     ```bash
-    docker run -it --rm --env-file=./.env \
-        -e SWAM_SOCKET_HOST=localhost \
+    docker run --env-file=./.env \
         -v maven_data:/root/.cache/coursier/v1/https/repo1.maven.org/maven2 \
         -v compiled_sources:/home/server/src/out/ \
-        -v ${LOCAL_WASM:?err}:/home/server/wasm/ \
-        -v ${LOCAL_AFL_OUTPUT:?err}:/home/client/out/ \
-        -v ${LOCAL_LOGS:?err}:/home/shared/logs/ \
-        wafl:latest
+        -v ${LOCAL_WASM_DIR:?err}:/home/server/wasm/ \
+        -v ${PWD}/wafl-temp/afl-out:/home/client/out/ \
+        -v ${PWD}/wafl-temp/logs:/home/shared/logs/ \
+        wafl:latest \
+        <.wasm/.wat filename> <target function> <seed arguments csv>
     ```
 
 ### Multi-processing
@@ -128,7 +128,7 @@ AFLplusplus is encouraged to be run with multiple instances if multiple cores ar
 
 ```bash
 # 3 for the number of AFL instances.
-./multi-processing.sh 3
+./multi-processing.sh 3 <.wasm/.wat filename> <target function> <seed arguments csv>
 ```
 
 ## Building & running without Docker
