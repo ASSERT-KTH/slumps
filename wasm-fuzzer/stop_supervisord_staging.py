@@ -5,6 +5,8 @@ import signal
 """
 This script is to ensure that supervisord gets killed when either AFL or SWAM crashes.
 This makes it easier to determine whether WAFL was successful in a CI.
+
+All write_stdout calls are standard protocol between the event listener and supervisord.
 """
 
 def write_stdout(s):
