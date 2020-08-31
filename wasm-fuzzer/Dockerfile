@@ -85,10 +85,13 @@ ENV LOGS_DIR=/home/shared/logs
 RUN mkdir -p $LOGS_DIR
 
 ADD supervisord.conf /home/supervisord.conf
+ADD supervisord.staging.conf /home/supervisord.staging.conf
+ADD stop_supervisord_staging.py /home/stop_supervisord_staging.py
 ADD wafl.sh /home/wafl.sh
 ADD prepare_env.sh /home/prepare_env.sh
 
 RUN chmod +x /home/wafl.sh
 RUN chmod +x /home/prepare_env.sh
+RUN chmod +x /home/stop_supervisord_staging.py
 
 ENTRYPOINT ["/home/wafl.sh"]
