@@ -39,57 +39,19 @@ To be able to run this on your machine, only Docker is required. If you want to 
 
 All configuration options are visible in the .env file. This is where you specify which .wasm/.wat file & function you want to be fuzzing and of what types it's input parameters are. Furthermore, it requires to provide a set of working input parameters, which are used in AFL test-runs and can be regarded as AFL's "seed" to random input.
 
-## Using docker-compose
+## Build & Run with Docker
 
-### Building
+The only configuration parameters to building this are currently the SCALA_VERSION and the MILL_VERSION in the Dockerfile. Nonetheless, it should not be required to change these parameters as they are fitted to the code of this repostory. The JDK is installed manually in this Dockerfile. It's entrypoint also only references the entrypoints of the client and the server.
 
-This tool creates two Docker containers, as specified in the docker-compose.base.yml file - one for the SWAM socket server (Dockerfile in ./fuzzing-server-swam) and one for the AFL socket client (Dockerfile in ./fuzzing-client-afl). The only configuration parameters to building this are currently the SCALA_VERSION and the MILL_VERSION in SWAM's Dockerfile. Nonetheless, it should not be required to change these parameters as they are fitted to the code of this repostory.
+### AFL section in Dockerfile
 
-How to build:
+This image uses the [official image of AFLplusplus](https://hub.docker.com/r/aflplusplus/aflplusplus/) as a base, which contains the full configuration of AFL pre-installed. It then builds the C++ files of this folder with the standard Ubuntu g++ compiler (not the one provided by AFL). The C++ files are therefore not instrumented. The resulting executables are later accessed during run-time.
 
-```bash
-docker-compose -f docker-compose.base.yml -f docker-compose.yml build
-```
-
-#### Mechanics of SWAM's Dockerfile
+### SWAM section in Dockerfile
 
 We are not using the standard base image for the Scala Mill Build Tool [(nightscape/scala-mill)](https://hub.docker.com/r/nightscape/scala-mill/dockerfile), since it uses an older version of Scala and Mill. Our Dockerfile is however strongly based on theirs.
 
 Mill currently does not provide any command to [simply install dependencies without compiling the source code](https://stackoverflow.com/questions/62834693/mill-build-tool-install-dependencies-without-compiling-source-code). Compiling the source code is done with `mill <package_name>.compile` and the reason why this is not included in the Dockerfile is to avoid the overhead of downloading all the same dependencies everytime source code is altered. The current workaround is to store the compiled sources along with the dependencies in volumes, which can be accessed during runtime and are specified in the docker-compose.base.yml file ("compiled_sources" & "maven_data"). SWAM's compilation is therefore delayed to the entrypoint (./entrypoint_mill_server.sh) and is encompassed in the `mill -i cli.run run_server <args>` command.
-
-#### Mechanics of AFL's Dockerfile
-
-This image uses the [official image of AFLplusplus](https://hub.docker.com/r/aflplusplus/aflplusplus/) as a base, which contains the full configuration of AFL pre-installed. It then builds the C++ files of this folder with the standard Ubuntu g++ compiler (not the one provided by AFL). The C++ files are therefore not instrumented. The resulting executables are later accessed during run-time.
-
-### Running
-
-1. Configure the ./.env file. See [Configuration](#Configuration) for details. *WARNING: Do not rename this file or reference a different \*.env file in docker-compose.base.yml! The docker-compose files use [variable substitution](https://docs.docker.com/compose/compose-file/#variable-substitution), which by default only reads from ".env".*
-
-2. Execute docker-compose configuration
-
-    ```bash
-    docker-compose -f docker-compose.base.yml -f docker-compose.yml up
-    ```
-
-3. View AFL's results and own logs in the folders which were specified in the .env file.
-
-## Using a single Dockerfile
-
-### Pros over docker-compose
-
-1. Both the AFL and the SWAM image only work together. Thereby it may make sense to bundle them into one image.
-
-1. It is more straightforward to just pull a single image without having to clone the repository (except the ./env file).
-
-### Cons over docker-compose
-
-1. Docker images are not meant to run multiple "main" processes. In this case both AFL and SWAM are detached - when they crash, the container does not automatically stop as well. Also, manually stopping the container becomes more difficult as well.
-
-2. We are interlinking two builds and therefore making one caching process in the Dockerfile dependent on the other. If the first changes, the second will have to rebuild as well.
-
-### Building
-
-This build uses the Dockerfile in the root of this directory. It is essentially a merge of the Dockerfiles in ./fuzzing-client-afl and ./fuzzing-server-swam. However, since the SWAM Dockerfile uses openjdk as the base image, the JDK is installed manually in this Dockerfile. It's entrypoint also only references the entrypoints of the client and the server.
 
 How to build:
 
@@ -131,16 +93,9 @@ AFLplusplus is encouraged to be run with multiple instances if multiple cores ar
 ./multi-processing.sh 3 <.wasm/.wat filename> <target function> <seed arguments csv>
 ```
 
-## Building & running without Docker
+## Building & Run without Docker
 
 If you wish to run this tool without using Docker, you will be required to install [AFLplusplus](https://github.com/AFLplusplus/AFLplusplus) and build SWAM with mill (see README ./fuzzing-server-swam). Concerning AFLplusplus, running `make source-only` on the cloned repository along with installing the dependencies should suffice.
-
-All other setup steps are best documented in:
-
-- ./fuzzing-server-swam/Dockerfile
-- ./fuzzing-server-swam/entrypoint_mill_server.sh
-- ./fuzzing-client-afl/Dockerfile
-- ./fuzzing-client-afl/entrypoint_afl.sh
 
 ## Test SWAM's socket server with sample input (for fibo.wat)
 
