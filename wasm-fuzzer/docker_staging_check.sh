@@ -1,7 +1,5 @@
 #!/bin/bash
 
-# TODO: Load wasm file into repository
-
 docker build -t wafl .
 
 yes | docker system prune
@@ -15,7 +13,7 @@ docker run -d --env-file=./.env \
     --name=staging_wafl \
     -v maven_data:/root/.cache/coursier/v1/https/repo1.maven.org/maven2 \
     -v compiled_sources:/home/server/src/out/ \
-    -v ${PWD}/wafl-temp/wat-wasm-files:/home/server/wasm/ \
+    -v ${PWD}/sample-testing-targets:/home/server/wasm/ \
     -v ${PWD}/wafl-temp/afl-out:/home/client/out/ \
     -v ${PWD}/wafl-temp/logs:/home/shared/logs/ \
     wafl:latest \
