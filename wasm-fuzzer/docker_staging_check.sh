@@ -4,10 +4,6 @@ docker build -t wafl .
 
 yes | docker system prune
 
-set -a
-source ./.env
-set +a
-
 docker run -d --env-file=./.env \
     -e STAGING=True \
     --name=staging_wafl \
