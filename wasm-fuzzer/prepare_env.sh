@@ -1,17 +1,19 @@
 #!/bin/bash
 
-currentID=$$
-echo "wafl ID $currentID"
+if [ -z "$WAFL_INSTANCE_ID" ]; then
+    export WAFL_INSTANCE_ID=$((1 + RANDOM % 99999999))
+fi
+echo "wafl ID $WAFL_INSTANCE_ID"
 
-set -a
-source .env
-set +a
-
-CURRENT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+CURRENT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
 
 # Check if inside Docker: https://stackoverflow.com/a/25518345/9068781
 if ! [ -f /.dockerenv ]; then
-    echo "Not inside a Docker container";
+    echo "Not inside a Docker container"
+
+    set -a
+    source .env
+    set +a
 
     TEMP_DIR=$CURRENT_DIR/wafl-temp
 
@@ -22,13 +24,12 @@ if ! [ -f /.dockerenv ]; then
     export SRC_INTERFACE_DIR=$CURRENT_DIR/fuzzing-client-afl
     export SRC_SWAM_DIR=$CURRENT_DIR/fuzzing-server-swam
 
-
     export OUT_INTERFACE_DIR=$TEMP_DIR/cpp-out
 
-    export INPUT_AFL_DIR=$TEMP_DIR/afl-in/$currentID
-    export OUTPUT_AFL_DIR=$TEMP_DIR/afl-out/$currentID
+    export INPUT_AFL_DIR=$TEMP_DIR/afl-in/$WAFL_INSTANCE_ID
+    export OUTPUT_AFL_DIR=$TEMP_DIR/afl-out
 
-    export LOGS_DIR=$TEMP_DIR/logs/$currentID
+    export LOGS_DIR=$TEMP_DIR/logs/$WAFL_INSTANCE_ID
 
     export WASM_OR_WAT_FILE=$1
 
@@ -39,7 +40,7 @@ if ! [ -f /.dockerenv ]; then
     mkdir -p $OUTPUT_AFL_DIR
     mkdir -p $LOGS_DIR
 else
-    echo "Inside a Docker container - env's are pre-defined";
+    echo "Inside a Docker container - env's are pre-defined"
 
     # Get filename from $1
     export WASM_OR_WAT_FILE=$WASM_DIR/$(basename $1)

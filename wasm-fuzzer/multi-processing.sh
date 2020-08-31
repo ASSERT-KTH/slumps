@@ -1,46 +1,46 @@
 #!/bin/bash
 
-if [ -z "$1" ]; then
+NUM_INSTANCES=$1
+shift;  # Pop $1 from argument list to pass all arguments "$@" to slumps/wafl:latest
+
+if [ -z "$NUM_INSTANCES" ]; then
     echo "Specifiy the number of AFL instances as argument!"
     exit 1
 fi
 
-echo "Running $1 AFL instance(s)."
+echo "Running $NUM_INSTANCES AFL instance(s)."
 
 set -a
 source ./.env
 set +a
 
-mkdir -p $LOCAL_WASM_DIR
-mkdir -p $LOCAL_AFL_OUTPUT_DIR
-mkdir -p $LOCAL_LOGS_DIR/1
-
 echo "Running #1"
 docker run --env-file=./.env \
     -e MASTER_AFL_NODE=True \
+    -e WAFL_INSTANCE_ID=1 \
     -v maven_data:/root/.cache/coursier/v1/https/repo1.maven.org/maven2 \
     -v compiled_sources:/home/server/src/out/ \
     -v ${LOCAL_WASM_DIR:?err}:/home/server/wasm/ \
     -v ${PWD}/wafl-temp/afl-out:/home/client/out/ \
     -v ${PWD}/wafl-temp/logs/1:/home/shared/logs/ \
-    -d slumps/wafl:latest $2 $3 $4
+    -d wafl:latest $@
 
-if [ $1 -lt 2 ]; then
+if [ $NUM_INSTANCES -lt 2 ]; then
     exit 0
 fi
 
-for i in $(seq 2 $1); do
+for i in $(seq 2 $NUM_INSTANCES); do
     echo "Waiting for previous mill server to compile..."
     sleep 30s
-    mkdir -p $LOCAL_LOGS_DIR/${i}
     echo "Running #${i}"
     docker run --env-file=./.env \
         -e MASTER_AFL_NODE=False \
+        -e WAFL_INSTANCE_ID=${i} \
         -v maven_data:/root/.cache/coursier/v1/https/repo1.maven.org/maven2 \
         -v compiled_sources:/home/server/src/out/ \
         -v ${LOCAL_WASM_DIR:?err}:/home/server/wasm/ \
         -v ${PWD}/wafl-temp/afl-out:/home/client/out/ \
         -v ${PWD}/wafl-temp/logs/${i}:/home/shared/logs/ \
-        -d slumps/wafl:latest $2 $3 $4
+        -d wafl:latest $@
 done
 exit 0
