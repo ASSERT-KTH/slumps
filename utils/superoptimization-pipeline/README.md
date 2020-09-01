@@ -1,4 +1,4 @@
-# pipeline
+# Superoptimized for WebAssembly
 
 
 ## Intro to superoptimization
@@ -10,7 +10,7 @@ Given a C program compiled to WASM, SLUMPs superoptimizer generates a new WASM p
 
 ### Execute
 ```bash
-pipeline.sh <program.c> 4 #CEGIS
+superopt.sh <program.c> 4 #CEGIS
 ```
 
 ### Build
@@ -61,11 +61,7 @@ cd ../..
 
 ### Requirements
 
-Python >= 3.6
-LLVM >= 8.0
-
-### To use pipeline.sh
-
+- Python >= 3.6
+- LLVM >= 8.0
 - Build souper
 - export ROOT variable with the absolute path to slumps project. For example ```export ROOT=/Users/javierca/Documents/Develop/slumps```
-- Run pipeline

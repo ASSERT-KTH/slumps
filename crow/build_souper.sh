@@ -26,4 +26,4 @@ fi
 
 cd binaryen
 cmake . && make
-cd ../utils/pipeline/python
+cd ../utils/superoptimization-pipeline/python
