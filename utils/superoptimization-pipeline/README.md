@@ -1,4 +1,4 @@
-# Superoptimized for WebAssembly
+# Superoptimizer for WebAssembly
 
 
 ## Intro to superoptimization
