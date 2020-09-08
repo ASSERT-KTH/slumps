@@ -4,7 +4,7 @@ metadata:
   generateName: slumps-distributed-wasi-
 spec:
   entrypoint: slumps-distributed
-  parallelism: 9
+  parallelism: 5
   arguments:
     parameters:
     - name: repo
@@ -29,7 +29,7 @@ spec:
       image: madshansen/docker-git-ftp
       command: [bash]
       source: |
-        apt-get update && apt-get install -y python && git clone "{{workflow.parameters.repo}}" && ls -l "{{workflow.parameters.folder}}" | wc -l && python -c "import json,os;  print(json.dumps(os.listdir('{{workflow.parameters.folder}}')))" > /out.txt && cat /out.txt
+        apt-get update && apt-get install -y python && git clone "{{workflow.parameters.repo}}" && ls -l "{{workflow.parameters.folder}}" | wc -l && python -c "import json,os;  print(json.dumps([l for l in os.listdir('{{workflow.parameters.folder}}') if  l.endswith('.c')]))" > /out.txt && cat /out.txt
     outputs:
       parameters:
         - name: programs
@@ -47,26 +47,14 @@ spec:
           parameters:
           - name: program
             value: "{{item.program}}"
-          - name: order
-            value: "{{item.order}}"
+          - name: time1
+            value: "{{item.time1}}"
+          - name: time2
+            value: "{{item.time2}}"
         withItems: 
-          - { program: "{{inputs.parameters.program}}", order: "17" }
-          - { program: "{{inputs.parameters.program}}", order: "12" }
-          - { program: "{{inputs.parameters.program}}", order: "13" }
-          - { program: "{{inputs.parameters.program}}", order: "14" }
-          - { program: "{{inputs.parameters.program}}", order: "11" }
-          - { program: "{{inputs.parameters.program}}", order: "1" }
-          - { program: "{{inputs.parameters.program}}", order: "2" }
-          - { program: "{{inputs.parameters.program}}", order: "3" }
-          - { program: "{{inputs.parameters.program}}", order: "4" }
-          - { program: "{{inputs.parameters.program}}", order: "5" }
-          - { program: "{{inputs.parameters.program}}", order: "6" }
-          - { program: "{{inputs.parameters.program}}", order: "7" }
-          - { program: "{{inputs.parameters.program}}", order: "8" }
-          - { program: "{{inputs.parameters.program}}", order: "9" }
-          - { program: "{{inputs.parameters.program}}", order: "10" }
-          - { program: "{{inputs.parameters.program}}", order: "15" }
-          - { program: "{{inputs.parameters.program}}", order: "16" }
+          - { program: "{{inputs.parameters.program}}",time2: "172800", time1: "86400" }
+          - { program: "{{inputs.parameters.program}}",time2: "259200", time1: "172800" }
+          - { program: "{{inputs.parameters.program}}",time2: "345600", time1: "259200" }
         continueOn:
           failed: true
   - name: slumps-template
@@ -74,21 +62,23 @@ spec:
     inputs:
       parameters:
       - name: program
-      - name: order
+      - name: time1
+      - name: time2
     outputs:
       artifacts:
       - name: slumps
         path: /slumps/crow/out
       - name: logs
         path: /slumps/crow/logs
-    container:
-      image: "jacarte/slumps:crow1"
+    script:
+      image: "jacarte/slumps:crow"
       command: [/bin/bash]
-      args: [start_docker.sh,"{{workflow.parameters.raw}}/{{inputs.parameters.program}}","-DEFAULT.order", "{{inputs.parameters.order}}", "-DEFAULT.timeout", "25200","-DEFAULT.link-wasi", "True", ]
-      #resources:
-      #  requests:
-      #    memory: 1.5G
-      #    cpu: 1
-      #  limits:
-      #    memory: 4G
-      #    cpu: 2
+      source: |
+        wget {{workflow.parameters.raw}}/{{inputs.parameters.program}} && mkdir -p /inputs && cp {{inputs.parameters.program}} /inputs/ && bash start_poly_bench.sh %DEFAULT.order 5,6,7,8,9,10,11,12,13,14,15,16,17,18,19 %souper.souper-common --solver-timeout=0 %DEFAULT.timeout {{inputs.parameters.time2}} %DEFAULT.exploration-timeout {{inputs.parameters.time1}} %DEFAULT.link-wasi True {{inputs.parameters.program}}
+      resources:
+        requests:
+          memory: 2G
+          cpu: 1
+        limits:
+          memory: 6G
+          cpu: 3

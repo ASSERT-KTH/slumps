@@ -1,4 +1,4 @@
-az aks get-credentials --resource-group $1 --name $2
+# az aks get-credentials --resource-group $1 --name $2
 kubectl create ns argo
 kubectl apply -n argo -f https://raw.githubusercontent.com/argoproj/argo/stable/manifests/install.yaml
 kubectl create rolebinding default-admin --clusterrole=admin --serviceaccount=default:default
