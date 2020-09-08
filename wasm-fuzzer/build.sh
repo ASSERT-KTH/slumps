@@ -13,6 +13,13 @@ git pull
 ./millw cli.assembly
 export SWAM_JAR=$(CURRENT_DIR)/fuzzing-server-swam/out/cli/assembly/dest/out.jar
 echo $SWAM_JAR
+
+
+if test -f "$SWAM_JAR"; then
+	echo "SWAM jar does not exist"
+	exit 1 # Fail if SWAM is not compiled
+fi
+
 cd ..
 
 
@@ -25,6 +32,10 @@ if [ ! -d aflpp ]; then
 	cd aflpp
 	make distrib
 	sudo make install
+	if test -f "afl-fuzz"; then
+		echo "afl-fuzz is not compiled"
+		exit 1 # Fail if SWAM is not compiled
+	fi
 	cd ..
 fi
 
