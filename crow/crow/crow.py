@@ -5,10 +5,10 @@ import sys,traceback
 from settings import config
 from stages import CToLLStage, LLToBC, BCToSouper, ObjtoWASM, WASM2WAT, BCCountCandidates, TimeoutException
 from utils import printProgressBar, createTmpFile, getIteratorByName, \
-    ContentToTmpFile, BreakException, RUNTIME_CONFIG, updatesettings, sendReportEmail, make_github_issue
+    ContentToTmpFile, BreakException, RUNTIME_CONFIG, updatesettings, sendReportEmail
 
 from logger import LOGGER, getlogfilename
-import threading
+import threading, queue
 import hashlib
 import json
 import redis
@@ -20,6 +20,7 @@ import multiprocessing
 import time
 import re
 import uuid
+from socket_server import listen
 
 
 levelPool = None
@@ -90,6 +91,8 @@ class Pipeline(object):
 
             works = self.chunkIt(order, len(redisports))
 
+
+
             for i,port in enumerate(redisports):
                 job = levelPool.submit(
                     self.processLevel, works[i], program_name, port, bc, OUT_FOLDER, onlybc, meta, outResult)
@@ -98,7 +101,7 @@ class Pipeline(object):
                 futures.append(job)
             
             timeout = config["DEFAULT"].getint("exploration-timeout")
-            done, fail = wait(futures, timeout=timeout, return_when=ALL_COMPLETED)
+            done, fail = wait(futures, return_when=ALL_COMPLETED)
             levelPool.shutdown(False)
             #Merging results
 
@@ -125,8 +128,9 @@ class Pipeline(object):
                 except Exception as e:
                     LOGGER.error(program_name, traceback.format_exc())
             
+            # TODO Separate both stages to support continuing on
             variantsFile = open(f"{OUT_FOLDER}/{program_name}.exploration.json", 'w')
-            variantsFile.write(json.dumps([[k.decode("utf-8"), [v1.decode("utf-8") for v1 in v if v1 is not None] ] for k, v in merging.items()],indent=4))
+            variantsFile.write(json.dumps([[k, [v1 for v1 in v if v1 is not None] ] for k, v in merging.items()],indent=4))
             variantsFile.close()
             # Call the generation stage
             # Split jobs
@@ -149,11 +153,23 @@ class Pipeline(object):
 
                 if generationcount % len(redisports) == 0:
                     ## WAIT for it
+
+                    LOGGER.info(program_name,f"Executing parallel generation job...")
                     done, fail = wait(futures, return_when=ALL_COMPLETED)
                     futures = []
 
+                    LOGGER.info(program_name,f"Disposing job...{len(done)} {len(fail)}")
+
                     for f in done:
                         variants += f.result()
+
+            LOGGER.info(program_name,f"Executing final parallel generation job...")
+            done, fail = wait(futures, return_when=ALL_COMPLETED)
+            futures = []
+            LOGGER.info(program_name,f"Disposing job...{len(done)} {len(fail)}")
+
+            for f in done:
+                variants += f.result()
                 # Save metadata
 
 
@@ -175,16 +191,20 @@ class Pipeline(object):
 
     def generateVariant(self,job,program_name, merging, port,bc, OUT_FOLDER, onlybc, meta, outResult):
         
+        if len(job) == 0 :
+            LOGGER.info(program_name,f"Empty job...")    
+            return []
+
         variants = []
-        #LOGGER.info(program_name,f"Generating {len(job)} variants...")
+        LOGGER.info(program_name,f"Generating {len(job)} variants...") 
+        r = redis.Redis(host="localhost", port=port)
         for j in job:
-            #LOGGER.info(program_name, f"Applying replacement set...")
-            r = redis.Redis(host="localhost", port=port)
-            #LOGGER.info(program_name, f"Cleaning previous cache for variant generation...{port}")
+            LOGGER.info(program_name, f"Cleaning previous cache for variant generation...{port}")
             try:
-                result = r.flushdb()
-                #LOGGER.success(
-                #    program_name, f"Flushing redis DB: result({result})")
+                LOGGER.success(program_name, f"Flushing redis DB...")
+
+                result = r.flushall()
+                LOGGER.success(program_name, f"DB flushed away: result({result})")
             except Exception as e:
                 LOGGER.error(program_name, traceback.format_exc())
 
@@ -193,26 +213,34 @@ class Pipeline(object):
             
             name = ""
 
-            try:
+            try:            
                keys = list(merging.keys())
                for k, v in j.items():
+                   LOGGER.info(program_name, f"Setting redis db")
+
                    if v is not None:
                        name +=  "[%s-%s]"%(keys.index(k), merging[k].index(v))
                        r.hset(k, "result", v)
                    else:
+                       
                        # search for infer word
                        rer = re.compile(r"infer %(\d+)")
-                       kl = k.decode("utf-8")
+                       kl = k
                        if rer.search(kl):
                            r.hset(k, "result", ("result %%%s\n"%(rer.search(kl).group(1),)).encode("utf-8"))
-                       #LOGGER.info(program_name, f"Replacing redundant key-value pair...")
-               with ContentToTmpFile(content=bc) as BCIN:
+                       LOGGER.info(program_name, f"Replacing redundant key-value pair...")
+
+               LOGGER.info(program_name, f"Preparing new variant generation...")
+
+               with ContentToTmpFile(content=bc, LOG_LEVEL=2) as BCIN:
                    tmpIn = BCIN.file
-                   with ContentToTmpFile() as BCOUT:
+                   with ContentToTmpFile(LOG_LEVEL=2) as BCOUT:
                        tmpOut = BCOUT.file
                        
                        try:
                            sanitized_set_name = name
+                           LOGGER.info(program_name, f"Generating variant {sanitized_set_name}...")
+
 
                            optBc = BCToSouper(program_name, level=1, debug=True, redisport=port)
                            optBc(args=[tmpIn, tmpOut], std=None)
@@ -226,7 +254,7 @@ class Pipeline(object):
                                                                            name,
                                                                            debug=True, generateOnlyBc=onlybc)
 
-                           variants.append([hex, n, [[k.decode("utf-8"), v.decode("utf-8") if v is not None else "No replace"] for k,v in j.items()]])
+                           variants.append([hex, n, [[k, v if v is not None else "No replace"] for k,v in j.items()]])
                        except Exception as e:
                            LOGGER.error(program_name, traceback.format_exc())
                            raise e
@@ -269,77 +297,55 @@ class Pipeline(object):
         pool = ThreadPoolExecutor(
             max_workers=config["DEFAULT"].getint("workers"))
 
-        results = {
+        results = {}
 
-        }
-
+        socket_port = config["souper"].getint("socket_port") + port
+        q = queue.Queue()
         for level in levels:
 
             results[level] = {}
+
             LOGGER.success(program_name,
-                        "%s: Searching level (increasing execution time) %s: %s redis:%s..." % (program_name,
+                        "%s: Searching level (increasing execution time) %s: %s souper-workers:%s souper-port:%s" % (program_name,
                                                                                         level, config["souper"][
-                                                                                            "souper-level-%s" % level], port))
+                                                                                            "souper-level-%s" % level], config["souper"].getint("workers"), socket_port))
 
             try:
-                bctocand = BCCountCandidates(program_name, level=level, redisport=port, timeout=config["DEFAULT"].getint("exploration-timeout"))
+                bctocand = BCCountCandidates(program_name, level=level, souper_workers=config["souper"].getint("workers"), 
+                timeout=config["DEFAULT"].getint("exploration-timeout"), socket_port=socket_port)
+                
             except Exception as e:
                 LOGGER.error(program_name,  traceback.format_exc())
                 return
             with ContentToTmpFile(content=bc) as TMP_BC:
 
-                r = redis.Redis(host="localhost", port=port)
-
-                # Clean cache
-                LOGGER.info(program_name, f"Cleaning previous cache...{port}")
                 try:
-                    result = r.flushdb()
                     
-                except Exception as e:
-                    LOGGER.error(program_name, traceback.format_exc())
+                    serverThread = threading.Thread(target=listen, args=[socket_port, q, program_name])
+                    serverThread.start()
 
-                try:
+                    bctocand(args=[TMP_BC.file], std=None)
 
-                    cand = bctocand(args=[TMP_BC.file], std=None)
-                except TimeoutException:
-                    if self.LOG_LEVEL > 2:
-                        LOGGER.warning(program_name, f"Timeout reached")
+
+                except TimeoutException as e:
+                    LOGGER.warning(program_name, f"Timeout reached")
+
                 except Exception as e:
                     LOGGER.error(program_name, traceback.format_exc())
                     raise e
-                
-                try: # Saving cache results
-                    if self.LOG_LEVEL >= 1:
-                        LOGGER.info(program_name, "Saving cache...")
-                    
-                    try:
-                        keys = r.keys("*")
 
-                        for k in keys:
-                            t = r.type(k)
-                            if t == b'hash':
-                                vals = r.hgetall(k)
-                                #if self.LOG_LEVEL > 2:
-                                #    LOGGER.info(program_name, f"\t{k} {vals}")
-                                if b'result' in vals and vals[b'result'] != b'':
-                                    results[level][k] = vals[b'result'].split(b'\n##\n')
-                                else:
-                                    results[level][k] = []
+            waitFor = 5
+            LOGGER.warning(program_name, f"Sleeping for {waitFor} seconds waiting for freeing ports...")
+            time.sleep(waitFor)
+            while not q.empty():
+                i = q.get()
+                k, v = i
 
-                        # set the redis cache and call Souper
-                    finally:
+                if k not in results[level]:
+                    results[level][k] = []
 
-                        if self.LOG_LEVEL >= 1:
-                            LOGGER.info(program_name, "Cleaning cache...")
-                        
-                        result = r.flushdb()
-                        LOGGER.success(
-                            program_name, f"Flushing redis DB: result({result})")
-                        r.close()
-                except Exception as e:
-                    LOGGER.error(program_name, traceback.format_exc())
-        return results
-
+                results[level][k].append(v)
+        return results   
     
     def generateWasm(self, namespace, bc, OUT_FOLDER, fileName, debug=True, generateOnlyBc=False):
         llFileName = "%s/%s" % (OUT_FOLDER, fileName)
@@ -411,6 +417,8 @@ def removeDuplicate(program_name, folder, filt="*.wasm", remove=False):
 
 
 def process(f, OUT_FOLDER, onlybc, program_name, redisports, isBc=False):
+    global launch
+
     MANAGER = multiprocessing.Manager()
     pipeline = Pipeline()
 
