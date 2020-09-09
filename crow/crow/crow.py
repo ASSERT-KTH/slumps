@@ -21,6 +21,7 @@ import time
 import re
 import uuid
 from socket_server import listen
+import numpy as np
 
 
 levelPool = None
@@ -141,15 +142,26 @@ class Pipeline(object):
             futures = []
             variants = []
 
-            for subset in getIteratorByName("keysSubset")(merging):
+            showGenerationProgress = config["DEFAULT"].getboolean("show-generation-progress")
 
+            temptativeNumber = np.prod([len(v) + 1 for v in merging.values()])
+
+            LOGGER.info(program_name,f"Temptative number of variants {temptativeNumber} (plus original). Expected ratio {len(redisports)} of programs in each iteration.")
+            
+            if showGenerationProgress:
+                LOGGER.disable()
+                printProgressBar(generationcount, temptativeNumber,suffix=f'             {generationcount}/{temptativeNumber}')
+
+            for subset in getIteratorByName("keysSubset")(merging):
+                
                 job = generationPool.submit(
                     self.generateVariant, [subset], program_name, merging, redisports[generationcount
-                    %len(redisports)], bc, OUT_FOLDER, onlybc, meta, outResult)
+                    %len(redisports)], bc, OUT_FOLDER, onlybc, meta, outResult, generationcount, temptativeNumber)
                     # job.result()
 
                 futures.append(job)
                 generationcount += 1
+                
 
                 if generationcount % len(redisports) == 0:
                     ## WAIT for it
@@ -163,16 +175,26 @@ class Pipeline(object):
                     for f in done:
                         variants += f.result()
 
+
+
+                    if showGenerationProgress:
+                        printProgressBar(len(variants), temptativeNumber,suffix=f'             {generationcount}/{temptativeNumber}')
+
+            
+
             LOGGER.info(program_name,f"Executing final parallel generation job...")
             done, fail = wait(futures, return_when=ALL_COMPLETED)
             futures = []
             LOGGER.info(program_name,f"Disposing job...{len(done)} {len(fail)}")
+            generationcount += len(done) + len(fail)
 
             for f in done:
                 variants += f.result()
                 # Save metadata
 
-
+            if showGenerationProgress:
+                printProgressBar(len(variants), temptativeNumber,suffix=f'              {generationcount}/{temptativeNumber}')
+                LOGGER.enable()
 
             LOGGER.info(program_name, f"Saving metadata...")
             variantsFile = open(f"{OUT_FOLDER}/{program_name}.variants.json", 'w')
@@ -189,7 +211,7 @@ class Pipeline(object):
 
         return dict(programs=meta, count=len(meta.keys()))
 
-    def generateVariant(self,job,program_name, merging, port,bc, OUT_FOLDER, onlybc, meta, outResult):
+    def generateVariant(self,job,program_name, merging, port,bc, OUT_FOLDER, onlybc, meta, outResult, current, total):
         
         if len(job) == 0 :
             LOGGER.info(program_name,f"Empty job...")    
@@ -198,7 +220,7 @@ class Pipeline(object):
         variants = []
         LOGGER.info(program_name,f"Generating {len(job)} variants...") 
         r = redis.Redis(host="localhost", port=port)
-        for j in job:
+        for jindex,j in enumerate(job):
             LOGGER.info(program_name, f"Cleaning previous cache for variant generation...{port}")
             try:
                 LOGGER.success(program_name, f"Flushing redis DB...")
@@ -335,7 +357,7 @@ class Pipeline(object):
                     raise e
 
             waitFor = 5
-            LOGGER.warning(program_name, f"Sleeping for {waitFor} seconds waiting for freeing ports...")
+            LOGGER.warning(program_name, f"Sleeping for {waitFor} seconds waiting for free ports...")
             time.sleep(waitFor)
             while not q.empty():
                 i = q.get()
@@ -432,7 +454,11 @@ def process(f, OUT_FOLDER, onlybc, program_name, redisports, isBc=False):
             LOGGER.error(program_name, f"The total timeout set {total_timeout}s must be larger than the whole (even parallel) generation stage, which is {1.0*exploration_timeout * LEVELS / exploration_workers}s, according to the number of threads and exploration timeout ")
             exit(1)
         else:
-            LOGGER.info(program_name, f"The total exploration stage would take {1.0*exploration_timeout * LEVELS / exploration_workers}s, according to the number of threads and exploration timeout ")
+            if exploration_timeout > -1:
+                LOGGER.info(program_name, f"The total exploration stage would take {1.0*exploration_timeout * LEVELS / exploration_workers}s, according to the number of threads and exploration timeout ")
+            else:
+                LOGGER.info(program_name, f"Sit and wait, there is no timeout")
+
 
 
     global launch
@@ -470,8 +496,6 @@ def process(f, OUT_FOLDER, onlybc, program_name, redisports, isBc=False):
     th.start()
 
     timeout = config["DEFAULT"].getint("timeout")
-
-    print("Timeout ... %s s" % timeout)
 
     if total_timeout > 0:
         th.join(timeout=timeout)
@@ -518,7 +542,6 @@ def main(f, redisports):
 
     result = dict(namespace=program_name, programs=[])
     attach = []
-    print(os.listdir(f))
     for final in ["%s/%s" % (f, i) for i in os.listdir(f)]:
 
         program_name, OUT_FOLDER, onlybc = getFileMeta(final)
@@ -540,7 +563,6 @@ def main(f, redisports):
     if not os.path.exists(OUT_FOLDER):
         os.mkdir(OUT_FOLDER)
 
-    print(json.dumps(result, indent=4))
 
 
 if __name__ == "__main__":
