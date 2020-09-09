@@ -35,3 +35,5 @@ wasm-fuzzer/wafl-temp/*
 
 *.log
 *.log.txt
+
+dump.rdb
