@@ -417,6 +417,23 @@ def removeDuplicate(program_name, folder, filt="*.wasm", remove=False):
 
 
 def process(f, OUT_FOLDER, onlybc, program_name, redisports, isBc=False):
+
+    LEVELS = 20 # upper bound level count
+    exploration_workers = config["DEFAULT"].getint("workers")
+    exploration_timeout = config["DEFAULT"].getint("exploration-timeout")
+    total_timeout = config["DEFAULT"].getint("timeout")
+
+    print(LEVELS, exploration_workers, exploration_timeout, total_timeout)
+    if total_timeout > 0 : # There is a timeout
+        # Validate the composition of times
+
+        if exploration_workers > LEVELS:
+            LOGGER.warning(program_name, f"The number of generation workers is the maximum number of levels {LEVELS}. You set the maximum to {exploration_workers}, skipped.")
+            exploration_workers = LEVELS
+        if 1.0*exploration_timeout * LEVELS / exploration_workers >= total_timeout:
+            LOGGER.error(program_name, f"The total timeout set {total_timeout}s must be larger than the whole (even parallel) generation stage, which is {1.0*exploration_timeout * LEVELS / exploration_workers}s, according to the number of threads and exploration timeout ")
+            exit(1)
+
     global launch
 
     MANAGER = multiprocessing.Manager()
@@ -455,7 +472,10 @@ def process(f, OUT_FOLDER, onlybc, program_name, redisports, isBc=False):
 
     print("Timeout ... %s s" % timeout)
 
-    th.join(timeout=timeout)
+    if total_timeout > 0:
+        th.join(timeout=timeout)
+    else:
+        th.join()
 
     if th.is_alive():
         th.kill()
@@ -492,6 +512,8 @@ def main(f, redisports):
     program_name = f.split("/")[-1].split(".")[0]
 
     LOGGER.info(program_name, "Pool size: %s" % len(redisports))
+
+    
 
     result = dict(namespace=program_name, programs=[])
     attach = []
@@ -533,7 +555,7 @@ if __name__ == "__main__":
 
 
     levelPool = ThreadPoolExecutor(
-    max_workers=max_workers)
+    max_workers=config["DEFAULT"].getint("workers"))
 
     generationPool = ThreadPoolExecutor(
     max_workers=max_workers)
