@@ -29,6 +29,7 @@ class ExternalStage(object):
         self.debug = True
         self.namespace = namespace
         self.timeout = -1
+        self.DEBUG_LEVEL = 1
 
     def processInner(self, std, err):
         return std, err
@@ -58,8 +59,7 @@ class ExternalStage(object):
         rc = p.returncode
 
         if rc != 0:
-            if self.DEBUG_LEVEL > 0:
-                LOGGER.error(self.namespace, "%s %s %s" % (err.decode("utf-8"), rc, std.decode("utf-8")))
+            LOGGER.error(self.namespace, "%s %s %s" % (err.decode("utf-8"), rc, std.decode("utf-8")))
 
             if rc == 124:
                 raise TimeoutException()
@@ -152,13 +152,15 @@ class BCMem2Reg(ExternalStage):
 
 class BCCountCandidates(ExternalStage):
 
-    def __init__(self, namespace, level=1, redisport=6380, timeout=-1):
+    def __init__(self, namespace, level=1, souper_workers=4, timeout=-1, socket_port = 5678):
         self.path_to_executable = Alias.opt
         self.name = "LLVM BC to Souper IR candidates"
         self.debug = True
         self.level = level
-        self.redisport = redisport
+        self.DEBUG_LEVEL = 1
+        self.souper_workers = souper_workers
         self.timeout = timeout
+        self.socket_port = socket_port
 
         self.namespace = namespace
 
@@ -168,7 +170,7 @@ class BCCountCandidates(ExternalStage):
         
 
         if RUNTIME_CONFIG["USE_REDIS"]:
-            extra_commands += " --souper-external-cache --souper-redis-port=%s"%(self.redisport, )
+            extra_commands += " --souper-crow-port=%s --souper-crow-workers=%s"%(self.socket_port, self.souper_workers, )
 
         new_inputs = (config["souper"]["list-candidates"] % (
         config["souper"]["souper-level-%s" % self.level], extra_commands)).split(" ")

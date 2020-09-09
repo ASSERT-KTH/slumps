@@ -19,3 +19,4 @@ six==1.13.0
 urllib3==1.25.8
 wcwidth==0.1.7
 zipp==0.6.0
+numpy==1.19.1
