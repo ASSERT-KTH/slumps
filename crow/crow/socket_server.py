@@ -37,7 +37,7 @@ def listen(port, q, program):
 						q.put([k, v])
 					LOGGER.success(program,f"Populating results...{len(result.keys())} keys")
 					s = np.prod([len(t) for t in result.values()])
-					LOGGER.success(program,f"Populating results...{s} tentative replacements")
+					LOGGER.success(program,f"Populating results...{s} temptative replacements")
 				except Exception as e:
 					print(st)
 				if not data:
