@@ -1,5 +1,5 @@
 # name jacarte/slumps:backend
-FROM jacarte/slumps:souper as builder
+FROM slumps/souper:latest as builder
 # souper:deps
 env DEBIAN_FRONTEND=noninteractive
 
@@ -35,6 +35,7 @@ WORKDIR slumps
 
 COPY --from=builder /slumps/wabt/build/wasm2wat /slumps/wabt/build/wasm2wat
 COPY --from=builder /usr/src/souper-build /slumps/souper/build
+
 COPY --from=builder /usr/src/souper/third_party /slumps/souper/third_party
 COPY --from=builder /tmp/wasi-libc /tmp/wasi-libc
 
