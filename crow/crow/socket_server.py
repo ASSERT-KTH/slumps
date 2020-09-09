@@ -12,12 +12,13 @@ def listen(port, q, program):
 
 	with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
 		s.bind((HOST, PORT))
-		print(f"Listening...{port}")
+
+		LOGGER.info(program,f"Listening...{port}")
 		
 		s.listen()
 		conn, addr = s.accept()
 		with conn:
-			print('Connected by', addr)
+			LOGGER.success(program,f'Connected by {addr}')
 			while True:
 				data = conn.recv(1024<<6)
 				data = data.replace('\\'.encode(), '\\\\'.encode()).replace('\n'.encode(), '\\n'.encode())
@@ -36,7 +37,7 @@ def listen(port, q, program):
 						q.put([k, v])
 					LOGGER.success(program,f"Populating results...{len(result.keys())} keys")
 					s = np.prod([len(t) for t in result.values()])
-					LOGGER.success(program,f"Populating results...{s} tentative replacements")
+					LOGGER.success(program,f"Populating results...{s} temptative replacements")
 				except Exception as e:
 					print(st)
 				if not data:
