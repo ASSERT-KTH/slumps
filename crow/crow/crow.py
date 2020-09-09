@@ -162,12 +162,14 @@ class Pipeline(object):
                 futures.append(job)
                 generationcount += 1
                 
-
                 if generationcount % len(redisports) == 0:
                     ## WAIT for it
 
+                    generationStartTime = time.time_ns()
                     LOGGER.info(program_name,f"Executing parallel generation job...")
                     done, fail = wait(futures, return_when=ALL_COMPLETED)
+                    generationEndTime = time.time_ns() - generationStartTime
+
                     futures = []
 
                     LOGGER.info(program_name,f"Disposing job...{len(done)} {len(fail)}")
@@ -178,7 +180,10 @@ class Pipeline(object):
 
 
                     if showGenerationProgress:
-                        printProgressBar(len(variants), temptativeNumber,suffix=f'             {generationcount}/{temptativeNumber}')
+                        speed = len(redisports)/generationEndTime
+                        eta = temptativeNumber/speed/1e9
+
+                        printProgressBar(len(variants), temptativeNumber,suffix=f'  {generationcount}/{temptativeNumber} eta:{eta}s')
 
             
 
@@ -193,7 +198,7 @@ class Pipeline(object):
                 # Save metadata
 
             if showGenerationProgress:
-                printProgressBar(len(variants), temptativeNumber,suffix=f'              {generationcount}/{temptativeNumber}')
+                printProgressBar(len(variants), temptativeNumber,suffix=f'  {generationcount}/{temptativeNumber}                       ')
                 LOGGER.enable()
 
             LOGGER.info(program_name, f"Saving metadata...")
