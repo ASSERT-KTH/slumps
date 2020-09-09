@@ -230,7 +230,7 @@ class ObjtoWASM(ExternalStage):
 
     def processInner(self, std, err):
         # return the std output optimized LLVM IR
-        print(std, err)
+        #print(std, err)
         return std
 
 
