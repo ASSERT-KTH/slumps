@@ -454,7 +454,7 @@ def process(f, OUT_FOLDER, onlybc, program_name, redisports, isBc=False):
         if exploration_workers > LEVELS:
             LOGGER.warning(program_name, f"The number of generation workers is the maximum number of levels {LEVELS}. You set the maximum to {exploration_workers}, skipped.")
             exploration_workers = LEVELS
-    if 1.0*exploration_timeout * LEVELS / exploration_workers >= total_timeout:
+    if 1.0*exploration_timeout * LEVELS / exploration_workers >= total_timeout or exploration_timeout <= -1:
         if total_timeout > 0:
             LOGGER.error(program_name, f"The total timeout set {total_timeout}s must be larger than the whole (even parallel) generation stage, which is {1.0*exploration_timeout * LEVELS / exploration_workers}s, according to the number of threads and exploration timeout ")
             exit(1)
@@ -462,7 +462,7 @@ def process(f, OUT_FOLDER, onlybc, program_name, redisports, isBc=False):
             if exploration_timeout > -1:
                 LOGGER.info(program_name, f"The total exploration stage would take {1.0*exploration_timeout * LEVELS / exploration_workers}s, according to the number of threads and exploration timeout ")
             else:
-                LOGGER.info(program_name, f"Sit and wait, there is no timeout")
+                LOGGER.warning(program_name, f"Sit and wait, there is no timeout")
 
 
 
