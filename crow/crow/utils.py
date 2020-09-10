@@ -123,7 +123,7 @@ def getIteratorByName(name: str):
 
 
 def createTmpFile(ext=""):
-    r = "%s/%s%s" % (OUT_FOLDER, uuid.uuid4(), ext if ext else "")
+    r = "%s/CROW_TMP-%s%s" % (OUT_FOLDER, uuid.uuid4(), ext if ext else "")
 
     return r
 
@@ -198,7 +198,7 @@ def sendReportEmail(subject, content, attachments=[]):
     #print("Error", e.__str__())
 
 
-def printProgressBar(iteration, total, prefix='', suffix='', decimals=1, length=100, fill='█', printEnd="\r"):
+def printProgressBar(iteration, total, prefix='', suffix='', decimals=1, length=60, fill='█', printEnd="\r"):
     """
     Call in a loop to create terminal progress bar
     @params:

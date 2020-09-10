@@ -177,7 +177,7 @@ class BCCountCandidates(ExternalStage):
         return super(BCCountCandidates, self).__call__(new_inputs, std)
 
     def processInner(self, std, err):
-        return processCandidatesMetaOutput(err.decode("utf-8"))
+        return std
     
 
 
