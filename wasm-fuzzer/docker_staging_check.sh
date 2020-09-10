@@ -1,15 +1,23 @@
 #!/bin/bash
 
+CURRENT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
+
+set -a
+source $CURRENT_DIR/.env
+set +a
+
+# Make sure we're starting a fresh test here
+rm -R $CURRENT_DIR/wafl-temp
+
 docker run -d --rm --env-file=./.env \
     -e STAGING=True \
     --name=staging_wafl \
     -v maven_data:/root/.cache/coursier/v1/https/repo1.maven.org/maven2 \
     -v compiled_sources:/home/server/src/out/ \
-    -v ${PWD}/sample-testing-targets:/home/server/wasm/ \
+    -v ${LOCAL_WASM_DIR:?err}:/home/server/wasm/ \
     -v ${PWD}/wafl-temp/afl-out:/home/client/out/ \
     -v ${PWD}/wafl-temp/logs:/home/shared/logs/ \
-    wafl:latest \
-    branches2.wasm a 11
+    wafl:latest $@
 
 sleep 30s
 
