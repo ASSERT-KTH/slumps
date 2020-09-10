@@ -198,7 +198,7 @@ def sendReportEmail(subject, content, attachments=[]):
     #print("Error", e.__str__())
 
 
-def printProgressBar(iteration, total, prefix='', suffix='', decimals=1, length=60, fill='█', printEnd="\r"):
+def printProgressBar(iteration, total, prefix='', suffix='', decimals=1, length=40, fill='█', printEnd="\r"):
     """
     Call in a loop to create terminal progress bar
     @params:
