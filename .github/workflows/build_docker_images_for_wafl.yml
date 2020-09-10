@@ -11,20 +11,30 @@ on:
 
 jobs:
   build:
-    name: Build docker stack
     runs-on: ubuntu-latest
     steps:
+      
       - name: Checkout
         uses: actions/checkout@v2 # checkout latest version of the repo
+
       - name: Install dependencies
         run: |
-          sudo apt-get update && docker --version
+          sudo apt-get update
+          docker --version
+
       - name: Build wafl image
         run: |
-          cd wasm-fuzzer && sudo docker build -t slumps/wafl:latest .
+          cd wasm-fuzzer
+          docker build -t wafl .
+
+      - name: Test wafl container
+        run: ./docker_staging_check.sh
+
       - name: Push images
         run: |
-          docker login -u="$user" -p="$pass" && docker push slumps/wafl:latest
+          docker tag wafl slumps/wafl:latest
+          docker login -u="$user" -p="$pass"
+          docker push slumps/wafl:latest
         env:
           user: ${{secrets.DOCKER_USER}}
           pass: ${{secrets.DOCKER_PASS}}
