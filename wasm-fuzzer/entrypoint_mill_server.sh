@@ -1,5 +1,7 @@
 #!/bin/bash
 
+CURRENT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
+
 # TODO: Put this file back into the SWAM repo
 
 # TODO: Put this into entrypoint_afl.sh as well as soon as the server infers the signature itself.
@@ -7,7 +9,7 @@
 # well (same commands as wafl.sh)
 if [[ $ENV_PREPARED != "True" ]]; then
     echo "Preparing environment!"
-    source ../prepare_env.sh $@
+    source $CURRENT_DIR/prepare_env.sh $@
 fi
 
 # Get wasm/wat from $WASM_DIR directory
