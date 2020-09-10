@@ -12,7 +12,7 @@ if ! [ -f /.dockerenv ]; then
     echo "Not inside a Docker container"
 
     set -a
-    source .env
+    source $CURRENT_DIR/.env
     set +a
 
     TEMP_DIR=$CURRENT_DIR/wafl-temp
@@ -56,4 +56,5 @@ export WASI=True
 export TARGET_FUNCTION=$2
 export WASM_ARG_CSV=$3
 
+# This makes sure this script is not run multiple twice
 export ENV_PREPARED=True
