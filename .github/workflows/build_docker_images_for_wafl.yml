@@ -1,16 +1,14 @@
 name: Build docker images
 on:
   push:
-      branches:
-        - master
-      # file paths to consider in the event. Optional; defaults to all.
-      paths:
-        - 'wasm-fuzzer/**'
-        - '.github/**'
-     
+    branches:
+      - master
+    # file paths to consider in the event. Optional; defaults to all.
+    paths:
+      - "wasm-fuzzer/**"
+      - ".github/**"
 
 jobs:
-
   build-and-test:
     runs-on: ubuntu-latest
     steps:
@@ -28,8 +26,16 @@ jobs:
       - name: Build wafl image
         run: docker build -t wafl .
 
+      - name: Point to sample-testing-targets in envs
+        run: sed --in-place "s|LOCAL_WASM_DIR=.*|LOCAL_WASM_DIR=${PWD}/sample-testing-targets|g" ${PWD}/.env
+
       - name: Test wafl image
-        run: ./docker_staging_check.sh
+        run: ./docker_staging_check.sh branches2.wasm a 11
+
+      - name: Test multi-processing.sh
+        run: |
+          ./multi-processing.sh 3 branches2.wasm a 11
+          sleep 3m
 
       - name: Push images
         run: |
