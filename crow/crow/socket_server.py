@@ -12,13 +12,14 @@ def listen(port, q, program):
 
 	with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
 		s.bind((HOST, PORT))
-
-		LOGGER.info(program,f"Listening...{port}")
+		if program:
+			LOGGER.info(program,f"Listening...{port}")
 		
 		s.listen()
 		conn, addr = s.accept()
 		with conn:
-			LOGGER.success(program,f'Connected by {addr}')
+			if program:
+				LOGGER.success(program,f'Connected by {addr}')
 			while True:
 				data = conn.recv(1024<<6)
 				data = data.replace('\\'.encode(), '\\\\'.encode()).replace('\n'.encode(), '\\n'.encode())
@@ -30,14 +31,23 @@ def listen(port, q, program):
 					for kvpair in js:
 						k, v = kvpair["key"], kvpair["value"]
 						
+						if not program:
+							#print(f"{k} -> {v}")
+							print(f"Populating results...{len(result.keys())} keys")
+							print(f"Populating results...{s} temptative replacements")
 						if k not in result:
-							result[k] = []
+							result[k] = set([])
 
-						result[k].append(v)
-						q.put([k, v])
-					LOGGER.success(program,f"Populating results...{len(result.keys())} keys")
+						result[k].add(v)
+						if q:
+							q.put([k, v])
+
 					s = np.prod([len(t) for t in result.values()])
-					LOGGER.success(program,f"Populating results...{s} temptative replacements")
+
+					if program:
+						LOGGER.success(program,f"Populating results...{len(result.keys())} keys")
+						LOGGER.success(program,f"Populating results...{s} temptative replacements")
+					
 				except Exception as e:
 					print(st)
 				if not data:
@@ -46,4 +56,4 @@ def listen(port, q, program):
 
 
 if __name__ == "__main__":
-	listen(65435, None, None)
+	listen(32145, None, None)

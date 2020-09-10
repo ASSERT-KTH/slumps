@@ -181,9 +181,9 @@ class Pipeline(object):
 
                     if showGenerationProgress:
                         speed = len(redisports)/generationEndTime
-                        eta = temptativeNumber/speed/1e9
+                        eta = (temptativeNumber-len(variants))/speed/1e9
 
-                        printProgressBar(len(variants), temptativeNumber,suffix=f'  {generationcount}/{temptativeNumber} eta:{eta}s')
+                        printProgressBar(len(variants), temptativeNumber,suffix=f'  {generationcount}/{temptativeNumber} eta:{eta:.2f}s')
 
             
 
@@ -582,13 +582,13 @@ if __name__ == "__main__":
         max_workers = 1
 
 
+    updatesettings(sys.argv[2:-1])
+
     levelPool = ThreadPoolExecutor(
     max_workers=config["DEFAULT"].getint("workers"))
 
     generationPool = ThreadPoolExecutor(
     max_workers=max_workers)
-
-    updatesettings(sys.argv[2:-1])
 
     if not os.path.exists("out"):
         os.mkdir("out")
