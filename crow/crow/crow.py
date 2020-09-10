@@ -94,6 +94,8 @@ class Pipeline(object):
             LOGGER.warning(program_name, f"Exploration jobs {works}")
 
             for i in range(config["DEFAULT"].getint("workers")):
+
+                # TODO assign random port
                 job = levelPool.submit(
                     self.processLevel, works[i], program_name, 1200, bc, OUT_FOLDER, onlybc, meta, outResult)
                 # job.result()
@@ -506,6 +508,9 @@ def process(f, OUT_FOLDER, onlybc, program_name, redisports, isBc=False):
             pipeline.processBitcode(
                 bc, result[file], program_name, redisports, OUT_FOLDER, onlybc)
 
+        except KeyboardInterrupt:
+            LOGGER.error(program_name, "Cancelled by user...exiting")
+        
         except Exception as e:
             LOGGER.error(file, traceback.format_exc())
 
@@ -513,22 +518,26 @@ def process(f, OUT_FOLDER, onlybc, program_name, redisports, isBc=False):
     th.start()
 
     timeout = config["DEFAULT"].getint("timeout")
+    try:
+        if total_timeout > 0:
+            th.join(timeout=timeout)
+        else:
+            th.join()
 
-    if total_timeout > 0:
-        th.join(timeout=timeout)
-    else:
-        th.join()
+        if th.is_alive():
+            th.kill()
+            program_name = f.split("/")[-1].split(".")[0]
+            LOGGER.error(program_name, "Exiting %s due to timeout" % f)
+            result_overall[f]["error"] = "Timeout %s" % timeout
 
-    if th.is_alive():
-        th.kill()
-        program_name = f.split("/")[-1].split(".")[0]
-        LOGGER.error(program_name, "Exiting %s due to timeout" % f)
-        result_overall[f]["error"] = "Timeout %s" % timeout
-
-    result_overall[f]["candidates"] = result_overall[f]["candidates"].__deepcopy__({
-    })
-    result_overall[f] = result_overall[f].copy()
-    result_overall = result_overall.copy()
+        result_overall[f]["candidates"] = result_overall[f]["candidates"].__deepcopy__({
+        })
+        result_overall[f] = result_overall[f].copy()
+        result_overall = result_overall.copy()
+    
+    except KeyboardInterrupt:
+        LOGGER.error(program_name, "Cancelled by user...exiting")
+        
 
     # clean OUT_FOLDER
 
