@@ -30,7 +30,7 @@ jobs:
         run: sed --in-place "s|LOCAL_WASM_DIR=.*|LOCAL_WASM_DIR=${PWD}/sample-testing-targets|g" ${PWD}/.env
 
       - name: Test wafl image
-        run: ./docker_staging_check.sh branches2.wasm a 11
+        run: ./test_wafl_image.sh branches2.wasm a 11
 
       - name: Test multi-processing.sh
         run: |
