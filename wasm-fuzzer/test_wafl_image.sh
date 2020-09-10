@@ -1,5 +1,11 @@
 #!/bin/bash
 
+# This script makes use of the environmental variable "STAGING". This causes the supervisord.stagng.conf
+# file to be used, which in turn adds an event listener to the AFL & SWAM processes. When one of them
+# crash, the event listener can crash supervisord (the main process) and thereby crash the container, 
+# telling us that something is wrong. Otherwise supervisord would just continue running (with or without 
+# restarting the crashed process).
+
 CURRENT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
 
 set -a

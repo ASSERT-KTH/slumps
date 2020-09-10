@@ -1,5 +1,9 @@
 #!/bin/bash
 
+# For this file to be runnable by itself, use prepare_env.sh & $SWAM_CMD infer signature.
+# However, infer signature is already being run in wafl.sh - therefore take it out there first 
+# and run it directly in SWAM.
+
 check_output_dir() {
     # AFL Docs on re-starting:
     # If you need to stop and re-start the fuzzing, use the same command line
