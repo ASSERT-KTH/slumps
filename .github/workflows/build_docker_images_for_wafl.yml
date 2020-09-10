@@ -10,24 +10,25 @@ on:
      
 
 jobs:
-  build:
+
+  build-and-test:
     runs-on: ubuntu-latest
     steps:
-      
       - name: Checkout
         uses: actions/checkout@v2 # checkout latest version of the repo
 
-      - name: Install dependencies
+      - run: cd wasm-fuzzer
+
+      - name: Build without Docker
         run: |
-          sudo apt-get update
-          docker --version
+          apt-get update
+          yes | apt-get install build-essential libtool-bin python3-dev automake flex bison libglib2.0-dev libpixman-1-dev clang python3-setuptools llvm
+          ./build.sh
 
       - name: Build wafl image
-        run: |
-          cd wasm-fuzzer
-          docker build -t wafl .
+        run: docker build -t wafl .
 
-      - name: Test wafl container
+      - name: Test wafl image
         run: ./docker_staging_check.sh
 
       - name: Push images
@@ -38,5 +39,3 @@ jobs:
         env:
           user: ${{secrets.DOCKER_USER}}
           pass: ${{secrets.DOCKER_PASS}}
-      
-     
