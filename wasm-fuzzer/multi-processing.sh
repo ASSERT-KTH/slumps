@@ -10,9 +10,14 @@ fi
 
 echo "Running $NUM_INSTANCES AFL instance(s)."
 
+CURRENT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
+
 set -a
-source ./.env
+source $CURRENT_DIR/.env
 set +a
+
+# Make sure we're starting a fresh test here
+rm -R $CURRENT_DIR/wafl-temp
 
 echo "Running #1"
 docker run --env-file=./.env \
