@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from settings import config, private
+from settings import config
 import os, sys
 
 

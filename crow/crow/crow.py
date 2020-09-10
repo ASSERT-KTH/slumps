@@ -5,7 +5,7 @@ import sys,traceback
 from settings import config
 from stages import CToLLStage, LLToBC, BCToSouper, ObjtoWASM, WASM2WAT, BCCountCandidates, TimeoutException
 from utils import printProgressBar, createTmpFile, getIteratorByName, \
-    ContentToTmpFile, BreakException, RUNTIME_CONFIG, updatesettings, sendReportEmail
+    ContentToTmpFile, BreakException, RUNTIME_CONFIG, updatesettings
 
 from logger import LOGGER, getlogfilename
 import threading, queue
@@ -87,16 +87,15 @@ class Pipeline(object):
             futures = []
             order = list(
                 map(lambda x: int(x),  config["DEFAULT"]["order"].split(",")))
-            LOGGER.info("ORDER", order)
             # split levels by redis interface
 
-            works = self.chunkIt(order, len(redisports))
+            works = self.chunkIt(order, config["DEFAULT"].getint("workers"))
 
+            LOGGER.warning(program_name, f"Exploration jobs {works}")
 
-
-            for i,port in enumerate(redisports):
+            for i in range(config["DEFAULT"].getint("workers")):
                 job = levelPool.submit(
-                    self.processLevel, works[i], program_name, port, bc, OUT_FOLDER, onlybc, meta, outResult)
+                    self.processLevel, works[i], program_name, 1200, bc, OUT_FOLDER, onlybc, meta, outResult)
                 # job.result()
 
                 futures.append(job)
@@ -187,7 +186,7 @@ class Pipeline(object):
 
                         uniquenessRatio = 100.0*unique/total
 
-                        printProgressBar(len(variants), temptativeNumber,suffix=f'  {generationcount}/{temptativeNumber} eta:{eta:.2f}s r:{uniquenessRatio:.2f}')
+                        printProgressBar(len(variants), temptativeNumber,suffix=f' {unique}U-{generationcount}/{temptativeNumber} eta:{eta:.2f}s r:{uniquenessRatio:.2f}')
 
             
 
@@ -418,16 +417,18 @@ def getFileMeta(file, outResult=None):
     return (program_name, OUT_FOLDER, onlybc)
 
 
-def removeDuplicate(program_name, folder, filt="*.wasm", remove=False):
+def removeDuplicate(program_name, folder, filt=".wasm", remove=False):
 
     if not os.path.exists(f"{folder}"):
         return
 
-    LOGGER.warning(program_name, "Removing duplicated variants")
+
+    LOGGER.warning(program_name, f"Removing duplicated variants '{filt}'")
 
     l = [f for f in os.listdir(folder) if f.endswith(filt)]
     LOGGER.info(program_name, "Total candidates: %s" % (len(l), ))
 
+    total = len(l)
     st = set()
 
     for f in l:
@@ -440,6 +441,14 @@ def removeDuplicate(program_name, folder, filt="*.wasm", remove=False):
                 os.remove(realPath)
         else:
             st.add(hashvalue)
+    
+    variantsFile = open(f"{folder}/{program_name}.{filt}.stats.json", 'w')
+    variantsFile.write(json.dumps({
+        "unique": len(st),
+        "total": total
+    }, indent=4))
+    variantsFile.close()
+
     LOGGER.info(program_name, "Unique: %s" % (len(st), ))
 
 
@@ -463,6 +472,9 @@ def process(f, OUT_FOLDER, onlybc, program_name, redisports, isBc=False):
                 LOGGER.info(program_name, f"The total exploration stage would take {1.0*exploration_timeout * LEVELS / exploration_workers}s, according to the number of threads and exploration timeout ")
             else:
                 LOGGER.warning(program_name, f"Sit and wait, there is no timeout")
+    else:
+        LOGGER.info(program_name, f"The total process will take a maximum time of {total_timeout}s")
+
 
 
 
@@ -521,9 +533,12 @@ def process(f, OUT_FOLDER, onlybc, program_name, redisports, isBc=False):
     # clean OUT_FOLDER
 
     remove_duplicate = config["DEFAULT"].getboolean("prune-equal")
-    filt = ".bc" if onlybc else ".wasm"
+    
+    print()
 
-    removeDuplicate(program_name, OUT_FOLDER, filt, remove_duplicate)
+    removeDuplicate(program_name, OUT_FOLDER, ".wasm", remove_duplicate)
+    removeDuplicate(program_name, OUT_FOLDER, ".bc", remove_duplicate)
+    removeDuplicate(program_name, OUT_FOLDER, ".wat", remove_duplicate)
 
     return result_overall
 

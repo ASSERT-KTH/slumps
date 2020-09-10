@@ -34,7 +34,7 @@ def listen(port, q, program):
 						
 						if not program:
 							#print(f"{k} -> {v}")
-							print(f"Populating results...{len(result.keys())} keys")
+							print(f"Populating results...{len(result.keys())} blocks")
 							print(f"Populating results...{s} temptative replacements")
 						if k not in result:
 							result[k] = set([])
@@ -45,8 +45,8 @@ def listen(port, q, program):
 
 
 					if program:
-						s = np.prod([len(t) for t in result.values()])
-						printProgressBar(0, 1, length=5, suffix=f"{len(result.keys())} keys. {s} temptative replacements")
+						s = np.prod([len(t) + 1 for t in result.values()])
+						printProgressBar(0, 1, length=1, suffix=f"{len(result.keys())} blocks. {s} probable replacements")
 						
 					
 				except Exception as e:
