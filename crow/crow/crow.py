@@ -22,7 +22,7 @@ import re
 import uuid
 from socket_server import listen
 import numpy as np
-
+from sanitizer import Sanitizer
 
 levelPool = None
 generationPool = None
@@ -97,7 +97,7 @@ class Pipeline(object):
 
                 # TODO assign random port
                 job = levelPool.submit(
-                    self.processLevel, works[i], program_name, 1200, bc, OUT_FOLDER, onlybc, meta, outResult)
+                    self.processLevel, works[i], program_name, 2600 + i, bc, OUT_FOLDER, onlybc, meta, outResult)
                 # job.result()
 
                 futures.append(job)
@@ -130,6 +130,24 @@ class Pipeline(object):
                 except Exception as e:
                     LOGGER.error(program_name, traceback.format_exc())
             
+            san = Sanitizer(
+                sanitize_redundant=config["sanitizer"].getboolean("sanitize-redundant"),
+                sanitize_no_wasm=config["sanitizer"].getboolean("sanitize-non-wasm"),
+                report_overlapping=config["sanitizer"].getboolean("report-overlapping"))
+
+            tentativeNumber = np.prod([len(v) + 1 for v in merging.values()])
+
+            LOGGER.info(program_name,f"tentative number of variants {tentativeNumber} (plus original). Expected ratio {len(redisports)} of programs in each iteration.")
+            
+            sanitized = san.sanitize(merging)
+
+            LOGGER.warning(program_name, json.dumps(sanitized, indent=4))
+            
+            tentativeNumber = np.prod([len(v) + 1 for v in sanitized.values()])
+
+            LOGGER.info(program_name,f"After sanitization {tentativeNumber} (plus original).")
+
+            merging = sanitized
             # TODO Separate both stages to support continuing on
             variantsFile = open(f"{OUT_FOLDER}/{program_name}.exploration.json", 'w')
             variantsFile.write(json.dumps([[k, [v1 for v1 in v if v1 is not None] ] for k, v in merging.items()],indent=4))
@@ -145,19 +163,15 @@ class Pipeline(object):
 
             showGenerationProgress = config["DEFAULT"].getboolean("show-generation-progress")
 
-            temptativeNumber = np.prod([len(v) + 1 for v in merging.values()])
-
-            LOGGER.info(program_name,f"Temptative number of variants {temptativeNumber} (plus original). Expected ratio {len(redisports)} of programs in each iteration.")
-            
             if showGenerationProgress:
                 LOGGER.disable()
-                printProgressBar(generationcount, temptativeNumber,suffix=f'             {generationcount}/{temptativeNumber}')
+                printProgressBar(generationcount, tentativeNumber,suffix=f'             {generationcount}/{tentativeNumber}')
 
             for subset in getIteratorByName("keysSubset")(merging):
                 
                 job = generationPool.submit(
                     self.generateVariant, [subset], program_name, merging, redisports[generationcount
-                    %len(redisports)], bc, OUT_FOLDER, onlybc, meta, outResult, generationcount, temptativeNumber)
+                    %len(redisports)], bc, OUT_FOLDER, onlybc, meta, outResult, generationcount, tentativeNumber)
                     # job.result()
 
                 futures.append(job)
@@ -182,13 +196,13 @@ class Pipeline(object):
 
                     if showGenerationProgress:
                         speed = len(redisports)/generationEndTime
-                        eta = (temptativeNumber-len(variants))/speed/1e9
+                        eta = (tentativeNumber-len(variants))/speed/1e9
                         unique = len(set([v[0] for v in variants]))
                         total = len([v[0] for v in variants])
 
                         uniquenessRatio = 100.0*unique/total
 
-                        printProgressBar(len(variants), temptativeNumber,suffix=f' {unique}U-{generationcount}/{temptativeNumber} eta:{eta:.2f}s r:{uniquenessRatio:.2f}')
+                        printProgressBar(len(variants), tentativeNumber,suffix=f' {unique}U-{generationcount}/{tentativeNumber} eta:{eta:.2f}s r:{uniquenessRatio:.2f}')
 
             
 
