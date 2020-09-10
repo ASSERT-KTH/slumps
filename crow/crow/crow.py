@@ -182,8 +182,12 @@ class Pipeline(object):
                     if showGenerationProgress:
                         speed = len(redisports)/generationEndTime
                         eta = (temptativeNumber-len(variants))/speed/1e9
+                        unique = len(set([v[0] for v in variants]))
+                        total = len([v[0] for v in variants])
 
-                        printProgressBar(len(variants), temptativeNumber,suffix=f'  {generationcount}/{temptativeNumber} eta:{eta:.2f}s')
+                        uniquenessRatio = 100.0*unique/total
+
+                        printProgressBar(len(variants), temptativeNumber,suffix=f'  {generationcount}/{temptativeNumber} eta:{eta:.2f}s r:{uniquenessRatio:.2f}')
 
             
 
@@ -196,10 +200,6 @@ class Pipeline(object):
             for f in done:
                 variants += f.result()
                 # Save metadata
-
-            if showGenerationProgress:
-                printProgressBar(len(variants), temptativeNumber,suffix=f'  {generationcount}/{temptativeNumber}                       ')
-                LOGGER.enable()
 
             LOGGER.info(program_name, f"Saving metadata...")
             variantsFile = open(f"{OUT_FOLDER}/{program_name}.variants.json", 'w')

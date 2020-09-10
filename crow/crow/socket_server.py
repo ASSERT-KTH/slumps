@@ -2,6 +2,7 @@ import socket
 import json
 from logger import LOGGER
 import numpy as np
+from utils import printProgressBar
 
 def listen(port, q, program):
 
@@ -42,11 +43,11 @@ def listen(port, q, program):
 						if q:
 							q.put([k, v])
 
-					s = np.prod([len(t) for t in result.values()])
 
 					if program:
-						LOGGER.success(program,f"Populating results...{len(result.keys())} keys")
-						LOGGER.success(program,f"Populating results...{s} temptative replacements")
+						s = np.prod([len(t) for t in result.values()])
+						printProgressBar(0, 1, length=5, suffix=f"{len(result.keys())} keys. {s} temptative replacements")
+						
 					
 				except Exception as e:
 					print(st)
