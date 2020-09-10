@@ -1,10 +1,6 @@
 #!/bin/bash
 
-docker build -t wafl .
-
-yes | docker system prune
-
-docker run -d --env-file=./.env \
+docker run -d --rm --env-file=./.env \
     -e STAGING=True \
     --name=staging_wafl \
     -v maven_data:/root/.cache/coursier/v1/https/repo1.maven.org/maven2 \
@@ -24,7 +20,7 @@ if [ $CONTAINER_STATUS != "running" ]; then
     echo "staging_wafl container is not running anymore. It must have crashed."
     exit 1
 else
-    echo "staging_wafl container is still running. Nice!"
+    echo "staging_wafl container is still running. We're good!"
     docker stop staging_wafl
     exit 0
 fi
