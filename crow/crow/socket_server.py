@@ -12,6 +12,7 @@ def listen(port, q, program):
 	result = {}
 
 	with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+		LOGGER.info(program,f"Getting port {port}")
 		s.bind((HOST, PORT))
 		if program:
 			LOGGER.info(program,f"Listening...{port}")
@@ -35,7 +36,7 @@ def listen(port, q, program):
 						if not program:
 							#print(f"{k} -> {v}")
 							print(f"Populating results...{len(result.keys())} blocks")
-							print(f"Populating results...{s} temptative replacements")
+							print(f"Populating results...{s} tentative replacements")
 						if k not in result:
 							result[k] = set([])
 
@@ -53,6 +54,7 @@ def listen(port, q, program):
 					print(st)
 				if not data:
 					break
+	print()
 				
 
 
