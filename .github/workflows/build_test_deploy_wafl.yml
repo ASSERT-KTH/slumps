@@ -1,4 +1,4 @@
-name: Build docker images
+name: Build, test and deploy WAFL
 on:
   push:
     branches:
