@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# This is the main entrypoint of WAFL with and without Docker
+
 CURRENT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
 
 source ${CURRENT_DIR}/prepare_env.sh $@
