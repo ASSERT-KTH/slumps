@@ -97,18 +97,17 @@ class Pipeline(object):
 
                 # TODO assign random port
                 job = levelPool.submit(
-                    self.processLevel, works[i], program_name, 2600 + i, bc, OUT_FOLDER, onlybc, meta, outResult)
+                    self.processLevel, works[i], program_name, 2620 + i, bc, OUT_FOLDER, onlybc, meta, outResult)
                 # job.result()
 
                 futures.append(job)
             
             timeout = config["DEFAULT"].getint("exploration-timeout")
             done, fail = wait(futures, return_when=ALL_COMPLETED)
-            levelPool.shutdown(False)
+            #levelPool.shutdown(False)
             #Merging results
 
             LOGGER.info(program_name, "Merging exploration results...")
-
             merging = {}
 
             codeCount = -1
@@ -358,7 +357,7 @@ class Pipeline(object):
                 
             except Exception as e:
                 LOGGER.error(program_name,  traceback.format_exc())
-                return
+                return results
             with ContentToTmpFile(content=bc) as TMP_BC:
 
                 try:
@@ -374,8 +373,8 @@ class Pipeline(object):
 
                 except Exception as e:
                     LOGGER.error(program_name, traceback.format_exc())
-                    raise e
 
+            serverThread.join()
             waitFor = 5
             LOGGER.warning(program_name, f"Sleeping for {waitFor} seconds waiting for free ports...")
             time.sleep(waitFor)
@@ -392,34 +391,35 @@ class Pipeline(object):
     def generateWasm(self, namespace, bc, OUT_FOLDER, fileName, debug=True, generateOnlyBc=False):
         llFileName = "%s/%s" % (OUT_FOLDER, fileName)
 
-        if generateOnlyBc:
-            hashvalue = hashlib.sha256(bc)
-            return hashvalue.hexdigest(), len(bc), "%s.bc" % (fileName,), "%s.bc" % (fileName,)
-
         with ContentToTmpFile(name="%s.bc" % llFileName, content=bc, ext=".bc", persist=True) as TMP_WASM:
 
             tmpWasm = TMP_WASM.file
 
             try:
-                finalObjCreator = ObjtoWASM(namespace, debug=debug)
-                finalObjCreator(args=[
-                    "%s.wasm" % (llFileName,),
-                    tmpWasm
-                ], std=None)
+                if not generateOnlyBc:
+                    finalObjCreator = ObjtoWASM(namespace, debug=debug)
+                    finalObjCreator(args=[
+                        "%s.wasm" % (llFileName,),
+                        tmpWasm
+                    ], std=None)
 
-                wat = WASM2WAT(namespace, debug=debug)
-                wat(std=None, args=[
-                    "%s.wasm" % (llFileName,),
-                    "%s.wat" % (llFileName,)]
-                    )
-                finalStream = open("%s.wasm" % (llFileName,), 'rb').read()
-                hashvalue = hashlib.sha256(finalStream)
-                if debug:
-                    LOGGER.warning(namespace, "%s: WASM SIZE %s" %
-                                   (namespace, len(finalStream),))
-                    LOGGER.warning(namespace, "%s: WASM SHA %s" %
-                                   (namespace, hashvalue.hexdigest(),))
-                return hashvalue.hexdigest(), len(finalStream), "%s.wasm" % (llFileName,), "%s.wat" % (llFileName,)
+                    wat = WASM2WAT(namespace, debug=debug)
+                    wat(std=None, args=[
+                        "%s.wasm" % (llFileName,),
+                        "%s.wat" % (llFileName,)]
+                        )
+                    finalStream = open("%s.wasm" % (llFileName,), 'rb').read()
+                    hashvalue = hashlib.sha256(finalStream)
+
+                    if debug:
+                        LOGGER.warning(namespace, "%s: WASM SIZE %s" %
+                                    (namespace, len(finalStream),))
+                        LOGGER.warning(namespace, "%s: WASM SHA %s" %
+                                    (namespace, hashvalue.hexdigest(),))
+                    return hashvalue.hexdigest(), len(finalStream), "%s.wasm" % (llFileName,), "%s.wat" % (llFileName,)
+                else:
+                    hashvalue = hashlib.sha256(bc)
+                    return hashvalue.hexdigest(), len(bc), "%s.bc" % (fileName,), "%s.bc" % (fileName,)
             except Exception as e:
                 LOGGER.error(namespace, traceback.format_exc())
 
