@@ -1,9 +1,15 @@
 #!/bin/bash
 
-# This script will only send the SWAM server a single message, to check whether it is sent correctly.
-# This requires SWAM to be up and running.
+# This script will only send the SWAM server a single message, to check 
+# whether it is sent correctly. It is meant to be used locally for quick testing.
 
-# Run as `./test_socket.sh branches2.wasm a 11`
+# This script requires SWAM to be up and running.
+#   Option A: Use `./entrypoint_mill_server.sh` after `$CURRENT_DIR/prepare_env.sh $@`
+#   Option B: Launch manually (example fibo.wat):
+#       mill -i cli.run run_server --wat --argType Int64  \
+#           --main naive --out ./ <path_to_fibo.wat>
+
+# Run this script as `./test_socket.sh branches2.wasm a 11`
 
 CURRENT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
 
