@@ -30,7 +30,7 @@ OUT_FOLDER = config["DEFAULT"]["outfolder"]
 class ContentToTmpFile(object):
 
 
-    def __init__(self, content=None, name=None, ext=None, persist=False, LOG_LEVEL = 0):
+    def __init__(self, content=None, name=None, ext=None, persist=False, LOG_LEVEL =  0):
         tmp = createTmpFile(ext) if not name else name
 
         tmp = ''.join([c for c in tmp])
