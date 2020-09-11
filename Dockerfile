@@ -15,10 +15,11 @@ COPY crow/crow/settings/config.ini                  /slumps/crow/crow/settings/c
 COPY crow/crow/settings/__init__.py                 /slumps/crow/crow/settings/__init__.py
 COPY crow/crow/crow.py                              /slumps/crow/crow/crow.py
 COPY crow/crow/iterators.py                         /slumps/crow/crow/iterators.py
-COPY crow/crow/socket_server.py                         /slumps/crow/crow/socket_server.py
+COPY crow/crow/socket_server.py                     /slumps/crow/crow/socket_server.py
 COPY crow/crow/logger.py                            /slumps/crow/crow/logger.py
 COPY crow/crow/stages.py                            /slumps/crow/crow/stages.py
 COPY crow/crow/utils.py                             /slumps/crow/crow/utils.py
+COPY crow/crow/sanitizer.py                         /slumps/crow/crow/sanitizer.py
 COPY crow/requirements.txt                          /slumps/crow/requirements.txt
 COPY start_poly_bench.sh                            /slumps
 COPY run.sh                                         /slumps

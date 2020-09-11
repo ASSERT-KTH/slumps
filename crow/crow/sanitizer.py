@@ -1,5 +1,6 @@
 
 import re
+import json
 
 class Sanitizer(object):
 
@@ -28,6 +29,7 @@ class Sanitizer(object):
 				# Remove redundant operations
 				for v in replacements:
 					r = v.replace("sadd.sat", "add")
+					r = r.replace("ssub.sat", "sub")
 					scan = resultMatch.search(v)
 
 					varName = scan.group(1)
@@ -47,12 +49,12 @@ class Sanitizer(object):
 					if not any([r in v for r in self.INVALID_WASM]):
 						cumul[k].append(v)
 
-		
+			overall_replacements = cumul
 		# TODO overlaping
 
 		#print(json.dumps(cumul, indent=4))
 		#print(json.dumps(overall_replacements, indent=4))
-		return cumul
+		return overall_replacements
 if __name__ == "__main__":
 
 	import json
