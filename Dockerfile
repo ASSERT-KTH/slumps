@@ -1,11 +1,11 @@
-FROM slumps/backend:latest AS builder
+FROM slumps/backend:latest 
 env DEBIAN_FRONTEND=noninteractive
 
 
 RUN apt-get update \
-    && apt-get -y install curl git tree python3.7 redis-server python3-pip wget cmake lld-9 \
-    && curl -sS -L -O https://github.com/CraneStation/wasi-sdk/releases/download/wasi-sdk-8/wasi-sdk_8.0_amd64.deb \
-    && dpkg -i wasi-sdk_8.0_amd64.deb && rm -f wasi-sdk_8.0_amd64.deb \
+    && apt-get -y install curl git tree python3.7 redis-server python3-pip wget \
+    #&& curl -sS -L -O https://github.com/CraneStation/wasi-sdk/releases/download/wasi-sdk-8/wasi-sdk_8.0_amd64.deb \
+    #&& dpkg -i wasi-sdk_8.0_amd64.deb && rm -f wasi-sdk_8.0_amd64.deb \
     && rm -rf /var/lib/apt/lists/*
     
 
@@ -28,12 +28,16 @@ COPY crow/headers                                   /slumps/crow/headers
 RUN mkdir -p /slumps/crow/crow/logs
 RUN mkdir -p /slumps/crow/crow/out
 
+
 WORKDIR /slumps
 
 RUN python3 -m pip install -r crow/requirements.txt
 RUN export LD_LIBRARY_PATH=/slumps/souper/third_party/alive2/build/:/slumps/souper/build:/slumps/souper/third_party/z3-install/lib::$LD_LIBRARY_PATH
 RUN export PATH=/slumps/souper/third_party/llvm-Release-install/bin:$PATH
 
-RUN tree .
+RUN mkdir -p /usr/src/souper/third_party/z3-install/bin
+RUN cp /slumps/souper/third_party/z3-install/bin/z3 /usr/src/souper/third_party/z3-install/bin/z3
+
+RUN tree -h .
 
 ENTRYPOINT ["./start_poly_bench.sh"]
