@@ -36,8 +36,24 @@ WORKDIR slumps
 COPY --from=builder /slumps/wabt/build/wasm2wat /slumps/wabt/build/wasm2wat
 COPY --from=builder /usr/src/souper-build /slumps/souper/build
 
-COPY --from=builder /usr/src/souper/third_party /slumps/souper/third_party
+COPY --from=builder /usr/src/souper/third_party/alive2-build /slumps/souper/third_party/alive2-build
+COPY --from=builder /usr/src/souper/third_party/hiredis-install /slumps/souper/third_party/hiredis-install
+COPY --from=builder /usr/src/souper/third_party/z3-install/lib /slumps/souper/third_party/z3-install/lib
+COPY --from=builder /usr/src/souper/third_party/z3-install/bin /slumps/souper/third_party/z3-install/bin
+COPY --from=builder /usr/src/souper/third_party/z3-build/z3 /slumps/souper/third_party/z3-build/z3
+# COPY --from=builder /usr/src/souper/third_party/klee /slumps/souper/third_party/klee
+
+COPY --from=builder /usr/src/souper/third_party/llvm-Release-install/lib /slumps/souper/third_party/llvm-Release-install/lib
+COPY --from=builder /usr/src/souper/third_party/llvm-Release-install/bin/clang /slumps/souper/third_party/llvm-Release-install/bin/clang
+COPY --from=builder /usr/src/souper/third_party/llvm-Release-install/bin/wasm-ld /slumps/souper/third_party/llvm-Release-install/bin/wasm-ld
+COPY --from=builder /usr/src/souper/third_party/llvm-Release-install/bin/opt /slumps/souper/third_party/llvm-Release-install/bin/opt
+COPY --from=builder /usr/src/souper/third_party/llvm-Release-install/bin/llvm-as /slumps/souper/third_party/llvm-Release-install/bin/llvm-as
+
 COPY --from=builder /tmp/wasi-libc /tmp/wasi-libc
 
-RUN rm -rf /slumps/souper/build/CMakeFiles && rm -rf /slumps/souper/build/docs && rm -rf /slumps/souper/build/CMakeCache.txt && rm -rf /slumps/souper/build/build.ninja
-RUN tree /slumps
+
+# RUN find / -name "CMakeFiles" -exec echo {} \;
+RUN rm -rf /slumps/souper/build/CMakeFiles
+RUN rm -rf /slumps/souper/build/docs/CMakeFiles
+RUN rm -rf /slumps/souper/third_party/alive2-build/CMakeFiles
+RUN tree -h /slumps
