@@ -21,20 +21,26 @@ class Sanitizer(object):
 			inferMatch = re.compile(r"infer %(\d+)\n")
 
 			for k in overall_replacements:
-				inferVarName = inferMatch.search(k).group(1)
-				cumul[k] = []
+				inferVarName = inferMatch.search(k)
 
-				replacements = overall_replacements[k]
+				if inferVarName:
+					inferVarName = inferVarName.group(1)
+					cumul[k] = []
 
-				# Remove redundant operations
-				for v in replacements:
-					r = v.replace("sadd.sat", "add")
-					r = r.replace("ssub.sat", "sub")
-					scan = resultMatch.search(v)
+					replacements = overall_replacements[k]
 
-					varName = scan.group(1)
-					if r not in cumul[k] and varName != inferVarName:
-						cumul[k].append(r)
+					# Remove redundant operations
+					for v in replacements:
+						r = v.replace("sadd.sat", "add")
+						r = r.replace("ssub.sat", "sub")
+						r = r.replace("uadd.sat", "add")
+						r = r.replace("usub.sat", "sub")
+						scan = resultMatch.search(v)
+
+						if scan:
+							varName = scan.group(1)
+							if r not in cumul[k] and varName != inferVarName:
+								cumul[k].append(r)
 
 
 			overall_replacements = cumul
