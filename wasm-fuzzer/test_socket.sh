@@ -27,11 +27,6 @@ $CURRENT_DIR/fuzzing-client-afl/build_interface.sh
 
 source $CURRENT_DIR/prepare_env.sh $@  # Taking "branches2.wasm a 11"
 
-echo "Infering signature for wasm"
-echo "$SWAM_CMD infer $WAT_ARG $WASM_OR_WAT_FILE $TARGET_FUNCTION"
-export WASM_ARG_TYPES_CSV=$($SWAM_CMD infer $WAT_ARG $WASM_OR_WAT_FILE $TARGET_FUNCTION)
-pkill -f out.jar
-
 CPP_OUT_DIR=$CURRENT_DIR/wafl-temp/cpp-out
 
 $CPP_OUT_DIR/prepare_wasm_input.out "$CPP_OUT_DIR/prepared_input.dat"

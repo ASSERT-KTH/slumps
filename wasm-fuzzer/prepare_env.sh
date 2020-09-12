@@ -48,6 +48,10 @@ else
     export SWAM_CMD="java -jar $SRC_SWAM_DIR/cli-0.6.0-RC3.jar"
 fi
 
+if [[ $WASM_OR_WAT_FILE == *.wat ]]; then
+    export WAT_ARG="--wat"
+fi
+
 # TODO: Make this CLI-dependent
 export WASI_FILTER=True
 export WASI=True
@@ -55,6 +59,14 @@ export WASI=True
 # TODO: Check if empty
 export TARGET_FUNCTION=$2
 export WASM_ARG_CSV=$3
+
+# TODO: Not needed for SWAM:
+#   1. Call infer-function directly in Scala at server startup
+#   2. Take out here and put this into entrypoint_afl.sh + test_socket.sh;
+echo "Infering signature for wasm"
+echo "$SWAM_CMD infer $WAT_ARG $WASM_OR_WAT_FILE $TARGET_FUNCTION"
+export WASM_ARG_TYPES_CSV=$($SWAM_CMD infer $WAT_ARG $WASM_OR_WAT_FILE $TARGET_FUNCTION) # Read from signature retriever
+pkill -f out.jar
 
 # This makes sure this script is not run multiple twice
 export ENV_PREPARED=True

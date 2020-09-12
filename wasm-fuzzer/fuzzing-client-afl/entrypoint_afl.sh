@@ -23,6 +23,13 @@ check_output_dir() {
     fi
 }
 
+# So that this script can be run by itself as 
+# well (same commands as wafl.sh)
+if [[ $ENV_PREPARED != "True" ]]; then
+    echo "Preparing environment!"
+    source $CURRENT_DIR/prepare_env.sh $@
+fi
+
 cd $SRC_INTERFACE_DIR
 
 $OUT_INTERFACE_DIR/prepare_wasm_input.out "$INPUT_AFL_DIR/prepared_input.dat"
