@@ -1,10 +1,9 @@
 #!/bin/bash
 
-CURRENT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
-
 # TODO: Put this file back into the SWAM repo
 
-# TODO: Put this into entrypoint_afl.sh as well as soon as the server infers the signature itself.
+CURRENT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
+
 # So that this script can be run by itself as 
 # well (same commands as wafl.sh)
 if [[ $ENV_PREPARED != "True" ]]; then
@@ -15,6 +14,10 @@ fi
 # Get wasm/wat from $WASM_DIR directory
 echo "WASM_OR_WAT_FILE: $WASM_OR_WAT_FILE"
 
+######################################################################
+### TODO: Remove this as soon as sig is infered directly in Server ###
+######################################################################
+
 # Parse WASM_ARG_TYPES_CSV: "Int64,Int32" to "--argType Int64 --argType Int32"
 ALL_ARG_TYPES=""
 IFS=',' read -r -a WASM_ARG_TYPES_ARRAY <<<"$WASM_ARG_TYPES_CSV"
@@ -23,7 +26,10 @@ for element in "${WASM_ARG_TYPES_ARRAY[@]}"; do
 done
 echo "ALL_ARG_TYPES: $ALL_ARG_TYPES"
 
-if [[ $WASM_OR_WAT_FILE == *.wat ]]; then WAT_ARG="--wat"; fi
+######################################################################
+######################################################################
+######################################################################
+
 if [[ $WASI == "True" ]]; then WASI_ARG="--wasi"; fi
 if [[ $WASI_FILTER == "True" ]]; then WASI_ARG="$WASI_ARG -r"; fi
 
