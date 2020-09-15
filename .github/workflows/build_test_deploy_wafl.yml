@@ -36,6 +36,7 @@ jobs:
         run: |
           
           echo "Building project"
+          rm -rf .git
           cd wasm-fuzzer
           git config pull.rebase false
           bash build.sh
