@@ -62,10 +62,10 @@ jobs:
           #architecture: x64 # (x64 or x86) - defaults to x64
 
       - name: Build wafl image
-        run: cd wasm-fuzzer && docker build -t wafl .
-
-      - name: Point to sample-testing-targets in envs
-        run: cd wasm-fuzzer && sed --in-place "s|LOCAL_WASM_DIR=.*|LOCAL_WASM_DIR=${PWD}/sample-testing-targets|g" ${PWD}/.env
+        run: |
+          cd wasm-fuzzer
+          docker --version
+          docker build -t wafl -f Dockerfile .
 
       - name: Push images
         run: |
