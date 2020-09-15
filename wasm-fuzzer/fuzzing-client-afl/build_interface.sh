@@ -1,5 +1,9 @@
 #!/bin/bash
 
+
+err=0
+trap 'err=1' ERR
+
 CURRENT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
 
 echo "Building the wafl interface..."
@@ -13,3 +17,6 @@ g++ -o $CPP_OUT_DIR/getFileSize.out ./fuzzing-client-afl/getFileSize.cpp ./fuzzi
 g++ -o $CPP_OUT_DIR/wait_for_server.out ./fuzzing-client-afl/wait_for_server.cpp ./fuzzing-client-afl/utils.cpp ./fuzzing-client-afl/socket_client.cpp
 g++ -o $CPP_OUT_DIR/run_client.out ./fuzzing-client-afl/run_client.cpp ./fuzzing-client-afl/socket_client.cpp ./fuzzing-client-afl/utils.cpp
 g++ -o $CPP_OUT_DIR/interface.out ./fuzzing-client-afl/interface.cpp ./fuzzing-client-afl/socket_client.cpp ./fuzzing-client-afl/utils.cpp
+
+
+test $err = 0
