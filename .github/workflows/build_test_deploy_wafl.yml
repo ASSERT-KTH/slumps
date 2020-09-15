@@ -1,0 +1,55 @@
+name: Build, test and deploy WAFL
+on:
+  push:
+    branches:
+      - master
+    # file paths to consider in the event. Optional; defaults to all.
+    paths:
+      - "wasm-fuzzer/**"
+      - ".github/**"
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2 # checkout latest version of the repo
+
+      - run: cd wasm-fuzzer
+
+      - name: Build without Docker
+        run: |
+          apt-get update
+          echo "Installing AFL dependencies"
+          yes | apt-get install build-essential libtool-bin python3-dev automake flex bison libglib2.0-dev libpixman-1-dev clang python3-setuptools llvm
+          echo "Installing supervisor"
+          apt-get install -y supervisor
+          echo "Building project"
+          ./build.sh
+
+      # TODO: Test this
+      - name: Test wafl without Docker
+        run: ./test_wafl_local.sh ${PWD}/sample-testing-targets/branches2.wasm a 11
+
+      - name: Build wafl image
+        run: docker build -t wafl .
+
+      - name: Point to sample-testing-targets in envs
+        run: sed --in-place "s|LOCAL_WASM_DIR=.*|LOCAL_WASM_DIR=${PWD}/sample-testing-targets|g" ${PWD}/.env
+
+      - name: Test wafl image
+        run: ./test_wafl_image.sh branches2.wasm a 11
+
+      - name: Test multi-processing.sh
+        run: |
+          ./multi-processing.sh 3 branches2.wasm a 11
+          sleep 3m
+
+      - name: Push images
+        run: |
+          docker tag wafl slumps/wafl:latest
+          docker login -u="$user" -p="$pass"
+          docker push slumps/wafl:latest
+        env:
+          user: ${{secrets.DOCKER_USER}}
+          pass: ${{secrets.DOCKER_PASS}}
