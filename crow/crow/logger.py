@@ -30,6 +30,14 @@ class Logger(object):
         self.debugToFile = debugToFile
         self.indent = 0
 
+        self.disabled = False
+
+    def disable(self):
+        self.disabled = True
+
+    def enable(self):
+        self.disabled = False
+
     def enter(self):
         self.indent += 1
 
@@ -58,31 +66,37 @@ class Logger(object):
             if std:
                 f.write(std.__str__())
         else:
-            print("%s%s%s%s" % (self.getIndent(), bcolors.UNDERLINE, message, bcolors.ENDC))
+            if not self.disabled:
+                print("%s%s%s%s" % (self.getIndent(), bcolors.UNDERLINE, message, bcolors.ENDC))
             sys.stdout.flush()
 
     def error(self,file,  message):
         f = open(getlogfilename(file), 'a+')
         f.write(message.__str__() + "\n")
-        print("%s%s%s%s" % (self.getIndent(), bcolors.FAIL, message, bcolors.ENDC))
+        if not self.disabled:
+            print("%s%s%s%s" % (self.getIndent(), bcolors.FAIL, message, bcolors.ENDC))
         sys.stdout.flush()
 
     def warning(self,file, message):
         f = open(getlogfilename(file), 'a+')
         f.write(message.__str__() + "\n")
-        print("%s%s%s%s" % (self.getIndent(), bcolors.WARNING, message, bcolors.ENDC))
+
+        if not self.disabled:
+            print("%s%s%s%s" % (self.getIndent(), bcolors.WARNING, message, bcolors.ENDC))
         sys.stdout.flush()
 
     def info(self,file,  message):
         f = open(getlogfilename(file), 'a+')
         f.write(message.__str__() + "\n")
-        print("%s%s%s%s" % (self.getIndent(), bcolors.OKBLUE, message, bcolors.ENDC))
+        if not self.disabled:
+            print("%s%s%s%s" % (self.getIndent(), bcolors.OKBLUE, message, bcolors.ENDC))
         sys.stdout.flush()
 
     def success(self,file,  message):
         f = open(getlogfilename(file), 'a+')
         f.write(message.__str__() + "\n")
-        print("%s%s%s%s" % (self.getIndent(), bcolors.OKGREEN, message, bcolors.ENDC))
+        if not self.disabled:
+            print("%s%s%s%s" % (self.getIndent(), bcolors.OKGREEN, message, bcolors.ENDC))
         sys.stdout.flush()
 
 
