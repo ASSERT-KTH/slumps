@@ -34,7 +34,8 @@ if ! [ -f /.dockerenv ]; then
     export WASM_OR_WAT_FILE=$1
 
     export BIN_AFL="$CURRENT_DIR/aflpp/afl-fuzz"
-    export SWAM_CMD="java -jar $SRC_SWAM_DIR/out/cli/assembly/dest/out.jar"
+    JAVA=$(which java)
+    export SWAM_CMD="$JAVA -jar $SRC_SWAM_DIR/out/cli/assembly/dest/out.jar"
 
     mkdir -p $INPUT_AFL_DIR
     mkdir -p $OUTPUT_AFL_DIR
@@ -45,7 +46,8 @@ else
     # Get filename from $1
     export WASM_OR_WAT_FILE=$WASM_DIR/$(basename $1)
     # export SWAM_CMD='mill cli.run'
-    export SWAM_CMD="java -jar $SRC_SWAM_DIR/cli-0.6.0-RC3.jar"
+    JAVA=$(which java)
+    export SWAM_CMD="$JAVA -jar $SRC_SWAM_DIR/cli-0.6.0-RC3.jar"
 fi
 
 if [[ $WASM_OR_WAT_FILE == *.wat ]]; then
