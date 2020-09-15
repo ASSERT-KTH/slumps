@@ -19,11 +19,11 @@ jobs:
 
       - name: Build without Docker
         run: |
-          apt-get update
+          sudo apt-get update
           echo "Installing AFL dependencies"
-          yes | apt-get install build-essential libtool-bin python3-dev automake flex bison libglib2.0-dev libpixman-1-dev clang python3-setuptools llvm
+          yes | sudo apt-get install build-essential libtool-bin python3-dev automake flex bison libglib2.0-dev libpixman-1-dev clang python3-setuptools llvm
           echo "Installing supervisor"
-          apt-get install -y supervisor
+          sudo apt-get install -y supervisor
           echo "Building project"
           ./build.sh
 
