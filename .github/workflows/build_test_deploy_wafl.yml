@@ -54,13 +54,6 @@ jobs:
           echo "Installing AFL dependencies"
           sudo apt-get install -y supervisor build-essential automake libtool-bin python3-dev git automake flex bison libglib2.0-dev libpixman-1-dev clang python3-setuptools llvm sudo procps docker
          
-      - name: Setup Java
-        uses: actions/setup-java@v1
-        with:
-          java-version: '11' # The JDK version to make available on the path.
-          java-package: jdk # (jre, jdk, or jdk+fx) - defaults to jdk
-          #architecture: x64 # (x64 or x86) - defaults to x64
-
       - name: Build wafl image
         run: |
           cd wasm-fuzzer
