@@ -30,14 +30,13 @@ Research project on randomization for WebAssembly/WASM.
     cmake --build .
     ```
 
-- Install the python requirements: `pip3 install -r src/requirements.txt`
+- Install the python requirements: `pip3 install -r  crow/requirements.txt`
 
 ## Troubleshooting
 
 - **CROW shows a fail in the CLANG step**: Install emscripten and run it as follows `emcc -v <file>.c`. Then copy all the include files in the [include](https://github.com/KTH/slumps/blob/18ef5189904e25019155fe305046f4b5b8907538/src/settings/config.ini#L17) configuration for CROW.
 - **CROW shows a fail connecting to REDIS**: Install Redis in your local pc and ensure that its running, or change the usage of external cache in the Souper [config](https://github.com/KTH/slumps/blob/18ef5189904e25019155fe305046f4b5b8907538/src/settings/config.ini#L58).
 - **CROW doesn't find the souper folder**: Check the [path](https://github.com/KTH/slumps/blob/18ef5189904e25019155fe305046f4b5b8907538/src/settings/config.ini#L2) in the settings file
-- **CROW fails in the souper opt pass**: Check the [name](https://github.com/KTH/slumps/blob/18ef5189904e25019155fe305046f4b5b8907538/src/settings/config.ini#L48) for the souper pass (for instance, the extension for Ubuntu can be different to the Mac one).
 
 ## Config options
 
@@ -49,12 +48,12 @@ Change the remaining values to get different results, for instance, add extra ar
 
 ## How to use it
 
-Run `python3  crow/crow/crow.py <file.c>` or run it directly on LLVM IR (the 'wasm32-unknown-unknown' target needs to be used during compilation) `python3 crow/crow/crow.py <file.bc>`
+In the project root, run `bash run.sh <number_of_concurrent_generators> <file.(c|bc)>`, collect the output in the folder `crow_out`
 
 ### Docker images
 
 To run CROW in an easy way, we provide a Docker image which contains the plumping to work with Souper (our modest changed version), binaryen and wabt.
-To build it, run: `docker build -t slumps:backend -m 8g -f Dockerfile` inside the docker_images folder. 
+To build it, run: `docker build -t slumps/backend:latest -m 8g -f Dockerfile` inside the docker_images folder. 
 
 If the LLVM build takes to long or fails due to memory lack in the image building:
     >  Increase memory and/or CPU ressources in the docker engine configuration
@@ -63,7 +62,7 @@ If the LLVM build takes to long or fails due to memory lack in the image buildin
 
 Bothg images are avaiable in the docker [Hub](https://hub.docker.com/repository/docker/jacarte/slumps)
 
-The application can be ported to a docker container too. To execute SLUMPs, enter in the src file and build the docker image. Run the following command to start the application ```docker run -it -v $(pwd)/<logs>:/slumps/src/logs -v $(pwd)/<out folder>:/slumps/src/out jacarte/slumps:app <url to download the program code> <config-options> ```. Slumps will process the fetched code from the arguments, exporting the results to the out folder volumen. You can specify the config parameters, specify the values of ```<config-options>``` as ```%<namespace>.key <value>```. For example, to change the timeout per program use ```<docker_run> %DEFAULT.timeout 3600 <program_url>```, this example changes the timeout to 3600 seconds. The other available options and possible values are listed below.
+The application can be ported to a docker container too. To execute SLUMPs, enter in the src file and build the docker image. Run the following command to start the application ```docker run -it -v  $(pwd):/inputs -v $(pwd)/<logs>:/slumps/src/logs -v $(pwd)/<out folder>:/slumps/src/out slumps/crow:latest  <program> <config-options> ```. Slumps will process the fetched code from the arguments, exporting the results to the out folder volumen. You can specify the config parameters, specify the values of ```<config-options>``` as ```%<namespace>.key <value>```. For example, to change the timeout per program use ```<docker_run> %DEFAULT.timeout 3600 <program_url>```, this example changes the timeout to 3600 seconds. The other available options and possible values are listed below.
 
 
 |Namespace|Key|Default value|Comments|
@@ -101,11 +100,11 @@ We added some features/options to Souper:
 - **`souper-valid-count`**: Search for successful optimizations without replacing
 - **`souper-redis-host`**: Host for redis
 - **`souper-redis-pass`**: Password for redis connection
+- **`souper-crow-workers`**: Number of concurrent threads looking for replacements
+- **`souper-crow-port`**: To which socket port send the found replacement information
+
 
 
 ## Issues
 
-- Candidates overlapping. For example, in the `bitwise_IO` problem there are only 36 different programs:
-    `Total number of programs 2048. Different sha count 36`
-
-- LLVM frontend for WASM: This will provide the WASM -> WASM behavior in SLUMPs
+- LLVM frontend for WASM: This will provide the WASM -> WASM behavior in CROW

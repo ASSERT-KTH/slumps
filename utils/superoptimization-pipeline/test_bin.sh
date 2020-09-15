@@ -12,12 +12,12 @@ cd build
 echo "Building..."
 cmake  ../
 make
-cd ../../utils/pipeline
+cd ../../utils/superoptimization-pipeline
 
 
 cd ../../binaryen
 cmake . & make
-cd ../utils/pipeline
+cd ../utils/superoptimization-pipeline
 
 RED='\033[0;31m'
 NC='\033[0m' # No Color

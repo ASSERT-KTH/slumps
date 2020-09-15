@@ -8,11 +8,11 @@ def keysSubset(S):
     if len(S) == 0:
         return {}
 
-    for k in S.keys():
-        for v in S[k]:
-            d = dict(zip(S.keys(), [None]*len(S.keys())))
-            d[k] = v
-            yield d
+    #for k in S.keys():
+    #    for v in S[k]:
+    #        d = dict(zip(S.keys(), [None]*len(S.keys())))
+    #        d[k] = v
+    #        yield d
 
     #print("Combinations")
 

@@ -11,6 +11,7 @@ echo "Building SWAM"
 cd fuzzing-server-swam
 git pull
 ./millw cli.assembly
+
 cd ..
 
 $CURRENT_DIR/fuzzing-client-afl/build_afl.sh

@@ -17,7 +17,6 @@ from email.mime.text import MIMEText
 from email.mime.base import MIMEBase
 from email import encoders
 import json
-import requests
 import threading
 import re
 import traceback
@@ -30,9 +29,8 @@ OUT_FOLDER = config["DEFAULT"]["outfolder"]
 
 class ContentToTmpFile(object):
 
-    LOG_LEVEL = 0
 
-    def __init__(self, content=None, name=None, ext=None, persist=False):
+    def __init__(self, content=None, name=None, ext=None, persist=False, LOG_LEVEL = 0):
         tmp = createTmpFile(ext) if not name else name
 
         tmp = ''.join([c for c in tmp])
@@ -45,6 +43,7 @@ class ContentToTmpFile(object):
             self.tmpF = open(tmp, 'wb')
         self.file = tmp
         self.persist = persist
+        self.LOG_LEVEL = LOG_LEVEL
 
 
     def __enter__(self):
@@ -63,7 +62,7 @@ class ContentToTmpFile(object):
 
 def updatesettings(argvs):
 
-    SLUMPS_DIR = os.path.dirname(os.path.dirname(__file__))
+    SLUMPS_DIR = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
 
     print("Slumps dir...%s" % SLUMPS_DIR)
     config["DEFAULT"]["slumpspath"] = SLUMPS_DIR
@@ -136,49 +135,6 @@ def globalCounter():
 
 globalCounter.counter = 0
 
-
-def make_github_issue(title, body=None, assignee=None, milestone=None, closed=None, labels=None):
-
-    USERNAME = os.environ.get(
-        'GITHUB_USER', private["github"].get("user", None))
-    TOKEN = os.environ.get(
-        'GITHUB_TOKEN', private["github"].get("token", None))
-    REPO_NAME = os.environ.get(
-        'REPO_NAME', private["github"].get("repo_name", None))
-
-    if USERNAME is None or TOKEN is None or REPO_NAME is None:
-        return
-
-    # The repository to add this issue to
-    REPO_OWNER = USERNAME
-
-    # Create an issue on github.com using the given parameters
-    # Url to create issues via POST
-
-    url = 'https://api.github.com/repos/%s/%s/import/issues' % (
-        REPO_OWNER, REPO_NAME)
-
-    # Headers
-    headers = {
-        "Authorization": "token %s" % TOKEN,
-        "Accept": "application/vnd.github.golden-comet-preview+json"
-    }
-
-    # Create our issue
-    data = {'issue': {'title': title,
-                      'body': body,
-                      'milestone': milestone,
-                      'labels': labels}}
-
-    payload = json.dumps(data)
-
-    # Add the issue to our repository
-    response = requests.request("POST", url, data=payload, headers=headers)
-    if response.status_code == 202:
-        print('Successfully created Issue "%s"' % title)
-    else:
-        print('Could not create Issue "%s"' % title)
-        print('Response:', response.content)
 
 
 def sendReportEmail(subject, content, attachments=[]):
