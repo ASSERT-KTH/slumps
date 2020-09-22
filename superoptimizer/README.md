@@ -7,6 +7,7 @@ Given a C program compiled to WASM, SLUMPs superoptimizer generates a new WASM p
 
 ![pass](docs/pass.png)
 
+See paper [Superoptimization of WebAssembly Bytecode](http://arxiv.org/pdf/2002.10213) ([doi:10.1145/3397537.3397567](https://doi.org/10.1145/3397537.3397567))
 
 ### Execute
 ```bash
