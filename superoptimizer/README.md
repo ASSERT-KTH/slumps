@@ -10,7 +10,16 @@ Given a C program compiled to WASM, SLUMPs superoptimizer generates a new WASM p
 
 ### Execute
 ```bash
-superopt.sh <program.c> 4 #CEGIS
+superopt.sh <program.c> 4 #Enumerative synthesis
+```
+
+To use a docker container
+
+```bash
+docker run -it --rm --entrypoint=/bin/bash -v $(pwd):/inputs slumps/superoptimizer:latest #CEGIS
+
+# inside the docker container
+bash pipeline.sh /inputs/<input_file.c> 4 #enumerative synthesis
 ```
 
 ### Build

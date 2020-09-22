@@ -1,0 +1,5 @@
+crawl
+wasi-libc/
+wasi-*
+test/*
+*.tar.gz
