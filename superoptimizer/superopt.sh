@@ -88,9 +88,13 @@ if [ "${ext}" == "c" ]; then
  $llvmas -o $name.bc $name.ll
 fi
 
-$wasmld --no-entry --export-all --allow-undefined -o $name.wasm $name.bc # $name.orig.obj
+if [ $WASI == 'True' ]; then
+    WASI_HEADERS=" -L$WASI_ROOT/share/wasi-sysroot/lib/wasm32-wasi $WASI_ROOT/share/wasi-sysroot/lib/wasm32-wasi/crt1.o -lc $WASI_ROOT/lib/clang/10.0.0/lib/wasi/libclang_rt.builtins-wasm32.a"
+fi
+
+$wasmld $WASI_HEADERS --no-entry --export-all --allow-undefined -o $name.wasm $name.bc # $name.orig.obj
 $wasm2wat -o $name.wat $name.wasm
-LOG_LEVEL=0
+LOG_LEVEL=4
 #llvm-as $name.reg.ll -o $name.bc
 
 bin_folders=$SLUMPS/souper/third_party/llvm-Release-install/binexport 
@@ -128,7 +132,8 @@ echo "Souperifying ${name}..."
 
 echo  "Souper pass finished"
 
-$wasmld --no-entry --export-all -O0 --allow-undefined -o $name.opt$2.wasm $name.opt$2.bc
+echo "$wasmld --no-entry $WASI_HEADERS --export-all -O0 --allow-undefined -o $name.opt$2.wasm $name.opt$2.bc"
+$wasmld --no-entry $WASI_HEADERS --export-all -O0 --allow-undefined -o $name.opt$2.wasm $name.opt$2.bc
 $wasm2wat -o $name.opt$2.wat $name.opt$2.wasm
 
 echo "$name" #>> report.$2.txt
