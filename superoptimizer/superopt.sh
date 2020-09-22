@@ -109,25 +109,25 @@ echo "Souperifying ${name}..."
     if [ "$2" = "1" ]; 
     then
        echo "option 1"
-        $llvmopt -load ${libsouperPass}  --souper  --souper-infer-inst  --souper-debug-level=$LOG_LEVEL --solver-timeout=1 -o $name.opt$2.bc $name.bc
+        $llvmopt -load ${libsouperPass}  --souper  --souper-infer-inst  --souper-debug-level=$LOG_LEVEL --solver-timeout=0 -o $name.opt$2.bc $name.bc
     fi
 
     if [ "$2" = "2" ]; 
     then
        echo "option 2"
-        $llvmopt -load ${libsouperPass}  --souper --souper-infer-inst   --solver-timeout=300 --souper-synthesis-comps=mul,select,const,const,shl,lshr,ashr,and,or,xor,add,sub,slt,ult,sle,ule,eq,ne --souper-debug-level=$LOG_LEVEL -o $name.opt$2.bc $name.bc
+        $llvmopt -load ${libsouperPass}  --souper --souper-infer-inst   --solver-timeout=0 --souper-synthesis-comps=mul,select,const,const,shl,lshr,ashr,and,or,xor,add,sub,slt,ult,sle,ule,eq,ne --souper-debug-level=$LOG_LEVEL -o $name.opt$2.bc $name.bc
     fi
 
     if [ "$2" = "3" ]; 
     then
        echo "option 3"
-        $llvmopt -load ${libsouperPass}  --souper --souper-infer-inst=false --solver-timeout=300 --souper-synthesis-comps=mul,select,const,const,shl,lshr,ashr,and,or,xor,add,sub,slt,ult,sle,ule,eq,ne  --souper-debug-level=$LOG_LEVEL -o $name.opt$2.bc $name.bc
+        $llvmopt -load ${libsouperPass}  --souper --souper-infer-inst=false --solver-timeout=0 --souper-synthesis-comps=mul,select,const,const,shl,lshr,ashr,and,or,xor,add,sub,slt,ult,sle,ule,eq,ne  --souper-debug-level=$LOG_LEVEL -o $name.opt$2.bc $name.bc
     fi
 
     if [ "$2" = "4" ]; 
     then
         echo "option 4"
-        $llvmopt -load ${libsouperPass}  -souper  --souper-infer-inst=false --souper-use-alive --souper-synthesis-const-with-cegis -solver-timeout=300  --souper-synthesis-comps=mul,select,const,const,shl,lshr,ashr,and,or,xor,add,sub,slt,ult,sle,ule,eq,ne --souper-debug-level=$LOG_LEVEL -o $name.opt$2.bc $name.bc 
+        $llvmopt -load ${libsouperPass}  -souper  --souper-infer-inst=false --souper-use-alive --souper-synthesis-const-with-cegis -solver-timeout=0  --souper-synthesis-comps=mul,select,const,const,shl,lshr,ashr,and,or,xor,add,sub,slt,ult,sle,ule,eq,ne --souper-debug-level=$LOG_LEVEL -o $name.opt$2.bc $name.bc 
     fi
 
 echo  "Souper pass finished"
