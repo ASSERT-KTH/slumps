@@ -12,11 +12,8 @@ RUN apt-get update \
 RUN mkdir slumps
 WORKDIR slumps
 
-# Rebuild on KTH repo update
-
-RUN git clone https://github.com/WebAssembly/wabt
-
-RUN cd wabt \
+RUN git clone https://github.com/WebAssembly/wabt \
+    && cd wabt \
     && git submodule update --init \
     && mkdir build && cd build \
     && cmake .. \
