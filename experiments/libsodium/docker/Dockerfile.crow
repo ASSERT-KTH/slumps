@@ -1,0 +1,45 @@
+from ubuntu:18.04
+
+ENV DEBIAN_FRONTEND noninteractive
+
+# Install basic stuff
+run apt-get update -qq \
+    && apt-get full-upgrade -y \
+    && apt-get install -y automake build-essential cmake curl git libtool ninja-build python3-pip software-properties-common tmux vim zip \
+    && pip3 install ipython tqdm
+run curl https://get.wasmer.io -sSfL | sh
+
+# Get wasi-sdk
+add docker/wasi-sdk.patch /tmp/
+run git clone --branch wasi-sdk-11 https://github.com/WebAssembly/wasi-sdk \
+    && cd wasi-sdk \
+    && git apply /tmp/wasi-sdk.patch \
+    && git submodule update --init --recursive \
+    && make package \
+    && dpkg -i dist/wasi-sdk_11.0+m_amd64.deb \
+    && ln -s /opt/wasi-sdk/share/*sysroot* /opt/wasi-sysroot \
+    && cd / \
+    && rm -rf /wasi-sdk
+
+# Get latest SWAM
+add https://api.github.com/repos/satabin/swam/git/refs/heads/master /tmp/version.json
+add docker/swam-random.patch /tmp/
+run apt-get install -y openjdk-11-jdk-headless \
+    && git clone https://github.com/satabin/swam \
+    && cd swam \
+    && git apply /tmp/swam-random.patch \
+    && ./millw cli.assembly \
+    && cd / \
+    && git clone https://github.com/orestisfl/swam swam-cov \
+    && cd swam-cov \
+    && ./millw cli.assembly
+
+add docker/libsodium.patch /tmp/
+run git clone https://github.com/jedisct1/libsodium/ \
+    && cd libsodium \
+    && git checkout 2b5f8f2b6810121c2d9a8cc8a392e01f4d3de433 \
+    && git apply /tmp/libsodium.patch
+
+env PATH=/opt/wasi-sdk/bin:$PATH
+add docker/cc_wrap.py /
+add docker/cc_bc_wrap.py /
