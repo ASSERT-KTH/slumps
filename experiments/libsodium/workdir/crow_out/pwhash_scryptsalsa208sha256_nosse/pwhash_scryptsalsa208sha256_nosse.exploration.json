@@ -1,0 +1,518 @@
+[
+    [
+        "%0:i32 = var\n%1:i64 = zext %0\n%2:i32 = var\n%3:i64 = zext %2\n%4:i64 = mulnuw %1, %3\n%5:i1 = ult 1073741823:i64, %4\npc %5 0:i1\n%6:i1 = eq 0:i32, %2\ninfer %6\n",
+        []
+    ],
+    [
+        "%0:i32 = var\n%1:i32 = var\n%2:i32 = var\n%3:i32 = add %1, %2\n%4:i32 = shl %3, 7:i32\n%5:i32 = lshr %3, 25:i32\n%6:i32 = or %4, %5\n%7:i32 = xor %0, %6 (hasExternalUses)\n%8:i32 = var\n%9:i32 = add %2, %7\n%10:i32 = shl %9, 9:i32\n%11:i32 = lshr %9, 23:i32\n%12:i32 = or %10, %11\n%13:i32 = xor %8, %12 (hasExternalUses)\n%14:i32 = add %7, %13 (hasExternalUses)\n%15:i32 = shl %14, 13:i32\ninfer %15\n",
+        []
+    ],
+    [
+        "%0:i32 = var\n%1:i32 = var\n%2:i32 = var\n%3:i32 = add %2, %0\n%4:i32 = shl %3, 7:i32\n%5:i32 = lshr %3, 25:i32\n%6:i32 = or %4, %5\n%7:i32 = xor %1, %6 (hasExternalUses)\n%8:i32 = add %0, %7 (hasExternalUses)\n%9:i32 = lshr %8, 23:i32\ninfer %9\n",
+        []
+    ],
+    [
+        "%0:i32 = var\n%1:i32 = var\n%2:i32 = var\n%3:i32 = add %0, %2\n%4:i32 = shl %3, 7:i32\n%5:i32 = lshr %3, 25:i32\n%6:i32 = or %4, %5\n%7:i32 = xor %1, %6 (hasExternalUses)\n%8:i32 = var\n%9:i32 = add %2, %7\n%10:i32 = shl %9, 9:i32\n%11:i32 = lshr %9, 23:i32\n%12:i32 = or %10, %11\n%13:i32 = xor %8, %12 (hasExternalUses)\n%14:i32 = add %7, %13\n%15:i32 = shl %14, 13:i32\n%16:i32 = lshr %14, 19:i32\n%17:i32 = or %15, %16\n%18:i32 = xor %0, %17 (hasExternalUses)\n%19:i32 = add %18, %13 (hasExternalUses)\n%20:i32 = shl %19, 18:i32\ninfer %20\n",
+        []
+    ],
+    [
+        "%0:i32 = var\n%1:i64 = zext %0\n%2:i32 = var\n%3:i64 = zext %2\n%4:i64 = mulnuw %1, %3\n%5:i1 = ult 1073741823:i64, %4\npc %5 0:i1\n%6:i64 = var\n%7:i1 = ult 4294967295:i64, %6\npc %7 0:i1\n%8:i64 = ctpop %6\n%9:i1 = ult 1:i64, %8\n%10:i1 = ult %6, 2:i64\n%11:i1 = or %9, %10\npc %11 0:i1\n%12:i1 = eq 0:i32, %0\n%13:i1 = eq 0:i32, %2\n%14:i1 = or %12, %13\npc %14 0:i1\n%15:i1 = ult 16777215:i32, %0\n%16:i32 = udiv 33554431:i32, %2\n%17:i1 = ult %16, %0\n%18:i1 = or %15, %17\npc %18 0:i1\n%19:i32 = udiv 33554431:i32, %0\n%20:i64 = zext %19\n%21:i1 = ult %20, %6\npc %21 0:i1\n%22:i32 = shlnw %0, 7:i32 (hasExternalUses)\n%23:i32 = mul %2, %22 (hasExternalUses)\n%24:i32 = trunc %6 (hasExternalUses)\n%25:i32 = mul %22, %24 (hasExternalUses)\n%26:i32 = add %23, %25 (hasExternalUses)\n%27:i1 = ult %26, %25\ninfer %27\n",
+        []
+    ],
+    [
+        "%0:i32 = var\n%1:i64 = zext %0\n%2:i32 = var\n%3:i64 = zext %2\n%4:i64 = mulnuw %1, %3\n%5:i1 = ult 1073741823:i64, %4\npc %5 0:i1\n%6:i1 = eq 0:i32, %0\n%7:i1 = eq 0:i32, %2\n%8:i1 = or %6, %7\npc %8 0:i1\n%9:i32 = udiv 33554431:i32, %2\ninfer %9\n",
+        []
+    ],
+    [
+        "%0:i32 = var\n%1:i32 = addnuw 1:i32, %0\ninfer %1\n",
+        []
+    ],
+    [
+        "%0:i32 = var\n%1:i32 = addnuw 1:i32, %0 (hasExternalUses)\n%2:i32 = var\n%3:i32 = shlnw %2, 5:i32 (hasExternalUses)\n%4:i1 = eq %1, %3\ninfer %4\n",
+        []
+    ],
+    [
+        "%0:i32 = var\n%1:i32 = shl %0, 1:i32 (hasExternalUses)\n%2:i1 = eq 0:i32, %1\ninfer %2\n",
+        []
+    ],
+    [
+        "%0:i32 = var\n%1:i64 = zext %0\n%2:i32 = var\n%3:i64 = zext %2\n%4:i64 = mulnuw %1, %3\n%5:i1 = ult 1073741823:i64, %4\npc %5 0:i1\n%6:i1 = eq 0:i32, %0\n%7:i1 = eq 0:i32, %2\n%8:i1 = or %6, %7\npc %8 0:i1\n%9:i1 = ult 16777215:i32, %0\n%10:i32 = udiv 33554431:i32, %2\n%11:i1 = ult %10, %0\n%12:i1 = or %9, %11\npc %12 0:i1\n%13:i32 = udiv 33554431:i32, %0\n%14:i64 = zext %13\ninfer %14\n",
+        []
+    ],
+    [
+        "%0:i32 = var\n%1:i32 = shlnw %0, 5:i32\ninfer %1\n",
+        []
+    ],
+    [
+        "%0:i32 = var (knownBits=0xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx0) (nonNegative) (range=[0,7))\n%1:i1 = ult %0, 6:i32\ninfer %1\n",
+        []
+    ],
+    [
+        "%0:i32 = var\n%1:i64 = zext %0\n%2:i32 = var\n%3:i64 = zext %2\n%4:i64 = mulnuw %1, %3\n%5:i1 = ult 1073741823:i64, %4\npc %5 0:i1\n%6:i1 = eq 0:i32, %0\n%7:i1 = eq 0:i32, %2\n%8:i1 = or %6, %7\npc %8 0:i1\n%9:i1 = ult 16777215:i32, %0\n%10:i32 = udiv 33554431:i32, %2\n%11:i1 = ult %10, %0\n%12:i1 = or %9, %11\npc %12 0:i1\n%13:i32 = udiv 33554431:i32, %0\ninfer %13\n",
+        []
+    ],
+    [
+        "%0:i32 = var\n%1:i32 = shlnw %0, 6:i32\ninfer %1\n",
+        [
+            "%9:i32 = fshr %0, %1, %1\nresult %9\n",
+            "%2:i32 = shl %0, 6:i32\nresult %2\n",
+            "%8:i32 = fshr %1, %1, %1\nresult %8\n",
+            "%12:i32 = and 2147483584:i32, %1\nresult %12\n",
+            "%13:i32 = fshl %0, %0, 6:i32\nresult %13\n",
+            "%3:i32 = freeze %1\nresult %3\n",
+            "%4:i32 = and %1, %1\nresult %4\n",
+            "%19:i32 = urem %1, 2147516416:i32\nresult %19\n",
+            "%7:i32 = fshl %1, %0, %1\nresult %7\n",
+            "%6:i32 = fshl %1, %1, %1\nresult %6\n",
+            "%11:i32 = mul 1073741825:i32, %1\nresult %11\n",
+            "%18:i32 = fshr 0:i32, %1, %1\nresult %18\n",
+            "%16:i32 = fshr %0, 2930848:i32, 26:i32\nresult %16\n",
+            "%17:i32 = fshl %1, 0:i32, %1\nresult %17\n",
+            "%15:i32 = fshr %0, %0, 26:i32\nresult %15\n",
+            "%5:i32 = or %1, %1\nresult %5\n",
+            "%14:i32 = fshl %0, 0:i32, 6:i32\nresult %14\n",
+            "result %1\n",
+            "%10:i32 = mul 64:i32, %0\nresult %10\n"
+        ]
+    ],
+    [
+        "%0:i32 = var\n%1:i32 = var\n%2:i32 = var\n%3:i32 = add %1, %0\n%4:i32 = shl %3, 7:i32\n%5:i32 = lshr %3, 25:i32\n%6:i32 = or %4, %5\n%7:i32 = xor %2, %6 (hasExternalUses)\n%8:i32 = var\n%9:i32 = add %0, %7\n%10:i32 = shl %9, 9:i32\n%11:i32 = lshr %9, 23:i32\n%12:i32 = or %10, %11\n%13:i32 = xor %8, %12 (hasExternalUses)\n%14:i32 = add %7, %13\n%15:i32 = shl %14, 13:i32\n%16:i32 = lshr %14, 19:i32\n%17:i32 = or %15, %16\n%18:i32 = xor %1, %17 (hasExternalUses)\n%19:i32 = add %18, %13\n%20:i32 = shl %19, 18:i32\n%21:i32 = lshr %19, 14:i32\n%22:i32 = or %20, %21\n%23:i32 = xor %0, %22\ninfer %23\n",
+        []
+    ],
+    [
+        "%0:i32 = var\n%1:i64 = zext %0\n%2:i32 = var\n%3:i64 = zext %2\n%4:i64 = mulnuw %1, %3\n%5:i1 = ult 1073741823:i64, %4\npc %5 0:i1\n%6:i1 = eq 0:i32, %0\n%7:i1 = eq 0:i32, %2\n%8:i1 = or %6, %7\npc %8 0:i1\n%9:i1 = ult 16777215:i32, %0\n%10:i32 = udiv 33554431:i32, %2\n%11:i1 = ult %10, %0\n%12:i1 = or %9, %11\ninfer %12\n",
+        []
+    ],
+    [
+        "%0:i32 = var\n%1:i32 = shl %0, 2:i32\ninfer %1\n",
+        []
+    ],
+    [
+        "%0:i32 = var (knownBits=0xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx) (nonNegative) (range=[0,1073741792))\n%1:i32 = addnw 1:i32, %0 (hasExternalUses)\n%2:i32 = var\n%3:i32 = shlnw %2, 5:i32 (hasExternalUses)\n%4:i32 = and 1073741792:i32, %3 (hasExternalUses)\n%5:i1 = eq %1, %4\ninfer %5\n",
+        []
+    ],
+    [
+        "%0:i32 = var\n%1:i32 = shl %0, 4:i32\n%2:i32 = var (knownBits=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx0) (range=[0,-3))\n%3:i32 = shl %2, 3:i32 (hasExternalUses)\n%4:i32 = add %1, %3\ninfer %4\n",
+        []
+    ],
+    [
+        "%0:i32 = var\n%1:i32 = var\n%2:i32 = var\n%3:i32 = add %1, %2\n%4:i32 = shl %3, 7:i32\n%5:i32 = lshr %3, 25:i32\n%6:i32 = or %4, %5\n%7:i32 = xor %0, %6 (hasExternalUses)\n%8:i32 = var\n%9:i32 = var\n%10:i32 = var\n%11:i32 = add %9, %8\n%12:i32 = shl %11, 7:i32\n%13:i32 = lshr %11, 25:i32\n%14:i32 = or %12, %13\n%15:i32 = xor %10, %14 (hasExternalUses)\n%16:i32 = var\n%17:i32 = add %8, %15\n%18:i32 = shl %17, 9:i32\n%19:i32 = lshr %17, 23:i32\n%20:i32 = or %18, %19\n%21:i32 = xor %16, %20 (hasExternalUses)\n%22:i32 = add %15, %21\n%23:i32 = shl %22, 13:i32\n%24:i32 = lshr %22, 19:i32\n%25:i32 = or %23, %24\n%26:i32 = xor %9, %25 (hasExternalUses)\n%27:i32 = add %26, %21\n%28:i32 = shl %27, 18:i32\n%29:i32 = lshr %27, 14:i32\n%30:i32 = or %28, %29\n%31:i32 = xor %8, %30 (hasExternalUses)\n%32:i32 = add %7, %31\n%33:i32 = shl %32, 7:i32\n%34:i32 = lshr %32, 25:i32\n%35:i32 = or %33, %34\ninfer %35\n",
+        []
+    ],
+    [
+        "%0:i32 = var\n%1:i64 = zext %0\n%2:i32 = var\n%3:i64 = zext %2\n%4:i64 = mulnuw %1, %3\n%5:i1 = ult 1073741823:i64, %4\npc %5 0:i1\n%6:i1 = eq 0:i32, %0\n%7:i1 = eq 0:i32, %2\n%8:i1 = or %6, %7\npc %8 0:i1\n%9:i1 = ult 16777215:i32, %0\ninfer %9\n",
+        []
+    ],
+    [
+        "%0:i32 = var\n%1:i32 = var\n%2:i32 = add %0, %1\n%3:i32 = shl %2, 7:i32\n%4:i32 = lshr %2, 25:i32\n%5:i32 = or %3, %4\ninfer %5\n",
+        []
+    ],
+    [
+        "%0:i32 = var\n%1:i64 = zext %0\n%2:i32 = var\n%3:i64 = zext %2\n%4:i64 = mulnuw %1, %3\n%5:i1 = ult 1073741823:i64, %4\npc %5 0:i1\n%6:i64 = var\n%7:i1 = ult 4294967295:i64, %6\npc %7 0:i1\n%8:i64 = ctpop %6\n%9:i1 = ult 1:i64, %8\n%10:i1 = ult %6, 2:i64\n%11:i1 = or %9, %10\npc %11 0:i1\n%12:i1 = eq 0:i32, %0\n%13:i1 = eq 0:i32, %2\n%14:i1 = or %12, %13\npc %14 0:i1\n%15:i1 = ult 16777215:i32, %0\n%16:i32 = udiv 33554431:i32, %2\n%17:i1 = ult %16, %0\n%18:i1 = or %15, %17\npc %18 0:i1\n%19:i32 = udiv 33554431:i32, %0\n%20:i64 = zext %19\n%21:i1 = ult %20, %6\npc %21 0:i1\n%22:i32 = shlnw %0, 7:i32 (hasExternalUses)\n%23:i32 = mul %2, %22 (hasExternalUses)\n%24:i32 = trunc %6 (hasExternalUses)\n%25:i32 = mul %22, %24 (hasExternalUses)\n%26:i32 = add %23, %25 (hasExternalUses)\n%27:i1 = ult %26, %25\npc %27 0:i1\n%28:i32 = shlnuw %0, 8:i32\n%29:i32 = or 64:i32, %28\n%30:i32 = add %26, %29 (hasExternalUses)\n%31:i1 = ult %30, %29\ninfer %31\n",
+        []
+    ],
+    [
+        "%0:i32 = var (knownBits=0xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx) (nonNegative) (range=[0,1073741792))\ninfer %0\n",
+        []
+    ],
+    [
+        "%0:i32 = var (knownBits=0xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx0) (nonNegative) (range=[0,7))\ninfer %0\n",
+        []
+    ],
+    [
+        "%0:i32 = var\n%1:i32 = var\n%2:i32 = var\n%3:i32 = var\n%4:i32 = add %3, %1\n%5:i32 = shl %4, 7:i32\n%6:i32 = lshr %4, 25:i32\n%7:i32 = or %5, %6\n%8:i32 = xor %2, %7 (hasExternalUses)\n%9:i32 = add %1, %8\n%10:i32 = shl %9, 9:i32\n%11:i32 = lshr %9, 23:i32\n%12:i32 = or %10, %11\n%13:i32 = xor %0, %12\ninfer %13\n",
+        []
+    ],
+    [
+        "%0:i32 = var\n%1:i64 = zext %0\n%2:i32 = var\n%3:i64 = zext %2\n%4:i64 = mulnuw %1, %3\n%5:i1 = ult 1073741823:i64, %4\npc %5 0:i1\n%6:i64 = var\n%7:i1 = ult 4294967295:i64, %6\npc %7 0:i1\n%8:i64 = ctpop %6\n%9:i1 = ult 1:i64, %8\n%10:i1 = ult %6, 2:i64\n%11:i1 = or %9, %10\npc %11 0:i1\n%12:i1 = eq 0:i32, %0\n%13:i1 = eq 0:i32, %2\n%14:i1 = or %12, %13\npc %14 0:i1\n%15:i1 = ult 16777215:i32, %0\n%16:i32 = udiv 33554431:i32, %2\n%17:i1 = ult %16, %0\n%18:i1 = or %15, %17\npc %18 0:i1\n%19:i32 = udiv 33554431:i32, %0\n%20:i64 = zext %19\n%21:i1 = ult %20, %6\npc %21 0:i1\n%22:i32 = shlnw %0, 7:i32 (hasExternalUses)\n%23:i32 = mul %2, %22 (hasExternalUses)\n%24:i32 = trunc %6 (hasExternalUses)\n%25:i32 = mul %22, %24 (hasExternalUses)\n%26:i32 = add %23, %25 (hasExternalUses)\n%27:i1 = ult %26, %25\npc %27 0:i1\n%28:i32 = shlnuw %0, 8:i32\n%29:i32 = or 64:i32, %28\ninfer %29\n",
+        []
+    ],
+    [
+        "%0:i32 = var\n%1:i32 = shl %0, 5:i32\ninfer %1\n",
+        []
+    ],
+    [
+        "%0:i32 = var\n%1:i32 = var\n%2:i32 = var\n%3:i32 = add %1, %2\n%4:i32 = shl %3, 7:i32\n%5:i32 = lshr %3, 25:i32\n%6:i32 = or %4, %5\n%7:i32 = xor %0, %6 (hasExternalUses)\n%8:i32 = var\n%9:i32 = add %2, %7\n%10:i32 = shl %9, 9:i32\n%11:i32 = lshr %9, 23:i32\n%12:i32 = or %10, %11\n%13:i32 = xor %8, %12 (hasExternalUses)\n%14:i32 = add %7, %13 (hasExternalUses)\n%15:i32 = lshr %14, 19:i32\ninfer %15\n",
+        []
+    ],
+    [
+        "%0:i32 = var\n%1:i32 = var\n%2:i32 = var\n%3:i32 = add %0, %2\n%4:i32 = shl %3, 7:i32\n%5:i32 = lshr %3, 25:i32\n%6:i32 = or %4, %5\n%7:i32 = xor %1, %6 (hasExternalUses)\n%8:i32 = var\n%9:i32 = add %2, %7\n%10:i32 = shl %9, 9:i32\n%11:i32 = lshr %9, 23:i32\n%12:i32 = or %10, %11\n%13:i32 = xor %8, %12 (hasExternalUses)\n%14:i32 = add %7, %13\n%15:i32 = shl %14, 13:i32\n%16:i32 = lshr %14, 19:i32\n%17:i32 = or %15, %16\n%18:i32 = xor %0, %17 (hasExternalUses)\n%19:i32 = add %18, %13\n%20:i32 = shl %19, 18:i32\n%21:i32 = lshr %19, 14:i32\n%22:i32 = or %20, %21\ninfer %22\n",
+        []
+    ],
+    [
+        "%0:i64 = var\n%1:i1 = ult 4294967295:i64, %0\npc %1 0:i1\n%2:i64 = ctpop %0\n%3:i1 = ult 1:i64, %2\n%4:i1 = ult %0, 2:i64\n%5:i1 = or %3, %4\ninfer %5\n",
+        [
+            "%21:i1 = select %3, 1:i1, %4\nresult %21\n",
+            "%23:i1 = select %5, %5, 0:i1\nresult %23\n",
+            "%18:i1 = select %4, %5, %3\nresult %18\n",
+            "%19:i1 = select %4, %4, %5\nresult %19\n",
+            "%17:i1 = select %3, %3, %4\nresult %17\n",
+            "%12:i1 = eq 1:i1, %5\nresult %12\n",
+            "%23:i1 = select %4, 1:i1, %3\nresult %23\n",
+            "%8:i1 = or %5, %5\nresult %8\n",
+            "%25:i1 = select %5, 1:i1, %3\nresult %25\n",
+            "%24:i1 = select %5, 1:i1, %5\nresult %24\n",
+            "%22:i1 = select %4, 1:i1, %3\nresult %22\n",
+            "%9:i1 = or %5, %3\nresult %9\n",
+            "%7:i1 = freeze %5\nresult %7\n",
+            "%27:i1 = select %5, 1:i1, 0:i1\nresult %27\n",
+            "%16:i1 = select %3, %3, %5\nresult %16\n",
+            "%22:i1 = select %5, %5, 0:i1\nresult %22\n",
+            "%15:i1 = select %3, %5, %4\nresult %15\n",
+            "%28:i1 = select %3, 1:i1, %5\nresult %28\n",
+            "%26:i1 = select %5, 1:i1, %4\nresult %26\n",
+            "%14:i1 = select %5, %5, %4\nresult %14\n",
+            "%20:i1 = select %4, %4, %3\nresult %20\n",
+            "%11:i1 = xor %3, %4\nresult %11\n",
+            "%6:i1 = and %5, %5\nresult %6\n",
+            "%10:i1 = or %5, %4\nresult %10\n",
+            "%13:i1 = select %5, %5, %3\nresult %13\n",
+            "result %5\n",
+            "%29:i1 = select %4, 1:i1, %5\nresult %29\n"
+        ]
+    ],
+    [
+        "%0:i32 = var\n%1:i64 = zext %0\ninfer %1\n",
+        []
+    ],
+    [
+        "%0:i32 = var\n%1:i64 = zext %0\n%2:i32 = var\n%3:i64 = zext %2\n%4:i64 = mulnuw %1, %3\n%5:i1 = ult 1073741823:i64, %4\npc %5 0:i1\n%6:i1 = eq 0:i32, %0\ninfer %6\n",
+        []
+    ],
+    [
+        "%0:i32 = var (knownBits=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx0) (range=[0,-3))\ninfer %0\n",
+        []
+    ],
+    [
+        "%0:i32 = var\n%1:i64 = zext %0\n%2:i32 = var\n%3:i64 = zext %2\n%4:i64 = mulnuw %1, %3\n%5:i1 = ult 1073741823:i64, %4\npc %5 0:i1\n%6:i1 = eq 0:i32, %0\n%7:i1 = eq 0:i32, %2\n%8:i1 = or %6, %7\npc %8 0:i1\n%9:i32 = udiv 33554431:i32, %2\n%10:i1 = ult %9, %0\ninfer %10\n",
+        []
+    ],
+    [
+        "%0:i32 = var\n%1:i32 = var\n%2:i32 = var\n%3:i32 = add %1, %2\n%4:i32 = shl %3, 7:i32\n%5:i32 = lshr %3, 25:i32\n%6:i32 = or %4, %5\n%7:i32 = xor %0, %6 (hasExternalUses)\n%8:i32 = var\n%9:i32 = add %2, %7\n%10:i32 = shl %9, 9:i32\n%11:i32 = lshr %9, 23:i32\n%12:i32 = or %10, %11\n%13:i32 = xor %8, %12 (hasExternalUses)\n%14:i32 = add %7, %13\ninfer %14\n",
+        []
+    ],
+    [
+        "%0:i32 = var\n%1:i64 = zext %0\n%2:i32 = var\n%3:i64 = zext %2\n%4:i64 = mulnuw %1, %3\n%5:i1 = ult 1073741823:i64, %4\ninfer %5\n",
+        []
+    ],
+    [
+        "%0:i32 = var (knownBits=0xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx) (nonNegative) (range=[0,1073741792))\n%1:i32 = addnw 1:i32, %0 (hasExternalUses)\n%2:i32 = var\n%3:i32 = shlnw %2, 5:i32 (hasExternalUses)\n%4:i32 = and 1073741792:i32, %3 (hasExternalUses)\n%5:i1 = eq %1, %4\npc %5 1:i1\n%6:i32 = var\n%7:i64 = var\n%8:i32 = trunc %7 (hasExternalUses)\n%9:i32 = add 4294967295:i32, %8 (hasExternalUses)\n%10:i32 = and %6, %9\n%11:i32 = mul %10, %3\ninfer %11\n",
+        []
+    ],
+    [
+        "%0:i32 = var\n%1:i32 = var\n%2:i32 = var\n%3:i32 = add %1, %2\n%4:i32 = shl %3, 7:i32\n%5:i32 = lshr %3, 25:i32\n%6:i32 = or %4, %5\n%7:i32 = xor %0, %6 (hasExternalUses)\n%8:i32 = var\n%9:i32 = var\n%10:i32 = var\n%11:i32 = add %9, %8\n%12:i32 = shl %11, 7:i32\n%13:i32 = lshr %11, 25:i32\n%14:i32 = or %12, %13\n%15:i32 = xor %10, %14 (hasExternalUses)\n%16:i32 = var\n%17:i32 = add %8, %15\n%18:i32 = shl %17, 9:i32\n%19:i32 = lshr %17, 23:i32\n%20:i32 = or %18, %19\n%21:i32 = xor %16, %20 (hasExternalUses)\n%22:i32 = add %15, %21\n%23:i32 = shl %22, 13:i32\n%24:i32 = lshr %22, 19:i32\n%25:i32 = or %23, %24\n%26:i32 = xor %9, %25 (hasExternalUses)\n%27:i32 = add %26, %21\n%28:i32 = shl %27, 18:i32\n%29:i32 = lshr %27, 14:i32\n%30:i32 = or %28, %29\n%31:i32 = xor %8, %30 (hasExternalUses)\n%32:i32 = add %7, %31 (hasExternalUses)\n%33:i32 = shl %32, 7:i32\ninfer %33\n",
+        []
+    ],
+    [
+        "%0:i32 = var\n%1:i64 = zext %0\n%2:i32 = var\n%3:i64 = zext %2\n%4:i64 = mulnuw %1, %3\ninfer %4\n",
+        []
+    ],
+    [
+        "%0:i32 = var (knownBits=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx0) (range=[0,-3))\n%1:i32 = shl %0, 3:i32\ninfer %1\n",
+        []
+    ],
+    [
+        "%0:i32 = var\n%1:i64 = zext %0\n%2:i32 = var\n%3:i64 = zext %2\n%4:i64 = mulnuw %1, %3\n%5:i1 = ult 1073741823:i64, %4\npc %5 0:i1\n%6:i64 = var\n%7:i1 = ult 4294967295:i64, %6\npc %7 0:i1\n%8:i64 = ctpop %6\n%9:i1 = ult 1:i64, %8\n%10:i1 = ult %6, 2:i64\n%11:i1 = or %9, %10\npc %11 0:i1\n%12:i1 = eq 0:i32, %0\n%13:i1 = eq 0:i32, %2\n%14:i1 = or %12, %13\npc %14 0:i1\n%15:i1 = ult 16777215:i32, %0\n%16:i32 = udiv 33554431:i32, %2\n%17:i1 = ult %16, %0\n%18:i1 = or %15, %17\npc %18 0:i1\n%19:i32 = udiv 33554431:i32, %0\n%20:i64 = zext %19\n%21:i1 = ult %20, %6\npc %21 0:i1\n%22:i32 = shlnw %0, 7:i32 (hasExternalUses)\n%23:i32 = mul %2, %22 (hasExternalUses)\n%24:i32 = trunc %6 (hasExternalUses)\n%25:i32 = mul %22, %24 (hasExternalUses)\n%26:i32 = add %23, %25 (hasExternalUses)\n%27:i1 = ult %26, %25\npc %27 0:i1\n%28:i32 = shlnuw %0, 8:i32\ninfer %28 (demandedBits=11111111111111111111111110111111)\n",
+        []
+    ],
+    [
+        "%0 = block 10\n%1:i32 = phi %0, 4294967295:i32, 4294967295:i32, 4294967295:i32, 4294967295:i32, 4294967295:i32, 4294967295:i32, 4294967295:i32, 0:i32, 4294967295:i32, 4294967295:i32\ninfer %1\n",
+        []
+    ],
+    [
+        "%0:i32 = var\n%1:i32 = shlnw %0, 5:i32 (hasExternalUses)\n%2:i32 = addnsw 4294967280:i32, %1\ninfer %2\n",
+        []
+    ],
+    [
+        "%0:i32 = var (knownBits=0xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx) (nonNegative) (range=[0,1073741792))\n%1:i32 = addnw 1:i32, %0\ninfer %1\n",
+        []
+    ],
+    [
+        "%0:i32 = var\n%1:i32 = var\n%2:i32 = var\n%3:i32 = add %1, %2\n%4:i32 = shl %3, 7:i32\n%5:i32 = lshr %3, 25:i32\n%6:i32 = or %4, %5\n%7:i32 = xor %0, %6 (hasExternalUses)\n%8:i32 = var\n%9:i32 = var\n%10:i32 = var\n%11:i32 = add %9, %8\n%12:i32 = shl %11, 7:i32\n%13:i32 = lshr %11, 25:i32\n%14:i32 = or %12, %13\n%15:i32 = xor %10, %14 (hasExternalUses)\n%16:i32 = var\n%17:i32 = add %8, %15\n%18:i32 = shl %17, 9:i32\n%19:i32 = lshr %17, 23:i32\n%20:i32 = or %18, %19\n%21:i32 = xor %16, %20 (hasExternalUses)\n%22:i32 = add %15, %21\n%23:i32 = shl %22, 13:i32\n%24:i32 = lshr %22, 19:i32\n%25:i32 = or %23, %24\n%26:i32 = xor %9, %25 (hasExternalUses)\n%27:i32 = add %26, %21\n%28:i32 = shl %27, 18:i32\n%29:i32 = lshr %27, 14:i32\n%30:i32 = or %28, %29\n%31:i32 = xor %8, %30 (hasExternalUses)\n%32:i32 = add %7, %31\ninfer %32\n",
+        []
+    ],
+    [
+        "%0:i32 = var\n%1:i32 = var\n%2:i32 = var\n%3:i32 = add %1, %0\n%4:i32 = shl %3, 7:i32\n%5:i32 = lshr %3, 25:i32\n%6:i32 = or %4, %5\n%7:i32 = xor %2, %6 (hasExternalUses)\n%8:i32 = var\n%9:i32 = add %0, %7\n%10:i32 = shl %9, 9:i32\n%11:i32 = lshr %9, 23:i32\n%12:i32 = or %10, %11\n%13:i32 = xor %8, %12 (hasExternalUses)\n%14:i32 = add %7, %13\n%15:i32 = shl %14, 13:i32\n%16:i32 = lshr %14, 19:i32\n%17:i32 = or %15, %16\n%18:i32 = xor %1, %17 (hasExternalUses)\n%19:i32 = add %18, %13\n%20:i32 = shl %19, 18:i32\n%21:i32 = lshr %19, 14:i32\n%22:i32 = or %20, %21\n%23:i32 = xor %0, %22 (hasExternalUses)\n%24:i32 = var\n%25:i32 = var\n%26:i32 = var\n%27:i32 = add %25, %26\n%28:i32 = shl %27, 7:i32\n%29:i32 = lshr %27, 25:i32\n%30:i32 = or %28, %29\n%31:i32 = xor %24, %30 (hasExternalUses)\n%32:i32 = add %23, %31 (hasExternalUses)\n%33:i32 = shl %32, 7:i32\ninfer %33\n",
+        []
+    ],
+    [
+        "%0:i32 = var (knownBits=0xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx) (nonNegative) (range=[0,1073741792))\n%1:i32 = addnw 1:i32, %0 (hasExternalUses)\n%2:i32 = var\n%3:i32 = shlnw %2, 5:i32 (hasExternalUses)\n%4:i32 = and 1073741792:i32, %3 (hasExternalUses)\n%5:i1 = eq %1, %4\npc %5 1:i1\n%6:i64 = var (knownBits=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx0) (range=[0,-1))\n%7:i32 = trunc %6 (hasExternalUses)\n%8:i32 = or 1:i32, %7\n%9:i32 = mul %8, %3\ninfer %9\n",
+        []
+    ],
+    [
+        "%0:i32 = var\n%1:i64 = zext %0\n%2:i32 = var\n%3:i64 = zext %2\n%4:i64 = mulnuw %1, %3\n%5:i1 = ult 1073741823:i64, %4\npc %5 0:i1\n%6:i1 = eq 0:i32, %0\n%7:i1 = eq 0:i32, %2\n%8:i1 = or %6, %7\ninfer %8\n",
+        []
+    ],
+    [
+        "%0:i32 = var\n%1:i32 = var\n%2:i32 = add %0, %1 (hasExternalUses)\n%3:i32 = shl %2, 7:i32\ninfer %3\n",
+        []
+    ],
+    [
+        "%0:i32 = var\n%1:i32 = var\n%2:i32 = shlnw %1, 7:i32 (hasExternalUses)\n%3:i32 = mul %0, %2\ninfer %3\n",
+        []
+    ],
+    [
+        "%0:i32 = var\n%1:i64 = var\n%2:i32 = trunc %1 (hasExternalUses)\n%3:i32 = add 4294967295:i32, %2 (hasExternalUses)\n%4:i32 = and %0, %3\ninfer %4\n",
+        []
+    ],
+    [
+        "%0:i32 = var\n%1:i32 = var\n%2:i32 = var\n%3:i32 = add %2, %0\n%4:i32 = shl %3, 7:i32\n%5:i32 = lshr %3, 25:i32\n%6:i32 = or %4, %5\n%7:i32 = xor %1, %6 (hasExternalUses)\n%8:i32 = add %0, %7\n%9:i32 = shl %8, 9:i32\n%10:i32 = lshr %8, 23:i32\n%11:i32 = or %9, %10\ninfer %11\n",
+        []
+    ],
+    [
+        "%0:i32 = var\n%1:i32 = var\n%2:i32 = add %0, %1 (hasExternalUses)\n%3:i32 = lshr %2, 25:i32\ninfer %3\n",
+        []
+    ],
+    [
+        "%0:i32 = var\n%1:i32 = var\n%2:i32 = addnuw 1:i32, %1 (hasExternalUses)\n%3:i1 = eq %0, %2\ninfer %3\n",
+        []
+    ],
+    [
+        "%0:i64 = var\n%1:i32 = trunc %0 (hasExternalUses)\n%2:i32 = add 4294967295:i32, %1\ninfer %2\n",
+        []
+    ],
+    [
+        "%0:i32 = var\n%1:i32 = var\n%2:i32 = var\n%3:i32 = add %0, %2\n%4:i32 = shl %3, 7:i32\n%5:i32 = lshr %3, 25:i32\n%6:i32 = or %4, %5\n%7:i32 = xor %1, %6 (hasExternalUses)\n%8:i32 = var\n%9:i32 = add %2, %7\n%10:i32 = shl %9, 9:i32\n%11:i32 = lshr %9, 23:i32\n%12:i32 = or %10, %11\n%13:i32 = xor %8, %12 (hasExternalUses)\n%14:i32 = add %7, %13\n%15:i32 = shl %14, 13:i32\n%16:i32 = lshr %14, 19:i32\n%17:i32 = or %15, %16\n%18:i32 = xor %0, %17 (hasExternalUses)\n%19:i32 = add %18, %13\ninfer %19\n",
+        []
+    ],
+    [
+        "%0:i32 = var\n%1:i32 = shl %0, 1:i32 (hasExternalUses)\n%2:i1 = eq 0:i32, %1\npc %2 0:i1\n%3:i32 = shl %0, 4:i32\ninfer %3\n",
+        []
+    ],
+    [
+        "%0:i32 = var\n%1:i32 = var\n%2:i32 = var\n%3:i32 = add %2, %0\n%4:i32 = shl %3, 7:i32\n%5:i32 = lshr %3, 25:i32\n%6:i32 = or %4, %5\n%7:i32 = xor %1, %6 (hasExternalUses)\n%8:i32 = add %0, %7\ninfer %8\n",
+        []
+    ],
+    [
+        "%0:i32 = var\n%1:i1 = eq 0:i32, %0\ninfer %1\n",
+        [
+            "%5:i1 = and %1, %1\nresult %5\n",
+            "%6:i1 = select %1, %1, 0:i1\nresult %6\n",
+            "%3:i1 = freeze %1\nresult %3\n",
+            "%2:i1 = freeze %1\nresult %2\n",
+            "%2:i1 = and %1, %1\nresult %2\n",
+            "result %1\n",
+            "%8:i1 = select %1, 1:i1, 0:i1\nresult %8\n",
+            "%3:i1 = or %1, %1\nresult %3\n",
+            "%5:i1 = eq 1:i1, %1\nresult %5\n",
+            "%7:i1 = select %1, 1:i1, %1\nresult %7\n",
+            "%4:i1 = eq 1:i1, %1\nresult %4\n",
+            "%4:i1 = or %1, %1\nresult %4\n"
+        ]
+    ],
+    [
+        "%0:i32 = var\n%1:i64 = zext %0\n%2:i32 = var\n%3:i64 = zext %2\n%4:i64 = mulnuw %1, %3\n%5:i1 = ult 1073741823:i64, %4\npc %5 0:i1\n%6:i64 = var\n%7:i1 = ult 4294967295:i64, %6\npc %7 0:i1\n%8:i64 = ctpop %6\n%9:i1 = ult 1:i64, %8\n%10:i1 = ult %6, 2:i64\n%11:i1 = or %9, %10\npc %11 0:i1\n%12:i1 = eq 0:i32, %0\n%13:i1 = eq 0:i32, %2\n%14:i1 = or %12, %13\npc %14 0:i1\n%15:i1 = ult 16777215:i32, %0\n%16:i32 = udiv 33554431:i32, %2\n%17:i1 = ult %16, %0\n%18:i1 = or %15, %17\npc %18 0:i1\n%19:i32 = udiv 33554431:i32, %0\n%20:i64 = zext %19\n%21:i1 = ult %20, %6\npc %21 0:i1\n%22:i32 = shlnw %0, 7:i32 (hasExternalUses)\n%23:i32 = mul %2, %22 (hasExternalUses)\n%24:i32 = trunc %6 (hasExternalUses)\n%25:i32 = mul %22, %24 (hasExternalUses)\n%26:i32 = add %23, %25 (hasExternalUses)\n%27:i1 = ult %26, %25\npc %27 0:i1\n%28:i32 = shlnuw %0, 8:i32\n%29:i32 = or 64:i32, %28 (hasExternalUses)\n%30:i32 = add %26, %29\ninfer %30\n",
+        []
+    ],
+    [
+        "%0:i32 = var\n%1:i32 = shlnw %0, 5:i32 (hasExternalUses)\n%2:i32 = and 1073741792:i32, %1 (hasExternalUses)\n%3:i1 = eq 0:i32, %2\npc %3 0:i1\n%4:i32 = var\n%5:i64 = var\n%6:i32 = trunc %5 (hasExternalUses)\n%7:i32 = add 4294967295:i32, %6 (hasExternalUses)\n%8:i32 = and %4, %7\n%9:i32 = mul %8, %1\ninfer %9\n",
+        []
+    ],
+    [
+        "%0:i32 = var\n%1:i32 = var\n%2:i32 = xor %0, %1\ninfer %2\n",
+        []
+    ],
+    [
+        "%0:i32 = var (knownBits=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx0) (range=[0,-3))\n%1:i32 = shl %0, 4:i32 (hasExternalUses)\n%2:i32 = or 16:i32, %1\ninfer %2\n",
+        []
+    ],
+    [
+        "%0:i32 = var\n%1:i64 = zext %0\n%2:i32 = var\n%3:i64 = zext %2\n%4:i64 = mulnuw %1, %3\n%5:i1 = ult 1073741823:i64, %4\npc %5 0:i1\n%6:i64 = var\n%7:i1 = ult 4294967295:i64, %6\npc %7 0:i1\n%8:i64 = ctpop %6\n%9:i1 = ult 1:i64, %8\n%10:i1 = ult %6, 2:i64\n%11:i1 = or %9, %10\npc %11 0:i1\n%12:i1 = eq 0:i32, %0\n%13:i1 = eq 0:i32, %2\n%14:i1 = or %12, %13\npc %14 0:i1\n%15:i1 = ult 16777215:i32, %0\n%16:i32 = udiv 33554431:i32, %2\n%17:i1 = ult %16, %0\n%18:i1 = or %15, %17\npc %18 0:i1\n%19:i32 = udiv 33554431:i32, %0\n%20:i64 = zext %19\n%21:i1 = ult %20, %6\npc %21 0:i1\n%22:i32 = shlnw %0, 7:i32 (hasExternalUses)\n%23:i32 = mul %2, %22\ninfer %23\n",
+        []
+    ],
+    [
+        "%0:i32 = var (knownBits=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx0) (range=[0,-3))\n%1:i32 = addnuw 2:i32, %0 (hasExternalUses)\n%2:i32 = var\n%3:i32 = shl %2, 1:i32 (hasExternalUses)\n%4:i1 = ult %1, %3\ninfer %4\n",
+        []
+    ],
+    [
+        "%0:i32 = var (knownBits=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx0) (range=[0,-3))\n%1:i32 = shl %0, 4:i32\ninfer %1\n",
+        []
+    ],
+    [
+        "%0:i32 = var\n%1:i32 = var\n%2:i32 = var\n%3:i32 = add %1, %0\n%4:i32 = shl %3, 7:i32\n%5:i32 = lshr %3, 25:i32\n%6:i32 = or %4, %5\n%7:i32 = xor %2, %6 (hasExternalUses)\n%8:i32 = var\n%9:i32 = add %0, %7\n%10:i32 = shl %9, 9:i32\n%11:i32 = lshr %9, 23:i32\n%12:i32 = or %10, %11\n%13:i32 = xor %8, %12 (hasExternalUses)\n%14:i32 = add %7, %13\n%15:i32 = shl %14, 13:i32\n%16:i32 = lshr %14, 19:i32\n%17:i32 = or %15, %16\n%18:i32 = xor %1, %17 (hasExternalUses)\n%19:i32 = add %18, %13\n%20:i32 = shl %19, 18:i32\n%21:i32 = lshr %19, 14:i32\n%22:i32 = or %20, %21\n%23:i32 = xor %0, %22 (hasExternalUses)\n%24:i32 = var\n%25:i32 = var\n%26:i32 = var\n%27:i32 = add %25, %26\n%28:i32 = shl %27, 7:i32\n%29:i32 = lshr %27, 25:i32\n%30:i32 = or %28, %29\n%31:i32 = xor %24, %30 (hasExternalUses)\n%32:i32 = add %23, %31 (hasExternalUses)\n%33:i32 = lshr %32, 25:i32\ninfer %33\n",
+        []
+    ],
+    [
+        "%0:i32 = var\n%1:i32 = var\n%2:i32 = add %0, %1\ninfer %2\n",
+        []
+    ],
+    [
+        "%0:i32 = var\n%1:i64 = zext %0\n%2:i32 = var\n%3:i64 = zext %2\n%4:i64 = mulnuw %1, %3\n%5:i1 = ult 1073741823:i64, %4\npc %5 0:i1\n%6:i64 = var\n%7:i1 = ult 4294967295:i64, %6\npc %7 0:i1\n%8:i64 = ctpop %6\n%9:i1 = ult 1:i64, %8\n%10:i1 = ult %6, 2:i64\n%11:i1 = or %9, %10\npc %11 0:i1\n%12:i1 = eq 0:i32, %0\n%13:i1 = eq 0:i32, %2\n%14:i1 = or %12, %13\npc %14 0:i1\n%15:i1 = ult 16777215:i32, %0\n%16:i32 = udiv 33554431:i32, %2\n%17:i1 = ult %16, %0\n%18:i1 = or %15, %17\npc %18 0:i1\n%19:i32 = udiv 33554431:i32, %0\n%20:i64 = zext %19\n%21:i1 = ult %20, %6\npc %21 0:i1\n%22:i32 = shlnw %0, 7:i32 (hasExternalUses)\n%23:i32 = mul %2, %22 (hasExternalUses)\n%24:i32 = trunc %6 (hasExternalUses)\n%25:i32 = mul %22, %24 (hasExternalUses)\n%26:i32 = add %23, %25 (hasExternalUses)\n%27:i1 = ult %26, %25\npc %27 0:i1\n%28:i32 = shlnuw %0, 8:i32\n%29:i32 = or 64:i32, %28\n%30:i32 = add %26, %29 (hasExternalUses)\n%31:i1 = ult %30, %29\npc %31 0:i1\n%32:i32 = var\n%33:i1 = ult %32, %30\ninfer %33\n",
+        []
+    ],
+    [
+        "%0:i64 = var (knownBits=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx0) (range=[0,-1))\n%1:i64 = add 2:i64, %0\ninfer %1\n",
+        []
+    ],
+    [
+        "%0:i32 = var (knownBits=0xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx0) (nonNegative) (range=[0,7))\n%1:i32 = addnw 2:i32, %0\ninfer %1\n",
+        []
+    ],
+    [
+        "%0:i64 = var\n%1:i1 = ult 4294967295:i64, %0\ninfer %1\n",
+        [
+            "%7:i1 = select %1, %1, 0:i1\nresult %7\n",
+            "%3:i1 = freeze %1\nresult %3\n",
+            "%9:i1 = select %1, 1:i1, 0:i1\nresult %9\n",
+            "%2:i1 = and %1, %1\nresult %2\n",
+            "result %1\n",
+            "%4:i1 = or %1, %1\nresult %4\n",
+            "%5:i1 = eq 1:i1, %1\nresult %5\n",
+            "%6:i1 = ule 4294967296:i64, %0\nresult %6\n",
+            "%8:i1 = select %1, 1:i1, %1\nresult %8\n"
+        ]
+    ],
+    [
+        "%0:i32 = var\n%1:i64 = zext %0\n%2:i32 = var\n%3:i64 = zext %2\n%4:i64 = mulnuw %1, %3\n%5:i1 = ult 1073741823:i64, %4\npc %5 0:i1\n%6:i64 = var\n%7:i1 = ult 4294967295:i64, %6\npc %7 0:i1\n%8:i64 = ctpop %6\n%9:i1 = ult 1:i64, %8\n%10:i1 = ult %6, 2:i64\n%11:i1 = or %9, %10\npc %11 0:i1\n%12:i1 = eq 0:i32, %0\n%13:i1 = eq 0:i32, %2\n%14:i1 = or %12, %13\npc %14 0:i1\n%15:i1 = ult 16777215:i32, %0\n%16:i32 = udiv 33554431:i32, %2\n%17:i1 = ult %16, %0\n%18:i1 = or %15, %17\npc %18 0:i1\n%19:i32 = udiv 33554431:i32, %0\n%20:i64 = zext %19\n%21:i1 = ult %20, %6\npc %21 0:i1\n%22:i32 = shlnw %0, 7:i32\ninfer %22\n",
+        []
+    ],
+    [
+        "%0:i32 = var\n%1:i32 = shlnw %0, 5:i32 (hasExternalUses)\n%2:i32 = and 1073741792:i32, %1 (hasExternalUses)\n%3:i1 = eq 0:i32, %2\npc %3 0:i1\n%4:i64 = var (knownBits=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx0) (range=[0,-1))\n%5:i32 = trunc %4 (hasExternalUses)\n%6:i32 = mul %1, %5\ninfer %6\n",
+        []
+    ],
+    [
+        "%0:i32 = var\n%1:i64 = zext %0\n%2:i32 = var\n%3:i64 = zext %2\n%4:i64 = mulnuw %1, %3\n%5:i1 = ult 1073741823:i64, %4\npc %5 0:i1\n%6:i64 = var\n%7:i1 = ult 4294967295:i64, %6\npc %7 0:i1\n%8:i64 = ctpop %6\n%9:i1 = ult 1:i64, %8\n%10:i1 = ult %6, 2:i64\n%11:i1 = or %9, %10\npc %11 0:i1\n%12:i1 = eq 0:i32, %0\n%13:i1 = eq 0:i32, %2\n%14:i1 = or %12, %13\npc %14 0:i1\n%15:i1 = ult 16777215:i32, %0\n%16:i32 = udiv 33554431:i32, %2\n%17:i1 = ult %16, %0\n%18:i1 = or %15, %17\npc %18 0:i1\n%19:i32 = udiv 33554431:i32, %0\n%20:i64 = zext %19\n%21:i1 = ult %20, %6\npc %21 0:i1\n%22:i32 = shlnw %0, 7:i32 (hasExternalUses)\n%23:i32 = trunc %6 (hasExternalUses)\n%24:i32 = mul %22, %23\ninfer %24\n",
+        []
+    ],
+    [
+        "%0:i32 = var\n%1:i32 = shlnw %0, 5:i32 (hasExternalUses)\n%2:i32 = and 1073741792:i32, %1\ninfer %2\n",
+        []
+    ],
+    [
+        "%0:i64 = var (knownBits=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx0) (range=[0,-1))\n%1:i64 = add 2:i64, %0 (hasExternalUses)\n%2:i64 = var\n%3:i1 = ult %1, %2\ninfer %3\n",
+        []
+    ],
+    [
+        "%0:i64 = var\n%1:i1 = ult 4294967295:i64, %0\npc %1 0:i1\n%2:i64 = ctpop %0\ninfer %2\n",
+        []
+    ],
+    [
+        "%0:i64 = var (knownBits=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx0) (range=[0,-1))\ninfer %0\n",
+        []
+    ],
+    [
+        "%0:i32 = var\n%1:i32 = var\n%2:i32 = var\n%3:i32 = add %1, %2\n%4:i32 = shl %3, 7:i32\n%5:i32 = lshr %3, 25:i32\n%6:i32 = or %4, %5\n%7:i32 = xor %0, %6 (hasExternalUses)\n%8:i32 = var\n%9:i32 = add %2, %7\n%10:i32 = shl %9, 9:i32\n%11:i32 = lshr %9, 23:i32\n%12:i32 = or %10, %11\n%13:i32 = xor %8, %12 (hasExternalUses)\n%14:i32 = add %7, %13\n%15:i32 = shl %14, 13:i32\n%16:i32 = lshr %14, 19:i32\n%17:i32 = or %15, %16\ninfer %17\n",
+        []
+    ],
+    [
+        "%0:i32 = var\n%1:i32 = shlnw %0, 5:i32 (hasExternalUses)\n%2:i32 = and 1073741792:i32, %1 (hasExternalUses)\n%3:i1 = eq 0:i32, %2\ninfer %3\n",
+        [
+            "result %3\n",
+            "%14:i1 = select %3, 1:i1, 0:i1\nresult %14\n",
+            "%5:i1 = freeze %3\nresult %5\n",
+            "%7:i1 = or %3, %3\nresult %7\n",
+            "%13:i1 = select %3, 1:i1, %3\nresult %13\n",
+            "%4:i1 = and %3, %3\nresult %4\n",
+            "%9:i1 = slt %2, 32:i32\nresult %9\n",
+            "%8:i1 = eq 1:i1, %3\nresult %8\n",
+            "%6:i1 = and %3, %3\nresult %6\n",
+            "%6:i1 = freeze %3\nresult %6\n",
+            "%5:i1 = ult %2, 32:i32\nresult %5\n",
+            "%12:i1 = select %3, %3, 0:i1\nresult %12\n",
+            "%10:i1 = ule %2, 8:i32\nresult %10\n",
+            "%4:i1 = ult %2, 32:i32\nresult %4\n",
+            "%11:i1 = sle %2, 0:i32\nresult %11\n"
+        ]
+    ],
+    [
+        "%0:i32 = var\n%1:i32 = var\n%2:i32 = var\n%3:i32 = add %0, %2\n%4:i32 = shl %3, 7:i32\n%5:i32 = lshr %3, 25:i32\n%6:i32 = or %4, %5\n%7:i32 = xor %1, %6 (hasExternalUses)\n%8:i32 = var\n%9:i32 = add %2, %7\n%10:i32 = shl %9, 9:i32\n%11:i32 = lshr %9, 23:i32\n%12:i32 = or %10, %11\n%13:i32 = xor %8, %12 (hasExternalUses)\n%14:i32 = add %7, %13\n%15:i32 = shl %14, 13:i32\n%16:i32 = lshr %14, 19:i32\n%17:i32 = or %15, %16\n%18:i32 = xor %0, %17 (hasExternalUses)\n%19:i32 = add %18, %13 (hasExternalUses)\n%20:i32 = lshr %19, 14:i32\ninfer %20\n",
+        []
+    ],
+    [
+        "%0:i32 = var\n%1:i32 = var\n%2:i32 = var\n%3:i32 = add %2, %0\n%4:i32 = shl %3, 7:i32\n%5:i32 = lshr %3, 25:i32\n%6:i32 = or %4, %5\n%7:i32 = xor %1, %6 (hasExternalUses)\n%8:i32 = add %0, %7 (hasExternalUses)\n%9:i32 = shl %8, 9:i32\ninfer %9\n",
+        []
+    ],
+    [
+        "%0:i32 = var\n%1:i32 = shl %0, 1:i32\ninfer %1\n",
+        []
+    ],
+    [
+        "%0:i64 = var\n%1:i1 = ult 4294967295:i64, %0\npc %1 0:i1\n%2:i1 = ult %0, 2:i64\ninfer %2\n",
+        [
+            "result %2\n",
+            "%8:i1 = ule %0, 1:i64\nresult %8\n",
+            "%9:i1 = sle %0, 1:i64\nresult %9\n",
+            "%4:i1 = and %2, %2\nresult %4\n",
+            "%5:i1 = freeze %2\nresult %5\n",
+            "%4:i1 = or %2, %2\nresult %4\n",
+            "%3:i1 = and %2, %2\nresult %3\n",
+            "%3:i1 = freeze %2\nresult %3\n",
+            "%7:i1 = slt %0, 2:i64\nresult %7\n",
+            "%12:i1 = select %2, 1:i1, 0:i1\nresult %12\n",
+            "%10:i1 = select %2, %2, 0:i1\nresult %10\n",
+            "%11:i1 = select %2, 1:i1, %2\nresult %11\n",
+            "%5:i1 = or %2, %2\nresult %5\n",
+            "%6:i1 = eq 1:i1, %2\nresult %6\n"
+        ]
+    ],
+    [
+        "%0:i32 = var\n%1:i32 = shl %0, 5:i32\n%2:i32 = add 4294967280:i32, %1\ninfer %2\n",
+        []
+    ],
+    [
+        "%0:i64 = var (knownBits=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx0) (range=[0,-1))\n%1:i32 = trunc %0\ninfer %1\n",
+        []
+    ],
+    [
+        "%0:i32 = var\n%1:i32 = var\n%2:i32 = var\n%3:i32 = add %1, %0\n%4:i32 = shl %3, 7:i32\n%5:i32 = lshr %3, 25:i32\n%6:i32 = or %4, %5\n%7:i32 = xor %2, %6 (hasExternalUses)\n%8:i32 = var\n%9:i32 = add %0, %7\n%10:i32 = shl %9, 9:i32\n%11:i32 = lshr %9, 23:i32\n%12:i32 = or %10, %11\n%13:i32 = xor %8, %12 (hasExternalUses)\n%14:i32 = add %7, %13\n%15:i32 = shl %14, 13:i32\n%16:i32 = lshr %14, 19:i32\n%17:i32 = or %15, %16\n%18:i32 = xor %1, %17 (hasExternalUses)\n%19:i32 = add %18, %13\n%20:i32 = shl %19, 18:i32\n%21:i32 = lshr %19, 14:i32\n%22:i32 = or %20, %21\n%23:i32 = xor %0, %22 (hasExternalUses)\n%24:i32 = var\n%25:i32 = var\n%26:i32 = var\n%27:i32 = add %25, %26\n%28:i32 = shl %27, 7:i32\n%29:i32 = lshr %27, 25:i32\n%30:i32 = or %28, %29\n%31:i32 = xor %24, %30 (hasExternalUses)\n%32:i32 = add %23, %31\ninfer %32\n",
+        []
+    ],
+    [
+        "%0:i32 = var\n%1:i64 = zext %0\n%2:i32 = var\n%3:i64 = zext %2\n%4:i64 = mulnuw %1, %3\n%5:i1 = ult 1073741823:i64, %4\npc %5 0:i1\n%6:i64 = var\n%7:i1 = ult 4294967295:i64, %6\npc %7 0:i1\n%8:i64 = ctpop %6\n%9:i1 = ult 1:i64, %8\n%10:i1 = ult %6, 2:i64\n%11:i1 = or %9, %10\npc %11 0:i1\n%12:i1 = eq 0:i32, %0\n%13:i1 = eq 0:i32, %2\n%14:i1 = or %12, %13\npc %14 0:i1\n%15:i1 = ult 16777215:i32, %0\n%16:i32 = udiv 33554431:i32, %2\n%17:i1 = ult %16, %0\n%18:i1 = or %15, %17\npc %18 0:i1\n%19:i32 = udiv 33554431:i32, %0\n%20:i64 = zext %19\n%21:i1 = ult %20, %6\ninfer %21\n",
+        []
+    ],
+    [
+        "%0:i32 = var\n%1:i32 = var\n%2:i32 = var\n%3:i32 = add %1, %2\n%4:i32 = shl %3, 7:i32\n%5:i32 = lshr %3, 25:i32\n%6:i32 = or %4, %5\n%7:i32 = xor %0, %6\ninfer %7\n",
+        []
+    ],
+    [
+        "%0:i32 = var\n%1:i64 = zext %0\n%2:i32 = var\n%3:i64 = zext %2\n%4:i64 = mulnuw %1, %3\n%5:i1 = ult 1073741823:i64, %4\npc %5 0:i1\n%6:i64 = var\n%7:i1 = ult 4294967295:i64, %6\npc %7 0:i1\n%8:i64 = ctpop %6\n%9:i1 = ult 1:i64, %8\n%10:i1 = ult %6, 2:i64\n%11:i1 = or %9, %10\npc %11 0:i1\n%12:i1 = eq 0:i32, %0\n%13:i1 = eq 0:i32, %2\n%14:i1 = or %12, %13\npc %14 0:i1\n%15:i1 = ult 16777215:i32, %0\n%16:i32 = udiv 33554431:i32, %2\n%17:i1 = ult %16, %0\n%18:i1 = or %15, %17\npc %18 0:i1\n%19:i32 = udiv 33554431:i32, %0\n%20:i64 = zext %19\n%21:i1 = ult %20, %6\npc %21 0:i1\n%22:i32 = trunc %6\ninfer %22\n",
+        []
+    ],
+    [
+        "%0:i32 = var (knownBits=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx0) (range=[0,-3))\n%1:i32 = addnuw 2:i32, %0\ninfer %1\n",
+        []
+    ],
+    [
+        "%0:i32 = var\n%1:i32 = var\n%2:i32 = var\n%3:i32 = add %1, %0\n%4:i32 = shl %3, 7:i32\n%5:i32 = lshr %3, 25:i32\n%6:i32 = or %4, %5\n%7:i32 = xor %2, %6 (hasExternalUses)\n%8:i32 = var\n%9:i32 = add %0, %7\n%10:i32 = shl %9, 9:i32\n%11:i32 = lshr %9, 23:i32\n%12:i32 = or %10, %11\n%13:i32 = xor %8, %12 (hasExternalUses)\n%14:i32 = add %7, %13\n%15:i32 = shl %14, 13:i32\n%16:i32 = lshr %14, 19:i32\n%17:i32 = or %15, %16\n%18:i32 = xor %1, %17 (hasExternalUses)\n%19:i32 = add %18, %13\n%20:i32 = shl %19, 18:i32\n%21:i32 = lshr %19, 14:i32\n%22:i32 = or %20, %21\n%23:i32 = xor %0, %22 (hasExternalUses)\n%24:i32 = var\n%25:i32 = var\n%26:i32 = var\n%27:i32 = add %25, %26\n%28:i32 = shl %27, 7:i32\n%29:i32 = lshr %27, 25:i32\n%30:i32 = or %28, %29\n%31:i32 = xor %24, %30 (hasExternalUses)\n%32:i32 = add %23, %31\n%33:i32 = shl %32, 7:i32\n%34:i32 = lshr %32, 25:i32\n%35:i32 = or %33, %34\ninfer %35\n",
+        []
+    ],
+    [
+        "%0:i32 = var\n%1:i32 = var\n%2:i32 = var\n%3:i32 = add %0, %2\n%4:i32 = shl %3, 7:i32\n%5:i32 = lshr %3, 25:i32\n%6:i32 = or %4, %5\n%7:i32 = xor %1, %6 (hasExternalUses)\n%8:i32 = var\n%9:i32 = add %2, %7\n%10:i32 = shl %9, 9:i32\n%11:i32 = lshr %9, 23:i32\n%12:i32 = or %10, %11\n%13:i32 = xor %8, %12 (hasExternalUses)\n%14:i32 = add %7, %13\n%15:i32 = shl %14, 13:i32\n%16:i32 = lshr %14, 19:i32\n%17:i32 = or %15, %16\n%18:i32 = xor %0, %17\ninfer %18\n",
+        []
+    ],
+    [
+        "%0:i32 = var\n%1:i64 = zext %0\n%2:i32 = var\n%3:i64 = zext %2\n%4:i64 = mulnuw %1, %3\n%5:i1 = ult 1073741823:i64, %4\npc %5 0:i1\n%6:i64 = var\n%7:i1 = ult 4294967295:i64, %6\npc %7 0:i1\n%8:i64 = ctpop %6\n%9:i1 = ult 1:i64, %8\n%10:i1 = ult %6, 2:i64\n%11:i1 = or %9, %10\npc %11 0:i1\n%12:i1 = eq 0:i32, %0\n%13:i1 = eq 0:i32, %2\n%14:i1 = or %12, %13\npc %14 0:i1\n%15:i1 = ult 16777215:i32, %0\n%16:i32 = udiv 33554431:i32, %2\n%17:i1 = ult %16, %0\n%18:i1 = or %15, %17\npc %18 0:i1\n%19:i32 = udiv 33554431:i32, %0\n%20:i64 = zext %19\n%21:i1 = ult %20, %6\npc %21 0:i1\n%22:i32 = shlnw %0, 7:i32 (hasExternalUses)\n%23:i32 = mul %2, %22 (hasExternalUses)\n%24:i32 = trunc %6 (hasExternalUses)\n%25:i32 = mul %22, %24 (hasExternalUses)\n%26:i32 = add %23, %25\ninfer %26\n",
+        []
+    ],
+    [
+        "%0:i64 = var\n%1:i1 = ult 4294967295:i64, %0\npc %1 0:i1\n%2:i64 = ctpop %0\n%3:i1 = ult 1:i64, %2\ninfer %3\n",
+        [
+            "result %3\n",
+            "%12:i1 = select %3, 1:i1, 0:i1\nresult %12\n",
+            "%5:i1 = freeze %3\nresult %5\n",
+            "%9:i1 = sle 2:i64, %2\nresult %9\n",
+            "%4:i1 = and %3, %3\nresult %4\n",
+            "%8:i1 = slt 1:i64, %2\nresult %8\n",
+            "%5:i1 = or %3, %3\nresult %5\n",
+            "%10:i1 = select %3, %3, 0:i1\nresult %10\n",
+            "%7:i1 = eq 1:i1, %3\nresult %7\n",
+            "%4:i1 = or %3, %3\nresult %4\n",
+            "%6:i1 = and %3, %3\nresult %6\n",
+            "%6:i1 = freeze %3\nresult %6\n",
+            "%11:i1 = select %3, 1:i1, %3\nresult %11\n"
+        ]
+    ],
+    [
+        "%0:i32 = var\n%1:i32 = var\n%2:i32 = var\n%3:i32 = add %1, %2\n%4:i32 = shl %3, 7:i32\n%5:i32 = lshr %3, 25:i32\n%6:i32 = or %4, %5\n%7:i32 = xor %0, %6 (hasExternalUses)\n%8:i32 = var\n%9:i32 = var\n%10:i32 = var\n%11:i32 = add %9, %8\n%12:i32 = shl %11, 7:i32\n%13:i32 = lshr %11, 25:i32\n%14:i32 = or %12, %13\n%15:i32 = xor %10, %14 (hasExternalUses)\n%16:i32 = var\n%17:i32 = add %8, %15\n%18:i32 = shl %17, 9:i32\n%19:i32 = lshr %17, 23:i32\n%20:i32 = or %18, %19\n%21:i32 = xor %16, %20 (hasExternalUses)\n%22:i32 = add %15, %21\n%23:i32 = shl %22, 13:i32\n%24:i32 = lshr %22, 19:i32\n%25:i32 = or %23, %24\n%26:i32 = xor %9, %25 (hasExternalUses)\n%27:i32 = add %26, %21\n%28:i32 = shl %27, 18:i32\n%29:i32 = lshr %27, 14:i32\n%30:i32 = or %28, %29\n%31:i32 = xor %8, %30 (hasExternalUses)\n%32:i32 = add %7, %31 (hasExternalUses)\n%33:i32 = lshr %32, 25:i32\ninfer %33\n",
+        []
+    ],
+    [
+        "%0:i32 = var\ninfer %0\n",
+        []
+    ],
+    [
+        "%0:i64 = var (knownBits=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx0) (range=[0,-1))\n%1:i32 = trunc %0 (hasExternalUses)\n%2:i32 = or 1:i32, %1\ninfer %2\n",
+        []
+    ]
+]

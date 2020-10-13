@@ -1,0 +1,36 @@
+[
+    [
+        "%0:i32 = var (knownBits=0xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx) (nonNegative) (range=[0,32))\n%1:i32 = addnw 1:i32, %0\ninfer %1\n",
+        []
+    ],
+    [
+        "%0:i32 = var (knownBits=0xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx) (nonNegative) (range=[0,32))\n%1:i32 = addnw 1:i32, %0 (hasExternalUses)\n%2:i1 = eq 32:i32, %1\ninfer %2\n",
+        []
+    ],
+    [
+        "%0:i8 = var\ninfer %0\n",
+        [
+            "result %0\n"
+        ]
+    ],
+    [
+        "%0 = block 2\n%1:i32 = phi %0, 0:i32, 4294967295:i32\ninfer %1\n",
+        []
+    ],
+    [
+        "%0:i32 = var\n%1:i1 = eq 0:i32, %0\ninfer %1\n",
+        []
+    ],
+    [
+        "%0:i32 = var (knownBits=0xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx) (nonNegative) (range=[0,32))\n%1:i32 = addnw 32:i32, %0\ninfer %1\n",
+        []
+    ],
+    [
+        "%0:i32 = var\ninfer %0\n",
+        []
+    ],
+    [
+        "%0:i32 = var (knownBits=0xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx) (nonNegative) (range=[0,32))\ninfer %0\n",
+        []
+    ]
+]
