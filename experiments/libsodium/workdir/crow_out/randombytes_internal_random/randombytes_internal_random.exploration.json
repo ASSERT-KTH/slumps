@@ -1,0 +1,120 @@
+[
+    [
+        "%0 = block 2\n%1:i32 = var\n%2:i32 = phi %0, 480:i32, %1\ninfer %2\n",
+        []
+    ],
+    [
+        "%0:i64 = var\n%1:i64 = var\n%2:i64 = mul 1000000:i64, %1\n%3:i64 = add %0, %2 (hasExternalUses)\n%4:i1 = eq 0:i64, %3\ninfer %4\n",
+        []
+    ],
+    [
+        "%0:i8 = var\n%1:i8 = var\n%2:i8 = xor %0, %1\ninfer %2\n",
+        []
+    ],
+    [
+        "%0:i64 = var\ninfer %0\n",
+        []
+    ],
+    [
+        "%0:i32 = var\n%1:i32 = lshr %0, 24:i32\ninfer %1 (demandedBits=00000000000000000000000011111111)\n",
+        []
+    ],
+    [
+        "%0:i1 = var\n%1:i1 = xor 1:i1, %0\ninfer %1\n",
+        [
+            "%2:i1 = ule %0, 0:i1\nresult %2\n"
+        ]
+    ],
+    [
+        "%0:i64 = var\n%1:i64 = var\n%2:i64 = mul 1000000:i64, %1\n%3:i64 = add %0, %2\ninfer %3\n",
+        []
+    ],
+    [
+        "%0:i32 = var\n%1:i32 = lshr %0, 8:i32\ninfer %1 (demandedBits=00000000000000000000000011111111)\n",
+        []
+    ],
+    [
+        "%0:i32 = var\n%1:i32 = lshr %0, 16:i32\n%2:i8 = trunc %1\ninfer %2\n",
+        []
+    ],
+    [
+        "%0:i8 = var\ninfer %0\n",
+        []
+    ],
+    [
+        "%0 = block 2\n%1:i32 = var\n%2:i32 = phi %0, 480:i32, %1\n%3:i32 = add 4294967292:i32, %2\ninfer %3\n",
+        []
+    ],
+    [
+        "%0:i64 = var\n%1:i64 = mul 1000000:i64, %0\ninfer %1\n",
+        []
+    ],
+    [
+        "%0:i32 = var\n%1:i32 = lshr %0, 24:i32\n%2:i8 = trunc %1\ninfer %2\n",
+        []
+    ],
+    [
+        "%0:i8 = var\n%1:i32 = var\n%2:i32 = lshr %1, 24:i32\n%3:i8 = trunc %2\n%4:i8 = xor %0, %3\ninfer %4\n",
+        []
+    ],
+    [
+        "%0:i32 = var\n%1:i32 = lshr %0, 16:i32\ninfer %1 (demandedBits=00000000000000000000000011111111)\n",
+        []
+    ],
+    [
+        "%0:i32 = var\n%1:i32 = lshr %0, 8:i32\n%2:i8 = trunc %1\ninfer %2\n",
+        []
+    ],
+    [
+        "%0:i32 = var (knownBits=0xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx) (nonNegative) (range=[0,32))\n%1:i32 = addnw 1:i32, %0\ninfer %1\n",
+        []
+    ],
+    [
+        "%0:i8 = var\n%1:i32 = var\n%2:i32 = lshr %1, 16:i32\n%3:i8 = trunc %2\n%4:i8 = xor %0, %3\ninfer %4\n",
+        []
+    ],
+    [
+        "%0:i1 = var\n%1:i1 = xor 1:i1, %0\n%2:i32 = sext %1\ninfer %2\n",
+        []
+    ],
+    [
+        "%0:i8 = var\n%1:i32 = var\n%2:i8 = trunc %1\n%3:i8 = xor %0, %2\ninfer %3\n",
+        []
+    ],
+    [
+        "%0:i32 = var\n%1:i8 = trunc %0\ninfer %1\n",
+        []
+    ],
+    [
+        "%0:i32 = var\n%1:i64 = zext %0\ninfer %1\n",
+        []
+    ],
+    [
+        "%0:i32 = var (knownBits=0xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx) (nonNegative) (range=[0,32))\ninfer %0\n",
+        []
+    ],
+    [
+        "%0:i8 = var\n%1:i32 = var\n%2:i32 = lshr %1, 8:i32\n%3:i8 = trunc %2\n%4:i8 = xor %0, %3\ninfer %4\n",
+        []
+    ],
+    [
+        "%0:i64 = var\n%1:i64 = add 1:i64, %0\ninfer %1\n",
+        []
+    ],
+    [
+        "%0:i32 = var (knownBits=0xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx) (nonNegative) (range=[0,32))\n%1:i32 = addnw 1:i32, %0 (hasExternalUses)\n%2:i1 = eq 32:i32, %1\ninfer %2\n",
+        []
+    ],
+    [
+        "%0:i32 = var\ninfer %0\n",
+        []
+    ],
+    [
+        "%0:i32 = var\n%1:i1 = eq 0:i32, %0\ninfer %1\n",
+        []
+    ],
+    [
+        "%0:i1 = var\ninfer %0\n",
+        []
+    ]
+]

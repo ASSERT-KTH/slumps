@@ -1,0 +1,13 @@
+diff --git a/.gitmodules b/.gitmodules
+index e8b2eac..c0ce0f3 100644
+--- a/.gitmodules
++++ b/.gitmodules
+@@ -1,6 +1,7 @@
+ [submodule "src/llvm-project"]
+ 	path = src/llvm-project
+-	url = https://github.com/llvm/llvm-project
++	url = https://github.com/Jacarte/llvm-project
++	breanch = peephole-disabling-v4
+ [submodule "src/wasi-libc"]
+ 	path = src/wasi-libc
+ 	url = https://github.com/CraneStation/wasi-libc

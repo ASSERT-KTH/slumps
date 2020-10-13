@@ -1,0 +1,13 @@
+from ubuntu:latest
+
+ENV DEBIAN_FRONTEND noninteractive
+
+# Install basic stuff
+run apt-get update -qq \
+    && apt-get full-upgrade -y \
+    && apt-get install -y automake build-essential cmake curl git libtool software-properties-common tmux vim zip python3-pip
+
+run git clone https://github.com/orestisfl/fastdtw/ \
+    && cd fastdtw \
+    && pip3 install Cython numpy \
+    && pip3 install .
