@@ -34,7 +34,7 @@ if [ ! -d aflpp ]; then
 	sudo make install
 	if test -f "afl-fuzz"; then
 		echo "afl-fuzz is not compiled"
-		exit 1 # Fail if SWAM is not compiled
+		exit 1 # Fail if AFLPP is not compiled
 	fi
 	cd ..
 fi
