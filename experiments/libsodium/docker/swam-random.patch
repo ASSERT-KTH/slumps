@@ -1,0 +1,22 @@
+diff --git a/wasi/src/swam/runtime/wasi/internal/MiscOps.scala b/wasi/src/swam/runtime/wasi/internal/MiscOps.scala
+index 99c14854..5dd8876f 100644
+--- a/wasi/src/swam/runtime/wasi/internal/MiscOps.scala
++++ b/wasi/src/swam/runtime/wasi/internal/MiscOps.scala
+@@ -21,15 +21,11 @@ package internal
+ 
+ import cats.implicits._
+ 
+-import java.security.SecureRandom
++import java.util.Random
+ 
+ private[wasi] trait MiscOps[F[_]] extends WasiBase[F] {
+ 
+-  private val random =
+-    if (options.contains(WasiOption.NonBlockingRNG))
+-      SecureRandom.getInstance("NativePRNGNonBlocking")
+-    else
+-      SecureRandom.getInstance("NativePRNGBlocking")
++  private val random = new Random(42)
+ 
+   def pollOneoff(in: Pointer, out: Pointer, nsubscriptions: Size, nevents: Pointer): F[Errno] =
+     unimplemented("poll_oneoff")

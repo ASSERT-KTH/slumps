@@ -1,0 +1,54 @@
+[
+    [
+        "%0:i32 = var\n%1:i1 = eq 0:i32, %0\ninfer %1\n",
+        []
+    ],
+    [
+        "%0:i8 = var\n%1:i8 = and 63:i8, %0\n%2:i8 = or 64:i8, %1\ninfer %2\n",
+        []
+    ],
+    [
+        "%0:i64 = var\ninfer %0\n",
+        []
+    ],
+    [
+        "%0:i64 = var\n%1:i1 = eq 64:i64, %0\ninfer %1\n",
+        []
+    ],
+    [
+        "%0:i64 = var\n%1:i64 = add 64:i64, %0\ninfer %1\n",
+        []
+    ],
+    [
+        "%0:i8 = var\n%1:i8 = and 63:i8, %0\ninfer %1 (demandedBits=10111111)\n",
+        []
+    ],
+    [
+        "%0:i8 = var\n%1:i8 = and 248:i8, %0\ninfer %1\n",
+        []
+    ],
+    [
+        "%0:i32 = var\n%1:i1 = ne 0:i32, %0\ninfer %1\n",
+        []
+    ],
+    [
+        "%0:i64 = var\n%1:i32 = trunc %0 (hasExternalUses)\n%2:i32 = add 64:i32, %1\ninfer %2\n",
+        []
+    ],
+    [
+        "%0:i64 = var\n%1:i32 = trunc %0\ninfer %1\n",
+        []
+    ],
+    [
+        "%0 = block 3\n%1:i32 = phi %0, 4294967295:i32, 0:i32, 0:i32\ninfer %1\n",
+        []
+    ],
+    [
+        "%0:i8 = var\ninfer %0 (demandedBits=11111000)\n",
+        []
+    ],
+    [
+        "%0:i8 = var\ninfer %0 (demandedBits=00111111)\n",
+        []
+    ]
+]
