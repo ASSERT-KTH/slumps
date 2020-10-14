@@ -1,0 +1,62 @@
+[
+    [
+        "%0:i32 = var\n%1:i32 = add 4294967295:i32, %0\n%2:i1 = ult 63:i32, %1\n%3:i32 = var\n%4:i1 = ult 64:i32, %3\n%5:i1 = or %2, %4\ninfer %5\n",
+        []
+    ],
+    [
+        "%0:i32 = var\n%1:i1 = ult 64:i32, %0\ninfer %1\n",
+        []
+    ],
+    [
+        "%0 = block 2\n%1:i32 = var\n%2:i32 = phi %0, %1, 4294967295:i32\ninfer %2\n",
+        []
+    ],
+    [
+        "%0:i32 = var\n%1:i32 = add 4294967295:i32, %0\n%2:i1 = ult 63:i32, %1\n%3:i32 = var\n%4:i1 = ult 64:i32, %3\n%5:i1 = or %2, %4\npc %5 0:i1\n%6:i1 = eq 0:i32, %3\n%7:i32 = var\n%8:i1 = eq 0:i32, %7\n%9:i1 = or %6, %8\npc %9 0:i1\n%10:i8 = trunc %3\ninfer %10\n",
+        []
+    ],
+    [
+        "%0:i32 = var\n%1:i1 = eq 0:i32, %0\ninfer %1\n",
+        []
+    ],
+    [
+        "%0:i32 = var\n%1:i1 = ult %0, 256:i32\npc %1 1:i1\n%2:i8 = trunc %0\ninfer %2\n",
+        []
+    ],
+    [
+        "%0:i32 = var\n%1:i1 = ult %0, 256:i32\ninfer %1\n",
+        []
+    ],
+    [
+        "%0:i32 = var\n%1:i32 = add 4294967295:i32, %0\n%2:i1 = ult 63:i32, %1\n%3:i32 = var\n%4:i1 = ult 64:i32, %3\n%5:i1 = or %2, %4\npc %5 0:i1\n%6:i8 = trunc %3\ninfer %6\n",
+        []
+    ],
+    [
+        "%0:i32 = var\ninfer %0\n",
+        []
+    ],
+    [
+        "%0 = block 4\n%1:i32 = phi %0, 0:i32, 4294967295:i32, 4294967295:i32, 4294967295:i32\ninfer %1\n",
+        []
+    ],
+    [
+        "%0:i32 = var\n%1:i32 = add 4294967295:i32, %0\n%2:i1 = ult 63:i32, %1\n%3:i32 = var\n%4:i1 = ult 64:i32, %3\n%5:i1 = or %2, %4\npc %5 0:i1\n%6:i1 = eq 0:i32, %3\n%7:i32 = var\n%8:i1 = eq 0:i32, %7\n%9:i1 = or %6, %8\ninfer %9\n",
+        []
+    ],
+    [
+        "%0:i32 = var\n%1:i32 = add 4294967295:i32, %0\n%2:i1 = ult 63:i32, %1\n%3:i32 = var\n%4:i1 = ult 64:i32, %3\n%5:i1 = or %2, %4\npc %5 0:i1\n%6:i1 = eq 0:i32, %3\ninfer %6\n",
+        []
+    ],
+    [
+        "%0:i32 = var\n%1:i32 = add 4294967295:i32, %0\n%2:i1 = ult 63:i32, %1\n%3:i32 = var\n%4:i1 = ult 64:i32, %3\n%5:i1 = or %2, %4\npc %5 0:i1\n%6:i8 = trunc %0\ninfer %6\n",
+        []
+    ],
+    [
+        "%0:i32 = var\n%1:i32 = add 4294967295:i32, %0\n%2:i1 = ult 63:i32, %1\ninfer %2\n",
+        []
+    ],
+    [
+        "%0:i32 = var\n%1:i32 = add 4294967295:i32, %0\ninfer %1\n",
+        []
+    ]
+]

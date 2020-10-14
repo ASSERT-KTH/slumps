@@ -1,0 +1,326 @@
+[
+    [
+        "%0:i64 = var\n%1:i64 = lshr %0, 51:i64\ninfer %1\n",
+        []
+    ],
+    [
+        "%0:i8 = var\n%1:i64 = zext %0\n%2:i64 = shlnw %1, 32:i64\ninfer %2\n",
+        []
+    ],
+    [
+        "%0:i64 = var\n%1:i64 = var\n%2:i64 = var\n%3:i64 = xor %1, %2\n%4:i64 = add %0, %3\n%5:i64 = var\n%6:i64 = var\n%7:i64 = add %5, %6\n%8:i64 = shl %6, 13:i64\n%9:i64 = lshr %6, 51:i64\n%10:i64 = or %8, %9\n%11:i64 = xor %7, %10 (hasExternalUses)\n%12:i64 = add %4, %11 (hasExternalUses)\n%13:i64 = shl %12, 32:i64\n%14:i64 = lshr %12, 32:i64\n%15:i64 = or %13, %14\n%16:i64 = shl %7, 32:i64\n%17:i64 = lshr %7, 32:i64\n%18:i64 = or %16, %17\n%19:i64 = shl %3, 16:i64\n%20:i64 = lshr %3, 48:i64\n%21:i64 = or %19, %20\n%22:i64 = xor %4, %21\n%23:i64 = add %18, %22 (hasExternalUses)\n%24:i64 = shl %22, 21:i64\n%25:i64 = lshr %22, 43:i64\n%26:i64 = or %24, %25\n%27:i64 = xor %23, %26\n%28:i64 = add %15, %27 (hasExternalUses)\n%29:i64 = shl %27, 16:i64\n%30:i64 = lshr %27, 48:i64\n%31:i64 = or %29, %30\n%32:i64 = xor %28, %31 (hasExternalUses)\n%33:i64 = lshr %32, 43:i64\ninfer %33\n",
+        []
+    ],
+    [
+        "%0:i64 = var\n%1:i64 = var\n%2:i64 = add %0, %1 (hasExternalUses)\n%3:i64 = lshr %2, 32:i64\ninfer %3\n",
+        []
+    ],
+    [
+        "%0:i64 = var\n%1:i64 = var\n%2:i64 = var\n%3:i64 = xor %1, %2 (hasExternalUses)\n%4:i64 = add %0, %3 (hasExternalUses)\n%5:i64 = var\n%6:i64 = var\n%7:i64 = add %5, %6 (hasExternalUses)\n%8:i64 = shl %6, 13:i64\n%9:i64 = lshr %6, 51:i64\n%10:i64 = or %8, %9\n%11:i64 = xor %7, %10\n%12:i64 = add %4, %11 (hasExternalUses)\n%13:i64 = shl %11, 17:i64\n%14:i64 = lshr %11, 47:i64\n%15:i64 = or %13, %14\n%16:i64 = xor %12, %15 (hasExternalUses)\n%17:i64 = lshr %16, 51:i64\ninfer %17\n",
+        []
+    ],
+    [
+        "%0:i64 = var\n%1:i64 = var\n%2:i64 = var\n%3:i64 = xor %1, %2\n%4:i64 = add %0, %3 (hasExternalUses)\n%5:i64 = shl %3, 16:i64\n%6:i64 = lshr %3, 48:i64\n%7:i64 = or %5, %6\n%8:i64 = xor %4, %7 (hasExternalUses)\n%9:i64 = shl %8, 21:i64\ninfer %9\n",
+        []
+    ],
+    [
+        "%0:i64 = var\n%1:i64 = var\n%2:i64 = add %0, %1 (hasExternalUses)\n%3:i64 = shl %2, 32:i64\n%4:i64 = lshr %2, 32:i64\n%5:i64 = or %3, %4\n%6:i64 = var\n%7:i64 = var\n%8:i64 = var\n%9:i64 = xor %7, %8\n%10:i64 = add %6, %9 (hasExternalUses)\n%11:i64 = shl %9, 16:i64\n%12:i64 = lshr %9, 48:i64\n%13:i64 = or %11, %12\n%14:i64 = xor %10, %13\n%15:i64 = add %5, %14 (hasExternalUses)\n%16:i64 = shl %14, 21:i64\n%17:i64 = lshr %14, 43:i64\n%18:i64 = or %16, %17\n%19:i64 = xor %15, %18 (hasExternalUses)\n%20:i64 = lshr %19, 48:i64\ninfer %20\n",
+        []
+    ],
+    [
+        "%0:i64 = var\n%1:i64 = var\n%2:i64 = add %0, %1 (hasExternalUses)\n%3:i64 = shl %2, 32:i64\n%4:i64 = lshr %2, 32:i64\n%5:i64 = or %3, %4\n%6:i64 = var\n%7:i64 = var\n%8:i64 = var\n%9:i64 = xor %7, %8\n%10:i64 = add %6, %9 (hasExternalUses)\n%11:i64 = shl %9, 16:i64\n%12:i64 = lshr %9, 48:i64\n%13:i64 = or %11, %12\n%14:i64 = xor %10, %13\n%15:i64 = add %5, %14 (hasExternalUses)\n%16:i64 = shl %14, 21:i64\n%17:i64 = lshr %14, 43:i64\n%18:i64 = or %16, %17\n%19:i64 = xor %15, %18\ninfer %19\n",
+        []
+    ],
+    [
+        "%0:i64 = var\n%1:i64 = var\n%2:i64 = var\n%3:i64 = xor %1, %2\n%4:i64 = add %0, %3\n%5:i64 = var\n%6:i64 = var\n%7:i64 = add %5, %6\n%8:i64 = shl %6, 13:i64\n%9:i64 = lshr %6, 51:i64\n%10:i64 = or %8, %9\n%11:i64 = xor %7, %10\n%12:i64 = add %4, %11\n%13:i64 = shl %12, 32:i64\n%14:i64 = lshr %12, 32:i64\n%15:i64 = or %13, %14\n%16:i64 = shl %7, 32:i64\n%17:i64 = lshr %7, 32:i64\n%18:i64 = or %16, %17\n%19:i64 = shl %3, 16:i64\n%20:i64 = lshr %3, 48:i64\n%21:i64 = or %19, %20\n%22:i64 = xor %4, %21\n%23:i64 = add %18, %22\n%24:i64 = shl %22, 21:i64\n%25:i64 = lshr %22, 43:i64\n%26:i64 = or %24, %25\n%27:i64 = xor %23, %26 (hasExternalUses)\n%28:i64 = add %15, %27 (hasExternalUses)\n%29:i64 = shl %11, 17:i64\n%30:i64 = lshr %11, 47:i64\n%31:i64 = or %29, %30\n%32:i64 = xor %12, %31\n%33:i64 = add %23, %32 (hasExternalUses)\n%34:i64 = shl %32, 13:i64\n%35:i64 = lshr %32, 51:i64\n%36:i64 = or %34, %35\n%37:i64 = xor %33, %36 (hasExternalUses)\n%38:i64 = add %28, %37\ninfer %38\n",
+        []
+    ],
+    [
+        "%0:i64 = var\n%1:i64 = var\n%2:i64 = var\n%3:i64 = xor %1, %2 (hasExternalUses)\n%4:i64 = add %0, %3 (hasExternalUses)\n%5:i64 = var\n%6:i64 = var\n%7:i64 = add %5, %6 (hasExternalUses)\n%8:i64 = shl %6, 13:i64\n%9:i64 = lshr %6, 51:i64\n%10:i64 = or %8, %9\n%11:i64 = xor %7, %10 (hasExternalUses)\n%12:i64 = add %4, %11 (hasExternalUses)\n%13:i64 = lshr %12, 32:i64\ninfer %13\n",
+        []
+    ],
+    [
+        "%0:i64 = var\n%1:i64 = shl %0, 13:i64\ninfer %1\n",
+        []
+    ],
+    [
+        "%0:i8 = var\n%1:i64 = zext %0\n%2:i64 = shlnw %1, 16:i64\ninfer %2\n",
+        []
+    ],
+    [
+        "%0 = block 2\n%1:i64 = var\n%2:i64 = shl %1, 56:i64 (hasExternalUses)\n%3:i8 = var\n%4:i64 = zext %3\n%5:i64 = shlnw %4, 48:i64\n%6:i64 = or %2, %5\n%7:i64 = phi %0, %2, %6\ninfer %7\n",
+        []
+    ],
+    [
+        "%0:i64 = var\n%1:i64 = var\n%2:i64 = add %0, %1\n%3:i64 = shl %2, 32:i64\n%4:i64 = lshr %2, 32:i64\n%5:i64 = or %3, %4\n%6:i64 = var\n%7:i64 = var\n%8:i64 = var\n%9:i64 = xor %7, %8\n%10:i64 = add %6, %9\n%11:i64 = shl %9, 16:i64\n%12:i64 = lshr %9, 48:i64\n%13:i64 = or %11, %12\n%14:i64 = xor %10, %13 (hasExternalUses)\n%15:i64 = add %5, %14 (hasExternalUses)\n%16:i64 = shl %1, 13:i64\n%17:i64 = lshr %1, 51:i64\n%18:i64 = or %16, %17\n%19:i64 = xor %2, %18\n%20:i64 = add %10, %19 (hasExternalUses)\n%21:i64 = shl %19, 17:i64\n%22:i64 = lshr %19, 47:i64\n%23:i64 = or %21, %22\n%24:i64 = xor %20, %23 (hasExternalUses)\n%25:i64 = add %15, %24 (hasExternalUses)\n%26:i64 = shl %25, 32:i64\n%27:i64 = lshr %25, 32:i64\n%28:i64 = or %26, %27\ninfer %28\n",
+        []
+    ],
+    [
+        "%0:i64 = var\n%1:i64 = var\n%2:i64 = add %0, %1\n%3:i64 = shl %2, 32:i64\n%4:i64 = lshr %2, 32:i64\n%5:i64 = or %3, %4\n%6:i64 = var\n%7:i64 = var\n%8:i64 = var\n%9:i64 = xor %7, %8\n%10:i64 = add %6, %9\n%11:i64 = shl %9, 16:i64\n%12:i64 = lshr %9, 48:i64\n%13:i64 = or %11, %12\n%14:i64 = xor %10, %13 (hasExternalUses)\n%15:i64 = add %5, %14 (hasExternalUses)\n%16:i64 = shl %1, 13:i64\n%17:i64 = lshr %1, 51:i64\n%18:i64 = or %16, %17\n%19:i64 = xor %2, %18\n%20:i64 = add %10, %19 (hasExternalUses)\n%21:i64 = shl %19, 17:i64\n%22:i64 = lshr %19, 47:i64\n%23:i64 = or %21, %22\n%24:i64 = xor %20, %23\n%25:i64 = add %15, %24 (hasExternalUses)\n%26:i64 = shl %24, 13:i64\n%27:i64 = lshr %24, 51:i64\n%28:i64 = or %26, %27\n%29:i64 = xor %25, %28 (hasExternalUses)\n%30:i64 = shl %29, 17:i64\ninfer %30\n",
+        []
+    ],
+    [
+        "%0:i64 = var\n%1:i64 = xor 8317987319222330741:i64, %0\ninfer %1\n",
+        []
+    ],
+    [
+        "%0:i64 = var\n%1:i64 = var\n%2:i64 = var\n%3:i64 = xor %1, %2\n%4:i64 = add %0, %3 (hasExternalUses)\n%5:i64 = shl %3, 16:i64\n%6:i64 = lshr %3, 48:i64\n%7:i64 = or %5, %6\n%8:i64 = xor %4, %7 (hasExternalUses)\n%9:i64 = shl %8, 21:i64\n%10:i64 = lshr %8, 43:i64\n%11:i64 = or %9, %10\ninfer %11\n",
+        []
+    ],
+    [
+        "%0:i64 = var\n%1:i64 = var\n%2:i64 = add %0, %1 (hasExternalUses)\n%3:i64 = shl %1, 13:i64\n%4:i64 = lshr %1, 51:i64\n%5:i64 = or %3, %4\n%6:i64 = xor %2, %5\ninfer %6\n",
+        []
+    ],
+    [
+        "%0 = block 2\n%1:i64 = var\n%2:i64 = shl %1, 56:i64 (hasExternalUses)\n%3 = block 2\n%4 = block 2\n%5 = block 2\n%6 = block 2\n%7 = block 2\n%8 = block 2\n%9:i8 = var\n%10:i64 = zext %9\n%11:i64 = shlnw %10, 48:i64\n%12:i64 = or %2, %11\n%13:i64 = phi %8, %2, %12\n%14:i8 = var\n%15:i64 = zext %14\n%16:i64 = shlnw %15, 40:i64\n%17:i64 = or %13, %16\n%18:i64 = phi %7, %2, %17\n%19:i8 = var\n%20:i64 = zext %19\n%21:i64 = shlnw %20, 32:i64\n%22:i64 = or %18, %21\n%23:i64 = phi %6, %2, %22\n%24:i8 = var\n%25:i64 = zext %24\n%26:i64 = shlnw %25, 24:i64\n%27:i64 = or %23, %26\n%28:i64 = phi %5, %2, %27\n%29:i8 = var\n%30:i64 = zext %29\n%31:i64 = shlnw %30, 16:i64\n%32:i64 = or %28, %31\n%33:i64 = phi %4, %2, %32\n%34:i8 = var\n%35:i64 = zext %34\n%36:i64 = shlnw %35, 8:i64\n%37:i64 = or %33, %36\n%38:i64 = phi %3, %2, %37\n%39:i8 = var\n%40:i64 = zext %39\n%41:i64 = or %38, %40\n%42:i64 = phi %0, %2, %41\ninfer %42\n",
+        []
+    ],
+    [
+        "%0 = block 2\n%1:i64 = var\n%2:i64 = shl %1, 56:i64\n%3 = block 2\n%4 = block 2\n%5:i8 = var\n%6:i64 = zext %5\n%7:i64 = shlnw %6, 48:i64\n%8:i64 = or %2, %7\n%9:i64 = phi %4, %2, %8\n%10:i8 = var\n%11:i64 = zext %10\n%12:i64 = shlnw %11, 40:i64\n%13:i64 = or %9, %12\n%14:i64 = phi %3, %2, %13\n%15:i8 = var\n%16:i64 = zext %15\n%17:i64 = shlnw %16, 32:i64\n%18:i64 = or %14, %17\n%19:i64 = phi %0, %2, %18\n%20:i8 = var\n%21:i64 = zext %20\n%22:i64 = shlnw %21, 24:i64\n%23:i64 = or %19, %22\ninfer %23\n",
+        []
+    ],
+    [
+        "%0:i8 = var\n%1:i64 = zext %0\n%2:i64 = shlnw %1, 48:i64\ninfer %2\n",
+        []
+    ],
+    [
+        "%0:i64 = var\n%1:i64 = var\n%2:i64 = var\n%3:i64 = xor %1, %2 (hasExternalUses)\n%4:i64 = add %0, %3 (hasExternalUses)\n%5:i64 = var\n%6:i64 = var\n%7:i64 = add %5, %6 (hasExternalUses)\n%8:i64 = shl %6, 13:i64\n%9:i64 = lshr %6, 51:i64\n%10:i64 = or %8, %9\n%11:i64 = xor %7, %10 (hasExternalUses)\n%12:i64 = add %4, %11\ninfer %12\n",
+        []
+    ],
+    [
+        "%0:i64 = var\n%1:i64 = shl %0, 13:i64\n%2:i64 = lshr %0, 51:i64\n%3:i64 = or %1, %2\ninfer %3\n",
+        []
+    ],
+    [
+        "%0:i64 = var\n%1:i64 = var\n%2:i64 = var\n%3:i64 = xor %1, %2 (hasExternalUses)\n%4:i64 = add %0, %3 (hasExternalUses)\n%5:i64 = var\n%6:i64 = var\n%7:i64 = add %5, %6 (hasExternalUses)\n%8:i64 = shl %6, 13:i64\n%9:i64 = lshr %6, 51:i64\n%10:i64 = or %8, %9\n%11:i64 = xor %7, %10\n%12:i64 = add %4, %11 (hasExternalUses)\n%13:i64 = shl %11, 17:i64\n%14:i64 = lshr %11, 47:i64\n%15:i64 = or %13, %14\n%16:i64 = xor %12, %15\ninfer %16\n",
+        []
+    ],
+    [
+        "%0 = block 2\n%1:i64 = var\n%2:i64 = shl %1, 56:i64 (hasExternalUses)\n%3 = block 2\n%4 = block 2\n%5 = block 2\n%6 = block 2\n%7:i8 = var\n%8:i64 = zext %7\n%9:i64 = shlnw %8, 48:i64\n%10:i64 = or %2, %9\n%11:i64 = phi %6, %2, %10\n%12:i8 = var\n%13:i64 = zext %12\n%14:i64 = shlnw %13, 40:i64\n%15:i64 = or %11, %14\n%16:i64 = phi %5, %2, %15\n%17:i8 = var\n%18:i64 = zext %17\n%19:i64 = shlnw %18, 32:i64\n%20:i64 = or %16, %19\n%21:i64 = phi %4, %2, %20\n%22:i8 = var\n%23:i64 = zext %22\n%24:i64 = shlnw %23, 24:i64\n%25:i64 = or %21, %24\n%26:i64 = phi %3, %2, %25\n%27:i8 = var\n%28:i64 = zext %27\n%29:i64 = shlnw %28, 16:i64\n%30:i64 = or %26, %29\n%31:i64 = phi %0, %2, %30\ninfer %31\n",
+        []
+    ],
+    [
+        "%0:i64 = var\n%1:i64 = var\n%2:i64 = add %0, %1\n%3:i64 = shl %2, 32:i64\n%4:i64 = lshr %2, 32:i64\n%5:i64 = or %3, %4\n%6:i64 = var\n%7:i64 = var\n%8:i64 = var\n%9:i64 = xor %7, %8\n%10:i64 = add %6, %9\n%11:i64 = shl %9, 16:i64\n%12:i64 = lshr %9, 48:i64\n%13:i64 = or %11, %12\n%14:i64 = xor %10, %13 (hasExternalUses)\n%15:i64 = add %5, %14 (hasExternalUses)\n%16:i64 = shl %1, 13:i64\n%17:i64 = lshr %1, 51:i64\n%18:i64 = or %16, %17\n%19:i64 = xor %2, %18\n%20:i64 = add %10, %19 (hasExternalUses)\n%21:i64 = shl %19, 17:i64\n%22:i64 = lshr %19, 47:i64\n%23:i64 = or %21, %22\n%24:i64 = xor %20, %23\n%25:i64 = add %15, %24 (hasExternalUses)\n%26:i64 = shl %24, 13:i64\n%27:i64 = lshr %24, 51:i64\n%28:i64 = or %26, %27\n%29:i64 = xor %25, %28 (hasExternalUses)\n%30:i64 = lshr %29, 47:i64\ninfer %30\n",
+        []
+    ],
+    [
+        "%0:i64 = var\n%1:i64 = var\n%2:i64 = var\n%3:i64 = xor %1, %2\n%4:i64 = add %0, %3\n%5:i64 = var\n%6:i64 = var\n%7:i64 = add %5, %6\n%8:i64 = shl %6, 13:i64\n%9:i64 = lshr %6, 51:i64\n%10:i64 = or %8, %9\n%11:i64 = xor %7, %10 (hasExternalUses)\n%12:i64 = add %4, %11 (hasExternalUses)\n%13:i64 = shl %12, 32:i64\n%14:i64 = lshr %12, 32:i64\n%15:i64 = or %13, %14\n%16:i64 = shl %7, 32:i64\n%17:i64 = lshr %7, 32:i64\n%18:i64 = or %16, %17\n%19:i64 = shl %3, 16:i64\n%20:i64 = lshr %3, 48:i64\n%21:i64 = or %19, %20\n%22:i64 = xor %4, %21\n%23:i64 = add %18, %22 (hasExternalUses)\n%24:i64 = shl %22, 21:i64\n%25:i64 = lshr %22, 43:i64\n%26:i64 = or %24, %25\n%27:i64 = xor %23, %26 (hasExternalUses)\n%28:i64 = add %15, %27\ninfer %28\n",
+        []
+    ],
+    [
+        "%0 = block 2\n%1:i64 = var\n%2:i64 = shl %1, 56:i64\n%3 = block 2\n%4 = block 2\n%5 = block 2\n%6:i8 = var\n%7:i64 = zext %6\n%8:i64 = shlnw %7, 48:i64\n%9:i64 = or %2, %8\n%10:i64 = phi %5, %2, %9\n%11:i8 = var\n%12:i64 = zext %11\n%13:i64 = shlnw %12, 40:i64\n%14:i64 = or %10, %13\n%15:i64 = phi %4, %2, %14\n%16:i8 = var\n%17:i64 = zext %16\n%18:i64 = shlnw %17, 32:i64\n%19:i64 = or %15, %18\n%20:i64 = phi %3, %2, %19\n%21:i8 = var\n%22:i64 = zext %21\n%23:i64 = shlnw %22, 24:i64\n%24:i64 = or %20, %23\n%25:i64 = phi %0, %2, %24\n%26:i8 = var\n%27:i64 = zext %26\n%28:i64 = shlnw %27, 16:i64\n%29:i64 = or %25, %28\ninfer %29\n",
+        []
+    ],
+    [
+        "%0 = block 2\n%1:i64 = var\n%2:i64 = shl %1, 56:i64 (hasExternalUses)\n%3 = block 2\n%4:i8 = var\n%5:i64 = zext %4\n%6:i64 = shlnw %5, 48:i64\n%7:i64 = or %2, %6\n%8:i64 = phi %3, %2, %7\n%9:i8 = var\n%10:i64 = zext %9\n%11:i64 = shlnw %10, 40:i64\n%12:i64 = or %8, %11\n%13:i64 = phi %0, %2, %12\ninfer %13\n",
+        []
+    ],
+    [
+        "%0:i64 = var\n%1:i64 = var\n%2:i64 = xor %0, %1\ninfer %2\n",
+        []
+    ],
+    [
+        "%0 = block 2\n%1:i64 = var\n%2:i64 = shl %1, 56:i64 (hasExternalUses)\n%3 = block 2\n%4 = block 2\n%5 = block 2\n%6:i8 = var\n%7:i64 = zext %6\n%8:i64 = shlnw %7, 48:i64\n%9:i64 = or %2, %8\n%10:i64 = phi %5, %2, %9\n%11:i8 = var\n%12:i64 = zext %11\n%13:i64 = shlnw %12, 40:i64\n%14:i64 = or %10, %13\n%15:i64 = phi %4, %2, %14\n%16:i8 = var\n%17:i64 = zext %16\n%18:i64 = shlnw %17, 32:i64\n%19:i64 = or %15, %18\n%20:i64 = phi %3, %2, %19\n%21:i8 = var\n%22:i64 = zext %21\n%23:i64 = shlnw %22, 24:i64\n%24:i64 = or %20, %23\n%25:i64 = phi %0, %2, %24\ninfer %25\n",
+        []
+    ],
+    [
+        "%0:i64 = var\n%1:i64 = var\n%2:i64 = add %0, %1 (hasExternalUses)\n%3:i64 = shl %2, 32:i64\n%4:i64 = lshr %2, 32:i64\n%5:i64 = or %3, %4\ninfer %5\n",
+        []
+    ],
+    [
+        "%0:i64 = var\n%1:i64 = var\n%2:i64 = xor %0, %1 (hasExternalUses)\n%3:i64 = lshr %2, 48:i64\ninfer %3\n",
+        []
+    ],
+    [
+        "%0:i64 = var\n%1:i32 = trunc %0\ninfer %1\n",
+        []
+    ],
+    [
+        "%0:i64 = var\n%1:i64 = var\n%2:i64 = add %0, %1 (hasExternalUses)\n%3:i64 = shl %2, 32:i64\n%4:i64 = lshr %2, 32:i64\n%5:i64 = or %3, %4\n%6:i64 = var\n%7:i64 = var\n%8:i64 = var\n%9:i64 = xor %7, %8\n%10:i64 = add %6, %9 (hasExternalUses)\n%11:i64 = shl %9, 16:i64\n%12:i64 = lshr %9, 48:i64\n%13:i64 = or %11, %12\n%14:i64 = xor %10, %13\n%15:i64 = add %5, %14 (hasExternalUses)\n%16:i64 = shl %14, 21:i64\n%17:i64 = lshr %14, 43:i64\n%18:i64 = or %16, %17\n%19:i64 = xor %15, %18 (hasExternalUses)\n%20:i64 = shl %19, 16:i64\ninfer %20\n",
+        []
+    ],
+    [
+        "%0:i64 = var\n%1:i64 = var\n%2:i64 = xor %0, %1 (hasExternalUses)\n%3:i64 = shl %2, 16:i64\n%4:i64 = lshr %2, 48:i64\n%5:i64 = or %3, %4\ninfer %5\n",
+        []
+    ],
+    [
+        "%0:i64 = var\n%1:i32 = trunc %0 (hasExternalUses)\n%2:i32 = and 7:i32, %1 (hasExternalUses)\n%3:i32 = subnsw 0:i32, %2\ninfer %3\n",
+        []
+    ],
+    [
+        "%0:i64 = var\n%1:i64 = var\n%2:i64 = add %0, %1\n%3:i64 = shl %2, 32:i64\n%4:i64 = lshr %2, 32:i64\n%5:i64 = or %3, %4\n%6:i64 = var\n%7:i64 = var\n%8:i64 = var\n%9:i64 = xor %7, %8\n%10:i64 = add %6, %9\n%11:i64 = shl %9, 16:i64\n%12:i64 = lshr %9, 48:i64\n%13:i64 = or %11, %12\n%14:i64 = xor %10, %13 (hasExternalUses)\n%15:i64 = add %5, %14 (hasExternalUses)\n%16:i64 = shl %1, 13:i64\n%17:i64 = lshr %1, 51:i64\n%18:i64 = or %16, %17\n%19:i64 = xor %2, %18\n%20:i64 = add %10, %19 (hasExternalUses)\n%21:i64 = shl %19, 17:i64\n%22:i64 = lshr %19, 47:i64\n%23:i64 = or %21, %22\n%24:i64 = xor %20, %23\n%25:i64 = add %15, %24 (hasExternalUses)\n%26:i64 = shl %24, 13:i64\n%27:i64 = lshr %24, 51:i64\n%28:i64 = or %26, %27\n%29:i64 = xor %25, %28\ninfer %29\n",
+        []
+    ],
+    [
+        "%0:i64 = var\n%1:i64 = var\n%2:i64 = add %0, %1 (hasExternalUses)\n%3:i64 = shl %1, 13:i64\n%4:i64 = lshr %1, 51:i64\n%5:i64 = or %3, %4\n%6:i64 = xor %2, %5 (hasExternalUses)\n%7:i64 = shl %6, 17:i64\n%8:i64 = lshr %6, 47:i64\n%9:i64 = or %7, %8\ninfer %9\n",
+        []
+    ],
+    [
+        "%0:i64 = var\n%1:i64 = var\n%2:i64 = add %0, %1\ninfer %2\n",
+        []
+    ],
+    [
+        "%0:i64 = var\n%1:i64 = xor 7237128888997146477:i64, %0\ninfer %1\n",
+        []
+    ],
+    [
+        "%0:i64 = var\n%1:i64 = var\n%2:i64 = var\n%3:i64 = xor %1, %2\n%4:i64 = add %0, %3\n%5:i64 = var\n%6:i64 = var\n%7:i64 = add %5, %6\n%8:i64 = shl %6, 13:i64\n%9:i64 = lshr %6, 51:i64\n%10:i64 = or %8, %9\n%11:i64 = xor %7, %10\n%12:i64 = add %4, %11\n%13:i64 = shl %12, 32:i64\n%14:i64 = lshr %12, 32:i64\n%15:i64 = or %13, %14\n%16:i64 = shl %7, 32:i64\n%17:i64 = lshr %7, 32:i64\n%18:i64 = or %16, %17\n%19:i64 = shl %3, 16:i64\n%20:i64 = lshr %3, 48:i64\n%21:i64 = or %19, %20\n%22:i64 = xor %4, %21\n%23:i64 = add %18, %22\n%24:i64 = shl %22, 21:i64\n%25:i64 = lshr %22, 43:i64\n%26:i64 = or %24, %25\n%27:i64 = xor %23, %26 (hasExternalUses)\n%28:i64 = add %15, %27 (hasExternalUses)\n%29:i64 = shl %11, 17:i64\n%30:i64 = lshr %11, 47:i64\n%31:i64 = or %29, %30\n%32:i64 = xor %12, %31\n%33:i64 = add %23, %32 (hasExternalUses)\n%34:i64 = shl %32, 13:i64\n%35:i64 = lshr %32, 51:i64\n%36:i64 = or %34, %35\n%37:i64 = xor %33, %36 (hasExternalUses)\n%38:i64 = add %28, %37 (hasExternalUses)\n%39:i64 = shl %38, 32:i64\ninfer %39\n",
+        []
+    ],
+    [
+        "%0:i64 = var\n%1:i64 = xor 7816392313619706465:i64, %0\ninfer %1\n",
+        []
+    ],
+    [
+        "%0:i64 = var\n%1:i64 = var\n%2:i64 = add %0, %1\n%3:i64 = shl %2, 32:i64\n%4:i64 = lshr %2, 32:i64\n%5:i64 = or %3, %4\n%6:i64 = var\n%7:i64 = var\n%8:i64 = var\n%9:i64 = xor %7, %8\n%10:i64 = add %6, %9\n%11:i64 = shl %9, 16:i64\n%12:i64 = lshr %9, 48:i64\n%13:i64 = or %11, %12\n%14:i64 = xor %10, %13 (hasExternalUses)\n%15:i64 = add %5, %14 (hasExternalUses)\n%16:i64 = shl %1, 13:i64\n%17:i64 = lshr %1, 51:i64\n%18:i64 = or %16, %17\n%19:i64 = xor %2, %18\n%20:i64 = add %10, %19 (hasExternalUses)\n%21:i64 = shl %19, 17:i64\n%22:i64 = lshr %19, 47:i64\n%23:i64 = or %21, %22\n%24:i64 = xor %20, %23 (hasExternalUses)\n%25:i64 = add %15, %24 (hasExternalUses)\n%26:i64 = shl %25, 32:i64\ninfer %26\n",
+        []
+    ],
+    [
+        "%0:i64 = var\n%1:i64 = var\n%2:i64 = add %0, %1 (hasExternalUses)\n%3:i64 = shl %1, 13:i64\n%4:i64 = lshr %1, 51:i64\n%5:i64 = or %3, %4\n%6:i64 = xor %2, %5 (hasExternalUses)\n%7:i64 = lshr %6, 47:i64\ninfer %7\n",
+        []
+    ],
+    [
+        "%0:i64 = var\n%1:i64 = var\n%2:i64 = var\n%3:i64 = xor %1, %2 (hasExternalUses)\n%4:i64 = add %0, %3\ninfer %4\n",
+        []
+    ],
+    [
+        "%0:i64 = var\n%1:i32 = trunc %0 (hasExternalUses)\n%2:i32 = and 7:i32, %1\ninfer %2\n",
+        []
+    ],
+    [
+        "%0:i64 = var\n%1:i64 = var\n%2:i64 = add %0, %1 (hasExternalUses)\n%3:i64 = shl %2, 32:i64\ninfer %3\n",
+        []
+    ],
+    [
+        "%0:i64 = var\n%1:i64 = var\n%2:i64 = var\n%3:i64 = xor %1, %2 (hasExternalUses)\n%4:i64 = add %0, %3 (hasExternalUses)\n%5:i64 = var\n%6:i64 = var\n%7:i64 = add %5, %6 (hasExternalUses)\n%8:i64 = shl %6, 13:i64\n%9:i64 = lshr %6, 51:i64\n%10:i64 = or %8, %9\n%11:i64 = xor %7, %10\n%12:i64 = add %4, %11 (hasExternalUses)\n%13:i64 = shl %11, 17:i64\n%14:i64 = lshr %11, 47:i64\n%15:i64 = or %13, %14\n%16:i64 = xor %12, %15 (hasExternalUses)\n%17:i64 = shl %16, 13:i64\n%18:i64 = lshr %16, 51:i64\n%19:i64 = or %17, %18\ninfer %19\n",
+        []
+    ],
+    [
+        "%0:i64 = var\n%1:i64 = var\n%2:i64 = add %0, %1 (hasExternalUses)\n%3:i64 = shl %2, 32:i64\n%4:i64 = lshr %2, 32:i64\n%5:i64 = or %3, %4\n%6:i64 = var\n%7:i64 = var\n%8:i64 = var\n%9:i64 = xor %7, %8\n%10:i64 = add %6, %9 (hasExternalUses)\n%11:i64 = shl %9, 16:i64\n%12:i64 = lshr %9, 48:i64\n%13:i64 = or %11, %12\n%14:i64 = xor %10, %13 (hasExternalUses)\n%15:i64 = add %5, %14\ninfer %15\n",
+        []
+    ],
+    [
+        "%0:i64 = var\n%1:i64 = var\n%2:i64 = add %0, %1 (hasExternalUses)\n%3:i64 = shl %1, 13:i64\n%4:i64 = lshr %1, 51:i64\n%5:i64 = or %3, %4\n%6:i64 = xor %2, %5 (hasExternalUses)\n%7:i64 = shl %6, 17:i64\ninfer %7\n",
+        []
+    ],
+    [
+        "%0 = block 2\n%1:i64 = var\n%2:i64 = shl %1, 56:i64\n%3 = block 2\n%4:i8 = var\n%5:i64 = zext %4\n%6:i64 = shlnw %5, 48:i64\n%7:i64 = or %2, %6\n%8:i64 = phi %3, %2, %7\n%9:i8 = var\n%10:i64 = zext %9\n%11:i64 = shlnw %10, 40:i64\n%12:i64 = or %8, %11\n%13:i64 = phi %0, %2, %12\n%14:i8 = var\n%15:i64 = zext %14\n%16:i64 = shlnw %15, 32:i64\n%17:i64 = or %13, %16\ninfer %17\n",
+        []
+    ],
+    [
+        "%0:i64 = var\n%1:i64 = var\n%2:i64 = add %0, %1 (hasExternalUses)\n%3:i64 = shl %2, 32:i64\n%4:i64 = lshr %2, 32:i64\n%5:i64 = or %3, %4\n%6:i64 = var\n%7:i64 = var\n%8:i64 = var\n%9:i64 = xor %7, %8\n%10:i64 = add %6, %9 (hasExternalUses)\n%11:i64 = shl %9, 16:i64\n%12:i64 = lshr %9, 48:i64\n%13:i64 = or %11, %12\n%14:i64 = xor %10, %13\n%15:i64 = add %5, %14 (hasExternalUses)\n%16:i64 = shl %14, 21:i64\n%17:i64 = lshr %14, 43:i64\n%18:i64 = or %16, %17\n%19:i64 = xor %15, %18 (hasExternalUses)\n%20:i64 = shl %19, 16:i64\n%21:i64 = lshr %19, 48:i64\n%22:i64 = or %20, %21\ninfer %22\n",
+        []
+    ],
+    [
+        "%0 = block 2\n%1:i64 = var\n%2:i64 = shl %1, 56:i64 (hasExternalUses)\n%3 = block 2\n%4 = block 2\n%5:i8 = var\n%6:i64 = zext %5\n%7:i64 = shlnw %6, 48:i64\n%8:i64 = or %2, %7\n%9:i64 = phi %4, %2, %8\n%10:i8 = var\n%11:i64 = zext %10\n%12:i64 = shlnw %11, 40:i64\n%13:i64 = or %9, %12\n%14:i64 = phi %3, %2, %13\n%15:i8 = var\n%16:i64 = zext %15\n%17:i64 = shlnw %16, 32:i64\n%18:i64 = or %14, %17\n%19:i64 = phi %0, %2, %18\ninfer %19\n",
+        []
+    ],
+    [
+        "%0:i64 = var\n%1:i64 = var\n%2:i64 = var\n%3:i64 = xor %1, %2\n%4:i64 = add %0, %3\n%5:i64 = var\n%6:i64 = var\n%7:i64 = add %5, %6\n%8:i64 = shl %6, 13:i64\n%9:i64 = lshr %6, 51:i64\n%10:i64 = or %8, %9\n%11:i64 = xor %7, %10 (hasExternalUses)\n%12:i64 = add %4, %11 (hasExternalUses)\n%13:i64 = shl %12, 32:i64\n%14:i64 = lshr %12, 32:i64\n%15:i64 = or %13, %14\n%16:i64 = shl %7, 32:i64\n%17:i64 = lshr %7, 32:i64\n%18:i64 = or %16, %17\n%19:i64 = shl %3, 16:i64\n%20:i64 = lshr %3, 48:i64\n%21:i64 = or %19, %20\n%22:i64 = xor %4, %21\n%23:i64 = add %18, %22 (hasExternalUses)\n%24:i64 = shl %22, 21:i64\n%25:i64 = lshr %22, 43:i64\n%26:i64 = or %24, %25\n%27:i64 = xor %23, %26\n%28:i64 = add %15, %27 (hasExternalUses)\n%29:i64 = shl %27, 16:i64\n%30:i64 = lshr %27, 48:i64\n%31:i64 = or %29, %30\n%32:i64 = xor %28, %31 (hasExternalUses)\n%33:i64 = shl %32, 21:i64\n%34:i64 = lshr %32, 43:i64\n%35:i64 = or %33, %34\ninfer %35\n",
+        []
+    ],
+    [
+        "%0 = block 2\n%1:i64 = var\n%2:i64 = shl %1, 56:i64 (hasExternalUses)\n%3 = block 2\n%4 = block 2\n%5 = block 2\n%6 = block 2\n%7 = block 2\n%8:i8 = var\n%9:i64 = zext %8\n%10:i64 = shlnw %9, 48:i64\n%11:i64 = or %2, %10\n%12:i64 = phi %7, %2, %11\n%13:i8 = var\n%14:i64 = zext %13\n%15:i64 = shlnw %14, 40:i64\n%16:i64 = or %12, %15\n%17:i64 = phi %6, %2, %16\n%18:i8 = var\n%19:i64 = zext %18\n%20:i64 = shlnw %19, 32:i64\n%21:i64 = or %17, %20\n%22:i64 = phi %5, %2, %21\n%23:i8 = var\n%24:i64 = zext %23\n%25:i64 = shlnw %24, 24:i64\n%26:i64 = or %22, %25\n%27:i64 = phi %4, %2, %26\n%28:i8 = var\n%29:i64 = zext %28\n%30:i64 = shlnw %29, 16:i64\n%31:i64 = or %27, %30\n%32:i64 = phi %3, %2, %31\n%33:i8 = var\n%34:i64 = zext %33\n%35:i64 = shlnw %34, 8:i64\n%36:i64 = or %32, %35\n%37:i64 = phi %0, %2, %36\ninfer %37\n",
+        []
+    ],
+    [
+        "%0:i64 = var\n%1:i64 = var\n%2:i64 = var\n%3:i64 = xor %1, %2\n%4:i64 = add %0, %3\n%5:i64 = var\n%6:i64 = var\n%7:i64 = add %5, %6\n%8:i64 = shl %6, 13:i64\n%9:i64 = lshr %6, 51:i64\n%10:i64 = or %8, %9\n%11:i64 = xor %7, %10\n%12:i64 = add %4, %11\n%13:i64 = shl %12, 32:i64\n%14:i64 = lshr %12, 32:i64\n%15:i64 = or %13, %14\n%16:i64 = shl %7, 32:i64\n%17:i64 = lshr %7, 32:i64\n%18:i64 = or %16, %17\n%19:i64 = shl %3, 16:i64\n%20:i64 = lshr %3, 48:i64\n%21:i64 = or %19, %20\n%22:i64 = xor %4, %21\n%23:i64 = add %18, %22\n%24:i64 = shl %22, 21:i64\n%25:i64 = lshr %22, 43:i64\n%26:i64 = or %24, %25\n%27:i64 = xor %23, %26 (hasExternalUses)\n%28:i64 = add %15, %27 (hasExternalUses)\n%29:i64 = shl %11, 17:i64\n%30:i64 = lshr %11, 47:i64\n%31:i64 = or %29, %30\n%32:i64 = xor %12, %31\n%33:i64 = add %23, %32 (hasExternalUses)\n%34:i64 = shl %32, 13:i64\n%35:i64 = lshr %32, 51:i64\n%36:i64 = or %34, %35\n%37:i64 = xor %33, %36 (hasExternalUses)\n%38:i64 = add %28, %37 (hasExternalUses)\n%39:i64 = lshr %38, 32:i64\ninfer %39\n",
+        []
+    ],
+    [
+        "%0:i64 = var\n%1:i64 = var\n%2:i64 = var\n%3:i64 = xor %1, %2\n%4:i64 = add %0, %3 (hasExternalUses)\n%5:i64 = shl %3, 16:i64\n%6:i64 = lshr %3, 48:i64\n%7:i64 = or %5, %6\n%8:i64 = xor %4, %7\ninfer %8\n",
+        []
+    ],
+    [
+        "%0:i64 = var\n%1:i64 = var\n%2:i64 = var\n%3:i64 = xor %1, %2 (hasExternalUses)\n%4:i64 = add %0, %3 (hasExternalUses)\n%5:i64 = var\n%6:i64 = var\n%7:i64 = add %5, %6 (hasExternalUses)\n%8:i64 = shl %6, 13:i64\n%9:i64 = lshr %6, 51:i64\n%10:i64 = or %8, %9\n%11:i64 = xor %7, %10 (hasExternalUses)\n%12:i64 = add %4, %11 (hasExternalUses)\n%13:i64 = shl %12, 32:i64\ninfer %13\n",
+        []
+    ],
+    [
+        "%0:i8 = var\n%1:i64 = zext %0\n%2:i64 = shlnw %1, 40:i64\ninfer %2\n",
+        []
+    ],
+    [
+        "%0:i64 = var\n%1:i64 = var\n%2:i64 = add %0, %1\n%3:i64 = shl %2, 32:i64\n%4:i64 = lshr %2, 32:i64\n%5:i64 = or %3, %4\n%6:i64 = var\n%7:i64 = var\n%8:i64 = var\n%9:i64 = xor %7, %8\n%10:i64 = add %6, %9\n%11:i64 = shl %9, 16:i64\n%12:i64 = lshr %9, 48:i64\n%13:i64 = or %11, %12\n%14:i64 = xor %10, %13 (hasExternalUses)\n%15:i64 = add %5, %14 (hasExternalUses)\n%16:i64 = shl %1, 13:i64\n%17:i64 = lshr %1, 51:i64\n%18:i64 = or %16, %17\n%19:i64 = xor %2, %18\n%20:i64 = add %10, %19 (hasExternalUses)\n%21:i64 = shl %19, 17:i64\n%22:i64 = lshr %19, 47:i64\n%23:i64 = or %21, %22\n%24:i64 = xor %20, %23 (hasExternalUses)\n%25:i64 = add %15, %24\ninfer %25\n",
+        []
+    ],
+    [
+        "%0:i64 = var\n%1:i64 = var\n%2:i64 = var\n%3:i64 = xor %1, %2 (hasExternalUses)\n%4:i64 = add %0, %3 (hasExternalUses)\n%5:i64 = var\n%6:i64 = var\n%7:i64 = add %5, %6 (hasExternalUses)\n%8:i64 = shl %6, 13:i64\n%9:i64 = lshr %6, 51:i64\n%10:i64 = or %8, %9\n%11:i64 = xor %7, %10\n%12:i64 = add %4, %11 (hasExternalUses)\n%13:i64 = shl %11, 17:i64\n%14:i64 = lshr %11, 47:i64\n%15:i64 = or %13, %14\n%16:i64 = xor %12, %15 (hasExternalUses)\n%17:i64 = shl %16, 13:i64\ninfer %17\n",
+        []
+    ],
+    [
+        "%0:i32 = var\n%1:i32 = var\n%2:i1 = eq %0, %1\ninfer %2\n",
+        []
+    ],
+    [
+        "%0:i64 = var\n%1:i64 = var\n%2:i64 = var\n%3:i64 = xor %1, %2\n%4:i64 = add %0, %3 (hasExternalUses)\n%5:i64 = shl %3, 16:i64\n%6:i64 = lshr %3, 48:i64\n%7:i64 = or %5, %6\n%8:i64 = xor %4, %7 (hasExternalUses)\n%9:i64 = lshr %8, 43:i64\ninfer %9\n",
+        []
+    ],
+    [
+        "%0:i64 = var\n%1:i64 = var\n%2:i64 = var\n%3:i64 = xor %1, %2 (hasExternalUses)\n%4:i64 = add %0, %3 (hasExternalUses)\n%5:i64 = var\n%6:i64 = var\n%7:i64 = add %5, %6 (hasExternalUses)\n%8:i64 = shl %6, 13:i64\n%9:i64 = lshr %6, 51:i64\n%10:i64 = or %8, %9\n%11:i64 = xor %7, %10 (hasExternalUses)\n%12:i64 = add %4, %11 (hasExternalUses)\n%13:i64 = shl %12, 32:i64\n%14:i64 = lshr %12, 32:i64\n%15:i64 = or %13, %14\ninfer %15\n",
+        []
+    ],
+    [
+        "%0 = block 2\n%1:i64 = var\n%2:i64 = shl %1, 56:i64\n%3:i8 = var\n%4:i64 = zext %3\n%5:i64 = shlnw %4, 48:i64\n%6:i64 = or %2, %5\n%7:i64 = phi %0, %2, %6\n%8:i8 = var\n%9:i64 = zext %8\n%10:i64 = shlnw %9, 40:i64\n%11:i64 = or %7, %10\ninfer %11\n",
+        []
+    ],
+    [
+        "%0:i8 = var\n%1:i64 = zext %0\ninfer %1\n",
+        []
+    ],
+    [
+        "%0:i8 = var\ninfer %0\n",
+        []
+    ],
+    [
+        "%0 = block 2\n%1:i64 = var\n%2:i64 = shl %1, 56:i64\n%3 = block 2\n%4 = block 2\n%5 = block 2\n%6 = block 2\n%7 = block 2\n%8:i8 = var\n%9:i64 = zext %8\n%10:i64 = shlnw %9, 48:i64\n%11:i64 = or %2, %10\n%12:i64 = phi %7, %2, %11\n%13:i8 = var\n%14:i64 = zext %13\n%15:i64 = shlnw %14, 40:i64\n%16:i64 = or %12, %15\n%17:i64 = phi %6, %2, %16\n%18:i8 = var\n%19:i64 = zext %18\n%20:i64 = shlnw %19, 32:i64\n%21:i64 = or %17, %20\n%22:i64 = phi %5, %2, %21\n%23:i8 = var\n%24:i64 = zext %23\n%25:i64 = shlnw %24, 24:i64\n%26:i64 = or %22, %25\n%27:i64 = phi %4, %2, %26\n%28:i8 = var\n%29:i64 = zext %28\n%30:i64 = shlnw %29, 16:i64\n%31:i64 = or %27, %30\n%32:i64 = phi %3, %2, %31\n%33:i8 = var\n%34:i64 = zext %33\n%35:i64 = shlnw %34, 8:i64\n%36:i64 = or %32, %35\n%37:i64 = phi %0, %2, %36\n%38:i8 = var\n%39:i64 = zext %38\n%40:i64 = or %37, %39\ninfer %40\n",
+        []
+    ],
+    [
+        "%0:i64 = var\ninfer %0\n",
+        []
+    ],
+    [
+        "%0:i64 = var\n%1:i64 = var\n%2:i64 = var\n%3:i64 = xor %1, %2\n%4:i64 = add %0, %3\n%5:i64 = var\n%6:i64 = var\n%7:i64 = add %5, %6\n%8:i64 = shl %6, 13:i64\n%9:i64 = lshr %6, 51:i64\n%10:i64 = or %8, %9\n%11:i64 = xor %7, %10 (hasExternalUses)\n%12:i64 = add %4, %11 (hasExternalUses)\n%13:i64 = shl %12, 32:i64\n%14:i64 = lshr %12, 32:i64\n%15:i64 = or %13, %14\n%16:i64 = shl %7, 32:i64\n%17:i64 = lshr %7, 32:i64\n%18:i64 = or %16, %17\n%19:i64 = shl %3, 16:i64\n%20:i64 = lshr %3, 48:i64\n%21:i64 = or %19, %20\n%22:i64 = xor %4, %21\n%23:i64 = add %18, %22 (hasExternalUses)\n%24:i64 = shl %22, 21:i64\n%25:i64 = lshr %22, 43:i64\n%26:i64 = or %24, %25\n%27:i64 = xor %23, %26\n%28:i64 = add %15, %27 (hasExternalUses)\n%29:i64 = shl %27, 16:i64\n%30:i64 = lshr %27, 48:i64\n%31:i64 = or %29, %30\n%32:i64 = xor %28, %31 (hasExternalUses)\n%33:i64 = shl %32, 21:i64\ninfer %33\n",
+        []
+    ],
+    [
+        "%0:i8 = var\n%1:i64 = zext %0\n%2:i64 = shlnw %1, 8:i64\ninfer %2\n",
+        []
+    ],
+    [
+        "%0:i64 = var\n%1:i64 = var\n%2:i64 = var\n%3:i64 = xor %1, %2\n%4:i64 = add %0, %3\n%5:i64 = var\n%6:i64 = var\n%7:i64 = add %5, %6\n%8:i64 = shl %6, 13:i64\n%9:i64 = lshr %6, 51:i64\n%10:i64 = or %8, %9\n%11:i64 = xor %7, %10 (hasExternalUses)\n%12:i64 = add %4, %11 (hasExternalUses)\n%13:i64 = shl %12, 32:i64\n%14:i64 = lshr %12, 32:i64\n%15:i64 = or %13, %14\n%16:i64 = shl %7, 32:i64\n%17:i64 = lshr %7, 32:i64\n%18:i64 = or %16, %17\n%19:i64 = shl %3, 16:i64\n%20:i64 = lshr %3, 48:i64\n%21:i64 = or %19, %20\n%22:i64 = xor %4, %21\n%23:i64 = add %18, %22 (hasExternalUses)\n%24:i64 = shl %22, 21:i64\n%25:i64 = lshr %22, 43:i64\n%26:i64 = or %24, %25\n%27:i64 = xor %23, %26\n%28:i64 = add %15, %27 (hasExternalUses)\n%29:i64 = shl %27, 16:i64\n%30:i64 = lshr %27, 48:i64\n%31:i64 = or %29, %30\n%32:i64 = xor %28, %31\ninfer %32\n",
+        []
+    ],
+    [
+        "%0:i64 = var\n%1:i32 = trunc %0 (hasExternalUses)\n%2:i32 = and 7:i32, %1\npc %2 7:i32\n%3:i64 = shl %0, 56:i64 (hasExternalUses)\n%4:i8 = var\n%5:i64 = zext %4\n%6:i64 = shlnw %5, 48:i64\n%7:i64 = or %3, %6\ninfer %7\n",
+        []
+    ],
+    [
+        "%0:i8 = var\n%1:i64 = zext %0\n%2:i64 = shlnw %1, 24:i64\ninfer %2\n",
+        []
+    ],
+    [
+        "%0:i64 = var\n%1:i64 = var\n%2:i64 = add %0, %1\n%3:i64 = shl %2, 32:i64\n%4:i64 = lshr %2, 32:i64\n%5:i64 = or %3, %4\n%6:i64 = var\n%7:i64 = var\n%8:i64 = var\n%9:i64 = xor %7, %8\n%10:i64 = add %6, %9\n%11:i64 = shl %9, 16:i64\n%12:i64 = lshr %9, 48:i64\n%13:i64 = or %11, %12\n%14:i64 = xor %10, %13 (hasExternalUses)\n%15:i64 = add %5, %14 (hasExternalUses)\n%16:i64 = shl %1, 13:i64\n%17:i64 = lshr %1, 51:i64\n%18:i64 = or %16, %17\n%19:i64 = xor %2, %18\n%20:i64 = add %10, %19 (hasExternalUses)\n%21:i64 = shl %19, 17:i64\n%22:i64 = lshr %19, 47:i64\n%23:i64 = or %21, %22\n%24:i64 = xor %20, %23 (hasExternalUses)\n%25:i64 = add %15, %24 (hasExternalUses)\n%26:i64 = lshr %25, 32:i64\ninfer %26\n",
+        []
+    ],
+    [
+        "%0:i64 = var\n%1:i64 = var\n%2:i64 = add %0, %1\n%3:i64 = shl %2, 32:i64\n%4:i64 = lshr %2, 32:i64\n%5:i64 = or %3, %4\n%6:i64 = var\n%7:i64 = var\n%8:i64 = var\n%9:i64 = xor %7, %8\n%10:i64 = add %6, %9\n%11:i64 = shl %9, 16:i64\n%12:i64 = lshr %9, 48:i64\n%13:i64 = or %11, %12\n%14:i64 = xor %10, %13 (hasExternalUses)\n%15:i64 = add %5, %14 (hasExternalUses)\n%16:i64 = shl %1, 13:i64\n%17:i64 = lshr %1, 51:i64\n%18:i64 = or %16, %17\n%19:i64 = xor %2, %18\n%20:i64 = add %10, %19 (hasExternalUses)\n%21:i64 = shl %19, 17:i64\n%22:i64 = lshr %19, 47:i64\n%23:i64 = or %21, %22\n%24:i64 = xor %20, %23\n%25:i64 = add %15, %24 (hasExternalUses)\n%26:i64 = shl %24, 13:i64\n%27:i64 = lshr %24, 51:i64\n%28:i64 = or %26, %27\n%29:i64 = xor %25, %28 (hasExternalUses)\n%30:i64 = shl %29, 17:i64\n%31:i64 = lshr %29, 47:i64\n%32:i64 = or %30, %31\ninfer %32\n",
+        []
+    ],
+    [
+        "%0 = block 2\n%1:i64 = var\n%2:i64 = shl %1, 56:i64\n%3 = block 2\n%4 = block 2\n%5 = block 2\n%6 = block 2\n%7:i8 = var\n%8:i64 = zext %7\n%9:i64 = shlnw %8, 48:i64\n%10:i64 = or %2, %9\n%11:i64 = phi %6, %2, %10\n%12:i8 = var\n%13:i64 = zext %12\n%14:i64 = shlnw %13, 40:i64\n%15:i64 = or %11, %14\n%16:i64 = phi %5, %2, %15\n%17:i8 = var\n%18:i64 = zext %17\n%19:i64 = shlnw %18, 32:i64\n%20:i64 = or %16, %19\n%21:i64 = phi %4, %2, %20\n%22:i8 = var\n%23:i64 = zext %22\n%24:i64 = shlnw %23, 24:i64\n%25:i64 = or %21, %24\n%26:i64 = phi %3, %2, %25\n%27:i8 = var\n%28:i64 = zext %27\n%29:i64 = shlnw %28, 16:i64\n%30:i64 = or %26, %29\n%31:i64 = phi %0, %2, %30\n%32:i8 = var\n%33:i64 = zext %32\n%34:i64 = shlnw %33, 8:i64\n%35:i64 = or %31, %34\ninfer %35\n",
+        []
+    ],
+    [
+        "%0:i64 = var\n%1:i64 = var\n%2:i64 = xor %0, %1 (hasExternalUses)\n%3:i64 = shl %2, 16:i64\ninfer %3\n",
+        []
+    ],
+    [
+        "%0:i64 = var\n%1:i64 = xor 8387220255154660723:i64, %0\ninfer %1\n",
+        []
+    ],
+    [
+        "%0:i64 = var\n%1:i64 = shl %0, 56:i64\ninfer %1\n",
+        []
+    ]
+]

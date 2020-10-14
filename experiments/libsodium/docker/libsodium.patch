@@ -1,0 +1,133 @@
+diff --git a/dist-build/wasm32-wasi.sh b/dist-build/wasm32-wasi.sh
+index c6ae3ac7..4e6ac2b6 100755
+--- a/dist-build/wasm32-wasi.sh
++++ b/dist-build/wasm32-wasi.sh
+@@ -19,13 +19,13 @@ export PREFIX="$(pwd)/libsodium-wasm32-wasi"
+ 
+ mkdir -p $PREFIX || exit 1
+ 
+-export CC="clang"
+-export CFLAGS="-DED25519_NONDETERMINISTIC=1 --target=wasm32-wasi --sysroot=${WASI_LIBC} -O2"
+-export LDFLAGS="-s -Wl,--no-threads"
++export CC="${CC:-clang}"
++export CFLAGS="-DED25519_NONDETERMINISTIC=1 --target=wasm32-wasi --sysroot=${WASI_LIBC} -O${OPT_LEVEL:-2}"
++export LDFLAGS="-Wl,--no-threads"
+ export NM="llvm-nm"
+ export AR="llvm-ar"
+ export RANLIB="llvm-ranlib"
+-export STRIP="llvm-strip"
++export STRIP="true"
+ 
+ make distclean > /dev/null
+ 
+@@ -46,8 +46,11 @@ fi
+ ./configure ${LIBSODIUM_ENABLE_MINIMAL_FLAG} \
+             --prefix="$PREFIX" --with-sysroot="$WASI_LIBC" \
+             --host=wasm32-wasi \
++            --enable-silent-rules \
+             --disable-ssp --disable-shared || exit 1
+ 
++make V=1 -j"${MAKE_PROCS:-1}" >make.log 2>&1 ; exit $?
++
+ NPROCESSORS=$(getconf NPROCESSORS_ONLN 2>/dev/null || getconf _NPROCESSORS_ONLN 2>/dev/null)
+ PROCESSORS=${NPROCESSORS:-3}
+ 
+diff --git a/test/default/cmptest.h b/test/default/cmptest.h
+index b1261bdb..ca8f8641 100644
+--- a/test/default/cmptest.h
++++ b/test/default/cmptest.h
+@@ -167,9 +167,7 @@ static FILE *fp_res;
+ 
+ int main(void)
+ {
+-    FILE          *fp_out;
+     unsigned char *_guard_page;
+-    int           c;
+ 
+     if ((fp_res = fopen(TEST_NAME_RES, "w+")) == NULL) {
+         perror("fopen(" TEST_NAME_RES ")");
+@@ -190,17 +188,7 @@ int main(void)
+     if (xmain() != 0) {
+         return 99;
+     }
+-    fflush(fp_res);
+-    rewind(fp_res);
+-    if ((fp_out = fopen(TEST_NAME_OUT, "r")) == NULL) {
+-        perror("fopen(" TEST_NAME_OUT ")");
+-        return 99;
+-    }
+-    do {
+-        if ((c = fgetc(fp_res)) != fgetc(fp_out)) {
+-            return 99;
+-        }
+-    } while (c != EOF);
++
+     sodium_free(_guard_page);
+ 
+     return 0;
+diff --git a/test/default/wasi-test-wrapper.sh b/test/default/wasi-test-wrapper.sh
+index 06335608..5be6f76a 100755
+--- a/test/default/wasi-test-wrapper.sh
++++ b/test/default/wasi-test-wrapper.sh
+@@ -1,40 +1,22 @@
+-#! /bin/sh
+-
+-MAX_MEMORY_TESTS="67108864"
+-
+-if command -v wasm-opt >/dev/null; then
+-  wasm-opt -O4 -o "${1}.tmp" "$1" && mv -f "${1}.tmp" "$1"
+-fi
+-
+-if [ -z "$WASI_RUNTIME" ] || [ "$WASI_RUNTIME" = "wavm" ]; then
+-  if command -v wavm >/dev/null; then
+-    wavm run --abi=wasi "$1" && exit 0
+-  fi
++#!/bin/bash
++if [[ -n "$TEST_DO_WASMER" ]]; then
++    wasmer --dir=. "$1"
++    exit $?
++elif [[ -n "$TEST_DO_COVERAGE" ]]; then
++    java -jar /swam-cov/out/cli/assembly/dest/out.jar run -t --wasi-opt non-blocking-rng --wasi --dir=. "$1" 2>&1 | python3 -c 'print(__import__("json").dumps(__import__("collections").Counter(map(str.strip, __import__("fileinput").input())), indent=2))'
++    exit $?
++elif [[ -n "$TEST_DO_RUN" ]]; then
++    # Only run tests:
++    java -jar /swam/out/cli/assembly/dest/out.jar run --time --wasi-opt non-blocking-rng --wasi --dir=. "$1" 2>&1 ; exit $?
++    exit $?
++elif [[ -n "$TEST_DO_TRACE" ]]; then
++    [[ -f whitelist.txt ]] || { echo 'Where is my whitelist?' && exit 1; }
++    grep -qw "$(basename $1)" whitelist.txt || { echo 'Non-whitelisted test!' && exit 0; }
++    [[ -f /blacklist.txt ]] && grep -qw "$(basename $1)" /blacklist.txt && echo 'Blacklisted test!' && exit 0
++
++    java -jar /swam/out/cli/assembly/dest/out.jar run --wasi-opt non-blocking-rng --wasi --dir=. "$1" -t 2>&1
++    exit $?
++else
++    echo 'No $TEST_DO_ variable set, exiting'
++    exit 55
+ fi
+-
+-if [ -z "$WASI_RUNTIME" ] || [ "$WASI_RUNTIME" = "wasmtime" ]; then
+-  if command -v wasmtime >/dev/null; then
+-    wasmtime -o --dir=. "$1" && exit 0
+-  fi
+-fi
+-
+-if [ -z "$WASI_RUNTIME" ] || [ "$WASI_RUNTIME" = "wasmer" ]; then
+-  if command -v wasmer >/dev/null; then
+-    wasmer run "$1" --backend "${WASMER_BACKEND:-cranelift}" --dir=. && exit 0
+-  fi
+-fi
+-
+-if [ -z "$WASI_RUNTIME" ] || [ "$WASI_RUNTIME" = "wasmer-js" ]; then
+-  if command -v wasmer-js >/dev/null; then
+-    wasmer-js run "$1" --dir=. && exit 0
+-  fi
+-fi
+-
+-if [ -z "$WASI_RUNTIME" ] || [ "$WASI_RUNTIME" = "wasm3" ]; then
+-  if command -v wasm3 >/dev/null; then
+-    wasm3 "$1" && exit 0
+-  fi
+-fi
+-
+-echo "WebAssembly runtime failed" >&2
+-exit 1
