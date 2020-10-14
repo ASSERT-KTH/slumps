@@ -1,9 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <limits.h>
-#include <emscripten.h>
 
-int EMSCRIPTEN_KEEPALIVE a(int a, int b){
+int a(int a, int b){
 
 	if(a > 10)
 	{
