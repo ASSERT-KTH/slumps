@@ -1,0 +1,66 @@
+[
+    [
+        "%0:i64 = var\n%1:i64 = add 63:i64, %0\n%2:i64 = lshr %1, 6:i64\n%3:i64 = subnsw 4294967296:i64, %2\ninfer %3\n",
+        []
+    ],
+    [
+        "%0:i64 = var\n%1:i1 = ult 4294967295:i64, %0\ninfer %1\n",
+        [
+            "%7:i1 = select %1, %1, 0:i1\nresult %7\n",
+            "%5:i1 = eq 1:i1, %1\nresult %5\n",
+            "%4:i1 = or %1, %1\nresult %4\n",
+            "%2:i1 = freeze %1\nresult %2\n",
+            "%8:i1 = select %1, 1:i1, %1\nresult %8\n",
+            "%6:i1 = ule 4294967296:i64, %0\nresult %6\n",
+            "%3:i1 = and %1, %1\nresult %3\n",
+            "result %1\n",
+            "%9:i1 = select %1, 1:i1, 0:i1\nresult %9\n"
+        ]
+    ],
+    [
+        "%0:i32 = var\ninfer %0\n",
+        []
+    ],
+    [
+        "%0:i64 = var\n%1:i64 = add 63:i64, %0\n%2:i64 = lshr %1, 6:i64\n%3:i64 = subnsw 4294967296:i64, %2\n%4:i32 = var\n%5:i64 = zext %4\n%6:i1 = ult %3, %5\npc %6 0:i1\n%7:i1 = ult 4294967295:i64, %0\ninfer %7\n",
+        [
+            "%12:i1 = ule 4294967296:i64, %0\nresult %12\n",
+            "%14:i1 = select %7, 1:i1, %7\nresult %14\n",
+            "result %7\n",
+            "%11:i1 = eq 1:i1, %7\nresult %11\n",
+            "%9:i1 = and %7, %7\nresult %9\n",
+            "%15:i1 = select %7, 1:i1, 0:i1\nresult %15\n",
+            "%10:i1 = or %7, %7\nresult %10\n",
+            "%8:i1 = freeze %7\nresult %8\n",
+            "%13:i1 = select %7, %7, 0:i1\nresult %13\n"
+        ]
+    ],
+    [
+        "%0:i32 = var\n%1:i64 = zext %0\ninfer %1\n",
+        []
+    ],
+    [
+        "%0:i64 = var\n%1:i64 = add 63:i64, %0\ninfer %1 (demandedBits=1111111111111111111111111111111111111111111111111111111111000000)\n",
+        []
+    ],
+    [
+        "%0:i64 = var\n%1:i64 = add 63:i64, %0\n%2:i64 = lshr %1, 6:i64\n%3:i64 = subnsw 4294967296:i64, %2\n%4:i32 = var\n%5:i64 = zext %4\n%6:i1 = ult %3, %5\ninfer %6\n",
+        [
+            "%15:i64 = add 63:i64, %0\n%16:i64 = lshr %15, 6:i64\n%17:i64 = subnsw 4294967296:i64, %16\n%18:i1 = ult %17, %5\n%19:i1 = select %18, %18, 0:i1\nresult %19\n",
+            "%8:i1 = or %6, %6\nresult %8\n",
+            "%9:i1 = freeze %6\nresult %9\n",
+            "%10:i64 = add 63:i64, %0\n%11:i64 = lshr %10, 6:i64\n%12:i64 = subnsw 4294967296:i64, %11\n%13:i1 = ult %12, %5\n%14:i1 = eq 1:i1, %13\nresult %14\n",
+            "%7:i1 = freeze %6\nresult %7\n",
+            "%7:i1 = and %6, %6\nresult %7\n",
+            "%9:i1 = or %6, %6\nresult %9\n",
+            "%8:i1 = and %6, %6\nresult %8\n",
+            "%20:i64 = add 63:i64, %0\n%21:i64 = lshr %20, 6:i64\n%22:i64 = subnsw 4294967296:i64, %21\n%23:i1 = ult %22, %5\n%24:i1 = select %23, 1:i1, %23\nresult %24\n",
+            "%25:i64 = add 63:i64, %0\n%26:i64 = lshr %25, 6:i64\n%27:i64 = subnsw 4294967296:i64, %26\n%28:i1 = ult %27, %5\n%29:i1 = select %28, 1:i1, 0:i1\nresult %29\n",
+            "result %6\n"
+        ]
+    ],
+    [
+        "%0:i64 = var\n%1:i64 = add 63:i64, %0\n%2:i64 = lshr %1, 6:i64\ninfer %2\n",
+        []
+    ]
+]

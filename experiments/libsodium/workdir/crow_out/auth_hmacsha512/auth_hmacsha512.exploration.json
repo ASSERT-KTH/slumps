@@ -1,0 +1,66 @@
+[
+    [
+        "%0:i32 = var (nonZero) (range=[1,0))\ninfer %0\n",
+        []
+    ],
+    [
+        "%0:i32 = var\n%1:i1 = ult 128:i32, %0\ninfer %1\n",
+        []
+    ],
+    [
+        "%0:i32 = var\n%1:i32 = var (knownBits=xxxxxxxxxxxxxxxxxxxxxxxxxxxx0000) (nonZero)\n%2:i32 = var (nonZero)\n%3:i1 = eq %1, %2\n%4:i32 = var\n%5:i32 = select %3, 4294967295:i32, %4\n%6:i32 = or %0, %5\ninfer %6\n",
+        []
+    ],
+    [
+        "%0 = block 2\n%1:i32 = var\n%2:i32 = phi %0, 64:i32, %1\n%3:i32 = var (nonZero) (range=[1,0))\n%4:i32 = addnuw 1:i32, %3 (hasExternalUses)\n%5:i1 = eq %2, %4\ninfer %5\n",
+        []
+    ],
+    [
+        "%0:i8 = var\n%1:i8 = xor 92:i8, %0\ninfer %1\n",
+        []
+    ],
+    [
+        "%0:i8 = var\n%1:i8 = var\n%2:i8 = xor %0, %1\ninfer %2\n",
+        []
+    ],
+    [
+        "%0:i8 = var\n%1:i8 = xor 54:i8, %0\ninfer %1\n",
+        []
+    ],
+    [
+        "%0:i32 = var (knownBits=xxxxxxxxxxxxxxxxxxxxxxxxxxxx0000) (nonZero)\n%1:i32 = var (nonZero)\n%2:i1 = eq %0, %1\n%3:i32 = var\n%4:i32 = select %2, 4294967295:i32, %3\ninfer %4\n",
+        []
+    ],
+    [
+        "%0 = block 2\n%1:i32 = var\n%2:i32 = phi %0, 64:i32, %1\n%3:i1 = eq 0:i32, %2\ninfer %3\n",
+        []
+    ],
+    [
+        "%0:i32 = var (knownBits=xxxxxxxxxxxxxxxxxxxxxxxxxxxx0000) (nonZero)\n%1:i32 = var (nonZero)\n%2:i1 = eq %0, %1\ninfer %2\n",
+        []
+    ],
+    [
+        "%0:i8 = var\ninfer %0\n",
+        []
+    ],
+    [
+        "%0 = block 2\n%1:i32 = var\n%2:i32 = phi %0, 64:i32, %1\ninfer %2\n",
+        []
+    ],
+    [
+        "%0:i32 = var\n%1:i1 = ult 128:i32, %0\npc %1 1:i1\n%2:i64 = zext %0\ninfer %2\n",
+        []
+    ],
+    [
+        "%0 = block 2\n%1:i32 = var\n%2:i32 = phi %0, 64:i32, %1\n%3:i1 = eq 0:i32, %2\npc %3 0:i1\n%4:i1 = eq 1:i32, %2\ninfer %4\n",
+        []
+    ],
+    [
+        "%0:i32 = var\ninfer %0\n",
+        []
+    ],
+    [
+        "%0:i32 = var (nonZero) (range=[1,0))\n%1:i32 = addnuw 1:i32, %0\ninfer %1\n",
+        []
+    ]
+]

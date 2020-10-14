@@ -1,0 +1,182 @@
+[
+    [
+        "%0:i8 = var\n%1:i8 = var\n%2:i8 = xor %0, %1\ninfer %2\n",
+        []
+    ],
+    [
+        "%0:i8 = var\n%1:i32 = zext %0\n%2:i32 = addnw 1:i32, %1 (hasExternalUses)\n%3:i32 = lshr %2, 8:i32\n%4:i8 = var\n%5:i32 = zext %4\n%6:i32 = addnw %3, %5\ninfer %6\n",
+        []
+    ],
+    [
+        "%0:i8 = var\n%1:i32 = zext %0\n%2:i32 = addnw 1:i32, %1 (hasExternalUses)\n%3:i32 = lshr %2, 8:i32\n%4:i8 = var\n%5:i32 = zext %4\n%6:i32 = addnw %3, %5 (hasExternalUses)\n%7:i32 = lshr %6, 8:i32\n%8:i8 = var\n%9:i32 = zext %8\n%10:i32 = addnw %7, %9 (hasExternalUses)\n%11:i32 = lshr %10, 8:i32\n%12:i8 = var\n%13:i32 = zext %12\n%14:i32 = addnw %11, %13 (hasExternalUses)\n%15:i32 = lshr %14, 8:i32\n%16:i8 = var\n%17:i32 = zext %16\n%18:i32 = addnw %15, %17\ninfer %18\n",
+        []
+    ],
+    [
+        "%0:i64 = var (range=[64,0))\n%1:i64 = add 18446744073709551552:i64, %0\ninfer %1\n",
+        []
+    ],
+    [
+        "%0:i64 = var\n%1:i1 = eq 0:i64, %0\ninfer %1\n",
+        []
+    ],
+    [
+        "%0:i64 = var (range=[64,0))\ninfer %0\n",
+        []
+    ],
+    [
+        "%0:i32 = var (range=[0,-1))\n%1:i32 = addnuw 1:i32, %0 (hasExternalUses)\n%2 = block 2\n%3:i64 = var\n%4:i64 = and 63:i64, %3\n%5:i64 = phi %2, %4, %3\n%6:i32 = trunc %5 (hasExternalUses)\n%7:i1 = eq %1, %6\ninfer %7\n",
+        []
+    ],
+    [
+        "%0:i32 = var (range=[0,-1))\n%1:i32 = addnuw 1:i32, %0\ninfer %1\n",
+        []
+    ],
+    [
+        "%0:i32 = var (range=[0,-1))\ninfer %0\n",
+        []
+    ],
+    [
+        "%0:i8 = var\n%1:i32 = zext %0\n%2:i32 = addnw 1:i32, %1 (hasExternalUses)\n%3:i32 = lshr %2, 8:i32\n%4:i8 = var\n%5:i32 = zext %4\n%6:i32 = addnw %3, %5 (hasExternalUses)\n%7:i32 = lshr %6, 8:i32\n%8:i8 = var\n%9:i32 = zext %8\n%10:i32 = addnw %7, %9 (hasExternalUses)\n%11:i32 = lshr %10, 8:i32\n%12:i8 = var\n%13:i32 = zext %12\n%14:i32 = addnw %11, %13\ninfer %14\n",
+        []
+    ],
+    [
+        "%0:i8 = var\n%1:i32 = zext %0\n%2:i32 = addnw 1:i32, %1 (hasExternalUses)\n%3:i32 = lshr %2, 8:i32\n%4:i8 = var\n%5:i32 = zext %4\n%6:i32 = addnw %3, %5 (hasExternalUses)\n%7:i32 = lshr %6, 8:i32\ninfer %7\n",
+        []
+    ],
+    [
+        "%0:i8 = var\ninfer %0\n",
+        []
+    ],
+    [
+        "%0 = block 2\n%1:i64 = var\n%2:i64 = and 63:i64, %1\n%3:i64 = phi %0, %2, %1\n%4:i32 = trunc %3\ninfer %4\n",
+        []
+    ],
+    [
+        "%0:i64 = var\ninfer %0\n",
+        []
+    ],
+    [
+        "%0:i8 = var\n%1:i32 = zext %0\ninfer %1 (demandedBits=00000000111111111111111111111111)\n",
+        []
+    ],
+    [
+        "%0 = block 2\n%1:i64 = var\n%2:i64 = and 63:i64, %1\n%3:i64 = phi %0, %2, %1\n%4:i32 = trunc %3 (hasExternalUses)\n%5:i1 = eq 0:i32, %4\ninfer %5\n",
+        []
+    ],
+    [
+        "%0:i8 = var\n%1:i32 = zext %0\ninfer %1\n",
+        []
+    ],
+    [
+        "%0:i8 = var\n%1:i32 = zext %0\n%2:i32 = addnw 1:i32, %1 (hasExternalUses)\n%3:i32 = lshr %2, 8:i32\n%4:i8 = var\n%5:i32 = zext %4\n%6:i32 = addnw %3, %5 (hasExternalUses)\n%7:i32 = lshr %6, 8:i32\n%8:i8 = var\n%9:i32 = zext %8\n%10:i32 = addnw %7, %9 (hasExternalUses)\n%11:i32 = lshr %10, 8:i32\n%12:i8 = var\n%13:i32 = zext %12\n%14:i32 = addnw %11, %13 (hasExternalUses)\n%15:i32 = lshr %14, 8:i32\n%16:i8 = var\n%17:i32 = zext %16\n%18:i32 = addnw %15, %17 (hasExternalUses)\n%19:i32 = lshr %18, 8:i32\n%20:i8 = var\n%21:i32 = zext %20\n%22:i32 = addnw %19, %21 (hasExternalUses)\n%23:i32 = lshr %22, 8:i32\n%24:i8 = var\n%25:i32 = zext %24\n%26:i32 = addnw %23, %25\ninfer %26 (demandedBits=00000000000000001111111111111111)\n",
+        []
+    ],
+    [
+        "%0:i8 = var\n%1:i32 = zext %0\n%2:i32 = addnw 1:i32, %1 (hasExternalUses)\n%3:i32 = lshr %2, 8:i32\n%4:i8 = var\n%5:i32 = zext %4\n%6:i32 = addnw %3, %5 (hasExternalUses)\n%7:i32 = lshr %6, 8:i32\n%8:i8 = var\n%9:i32 = zext %8\n%10:i32 = addnw %7, %9 (hasExternalUses)\n%11:i32 = lshr %10, 8:i32\n%12:i8 = var\n%13:i32 = zext %12\n%14:i32 = addnw %11, %13 (hasExternalUses)\n%15:i32 = lshr %14, 8:i32\n%16:i8 = var\n%17:i32 = zext %16\n%18:i32 = addnw %15, %17 (hasExternalUses)\n%19:i32 = lshr %18, 8:i32\n%20:i8 = var\n%21:i32 = zext %20\n%22:i32 = addnw %19, %21 (hasExternalUses)\n%23:i32 = lshr %22, 8:i32\n%24:i8 = var\n%25:i32 = zext %24\n%26:i32 = addnw %23, %25 (hasExternalUses)\n%27:i8 = trunc %26\ninfer %27\n",
+        []
+    ],
+    [
+        "%0:i32 = var (knownBits=0xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx) (nonNegative) (range=[0,64))\n%1:i32 = addnw 1:i32, %0 (hasExternalUses)\n%2:i1 = eq 64:i32, %1\ninfer %2\n",
+        []
+    ],
+    [
+        "%0 = block 2\n%1:i64 = var\n%2:i64 = and 63:i64, %1 (hasExternalUses)\n%3:i64 = phi %0, %2, %1\ninfer %3 (demandedBits=0000000000000000000000000000000011111111111111111111111111111111)\n",
+        []
+    ],
+    [
+        "%0:i8 = var\n%1:i32 = zext %0\n%2:i32 = addnw 1:i32, %1 (hasExternalUses)\n%3:i32 = lshr %2, 8:i32\ninfer %3\n",
+        []
+    ],
+    [
+        "%0:i8 = var\n%1:i32 = zext %0\n%2:i32 = addnw 1:i32, %1\ninfer %2\n",
+        []
+    ],
+    [
+        "%0:i8 = var\n%1:i32 = zext %0\n%2:i32 = addnw 1:i32, %1 (hasExternalUses)\n%3:i32 = lshr %2, 8:i32\n%4:i8 = var\n%5:i32 = zext %4\n%6:i32 = addnw %3, %5 (hasExternalUses)\n%7:i32 = lshr %6, 8:i32\n%8:i8 = var\n%9:i32 = zext %8\n%10:i32 = addnw %7, %9 (hasExternalUses)\n%11:i32 = lshr %10, 8:i32\n%12:i8 = var\n%13:i32 = zext %12\n%14:i32 = addnw %11, %13 (hasExternalUses)\n%15:i32 = lshr %14, 8:i32\n%16:i8 = var\n%17:i32 = zext %16\n%18:i32 = addnw %15, %17 (hasExternalUses)\n%19:i8 = trunc %18\ninfer %19\n",
+        []
+    ],
+    [
+        "%0:i8 = var\n%1:i32 = zext %0\n%2:i32 = addnw 1:i32, %1 (hasExternalUses)\n%3:i32 = lshr %2, 8:i32\n%4:i8 = var\n%5:i32 = zext %4\n%6:i32 = addnw %3, %5 (hasExternalUses)\n%7:i32 = lshr %6, 8:i32\n%8:i8 = var\n%9:i32 = zext %8\n%10:i32 = addnw %7, %9 (hasExternalUses)\n%11:i8 = trunc %10\ninfer %11\n",
+        []
+    ],
+    [
+        "%0:i8 = var\n%1:i32 = zext %0\n%2:i32 = addnw 1:i32, %1 (hasExternalUses)\n%3:i32 = lshr %2, 8:i32\n%4:i8 = var\n%5:i32 = zext %4\n%6:i32 = addnw %3, %5 (hasExternalUses)\n%7:i32 = lshr %6, 8:i32\n%8:i8 = var\n%9:i32 = zext %8\n%10:i32 = addnw %7, %9 (hasExternalUses)\n%11:i32 = lshr %10, 8:i32\n%12:i8 = var\n%13:i32 = zext %12\n%14:i32 = addnw %11, %13 (hasExternalUses)\n%15:i32 = lshr %14, 8:i32\n%16:i8 = var\n%17:i32 = zext %16\n%18:i32 = addnw %15, %17 (hasExternalUses)\n%19:i32 = lshr %18, 8:i32\n%20:i8 = var\n%21:i32 = zext %20\n%22:i32 = addnw %19, %21 (hasExternalUses)\n%23:i32 = lshr %22, 8:i32\n%24:i8 = var\n%25:i32 = zext %24\n%26:i32 = addnw %23, %25 (hasExternalUses)\n%27:i32 = lshr %26, 8:i32\ninfer %27 (demandedBits=00000000000000000000000011111111)\n",
+        []
+    ],
+    [
+        "%0:i8 = var\n%1:i32 = zext %0\n%2:i32 = addnw 1:i32, %1 (hasExternalUses)\n%3:i32 = lshr %2, 8:i32\n%4:i8 = var\n%5:i32 = zext %4\n%6:i32 = addnw %3, %5 (hasExternalUses)\n%7:i32 = lshr %6, 8:i32\n%8:i8 = var\n%9:i32 = zext %8\n%10:i32 = addnw %7, %9 (hasExternalUses)\n%11:i32 = lshr %10, 8:i32\n%12:i8 = var\n%13:i32 = zext %12\n%14:i32 = addnw %11, %13 (hasExternalUses)\n%15:i32 = lshr %14, 8:i32\n%16:i8 = var\n%17:i32 = zext %16\n%18:i32 = addnw %15, %17 (hasExternalUses)\n%19:i32 = lshr %18, 8:i32\n%20:i8 = var\n%21:i32 = zext %20\n%22:i32 = addnw %19, %21 (hasExternalUses)\n%23:i32 = lshr %22, 8:i32\ninfer %23 (demandedBits=00000000000000001111111111111111)\n",
+        []
+    ],
+    [
+        "%0:i8 = var\n%1:i32 = zext %0\n%2:i32 = addnw 1:i32, %1 (hasExternalUses)\n%3:i32 = lshr %2, 8:i32\n%4:i8 = var\n%5:i32 = zext %4\n%6:i32 = addnw %3, %5 (hasExternalUses)\n%7:i32 = lshr %6, 8:i32\n%8:i8 = var\n%9:i32 = zext %8\n%10:i32 = addnw %7, %9 (hasExternalUses)\n%11:i32 = lshr %10, 8:i32\n%12:i8 = var\n%13:i32 = zext %12\n%14:i32 = addnw %11, %13 (hasExternalUses)\n%15:i32 = lshr %14, 8:i32\n%16:i8 = var\n%17:i32 = zext %16\n%18:i32 = addnw %15, %17 (hasExternalUses)\n%19:i32 = lshr %18, 8:i32\n%20:i8 = var\n%21:i32 = zext %20\n%22:i32 = addnw %19, %21 (hasExternalUses)\n%23:i8 = trunc %22\ninfer %23\n",
+        []
+    ],
+    [
+        "%0:i8 = var\n%1:i32 = zext %0\n%2:i32 = addnw 1:i32, %1 (hasExternalUses)\n%3:i32 = lshr %2, 8:i32\n%4:i8 = var\n%5:i32 = zext %4\n%6:i32 = addnw %3, %5 (hasExternalUses)\n%7:i32 = lshr %6, 8:i32\n%8:i8 = var\n%9:i32 = zext %8\n%10:i32 = addnw %7, %9 (hasExternalUses)\n%11:i32 = lshr %10, 8:i32\n%12:i8 = var\n%13:i32 = zext %12\n%14:i32 = addnw %11, %13 (hasExternalUses)\n%15:i32 = lshr %14, 8:i32\n%16:i8 = var\n%17:i32 = zext %16\n%18:i32 = addnw %15, %17 (hasExternalUses)\n%19:i32 = lshr %18, 8:i32\n%20:i8 = var\n%21:i32 = zext %20\n%22:i32 = addnw %19, %21 (hasExternalUses)\n%23:i32 = lshr %22, 8:i32\n%24:i8 = var\n%25:i32 = zext %24\n%26:i32 = addnw %23, %25 (hasExternalUses)\n%27:i32 = lshr %26, 8:i32\n%28:i8 = trunc %27\ninfer %28\n",
+        []
+    ],
+    [
+        "%0:i32 = var (knownBits=0xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx) (nonNegative) (range=[0,64))\n%1:i32 = addnw 1:i32, %0\ninfer %1\n",
+        []
+    ],
+    [
+        "%0:i64 = var\n%1:i64 = and 63:i64, %0\ninfer %1\n",
+        []
+    ],
+    [
+        "%0:i8 = var\n%1:i32 = zext %0\n%2:i32 = addnw 1:i32, %1 (hasExternalUses)\n%3:i32 = lshr %2, 8:i32\n%4:i8 = var\n%5:i32 = zext %4\n%6:i32 = addnw %3, %5 (hasExternalUses)\n%7:i32 = lshr %6, 8:i32\n%8:i8 = var\n%9:i32 = zext %8\n%10:i32 = addnw %7, %9 (hasExternalUses)\n%11:i32 = lshr %10, 8:i32\ninfer %11\n",
+        []
+    ],
+    [
+        "%0:i64 = var\n%1:i1 = eq 0:i64, %0\npc %1 0:i1\n%2:i1 = ult 63:i64, %0\ninfer %2\n",
+        []
+    ],
+    [
+        "%0:i32 = var (knownBits=0xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx) (nonNegative) (range=[0,64))\ninfer %0\n",
+        []
+    ],
+    [
+        "%0:i8 = var\n%1:i32 = zext %0\n%2:i32 = addnw 1:i32, %1 (hasExternalUses)\n%3:i32 = lshr %2, 8:i32\n%4:i8 = var\n%5:i32 = zext %4\n%6:i32 = addnw %3, %5 (hasExternalUses)\n%7:i32 = lshr %6, 8:i32\n%8:i8 = var\n%9:i32 = zext %8\n%10:i32 = addnw %7, %9 (hasExternalUses)\n%11:i32 = lshr %10, 8:i32\n%12:i8 = var\n%13:i32 = zext %12\n%14:i32 = addnw %11, %13 (hasExternalUses)\n%15:i32 = lshr %14, 8:i32\n%16:i8 = var\n%17:i32 = zext %16\n%18:i32 = addnw %15, %17 (hasExternalUses)\n%19:i32 = lshr %18, 8:i32\ninfer %19 (demandedBits=00000000111111111111111111111111)\n",
+        []
+    ],
+    [
+        "%0:i8 = var\n%1:i32 = zext %0\n%2:i32 = addnw 1:i32, %1 (hasExternalUses)\n%3:i32 = lshr %2, 8:i32\n%4:i8 = var\n%5:i32 = zext %4\n%6:i32 = addnw %3, %5 (hasExternalUses)\n%7:i32 = lshr %6, 8:i32\n%8:i8 = var\n%9:i32 = zext %8\n%10:i32 = addnw %7, %9 (hasExternalUses)\n%11:i32 = lshr %10, 8:i32\n%12:i8 = var\n%13:i32 = zext %12\n%14:i32 = addnw %11, %13 (hasExternalUses)\n%15:i32 = lshr %14, 8:i32\n%16:i8 = var\n%17:i32 = zext %16\n%18:i32 = addnw %15, %17 (hasExternalUses)\n%19:i32 = lshr %18, 8:i32\n%20:i8 = var\n%21:i32 = zext %20\n%22:i32 = addnw %19, %21\ninfer %22 (demandedBits=00000000111111111111111111111111)\n",
+        []
+    ],
+    [
+        "%0:i8 = var\n%1:i32 = zext %0\n%2:i32 = addnw 1:i32, %1 (hasExternalUses)\n%3:i32 = lshr %2, 8:i32\n%4:i8 = var\n%5:i32 = zext %4\n%6:i32 = addnw %3, %5 (hasExternalUses)\n%7:i8 = trunc %6\ninfer %7\n",
+        []
+    ],
+    [
+        "%0:i8 = var\n%1:i32 = zext %0\n%2:i32 = addnw 1:i32, %1 (hasExternalUses)\n%3:i32 = lshr %2, 8:i32\n%4:i8 = var\n%5:i32 = zext %4\n%6:i32 = addnw %3, %5 (hasExternalUses)\n%7:i32 = lshr %6, 8:i32\n%8:i8 = var\n%9:i32 = zext %8\n%10:i32 = addnw %7, %9 (hasExternalUses)\n%11:i32 = lshr %10, 8:i32\n%12:i8 = var\n%13:i32 = zext %12\n%14:i32 = addnw %11, %13 (hasExternalUses)\n%15:i32 = lshr %14, 8:i32\ninfer %15\n",
+        []
+    ],
+    [
+        "%0:i8 = var\n%1:i32 = zext %0\n%2:i32 = addnw 1:i32, %1 (hasExternalUses)\n%3:i32 = lshr %2, 8:i32\n%4:i8 = var\n%5:i32 = zext %4\n%6:i32 = addnw %3, %5 (hasExternalUses)\n%7:i32 = lshr %6, 8:i32\n%8:i8 = var\n%9:i32 = zext %8\n%10:i32 = addnw %7, %9 (hasExternalUses)\n%11:i32 = lshr %10, 8:i32\n%12:i8 = var\n%13:i32 = zext %12\n%14:i32 = addnw %11, %13 (hasExternalUses)\n%15:i8 = trunc %14\ninfer %15\n",
+        []
+    ],
+    [
+        "%0:i64 = var\n%1:i64 = and 63:i64, %0 (hasExternalUses)\n%2:i1 = eq 0:i64, %1\ninfer %2\n",
+        []
+    ],
+    [
+        "%0:i8 = var\n%1:i32 = zext %0\n%2:i32 = addnw 1:i32, %1 (hasExternalUses)\n%3:i8 = trunc %2\ninfer %3\n",
+        []
+    ],
+    [
+        "%0:i8 = var\n%1:i32 = zext %0\n%2:i32 = addnw 1:i32, %1 (hasExternalUses)\n%3:i32 = lshr %2, 8:i32\n%4:i8 = var\n%5:i32 = zext %4\n%6:i32 = addnw %3, %5 (hasExternalUses)\n%7:i32 = lshr %6, 8:i32\n%8:i8 = var\n%9:i32 = zext %8\n%10:i32 = addnw %7, %9\ninfer %10\n",
+        []
+    ],
+    [
+        "%0:i8 = var\n%1:i32 = zext %0\ninfer %1 (demandedBits=00000000000000001111111111111111)\n",
+        []
+    ],
+    [
+        "%0:i64 = var (range=[64,0))\n%1:i64 = add 18446744073709551552:i64, %0 (hasExternalUses)\n%2:i1 = ult 63:i64, %1\ninfer %2\n",
+        []
+    ],
+    [
+        "%0:i8 = var\n%1:i8 = var\n%2:i32 = zext %1\n%3:i32 = addnw 1:i32, %2 (hasExternalUses)\n%4:i32 = lshr %3, 8:i32\n%5:i8 = var\n%6:i32 = zext %5\n%7:i32 = addnw %4, %6 (hasExternalUses)\n%8:i32 = lshr %7, 8:i32\n%9:i8 = var\n%10:i32 = zext %9\n%11:i32 = addnw %8, %10 (hasExternalUses)\n%12:i32 = lshr %11, 8:i32\n%13:i8 = var\n%14:i32 = zext %13\n%15:i32 = addnw %12, %14 (hasExternalUses)\n%16:i32 = lshr %15, 8:i32\n%17:i8 = var\n%18:i32 = zext %17\n%19:i32 = addnw %16, %18 (hasExternalUses)\n%20:i32 = lshr %19, 8:i32\n%21:i8 = var\n%22:i32 = zext %21\n%23:i32 = addnw %20, %22 (hasExternalUses)\n%24:i32 = lshr %23, 8:i32\n%25:i8 = var\n%26:i32 = zext %25\n%27:i32 = addnw %24, %26 (hasExternalUses)\n%28:i32 = lshr %27, 8:i32\n%29:i8 = trunc %28\n%30:i8 = add %0, %29\ninfer %30\n",
+        []
+    ]
+]
