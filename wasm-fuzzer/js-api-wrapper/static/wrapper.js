@@ -11,22 +11,54 @@ function _base64ToArrayBuffer(base64) {
     return bytes.buffer;
 }
 
+class WASMListener{
 
-mem = new Array(1 << 17);
-previousId = -1;
-
-function registerVisit(id) {
-	if(previousId >= 0){
-	  let index = (previousId ^ id)
-	  if(isNaN(mem[index]))
-		mem[index] = 0;
-	  mem[index]++;
-	  previousId = id >> 1;
-	}else{
-	  previousId = id
-	  mem[previousId] = 1;
+	constructor(hash, name, meta){
+		this.hash = hash;
+		this.meta = meta
+		this.previousId = -1
+		this.mem = new Array(1 << 17);
+		this.unique = {}
+		this.name = name
+		
+		this.registerVisit  = this.registerVisit.bind(this)
 	}
-  }
+
+	
+	registerVisit(id) {
+		this.unique[id] = 1
+		if(this.previousId >= 0){
+		  let index = (this.previousId ^ id)
+		  if(isNaN(this.mem[index]))
+			this.mem[index] = 0;
+		  this.mem[index]++;
+		  this.previousId = id >> 1;
+		}else{
+		  this.previousId = id
+		  this.mem[this.previousId] = 1;
+		}
+	  }
+}
+
+const listeners = {
+
+}
+
+function callBinaries(){
+	if(window.setBinaries){
+
+		// visited={t.uniqueHitBlocks} total={t.totalBlockCount}
+		window.setBinaries(Object.keys(listeners).map(k => ({
+			name: listeners[k].name,
+			hash: k,
+			uniqueHitBlocks: Object.keys(listeners[k].unique).length,
+			totalBlockCount: listeners[k].meta.totalBasicBlocks,
+			totalInstructions: listeners[k].meta.totalInstructions
+		})))
+	}
+	else
+		setTimeout(() => callBinaries(), 1000)
+}
 
 WebAssembly.instantiate = function(binary, info){
 	
@@ -51,9 +83,13 @@ WebAssembly.instantiate = function(binary, info){
 			res.json().then(jsonData => 
 			{		
 				console.log("Initiating WASM...");
+				listeners[jsonData.hash] = new WASMListener(jsonData.hash, jsonData.name, jsonData.metadata)
+				callBinaries();
+
 				resolve(old(_base64ToArrayBuffer(jsonData.instrumented), {
 					...info, swam: { // Add hit listener
-						"swam_cb": registerVisit
+						// TODO create a different listener for a different binary
+						"swam_cb": listeners[jsonData.hash].registerVisit
 					}
 				}));
 			}).catch(err => console.log(err));
@@ -64,5 +100,14 @@ WebAssembly.instantiate = function(binary, info){
 	})
 };
 
-// INJECT Dashboard
 
+
+
+// INJECT Dashboard
+console.log("Injecting DASHBOARD...");
+const app = document.createElement('script');
+app.src = "http://localhost:5000/static/index.js";
+
+window.onload = function(e){
+	document.body.appendChild(app);
+}
