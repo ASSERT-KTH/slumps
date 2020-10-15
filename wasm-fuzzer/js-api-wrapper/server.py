@@ -7,6 +7,7 @@ import flask
 from base64 import encodebytes
 import json
 from subprocess import Popen, check_output
+import hashlib
 
 app = Flask(__name__)
 
@@ -45,17 +46,21 @@ def instrument():
 	outPath = os.path.abspath("tmp/temp.instrumented.wasm")
 
 	swamOutput = check_output(["java", "-jar", SWAM_BIN_ENV, "coverage", "--novalidate", "--export-instrumented", outPath, absPath], stderr=sys.stderr)
+	swamOutput = swamOutput.decode()
+	swamOutput = json.loads(swamOutput)
 
+	print(swamOutput)
 	# read instrumented
 	instrumentedWASM = open(outPath, 'rb')
 
 	# read metadata
-
+	hashvalue = hashlib.sha256(request.data)
+	hsh = hashvalue.hexdigest()
 
 
 	encoded_wasm = encodebytes(instrumentedWASM.read()).decode('ascii') # encode as base64
 
-	r = flask.jsonify(instrumented=encoded_wasm)
+	r = flask.jsonify(instrumented=encoded_wasm, hash=f"{hsh[:-20]}...", name="temp", metadata=swamOutput)
 	#r.headers.add('Access-Control-Allow-Origin', '*')
 
 	return r
