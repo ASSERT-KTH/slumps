@@ -1563,19 +1563,7 @@ function createWasm() {
     'env': asmLibraryArg,
     'wasi_snapshot_preview1': asmLibraryArg,
     "swam": {
-      "swam_cb": function(id) {
-        
-        if(previousId >= 0){
-          let index = (previousId ^ id)
-          if(isNaN(mem[index]))
-            mem[index] = 0;
-          mem[index]++;
-          previousId = id >> 1;
-        }else{
-          previousId = id
-          mem[previousId] = 1;
-        }
-      }
+      "swam_cb": 
     }
   };
   // Load the wasm module and create an instance of using native support in the JS engine.
