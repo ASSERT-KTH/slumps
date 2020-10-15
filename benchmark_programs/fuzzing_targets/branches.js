@@ -1509,7 +1509,7 @@ function createExportWrapper(name, fixedasm) {
 }
 
 
-var wasmBinaryFile = 'branches.cb.wasm';
+var wasmBinaryFile = 'branches.wasm';
 if (!isDataURI(wasmBinaryFile)) {
   wasmBinaryFile = locateFile(wasmBinaryFile);
 }
@@ -1551,8 +1551,7 @@ function getBinaryPromise() {
   return Promise.resolve().then(getBinary);
 }
 
-mem = new Array(1 << 17);
-previousId = -1;
+
 
 // Create the wasm instance.
 // Receives the wasm imports, returns the exports.
@@ -1560,22 +1559,7 @@ function createWasm() {
   // prepare imports
   var info = {
     'env': asmLibraryArg,
-    'wasi_snapshot_preview1': asmLibraryArg,
-    "swam": {
-      "swam_cb": function(id) {
-        
-        if(previousId >= 0){
-          let index = (previousId ^ id)
-          if(isNaN(mem[index]))
-            mem[index] = 0;
-          mem[index]++;
-          previousId = id >> 1;
-        }else{
-          previousId = id
-          mem[previousId] = 1;
-        }
-      }
-    }
+    'wasi_snapshot_preview1': asmLibraryArg
   };
   // Load the wasm module and create an instance of using native support in the JS engine.
   // handle a generated wasm instance, receiving its exports and
@@ -4526,14 +4510,24 @@ function callMain(args) {
   assert(runDependencies == 0, 'cannot call main when async dependencies remain! (listen on Module["onRuntimeInitialized"])');
   assert(__ATPRERUN__.length == 0, 'cannot call main when preRun functions remain to be called');
 
-  var entryFunction = Module['_a'];
+  var entryFunction = Module['_main'];
 
+
+  args = args || [];
+
+  var argc = args.length+1;
+  var argv = stackAlloc((argc + 1) * 4);
+  HEAP32[argv >> 2] = allocateUTF8OnStack(thisProgram);
+  for (var i = 1; i < argc; i++) {
+    HEAP32[(argv >> 2) + i] = allocateUTF8OnStack(args[i - 1]);
+  }
+  HEAP32[(argv >> 2) + argc] = 0;
 
   try {
 
 
-    var ret = entryFunction(100,120);
-    console.log(mem)
+    var ret = entryFunction(argc, argv);
+
 
     // In PROXY_TO_PTHREAD builds, we should never exit the runtime below, as execution is asynchronously handed
     // off to a pthread.
