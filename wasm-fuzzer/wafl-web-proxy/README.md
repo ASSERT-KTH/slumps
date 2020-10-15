@@ -1,0 +1,1 @@
+To disable certificate checking in firefox https://stackoverflow.com/questions/20088/is-there-a-way-to-make-firefox-ignore-invalid-ssl-certificates

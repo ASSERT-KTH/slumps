@@ -3,7 +3,7 @@
 build() {
     echo 'building react'
 
-    rm -rf dist/*
+    rm -rf build/*
 
     export INLINE_RUNTIME_CHUNK=false
     export GENERATE_SOURCEMAP=false
@@ -11,8 +11,10 @@ build() {
     node scripts/build.js
 
     mkdir -p dist
-    cp -r build/* ../static
+    cp -rf build/static/js/* ../static
+    cp -rf build/static/css/* ../static
 
+    touch ../static/index.js
 }
 
 build
