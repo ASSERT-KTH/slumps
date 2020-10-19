@@ -26,7 +26,7 @@ class WASMListener{
 
 	
 	registerVisit(id) {
-		this.unique[id] = 1
+		/*this.unique[id] = 1
 		if(this.previousId >= 0){
 		  let index = (this.previousId ^ id)
 		  if(isNaN(this.mem[index]))
@@ -37,6 +37,8 @@ class WASMListener{
 		  this.previousId = id
 		  this.mem[this.previousId] = 1;
 		}
+
+		callBinaries()*/
 	  }
 }
 
@@ -62,6 +64,7 @@ function callBinaries(){
 
 WebAssembly.instantiate = function(binary, info){
 	
+	console.log(info)
 	return new Promise(function(resolve, reject){
 		console.log("Instrumenting WASM...");
 		// SEND the binary to the server to instrument
@@ -85,6 +88,8 @@ WebAssembly.instantiate = function(binary, info){
 				console.log("Initiating WASM...");
 				listeners[jsonData.hash] = new WASMListener(jsonData.hash, jsonData.name, jsonData.metadata)
 				callBinaries();
+
+				// TODO add offset to MEM access (covSize + blockSize + 1)
 
 				resolve(old(_base64ToArrayBuffer(jsonData.instrumented), {
 					...info, swam: { // Add hit listener

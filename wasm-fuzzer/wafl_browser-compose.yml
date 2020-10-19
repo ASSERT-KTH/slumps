@@ -1,0 +1,11 @@
+version: "3.8"
+services:
+  proxy:
+    image: slumps/wafl_proxy
+    ports:
+      - "8080:8080"
+      - "8002:8002"
+  wrapper:
+    image: slumps/wafl_cov
+    ports:
+      - "5000:8080"
