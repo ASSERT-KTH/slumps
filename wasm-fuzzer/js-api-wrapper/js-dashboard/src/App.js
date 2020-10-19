@@ -38,6 +38,7 @@ export default class Main extends React.Component {
 			width:'100%',
 			background: 'black',
 			left: 0,
+			zIndex: 999999,
 			top: 0,
 			backgroundColor: 'rgba(100,100,100,0.4)',
 			fontSize: '9pt',
@@ -47,7 +48,7 @@ export default class Main extends React.Component {
         return (
 			<div className={'my-extension'} style={style}>
 				<div style={{display:'flex', flexFlow:'row', alignItems: 'center'}}>
-					<h4 style={{padding: '5px', margin:0}}>
+					<h4 style={{padding: '5px', margin:0, color:'red'}}>
 					Take a WAFL! | </h4>
 					<div style={{display:'flex', flexDirection: 'column', flexFlow:'row'}}>
 						{
