@@ -2,6 +2,9 @@ const AnyProxy = require('anyproxy');
 const fs = require("fs");
 var MongoClient = require('mongodb').MongoClient;
 const mongoUrl = process.env.MONGI_DB ||  "mongodb://localhost:27017/mydb";
+const crypto = require('crypto');
+const md5sum = crypto.createHash('md5');
+var exec = require('child_process').execSync;
 
 MongoClient.connect(mongoUrl, function(err, db) {
 	if (err) throw err;
@@ -43,21 +46,30 @@ const options = {
 				return {
 					response: {
 						statusCode: 200,
-						header: { 'content-type': 'text/javascript' },
+						header: { 'content-type': 'text/javascript'},
 						body: content
 					  }
 				}
 			}
 
+			if(wrapper_script === '/cert'){
+				return {
+					response: {
+						statusCode: 200,
+						header: { 'content-type': 'application/txt', "Content-Disposition": 'attachment; filename="WAFL.crt"', "Connection": "close" },
+						body: fs.readFileSync(process.env.CERT_PATH) 
+					  }
+				}
+			}
 			if(wrapper_script === '/instrument'){
-				console.log(requestDetail.requestData)
+				const WASM_HASH = 'test' // md5sum.update(requestDetail.requestData).digest("hex")
 
 				// SAVE Metadata in mongodb
 				// SAVE WASM binary
 				MongoClient.connect(mongoUrl, function(err, db) {
 					if (err) throw err;
 					var dbo = db.db("wafl");
-					var myobj = {requestOptions: requestDetail.requestOptions, wasm: requestDetail.requestData};
+					var myobj = {requestOptions: requestDetail.requestOptions, wasm: requestDetail.requestData, hash: WASM_HASH};
 
 
 					dbo.collection("requests").insertOne(myobj, function(err, res) {
@@ -69,25 +81,32 @@ const options = {
 
 
 				// SAVE WASM binary locally, generate random id and save it in the mongodb
-				
-				// CALL SWAM
+				const pWasmFile = `wasms/${WASM_HASH}.wasm`
+				fs.writeFileSync(pWasmFile, requestDetail.requestData)
 
-				// return instrumented WASM
+				let metaData  =  exec(`${process.env.SWAM_BIN} coverage  ${__dirname}/${pWasmFile} --export-instrumented ${__dirname}/${pWasmFile}.cb.wasm --instrumentation-type global-callback`);
+				metaData = JSON.parse(metaData)
+				const response = {
+					instrumented: null, hash:WASM_HASH, name:"temp", metaData
+				}
+				const stream = JSON.stringify(response);
+
+				console.log(stream.length)
 
 				return {
 					response: {
-						statusCode: 500,
-						header: { 'content-type': 'text/html' },
-						body: "Not implemented"
+						statusCode: 200,
+						header: { 'content-type': 'application/json'},
+						body: stream
 					  }
 				}
 			}
 
 			return {
 				response: {
-					statusCode: 400,
+					statusCode: 200,
 					header: { 'content-type': 'text/html' },
-					body: "Not found"
+					body: fs.readFileSync("pages/index.html") // TODO return README webpage about wafl
 				  }
 			}
 		}
