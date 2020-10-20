@@ -1,5 +1,20 @@
 const AnyProxy = require('anyproxy');
 const fs = require("fs");
+var MongoClient = require('mongodb').MongoClient;
+const mongoUrl = process.env.MONGI_DB ||  "mongodb://localhost:27017/mydb";
+
+MongoClient.connect(mongoUrl, function(err, db) {
+	if (err) throw err;
+
+	var dbo = db.db("wafl");
+	if(!dbo.collection("requests"))
+		dbo.createCollection("requests", function(err, res) {
+	if (err) throw err;
+	
+    console.log("Collection created!");
+    db.close();
+  });
+});
 
 const MASKED_URL="https://wafl.live"
 
@@ -30,6 +45,40 @@ const options = {
 						statusCode: 200,
 						header: { 'content-type': 'text/javascript' },
 						body: content
+					  }
+				}
+			}
+
+			if(wrapper_script === '/instrument'){
+				console.log(requestDetail.requestData)
+
+				// SAVE Metadata in mongodb
+				// SAVE WASM binary
+				MongoClient.connect(mongoUrl, function(err, db) {
+					if (err) throw err;
+					var dbo = db.db("wafl");
+					var myobj = {requestOptions: requestDetail.requestOptions, wasm: requestDetail.requestData};
+
+
+					dbo.collection("requests").insertOne(myobj, function(err, res) {
+					  if (err) throw err;
+					  console.log(`1 request inserted`);
+					  db.close();
+					});
+				  });
+
+
+				// SAVE WASM binary locally, generate random id and save it in the mongodb
+				
+				// CALL SWAM
+
+				// return instrumented WASM
+
+				return {
+					response: {
+						statusCode: 500,
+						header: { 'content-type': 'text/html' },
+						body: "Not implemented"
 					  }
 				}
 			}
@@ -69,7 +118,7 @@ const options = {
 		if(data.indexOf("<body>") > -1)
 			data = data.replace("<body>", `<body>\n${dashBoardJS}\n`)
 
-		console.log(data)
+		//console.log(data)
 		
 		if(data.indexOf("</head>") > -1)
 			console.log(data.indexOf("</head>"))
