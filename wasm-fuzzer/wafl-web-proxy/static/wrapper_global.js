@@ -83,7 +83,7 @@ WebAssembly.instantiate = function(binary, info){
 			method: "POST",
 			cache: "no-cache",
 			body: binary,
-			//mode: 'no-cors'
+			mode: 'no-cors'
 		})
 		.then(function(res){ 
 			
