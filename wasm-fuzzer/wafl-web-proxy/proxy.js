@@ -19,7 +19,8 @@ MongoClient.connect(mongoUrl, function(err, db) {
   });
 });
 
-const MASKED_URL="https://wafl.live"
+const INSTRUMENT_URL = "https://wafl.live"
+const MASKED_URL=/^https?:\/\/wafl.live/
 
 console.log(MASKED_URL)
 const options = {
@@ -30,13 +31,13 @@ const options = {
   wsIntercept: false,
   silent: false,
   webInterface: {
-    enable: true,
-    webPort: 8002
+    enable: false
   },
   rule: {
 	
 	beforeSendRequest: async function(requestDetail) {
-		if(requestDetail.url.indexOf(MASKED_URL) !== -1){
+		if(MASKED_URL.test(requestDetail.url)){
+			
 			const wrapper_script = requestDetail.url.replace(MASKED_URL, "")
 			console.log("Internal processing",wrapper_script)
 			if(wrapper_script.indexOf("/static") !== -1){ // return static content
@@ -123,7 +124,7 @@ const options = {
 
 		// INJECT WAFL script
 		let data = responseDetail.response.body.toString();
-		const routerJS  = `<script type="text/javascript">window.INSTRUMENTER_HOST='${MASKED_URL}'</script>\n`
+		const routerJS  = `<script type="text/javascript">window.INSTRUMENTER_HOST='${INSTRUMENT_URL}'</script>\n`
 
 		const content = fs.readFileSync(`./static/${process.env.INSTRUMENTATION_TYPE}`);
 		const dashboardIndex = fs.readFileSync(`./static/index.js`);
