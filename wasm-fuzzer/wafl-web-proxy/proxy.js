@@ -29,7 +29,7 @@ const options = {
   forceProxyHttps: true,
   dangerouslyIgnoreUnauthorized: true,
   wsIntercept: false,
-  silent: false,
+  silent: true,
   webInterface: {
     enable: false
   },
@@ -47,59 +47,92 @@ const options = {
 				return {
 					response: {
 						statusCode: 200,
-						header: { 'content-type': 'text/javascript'},
+						header: { 'Content-Type': 'text/javascript'},
 						body: content
 					  }
 				}
 			}
 
 			if(wrapper_script === '/cert'){
+				
 				return {
 					response: {
 						statusCode: 200,
-						header: { 'content-type': 'application/txt', "Content-Disposition": 'attachment; filename="WAFL.crt"', "Connection": "close" },
+						header: {  'Content-Type': 'application/txt', "Content-Disposition": 'attachment; filename="WAFL.crt"', "Connection": "close" },
 						body: fs.readFileSync(process.env.CERT_PATH) 
 					  }
 				}
 			}
 			if(wrapper_script === '/instrument'){
-				const WASM_HASH = 'test' // md5sum.update(requestDetail.requestData).digest("hex")
-
-				// SAVE Metadata in mongodb
-				// SAVE WASM binary
-				MongoClient.connect(mongoUrl, function(err, db) {
-					if (err) throw err;
-					var dbo = db.db("wafl");
-					var myobj = {requestOptions: requestDetail.requestOptions, wasm: requestDetail.requestData, hash: WASM_HASH};
 
 
-					dbo.collection("requests").insertOne(myobj, function(err, res) {
-					  if (err) throw err;
-					  console.log(`1 request inserted`);
-					  db.close();
-					});
-				  });
-
-
-				// SAVE WASM binary locally, generate random id and save it in the mongodb
-				const pWasmFile = `wasms/${WASM_HASH}.wasm`
-				fs.writeFileSync(pWasmFile, requestDetail.requestData)
-
-				let metaData  =  exec(`${process.env.SWAM_BIN} coverage  ${__dirname}/${pWasmFile} --export-instrumented ${__dirname}/${pWasmFile}.cb.wasm --instrumentation-type global-callback`);
-				metaData = JSON.parse(metaData)
-				const response = {
-					instrumented: null, hash:WASM_HASH, name:"temp", metaData
+				if(requestDetail.requestOptions.method === 'OPTIONS'){
+					console.log("RETURNING OPTIONS")
+					return {
+						response: {
+							statusCode: 200,
+							header: { 
+								
+								'Access-Control-Allow-Origin': '*', 
+								'Allow': 'OPTIONS, HEAD, POST',
+								'Access-Control-Allow-Headers': 'access-control-allow-methods,access-control-allow-origin,content-type',
+								'Server': 'WAKOKO'},
+						}
+					}
 				}
-				const stream = JSON.stringify(response);
+				if(requestDetail.requestOptions.method === 'POST'){
+					console.log("INSTRUMENTING")
+					// SAVE Metadata in mongodb
+					// SAVE WASM binary
+					const WASM_HASH = 'test'; //md5sum.update(requestDetail.requestData).digest("hex")
+					const pWasmFile = `wasms/${WASM_HASH}.wasm`
+					let metaData = null
+					if(fs.existsSync(`${__dirname}/${pWasmFile}.cb.wasm`)){ // CACHE?
+						metaData = {}
+					}
+					else{
 
-				console.log(stream.length)
+						MongoClient.connect(mongoUrl, function(err, db) {
+							if (err) throw err;
+							var dbo = db.db("wafl");
+							var myobj = {requestOptions: requestDetail.requestOptions, wasm: requestDetail.requestData, hash: WASM_HASH};
 
-				return {
-					response: {
-						statusCode: 200,
-						header: { 'content-type': 'application/json'},
-						body: stream
-					  }
+
+							dbo.collection("requests").insertOne(myobj, function(err, res) {
+							if (err) throw err;
+							console.log(`1 request inserted`);
+							db.close();
+							});
+						});
+
+
+						// SAVE WASM binary locally, generate random id and save it in the mongodb
+						fs.writeFileSync(pWasmFile, requestDetail.requestData)
+						metaData  =  exec(`${process.env.SWAM_BIN} coverage  ${__dirname}/${pWasmFile} --export-instrumented ${__dirname}/${pWasmFile}.cb.wasm --instrumentation-type global-callback`);
+						metaData = JSON.parse(metaData)
+					}
+
+					let content = [...fs.readFileSync(`${__dirname}/${pWasmFile}.cb.wasm`)];
+
+					const response = {
+						instrumented: content, hash:WASM_HASH, name:"temp", metaData
+					}
+					const stream = JSON.stringify(response);
+					
+
+					return {
+						response: {
+							statusCode: 200,
+							header: { 
+								//...requestDetail.requestOptions.headers,
+								'Content-Type': 'application/json' , 
+								'Content-Length': stream.length, 
+								'Connection': 'close', 
+								'Access-Control-Allow-Origin': '*', 
+								'Server': 'WAKOKO'},
+							body: stream
+						}
+					}
 				}
 			}
 
@@ -126,7 +159,7 @@ const options = {
 		let data = responseDetail.response.body.toString();
 		const routerJS  = `<script type="text/javascript">window.INSTRUMENTER_HOST='${INSTRUMENT_URL}'</script>\n`
 
-		const content = fs.readFileSync(`./static/${process.env.INSTRUMENTATION_TYPE}`);
+		const content = fs.readFileSync(`./static/${process.env.INSTRUMENTATION_TYPE || 'wrapper_global.js'}`);
 		const dashboardIndex = fs.readFileSync(`./static/index.js`);
 
 		const instrumentationJS = `<script type="text/javascript">${content}</script>\n`
