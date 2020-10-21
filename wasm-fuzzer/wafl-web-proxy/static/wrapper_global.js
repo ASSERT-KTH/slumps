@@ -78,15 +78,14 @@ WebAssembly.instantiate = function(binary, info){
 			headers: {
 			'Accept': 'application/json',
 			'Content-Type': 'application/json',
-			'Access-Control-Allow-Origin': '*'
-			},
+			'Access-Control-Allow-Origin': '*',
+			//'Access-Control-Allow-Methods': 'POST'	
+				},
 			method: "POST",
-			cache: "no-cache",
 			body: binary,
-			mode: 'no-cors'
+			//mode: 'no-cors'
 		})
 		.then(function(res){ 
-			
 			res.json().then(async jsonData => 
 			{		
 
@@ -102,7 +101,7 @@ WebAssembly.instantiate = function(binary, info){
 
 
 
-				old(_base64ToArrayBuffer(jsonData.instrumented), info).then(result => {
+				old(new Uint8Array(jsonData.instrumented), info).then(result => {
 
 					const { instance } = result;
 
