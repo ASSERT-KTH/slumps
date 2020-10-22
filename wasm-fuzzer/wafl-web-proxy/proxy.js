@@ -1,7 +1,7 @@
 const AnyProxy = require('anyproxy');
 const fs = require("fs");
 var MongoClient = require('mongodb').MongoClient;
-const mongoUrl = process.env.MONGI_DB ||  "mongodb://localhost:27017/mydb";
+const mongoUrl = process.env.MONGO_DB ||  "mongodb://localhost:27017/mydb";
 const crypto = require('crypto');
 const md5sum = crypto.createHash('md5');
 var exec = require('child_process').execSync;
@@ -9,7 +9,7 @@ var exec = require('child_process').execSync;
 MongoClient.connect(mongoUrl, function(err, db) {
 	if (err) throw err;
 
-	var dbo = db.db("wafl");
+	var dbo = db.db("wakoko");
 	if(!dbo.collection("requests"))
 		dbo.createCollection("requests", function(err, res) {
 	if (err) throw err;
@@ -19,15 +19,16 @@ MongoClient.connect(mongoUrl, function(err, db) {
   });
 });
 
-const INSTRUMENT_URL = "https://wafl.live"
-const MASKED_URL=/^https?:\/\/wafl.live/
+const PORT = process.env.WAKOKO_PORT || 8080
+const INSTRUMENT_URL = "https://wakoko.live"
+const MASKED_URL=/^https?:\/\/wakoko.live/
+const LOCALHOST = new RegExp(`^https?:\/\/(localhost|0\.0\.0\.0|127\.0\.0\.1):${PORT}(\/.+)?`)
 
 console.log(MASKED_URL)
 const options = {
-  port: 8080,
+  port: PORT,
   throttle: 10000,
   forceProxyHttps: true,
-  dangerouslyIgnoreUnauthorized: true,
   wsIntercept: false,
   silent: true,
   webInterface: {
@@ -58,7 +59,7 @@ const options = {
 				return {
 					response: {
 						statusCode: 200,
-						header: {  'Content-Type': 'application/txt', "Content-Disposition": 'attachment; filename="WAFL.crt"', "Connection": "close" },
+						header: {  'Content-Type': 'application/txt', "Content-Disposition": 'attachment; filename="WAKOKO.crt"', "Connection": "close" },
 						body: fs.readFileSync(process.env.CERT_PATH) 
 					  }
 				}
@@ -80,6 +81,7 @@ const options = {
 						}
 					}
 				}
+				console.log(requestDetail.requestOptions.method)
 				if(requestDetail.requestOptions.method === 'POST'){
 					console.log("INSTRUMENTING")
 					// SAVE Metadata in mongodb
@@ -87,15 +89,35 @@ const options = {
 					const WASM_HASH = 'test'; //md5sum.update(requestDetail.requestData).digest("hex")
 					const pWasmFile = `wasms/${WASM_HASH}.wasm`
 					let metaData = null
-					if(fs.existsSync(`${__dirname}/${pWasmFile}.cb.wasm`)){ // CACHE?
-						metaData = {}
-					}
-					else{
+					if(fs.existsSync(`${__dirname}/${pWasmFile}.cb.wasm`)){ // CACHE querying
 
 						MongoClient.connect(mongoUrl, function(err, db) {
 							if (err) throw err;
-							var dbo = db.db("wafl");
-							var myobj = {requestOptions: requestDetail.requestOptions, wasm: requestDetail.requestData, hash: WASM_HASH};
+							var dbo = db.db("wakoko");
+							dbo.collection("requests").findOne({
+								hash: WASM_HASH
+							}, function(err, result) {
+							  if (err) {
+								  console.log(err);
+									throw err;
+							  } 
+							  console.log(result);
+							  db.close();
+							});
+						  });
+
+						metaData = {}
+					}
+					else{
+						// SAVE WASM binary locally, generate random id and save it in the mongodb
+						fs.writeFileSync(pWasmFile, requestDetail.requestData)
+						metaData  =  exec(`${process.env.SWAM_BIN} coverage  ${__dirname}/${pWasmFile} --export-instrumented ${__dirname}/${pWasmFile}.cb.wasm --instrumentation-type global-callback`);
+						metaData = JSON.parse(metaData)
+
+						MongoClient.connect(mongoUrl, function(err, db) {
+							if (err) throw err;
+							var dbo = db.db("wakoko");
+							var myobj = {requestOptions: requestDetail.requestOptions, wasm: requestDetail.requestData, hash: WASM_HASH, instrumentationData: metaData};
 
 
 							dbo.collection("requests").insertOne(myobj, function(err, res) {
@@ -106,10 +128,7 @@ const options = {
 						});
 
 
-						// SAVE WASM binary locally, generate random id and save it in the mongodb
-						fs.writeFileSync(pWasmFile, requestDetail.requestData)
-						metaData  =  exec(`${process.env.SWAM_BIN} coverage  ${__dirname}/${pWasmFile} --export-instrumented ${__dirname}/${pWasmFile}.cb.wasm --instrumentation-type global-callback`);
-						metaData = JSON.parse(metaData)
+						
 					}
 
 					let content = [...fs.readFileSync(`${__dirname}/${pWasmFile}.cb.wasm`)];
@@ -140,7 +159,17 @@ const options = {
 				response: {
 					statusCode: 200,
 					header: { 'content-type': 'text/html' },
-					body: fs.readFileSync("pages/index.html") // TODO return README webpage about wafl
+					body: fs.readFileSync("pages/index.html") // TODO return README webpage about wakoko
+				  }
+			}
+		}
+
+		if(LOCALHOST.test(requestDetail.url)){
+			return {
+				response: {
+					statusCode: 200,
+					header: { 'content-type': 'text/html' },
+					body: fs.readFileSync("pages/index.html") // TODO return README webpage about wakoko
 				  }
 			}
 		}
