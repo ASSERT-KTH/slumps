@@ -7,6 +7,7 @@
 # restarting the crashed process).
 
 CURRENT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
+source $CURRENT_DIR/logging_lib.sh
 
 set -a
 source $CURRENT_DIR/.env
@@ -28,13 +29,13 @@ docker run -d --rm --env-file=./.env \
 sleep 30s
 
 CONTAINER_STATUS=$(docker container inspect -f '{{.State.Status}}' staging_wafl)
-echo "CONTAINER_STATUS: $CONTAINER_STATUS"
+log_info "CONTAINER_STATUS: $CONTAINER_STATUS"
 
 if [ $CONTAINER_STATUS != "running" ]; then
-    echo "staging_wafl container is not running anymore. It must have crashed."
+    log_error "staging_wafl container is not running anymore. It must have crashed."
     exit 1
 else
-    echo "staging_wafl container is still running. We're good!"
+    log_info "staging_wafl container is still running. We're good!"
     docker stop staging_wafl
     exit 0
 fi
