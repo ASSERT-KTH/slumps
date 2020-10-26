@@ -17,7 +17,7 @@ REQUIRED_ARGUMENTS_MESSAGE="The following 3 arguments are required:
 "
 
 if [ "$#" -ne 3 ]; then
-    log_error "Incorrect amount of arguments. $REQUIRED_ARGUMENTS_MESSAGE"
+    log_error "Incorrect amount of arguments ($# were given). $REQUIRED_ARGUMENTS_MESSAGE"
     exit 1
 fi
 
