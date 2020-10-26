@@ -119,15 +119,11 @@ const options = {
 							var dbo = db.db("wakoko");
 							var myobj = {requestOptions: requestDetail.requestOptions, wasm: requestDetail.requestData, hash: WASM_HASH, instrumentationData: metadata};
 
-							if(!record){
+							await dbo.collection("requests").insertOne(myobj);
 
-								await dbo.collection("requests").insertOne(myobj);
+							db.close();
 
-								db.close();
-
-								console.log(`1 request inserted`);
-							}
-							
+							console.log(`1 request inserted`);
 						}
 						catch(e){
 							console.log(`Failed to instrument ${e}`);
