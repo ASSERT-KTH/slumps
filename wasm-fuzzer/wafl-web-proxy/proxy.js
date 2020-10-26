@@ -4,8 +4,8 @@ var MongoClient = require('mongodb').MongoClient;
 const mongoUrl = process.env.MONGO_DB ||  "mongodb://localhost:27017/mydb";
 const crypto = require('crypto');
 const { exception } = require('console');
-const md5sum = crypto.createHash('md5');
 var exec = require('child_process').execSync;
+
 
 MongoClient.connect(mongoUrl, function(err, db) {
 	if (err) throw err;
@@ -89,7 +89,9 @@ const options = {
 					console.log("INSTRUMENTING")
 					// SAVE metadata in mongodb
 					// SAVE WASM binary
-					const WASM_HASH = 'test'; //md5sum.update(requestDetail.requestData).digest("hex")
+					// Create a fresh hash for each iteration
+					const md5sum = crypto.createHash('md5');
+					const WASM_HASH = md5sum.update(requestDetail.requestData).digest("hex")
 					const pWasmFile = `wasms/${WASM_HASH}.wasm`
 					let metadata = null
 					if(fs.existsSync(`${__dirname}/${pWasmFile}.cb.wasm`)){ // CACHE querying
