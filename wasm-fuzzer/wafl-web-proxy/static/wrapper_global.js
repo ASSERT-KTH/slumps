@@ -1,16 +1,23 @@
 
+fetch(`${window.INSTRUMENTER_HOST}/instrument`, {
+	headers: {
+		'Accept': 'application/json',
+		'Content-Type': 'application/json',
+		'Access-Control-Allow-Origin': '*',
+		//'Access-Control-Allow-Methods': 'POST'	
+			},
+		method: "POST"
+}).then(console.log).catch(e => {
+	if(confirm(`It seems that your browser does not trust in wakoko ${e}. Press OK to open a new tab in ${window.INSTRUMENTER_HOST} to enable it.`)){
+		window.open(window.INSTRUMENTER_HOST, "_blank");
+
+		setTimeout(() => location.reload(), 5000);
+	}
+})
+
+
 console.log("Wrapping WASM API...");
 let old = WebAssembly.instantiate;
-
-function _base64ToArrayBuffer(base64) {
-    var binary_string = window.atob(base64);
-    var len = binary_string.length;
-    var bytes = new Uint8Array(len);
-    for (var i = 0; i < len; i++) {
-        bytes[i] = binary_string.charCodeAt(i);
-    }
-    return bytes.buffer;
-}
 
 const listeners = {
 

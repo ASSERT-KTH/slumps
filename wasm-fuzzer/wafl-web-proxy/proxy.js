@@ -3,6 +3,7 @@ const fs = require("fs");
 var MongoClient = require('mongodb').MongoClient;
 const mongoUrl = process.env.MONGO_DB ||  "mongodb://localhost:27017/mydb";
 const crypto = require('crypto');
+const { exception } = require('console');
 const md5sum = crypto.createHash('md5');
 var exec = require('child_process').execSync;
 
@@ -20,8 +21,8 @@ MongoClient.connect(mongoUrl, function(err, db) {
 });
 
 const PORT = process.env.WAKOKO_PORT || 8080
-const INSTRUMENT_URL = "https://wakoko.live"
-const MASKED_URL=/^https?:\/\/wakoko.live/
+const INSTRUMENT_URL = "https://wakoko.com"
+const MASKED_URL=/^https?:\/\/wakoko.com/
 const LOCALHOST = new RegExp(`^https?:\/\/(localhost|0\.0\.0\.0|127\.0\.0\.1):${PORT}(\/.+)?`)
 
 console.log(MASKED_URL)
@@ -37,6 +38,7 @@ const options = {
   rule: {
 	
 	beforeSendRequest: async function(requestDetail) {
+
 		if(MASKED_URL.test(requestDetail.url)){
 			
 			const wrapper_script = requestDetail.url.replace(MASKED_URL, "")
@@ -66,6 +68,7 @@ const options = {
 			}
 			if(wrapper_script === '/instrument'){
 
+				console.log(requestDetail.requestOptions.method)
 
 				if(requestDetail.requestOptions.method === 'OPTIONS'){
 					console.log("RETURNING OPTIONS")
@@ -84,40 +87,32 @@ const options = {
 				console.log(requestDetail.requestOptions.method)
 				if(requestDetail.requestOptions.method === 'POST'){
 					console.log("INSTRUMENTING")
-					// SAVE Metadata in mongodb
+					// SAVE metadata in mongodb
 					// SAVE WASM binary
 					const WASM_HASH = 'test'; //md5sum.update(requestDetail.requestData).digest("hex")
 					const pWasmFile = `wasms/${WASM_HASH}.wasm`
-					let metaData = null
+					let metadata = null
 					if(fs.existsSync(`${__dirname}/${pWasmFile}.cb.wasm`)){ // CACHE querying
 
-						MongoClient.connect(mongoUrl, function(err, db) {
-							if (err) throw err;
-							var dbo = db.db("wakoko");
-							dbo.collection("requests").findOne({
-								hash: WASM_HASH
-							}, function(err, result) {
-							  if (err) {
-								  console.log(err);
-									throw err;
-							  } 
-							  console.log(result);
-							  db.close();
-							});
-						  });
-
-						metaData = {}
+						let db = await MongoClient.connect(mongoUrl);
+						
+						var dbo = db.db("wakoko");
+						metadata = await dbo.collection("requests").findOne({
+							hash: WASM_HASH
+						});
+						
+						metadata = metadata.instrumentationData
 					}
 					else{
 						// SAVE WASM binary locally, generate random id and save it in the mongodb
 						fs.writeFileSync(pWasmFile, requestDetail.requestData)
-						metaData  =  exec(`${process.env.SWAM_BIN} coverage  ${__dirname}/${pWasmFile} --export-instrumented ${__dirname}/${pWasmFile}.cb.wasm --instrumentation-type global-callback`);
-						metaData = JSON.parse(metaData)
+						metadata  =  exec(`${process.env.SWAM_BIN} coverage  ${__dirname}/${pWasmFile} --export-instrumented ${__dirname}/${pWasmFile}.cb.wasm --instrumentation-type global-callback`);
+						metadata = JSON.parse(metadata)
 
 						MongoClient.connect(mongoUrl, function(err, db) {
 							if (err) throw err;
 							var dbo = db.db("wakoko");
-							var myobj = {requestOptions: requestDetail.requestOptions, wasm: requestDetail.requestData, hash: WASM_HASH, instrumentationData: metaData};
+							var myobj = {requestOptions: requestDetail.requestOptions, wasm: requestDetail.requestData, hash: WASM_HASH, instrumentationData: metadata};
 
 
 							dbo.collection("requests").insertOne(myobj, function(err, res) {
@@ -133,8 +128,9 @@ const options = {
 
 					let content = [...fs.readFileSync(`${__dirname}/${pWasmFile}.cb.wasm`)];
 
+					console.log(metadata)
 					const response = {
-						instrumented: content, hash:WASM_HASH, name:"temp", metaData
+						instrumented: content, hash:WASM_HASH, name:"temp", metadata
 					}
 					const stream = JSON.stringify(response);
 					
@@ -177,6 +173,8 @@ const options = {
 	},
 	beforeSendResponse: async function (requestDetail, responseDetail) {
 
+		if(MASKED_URL.test(requestDetail.url))
+			return responseDetail
 		if(responseDetail.response.statusCode !== 200)
 			return
 		if(responseDetail.response.header["Content-Type"]){
@@ -186,12 +184,13 @@ const options = {
 
 		// INJECT WAFL script
 		let data = responseDetail.response.body.toString();
-		const routerJS  = `<script type="text/javascript">window.INSTRUMENTER_HOST='${INSTRUMENT_URL}'</script>\n`
+		const routerJS  = `<script type="text/javascript">window.INSTRUMENTER_HOST='${INSTRUMENT_URL}';\n</script>\n` // Set global host for instrumentation and open the address to force user to ttrust the site
 
 		const content = fs.readFileSync(`./static/${process.env.INSTRUMENTATION_TYPE || 'wrapper_global.js'}`);
 		const dashboardIndex = fs.readFileSync(`./static/index.js`);
 
 		const instrumentationJS = `<script type="text/javascript">${content}</script>\n`
+		
 		const dashBoardJS = `<script type="text/javascript">${dashboardIndex}</script>\n`
 		data = data.replace("<head>", `<head>${routerJS}${instrumentationJS}\n`)
 
