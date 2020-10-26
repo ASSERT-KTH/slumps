@@ -1,4 +1,5 @@
 
+import { Cursor } from 'mongodb';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import "./content.css";
@@ -7,8 +8,8 @@ import "./content.css";
 export class WASMStatusView extends React.Component {
 	render(){
 		return (
-			<div style={{padding: 5, color: 'red'}}>
-				{this.props.name} <a>{this.props.hash}</a> <a>Covered: {this.props.visited} ({100.0*this.props.visited/this.props.total}%), Basic blocks: {this.props.total} ({100.0*this.props.total/this.props.instructions}%), Instruction count: {this.props.instructions} </a>|
+			<div style={{paddingRight: 5, color: 'white', fontSize: '7pt'}}>
+				<a> {this.props.visited}/{this.props.total} ({100.0*this.props.visited/this.props.total}%) </a>|
 			</div>
 		)
 	}
@@ -20,44 +21,66 @@ export default class Main extends React.Component {
 		super()
 
 		this.state = {
-			opened: false,
-			binaries: []
+			opened: true,
+			// visited={t.uniqueHitBlocks} total={t.totalBlockCount} instructions={t.totalInstructions}
+			rate: 5000,
+			binaries: [
+				{
+					name: '1',
+					uniqueHitBlocks: 1,
+					totalBlockCount: 3,
+					totalInstructions: 10
+				},
+				{
+					name: '1',
+					uniqueHitBlocks: 2,
+					totalBlockCount: 323,
+					totalInstructions: 10
+				}
+			]
 		}
 
 		const self = this;
 		console.log("Setting callbacks...")
+
 		window.setBinaries = function(bins){
 			self.setState({binaries: bins})
 		}
+		
 	}
 
     render() {
 
 		let style={
-			position:'absolute',
+			position:'fixed',
 			width:'100%',
 			background: 'black',
 			left: 0,
 			zIndex: 999999,
 			top: 0,
-			backgroundColor: 'rgba(100,100,100,0.4)',
+			backgroundColor: 'rgba(0,0,0,1)',
 			fontSize: '9pt',
+			boxShadow: '2px 2px 2px grey',
 			fontFamily: "Consolas, Menlo, Monaco, Lucida Console, Liberation Mono, DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, monospace, serif"
 
 		}
         return (
-			<div className={'my-extension'} style={style}>
+			<div>
+			{this.state.opened && <div style={style}>
 				<div style={{display:'flex', flexFlow:'row', alignItems: 'center'}}>
-					<h4 style={{padding: '5px', margin:0, color:'red'}}>
-					Take a WAFL! | </h4>
-					<div style={{display:'flex', flexDirection: 'column', flexFlow:'row'}}>
-						{
-							this.state.binaries.map(t => <WASMStatusView name={t.name} hash={t.hash} visited={t.uniqueHitBlocks} total={t.totalBlockCount} instructions={t.totalInstructions}/>)
-
-						}
-					</div>
+					<h4 style={{padding: '5px', margin:0, color:'white', cursor:'pointer'}} onClick={() => this.setState({opened: !this.state.opened})}>
+					WAKOKO 1/{this.state.rate}ms</h4>
 					
 				</div>
+				<div style={{display:'flex', flexDirection: 'column', flexFlow:'row', paddingBottom: '2px', paddingLeft: '4px'}}>
+					{
+						this.state.binaries.map(t => <WASMStatusView name={t.name} hash={t.hash} visited={t.uniqueHitBlocks} total={t.totalBlockCount} instructions={t.totalInstructions}/>)
+
+					}
+				</div>
+					
+			</div>}
+			{!this.state.opened && <a style={{...style,color:'white', backgroundColor:'black', width:'auto', cursor:'pointer', padding:'2px'}} onClick={() => this.setState({opened: !this.state.opened})}>WAKOKO</a>}
 			</div>
         )
     }
