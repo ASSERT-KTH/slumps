@@ -95,42 +95,48 @@ const options = {
 					const pWasmFile = `wasms/${WASM_HASH}.wasm`
 					let metadata = null
 
-					if(!requestDetail.requestData)
+					if(!requestDetail.requestData){
 						return
+					}
+					let db = await MongoClient.connect(mongoUrl);
+					var dbo = db.db("wakoko");
+					let record = await dbo.collection("requests").findOne({
+						hash: WASM_HASH
+					});
 
-					if(fs.existsSync(`${__dirname}/${pWasmFile}.cb.wasm`)){ // CACHE querying
-
-						let db = await MongoClient.connect(mongoUrl);
-						
-						var dbo = db.db("wakoko");
-						metadata = await dbo.collection("requests").findOne({
-							hash: WASM_HASH
-						});
-						
-						if(metadata)
-							metadata = metadata.instrumentationData
+					if(!!record){ // CACHE querying
+						metadata = record.instrumentationData
 					}
 					else{
 						// SAVE WASM binary locally, generate random id and save it in the mongodb
 						fs.writeFileSync(pWasmFile, requestDetail.requestData)
-						metadata  =  exec(`${process.env.SWAM_BIN} coverage  ${__dirname}/${pWasmFile} --export-instrumented ${__dirname}/${pWasmFile}.cb.wasm --instrumentation-type global-callback`);
-						console.log(metadata)
-						metadata = JSON.parse(metadata)
+						try{
+							metadata  =  exec(`${process.env.SWAM_BIN} coverage  ${__dirname}/${pWasmFile} --export-instrumented ${__dirname}/${pWasmFile}.cb.wasm --instrumentation-type global-callback`);
+							metadata = JSON.parse(metadata)
 
-						MongoClient.connect(mongoUrl, function(err, db) {
-							if (err) throw err;
+							let db = await MongoClient.connect(mongoUrl);
+
 							var dbo = db.db("wakoko");
 							var myobj = {requestOptions: requestDetail.requestOptions, wasm: requestDetail.requestData, hash: WASM_HASH, instrumentationData: metadata};
 
-
-							dbo.collection("requests").insertOne(myobj, function(err, res) {
-							if (err) throw err;
-							console.log(`1 request inserted`);
-							db.close();
+							let record = await dbo.collection("requests").findOne({
+								hash: WASM_HASH
 							});
-						});
 
+							if(!record){
 
+								await dbo.collection("requests").insertOne(myobj);
+
+								db.close();
+
+								console.log(`1 request inserted`);
+							}
+							
+						}
+						catch(e){
+							console.log(`Failed to instrument ${e}`);
+							return;
+						}
 						
 					}
 
