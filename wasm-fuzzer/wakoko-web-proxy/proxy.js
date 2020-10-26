@@ -103,7 +103,8 @@ const options = {
 							hash: WASM_HASH
 						});
 						
-						metadata = metadata.instrumentationData
+						if(metadata)
+							metadata = metadata.instrumentationData
 					}
 					else{
 						// SAVE WASM binary locally, generate random id and save it in the mongodb
@@ -192,7 +193,7 @@ const options = {
 
 		const instrumentationJS = `<script type="text/javascript">${content}</script>\n`
 		
-		const dashBoardJS = `<script type="text/javascript">${dashboardIndex}</script>\n`
+		const dashBoardJS = `<script src="${INSTRUMENT_URL}/static/index.js" type="text/javascript"></script>\n`
 		data = data.replace("<head>", `<head>${routerJS}${instrumentationJS}\n`)
 
 		if(data.indexOf("</body>") > -1)
