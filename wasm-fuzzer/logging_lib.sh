@@ -1,6 +1,6 @@
 #!/bin/bash
 
-declare -A _log_levels=([ERROR]=0 [WARNING]=1 [INFO]=2 [DEBUG]=3)
+declare -a _log_levels=([ERROR]=0 [WARNING]=1 [INFO]=2 [DEBUG]=3)
 declare -i _log_level=3
 set_log_level() {
   level="${1:-INFO}"
@@ -26,8 +26,10 @@ log_debug_file()   { (( _log_level >= ${_log_levels[DEBUG]} ))   && [[ -f $1 ]] 
 
 # Initialise:
 
+CURRENT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
+
 set -a
-source $(dirname $0)/.env
+source $CURRENT_DIR/.env
 set +a
 
 set_log_level $LOG_LEVEL
