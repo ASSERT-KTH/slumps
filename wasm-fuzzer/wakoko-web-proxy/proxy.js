@@ -119,10 +119,6 @@ const options = {
 							var dbo = db.db("wakoko");
 							var myobj = {requestOptions: requestDetail.requestOptions, wasm: requestDetail.requestData, hash: WASM_HASH, instrumentationData: metadata};
 
-							let record = await dbo.collection("requests").findOne({
-								hash: WASM_HASH
-							});
-
 							if(!record){
 
 								await dbo.collection("requests").insertOne(myobj);
