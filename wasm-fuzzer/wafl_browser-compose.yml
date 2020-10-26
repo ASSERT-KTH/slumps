@@ -5,6 +5,9 @@ services:
     ports:
       - "8080:8080"
       - "8002:8002"
+    environment:
+      INSTRUMENTER_ADDRESS: 'https://localhost:5000'
+      INSTRUMENTATION_TYPE: 'wrapper_global.js'
   wrapper:
     image: slumps/wafl_cov
     ports:

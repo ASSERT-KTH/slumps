@@ -1,1 +1,0 @@
-python -c 'import os; open("secret.key", "wb").write(os.urandom(16))'
