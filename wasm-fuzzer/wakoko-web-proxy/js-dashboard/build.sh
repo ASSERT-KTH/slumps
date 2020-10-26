@@ -12,7 +12,6 @@ build() {
 
     mkdir -p dist
     cp -rf build/static/js/* ../static
-    cp -rf build/static/css/* ../static
 
     touch ../static/index.js
 }

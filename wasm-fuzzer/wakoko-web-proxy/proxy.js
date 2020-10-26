@@ -94,6 +94,10 @@ const options = {
 					const WASM_HASH = md5sum.update(requestDetail.requestData).digest("hex")
 					const pWasmFile = `wasms/${WASM_HASH}.wasm`
 					let metadata = null
+
+					if(!requestDetail.requestData)
+						return
+
 					if(fs.existsSync(`${__dirname}/${pWasmFile}.cb.wasm`)){ // CACHE querying
 
 						let db = await MongoClient.connect(mongoUrl);
@@ -110,6 +114,7 @@ const options = {
 						// SAVE WASM binary locally, generate random id and save it in the mongodb
 						fs.writeFileSync(pWasmFile, requestDetail.requestData)
 						metadata  =  exec(`${process.env.SWAM_BIN} coverage  ${__dirname}/${pWasmFile} --export-instrumented ${__dirname}/${pWasmFile}.cb.wasm --instrumentation-type global-callback`);
+						console.log(metadata)
 						metadata = JSON.parse(metadata)
 
 						MongoClient.connect(mongoUrl, function(err, db) {
@@ -131,6 +136,7 @@ const options = {
 
 					let content = [...fs.readFileSync(`${__dirname}/${pWasmFile}.cb.wasm`)];
 
+					// console.log(metadata)
 					const response = {
 						instrumented: content, hash:WASM_HASH, name:"temp", metadata
 					}
