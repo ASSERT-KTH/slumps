@@ -1,8 +1,8 @@
 ## WAKOKO
 
-WAKOKO provides live time coverage for WebAssembly in the browser. It uses a man-in-the-middle proxy approach. The proxy inject a JavaScript code to catch all WASM instantiation calls, the WASM binary is instrumented and returned back.
+WAKOKO provides live time coverage for WebAssembly in the browser. It uses a man-in-the-middle proxy approach. The proxy injects a JavaScript code to catch all WASM instantiation calls, the WASM binary is instrumented and returned back.
 
-Since we use a proxy, you need to trust in the certificates that we generate. After setting up the proxy, download and trust in the certificate.
+Since we use a proxy, you need to trust the certificates that we generate. After setting up the proxy, download, and trust in the certificate.
 
 **This is a work in progress. Use this tool under your own responsability.** 
 
