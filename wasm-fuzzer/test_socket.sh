@@ -6,8 +6,8 @@
 # This script requires SWAM to be up and running.
 #   Option A: Use `./entrypoint_mill_server.sh` after `$CURRENT_DIR/prepare_env.sh $@`
 #   Option B: Launch manually (example fibo.wat):
-#       mill -i cli.run run_server --wat --argType Int64  \
-#           --main naive --out ./ <path_to_fibo.wat>
+#       mill -i cli_server.run run_server --wat  --main naive <path_to_fibo.wat>
+#       mill -i cli_server.run run_server --wasi --main a wasm-fuzzer/sample-testing-targets/branches2.wasm
 
 # Run this script as `./test_socket.sh branches2.wasm a 11`
 
