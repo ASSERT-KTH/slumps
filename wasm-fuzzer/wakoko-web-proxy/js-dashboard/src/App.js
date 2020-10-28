@@ -25,7 +25,7 @@ export default class Main extends React.Component {
 			// visited={t.uniqueHitBlocks} total={t.totalBlockCount} instructions={t.totalInstructions}
 			rate: 5000,
 			binaries: [
-				{
+				/*{
 					name: '1',
 					uniqueHitBlocks: 1,
 					totalBlockCount: 3,
@@ -36,17 +36,33 @@ export default class Main extends React.Component {
 					uniqueHitBlocks: 2,
 					totalBlockCount: 323,
 					totalInstructions: 10
-				}
+				}*/
 			]
 		}
 
 		const self = this;
+		
+		
+	}
+
+	componentDidMount(){
 		console.log("Setting callbacks...")
 
-		window.setBinaries = function(bins){
-			self.setState({binaries: bins})
-		}
+		window.setBinaries = function(wasms){
+			this.setState({binaries: wasms})
+		}.bind(this)
+		/*
+		setInterval(function(){
+			console.log("Retrieving listeners...")
+			
+			window.wasms = function(w){
+				
+				this.setState({binaries: [...window.rawWasms], opened: false})
+				console.log(this.state.binaries)
+			}
+			this.setState({binares: [...window.rawWasms]})
 		
+		}.bind(this), 10000)*/
 	}
 
     render() {
@@ -69,7 +85,7 @@ export default class Main extends React.Component {
 			{this.state.opened && <div style={style}>
 				<div style={{display:'flex', flexFlow:'row', alignItems: 'center'}}>
 					<h4 style={{padding: '5px', margin:0, color:'white', cursor:'pointer'}} onClick={() => this.setState({opened: !this.state.opened})}>
-					WAKOKO 1/{this.state.rate}ms</h4>
+					WAKOKO</h4>
 					
 				</div>
 				<div style={{display:'flex', flexDirection: 'column', flexFlow:'row', paddingBottom: '2px', paddingLeft: '4px'}}>
