@@ -14,7 +14,7 @@ Since we use a proxy, you need to trust in the certificates that we generate. Af
 
 - Go to the address `wakoko.live/cert`, download and trust in the certificates.
 
-- Go to the address `https://wakoko.live` and trust in this address.
+- Go to the address `https://wakoko.live` and trust in this page.
 
 - You are ready now to use WAKOKO.
 
