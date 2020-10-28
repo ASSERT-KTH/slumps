@@ -1,3 +1,5 @@
+require('dotenv').config()
+
 const AnyProxy = require('anyproxy');
 const fs = require("fs");
 var MongoClient = require('mongodb').MongoClient;
