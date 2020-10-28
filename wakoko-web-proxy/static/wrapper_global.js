@@ -31,13 +31,18 @@ function callBinaries(){
 	if(window.setBinaries){
 
 		// visited={t.uniqueHitBlocks} total={t.totalBlockCount}
-		window.setBinaries(Object.keys(listeners).map(k => ({
-			name: listeners[k].name,
-			hash: k,
-			uniqueHitBlocks: listeners[k].getCoverage(),
-			totalBlockCount: listeners[k].meta.totalBasicBlocks,
-			totalInstructions: listeners[k].meta.totalInstructions
-		})))
+		window.setBinaries(Object.keys(listeners).map(k => {
+			listeners[k].getCoverage(true);
+
+			return {
+				name: listeners[k].name,
+				hash: k,
+				uniqueHitBlocks: listeners[k].history,
+				totalBlockCount: listeners[k].meta.totalBasicBlocks,
+				totalInstructions: listeners[k].meta.totalInstructions,
+				rate: window.WAKOKO_RATE
+			}
+		}))
 	}
 }
 
@@ -55,12 +60,13 @@ class WASMListener{
 		this.module = moduleRef;
 		this.offset=offset;
 		this.totalBlocks = totalBlocks;
+		this.history = [ ];
 
 		this.getCoverage = this.getCoverage.bind(this);
 
 	}
 
-	getCoverage(){
+	getCoverage(save){
 		//console.log(this.module.exports)
 		let sum = 0
 		for(let i = this.offset; i < this.offset + this.totalBlocks - 1; i++){
@@ -69,6 +75,9 @@ class WASMListener{
 			if(name in this.module.exports)
 				sum += this.module.exports[name].value
 		}
+
+		if(save)
+			this.history.push(sum)
 
 		return sum;
 	}
@@ -131,7 +140,7 @@ WebAssembly.instantiate = function(binary, info){
 						callBinaries()
 						time = oldTimeout(() => {
 							callBinaries()
-						}, 3000)
+						}, window.WAKOKO_RATE)
 					}
 					resolve(result)
 
