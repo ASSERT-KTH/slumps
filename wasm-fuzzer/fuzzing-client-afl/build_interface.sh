@@ -1,22 +1,24 @@
 #!/bin/bash
 
-
 err=0
 trap 'err=1' ERR
 
 CURRENT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
+PARENT_DIR="$(dirname "$CURRENT_DIR")"
+source $PARENT_DIR/logging_lib.sh
 
-echo "Building the wafl interface..."
+CURRENT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"  # Has to be run again
 
-mkdir -p $CURRENT_DIR/../wafl-temp
-CPP_OUT_DIR=$CURRENT_DIR/../wafl-temp/cpp-out
+log_info "Building the wafl interface..."
+
+mkdir -p $PARENT_DIR/wafl-temp
+CPP_OUT_DIR=$PARENT_DIR/wafl-temp/cpp-out
 mkdir -p $CPP_OUT_DIR
 
-g++ -o $CPP_OUT_DIR/prepare_wasm_input.out ./fuzzing-client-afl/prepare_wasm_input.cpp ./fuzzing-client-afl/utils.cpp
-g++ -o $CPP_OUT_DIR/getFileSize.out ./fuzzing-client-afl/getFileSize.cpp ./fuzzing-client-afl/utils.cpp
-g++ -o $CPP_OUT_DIR/wait_for_server.out ./fuzzing-client-afl/wait_for_server.cpp ./fuzzing-client-afl/utils.cpp ./fuzzing-client-afl/socket_client.cpp
-g++ -o $CPP_OUT_DIR/run_client.out ./fuzzing-client-afl/run_client.cpp ./fuzzing-client-afl/socket_client.cpp ./fuzzing-client-afl/utils.cpp
-g++ -o $CPP_OUT_DIR/interface.out ./fuzzing-client-afl/interface.cpp ./fuzzing-client-afl/socket_client.cpp ./fuzzing-client-afl/utils.cpp
-
+g++ -o $CPP_OUT_DIR/prepare_wasm_input.out $CURRENT_DIR/prepare_wasm_input.cpp $CURRENT_DIR/utils.cpp
+g++ -o $CPP_OUT_DIR/getFileSize.out $CURRENT_DIR/getFileSize.cpp $CURRENT_DIR/utils.cpp
+g++ -o $CPP_OUT_DIR/wait_for_server.out $CURRENT_DIR/wait_for_server.cpp $CURRENT_DIR/utils.cpp $CURRENT_DIR/socket_client.cpp
+g++ -o $CPP_OUT_DIR/run_client.out $CURRENT_DIR/run_client.cpp $CURRENT_DIR/socket_client.cpp $CURRENT_DIR/utils.cpp
+g++ -o $CPP_OUT_DIR/interface.out $CURRENT_DIR/interface.cpp $CURRENT_DIR/socket_client.cpp $CURRENT_DIR/utils.cpp
 
 test $err = 0
