@@ -1,19 +1,105 @@
 
-import { Cursor } from 'mongodb';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import "./content.css";
 // // head={[<link type="text/css" rel="stylesheet" href={"http://localhost:5000/static/content.css"} ></link>]}> 
 
-export class WASMStatusView extends React.Component {
+export class CovPlot extends React.Component {
+
+	canvasRef;
+
+	constructor(){
+		super();
+		this.state = {
+			size: 50
+		}
+
+		this.draw = this.draw.bind(this)
+
+	}
+
+	draw(){
+		if(this.canvasRef){
+			const canvas = this.canvasRef
+			const context = canvas.getContext('2d')
+			  
+
+			context.fillStyle = '#000000'
+			context.fillRect(0, 0, context.canvas.width, context.canvas.height)
+			context.strokeStyle = "#00FF00";
+			context.lineWidth = 6;
+
+			context.beginPath();
+			const xScale = context.canvas.width/(2*this.props.values.length);
+
+			for(let i = 1; i < this.props.values.length; i++){
+
+				const x0 = xScale*(2*(i - 1) + 1)
+				const x1 = xScale*(2*(i) + 1)
+
+				const y0 = context.canvas.height - 0.9*this.props.values[i - 1]*context.canvas.height
+				const y1 = context.canvas.height - 0.9*this.props.values[i]*context.canvas.height
+
+				context.moveTo(x0, y0);
+				context.lineTo(x1, y1);
+			}
+			context.stroke();
+		}
+	}
+
+	componentDidMount(){
+		this.draw()
+	}
+
+	componentDidUpdate(){
+		this.draw()
+	}
+
 	render(){
+
 		return (
-			<div style={{paddingRight: 5, color: 'white', fontSize: '7pt'}}>
-				<a> {this.props.visited}/{this.props.total} ({100.0*this.props.visited/this.props.total}%) </a>|
-			</div>
+			this.props.opened && (<div style={{paddingRight: 5, color: 'white', fontSize: '7pt', top:'50px', height: this.state.size}}>
+				<canvas style={{height:0.8*this.state.size}} ref={(r) =>this.canvasRef = r}/>
+			</div>)
 		)
 	}
 }
+
+export class WASMStatusView extends React.Component {
+
+	constructor(){
+		super();
+
+		this.state = {
+			opened: false
+		}
+
+		this.download = this.download.bind(this);
+	}
+
+	download(){
+		
+		if(this.props.visited){
+			var atag = document.createElement("a");
+			var file = new Blob([this.props.visited.reduce((p, c) => `${p},${c}`)],
+					{ type: "text/plain;charset=utf-8" });
+			atag.href = URL.createObjectURL(file);
+			atag.download = "cov.csv";
+			atag.click();
+		}
+
+	}
+
+	render(){
+		let lastVisited = this.props.visited.slice(-1)[0] 
+
+		return (<div key={this.props.name} onMouseLeave={() => this.setState({opened: false})} onMouseOver={() => this.setState({opened: true})} style={{paddingRight: 5, color: 'white', fontSize: '7pt'}}>
+				<a   > {lastVisited}/{this.props.total} ({100.0*lastVisited/this.props.total}%) </a><a onClick={this.download}>Download data</a>
+				<CovPlot values={this.props.visited.map(t => 1.0*t/this.props.total)} opened={true}/>
+			</div>)
+	}
+}
+
 
 export default class Main extends React.Component {
 
@@ -27,13 +113,13 @@ export default class Main extends React.Component {
 			binaries: [
 				/*{
 					name: '1',
-					uniqueHitBlocks: 1,
+					uniqueHitBlocks: [1,1,1,1,1,1,2,3],
 					totalBlockCount: 3,
 					totalInstructions: 10
 				},
 				{
-					name: '1',
-					uniqueHitBlocks: 2,
+					name: '2',
+					uniqueHitBlocks: [1,2,3, 100, 120, 120, 130, 150, 200, 240, 245, 260, 300, 323],
 					totalBlockCount: 323,
 					totalInstructions: 10
 				}*/
