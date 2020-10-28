@@ -14,7 +14,13 @@ Since we use a proxy, you need to trust in the certificates that we generate. Af
 
 - Go to the address `wakoko.live/cert`, download and trust in the certificates.
 
+- Go to the address `https://wakoko.live` and trust in this address.
+
 - You are ready now to use WAKOKO.
+
+### Troubleshooting
+
+- WAKOKO injects some requests to the address `https://wakoko.live/...`, this means that the policy of the browser about CORS can cancel the requests. If WAKOKO detects this, it lanches a dialog asking you to access the address `https://wakoko.live`. Once the page is trusted it should work.
 
 ### How to setup locally ?
 
