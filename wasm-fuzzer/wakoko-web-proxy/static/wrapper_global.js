@@ -1,4 +1,6 @@
 
+const oldTimeout = setInterval
+
 fetch(`${window.INSTRUMENTER_HOST}/instrument`, {
 	headers: {
 		'Accept': 'application/json',
@@ -7,7 +9,7 @@ fetch(`${window.INSTRUMENTER_HOST}/instrument`, {
 		//'Access-Control-Allow-Methods': 'POST'	
 			},
 		method: "POST"
-}).then(console.log).catch(e => {
+}).then(() => {}).catch(e => {
 	if(confirm(`It seems that your browser does not trust in wakoko ${e}. Press OK to open a new tab in ${window.INSTRUMENTER_HOST} to enable it.`)){
 		window.open(window.INSTRUMENTER_HOST, "_blank");
 
@@ -23,6 +25,8 @@ const listeners = {
 
 }
 
+let time = null;
+
 function callBinaries(){
 	if(window.setBinaries){
 
@@ -35,7 +39,6 @@ function callBinaries(){
 			totalInstructions: listeners[k].meta.totalInstructions
 		})))
 	}
-	setTimeout(() => callBinaries(), 5000)
 }
 
 const MAX_BUFFER_SIZE = 200
@@ -54,6 +57,7 @@ class WASMListener{
 		this.totalBlocks = totalBlocks;
 
 		this.getCoverage = this.getCoverage.bind(this);
+
 	}
 
 	getCoverage(){
@@ -71,9 +75,12 @@ class WASMListener{
 
 }
 
-WebAssembly.instantiateStreaming = null;
+WebAssembly.instantiateStreaming = null; // TODO
+
+window.rawWasms = []
 
 
+console.log("WRAPPING API...");
 WebAssembly.instantiate = function(binary, info){
 
 	return new Promise(function(resolve, reject){
@@ -112,15 +119,20 @@ WebAssembly.instantiate = function(binary, info){
 
 					const { instance } = result;
 
-					listeners[jsonData.hash] = new WASMListener(jsonData.hash, jsonData.name, jsonData.metadata, 
+					const listener = new WASMListener(jsonData.hash, jsonData.name, jsonData.metadata, 
 						jsonData.metadata.totalBasicBlocks,
 						instance,
 						jsonData.metadata.AFLMemOffset
 						)
-	
-						
-		
-					callBinaries()
+					listeners[jsonData.hash] = listener
+					
+					console.log("Instrumented")
+					if(!time){
+						callBinaries()
+						time = oldTimeout(() => {
+							callBinaries()
+						}, 3000)
+					}
 					resolve(result)
 
 				}).catch(err => console.error(err, err.stack));
@@ -134,16 +146,3 @@ WebAssembly.instantiate = function(binary, info){
 	})
 };
 
-
-
-
-/*
-// INJECT Dashboard
-console.log("Injecting DASHBOARD...");
-const app = document.createElement('script');
-if(window.INSTRUMENTER_HOST)
-	app.src = `${window.INSTRUMENTER_HOST}/static/index.js`;
-
-window.onload = function(e){
-	document.body.appendChild(app);
-}*/

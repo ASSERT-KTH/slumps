@@ -95,8 +95,22 @@ const options = {
 					const pWasmFile = `wasms/${WASM_HASH}.wasm`
 					let metadata = null
 
-					if(!requestDetail.requestData){
-						return
+					console.log(requestDetail.requestData.length)
+					if(!requestDetail.requestData || requestDetail.requestData.length == 0){
+						console.log("Bypassing instrumentation...")
+						return {
+							response: {
+								statusCode: 200,
+								header: { 
+									//...requestDetail.requestOptions.headers,
+									'Content-Type': 'application/json' , 
+									'Content-Length': 0, 
+									'Connection': 'close', 
+									'Access-Control-Allow-Origin': '*', 
+									'Server': 'WAKOKO'},
+								body: ''
+							}
+						}
 					}
 					let db = await MongoClient.connect(mongoUrl);
 					var dbo = db.db("wakoko");
@@ -104,6 +118,7 @@ const options = {
 						hash: WASM_HASH
 					});
 
+					console.log(WASM_HASH)
 					if(!!record){ // CACHE querying
 						metadata = record.instrumentationData
 					}
@@ -180,7 +195,7 @@ const options = {
 	beforeSendResponse: async function (requestDetail, responseDetail) {
 
 		if(MASKED_URL.test(requestDetail.url))
-			return responseDetail
+			return
 		if(responseDetail.response.statusCode !== 200)
 			return
 		if(responseDetail.response.header["Content-Type"]){
@@ -193,7 +208,6 @@ const options = {
 		const routerJS  = `<script type="text/javascript">window.INSTRUMENTER_HOST='${INSTRUMENT_URL}';\n</script>\n` // Set global host for instrumentation and open the address to force user to ttrust the site
 
 		const content = fs.readFileSync(`./static/${process.env.INSTRUMENTATION_TYPE || 'wrapper_global.js'}`);
-		const dashboardIndex = fs.readFileSync(`./static/index.js`);
 
 		const instrumentationJS = `<script type="text/javascript">${content}</script>\n`
 		
@@ -202,7 +216,7 @@ const options = {
 
 		if(data.indexOf("</body>") > -1)
 			data = data.replace("</body>", `\n${dashBoardJS}\n</body>\n`)
-		if(data.indexOf("<body>") > -1)
+		else if(data.indexOf("<body>") > -1)
 			data = data.replace("<body>", `<body>\n${dashBoardJS}\n`)
 
 		//console.log(data)
