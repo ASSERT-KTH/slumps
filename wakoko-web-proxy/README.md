@@ -28,6 +28,8 @@ TODO
 
 ### DEMO
 
+You can access to the following links to try WAKOKO.
+
 #### [OpenCV](https://huningxin.github.io/opencv.js/samples/video-processing/index-wasm.html)
 ![docs/FunkyKarts.gif](docs/OpenCV.gif)
 
