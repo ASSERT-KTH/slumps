@@ -1,12 +1,30 @@
 ## WAKOKO
 
-WAKOKO provides live time coverage for WebAssembly in the browser. This is a work in progress. Use this tool under your own responsability. 
+WAKOKO provides live time coverage for WebAssembly in the browser. It uses a man-in-the-middle proxy approach. The proxy inject a JavaScript code to catch all WASM instantiation calls, the WASM binary is instrumented and returned back.
 
-### How to use it ?
+Since we use a proxy, you need to trust in the certificates that we generate. After setting up the proxy, download and trust in the certificate.
+
+**This is a work in progress. Use this tool under your own responsability.** 
+
+### How to use it?
 
 **We recommend to use a browser that you dont regularly use.**
 
-- Set the proxy option in your browser to `www.wakoko.live` port `8080`
+- Set the proxy option in your browser to `www.wakoko.live` port `8080`.
+
+- Go to the address `wakoko.live/cert`, download and trust in the certificates.
+
+- You are ready now to use WAKOKO.
+
+### How to setup locally ?
+
+TODO
 
 ### DEMO
+
+#### [OpenCV](https://huningxin.github.io/opencv.js/samples/video-processing/index-wasm.html)
+![docs/FunkyKarts.gif](docs/OpenCV.gif)
+
+#### [Funky Karts](https://www.funkykarts.rocks/demo.html)
+![docs/FunkyKarts.gif](docs/FunkyKarts.gif)
 
