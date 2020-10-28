@@ -4,6 +4,7 @@ const AnyProxy = require('anyproxy');
 const fs = require("fs");
 var MongoClient = require('mongodb').MongoClient;
 const mongoUrl = process.env.MONGO_DB ||  "mongodb://localhost:27017/mydb";
+const WAKOKO_RATE = process.env.WAKOKO_RATE || 500; // poll every 3 seconds
 const crypto = require('crypto');
 const { exception } = require('console');
 var exec = require('child_process').execSync;
@@ -27,7 +28,7 @@ const INSTRUMENT_URL = "https://wakoko.com"
 const MASKED_URL=/^https?:\/\/wakoko.com/
 const LOCALHOST = new RegExp(`^https?:\/\/(localhost|0\.0\.0\.0|127\.0\.0\.1):${PORT}(\/.+)?`)
 
-console.log(MASKED_URL)
+console.log(INSTRUMENT_URL, process.env.SWAM_BIN, process.env.WAKOKO_RATE)
 const options = {
   port: PORT,
   throttle: 10000,
@@ -196,6 +197,11 @@ const options = {
 	},
 	beforeSendResponse: async function (requestDetail, responseDetail) {
 
+		if(/.*wasm$/.test(requestDetail.url)) // do nothing to WASM
+			return
+
+		console.log(requestDetail.url)
+
 		if(MASKED_URL.test(requestDetail.url))
 			return
 		if(responseDetail.response.statusCode !== 200)
@@ -207,7 +213,7 @@ const options = {
 
 		// INJECT WAFL script
 		let data = responseDetail.response.body.toString();
-		const routerJS  = `<script type="text/javascript">window.INSTRUMENTER_HOST='${INSTRUMENT_URL}';\n</script>\n` // Set global host for instrumentation and open the address to force user to ttrust the site
+		const routerJS  = `<script type="text/javascript">window.INSTRUMENTER_HOST='${INSTRUMENT_URL}';\n window.WAKOKO_RATE=${WAKOKO_RATE};\n</script>\n` // Set global host for instrumentation and open the address to force user to ttrust the site
 
 		const content = fs.readFileSync(`./static/${process.env.INSTRUMENTATION_TYPE || 'wrapper_global.js'}`);
 
