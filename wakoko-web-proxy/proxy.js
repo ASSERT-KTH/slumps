@@ -24,8 +24,8 @@ MongoClient.connect(mongoUrl, function(err, db) {
 });
 
 const PORT = process.env.WAKOKO_PORT || 8080
-const INSTRUMENT_URL = "https://wakoko.com"
-const MASKED_URL=/^https?:\/\/wakoko.com/
+const INSTRUMENT_URL = process.env.INSTRUMENT_URL || "https://wakoko.com"
+const MASKED_URL= new RegExp(process.env.MASKED ||  /^https?:\/\/wakoko.com/)
 const LOCALHOST = new RegExp(`^https?:\/\/(localhost|0\.0\.0\.0|127\.0\.0\.1):${PORT}(\/.+)?`)
 
 console.log(INSTRUMENT_URL, process.env.SWAM_BIN, process.env.WAKOKO_RATE)
