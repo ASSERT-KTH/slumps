@@ -84,10 +84,13 @@ class WASMListener{
 
 }
 
-WebAssembly.instantiateStreaming = null; // TODO
-
-window.rawWasms = []
-
+// fall-back to regular instantiation
+const oldInstantiateStreaming = WebAssembly.instantiateStreaming;
+WebAssembly.instantiateStreaming = async (source, importObject) => {
+	let response = await source;
+	let buffer = await response.arrayBuffer();
+	return WebAssembly.instantiate(buffer, importObject);
+};
 
 console.log("WRAPPING API...");
 WebAssembly.instantiate = function(binary, info){
