@@ -1,7 +1,7 @@
 #!/bin/bash
 
-err=0
-trap 'err=1' ERR
+#err=0
+#trap 'err=1' ERR
 
 CURRENT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
 cd $CURRENT_DIR/..
@@ -19,4 +19,4 @@ if [ ! -d aflpp ]; then
 fi
 
 
-test $err = 0
+#test $err = 0

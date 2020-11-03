@@ -1,8 +1,8 @@
 #!/bin/bash
 
 
-err=0
-trap 'err=1' ERR
+#err=0
+#trap 'err=1' ERR
 
 CURRENT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
 PARENT_DIR="$(dirname "$CURRENT_DIR")"
@@ -21,4 +21,4 @@ g++ -o $CPP_OUT_DIR/wait_for_server.out $CURRENT_DIR/wait_for_server.cpp $CURREN
 g++ -o $CPP_OUT_DIR/run_client.out $CURRENT_DIR/run_client.cpp $CURRENT_DIR/socket_client.cpp $CURRENT_DIR/utils.cpp
 g++ -o $CPP_OUT_DIR/interface.out $CURRENT_DIR/interface.cpp $CURRENT_DIR/socket_client.cpp $CURRENT_DIR/utils.cpp
 
-test $err = 0
+#test $err = 0
