@@ -17,8 +17,9 @@ class WasmBinary extends React.Component {
     var file = new Blob([this.props.binary],
       {type: "application/octet-stream"});
     atag.href = URL.createObjectURL(file);
-    atag.download = "binary.wasm";
+    atag.download = `${this.props.name}${this.props.index}.wasm`;
     atag.click();
+    atag.remove();
   }
   
   render(){
@@ -59,7 +60,7 @@ class Main extends React.Component {
               <ul>
               { 
                 this.state.binaries &&
-                  this.state.binaries.map(t => <li><WasmBinary binary={t}/></li>)
+                  this.state.binaries.map((t, i) => <li key={i}><WasmBinary index={i} binary={t} name={window.location.href}/></li>)
               }
               </ul>
             </div>
