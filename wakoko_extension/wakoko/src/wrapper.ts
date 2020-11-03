@@ -1,8 +1,8 @@
 import {Utils} from 'instrumentor/instrumentor'
-
+import './content.css';
 const oldModule = WebAssembly.Module;
 // @ts-ignore
-WebAssembly =  null;
+WebAssembly.Module =  null;
 
 // @ts-ignore
 WebAssembly.Instance =  null;
