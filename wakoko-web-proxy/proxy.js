@@ -152,7 +152,7 @@ const options = {
 
 					let content = [...fs.readFileSync(`${__dirname}/${pWasmFile}.cb.wasm`)];
 
-					// console.log(metadata)
+					console.log(metadata)
 					const response = {
 						instrumented: content, hash:WASM_HASH, name:"temp", metadata
 					}

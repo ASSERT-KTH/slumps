@@ -1,7 +1,7 @@
 /* src/index.css */
 #wakoko-extension-root iframe {
     width: 400px;
-    height: auto;
+    height: 600px;
     border: none;
     position: fixed;
     z-index: 999999;

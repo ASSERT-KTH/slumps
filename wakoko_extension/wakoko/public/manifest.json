@@ -12,6 +12,7 @@
       }
       
   ], 
-   "web_accessible_resources": ["/static/js/app.js", "/static/css/content.css"]
+   "web_accessible_resources": ["/static/js/app.js", "/static/css/content.css", "/static/js/wrapper.js",
+    "/static/js/wrapper.js.map", "/static/js/app.js.map", "/static/css/content.css.map"]
   
 }
