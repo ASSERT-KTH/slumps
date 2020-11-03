@@ -58,7 +58,11 @@ jobs:
           java-package: jdk # (jre, jdk, or jdk+fx) - defaults to jdk
           #architecture: x64 # (x64 or x86) - defaults to x64
 
-      
+      - name: Build without Docker
+        run: |
+          echo "Building project"
+          cd wasm-fuzzer
+          bash ./build.sh
       
       - name: Test wafl
         run: |
