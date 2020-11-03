@@ -1,0 +1,17 @@
+
+/* src/content.css */
+.wakoko-extension {
+	padding: 20px;
+	
+	position: fixed;
+	overflow-y: auto;
+	top: 0px;
+	right: 0px;
+	z-index: 2147483647;
+	background-color: rgba(0,0,0,0.9);
+	box-shadow: 0px 0px 5px #0000009e;
+	color: white !important;
+   }
+.wakoko-extension h1 {
+	color: #000;
+}
