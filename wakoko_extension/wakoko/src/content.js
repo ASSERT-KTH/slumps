@@ -4,13 +4,14 @@ import "./content.css";
 
 const id = chrome.runtime.id;
 
+
+
+var scriptElement = document.createElement("script");
+scriptElement.setAttribute('src', chrome.runtime.getURL('/static/js/app.js'));
+(document.head||document.documentElement).prepend(scriptElement);
+
 var script = document.createElement('script');
 script.textContent = `
-
-window.wasms = []
-window.setBinaries = function(w){
-	window.wasms.push(w)
-}
 
 let old = window.WebAssembly.instantiate;
 WebAssembly.instantiate = function(binary, info){
@@ -38,11 +39,11 @@ WebAssembly.instantiateStreaming = async (source, importObject) => {
 };
 
 
+window.wasms = []
+window.setBinaries = function(w){
+	window.wasms.push(w)
+}
+
 `;
 (document.head||document.documentElement).prepend(script);
 
-
-
-var scriptElement = document.createElement("script");
-scriptElement.setAttribute('src', chrome.runtime.getURL('/static/js/app.js'));
-(document.head||document.documentElement).prepend(scriptElement);

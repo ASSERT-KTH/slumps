@@ -1,5 +1,11 @@
 /* src/index.css */
 #my-extension-root {
+  
+}
+
+/* src/content.css */
+.my-extension {
+  padding: 20px;
   width: 400px;
   height: auto;
   position: fixed;
@@ -10,11 +16,6 @@
   background-color: rgba(0,0,0,0.9);
   box-shadow: 0px 0px 5px #0000009e;
   color: white !important;
-}
-
-/* src/content.css */
-.my-extension {
-	padding: 20px;
  }
  .my-extension h1 {
 	 color: #000;

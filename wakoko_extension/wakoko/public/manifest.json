@@ -2,9 +2,7 @@
   "name": "WAKOKO",
   "version": "0.1",
   "manifest_version": 2,
-  "browser_action": {
-      "default_popup": "index.html"
-  },
+
     "content_scripts" : [
       {
         "matches": [ "<all_urls>" ],
