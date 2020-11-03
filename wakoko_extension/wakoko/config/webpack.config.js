@@ -166,8 +166,7 @@ module.exports = function (webpackEnv) {
     // These are the "entry points" to our application.
     // This means they will be the "root" imports that are included in JS bundle.
     entry: { 
-      app: ['./src/index.tsx'], 
-      content: ['./src/content.ts'],
+      app: ['./src/index.tsx'],
       wrapper: ['./src/wrapper.ts']},
     output: {
       // The build folder.
