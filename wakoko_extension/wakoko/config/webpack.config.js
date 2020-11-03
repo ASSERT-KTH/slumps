@@ -167,7 +167,8 @@ module.exports = function (webpackEnv) {
     // This means they will be the "root" imports that are included in JS bundle.
     entry: { 
       app: ['./src/index.tsx'], 
-      content: ['./src/content.ts']},
+      content: ['./src/content.ts'],
+      wrapper: ['./src/wrapper.ts']},
     output: {
       // The build folder.
       path: isEnvProduction ? paths.appBuild : undefined,

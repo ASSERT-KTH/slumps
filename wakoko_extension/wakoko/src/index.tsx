@@ -7,4 +7,4 @@ import './index.css';
 const app = document.createElement('div');
 app.id = "wakoko-extension-root";
 (document.body || document.documentElement).appendChild(app);
-ReactDOM.render(<Main wasms={(window as any).wasms || []} />, app);
+ReactDOM.render(<Main binaries={(window as any).wasms || []} />, app);
