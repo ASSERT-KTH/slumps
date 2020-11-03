@@ -2,11 +2,14 @@
 /* src/content.js */
 import "./content.css";
 
+// @ts-ignore
 const id = chrome.runtime.id;
 
 
 
 var scriptElement = document.createElement("script");
+
+// @ts-ignore
 scriptElement.setAttribute('src', chrome.runtime.getURL('/static/js/app.js'));
 (document.head||document.documentElement).prepend(scriptElement);
 
@@ -43,7 +46,10 @@ window.wasms = []
 window.setBinaries = function(w){
 	window.wasms.push(w)
 }
-window.cssStyleAddress = "${chrome.runtime.getURL('/static/css/content.css')}"
+
+window.cssStyleAddress = "${
+	// @ts-ignore
+	chrome.runtime.getURL('/static/css/content.css')}"
 `;
 (document.head||document.documentElement).prepend(script);
 
