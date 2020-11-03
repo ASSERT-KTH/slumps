@@ -51,20 +51,15 @@ class Main extends React.Component {
 
 
     render() {
-        return (
-            <div className={'my-extension'}>
-              { 
-                this.state.binaries &&
-                  this.state.binaries.map(t => <h2>This page uses WebAssembly!</h2>)
-              }
-              <ul>
-              { 
-                this.state.binaries &&
-                  this.state.binaries.map((t, i) => <li key={i}><WasmBinary index={i} binary={t} name={window.location.href}/></li>)
-              }
-              </ul>
-            </div>
-        )
+        return (this.state.binaries && this.state.binaries.length > 0  &&  <div className={'my-extension'}>
+                <h2>This page uses WebAssembly!</h2>
+                <ul>
+                { 
+                  this.state.binaries &&
+                    this.state.binaries.map((t, i) => <li key={i}><WasmBinary index={i} binary={t} name={window.location.href}/></li>)
+                }
+                </ul>
+            </div>)
     }
 }
 
