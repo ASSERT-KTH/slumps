@@ -32,13 +32,13 @@ jobs:
         run: |
          java -version
 
+      
       - name: Build without Docker
         run: |
           
           echo "Building project"
           cd wasm-fuzzer
-          bash fuzzing-client-afl/build_afl.sh
-          bash fuzzing-client-afl/build_interface.sh
+          bash ./build.sh
   test-local:
     needs: build
     runs-on: ubuntu-latest
@@ -59,12 +59,6 @@ jobs:
           #architecture: x64 # (x64 or x86) - defaults to x64
 
       
-      - name: Build without Docker
-        run: |
-          
-          echo "Building project"
-          cd wasm-fuzzer
-          bash ./build.sh
       
       - name: Test wafl
         run: |
