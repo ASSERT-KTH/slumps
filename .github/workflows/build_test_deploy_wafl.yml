@@ -39,8 +39,38 @@ jobs:
           cd wasm-fuzzer
           bash fuzzing-client-afl/build_afl.sh
           bash fuzzing-client-afl/build_interface.sh
+  test-local:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2 # checkout latest version of the repo
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          echo "Installing AFL dependencies"
+          sudo apt-get install -y supervisor build-essential automake libtool-bin python3-dev git automake flex bison libglib2.0-dev libpixman-1-dev clang python3-setuptools llvm procps
+      - name: Setup Java
+        uses: actions/setup-java@v1
+        with:
+          java-version: '11' # The JDK version to make available on the path.
+          java-package: jdk # (jre, jdk, or jdk+fx) - defaults to jdk
+          #architecture: x64 # (x64 or x86) - defaults to x64
 
       
+      - name: Build without Docker
+        run: |
+          
+          echo "Building project"
+          cd wasm-fuzzer
+          bash ./build.sh
+      
+      - name: Test wafl
+        run: |
+          cd wasm-fuzzer
+          bash test_wafl_local.sh ${PWD}/sample-testing-targets/branches2.wasm a 11
+   
   build-docker:
     needs: build
     runs-on: ubuntu-latest
@@ -68,3 +98,5 @@ jobs:
         env:
           user: ${{secrets.DOCKER_USER}}
           pass: ${{secrets.DOCKER_PASS}}
+          
+ 
