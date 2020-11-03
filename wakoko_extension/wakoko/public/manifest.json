@@ -5,5 +5,16 @@
   "browser_action": {
       "default_popup": "index.html"
   },
-  "content_security_policy": "script-src 'self' 'sha256-GgRxrVOKNdB4LrRsVPDSbzvfdV4UqglmviH9GoBJ5jk='; object-src 'self'"
+    "content_scripts" : [
+      {
+        "matches": [ "<all_urls>" ],
+        "css": ["/static/css/app.css"],
+        "js": ["/static/js/content.js"],
+        "run_at":"document_idle"
+      }
+      
+  ], 
+   "web_accessible_resources": ["/static/js/app.js"]
+  
+  //"content_security_policy": "script-src 'self' 'sha256-GgRxrVOKNdB4LrRsVPDSbzvfdV4UqglmviH9GoBJ5jk='; object-src 'self'"
 }

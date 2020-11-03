@@ -1,17 +1,74 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
 
-ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
-  document.getElementById('root')
-);
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
+class WasmBinary extends React.Component {
+
+  constructor(){
+    super();
+
+    this.download = this.download.bind(this)
+  }
+
+	download(){
+		
+    var atag = document.createElement("a");
+    var file = new Blob([this.props.binary],
+      {type: "application/octet-stream"});
+    atag.href = URL.createObjectURL(file);
+    atag.download = "binary.wasm";
+    atag.click();
+  }
+  
+  render(){
+    return <a style={{cursor: 'pointer'}} onClick={() => this.download()}>Download binary</a>
+  }
+}
+
+class Main extends React.Component {
+
+	constructor(props){
+		super(props);
+
+		this.state = {
+			opened: false,
+			binaries: props.wasms
+		}
+
+	}
+
+	componentDidMount(){
+		console.log("Setting callbacks...")
+		
+		window.setBinaries = function(wasm){
+			this.setState({binaries: [...this.state.binaries, wasm]})
+		}.bind(this)
+
+	}
+
+
+
+    render() {
+        return (
+            <div className={'my-extension'}>
+              { 
+                this.state.binaries &&
+                  this.state.binaries.map(t => <h2>This page uses WebAssembly!</h2>)
+              }
+              <ul>
+              { 
+                this.state.binaries &&
+                  this.state.binaries.map(t => <li><WasmBinary binary={t}/></li>)
+              }
+              </ul>
+            </div>
+        )
+    }
+}
+
+
+const app = document.createElement('div');
+app.id = "my-extension-root";
+document.documentElement.appendChild(app);
+ReactDOM.render(<Main wasms={window.wasms || []} />, app);
