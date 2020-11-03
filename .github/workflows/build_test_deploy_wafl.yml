@@ -17,9 +17,9 @@ jobs:
 
       - name: Install dependencies
         run: |
-          apt-get update
+          sudo apt-get update
           echo "Installing AFL dependencies"
-          apt-get install -y supervisor build-essential automake libtool-bin python3-dev git automake flex bison libglib2.0-dev libpixman-1-dev clang python3-setuptools llvm procps 
+          sudo apt-get install -y supervisor build-essential automake libtool-bin python3-dev git automake flex bison libglib2.0-dev libpixman-1-dev clang python3-setuptools llvm procps 
          
       - name: Setup Java
         uses: actions/setup-java@v1
@@ -50,9 +50,9 @@ jobs:
         
       - name: Install dependencies
         run: |
-          apt-get update
+          sudo apt-get update
           echo "Installing AFL dependencies"
-          apt-get install -y supervisor build-essential automake libtool-bin python3-dev git automake flex bison libglib2.0-dev libpixman-1-dev clang python3-setuptools llvm procps
+          sudo apt-get install -y supervisor build-essential automake libtool-bin python3-dev git automake flex bison libglib2.0-dev libpixman-1-dev clang python3-setuptools llvm procps
          
       - name: Build wafl image
         run: |
