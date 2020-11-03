@@ -1,7 +1,7 @@
 #!/bin/bash
 
-err=0
-trap 'err=1' ERR
+#err=0
+#trap 'err=1' ERR
 
 CURRENT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
 
@@ -24,4 +24,6 @@ cd ..
 bash $CURRENT_DIR/fuzzing-client-afl/build_afl.sh
 bash $CURRENT_DIR/fuzzing-client-afl/build_interface.sh
 
-test $err = 0
+echo "Finishing"
+
+#test $err = 0
