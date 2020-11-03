@@ -43,7 +43,7 @@ window.wasms = []
 window.setBinaries = function(w){
 	window.wasms.push(w)
 }
-
+window.cssStyleAddress = "${chrome.runtime.getURL('/static/css/content.css')}"
 `;
 (document.head||document.documentElement).prepend(script);
 
