@@ -11,45 +11,36 @@ var scriptElement = document.createElement("script");
 
 // @ts-ignore
 scriptElement.setAttribute('src', chrome.runtime.getURL('/static/js/app.js'));
-(document.head||document.documentElement).prepend(scriptElement);
+scriptElement.async = false;   
 
 var script = document.createElement('script');
-script.textContent = `
-
-let old = window.WebAssembly.instantiate;
-WebAssembly.instantiate = function(binary, info){
-	console.log("Intercepted call");
-	return new Promise(function(resolve, reject){
-		// SEND the binary to the server to instrument
-		old(binary, info).then(result => {
-
-			window.setBinaries(binary)
-			const { instance } = result;
-			
-			resolve(result)
-
-		}).catch(err => console.error(err, err.stack));
+// @ts-ignore
+//script.setAttribute('src', chrome.runtime.getURL('/static/js/wrapper.js'));
 
 
-	})
-};
+chrome.runtime.getPackageDirectoryEntry(function(root) {
+	root.getFile("wrapper.js", {}, function(fileEntry) {
+		script.async = false;   
+		script.innerText = 
+	  fileEntry.file(function(file) {
+		var reader = new FileReader();
+		reader.onloadend = function(e) {
+		  // contents are in this.result
+		};
+		reader.readAsText(file);
+	  }, errorHandler);
+	}, errorHandler);
+  });
 
-const oldInstantiateStreaming = WebAssembly.instantiateStreaming;
-WebAssembly.instantiateStreaming = async (source, importObject) => {
-	let response = await source;
-	let buffer = await response.arrayBuffer();
-	return WebAssembly.instantiate(buffer, importObject);
-};
-
-
-window.wasms = []
-window.setBinaries = function(w){
-	window.wasms.push(w)
-}
-
-window.cssStyleAddress = "${
+var metaScript = document.createElement("script");
+metaScript.async = false;
+metaScript.innerText = `window.cssStyleAddress = "${
 	// @ts-ignore
-	chrome.runtime.getURL('/static/css/content.css')}"
-`;
-(document.head||document.documentElement).prepend(script);
+	chrome.runtime.getURL('/static/css/content.css')}"`;
 
+
+(document.head||document.documentElement).prepend(scriptElement);
+(document.documentElement).prepend(script);
+(document.head||document.documentElement).prepend(metaScript);
+
+// TODO check for service workers

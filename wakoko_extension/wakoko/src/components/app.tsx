@@ -2,15 +2,24 @@
 import * as React from "react";
 import WasmBinary from './wasm-binary'
 import Frame, { FrameContextConsumer }from 'react-frame-component';
+import {RetrieverMockService} from '../services/retriever.mock.service'
+import WASMListener from "models/wasm.listener";
 
-export default class Main extends React.Component<any, any> {
+export interface MainProps {
+	binaries: WASMListener[];
+}
 
-	constructor(props: any){
+export interface MainState extends MainProps {
+	opened: boolean;
+}
+export default class Main extends React.Component<MainProps, MainState> {
+
+	constructor(props: MainProps){
 		super(props);
 
 		this.state = {
 			opened: false,
-			binaries: props.wasms
+			binaries: props.binaries
 		}
 
 	}
@@ -19,7 +28,7 @@ export default class Main extends React.Component<any, any> {
 		console.log("Setting callbacks...");
 		const self = this;
 
-		(window as any).setBinaries = function(wasm: any){
+		(window as any).setBinaries = function(wasm: WASMListener){
 			self.setState({binaries: [...self.state.binaries, wasm]})
 		}.bind(this)
 
@@ -41,7 +50,7 @@ export default class Main extends React.Component<any, any> {
 						<ul>
 						{ 
 							this.state.binaries &&
-							this.state.binaries.map((t: any, i: number) => <li key={i}><WasmBinary index={i} binary={t} name={window.location.href}/></li>)
+							this.state.binaries.map((t: any, i: number) => <li key={i}><WasmBinary index={i} module={t} page={window.location.href}/></li>)
 						}
 						</ul>
 				  </div>)}
