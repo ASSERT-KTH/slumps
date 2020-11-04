@@ -1,16 +1,20 @@
 
 import WASMListener from "models/wasm.listener";
 import * as React from "react";
+import GraphData from "./graph.data";
+import Graph from "./graph.view";
 import CovPlot from "./plot";
 
 export interface WasmBinaryProps {
 	module: WASMListener;
 	page: string;
 	index: number;
+	freq: number;
 }
 
 export interface WasmBinaryState {
-	history: number[]
+	history: number[],
+	CFG: any
 }
 
 class WasmBinary extends React.Component<WasmBinaryProps, WasmBinaryState> {
@@ -19,7 +23,8 @@ class WasmBinary extends React.Component<WasmBinaryProps, WasmBinaryState> {
 	  super(props);
 		
 	  this.state = {
-		  history: []
+		  history: [],
+		  CFG: {}
 	  }
 	  this.download = this.download.bind(this)
 	}
@@ -28,11 +33,13 @@ class WasmBinary extends React.Component<WasmBinaryProps, WasmBinaryState> {
 
 	componentDidMount(){
 		this.time = setInterval(() => {
-			this.props.module.getCoverage(true)
+			this.props.module.getBlockCoverage(true)
+			this.props.module.getCFGCoverage()
 			this.setState({
-				history: [...this.props.module.history]
+				history: [...this.props.module.history],
+				CFG: this.props.module.CFG
 			})
-		}, 1000)
+		}, this.props.freq)
 	}
 
 	componentWillUnmount(){
@@ -74,8 +81,8 @@ class WasmBinary extends React.Component<WasmBinaryProps, WasmBinaryState> {
 					  <h4>{lastVisited}/{this.props.module.totalBlocks} ({100.0*lastVisited/this.props.module.totalBlocks}%) </h4>
 
 					<CovPlot values={this.state.history.map(t => 1.0*t/this.props.module.totalBlocks)} opened={true}/>
-
-	  	</div>)
+					{/*<GraphData cfg={this.state.CFG}/>*/}
+		  </div>)
 	}
   }
 
