@@ -1,15 +1,19 @@
 #!/bin/bash
 
 CURRENT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
-cd $CURRENT_DIR/..
+PARENT_DIR="$(dirname "$CURRENT_DIR")"
+source $PARENT_DIR/logging_lib.sh
+CURRENT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"  # Has to be run again
+
+cd $PARENT_DIR
 
 if [ ! -d aflpp ]; then
-    echo "Downloading aflplusplus..."
+    log_info "Downloading aflplusplus..."
     git clone https://github.com/AFLplusplus/AFLplusplus.git aflpp
 
-    echo "Building aflplusplus..."
+    log_info "Building aflplusplus..."
     cd aflpp
     make distrib
     sudo make install
-    cd ..
+
 fi
