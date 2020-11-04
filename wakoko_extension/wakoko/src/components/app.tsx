@@ -4,6 +4,8 @@ import WasmBinary from './wasm-binary'
 import Frame, { FrameContextConsumer }from 'react-frame-component';
 import {RetrieverMockService} from '../services/retriever.mock.service'
 import WASMListener from "models/wasm.listener";
+import 'antd/dist/antd.css';
+
 
 export interface MainProps {
 	binaries: WASMListener[];
@@ -18,7 +20,7 @@ export default class Main extends React.Component<MainProps, MainState> {
 		super(props);
 
 		this.state = {
-			opened: false,
+			opened: true,
 			binaries: props.binaries
 		}
 
@@ -38,25 +40,26 @@ export default class Main extends React.Component<MainProps, MainState> {
 
     render() {
 		
-		return (<Frame head={[<link type="text/css" rel="stylesheet" href={
-			/*@ts-ignore*/
-			window.cssStyleAddress} ></link>]}> 
-			<FrameContextConsumer>
-				{
-				({document, window}) => {
-                      // Render Children
-                      return (this.state.binaries && this.state.binaries.length > 0  &&  <div className={'wakoko-extension'}>
-						<h2>WAKOKO</h2>
-						<ul>
+		return (<React.Fragment>
+				<a onClick={() => this.setState({opened: !this.state.opened})} style={{position:'fixed', top: 0, right: this.state.opened? 290 : 10, zIndex: 9999999}}><strong>{this.state.opened? '>': '< wakoko'}</strong></a>
+				{this.state.opened && <Frame head={[
+				<link type="text/css" rel="stylesheet" href={
+				/*@ts-ignore*/
+				window.cssStyleAddress} ></link>,
+				<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/antd@4.8.0/dist/antd.css"></link>]}> 
+				<FrameContextConsumer>
+					{
+					({document, window}) => {
+						// Render Children
+						return (this.state.binaries && this.state.binaries.length > 0  &&  <div className={'wakoko-extension'}>
+							<h1>WAKOKO</h1>
 						{ 
-							this.state.binaries &&
-							this.state.binaries.map((t: any, i: number) => <li key={i}><WasmBinary freq={500} index={i} module={t} page={window.location.href}/></li>)
-						}
-						</ul>
-				  </div>)}
-				  }
-			</FrameContextConsumer>
-			</Frame>) 
+							this.state.binaries.map((t: any, i: number) => <WasmBinary freq={2000} index={i} module={t} page={window.location.href}/>)
+						}</div>)
+					}
+				} 
+				</FrameContextConsumer>
+			</Frame>}</React.Fragment>) 
 		
 		
     }

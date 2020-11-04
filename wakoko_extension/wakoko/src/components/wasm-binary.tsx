@@ -4,6 +4,7 @@ import * as React from "react";
 import GraphData from "./graph.data";
 import Graph from "./graph.view";
 import CovPlot from "./plot";
+import { Progress, Card } from 'antd';
 
 export interface WasmBinaryProps {
 	module: WASMListener;
@@ -81,16 +82,19 @@ class WasmBinary extends React.Component<WasmBinaryProps, WasmBinaryState> {
 	render(){
 
 		const lastVisited = this.state.history.slice(-1)[0] 
-	  return (<div style={{padding: '5px'}}>
+		const percent = Number((100*lastVisited/this.props.module.totalBlocks).toFixed(2));
+	  return (<Card cover={<CovPlot values={this.state.history.map(t => 1.0*t/this.props.module.totalBlocks)} opened={true}/>}><div style={{padding: '5px'}}>
+
+					<Progress showInfo percent={percent} />
+
 					<h4 style={{cursor: 'pointer'}} onClick={() => this.download()}>Download original binary</h4>
 
 	  				<h4 style={{cursor: 'pointer'}} onClick={() => this.downloadInstrumented()}>Download instrumented binary</h4>
 
-					  <h4>{lastVisited}/{this.props.module.totalBlocks} ({100.0*lastVisited/this.props.module.totalBlocks}%) </h4>
 
-					<CovPlot values={this.state.history.map(t => 1.0*t/this.props.module.totalBlocks)} opened={true}/>
+					
 					{/*<GraphData links={this.state.links} nodes={this.state.nodes}/>*/}
-		  </div>)
+		  </div></Card>)
 	}
   }
 

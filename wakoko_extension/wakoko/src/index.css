@@ -1,11 +1,15 @@
 /* src/index.css */
 #wakoko-extension-root iframe {
-    width: 400px;
-    height: 800px;
+    width: auto;
+    height: auto;
+    min-height: 300px;
+    min-width: 300px;
     border: none;
     position: fixed;
-    z-index: 999999;
+    z-index: 9999998;
     top: 0;
     right: 0;
+
+    background-color: rgba(0,0,0,0.5 green, blue, alpha);
 }
 
