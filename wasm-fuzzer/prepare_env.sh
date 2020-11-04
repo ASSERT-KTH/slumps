@@ -1,15 +1,34 @@
 #!/bin/bash
 
+CURRENT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
+source $CURRENT_DIR/logging_lib.sh
+
+log_info "Starting to prepare environment!"
+
+REQUIRED_ARGUMENTS_MESSAGE="The following 3 arguments are required:
+    1.
+        a) Using Docker: .wasm/.wat filename
+        b) Without Docker: .wasm/.wat filepath
+    2. target function in .wasm/.wat file
+    3. seed arguments csv
+        e.g. 13,16.9,0
+    
+    Example: ${CURRENT_DIR}/sample-testing-targets/branches2.wasm a 11
+"
+
+if [ "$#" -ne 3 ]; then
+    log_error "Incorrect amount of arguments ($# were given). $REQUIRED_ARGUMENTS_MESSAGE"
+    exit 1
+fi
+
 if [ -z "$WAFL_INSTANCE_ID" ]; then
     export WAFL_INSTANCE_ID=$((1 + RANDOM % 99999999))
 fi
-echo "wafl ID $WAFL_INSTANCE_ID"
-
-CURRENT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
+log_info "wafl ID $WAFL_INSTANCE_ID"
 
 # Check if inside Docker: https://stackoverflow.com/a/25518345/9068781
 if ! [ -f /.dockerenv ]; then
-    echo "Not inside a Docker container"
+    log_info "Not inside a Docker container"
 
     set -a
     source $CURRENT_DIR/.env
@@ -41,13 +60,18 @@ if ! [ -f /.dockerenv ]; then
     mkdir -p $OUTPUT_AFL_DIR
     mkdir -p $LOGS_DIR
 else
-    echo "Inside a Docker container - env's are pre-defined"
+    log_info "Inside a Docker container - env's are pre-defined"
 
     # Get filename from $1
     export WASM_OR_WAT_FILE=$WASM_DIR/$(basename $1)
     # export SWAM_CMD='mill cli.run'
     JAVA=$(which java)
     export SWAM_CMD="$JAVA -jar $SRC_SWAM_DIR/cli-0.6.0-RC3.jar"
+fi
+
+if [ ! -f $WASM_OR_WAT_FILE ]; then
+    log_error "File $WASM_OR_WAT_FILE not found! $REQUIRED_ARGUMENTS_MESSAGE"
+    exit 1
 fi
 
 if [[ $WASM_OR_WAT_FILE == *.wat ]]; then
@@ -58,17 +82,18 @@ fi
 export WASI_FILTER=True
 export WASI=True
 
-# TODO: Check if empty
 export TARGET_FUNCTION=$2
 export WASM_ARG_CSV=$3
 
 # TODO: Not needed for SWAM:
 #   1. Call infer-function directly in Scala at server startup
 #   2. Take out here and put this into entrypoint_afl.sh + test_socket.sh;
-echo "Infering signature for wasm"
-echo "$SWAM_CMD infer $WAT_ARG $WASM_OR_WAT_FILE $TARGET_FUNCTION"
+log_info "Inferring signature for wasm"
+log_info "Running: $SWAM_CMD infer $WAT_ARG $WASM_OR_WAT_FILE $TARGET_FUNCTION"
 export WASM_ARG_TYPES_CSV=$($SWAM_CMD infer $WAT_ARG $WASM_OR_WAT_FILE $TARGET_FUNCTION) # Read from signature retriever
 pkill -f out.jar
 
 # This makes sure this script is not run multiple twice
 export ENV_PREPARED=True
+
+log_info "Finished preparing environment!"
