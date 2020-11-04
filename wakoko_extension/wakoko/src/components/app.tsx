@@ -50,7 +50,7 @@ export default class Main extends React.Component<MainProps, MainState> {
 						<ul>
 						{ 
 							this.state.binaries &&
-							this.state.binaries.map((t: any, i: number) => <li key={i}><WasmBinary freq={1000} index={i} module={t} page={window.location.href}/></li>)
+							this.state.binaries.map((t: any, i: number) => <li key={i}><WasmBinary freq={500} index={i} module={t} page={window.location.href}/></li>)
 						}
 						</ul>
 				  </div>)}

@@ -23,47 +23,48 @@ export default class GraphView extends React.Component<IProps, any> {
 
     c: any;
 
+
     updateStyleAndAttrs(nodes: any, links: any) {
+		console.log(nodes, links);
         const cx = this.props.width/2;
         const cy = this.props.height/2;
 
         const dx = this.props.dx || 0;
         const dy = this.props.dy || 0;
 		
-		var items = d3.select(this.c).selectAll('*').remove();
 
-		// Remove old elements:
-		items.exit().remove();
-
-		const link = d3.select(this.c).append("g")
-		  .attr("stroke", "#999")
-		  .attr("stroke-opacity", 0.6)
-		.selectAll("line")
-		.data(links)
-		.join("line")
-		  //.attr("stroke-width", d => Math.sqrt(d.value));
-	
-	  const node = d3.select(this.c).append("g")
-		.attr("stroke", "#fff")
-		.attr("stroke-width", 1.5)
-		.selectAll("circle")
-		.data(nodes)
-		.join("circle")
-		.attr("r", 3)
-		.attr("fill", 'red');
-
-        link.append("title")
-			.text(function (d: any) {return d.type;});
+	  const node = d3.select(this.c)
+	  .selectAll(".node")
+	  .data(nodes)
 		
 
+	  const link = d3.select(this.c)
+	  .selectAll(".link")
+	  .data(links)
+
+
+	d3.select(this.c)
+	.selectAll('.links')  
+	.attr("transform", 
+	`translate(${cx + dx}, ${cy + dy}) 
+	scale(${this.props.scale || 1}, ${this.props.scale || 1} )
+	rotate(${this.props.rotation||0})`)
+
+
+	d3.select(this.c)
+	.selectAll('.nodes')  
+	.attr("transform", 
+		`translate(${cx + dx}, ${cy + dy}) 
+		scale(${this.props.scale || 1}, ${this.props.scale || 1})
+		rotate(${this.props.rotation||0})`)
 
 		//console.log(node, links)
-		const simulation = 
+	const simulation = 
 		d3.forceSimulation(nodes)
 		.force("charge", d3.forceManyBody())
 		.force("center", d3.forceCenter(cx, cy))
 		// @ts-ignore
-		.force("link", d3.forceLink(links).id(d => d.id));
+		//.force("link", d3.forceLink(links).id(d => d.name));
 
 		//console.log(nodes)
 
@@ -100,14 +101,22 @@ export default class GraphView extends React.Component<IProps, any> {
 
     render(){
 
+        const nodes = this.props.nodes.map((i, index) => <circle r={2} className={`node node-${i.name}`} key={index + 'node'} />)
+        const links = this.props.links.map((i, index) => <line className='link' key={index + 'path'} />)
 
         return (
         <React.Fragment>
             <svg style={this.props.style} 
             className='canvas' 
             width={this.props.width}
+            height={this.props.height}
             ref={e => this.c = e}>
-                
+                <g className="links">
+                    {links}
+                </g>
+                <g className="nodes">
+                    {nodes}
+                </g>
             </svg>
         </React.Fragment>    );
     }
