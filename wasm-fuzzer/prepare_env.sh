@@ -90,14 +90,6 @@ export WASI=True
 export TARGET_FUNCTION=$2
 export WASM_ARG_CSV=$3
 
-# TODO: Not needed for SWAM:
-#   1. Call infer-function directly in Scala at server startup
-#   2. Take out here and put this into entrypoint_afl.sh + test_socket.sh;
-log_info "Inferring signature for wasm"
-log_info "Running: $SWAM_CLI_CMD infer $WAT_ARG $WASM_OR_WAT_FILE $TARGET_FUNCTION"
-export WASM_ARG_TYPES_CSV=$($SWAM_CLI_CMD infer $WAT_ARG $WASM_OR_WAT_FILE $TARGET_FUNCTION) # Read from signature retriever
-pkill -f out.jar
-
 # This makes sure this script is not run multiple twice
 export ENV_PREPARED=True
 

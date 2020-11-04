@@ -12,6 +12,7 @@
 # Run this script as `./test_socket.sh branches2.wasm a 11`
 
 CURRENT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
+source $CURRENT_DIR/logging_lib.sh
 
 #############
 ### Build ###
@@ -26,6 +27,11 @@ $CURRENT_DIR/fuzzing-client-afl/build_interface.sh
 ###########
 
 source $CURRENT_DIR/prepare_env.sh $@  # Taking "branches2.wasm a 11"
+
+log_info "Inferring signature for wasm"
+log_info "Running: $SWAM_CLI_CMD infer $WAT_ARG $WASM_OR_WAT_FILE $TARGET_FUNCTION"
+export WASM_ARG_TYPES_CSV=$($SWAM_CLI_CMD infer $WAT_ARG $WASM_OR_WAT_FILE $TARGET_FUNCTION) # Read from signature retriever
+pkill -f out.jar
 
 CPP_OUT_DIR=$CURRENT_DIR/wafl-temp/cpp-out
 
