@@ -34,10 +34,17 @@ jobs:
         run: |
           java -version
 
-      - name: Build
+      - name: Build SWAM
         run: |
-          cd wasm-fuzzer
-          bash ./build.sh
+          cd wasm-fuzzer/fuzzing-server-swam
+          ./millw cli.assembly
+          cd ..
+
+      - name: Build Interface
+        run: bash ./fuzzing-client-afl/build_interface.sh
+
+      - name: Build AFL
+        run: bash ./fuzzing-client-afl/fuzzing-client-afl/build_afl.sh
 
   test-local:
     needs: build-local
