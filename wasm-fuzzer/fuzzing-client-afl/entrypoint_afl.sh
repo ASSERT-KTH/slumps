@@ -33,6 +33,11 @@ if [[ $ENV_PREPARED != "True" ]]; then
     source $PARENT_DIR/prepare_env.sh $@
 fi
 
+log_info "Inferring signature for wasm"
+log_info "Running: $SWAM_CLI_CMD infer $WAT_ARG $WASM_OR_WAT_FILE $TARGET_FUNCTION"
+export WASM_ARG_TYPES_CSV=$($SWAM_CLI_CMD infer $WAT_ARG $WASM_OR_WAT_FILE $TARGET_FUNCTION) # Read from signature retriever
+pkill -f out.jar
+
 cd $SRC_INTERFACE_DIR
 
 $OUT_INTERFACE_DIR/prepare_wasm_input.out "$INPUT_AFL_DIR/prepared_input.dat"
