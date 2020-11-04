@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# For this file to be runnable by itself, use prepare_env.sh & $SWAM_CMD infer signature.
+# For this file to be runnable by itself, use prepare_env.sh & $SWAM_CLI_CMD infer signature.
 # However, infer signature is already being run in wafl.sh - therefore take it out there first 
 # and run it directly in SWAM.
 

@@ -54,7 +54,8 @@ if ! [ -f /.dockerenv ]; then
 
     export BIN_AFL="$CURRENT_DIR/aflpp/afl-fuzz"
     JAVA=$(which java)
-    export SWAM_CMD="$JAVA -jar $SRC_SWAM_DIR/out/cli/assembly/dest/out.jar"
+    export SWAM_CLI_CMD="$JAVA -jar $SRC_SWAM_DIR/out/cli/assembly/dest/out.jar"
+    export SWAM_SERVER_CMD="$JAVA -jar $SRC_SWAM_DIR/out/cli_server/assembly/dest/out.jar"
 
     mkdir -p $INPUT_AFL_DIR
     mkdir -p $OUTPUT_AFL_DIR
@@ -64,7 +65,11 @@ else
 
     # Get filename from $1
     export WASM_OR_WAT_FILE=$WASM_DIR/$(basename $1)
-    # export SWAM_CMD='mill cli.run'
+
+    # export SWAM_CLI_CMD='mill cli.run'
+    # export SWAM_SERVER_CMD='mill cli_server.run'
+
+    # TODO: Replace SWAM_CMD with SWAM_CLI_CMD & SWAM_SERVER_CMD
     JAVA=$(which java)
     export SWAM_CMD="$JAVA -jar $SRC_SWAM_DIR/cli-0.6.0-RC3.jar"
 fi
@@ -89,8 +94,8 @@ export WASM_ARG_CSV=$3
 #   1. Call infer-function directly in Scala at server startup
 #   2. Take out here and put this into entrypoint_afl.sh + test_socket.sh;
 log_info "Inferring signature for wasm"
-log_info "Running: $SWAM_CMD infer $WAT_ARG $WASM_OR_WAT_FILE $TARGET_FUNCTION"
-export WASM_ARG_TYPES_CSV=$($SWAM_CMD infer $WAT_ARG $WASM_OR_WAT_FILE $TARGET_FUNCTION) # Read from signature retriever
+log_info "Running: $SWAM_CLI_CMD infer $WAT_ARG $WASM_OR_WAT_FILE $TARGET_FUNCTION"
+export WASM_ARG_TYPES_CSV=$($SWAM_CLI_CMD infer $WAT_ARG $WASM_OR_WAT_FILE $TARGET_FUNCTION) # Read from signature retriever
 pkill -f out.jar
 
 # This makes sure this script is not run multiple twice
