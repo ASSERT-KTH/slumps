@@ -9,7 +9,7 @@ on:
       - ".github/**"
 
 jobs:
-  build-local:
+  local:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -45,21 +45,12 @@ jobs:
       - name: Build AFL
         run: bash ./wasm-fuzzer/fuzzing-client-afl/build_afl.sh
 
-  test-local:
-    needs: build-local
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-        with:
-          submodules: "true"
-
       - name: Test wafl
         run: |
           cd wasm-fuzzer
           bash test_wafl_local.sh ${PWD}/sample-testing-targets/branches2.wasm a 11
 
-  build-docker:
+  docker:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -70,13 +61,6 @@ jobs:
           cd wasm-fuzzer
           docker --version
           docker build -t wafl -f Dockerfile .
-
-  test-docker:
-    needs: build-docker
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
 
       - name: Push images
         run: |
