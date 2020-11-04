@@ -38,13 +38,12 @@ jobs:
           cd wasm-fuzzer/fuzzing-server-swam
           ./millw cli.assembly
           ./millw cli_server.assembly
-          cd ..
 
       - name: Build Interface
-        run: bash ./fuzzing-client-afl/build_interface.sh
+        run: bash ./wasm-fuzzer/fuzzing-client-afl/build_interface.sh
 
       - name: Build AFL
-        run: bash ./fuzzing-client-afl/fuzzing-client-afl/build_afl.sh
+        run: bash ./wasm-fuzzer/fuzzing-client-afl/build_afl.sh
 
   test-local:
     needs: build-local
