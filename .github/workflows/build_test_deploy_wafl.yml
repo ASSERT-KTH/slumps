@@ -17,10 +17,9 @@ jobs:
         with:
           submodules: "true"
 
-      - name: Install dependencies
+      - name: Install AFL dependencies & supervisord
         run: |
           sudo apt-get update
-          echo "Installing AFL dependencies & supervisord"
           sudo apt-get install -y supervisor build-essential automake libtool-bin python3-dev git automake flex bison libglib2.0-dev libpixman-1-dev clang python3-setuptools llvm procps
 
       - name: Setup Java
@@ -38,6 +37,7 @@ jobs:
         run: |
           cd wasm-fuzzer/fuzzing-server-swam
           ./millw cli.assembly
+          ./millw cli_server.assembly
           cd ..
 
       - name: Build Interface

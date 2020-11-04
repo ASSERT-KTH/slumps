@@ -21,5 +21,5 @@ cd $SRC_SWAM_DIR
 
 LOGGING_ARG="1> $LOGS_DIR/swam.std.txt 2> $LOGS_DIR/swam.err.txt &"
 
-log_info "Running: $SWAM_CMD run_server $WASM_OR_WAT_FILE --main $TARGET_FUNCTION $WAT_ARG $WASI_ARG $LOGGING_ARG"
-exec $SWAM_CMD run_server $WASM_OR_WAT_FILE --main $TARGET_FUNCTION $WAT_ARG $WASI_ARG 1> $LOGS_DIR/swam.std.txt 2> $LOGS_DIR/swam.err.txt
+log_info "Running: $SWAM_SERVER_CMD run_server $WASM_OR_WAT_FILE --main $TARGET_FUNCTION $WAT_ARG $WASI_ARG $LOGGING_ARG"
+exec $SWAM_SERVER_CMD run_server $WASM_OR_WAT_FILE --main $TARGET_FUNCTION $WAT_ARG $WASI_ARG 1> $LOGS_DIR/swam.std.txt 2> $LOGS_DIR/swam.err.txt
