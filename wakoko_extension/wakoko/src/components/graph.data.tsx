@@ -4,9 +4,13 @@ import GraphView from "./graph.view";
 import {Node} from "../models/wasm.listener";
 
 interface IProps{
-    cfg: {
-		[key: number]: Node
-	};
+    nodes: {
+		[key: number]: boolean
+	}
+	links: {
+		target: number,
+		source: number
+	}[] 
 }
 
 interface IState {
@@ -31,8 +35,8 @@ export default class GraphData extends React.Component<IProps, IState> {
             nodes: [],
             links: [],
             scale: 1,
-            width: 500,
-            height: 900,
+            width: 300,
+            height: 500,
             rotation: 0,
             dx: 0,
             dy: 0,
@@ -42,24 +46,12 @@ export default class GraphData extends React.Component<IProps, IState> {
     
     componentWillReceiveProps(nextProps: IProps) {
 
-        const nodes = Object.keys(nextProps.cfg).map(i => ({
-            name: `${i}`,
-            id: parseInt(i)
-        }));
-        const links = [].concat.apply([], nodes.map(n => {
-            return Object.keys(nextProps.cfg[n.id].children).filter(t => nextProps.cfg[t]).map(ch => {
-                return {
-                    target: parseInt(ch),
-                    source: n.id,
-                    type: "CFG"
-                }
-            })
-        }))
-
-
         this.setState({
-            nodes,
-            links
+            nodes: Object.keys(nextProps.nodes).map(t => ({
+                id: t,
+                name: `${t}`
+            })),
+            links: nextProps.links
         })
         // TODO create graph
     }
@@ -75,7 +67,7 @@ export default class GraphData extends React.Component<IProps, IState> {
             dx={this.state.dx}
             dy={this.state.dy}
             style={{
-                marginTop: '20px'
+
             }}
             width={this.state.width}
             height={this.state.height}
