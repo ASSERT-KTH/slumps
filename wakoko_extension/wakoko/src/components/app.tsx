@@ -46,11 +46,11 @@ export default class Main extends React.Component<MainProps, MainState> {
 				({document, window}) => {
                       // Render Children
                       return (this.state.binaries && this.state.binaries.length > 0  &&  <div className={'wakoko-extension'}>
-						<h2>This page uses WebAssembly!</h2>
+						<h2>WAKOKO</h2>
 						<ul>
 						{ 
 							this.state.binaries &&
-							this.state.binaries.map((t: any, i: number) => <li key={i}><WasmBinary index={i} module={t} page={window.location.href}/></li>)
+							this.state.binaries.map((t: any, i: number) => <li key={i}><WasmBinary freq={1000} index={i} module={t} page={window.location.href}/></li>)
 						}
 						</ul>
 				  </div>)}
