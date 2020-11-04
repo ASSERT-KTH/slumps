@@ -3,7 +3,6 @@
 CURRENT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
 PARENT_DIR="$(dirname "$CURRENT_DIR")"
 source $PARENT_DIR/logging_lib.sh
-
 CURRENT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"  # Has to be run again
 
 log_info "Building the wafl interface..."
