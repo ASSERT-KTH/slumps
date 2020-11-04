@@ -10,7 +10,7 @@ export default class CovPlot extends React.Component<{
 	constructor(props){
 		super(props);
 		this.state = {
-			size: 50
+			size:60
 		}
 
 		this.draw = this.draw.bind(this)
@@ -36,8 +36,8 @@ export default class CovPlot extends React.Component<{
 				const x0 = xScale*(2*(i - 1) + 1)
 				const x1 = xScale*(2*(i) + 1)
 
-				const y0 = context.canvas.height - 0.9*this.props.values[i - 1]*context.canvas.height
-				const y1 = context.canvas.height - 0.9*this.props.values[i]*context.canvas.height
+				const y0 = context.canvas.height - this.props.values[i - 1]*context.canvas.height
+				const y1 = context.canvas.height - this.props.values[i]*context.canvas.height
 
 				context.moveTo(x0, y0);
 				context.lineTo(x1, y1);
@@ -57,9 +57,8 @@ export default class CovPlot extends React.Component<{
 	render(){
 
 		return (
-			this.props.opened && (<div style={{paddingRight: 5, color: 'white', fontSize: '7pt', top:'50px', height: this.state.size}}>
-				<canvas style={{height:0.8*this.state.size}} ref={(r) =>this.canvasRef = r}/>
-			</div>)
+			this.props.opened && (
+				<canvas style={{height: this.state.size}} ref={(r) =>this.canvasRef = r}/>)
 		)
 	}
 }
