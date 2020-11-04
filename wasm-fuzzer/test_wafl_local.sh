@@ -22,15 +22,20 @@ $CURRENT_DIR/wafl.sh $@
 
 sleep 30s
 
-# TODO: Check if this works
 SUPERVISORD_STATUS=$(ps aux | grep 'supervisor')
 log_info "SUPERVISORD_STATUS: $SUPERVISORD_STATUS"
+# --> SUPERVISORD_STATUS: 
+#   root      5504  0.0  0.2  65572 20668 ?        Ss   23:21   0:00 /usr/bin/python /usr/bin/supervisord -n -c /etc/supervisor/supervisord.conf
+#   runner   26235  0.0  0.0  14848   988 ?        S    23:30   0:00 grep supervisor
 
-if ! [ $SUPERVISORD_STATUS ]; then
-    log_error "supervisord process is not running anymore. It must have crashed."
-    exit 1
-else
+log_info $(pgrep -x "/usr/bin/supervisord")
+
+if pgrep -x "/usr/bin/supervisord" > /dev/null
+then
     log_info "supervisord process is still running. We're good!"
     # TODO: Kill supervisord
     exit 0
+else
+    log_error "supervisord process is not running anymore. It must have crashed."
+    exit 1
 fi
