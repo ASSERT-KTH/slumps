@@ -3,12 +3,13 @@ on:
   push:
     branches:
       - master
+      - fixing-wafl-ci
     paths:
       - "wasm-fuzzer/**"
       - ".github/**"
 
 jobs:
-  build:
+  build-local:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -38,7 +39,7 @@ jobs:
           bash ./build.sh
 
   test-local:
-    needs: build
+    needs: build-local
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -50,23 +51,23 @@ jobs:
           bash test_wafl_local.sh ${PWD}/sample-testing-targets/branches2.wasm a 11
 
   build-docker:
-    needs: build
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-
-      - name: Install dependencies
-        run: |
-          sudo apt-get update
-          echo "Installing AFL dependencies"
-          sudo apt-get install -y supervisor build-essential automake libtool-bin python3-dev git automake flex bison libglib2.0-dev libpixman-1-dev clang python3-setuptools llvm procps
 
       - name: Build wafl image
         run: |
           cd wasm-fuzzer
           docker --version
           docker build -t wafl -f Dockerfile .
+
+  test-docker:
+    needs: build-docker
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
 
       - name: Push images
         run: |
