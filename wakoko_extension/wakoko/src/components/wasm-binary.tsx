@@ -14,7 +14,13 @@ export interface WasmBinaryProps {
 
 export interface WasmBinaryState {
 	history: number[],
-	CFG: any
+	nodes: {
+		[key: number]: boolean
+	}
+	links: {
+		target: number,
+		source: number
+	}[] 
 }
 
 class WasmBinary extends React.Component<WasmBinaryProps, WasmBinaryState> {
@@ -24,7 +30,8 @@ class WasmBinary extends React.Component<WasmBinaryProps, WasmBinaryState> {
 		
 	  this.state = {
 		  history: [],
-		  CFG: {}
+		  nodes: {},
+		  links: []
 	  }
 	  this.download = this.download.bind(this)
 	}
@@ -37,7 +44,8 @@ class WasmBinary extends React.Component<WasmBinaryProps, WasmBinaryState> {
 			this.props.module.getCFGCoverage()
 			this.setState({
 				history: [...this.props.module.history],
-				CFG: this.props.module.CFG
+				nodes: this.props.module.nodes,
+				links: this.props.module.links
 			})
 		}, this.props.freq)
 	}
@@ -81,7 +89,7 @@ class WasmBinary extends React.Component<WasmBinaryProps, WasmBinaryState> {
 					  <h4>{lastVisited}/{this.props.module.totalBlocks} ({100.0*lastVisited/this.props.module.totalBlocks}%) </h4>
 
 					<CovPlot values={this.state.history.map(t => 1.0*t/this.props.module.totalBlocks)} opened={true}/>
-					{/*<GraphData cfg={this.state.CFG}/>*/}
+					{/*<GraphData links={this.state.links} nodes={this.state.nodes}/>*/}
 		  </div>)
 	}
   }

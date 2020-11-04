@@ -20,9 +20,13 @@ export default class WASMListener{
 	history: number[];
 	original: ArrayBuffer;
 	instrumented: ArrayBuffer;
-	CFG: {
-		[key: number]: Node
-	};
+	nodes: {
+		[key: number]: boolean
+	}
+	links: {
+		target: number,
+		source: number
+	}[] 
 
 	constructor(hash, name, meta, totalBlocks, offset, original, instrumented){
 		this.hash = hash;
@@ -35,7 +39,8 @@ export default class WASMListener{
 		this.original = original;
 		this.instrumented = instrumented;
 
-		this.CFG = {}
+		this.nodes = []
+		this.links = []
 
 		this.getBlockCoverage = this.getBlockCoverage.bind(this);
 		this.getCFGCoverage = this.getCFGCoverage.bind(this);
@@ -74,16 +79,23 @@ export default class WASMListener{
 	getCFGCoverage(){
 		for(let i = this.offset; i < this.offset + this.totalBlocks - 1; i++){
 			const name = `cg${i}`
+			if(!(this.nodes[i]))
+				this.nodes[i] = true
 			//console.log(name)
 			if(name in this.module.exports)
 			{
 				const value = this.module.exports[name].value
 				
 				if(value){
-					if(!(this.CFG[value])){
-						this.CFG[value] = new Node()
-					}
-					this.CFG[value].children[i] = true
+					
+					if(!(this.nodes[parseInt(value)]))
+						this.nodes[parseInt(value)] = true
+
+					this.links.push({
+						target: i,
+						source: parseInt(value)
+					})
+
 				}
 			}
 		}
