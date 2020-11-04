@@ -13,7 +13,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v2 # checkout latest version of the repo
+        uses: actions/checkout@v2
+        with:
+          submodules: "true"
 
       - name: Install dependencies
         run: |
@@ -32,9 +34,8 @@ jobs:
         run: |
           java -version
 
-      - name: Build without Docker
+      - name: Build
         run: |
-          echo "Building project"
           cd wasm-fuzzer
           bash ./build.sh
 
@@ -44,6 +45,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+        with:
+          submodules: "true"
 
       - name: Test wafl
         run: |
