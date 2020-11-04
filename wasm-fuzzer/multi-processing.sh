@@ -1,16 +1,17 @@
 #!/bin/bash
 
+CURRENT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
+source $CURRENT_DIR/logging_lib.sh
+
 NUM_INSTANCES=$1
 shift;  # Pop $1 from argument list to pass all arguments "$@" to slumps/wafl:latest
 
 if [ -z "$NUM_INSTANCES" ]; then
-    echo "Specifiy the number of AFL instances as argument!"
+    log_error "Specifiy the number of AFL instances as argument!"
     exit 1
 fi
 
-echo "Running $NUM_INSTANCES AFL instance(s)."
-
-CURRENT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
+log_info "Running $NUM_INSTANCES AFL instance(s)."
 
 set -a
 source $CURRENT_DIR/.env
@@ -19,7 +20,7 @@ set +a
 # Make sure we're starting a fresh test here
 rm -R $CURRENT_DIR/wafl-temp
 
-echo "Running #1"
+log_info "Running #1"
 docker run --env-file=./.env \
     -e MASTER_AFL_NODE=True \
     -e WAFL_INSTANCE_ID=1 \
@@ -35,9 +36,9 @@ if [ $NUM_INSTANCES -lt 2 ]; then
 fi
 
 for i in $(seq 2 $NUM_INSTANCES); do
-    echo "Waiting for previous mill server to compile..."
+    log_info "Waiting for previous mill server to compile..."
     sleep 30s
-    echo "Running #${i}"
+    log_info "Running #${i}"
     docker run --env-file=./.env \
         -e MASTER_AFL_NODE=False \
         -e WAFL_INSTANCE_ID=${i} \

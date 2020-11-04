@@ -7,6 +7,7 @@
 # crash, the event listener can crash supervisord, telling us that something is wrong.
 
 CURRENT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
+source $CURRENT_DIR/logging_lib.sh
 
 set -a
 source $CURRENT_DIR/.env
@@ -23,13 +24,13 @@ sleep 30s
 
 # TODO: Check if this works
 SUPERVISORD_STATUS=$(ps aux | grep 'supervisor')
-echo "SUPERVISORD_STATUS: $SUPERVISORD_STATUS"
+log_info "SUPERVISORD_STATUS: $SUPERVISORD_STATUS"
 
 if ! [ $SUPERVISORD_STATUS ]; then
-    echo "supervisord process is not running anymore. It must have crashed."
+    log_error "supervisord process is not running anymore. It must have crashed."
     exit 1
 else
-    echo "supervisord process is still running. We're good!"
+    log_info "supervisord process is still running. We're good!"
     # TODO: Kill supervisord
     exit 0
 fi
