@@ -29,6 +29,12 @@ jobs:
           java-package: jdk # (jre, jdk, or jdk+fx) - defaults to jdk
           #architecture: x64 # (x64 or x86) - defaults to x64
 
+      - name: Check file structure
+        run: |
+          echo "pwd: ${PWD}"
+          ls -l
+          tree ${PWD}
+
       - name: Build SWAM
         run: |
           cd wasm-fuzzer/fuzzing-server-swam
@@ -40,6 +46,12 @@ jobs:
 
       - name: Build AFL
         run: bash ./wasm-fuzzer/fuzzing-client-afl/build_afl.sh
+
+      - name: Check file structure
+        run: |
+          echo "pwd: ${PWD}"
+          ls -l
+          tree ${PWD}
 
       - name: Test wafl
         run: |
