@@ -16,14 +16,14 @@ set +a
 # Make sure we're starting a fresh test here
 rm -R $CURRENT_DIR/wafl-temp
 
-docker run -d --rm --env-file=./.env \
+docker run -d --rm --env-file=${CURRENT_DIR}/.env} \
     -e STAGING=True \
     --name=staging_wafl \
     -v maven_data:/root/.cache/coursier/v1/https/repo1.maven.org/maven2 \
     -v compiled_sources:/home/server/src/out/ \
     -v ${LOCAL_WASM_DIR:?err}:/home/server/wasm/ \
-    -v ${PWD}/wafl-temp/afl-out:/home/client/out/ \
-    -v ${PWD}/wafl-temp/logs:/home/shared/logs/ \
+    -v ${CURRENT_DIR}/wafl-temp/afl-out:/home/client/out/ \
+    -v ${CURRENT_DIR}/wafl-temp/logs:/home/shared/logs/ \
     wafl:latest $@
 
 sleep 30s
