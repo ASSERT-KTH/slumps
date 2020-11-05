@@ -1,7 +1,11 @@
 #!/bin/bash
 
 CURRENT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
-source $CURRENT_DIR/logging_lib.sh
+if ! [ -f /.dockerenv ]; then
+    # Not inside a Docker container
+    export WAFL_HOME=$CURRENT_DIR  
+fi
+source $WAFL_HOME/logging_lib.sh
 
 log_info "Starting to prepare environment!"
 
@@ -13,7 +17,7 @@ REQUIRED_ARGUMENTS_MESSAGE="The following 3 arguments are required:
     3. seed arguments csv
         e.g. 13,16.9,0
     
-    Example: ${CURRENT_DIR}/sample-testing-targets/branches2.wasm a 11
+    Example: ${WAFL_HOME}/sample-testing-targets/branches2.wasm a 11
 "
 
 if [ "$#" -ne 3 ]; then
@@ -31,17 +35,17 @@ if ! [ -f /.dockerenv ]; then
     log_info "Not inside a Docker container"
 
     set -a
-    source $CURRENT_DIR/.env
+    source $WAFL_HOME/.env
     set +a
 
-    TEMP_DIR=$CURRENT_DIR/wafl-temp
+    TEMP_DIR=$WAFL_HOME/wafl-temp
 
     mkdir -p $TEMP_DIR/afl-in
     mkdir -p $TEMP_DIR/afl-out
     mkdir -p $TEMP_DIR/logs
 
-    export SRC_INTERFACE_DIR=$CURRENT_DIR/fuzzing-client-afl
-    export SRC_SWAM_DIR=$CURRENT_DIR/fuzzing-server-swam
+    export SRC_INTERFACE_DIR=$WAFL_HOME/fuzzing-client-afl
+    export SRC_SWAM_DIR=$WAFL_HOME/fuzzing-server-swam
 
     export OUT_INTERFACE_DIR=$TEMP_DIR/cpp-out
 
@@ -52,7 +56,7 @@ if ! [ -f /.dockerenv ]; then
 
     export WASM_OR_WAT_FILE=$1
 
-    export BIN_AFL="$CURRENT_DIR/aflpp/afl-fuzz"
+    export BIN_AFL="$WAFL_HOME/aflpp/afl-fuzz"
     JAVA=$(which java)
     export SWAM_CLI_CMD="$JAVA -jar $SRC_SWAM_DIR/out/cli/assembly/dest/out.jar"
     export SWAM_SERVER_CMD="$JAVA -jar $SRC_SWAM_DIR/out/cli_server/assembly/dest/out.jar"
@@ -69,9 +73,9 @@ else
     # export SWAM_CLI_CMD='mill cli.run'
     # export SWAM_SERVER_CMD='mill cli_server.run'
 
-    # TODO: Replace SWAM_CMD with SWAM_CLI_CMD & SWAM_SERVER_CMD
     JAVA=$(which java)
-    export SWAM_CMD="$JAVA -jar $SRC_SWAM_DIR/cli-0.6.0-RC3.jar"
+    export SWAM_CLI_CMD="$JAVA -jar $SRC_SWAM_DIR/cli-0.6.0-RC3.jar"
+    export SWAM_SERVER_CMD="$JAVA -jar $SRC_SWAM_DIR/cli_server-0.6.0-RC3.jar"
 fi
 
 if [ ! -f $WASM_OR_WAT_FILE ]; then
