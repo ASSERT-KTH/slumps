@@ -52,11 +52,29 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
+      - id: cache-docker-save
+        uses: actions/cache@v1
+        with:
+          path: /tmp/docker-save
+          key: docker-save-${{ hashFiles('./wasm-fuzzer/Dockerfile') }}
+
+      - if: steps.cache-docker-save.outputs.cache-hit == 'true'
+        run: docker load --input /tmp/docker-save/wafl.tar || true
+
       - name: Build wafl image
         run: |
           cd wasm-fuzzer
           docker --version
           docker build -t wafl -f Dockerfile .
+
+      - name: Save Docker images to cache
+        if: steps.cache-docker-save.outputs.cache-hit != 'true'
+        run: |
+          mkdir -p /tmp/docker-save && 
+          docker save \
+            wafl $(docker history -q wafl | grep -v "<missing>") \
+            --output /tmp/docker-save/wafl.tar && 
+          ls -l /tmp/docker-save
 
       - name: Point to sample-testing-targets in envs
         run: |
@@ -68,8 +86,8 @@ jobs:
 
       - name: Test multi-processing.sh
         run: |
-           wasm-fuzzer/multi-processing.sh 3 branches2.wasm a 11
-           sleep 3m
+          wasm-fuzzer/multi-processing.sh 3 branches2.wasm a 11
+          sleep 3m
 
       - name: Push images
         run: |
