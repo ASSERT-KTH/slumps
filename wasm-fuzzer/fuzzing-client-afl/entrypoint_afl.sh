@@ -34,8 +34,8 @@ if [[ $ENV_PREPARED != "True" ]]; then
 fi
 
 log_info "Inferring signature for wasm"
-log_info "Running: $SWAM_CLI_CMD infer $WAT_ARG $WASM_OR_WAT_FILE $TARGET_FUNCTION"
-export WASM_ARG_TYPES_CSV=$($SWAM_CLI_CMD infer $WAT_ARG $WASM_OR_WAT_FILE $TARGET_FUNCTION) # Read from signature retriever
+log_info "Running: $SWAM_CLI_CMD infer $WAT_ARG $WASM_OR_WAT_FILE --main $TARGET_FUNCTION"
+export WASM_ARG_TYPES_CSV=$($SWAM_CLI_CMD infer $WAT_ARG $WASM_OR_WAT_FILE --main $TARGET_FUNCTION) # Read from signature retriever
 pkill -f out.jar
 
 cd $SRC_INTERFACE_DIR

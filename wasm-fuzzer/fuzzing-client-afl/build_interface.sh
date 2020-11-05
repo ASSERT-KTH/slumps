@@ -16,3 +16,5 @@ g++ -o $CPP_OUT_DIR/getFileSize.out $CURRENT_DIR/getFileSize.cpp $CURRENT_DIR/ut
 g++ -o $CPP_OUT_DIR/wait_for_server.out $CURRENT_DIR/wait_for_server.cpp $CURRENT_DIR/utils.cpp $CURRENT_DIR/socket_client.cpp
 g++ -o $CPP_OUT_DIR/run_client.out $CURRENT_DIR/run_client.cpp $CURRENT_DIR/socket_client.cpp $CURRENT_DIR/utils.cpp
 g++ -o $CPP_OUT_DIR/interface.out $CURRENT_DIR/interface.cpp $CURRENT_DIR/socket_client.cpp $CURRENT_DIR/utils.cpp
+
+log_info "Finished building the wafl interface..."
