@@ -16,7 +16,7 @@ set +a
 # Make sure we're starting a fresh test here
 rm -R $CURRENT_DIR/wafl-temp
 
-docker run -d --rm --env-file=${CURRENT_DIR}/.env} \
+docker run -d --rm --env-file=${CURRENT_DIR}/.env \
     -e STAGING=True \
     --name=staging_wafl \
     -v maven_data:/root/.cache/coursier/v1/https/repo1.maven.org/maven2 \
