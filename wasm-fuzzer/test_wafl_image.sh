@@ -31,7 +31,7 @@ sleep 30s
 CONTAINER_STATUS=$(docker container inspect -f '{{.State.Status}}' staging_wafl)
 log_info "CONTAINER_STATUS: $CONTAINER_STATUS"
 
-if [ $CONTAINER_STATUS != "running" ]; then
+if [[ $CONTAINER_STATUS != "running" ]]; then
     log_error "staging_wafl container is not running anymore. It must have crashed."
     exit 1
 else
