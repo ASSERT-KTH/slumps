@@ -28,6 +28,8 @@ docker run -d --rm --env-file=${CURRENT_DIR}/.env \
 
 sleep 30s
 
+docker logs staging_wafl
+
 CONTAINER_STATUS=$(docker container inspect -f '{{.State.Status}}' staging_wafl)
 log_info "CONTAINER_STATUS: $CONTAINER_STATUS"
 
