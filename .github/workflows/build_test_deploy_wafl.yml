@@ -64,11 +64,11 @@ jobs:
           sed --in-place "s|LOCAL_WASM_DIR=.*|LOCAL_WASM_DIR=${PWD}/sample-testing-targets|g" ${PWD}/.env
 
       - name: Test wafl image
-        run: ./test_wafl_image.sh branches2.wasm a 11
+        run: wasm-fuzzer/test_wafl_image.sh branches2.wasm a 11
 
       - name: Test multi-processing.sh
         run: |
-           ./multi-processing.sh 3 branches2.wasm a 11
+           wasm-fuzzer/multi-processing.sh 3 branches2.wasm a 11
            sleep 3m
 
       - name: Push images
