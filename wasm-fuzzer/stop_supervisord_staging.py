@@ -15,7 +15,7 @@ def write_stdout(s):
     sys.stdout.flush()
 
 def write_stderr(s):
-    sys.stderr.write("\n>>> Event listener here (stderr) >>> " + s)
+    sys.stderr.write("\n>>> Event listener here (stderr) >>> " + s + "\n")
     sys.stderr.flush()
 
 def main():
