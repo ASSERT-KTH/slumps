@@ -6,7 +6,14 @@
 
 CURRENT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
 PARENT_DIR="$(dirname "$CURRENT_DIR")"
-source $PARENT_DIR/logging_lib.sh
+
+# So that this script can be run by itself as 
+# well (same commands as wafl.sh)
+if [[ $ENV_PREPARED != "True" ]]; then
+    source $PARENT_DIR/prepare_env.sh $@
+fi
+
+source $WAFL_HOME/logging_lib.sh
 
 check_output_dir() {
     # AFL Docs on re-starting:
@@ -26,12 +33,6 @@ check_output_dir() {
         log_info "$DIR_NAME does not exist or is empty - starting a fresh run!"
     fi
 }
-
-# So that this script can be run by itself as 
-# well (same commands as wafl.sh)
-if [[ $ENV_PREPARED != "True" ]]; then
-    source $PARENT_DIR/prepare_env.sh $@
-fi
 
 log_info "Inferring signature for wasm"
 log_info "Running: $SWAM_CLI_CMD infer $WAT_ARG $WASM_OR_WAT_FILE --main $TARGET_FUNCTION"
