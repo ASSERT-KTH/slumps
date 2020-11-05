@@ -2,15 +2,22 @@
 /* src/content.css */
 .wakoko-extension {
 	padding: 2px;
+	margin-top: 30px;
 	
 	position: fixed;
-	width: 90%;
+	width: 100%;
 	height: 100%;
 	overflow-y: auto;
 	top: 0px;
 	right: 5px;
 	z-index: 2147483647;
 
+	background: transparent !important;
+
+}
+
+body{
+	background: transparent;
 }
 
 .wakoko-extension h1 {

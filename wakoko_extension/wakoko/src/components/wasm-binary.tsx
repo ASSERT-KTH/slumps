@@ -5,6 +5,7 @@ import GraphData from "./graph.data";
 import Graph from "./graph.view";
 import CovPlot from "./plot";
 import { Progress, Card } from 'antd';
+import { DownloadOutlined, DownSquareFilled, BoxPlotOutlined } from '@ant-design/icons';
 
 export interface WasmBinaryProps {
 	module: WASMListener;
@@ -67,6 +68,19 @@ class WasmBinary extends React.Component<WasmBinaryProps, WasmBinaryState> {
 	  atag.remove();
 	}
 
+	downloadCSV(){
+		
+		if(this.state.history){
+			var atag = document.createElement("a");
+			// @ts-ignore
+			var file = new Blob([this.state.history.reduce((p, c) => `${p},${c}`)],
+					{ type: "text/plain;charset=utf-8" });
+			atag.href = URL.createObjectURL(file);
+			atag.download = "cov.csv";
+			atag.click();
+		}
+
+	}
 
 	downloadInstrumented(){
 		  
@@ -83,13 +97,16 @@ class WasmBinary extends React.Component<WasmBinaryProps, WasmBinaryState> {
 
 		const lastVisited = this.state.history.slice(-1)[0] 
 		const percent = Number((100*lastVisited/this.props.module.totalBlocks).toFixed(2));
-	  return (<Card cover={<CovPlot values={this.state.history.map(t => 1.0*t/this.props.module.totalBlocks)} opened={true}/>}><div style={{padding: '5px'}}>
+	  return (<Card 
+	  cover={<CovPlot values={this.state.history.map(t => 1.0*t/this.props.module.totalBlocks)} opened={true}/>}
+	  actions={[
+		<BoxPlotOutlined key="setting" title="Download time data" onClick={() => this.downloadCSV()} />,
+		<DownloadOutlined key="edit" title="Download original binary" onClick={() => this.download()}/>,
+		<DownSquareFilled key="ellipsis" title="Download instrumented binary" onClick={() => this.downloadInstrumented()}/>,
+	  ]}
+	  ><div style={{padding: '5px'}}>
 
 					<Progress showInfo percent={percent} />
-
-					<h4 style={{cursor: 'pointer'}} onClick={() => this.download()}>Download original binary</h4>
-
-	  				<h4 style={{cursor: 'pointer'}} onClick={() => this.downloadInstrumented()}>Download instrumented binary</h4>
 
 
 					
