@@ -28,8 +28,4 @@ log_debug_file()   { (( _log_level >= ${_log_levels[DEBUG]} ))   && [[ -f $1 ]] 
 
 CURRENT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
 
-set -a
-source $CURRENT_DIR/.env
-set +a
-
 set_log_level $LOG_LEVEL
