@@ -5,6 +5,8 @@ import Frame, { FrameContextConsumer }from 'react-frame-component';
 import {RetrieverMockService} from '../services/retriever.mock.service'
 import WASMListener from "models/wasm.listener";
 import 'antd/dist/antd.css';
+import TreeMap from "./tree.map";
+
 
 
 export interface MainProps {
@@ -36,13 +38,35 @@ export default class Main extends React.Component<MainProps, MainState> {
 
 	}
 
+	render(){
+		
+		return <TreeMap
+		children={[
+			{children: [],
+			relativeLocation: {
+				x: 0,
+				y: 0
+			},
+		width: 100,
+	height: 80},
+	{
+		children: [],
+		relativeLocation: {
+			x: 0,
+			y: 80
+		},
+		width: 150,
+		height: 150
+	}
+		]}
+	/>
+	}
 
-
-    render() {
+    render1() {
 		
 		return (<React.Fragment>
-				<a onClick={() => this.setState({opened: !this.state.opened})} style={{position:'fixed', top: 0, right: this.state.opened? 290 : 10, zIndex: 9999999}}><strong>{this.state.opened? '>': '< wakoko'}</strong></a>
-				{this.state.opened && <Frame head={[
+				<a onClick={() => this.setState({opened: !this.state.opened})} style={{position:'fixed', top: 0, right: this.state.opened? 290 : 10, zIndex: 9999999}}><strong>{this.state.opened? '> wakoko': '< wakoko'}</strong></a>
+				{this.state.opened && <Frame style={{background:'transparent'}} head={[
 				<link type="text/css" rel="stylesheet" href={
 				/*@ts-ignore*/
 				window.cssStyleAddress} ></link>,
@@ -52,7 +76,7 @@ export default class Main extends React.Component<MainProps, MainState> {
 					({document, window}) => {
 						// Render Children
 						return (this.state.binaries && this.state.binaries.length > 0  &&  <div className={'wakoko-extension'}>
-							<h1>WAKOKO</h1>
+							
 						{ 
 							this.state.binaries.map((t: any, i: number) => <WasmBinary freq={2000} index={i} module={t} page={window.location.href}/>)
 						}</div>)
