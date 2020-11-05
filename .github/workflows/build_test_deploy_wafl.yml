@@ -31,8 +31,7 @@ jobs:
 
       - name: Check file structure
         run: |
-          echo "pwd: ${PWD}"
-          ls -l
+          cd wasm-fuzzer
           tree ${PWD}
 
       - name: Build SWAM
@@ -49,8 +48,7 @@ jobs:
 
       - name: Check file structure
         run: |
-          echo "pwd: ${PWD}"
-          ls -l
+          cd wasm-fuzzer
           tree ${PWD}
 
       - name: Test wafl
