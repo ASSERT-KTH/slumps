@@ -8,6 +8,7 @@ import 'antd/dist/antd.css';
 import TreeMap from "./tree.map";
 
 
+const mock = new RetrieverMockService()
 
 export interface MainProps {
 	binaries: WASMListener[];
@@ -23,7 +24,7 @@ export default class Main extends React.Component<MainProps, MainState> {
 
 		this.state = {
 			opened: true,
-			binaries: props.binaries
+			binaries: ((window as any).DEBUG)? mock.createMockListeners() : props.binaries
 		}
 
 	}
@@ -38,12 +39,12 @@ export default class Main extends React.Component<MainProps, MainState> {
 
 	}
 
-	render(){
+	render2(){
 		
 		return <TreeMap blockCount={12345} />
 	}
 
-    render1() {
+    render() {
 		
 		return (<React.Fragment>
 				<a onClick={() => this.setState({opened: !this.state.opened})} style={{position:'fixed', top: 0, right: this.state.opened? 290 : 10, zIndex: 9999999}}><strong>{this.state.opened? '> wakoko': '< wakoko'}</strong></a>
