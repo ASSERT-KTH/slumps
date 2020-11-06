@@ -74,8 +74,8 @@ else
     # export SWAM_SERVER_CMD='mill cli_server.run'
 
     JAVA=$(which java)
-    export SWAM_CLI_CMD="$JAVA -jar $SRC_SWAM_DIR/cli-0.6.0-RC3.jar"
-    export SWAM_SERVER_CMD="$JAVA -jar $SRC_SWAM_DIR/cli_server-0.6.0-RC3.jar"
+    export SWAM_CLI_CMD="$JAVA -jar $SRC_SWAM_DIR/swam_cli.jar"
+    export SWAM_SERVER_CMD="$JAVA -jar $SRC_SWAM_DIR/swam_server.jar"
 fi
 
 if [ ! -f $WASM_OR_WAT_FILE ]; then
