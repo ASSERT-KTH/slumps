@@ -70,7 +70,17 @@ export abstract class BaseWASMListener{
 export default class WASMListener extends BaseWASMListener{
 
 	setVisitedMap(save: any): void {
-		throw new Error("Method not implemented.");
+		for(let i = this.offset; i < this.offset + this.totalBlocks - 1; i++){
+			const name = `cg${i}`
+			//console.log(name)
+			if(name in this.module.exports)
+			{
+				const value = this.module.exports[name].value
+				if(value)
+					this.blockMap[i - this.offset] = value
+			}
+		}
+
 	}
 
 	
