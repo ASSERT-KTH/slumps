@@ -26,7 +26,7 @@ export default class CovPlot extends React.Component<{
 			context.fillStyle = '#000000'
 			context.fillRect(0, 0, context.canvas.width, context.canvas.height)
 			context.strokeStyle = "#00FF00";
-			context.lineWidth = 6;
+			context.lineWidth = 1;
 
 			context.beginPath();
 			const xScale = context.canvas.width/(2*this.props.values.length);
@@ -58,7 +58,7 @@ export default class CovPlot extends React.Component<{
 
 		return (
 			this.props.opened && (
-				<canvas style={{height: this.state.size}} ref={(r) =>this.canvasRef = r}/>)
+				<canvas height={this.state.size} ref={(r) =>this.canvasRef = r}/>)
 		)
 	}
 }

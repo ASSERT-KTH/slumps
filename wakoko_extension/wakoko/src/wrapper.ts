@@ -56,4 +56,8 @@ window.setBinaries = function(w){
 	console.warn("NO DASHBOARD CALLBACK")
 }
 // @ts-ignore
+window.IS_EXTENSION = true; 
+// @ts-ignore
 window.ENABLE_DASHBOARD = true; 
+// @ts-ignore
+window.DEBUG = false; 

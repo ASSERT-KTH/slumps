@@ -16,7 +16,7 @@ export default class Squarifyier{
 		this.widthValue = width;
 		this.heightValue = height;
 
-		if(width > height)
+		if(width >= height)
 			this.w = height;
 		else
 			this.w = width
@@ -25,7 +25,6 @@ export default class Squarifyier{
 
 	worst(row: {size: number}[], w: number){
 
-		console.log(row)
 		const min = Math.min.apply(Math, row.map(t => t.size))
 		const max = Math.max.apply(Math, row.map(t => t.size))
 		const s = row.map(t => t.size).reduce((p, t) => p + t)
@@ -33,7 +32,7 @@ export default class Squarifyier{
 		const ww = w*w;
 		const ss = s*s;
 
-		return Math.max(ww*max/ss, ss/(ww*min));
+		return Math.max(Math.pow(w, 2) * max / Math.pow(s, 2), Math.pow(s, 2) / (Math.pow(w, 2) * min));
 	}
 
 	squarify(children: { size: number }[], row: {size: number}[], w: number){
@@ -55,7 +54,7 @@ export default class Squarifyier{
 
 		const worst1 = this.worst(row, w)
 		const worst2 = this.worst(newRow, w)
-		if(worst1 <= worst2)
+		if(worst1 >= worst2)
 			this.squarify(children.slice(1), newRow, w);
 		else{
 			this.layoutRow(row);
@@ -115,7 +114,7 @@ export default class Squarifyier{
 
 
 
-		if(this.widthValue > this.heightValue)
+		if(this.widthValue >= this.heightValue)
 			this.w = this.heightValue 
 		else
 			this.w = this.widthValue

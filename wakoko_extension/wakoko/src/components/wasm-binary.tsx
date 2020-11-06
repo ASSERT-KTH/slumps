@@ -1,5 +1,5 @@
 
-import WASMListener from "models/wasm.listener";
+import WASMListener, {BaseWASMListener} from "models/wasm.listener";
 import * as React from "react";
 import GraphData from "./graph.data";
 import Graph from "./graph.view";
@@ -8,7 +8,7 @@ import { Progress, Card } from 'antd';
 import { DownloadOutlined, DownSquareFilled, BoxPlotOutlined } from '@ant-design/icons';
 
 export interface WasmBinaryProps {
-	module: WASMListener;
+	module: BaseWASMListener;
 	page: string;
 	index: number;
 	freq: number;
@@ -43,11 +43,8 @@ class WasmBinary extends React.Component<WasmBinaryProps, WasmBinaryState> {
 	componentDidMount(){
 		this.time = setInterval(() => {
 			this.props.module.getBlockCoverage(true)
-			this.props.module.getCFGCoverage()
 			this.setState({
-				history: [...this.props.module.history],
-				nodes: this.props.module.nodes,
-				links: this.props.module.links
+				history: [...this.props.module.history]
 			})
 		}, this.props.freq)
 	}
