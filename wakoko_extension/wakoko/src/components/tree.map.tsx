@@ -62,7 +62,7 @@ export default class TreeMap extends React.Component<IProps, IState> {
 			context.fillStyle = '#FFFFFF'
 			context.fillRect(0, 0, context.canvas.width, context.canvas.height)
 			context.strokeStyle = "#0000ff66";
-			context.lineWidth = 5;
+			context.lineWidth = 1;
 			context.fillStyle = '#00ff00'
 
 			context.beginPath();
@@ -130,6 +130,9 @@ export default class TreeMap extends React.Component<IProps, IState> {
 		const canvas = this.canvasRef
 		const context = canvas.getContext('2d')
 
+		context.strokeStyle = "#000000";
+		context.beginPath();
+		context.lineWidth = 0.3;
 		for(let i = 0; i < hitMap.length; i++){
 			const b = hitMap[i];
 
@@ -142,6 +145,7 @@ export default class TreeMap extends React.Component<IProps, IState> {
 				const h = b.height - 2*padd;
 
 				context.fillStyle = '#FFFFFF'
+				context.rect(b.x, b.y, b.width, b.height);
 				context.fillRect(x, y, w, h)
 				
 				context.fillStyle = '#00ff0055'
@@ -150,6 +154,8 @@ export default class TreeMap extends React.Component<IProps, IState> {
 				}
 			}
 		}
+
+		context.stroke();
 	}
 
 	componentDidMount(){

@@ -56,7 +56,7 @@ export default class Main extends React.Component<MainProps, MainState> {
 						return (this.state.binaries && this.state.binaries.length > 0  &&  <div className={'wakoko-extension'}>
 							
 						{ 
-							this.state.binaries.map((t: any, i: number) => <WasmBinary freq={2000} index={i} module={t} page={window.location.href}/>)
+							this.state.binaries.map((t: any, i: number) => <WasmBinary key={i} freq={1500} index={i} module={t} page={window.location.href}/>)
 						}</div>)
 					}
 				} 

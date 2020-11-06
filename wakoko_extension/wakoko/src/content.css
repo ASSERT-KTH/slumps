@@ -12,7 +12,7 @@
 	right: 5px;
 	z-index: 2147483647;
 
-	background: transparent !important;
+	background: rgba(0,0,0,0.4) !important;
 
 }
 
