@@ -3,99 +3,122 @@ import Node from '../models/node';
 
 export default class Squarifyier{
 
-	width: number;
-	height: number;
-	xoffset: number;
-	yoffset: number;
-	children: Node[];
-	placed: Node[];
+	w: number;
 
-	constructor(xoffset, yoffset, width, height, children: Node[]){
+	widthValue: number;
+	heightValue: number;
+	xoffset: number = 0;
+	yoffset: number = 0;
+
+	constructor(width, height){
 		console.log("SQ")
-		this.width = width;
-		this.height = height;
-		this.xoffset = xoffset;
-		this.yoffset = yoffset;
-		this.children = children;
-		this.placed = []
+		
+		this.widthValue = width;
+		this.heightValue = height;
+
+		if(width > height)
+			this.w = height;
+		else
+			this.w = width
 	}
 
-	get ratio(){
-		return [this.width/this.height, this.height/this.width]
-	}
 
-	getSize(node: Node){
-		return node.children.length || 1;
-	}
+	worst(row: {size: number}[], w: number){
 
-	getTotalArea(){
-		let sum = 0;
-		this.children.forEach(t => sum += this.getSize(t))
+		console.log(row)
+		const min = Math.min.apply(Math, row.map(t => t.size))
+		const max = Math.max.apply(Math, row.map(t => t.size))
+		const s = row.map(t => t.size).reduce((p, t) => p + t)
 
-		return sum;
-	}
-
-	getCurrentRatio(w){
-		const max =  Math.max.apply(Math, this.children.map(t =>this.getSize(t)))
-		const min =  Math.min.apply(Math, this.children.map(t => this.getSize(t)))
-
-		const s = this.getTotalArea();
 		const ww = w*w;
 		const ss = s*s;
-		const ratio1 = ww/ss;
-		return Math.max(ratio1*max, 1/(ratio1*min))
+
+		return Math.max(ww*max/ss, ss/(ww*min));
 	}
 
-	squarify(){
+	squarify(children: { size: number }[], row: {size: number}[], w: number){
 
-		if(this.children.length == 0)
+
+		if(children.length == 1){
+			this.layoutRow([...row, children[0]])
 			return;
-
-		console.log(this.width, this.height)
-		const c = this.children[0]
-		if(this.width >= this.height) // horizontal subdivision
-		{
-			console.log("Going horizontally", this.xoffset, this.yoffset);
-			const w1 = this.getSize(c)*this.width/this.getTotalArea();
-			const ratio = this.height/w1;
-			const currentRatio = this.getCurrentRatio(this.width)
-
-			if(ratio <= currentRatio){
-				c.relativeLocation.x = this.xoffset
-				c.relativeLocation.y = this.yoffset
-				
-				c.width = w1;
-				c.height = this.height;
-				this.xoffset += w1;
-
-				this.placed.push(c)
-				this.children.shift()
-
-				this.width = this.width - w1;
-				this.squarify()
-			}
-
 		}
-		else{ // vertical subdivision
-			const w1 = this.getSize(c)*this.height/this.getTotalArea();
-			const ratio = this.width/w1;
-			const currentRatio = this.getCurrentRatio(this.height)
 
-			console.log("Going vertical", this.xoffset, this.yoffset);
-			if(ratio <= currentRatio){	
-				c.relativeLocation.y = this.yoffset
-				c.relativeLocation.x = this.xoffset
+		const head = children[0];
+
+		const newRow  = [...row, head]
+
+		if(row.length == 0){
+			this.squarify(children.slice(1), newRow, w);
+			return
+		}
+
+		const worst1 = this.worst(row, w)
+		const worst2 = this.worst(newRow, w)
+		if(worst1 <= worst2)
+			this.squarify(children.slice(1), newRow, w);
+		else{
+			this.layoutRow(row);
+			this.squarify(children, [], this.w)
+		}
+	}
+
+	layoutRow(row: { size: number }[]){
+
+		console.log(row)
+		const s = row.map(t => t.size).reduce((p, t) => p + t)
+
+
 			
-				this.yoffset += w1;
-				c.height = w1;
-				c.width = this.width;
-				this.placed.push(c)
-				this.children.shift()
+		const areaWidth = s/this.heightValue;
+		const  areaHeight = s/this.widthValue;
 
-				this.height = this.height - w1;
-				this.squarify()
+		let newX = this.xoffset;
+		let newY = this.yoffset;
+
+		if(this.widthValue >= this.heightValue)
+			for(let r of row){
+				r['x'] = newX;
+				r['y'] = newY;
+				r['width'] = areaWidth;
+				r['height'] = r.size/areaWidth;
+				newY += r.size/areaWidth;
 			}
+		else
+			for(let r of row){
+				r['x'] = newX;
+				r['y'] = newY;
+				r['width'] = r.size/areaHeight;
+				r['height'] = areaHeight;
+				newX += r.size/areaHeight; 
+			}
+
+
+		let width = this.widthValue;
+		let height = this.heightValue;
+
+		if(this.widthValue >= this.heightValue)// in the left
+		{
+			const areaRatio = s/this.heightValue;
+			width = width - areaRatio;
+
+			this.widthValue = width;
+			this.xoffset = this.xoffset + areaRatio;
 		}
+		else{
+			const areaRatio = s/this.widthValue;
+			height = height - areaRatio;
+
+			this.heightValue = height;
+			this.yoffset = this.yoffset + areaRatio;
+		}
+
+
+
+		if(this.widthValue > this.heightValue)
+			this.w = this.heightValue 
+		else
+			this.w = this.widthValue
 	}
 
 
