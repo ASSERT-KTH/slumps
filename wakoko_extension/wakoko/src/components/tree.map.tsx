@@ -61,8 +61,8 @@ export default class TreeMap extends React.Component<IProps, IState> {
 
 			context.fillStyle = '#FFFFFF'
 			context.fillRect(0, 0, context.canvas.width, context.canvas.height)
-			context.strokeStyle = "#ff0000";
-			context.lineWidth = 1;
+			context.strokeStyle = "#0000ff66";
+			context.lineWidth = 5;
 			context.fillStyle = '#00ff00'
 
 			context.beginPath();
@@ -107,8 +107,14 @@ export default class TreeMap extends React.Component<IProps, IState> {
 
 				for(let b of blocks)
 				{
+					const padd = 0.01*b.width;
+					const x = b.x + padd;
+					const y = b.y + padd;
+					const w = b.width - 2*padd;
+					const h = b.height - 2*padd;
+
 					hitMap[b.id] = { x: b['x'], y: b['y'], width: b['width'], height: b['height'], hit: 0 };
-					context.rect(b["x"], b["y"],b["width"], b["height"]);
+					context.rect(x, y, w, h);
 					
 				}
 			}
@@ -124,14 +130,24 @@ export default class TreeMap extends React.Component<IProps, IState> {
 		const canvas = this.canvasRef
 		const context = canvas.getContext('2d')
 
-		context.fillStyle = '#00FF00'
-
-		
 		for(let i = 0; i < hitMap.length; i++){
 			const b = hitMap[i];
 
-			if(b && b.hit){
-				context.fillRect(b.x, b.y, b.width, b.height)
+			if(b){
+
+				const padd = 0.07*b.width;
+				const x = b.x + padd;
+				const y = b.y + padd;
+				const w = b.width - 2*padd;
+				const h = b.height - 2*padd;
+
+				context.fillStyle = '#FFFFFF'
+				context.fillRect(x, y, w, h)
+				
+				context.fillStyle = '#00ff0055'
+				if(b.hit){
+					context.fillRect(x, y, w, h)
+				}
 			}
 		}
 	}
