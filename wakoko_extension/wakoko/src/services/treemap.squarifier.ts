@@ -10,11 +10,12 @@ export default class Squarifyier{
 	xoffset: number = 0;
 	yoffset: number = 0;
 
-	constructor(width, height){
-		console.log("SQ")
+	constructor(xoffset, yoffset, width, height){
 		
 		this.widthValue = width;
 		this.heightValue = height;
+		this.xoffset = xoffset;
+		this.yoffset = yoffset;
 
 		if(width >= height)
 			this.w = height;
@@ -64,7 +65,6 @@ export default class Squarifyier{
 
 	layoutRow(row: { size: number }[]){
 
-		console.log(row)
 		const s = row.map(t => t.size).reduce((p, t) => p + t)
 
 

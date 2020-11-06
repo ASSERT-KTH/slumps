@@ -39,11 +39,7 @@ export default class Main extends React.Component<MainProps, MainState> {
 
 	}
 
-	render2(){
-		
-		return <TreeMap blockCount={12345} />
-	}
-
+	
     render() {
 		
 		return (<React.Fragment>
