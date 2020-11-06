@@ -9,8 +9,7 @@ export class Node {
 	}
 }
 
-export default class WASMListener{
-
+export abstract class BaseWASMListener{
 	hash: string;
 	meta: any;
 	name: string;
@@ -43,7 +42,6 @@ export default class WASMListener{
 		this.links = []
 
 		this.getBlockCoverage = this.getBlockCoverage.bind(this);
-		this.getCFGCoverage = this.getCFGCoverage.bind(this);
 		this.setModuleRef = this.setModuleRef.bind(this);
 
 	}
@@ -56,6 +54,12 @@ export default class WASMListener{
 		return this.history.slice(-1)[0] 
 	}
 
+	abstract getBlockCoverage(save): number;
+}
+
+export default class WASMListener extends BaseWASMListener{
+
+	
 	getBlockCoverage(save){
 		let sum = 0
 		for(let i = this.offset; i < this.offset + this.totalBlocks - 1; i++){
@@ -76,29 +80,6 @@ export default class WASMListener{
 	}
 
 
-	getCFGCoverage(){
-		for(let i = this.offset; i < this.offset + this.totalBlocks - 1; i++){
-			const name = `cg${i}`
-			if(!(this.nodes[i]))
-				this.nodes[i] = true
-			//console.log(name)
-			if(name in this.module.exports)
-			{
-				const value = this.module.exports[name].value
-				
-				if(value){
-					
-					if(!(this.nodes[parseInt(value)]))
-						this.nodes[parseInt(value)] = true
-
-					this.links.push({
-						target: i,
-						source: parseInt(value)
-					})
-
-				}
-			}
-		}
-	}
+	
 
 }
