@@ -6,6 +6,7 @@ import Graph from "./graph.view";
 import CovPlot from "./plot";
 import { Progress, Card } from 'antd';
 import { DownloadOutlined, DownSquareFilled, BoxPlotOutlined } from '@ant-design/icons';
+import TreeMap from "./tree.map";
 
 export interface WasmBinaryProps {
 	module: BaseWASMListener;
@@ -22,7 +23,8 @@ export interface WasmBinaryState {
 	links: {
 		target: number,
 		source: number
-	}[] 
+	}[],
+	blockInfo: Uint8Array
 }
 
 class WasmBinary extends React.Component<WasmBinaryProps, WasmBinaryState> {
@@ -33,7 +35,8 @@ class WasmBinary extends React.Component<WasmBinaryProps, WasmBinaryState> {
 	  this.state = {
 		  history: [],
 		  nodes: {},
-		  links: []
+		  links: [],
+		  blockInfo: this.props.module.blockMap
 	  }
 	  this.download = this.download.bind(this)
 	}
@@ -43,8 +46,11 @@ class WasmBinary extends React.Component<WasmBinaryProps, WasmBinaryState> {
 	componentDidMount(){
 		this.time = setInterval(() => {
 			this.props.module.getBlockCoverage(true)
+			this.props.module.setVisitedMap(true)
+
 			this.setState({
-				history: [...this.props.module.history]
+				history: [...this.props.module.history],
+				blockInfo: this.props.module.blockMap
 			})
 		}, this.props.freq)
 	}
@@ -95,7 +101,11 @@ class WasmBinary extends React.Component<WasmBinaryProps, WasmBinaryState> {
 		const lastVisited = this.state.history.slice(-1)[0] 
 		const percent = Number((100*lastVisited/this.props.module.totalBlocks).toFixed(2));
 	  return (<Card 
-	  cover={<CovPlot values={this.state.history.map(t => 1.0*t/this.props.module.totalBlocks)} opened={true}/>}
+	  cover={
+	  <React.Fragment>
+		  <CovPlot values={this.state.history.map(t => 1.0*t/this.props.module.totalBlocks)} opened={true}/>
+		  <TreeMap functions={this.props.module.meta.map} hitMap={this.props.module.blockMap} blockCount={this.props.module.totalBlocks}/>
+	</React.Fragment>}
 	  actions={[
 		<BoxPlotOutlined key="setting" title="Download time data" onClick={() => this.downloadCSV()} />,
 		<DownloadOutlined key="edit" title="Download original binary" onClick={() => this.download()}/>,

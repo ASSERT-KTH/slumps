@@ -26,6 +26,8 @@ export abstract class BaseWASMListener{
 		target: number,
 		source: number
 	}[] 
+	
+	blockMap: Uint8Array;
 
 	constructor(hash, name, meta, totalBlocks, offset, original, instrumented){
 		this.hash = hash;
@@ -41,8 +43,15 @@ export abstract class BaseWASMListener{
 		this.nodes = []
 		this.links = []
 
+		if(this.meta["map"])
+			this.meta["map"] = this.meta['map'].map(t => {
+				return ({desc: t.desc, size: t["children"].length, children: t["children"].sort((a, b) => -a.size + b.size)})
+			})
+
 		this.getBlockCoverage = this.getBlockCoverage.bind(this);
 		this.setModuleRef = this.setModuleRef.bind(this);
+
+		this.blockMap = new Uint8Array(totalBlocks)
 
 	}
 
@@ -55,9 +64,14 @@ export abstract class BaseWASMListener{
 	}
 
 	abstract getBlockCoverage(save): number;
+	abstract setVisitedMap(save): void;
 }
 
 export default class WASMListener extends BaseWASMListener{
+
+	setVisitedMap(save: any): void {
+		throw new Error("Method not implemented.");
+	}
 
 	
 	getBlockCoverage(save){
