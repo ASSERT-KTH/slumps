@@ -7,3 +7,6 @@
 ./test_wafl_local.sh
 ./test_socket.sh
 ./multi-processing.sh
+
+swam_cli.jar
+swam_server.jar

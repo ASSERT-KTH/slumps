@@ -3,7 +3,7 @@
 CURRENT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
 if ! [ -f /.dockerenv ]; then
     # Not inside a Docker container
-    export WAFL_HOME=$CURRENT_DIR  
+    export WAFL_HOME=$CURRENT_DIR
 fi
 source $WAFL_HOME/logging_lib.sh
 
@@ -57,9 +57,13 @@ if ! [ -f /.dockerenv ]; then
     export WASM_OR_WAT_FILE=$1
 
     export BIN_AFL="$WAFL_HOME/aflpp/afl-fuzz"
+    
     JAVA=$(which java)
-    export SWAM_CLI_CMD="$JAVA -jar $SRC_SWAM_DIR/out/cli/assembly/dest/out.jar"
-    export SWAM_SERVER_CMD="$JAVA -jar $SRC_SWAM_DIR/out/cli_server/assembly/dest/out.jar"
+    export SWAM_CLI_CMD="$JAVA -jar $SRC_SWAM_DIR/swam_cli.jar"
+    export SWAM_SERVER_CMD="$JAVA -jar $SRC_SWAM_DIR/swam_server.jar"
+
+    # export SWAM_CLI_CMD="$JAVA -jar $SRC_SWAM_DIR/out/cli/assembly/dest/out.jar"
+    # export SWAM_SERVER_CMD="$JAVA -jar $SRC_SWAM_DIR/out/cli_server/assembly/dest/out.jar"
 
     mkdir -p $INPUT_AFL_DIR
     mkdir -p $OUTPUT_AFL_DIR
@@ -70,12 +74,12 @@ else
     # Get filename from $1
     export WASM_OR_WAT_FILE=$WASM_DIR/$(basename $1)
 
-    # export SWAM_CLI_CMD='mill cli.run'
-    # export SWAM_SERVER_CMD='mill cli_server.run'
-
     JAVA=$(which java)
     export SWAM_CLI_CMD="$JAVA -jar $SRC_SWAM_DIR/swam_cli.jar"
     export SWAM_SERVER_CMD="$JAVA -jar $SRC_SWAM_DIR/swam_server.jar"
+
+    # export SWAM_CLI_CMD='mill cli.run'
+    # export SWAM_SERVER_CMD='mill cli_server.run'
 fi
 
 if [ ! -f $WASM_OR_WAT_FILE ]; then
