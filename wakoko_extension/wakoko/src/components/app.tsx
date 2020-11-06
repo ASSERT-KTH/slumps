@@ -40,26 +40,7 @@ export default class Main extends React.Component<MainProps, MainState> {
 
 	render(){
 		
-		return <TreeMap
-		children={[
-			{children: [],
-			relativeLocation: {
-				x: 0,
-				y: 0
-			},
-		width: 100,
-	height: 80},
-	{
-		children: [],
-		relativeLocation: {
-			x: 0,
-			y: 80
-		},
-		width: 150,
-		height: 150
-	}
-		]}
-	/>
+		return <TreeMap blockCount={12345} />
 	}
 
     render1() {

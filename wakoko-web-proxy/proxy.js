@@ -129,8 +129,12 @@ const options = {
 						// SAVE WASM binary locally, generate random id and save it in the mongodb
 						fs.writeFileSync(pWasmFile, requestDetail.requestData)
 						try{
-							metadata  =  exec(`${process.env.SWAM_BIN} coverage  ${__dirname}/${pWasmFile} --export-instrumented ${__dirname}/${pWasmFile}.cb.wasm --instrumentation-type extended-global-callback`);
+							metadata  =  exec(`${process.env.SWAM_BIN} coverage  ${__dirname}/${pWasmFile} --export-instrumented ${__dirname}/${pWasmFile}.cb.wasm --instrumentation-type global-callback`, {maxBuffer: 1 << 26  /* 128 Mb */});
+
+							console.log(metadata)
 							metadata = JSON.parse(metadata)
+
+							console.log(metadata)
 
 							let db = await MongoClient.connect(mongoUrl);
 
