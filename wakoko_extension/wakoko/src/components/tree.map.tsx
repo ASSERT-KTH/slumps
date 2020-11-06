@@ -3,7 +3,7 @@ import Squarifyier from "services/treemap.squarifier";
 import Node from '../models/node';
 
 interface IProps{
-    children: Node[];
+    blockCount: number;
 }
 
 export default class TreeMap extends React.Component<IProps, any> {
@@ -13,44 +13,67 @@ export default class TreeMap extends React.Component<IProps, any> {
 	constructor(props){
 		super(props);
 		this.state = {
-			size:60
+			size:400
 		}
 
 		this.draw = this.draw.bind(this)
 
 	}
 	
-	draw(children: Node[]){
+	draw(){
 
-		function draw(n: Node, ctx){			
-			ctx.fillStyle = '#00FF0066'
-
-			console.log(n);
-			ctx.fillRect(n.relativeLocation.x, n.relativeLocation.y, n.width, n.height);
-			ctx.strokeStyle = "#FFFFFF";
-
-			ctx.beginPath();
-			ctx.rect(n.relativeLocation.x, n.relativeLocation.y, n.width, n.height);
-
-			ctx.stroke();
-
-			if(n.children.length > 0)
-				for(let ch of n.children)
-					draw(ch, ctx);
-		}
 
 		if(this.canvasRef){
+
+
+
 			const canvas = this.canvasRef
 			const context = canvas.getContext('2d')
+
+			const area = context.canvas.width*context.canvas.height;
+
+
+			let ch = [
+				{size: 6},
+				{size: 6},
+				{size: 4},
+				{size: 3},
+				{size: 2},
+				{size: 2},
+				{size: 1},
+			];
+
+			const s = ch.map(t => t.size).reduce((p, t) => p + t)
+
+			const multiplier = area/s;
+
+			const sq = new Squarifyier(context.canvas.width, context.canvas.height)
+			
+			console.log(multiplier)
+			ch = ch.map(t => (
+				{size: t.size*multiplier}
+			))
+
+			sq.squarify(ch, [], sq.w)
+			console.log(ch)
 			  
 
-			context.fillStyle = '#000000'
-			context.fillRect(0, 0, context.canvas.width, context.canvas.height)
-			context.strokeStyle = "#FF0000";
-			context.lineWidth = 4;
+			context.fillStyle = '#0000ff'
+			//context.fillRect(0, 0, context.canvas.width, context.canvas.height)
+			context.strokeStyle = "#000000";
+			context.lineWidth = 3;
 
-			for(let node of children)
-				draw(node, context)
+			context.beginPath();
+			
+			let x = 0;
+			let y = 0;
+			let step = 2;
+
+			for(let c of ch)
+			{
+				context.rect(c["x"], c["y"],c["width"], c["height"]);
+			}
+			context.stroke();
 
 			
 		}
@@ -58,21 +81,18 @@ export default class TreeMap extends React.Component<IProps, any> {
 
 	componentDidMount(){
 
-		const squarifier = new Squarifyier(0 ,0, 120, 60, this.props.children)
-		squarifier.squarify()
-		console.log(squarifier.placed)
-		this.draw(squarifier.placed)
+		this.draw()
 	}
 
 	componentDidUpdate(){
-
+		this.draw()
 	}
     render(){
 
         
 		
 
-        return (<canvas style={{height: this.state.size, width: 2*this.state.size}} ref={(r) =>this.canvasRef = r}/>)
+        return (<canvas height={400} width={600} ref={(r) =>this.canvasRef = r}/>)
 		;
     }
 }
