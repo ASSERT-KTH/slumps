@@ -34,11 +34,17 @@ jobs:
           cd wasm-fuzzer
           tree ${PWD}
 
-      - name: Build SWAM
+      # - name: Build SWAM
+      #   run: |
+      #     cd wasm-fuzzer/fuzzing-server-swam
+      #     ./millw cli.assembly
+      #     ./millw cli_server.assembly
+
+      - name: Download SWAM
         run: |
           cd wasm-fuzzer/fuzzing-server-swam
-          ./millw cli.assembly
-          ./millw cli_server.assembly
+          bash curl -o swam_cli.jar -L https://github.com/KTH/swam/releases/download/v0.6.0-RC3/swam_cli.jar
+          bash curl -o swam_server.jar -L https://github.com/KTH/swam/releases/download/v0.6.0-RC3/swam_server.jar
 
       - name: Build Interface
         run: bash ./wasm-fuzzer/fuzzing-client-afl/build_interface.sh
