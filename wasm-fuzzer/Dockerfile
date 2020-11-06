@@ -42,7 +42,8 @@ WORKDIR $SRC_SWAM_DIR
 # See: https://stackoverflow.com/questions/62834693/mill-build-tool-install-dependencies-without-compiling-source-code
 
 # DOWNLOAD latest version of SWAM cli jar file (wget into WORKDIR; wget works with cache in Dockerfile)
-RUN wget https://github.com/KTH/swam/releases/download/v0.6.0-RC3/cli-0.6.0-RC3.jar
+RUN wget https://github.com/KTH/swam/releases/download/v0.6.0-RC3/swam_cli.jar
+RUN wget https://github.com/KTH/swam/releases/download/v0.6.0-RC3/swam_server.jar
 
 ADD entrypoint_mill_server.sh /home
 RUN chmod +x /home/entrypoint_mill_server.sh
