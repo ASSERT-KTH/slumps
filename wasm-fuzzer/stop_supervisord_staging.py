@@ -48,7 +48,7 @@ def main():
         pid = int(pidfile.readline())
         write_stderr('Received unexpected exit. Killing supervisor pid: ' + str(pid))
         try:
-            os.kill(pid, signal.SIGQUIT)
+            os.kill(pid, signal.SIGTERM)
         except Exception as e:
             write_stderr('Could not kill supervisor: ' + str(e))
 
