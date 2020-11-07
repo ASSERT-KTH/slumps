@@ -6,15 +6,12 @@ FROM aflplusplus/aflplusplus
 ##### JVM ######
 ################
 
-RUN yes | apt-get install curl
 RUN apt-get update
+RUN apt-get install -y curl
 RUN DEBIAN_FRONTEND="noninteractive" apt-get -y install tzdata wget
-RUN apt-get update
-RUN yes | apt-get install software-properties-common
-RUN apt-get update
+RUN apt-get install -y software-properties-common
 RUN yes | add-apt-repository ppa:openjdk-r/ppa
-RUN apt-get update
-RUN yes | apt-get install openjdk-12-jdk-headless
+RUN apt-get install -y openjdk-12-jdk-headless
 
 #######################
 ##### Supervisor ######
