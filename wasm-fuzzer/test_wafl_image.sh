@@ -18,6 +18,7 @@ rm -R $CURRENT_DIR/wafl-temp
 
 docker run -d --env-file=${CURRENT_DIR}/.env \
     -e STAGING=True \
+    -e AFL_I_DONT_CARE_ABOUT_MISSING_CRASHES=1 \
     --name=staging_wafl \
     -v maven_data:/root/.cache/coursier/v1/https/repo1.maven.org/maven2 \
     -v compiled_sources:/home/server/src/out/ \
