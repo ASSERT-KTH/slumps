@@ -1,14 +1,27 @@
 import {Utils} from 'instrumentor/instrumentor'
 import './content.css';
-const oldModule = WebAssembly.Module;
-// @ts-ignore
-WebAssembly.Module =  null;
+
 
 // @ts-ignore
-WebAssembly.Instance =  null;
+if(!window.IS_EXTENSION)
+	// @ts-ignore
+	window.DEBUG=true;
+else
+	// @ts-ignore
+	window.DEBUG=false;
+
+
+//const oldModule = WebAssembly.Module;
+// @ts-ignore
+//WebAssembly.Module =  null;
+
+// @ts-ignore
+//WebAssembly.Instance =  null;
 
 // @ts-ignore
 window.INSTRUMENTER_HOST = "http://localhost:8080"
+// @ts-ignore
+window.old_instantiate = WebAssembly.instantiate;
 
 let old = window.WebAssembly.instantiate;
 console.log("REPLACING API..")
@@ -23,7 +36,9 @@ function wrapper(binary, info){
 
 		old(new Uint8Array(instrumentation.instrumented), info).then(result => {
 			
+
 			const { instance } = result;
+			console.log(instance);
 			instrumentation.setModuleRef(instance)
 			// @ts-ignore
 			window.setBinaries(instrumentation)
