@@ -104,7 +104,7 @@ class WasmBinary extends React.Component<WasmBinaryProps, WasmBinaryState> {
 	  cover={
 	  <React.Fragment>
 		  <CovPlot values={this.state.history.map(t => 1.0*t/this.props.module.totalBlocks)} opened={true}/>
-		  <TreeMap functions={this.props.module.meta.map} hitMap={this.props.module.blockMap} blockCount={this.props.module.totalBlocks}/>
+		  {/*<TreeMap functions={this.props.module.meta.map} hitMap={this.props.module.blockMap} blockCount={this.props.module.totalBlocks}/>*/}
 	</React.Fragment>}
 	  actions={[
 		<BoxPlotOutlined key="setting" title="Download time data" onClick={() => this.downloadCSV()} />,

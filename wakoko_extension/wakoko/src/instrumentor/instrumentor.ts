@@ -1,4 +1,5 @@
 import WASMListener from "models/wasm.listener";
+import InsiteBasedInstrumentor from "./insite.based.instrumentor";
 import ServerBasedInstrumentor from "./server.based.instrumentor";
 
 export default interface IInstrumentor {
@@ -9,6 +10,6 @@ export default interface IInstrumentor {
 
 export class Utils{
 	static getInstrumentor(): IInstrumentor{
-		return new ServerBasedInstrumentor();
+		return new InsiteBasedInstrumentor();
 	}
 }

@@ -70,8 +70,8 @@ export abstract class BaseWASMListener{
 export default class WASMListener extends BaseWASMListener{
 
 	setVisitedMap(save: any): void {
-		for(let i = this.offset; i < this.offset + this.totalBlocks - 1; i++){
-			const name = `cg${i}`
+		/*for(let i = this.offset; i < this.offset + this.totalBlocks - 1; i++){
+			const name = `c${i}`
 			//console.log(name)
 			if(name in this.module.exports)
 			{
@@ -79,15 +79,16 @@ export default class WASMListener extends BaseWASMListener{
 				if(value)
 					this.blockMap[i - this.offset] = value
 			}
-		}
+		}*/
 
 	}
 
 	
 	getBlockCoverage(save){
 		let sum = 0
+		//console.log(this.offset, this.totalBlocks, this.module.exports, this.module.exports["c51"]);
 		for(let i = this.offset; i < this.offset + this.totalBlocks - 1; i++){
-			const name = `cg${i}`
+			const name = `c${i}`
 			//console.log(name)
 			if(name in this.module.exports)
 			{
@@ -100,6 +101,7 @@ export default class WASMListener extends BaseWASMListener{
 		if(save){
 			this.history.push(sum)
 		}
+		//console.log(sum);
 		return sum;
 	}
 

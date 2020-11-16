@@ -47,7 +47,7 @@ export default class Main extends React.Component<MainProps, MainState> {
 				{this.state.opened && <Frame style={{background:'transparent'}} head={[
 				<link type="text/css" rel="stylesheet" href={
 				/*@ts-ignore*/
-				window.cssStyleAddress} ></link>,
+				`${staticAddress}/css/content.css`} ></link>,
 				<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/antd@4.8.0/dist/antd.css"></link>]}> 
 				<FrameContextConsumer>
 					{
@@ -56,7 +56,7 @@ export default class Main extends React.Component<MainProps, MainState> {
 						return (this.state.binaries && this.state.binaries.length > 0  &&  <div className={'wakoko-extension'}>
 							
 						{ 
-							this.state.binaries.map((t: any, i: number) => <WasmBinary key={i} freq={1500} index={i} module={t} page={window.location.href}/>)
+							this.state.binaries.map((t: any, i: number) => <WasmBinary key={i} freq={2000} index={i} module={t} page={window.location.href}/>)
 						}</div>)
 					}
 				} 
