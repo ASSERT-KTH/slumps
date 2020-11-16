@@ -33,7 +33,5 @@ log_info "Running: $SWAM_CLI_CMD infer $WAT_ARG $WASM_OR_WAT_FILE $TARGET_FUNCTI
 export WASM_ARG_TYPES_CSV=$($SWAM_CLI_CMD infer $WAT_ARG $WASM_OR_WAT_FILE $TARGET_FUNCTION) # Read from signature retriever
 pkill -f out.jar
 
-CPP_OUT_DIR=$CURRENT_DIR/wafl-temp/cpp-out
-
-$CPP_OUT_DIR/prepare_wasm_input.out "$CPP_OUT_DIR/prepared_input.dat"
-$CPP_OUT_DIR/run_client.out "$CPP_OUT_DIR/prepared_input.dat"
+$OUT_INTERFACE_DIR/prepare_wasm_input.out "$OUT_INTERFACE_DIR/prepared_input.dat"
+$OUT_INTERFACE_DIR/run_client.out "$OUT_INTERFACE_DIR/prepared_input.dat"
