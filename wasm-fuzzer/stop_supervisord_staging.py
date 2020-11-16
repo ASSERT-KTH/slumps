@@ -46,7 +46,6 @@ def main():
 
         supervisord_pid_path = os.environ['WAFL_HOME'] + "/supervisord.pid"
         pidfile = open(supervisord_pid_path,'r')
-        # pidfile = open('/var/run/supervisord.pid','r')
 
         pid = int(pidfile.readline())
         write_stderr('Received unexpected exit. Killing supervisor pid: ' + str(pid))

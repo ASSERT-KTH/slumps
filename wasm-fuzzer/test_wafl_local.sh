@@ -26,7 +26,7 @@ log_info "SUPERVISORD_STATUS: $SUPERVISORD_STATUS"
 #   root      5504  0.0  0.2  65572 20668 ?        Ss   23:21   0:00 /usr/bin/python /usr/bin/supervisord -n -c /etc/supervisor/supervisord.conf
 #   runner   26235  0.0  0.0  14848   988 ?        S    23:30   0:00 grep supervisor
 
-SUPERVISORD_PID=$(pgrep -x "/usr/bin/supervisord")
+SUPERVISORD_PID=$(pgrep -x supervisord)
 log_info "SUPERVISORD_PID: $SUPERVISORD_PID"
 
 if $SUPERVISORD_PID > /dev/null
