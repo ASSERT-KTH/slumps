@@ -29,11 +29,6 @@ jobs:
           java-package: jdk # (jre, jdk, or jdk+fx) - defaults to jdk
           #architecture: x64 # (x64 or x86) - defaults to x64
 
-      - name: Check file structure
-        run: |
-          cd wasm-fuzzer
-          tree ${PWD}
-
       # - name: Build SWAM
       #   run: |
       #     cd wasm-fuzzer/fuzzing-server-swam
@@ -42,23 +37,27 @@ jobs:
 
       - name: Download SWAM
         run: |
+          echo ${PWD}
           cd wasm-fuzzer/fuzzing-server-swam
           curl -o swam_cli.jar -L https://github.com/KTH/swam/releases/download/v0.6.0-RC3/swam_cli.jar
           curl -o swam_server.jar -L https://github.com/KTH/swam/releases/download/v0.6.0-RC3/swam_server.jar
 
       - name: Build Interface
-        run: bash ./wasm-fuzzer/fuzzing-client-afl/build_interface.sh
+        run: |
+          echo ${PWD}
+          bash ./wasm-fuzzer/fuzzing-client-afl/build_interface.sh
+          tree ${PWD}/wasm-fuzzer/wafl-temp
 
       - name: Build AFL
-        run: bash ./wasm-fuzzer/fuzzing-client-afl/build_afl.sh
-
-      - name: Check file structure
         run: |
-          cd wasm-fuzzer
-          tree ${PWD}
+          echo ${PWD}
+          bash ./wasm-fuzzer/fuzzing-client-afl/build_afl.sh
+          tree ${PWD}/wasm-fuzzer/wafl-temp
 
       - name: Test wafl
         run: |
+          echo ${PWD}
+          tree ${PWD}/wafl-temp
           cd wasm-fuzzer
           bash test_wafl_local.sh ${PWD}/sample-testing-targets/branches2.wasm a 11
 
