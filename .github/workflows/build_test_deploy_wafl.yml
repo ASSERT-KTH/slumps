@@ -3,90 +3,102 @@ on:
   push:
     branches:
       - master
+      - fixing-wafl-ci
     paths:
       - "wasm-fuzzer/**"
       - ".github/**"
 
 jobs:
-  build:
+  local:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v2 # checkout latest version of the repo
-        
+        uses: actions/checkout@v2
+        with:
+          submodules: "true"
 
-      - name: Install dependencies
+      - name: Install AFL dependencies & supervisord
         run: |
           sudo apt-get update
-          echo "Installing AFL dependencies"
-          sudo apt-get install -y supervisor build-essential automake libtool-bin python3-dev git automake flex bison libglib2.0-dev libpixman-1-dev clang python3-setuptools llvm procps 
-         
+          sudo apt-get install -y supervisor build-essential automake libtool-bin python3-dev git automake flex bison libglib2.0-dev libpixman-1-dev clang python3-setuptools llvm procps tree
+
       - name: Setup Java
         uses: actions/setup-java@v1
         with:
-          java-version: '11' # The JDK version to make available on the path.
+          java-version: "11" # The JDK version to make available on the path.
           java-package: jdk # (jre, jdk, or jdk+fx) - defaults to jdk
           #architecture: x64 # (x64 or x86) - defaults to x64
 
-      - name: Checking java
-        run: |
-         java -version
+      # - name: Build SWAM
+      #   run: |
+      #     cd wasm-fuzzer/fuzzing-server-swam
+      #     ./millw cli.assembly
+      #     ./millw cli_server.assembly
 
-      
-      - name: Build without Docker
+      - name: Download SWAM
         run: |
-          
-          echo "Building project"
-          cd wasm-fuzzer
-          bash ./build.sh
-  test-local:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2 # checkout latest version of the repo
+          cd wasm-fuzzer/fuzzing-server-swam
+          curl -o swam_cli.jar -L https://github.com/KTH/swam/releases/download/v0.6.0-RC3/swam_cli.jar
+          curl -o swam_server.jar -L https://github.com/KTH/swam/releases/download/v0.6.0-RC3/swam_server.jar
 
-      - name: Install dependencies
+      - name: Build Interface
         run: |
-          sudo apt-get update
-          echo "Installing AFL dependencies"
-          sudo apt-get install -y supervisor build-essential automake libtool-bin python3-dev git automake flex bison libglib2.0-dev libpixman-1-dev clang python3-setuptools llvm procps
-      - name: Setup Java
-        uses: actions/setup-java@v1
-        with:
-          java-version: '11' # The JDK version to make available on the path.
-          java-package: jdk # (jre, jdk, or jdk+fx) - defaults to jdk
-          #architecture: x64 # (x64 or x86) - defaults to x64
+          bash ./wasm-fuzzer/fuzzing-client-afl/build_interface.sh
+          tree ${PWD}/wasm-fuzzer/wafl-temp
 
-      - name: Build without Docker
+      - name: Build AFL
         run: |
-          echo "Building project"
-          cd wasm-fuzzer
-          bash ./build.sh
-      
+          bash ./wasm-fuzzer/fuzzing-client-afl/build_afl.sh
+          tree ${PWD}/wasm-fuzzer/wafl-temp
+
       - name: Test wafl
         run: |
+          tree ${PWD}/wasm-fuzzer/wafl-temp
           cd wasm-fuzzer
           bash test_wafl_local.sh ${PWD}/sample-testing-targets/branches2.wasm a 11
-   
-  build-docker:
-    needs: build
+
+  docker:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v2 # checkout latest version of the repo
-        
-      - name: Install dependencies
-        run: |
-          sudo apt-get update
-          echo "Installing AFL dependencies"
-          sudo apt-get install -y supervisor build-essential automake libtool-bin python3-dev git automake flex bison libglib2.0-dev libpixman-1-dev clang python3-setuptools llvm procps
-         
+        uses: actions/checkout@v2
+
+      - id: cache-docker-save
+        uses: actions/cache@v1
+        with:
+          path: /tmp/docker-save
+          key: docker-save-${{ hashFiles('./wasm-fuzzer/Dockerfile') }}
+
+      - if: steps.cache-docker-save.outputs.cache-hit == 'true'
+        run: docker load --input /tmp/docker-save/wafl.tar || true
+
       - name: Build wafl image
         run: |
           cd wasm-fuzzer
           docker --version
           docker build -t wafl -f Dockerfile .
+
+      - name: Save Docker images to cache
+        if: steps.cache-docker-save.outputs.cache-hit != 'true'
+        run: |
+          mkdir -p /tmp/docker-save && 
+          docker save \
+            wafl $(docker history -q wafl | grep -v "<missing>") \
+            --output /tmp/docker-save/wafl.tar && 
+          ls -l /tmp/docker-save
+
+      - name: Point to sample-testing-targets in envs
+        run: |
+          cd wasm-fuzzer
+          sed --in-place "s|LOCAL_WASM_DIR=.*|LOCAL_WASM_DIR=${PWD}/sample-testing-targets|g" ${PWD}/.env
+
+      - name: Test wafl image
+        run: wasm-fuzzer/test_wafl_image.sh branches2.wasm a 11
+
+      - name: Test multi-processing.sh
+        run: |
+          wasm-fuzzer/multi-processing.sh 3 branches2.wasm a 11
+          sleep 3m
 
       - name: Push images
         run: |
@@ -96,5 +108,3 @@ jobs:
         env:
           user: ${{secrets.DOCKER_USER}}
           pass: ${{secrets.DOCKER_PASS}}
-          
- 

@@ -37,3 +37,6 @@ wasm-fuzzer/wafl-temp/*
 *.log.txt
 
 dump.rdb
+
+swam_cli.jar
+swam_server.jar

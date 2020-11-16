@@ -15,7 +15,7 @@ def write_stdout(s):
     sys.stdout.flush()
 
 def write_stderr(s):
-    sys.stderr.write("\n>>> Event listener here (stderr) >>> " + s)
+    sys.stderr.write("\n>>> Event listener here (stderr) >>> " + s + "\n")
     sys.stderr.flush()
 
 def main():
@@ -44,11 +44,13 @@ def main():
             write_stdout('RESULT 2\nOK')
             continue
 
-        pidfile = open('/var/run/supervisord.pid','r')
+        supervisord_pid_path = os.environ['WAFL_HOME'] + "/supervisord.pid"
+        pidfile = open(supervisord_pid_path,'r')
+
         pid = int(pidfile.readline())
         write_stderr('Received unexpected exit. Killing supervisor pid: ' + str(pid))
         try:
-            os.kill(pid, signal.SIGQUIT)
+            os.kill(pid, signal.SIGTERM)
         except Exception as e:
             write_stderr('Could not kill supervisor: ' + str(e))
 

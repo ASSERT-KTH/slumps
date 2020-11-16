@@ -6,12 +6,13 @@
 # This script requires SWAM to be up and running.
 #   Option A: Use `./entrypoint_mill_server.sh` after `$CURRENT_DIR/prepare_env.sh $@`
 #   Option B: Launch manually (example fibo.wat):
-#       mill -i cli.run run_server --wat --argType Int64  \
-#           --main naive --out ./ <path_to_fibo.wat>
+#       mill -i cli_server.run run_server --wat  --main naive <path_to_fibo.wat>
+#       mill -i cli_server.run run_server --wasi --main a wasm-fuzzer/sample-testing-targets/branches2.wasm
 
 # Run this script as `./test_socket.sh branches2.wasm a 11`
 
 CURRENT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
+source $CURRENT_DIR/logging_lib.sh
 
 #############
 ### Build ###
@@ -27,7 +28,10 @@ $CURRENT_DIR/fuzzing-client-afl/build_interface.sh
 
 source $CURRENT_DIR/prepare_env.sh $@  # Taking "branches2.wasm a 11"
 
-CPP_OUT_DIR=$CURRENT_DIR/wafl-temp/cpp-out
+log_info "Inferring signature for wasm"
+log_info "Running: $SWAM_CLI_CMD infer $WAT_ARG $WASM_OR_WAT_FILE $TARGET_FUNCTION"
+export WASM_ARG_TYPES_CSV=$($SWAM_CLI_CMD infer $WAT_ARG $WASM_OR_WAT_FILE $TARGET_FUNCTION) # Read from signature retriever
+pkill -f out.jar
 
-$CPP_OUT_DIR/prepare_wasm_input.out "$CPP_OUT_DIR/prepared_input.dat"
-$CPP_OUT_DIR/run_client.out "$CPP_OUT_DIR/prepared_input.dat"
+$OUT_INTERFACE_DIR/prepare_wasm_input.out "$OUT_INTERFACE_DIR/prepared_input.dat"
+$OUT_INTERFACE_DIR/run_client.out "$OUT_INTERFACE_DIR/prepared_input.dat"

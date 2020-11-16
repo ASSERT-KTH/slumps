@@ -7,6 +7,7 @@
 # restarting the crashed process).
 
 CURRENT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
+source $CURRENT_DIR/logging_lib.sh
 
 set -a
 source $CURRENT_DIR/.env
@@ -15,26 +16,33 @@ set +a
 # Make sure we're starting a fresh test here
 rm -R $CURRENT_DIR/wafl-temp
 
-docker run -d --rm --env-file=./.env \
+docker run -d --env-file=${CURRENT_DIR}/.env \
     -e STAGING=True \
+    -e AFL_I_DONT_CARE_ABOUT_MISSING_CRASHES=1 \
     --name=staging_wafl \
     -v maven_data:/root/.cache/coursier/v1/https/repo1.maven.org/maven2 \
     -v compiled_sources:/home/server/src/out/ \
     -v ${LOCAL_WASM_DIR:?err}:/home/server/wasm/ \
-    -v ${PWD}/wafl-temp/afl-out:/home/client/out/ \
-    -v ${PWD}/wafl-temp/logs:/home/shared/logs/ \
+    -v ${CURRENT_DIR}/wafl-temp/afl-out:/home/client/out/ \
+    -v ${CURRENT_DIR}/wafl-temp/logs:/home/shared/logs/ \
     wafl:latest $@
+
+sleep 5s
+
+docker container ps
 
 sleep 30s
 
-CONTAINER_STATUS=$(docker container inspect -f '{{.State.Status}}' staging_wafl)
-echo "CONTAINER_STATUS: $CONTAINER_STATUS"
+docker logs staging_wafl
 
-if [ $CONTAINER_STATUS != "running" ]; then
-    echo "staging_wafl container is not running anymore. It must have crashed."
+CONTAINER_STATUS=$(docker container inspect -f '{{.State.Status}}' staging_wafl)
+log_info "CONTAINER_STATUS: $CONTAINER_STATUS"
+
+if [[ $CONTAINER_STATUS != "running" ]]; then
+    log_error "staging_wafl container is not running anymore. It must have crashed."
     exit 1
 else
-    echo "staging_wafl container is still running. We're good!"
+    log_info "staging_wafl container is still running. We're good!"
     docker stop staging_wafl
     exit 0
 fi
