@@ -47,7 +47,10 @@ if ! [ -f /.dockerenv ]; then
     export SRC_INTERFACE_DIR=$WAFL_HOME/fuzzing-client-afl
     export SRC_SWAM_DIR=$WAFL_HOME/fuzzing-server-swam
 
-    export OUT_INTERFACE_DIR=$TEMP_DIR/cpp-out
+    # Not writing this to TEMP_DIR, since it won't be included in supervisord 
+    # otherwise (not same dir as entrypoint).
+    export OUT_INTERFACE_DIR=$SRC_INTERFACE_DIR/cpp-out
+    # export OUT_INTERFACE_DIR=$TEMP_DIR/cpp-out
 
     export INPUT_AFL_DIR=$TEMP_DIR/afl-in/$WAFL_INSTANCE_ID
     export OUTPUT_AFL_DIR=$TEMP_DIR/afl-out
@@ -57,7 +60,7 @@ if ! [ -f /.dockerenv ]; then
     export WASM_OR_WAT_FILE=$1
 
     export BIN_AFL="$WAFL_HOME/aflpp/afl-fuzz"
-    
+
     JAVA=$(which java)
     export SWAM_CLI_CMD="$JAVA -jar $SRC_SWAM_DIR/swam_cli.jar"
     export SWAM_SERVER_CMD="$JAVA -jar $SRC_SWAM_DIR/swam_server.jar"
