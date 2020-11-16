@@ -31,12 +31,12 @@ log_info "SUPERVISORD_STATUS: $SUPERVISORD_STATUS"
 SUPERVISORD_PID=$(pgrep -o -f 'supervisord.staging.conf')
 log_info "SUPERVISORD_PID: $SUPERVISORD_PID"
 
-if $SUPERVISORD_PID > /dev/null
+if [ -z "$SUPERVISORD_PID" ]
 then
+    log_error "supervisord process is not running anymore. It must have crashed."
+    exit 1
+else
     log_info "supervisord process is still running. We're good!"
     kill $SUPERVISORD_PID
     exit 0
-else
-    log_error "supervisord process is not running anymore. It must have crashed."
-    exit 1
 fi
