@@ -1,7 +1,5 @@
 #!/bin/bash
 
-# TODO: Test this
-
 # This script makes use of the environmental variable "STAGING". This causes the supervisord.stagng.conf
 # file to be used, which in turn adds an event listener to the AFL & SWAM processes. When one of them
 # crash, the event listener can crash supervisord, telling us that something is wrong.

@@ -1,5 +1,6 @@
 *.out
 *.dat
+fuzzing-client-afl/cpp-out
 ./fuzzing-server-swam/out
 ./wafl-temp
 
