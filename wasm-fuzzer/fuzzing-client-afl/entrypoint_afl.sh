@@ -41,6 +41,9 @@ pkill -f out.jar
 
 cd $SRC_INTERFACE_DIR
 
+# TODO: Temporary
+ls -la $OUT_INTERFACE_DIR
+
 $OUT_INTERFACE_DIR/prepare_wasm_input.out "$INPUT_AFL_DIR/prepared_input.dat"
 
 # TODO: Remove everything related to REQUIRED_BYTES
