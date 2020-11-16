@@ -16,7 +16,7 @@ rm -R $CURRENT_DIR/wafl-temp
 
 export STAGING=True
 
-$CURRENT_DIR/wafl.sh $@
+$CURRENT_DIR/wafl.sh $@ &
 
 sleep 30s
 
@@ -26,12 +26,13 @@ log_info "SUPERVISORD_STATUS: $SUPERVISORD_STATUS"
 #   root      5504  0.0  0.2  65572 20668 ?        Ss   23:21   0:00 /usr/bin/python /usr/bin/supervisord -n -c /etc/supervisor/supervisord.conf
 #   runner   26235  0.0  0.0  14848   988 ?        S    23:30   0:00 grep supervisor
 
-log_info $(pgrep -x "/usr/bin/supervisord")
+SUPERVISORD_PID=$(pgrep -x "/usr/bin/supervisord")
+log_info "SUPERVISORD_PID: $SUPERVISORD_PID"
 
-if pgrep -x "/usr/bin/supervisord" > /dev/null
+if $SUPERVISORD_PID > /dev/null
 then
     log_info "supervisord process is still running. We're good!"
-    # TODO: Kill supervisord
+    kill $SUPERVISORD_PID
     exit 0
 else
     log_error "supervisord process is not running anymore. It must have crashed."
