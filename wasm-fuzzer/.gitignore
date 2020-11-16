@@ -2,3 +2,4 @@ aflpp
 wafl
 out*
 wafl-temp
+fuzzing-client-afl/cpp-out
