@@ -7,8 +7,13 @@ CURRENT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"  # H
 
 log_info "Building the wafl interface..."
 
-mkdir -p $PARENT_DIR/wafl-temp
-CPP_OUT_DIR=$PARENT_DIR/wafl-temp/cpp-out
+# mkdir -p $PARENT_DIR/wafl-temp
+# CPP_OUT_DIR=$PARENT_DIR/wafl-temp/cpp-out
+# mkdir -p $CPP_OUT_DIR
+
+# Not writing this to wafl-temp, since it needs to be in the same dir as
+# the entrypoint for supervisor to find it.
+CPP_OUT_DIR=$CURRENT_DIR/cpp-out
 mkdir -p $CPP_OUT_DIR
 
 g++ -o $CPP_OUT_DIR/prepare_wasm_input.out $CURRENT_DIR/prepare_wasm_input.cpp $CURRENT_DIR/utils.cpp
