@@ -1,5 +1,5 @@
 aflpp
 wafl
 out*
-fuzzing-server-swam
 wafl-temp
+fuzzing-client-afl/cpp-out
