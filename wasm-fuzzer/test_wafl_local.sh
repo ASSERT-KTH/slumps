@@ -23,10 +23,12 @@ sleep 30s
 SUPERVISORD_STATUS=$(ps aux | grep 'supervisor')
 log_info "SUPERVISORD_STATUS: $SUPERVISORD_STATUS"
 # --> SUPERVISORD_STATUS: 
-#   root      5504  0.0  0.2  65572 20668 ?        Ss   23:21   0:00 /usr/bin/python /usr/bin/supervisord -n -c /etc/supervisor/supervisord.conf
-#   runner   26235  0.0  0.0  14848   988 ?        S    23:30   0:00 grep supervisor
+# root      5860  0.0  0.2  65660 20816 ?        Ss   15:31   0:00 /usr/bin/python /usr/bin/supervisord -n -c /etc/supervisor/supervisord.conf 148
+# runner   20155  0.0  0.0  11404   588 ?        R    15:39   0:00 grep supervisor 149
+# runner   29606  0.4  0.2  65456 20736 ?        S    15:39   0:00 /usr/bin/python /usr/bin/supervisord -c /home/runner/work/slumps/slumps/wasm-fuzzer/supervisord.staging.conf
 
-SUPERVISORD_PID=$(pgrep -x supervisord)
+# SUPERVISORD_PID=$(pgrep -o -x supervisord)
+SUPERVISORD_PID=$(pgrep -o -f 'supervisord.staging.conf')
 log_info "SUPERVISORD_PID: $SUPERVISORD_PID"
 
 if $SUPERVISORD_PID > /dev/null
