@@ -1,8 +1,19 @@
 #!/bin/bash
 
-# For this file to be runnable by itself, use prepare_env.sh & $SWAM_CMD infer signature.
+# For this file to be runnable by itself, use prepare_env.sh & $SWAM_CLI_CMD infer signature.
 # However, infer signature is already being run in wafl.sh - therefore take it out there first 
 # and run it directly in SWAM.
+
+CURRENT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
+PARENT_DIR="$(dirname "$CURRENT_DIR")"
+
+# So that this script can be run by itself as 
+# well (same commands as wafl.sh)
+if [[ $ENV_PREPARED != "True" ]]; then
+    source $PARENT_DIR/prepare_env.sh $@
+fi
+
+source $WAFL_HOME/logging_lib.sh
 
 check_output_dir() {
     # AFL Docs on re-starting:
@@ -16,21 +27,24 @@ check_output_dir() {
     # Check if AFL has already produced results
     if [ -d $DIR_NAME ] && [ "$(ls -A $DIR_NAME)" ]; then
         # Prevent to delete old findings). Useful if AFL/SWAM may crash and auto-restart.
-        echo "$DIR_NAME exists and is not empty, so continuing where we left off!"
+        log_info "$DIR_NAME exists and is not empty, so continuing where we left off!"
         INPUT_AFL_DIR="-"
     else
-        echo "$DIR_NAME does not exist or is empty - starting fresh run!"
+        log_info "$DIR_NAME does not exist or is empty - starting a fresh run!"
     fi
 }
 
-# So that this script can be run by itself as 
-# well (same commands as wafl.sh)
-if [[ $ENV_PREPARED != "True" ]]; then
-    echo "Preparing environment!"
-    source $CURRENT_DIR/prepare_env.sh $@
-fi
+log_info "Inferring signature for wasm"
+log_info "Running: $SWAM_CLI_CMD infer $WAT_ARG $WASM_OR_WAT_FILE --main $TARGET_FUNCTION"
+export WASM_ARG_TYPES_CSV=$($SWAM_CLI_CMD infer $WAT_ARG $WASM_OR_WAT_FILE --main $TARGET_FUNCTION) # Read from signature retriever
+pkill -f out.jar
 
 cd $SRC_INTERFACE_DIR
+
+# Debugging for supervisord
+# ls -la $(echo $OUT_INTERFACE_DIR | sed 's:/wafl-temp/cpp-out::')
+# ls -la $(echo $OUT_INTERFACE_DIR | sed 's:/cpp-out::')
+# ls -la $OUT_INTERFACE_DIR
 
 $OUT_INTERFACE_DIR/prepare_wasm_input.out "$INPUT_AFL_DIR/prepared_input.dat"
 
@@ -69,5 +83,5 @@ fi
 # If you want quick & dirty results right away - akin to zzuf and other
 # traditional fuzzers - add the -d option to the command line.
 
-echo "$BIN_AFL -i $INPUT_AFL_DIR -o $OUTPUT_AFL_DIR $RANK -d -- ${OUT_INTERFACE_DIR}/interface.out @@ $REQUIRED_BYTES"
+log_info "Running: $BIN_AFL -i $INPUT_AFL_DIR -o $OUTPUT_AFL_DIR $RANK -d -- ${OUT_INTERFACE_DIR}/interface.out @@ $REQUIRED_BYTES"
 exec $BIN_AFL -i "$INPUT_AFL_DIR" -o $OUTPUT_AFL_DIR $RANK -d -- "${OUT_INTERFACE_DIR}/interface.out" @@ $REQUIRED_BYTES

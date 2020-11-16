@@ -1,29 +1,16 @@
 #!/bin/bash
 
-#err=0
-#trap 'err=1' ERR
-
 CURRENT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
+source $CURRENT_DIR/logging_lib.sh
 
-echo $CURRENT_DIR
+log_info "Downloading SWAM"
+cd $CURRENT_DIR/fuzzing-server-swam
+# ./millw cli.assembly
 
+curl -o swam_cli.jar -L https://github.com/KTH/swam/releases/download/v0.6.0-RC3/swam_cli.jar
+curl -o swam_server.jar -L https://github.com/KTH/swam/releases/download/v0.6.0-RC3/swam_server.jar
 
-echo "Cloning SWAM"
-if [ ! -d fuzzing-server-swam ]; then
-    git clone --single-branch --branch slumps https://github.com/KTH/swam.git fuzzing-server-swam
-fi
-
-echo "Building SWAM"
-cd fuzzing-server-swam
-git pull
-./millw cli.assembly
-
-
-cd ..
-
-bash $CURRENT_DIR/fuzzing-client-afl/build_afl.sh
 bash $CURRENT_DIR/fuzzing-client-afl/build_interface.sh
+bash $CURRENT_DIR/fuzzing-client-afl/build_afl.sh
 
-echo "Finishing"
-
-#test $err = 0
+log_info "Finished building WAFL"
