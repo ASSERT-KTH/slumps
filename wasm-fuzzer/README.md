@@ -1,9 +1,5 @@
 # WAFL - Fuzz your WASM with AFLplusplus
 
-## Disclaimer
-
-This is still in a prototyping stage. There are still many assumptions made on how AFL (and C++ and Scala and shared memory) works. Also, SWAM's coverage functionality on which this tool depends is currently still being developed.
-
 ## Introduction
 
 This tool aims to act as an interface between [SWAM](https://github.com/satabin/swam) and [AFLplusplus](https://github.com/AFLplusplus/AFLplusplus). Whilst SWAM is a Scala interpreter for WebAssembly, AFL is a fuzzing tool for C++ programs. Since AFL provides a generic fuzzing algorithm which is not necessarily bound to C++, we aim to provide a spin-off that applies it to WASM binaries.
@@ -41,7 +37,7 @@ All configuration options are visible in the .env file. This is where you specif
 
 ## Build & Run with Docker
 
-The only configuration parameters to building this are currently the SCALA_VERSION and the MILL_VERSION in the Dockerfile. Nonetheless, it should not be required to change these parameters as they are fitted to the code of this repostory. The JDK is installed manually in this Dockerfile. It's entrypoint also only references the entrypoints of the client and the server.
+The are no configuration parameters in the Dockerfile. The JVM is installed manually in this Dockerfile. It's entrypoint also only references the entrypoints of the client and the server.
 
 ### AFL section in Dockerfile
 
@@ -99,16 +95,16 @@ If you wish to run this tool without using Docker, you will be required to insta
 
 ## Test SWAM's socket server with sample input (for fibo.wat)
 
-1. Start the SWAM socket server. We want to run the "naive" function in the fibo.wat file. Since the function takes one long/Int64 as an input parameter, we need to specify this with the "--argType" option.
+1. Start the SWAM socket server. We want to run the "naive" function in the fibo.wat file.
 
     ```bash
-    mill -i cli.run run_server --wat --argType Int64 --main naive --out ./ <path_to_repo>/examples/docs/fibo.wat
+    mill cli_server.run run_server --wat --main naive <path_to_repo>/examples/docs/fibo.wat
     ```
 
-1. Start socket client and communicate input/output with server
+1. Start socket client and communicate input/output with server. Arguments: <.wasm/.wat filepath> <target function> <seed arguments csv>
 
     ```bash
-    ./run_test.sh
+    ./test_socket.sh <path_to_repo>/examples/docs/fibo.wat naive 10
     ```
 
 ## Optimisations
@@ -119,11 +115,11 @@ If you wish to run this tool without using Docker, you will be required to insta
 
 1. **#SPEED**: The SWAM socket server only instantiates the given WASM file/function once. Executing the instantiated function when receiving a message through the socket is equivalent to executing a fixed Scala function in the source code.
 
-1. **#PORTABILITY**: Both the SWAM engine and AFLplusplus are dockerized in two separate containers and are given a corresponding service in docker-compose.base.yml setup. All required configuration is to be found in ./.env.
+1. **#PORTABILITY**: Both the SWAM engine and AFLplusplus are dockerized in a single container. All required configuration is to be found in ./.env.
 
 1. **#SPEED**: It is possible to run multiple AFL instances in parallel in a Master/Secondary configuration. See section on [Multi-processing](#Multi-processing).
 
-## Example logs for fibo.wat with docker-compose configuration
+## Example logs for fibo.wat with docker-compose configuration (outdated)
 
 The following the Docker logs of the SWAM server
 
