@@ -44,9 +44,7 @@ def main():
             write_stdout('RESULT 2\nOK')
             continue
 
-        temp_dir = os.environ['TMPDIR']
-        write_stderr('temp_dir: ' + temp_dir)
-        supervisord_pid_path = temp_dir + "/supervisord.pid"
+        supervisord_pid_path = os.environ['WAFL_HOME'] + "/supervisord.pid"
         pidfile = open(supervisord_pid_path,'r')
         # pidfile = open('/var/run/supervisord.pid','r')
 
