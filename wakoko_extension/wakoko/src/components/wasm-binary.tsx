@@ -23,8 +23,7 @@ export interface WasmBinaryState {
 	links: {
 		target: number,
 		source: number
-	}[],
-	blockInfo: Uint8Array
+	}[]
 }
 
 class WasmBinary extends React.Component<WasmBinaryProps, WasmBinaryState> {
@@ -35,8 +34,7 @@ class WasmBinary extends React.Component<WasmBinaryProps, WasmBinaryState> {
 	  this.state = {
 		  history: [],
 		  nodes: {},
-		  links: [],
-		  blockInfo: this.props.module.blockMap
+		  links: []
 	  }
 	  this.download = this.download.bind(this)
 	}
@@ -49,8 +47,7 @@ class WasmBinary extends React.Component<WasmBinaryProps, WasmBinaryState> {
 			this.props.module.setVisitedMap(true)
 
 			this.setState({
-				history: [...this.props.module.history],
-				blockInfo: this.props.module.blockMap
+				history: [...this.props.module.history]
 			})
 		}, this.props.freq)
 	}

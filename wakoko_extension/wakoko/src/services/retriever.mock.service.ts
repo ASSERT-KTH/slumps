@@ -8,7 +8,6 @@ export class MockWasmListener extends BaseWASMListener{
 
 		for(let i = 0; i< this.MAX; i++){
 			let cv  = parseInt(`${Math.random()*17434}`);
-			this.blockMap[cv] = 1;
 		}
 	}
 	getBlockCoverage(save){
