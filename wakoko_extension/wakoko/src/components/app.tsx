@@ -47,7 +47,7 @@ export default class Main extends React.Component<MainProps, MainState> {
 				{this.state.opened && <Frame style={{background:'transparent'}} head={[
 				<link type="text/css" rel="stylesheet" href={
 				/*@ts-ignore*/
-				`${staticAddress}/css/content.css`} ></link>,
+				`${window.staticAddress? window.staticAddress : ''}/css/content.css`} ></link>,
 				<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/antd@4.8.0/dist/antd.css"></link>]}> 
 				<FrameContextConsumer>
 					{

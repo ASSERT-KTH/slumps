@@ -56,6 +56,7 @@ export abstract class BaseWASMListener{
 
 	abstract getBlockCoverage(save): number;
 	abstract setVisitedMap(save): void;
+
 }
 
 export default class WASMListener extends BaseWASMListener{
