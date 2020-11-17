@@ -137,7 +137,7 @@ AFLplusplus is encouraged to be run with multiple instances if multiple cores ar
 3. Run:
 
     ```bash
-    $CURRENT_DIR/wafl.sh $@ &
+    ./wafl.sh <.wasm/.wat filepath> <target function> <seed arguments csv>
     ```
 
 ## Test SWAM's socket server with sample input (for fibo.wat)
