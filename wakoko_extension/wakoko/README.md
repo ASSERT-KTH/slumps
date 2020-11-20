@@ -36,8 +36,8 @@ Inside the wrapper code, there is a call to the instrumentation service. Right n
 
 ## Building and packaging the extension
 
-We need to follow some guidelines to build a browser extension. The content of the `public` folder will be copied in the build folder. For example, we placed the `manifest.json` file, which contains the basic behavior of the extension, in this folder. Besides, icons and images should be included here.
+We need to follow some guidelines to build a browser extension. The content of the `public` folder will be copied in the `build` folder (where the final extension code will be). For example, we placed the `manifest.json` file, which contains the basic behavior of the extension, in this folder. Besides, icons and images should be included here for now.
 
-To build the extension run the following script, `bash build_extension.sh`. This script is a full pipeline, it first builds the `wakoko_instrumentor` project to WebAssembly using emcc (make sure to have [emsdk ](https://emscripten.org/) activated). Then the `content_template.js` file is filled with th needed contents, the browser extension address for the static files, and the wrapper code to be injected in the page. Concretely, thre are two reserved places where the code is added, `INSTRUMENTOR` and `WRAPPER`.
+To build the extension run the following script, `bash build_extension.sh`. This script is a full pipeline, it first builds the `wakoko_instrumentor` project to WebAssembly using emcc (make sure to have [emsdk ](https://emscripten.org/) activated). Then the `content_template.js` file is filled with the needed contents, the browser extension address for the static files, and the wrapper code to be injected in the page. Concretely, there are two reserved places where the code is added, `INSTRUMENTOR` and `WRAPPER`.
 
 Notice if that the emsdk is not set, the build can fail. If this happens, change the default instrumentor to the server based approach as it is described previously.
