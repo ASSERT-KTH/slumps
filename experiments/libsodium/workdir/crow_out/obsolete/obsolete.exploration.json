@@ -1,0 +1,82 @@
+[
+    [
+        "%0:i64 = var\n%1:i1 = ult %0, 64:i64\npc %1 0:i1\n%2:i64 = add 18446744073709551552:i64, %0 (hasExternalUses)\n%3:i1 = ult 4294967231:i64, %2\npc %3 0:i1\n%4:i64 = addnsw 18446744073709551584:i64, %0\ninfer %4\n",
+        []
+    ],
+    [
+        "%0:i8 = var\n%1:i1 = ult 31:i8, %0\ninfer %1\n",
+        []
+    ],
+    [
+        "%0 = block 9\n%1:i32 = phi %0, 0:i32, 4294967295:i32, 4294967295:i32, 4294967295:i32, 4294967295:i32, 4294967295:i32, 4294967295:i32, 4294967295:i32, 4294967295:i32\ninfer %1\n",
+        []
+    ],
+    [
+        "%0:i64 = var\n%1:i1 = ult %0, 64:i64\npc %1 0:i1\n%2:i64 = add 18446744073709551552:i64, %0 (hasExternalUses)\n%3:i1 = ult 4294967231:i64, %2\npc %3 0:i1\n%4:i32 = trunc %2\ninfer %4\n",
+        []
+    ],
+    [
+        "%0:i64 = var\n%1:i32 = trunc %0\ninfer %1\n",
+        []
+    ],
+    [
+        "%0:i64 = var\n%1:i1 = ult %0, 64:i64\ninfer %1\n",
+        []
+    ],
+    [
+        "%0:i8 = var\n%1:i8 = and 63:i8, %0\ninfer %1 (demandedBits=10111111)\n",
+        []
+    ],
+    [
+        "%0:i8 = var\n%1:i8 = xor 128:i8, %0\ninfer %1\n",
+        []
+    ],
+    [
+        "%0:i8 = var\ninfer %0 (demandedBits=11111000)\n",
+        []
+    ],
+    [
+        "%0:i64 = var\n%1:i1 = ult %0, 64:i64\npc %1 0:i1\n%2:i64 = add 18446744073709551552:i64, %0 (hasExternalUses)\n%3:i1 = ult 4294967231:i64, %2\npc %3 0:i1\n%4:i32 = trunc %0\n%5:i32 = add 4294967295:i32, %4\ninfer %5\n",
+        []
+    ],
+    [
+        "%0:i8 = var\n%1:i8 = and 248:i8, %0\ninfer %1\n",
+        []
+    ],
+    [
+        "%0:i64 = var\n%1:i1 = ult %0, 64:i64\npc %1 0:i1\n%2:i64 = add 18446744073709551552:i64, %0 (hasExternalUses)\n%3:i1 = ult 4294967231:i64, %2\npc %3 0:i1\n%4:i32 = trunc %0\ninfer %4\n",
+        []
+    ],
+    [
+        "%0:i8 = var\n%1:i8 = and 63:i8, %0\n%2:i8 = or 64:i8, %1\ninfer %2\n",
+        []
+    ],
+    [
+        "%0:i64 = var\n%1:i1 = ult %0, 64:i64\npc %1 0:i1\n%2:i64 = add 18446744073709551552:i64, %0 (hasExternalUses)\n%3:i1 = ult 4294967231:i64, %2\ninfer %3\n",
+        []
+    ],
+    [
+        "%0:i64 = var\n%1:i64 = add 64:i64, %0\ninfer %1\n",
+        []
+    ],
+    [
+        "%0:i32 = var\n%1:i1 = eq 0:i32, %0\ninfer %1\n",
+        []
+    ],
+    [
+        "%0:i8 = var\ninfer %0 (demandedBits=00111111)\n",
+        []
+    ],
+    [
+        "%0:i32 = var\ninfer %0\n",
+        []
+    ],
+    [
+        "%0:i8 = var\ninfer %0\n",
+        []
+    ],
+    [
+        "%0:i64 = var\n%1:i1 = ult %0, 64:i64\npc %1 0:i1\n%2:i64 = add 18446744073709551552:i64, %0\ninfer %2\n",
+        []
+    ]
+]

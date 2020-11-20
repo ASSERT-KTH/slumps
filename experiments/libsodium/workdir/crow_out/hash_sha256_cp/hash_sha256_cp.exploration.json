@@ -1,0 +1,906 @@
+[
+    [
+        "%0:i32 = var\n%1:i32 = var\n%2:i32 = var\n%3:i32 = var\n%4:i32 = shl %3, 7:i32\n%5:i32 = lshr %3, 25:i32\n%6:i32 = or %4, %5\n%7:i32 = shl %3, 21:i32\n%8:i32 = lshr %3, 11:i32\n%9:i32 = or %7, %8\n%10:i32 = shl %3, 26:i32\n%11:i32 = lshr %3, 6:i32\n%12:i32 = or %10, %11\n%13:i32 = xor %9, %12\n%14:i32 = xor %6, %13\n%15:i32 = add %2, %14\n%16:i32 = add %1, %15\n%17:i32 = var\n%18:i32 = var\n%19:i32 = xor %18, %17\n%20:i32 = and %3, %19\n%21:i32 = xor %17, %20\n%22:i32 = add %16, %21\n%23:i32 = add %0, %22 (hasExternalUses)\n%24:i32 = var\n%25:i32 = shl %24, 10:i32\n%26:i32 = lshr %24, 22:i32\n%27:i32 = or %25, %26\n%28:i32 = shl %24, 19:i32\n%29:i32 = lshr %24, 13:i32\n%30:i32 = or %28, %29\n%31:i32 = shl %24, 30:i32\n%32:i32 = lshr %24, 2:i32\n%33:i32 = or %31, %32\n%34:i32 = xor %30, %33\n%35:i32 = xor %27, %34\n%36:i32 = add %23, %35\n%37:i32 = var\n%38:i32 = var\n%39:i32 = or %37, %38\n%40:i32 = and %24, %39\n%41:i32 = and %37, %38\n%42:i32 = or %40, %41\n%43:i32 = add %36, %42 (hasExternalUses)\n%44:i32 = lshr %43, 2:i32\ninfer %44\n",
+        []
+    ],
+    [
+        "%0:i32 = var (knownBits=0xxxxxxxxxxxxxxxxxxxxxxxxxxx0000) (nonNegative) (range=[0,49))\n%1:i1 = eq 48:i32, %0\npc %1 0:i1\n%2:i32 = or 10:i32, %0 (hasExternalUses)\n%3:i32 = addnw 9:i32, %2\ninfer %3\n",
+        []
+    ],
+    [
+        "%0:i32 = var\n%1:i32 = var\n%2:i32 = shl %1, 7:i32\n%3:i32 = lshr %1, 25:i32\n%4:i32 = or %2, %3\n%5:i32 = shl %1, 21:i32\n%6:i32 = lshr %1, 11:i32\n%7:i32 = or %5, %6\n%8:i32 = shl %1, 26:i32\n%9:i32 = lshr %1, 6:i32\n%10:i32 = or %8, %9\n%11:i32 = xor %7, %10\n%12:i32 = xor %4, %11\n%13:i32 = add %0, %12\ninfer %13\n",
+        []
+    ],
+    [
+        "%0:i32 = var\n%1:i32 = lshr %0, 8:i32\ninfer %1 (demandedBits=00000000000000000000000011111111)\n",
+        []
+    ],
+    [
+        "%0:i64 = var\n%1:i1 = eq 0:i64, %0\npc %1 0:i1\n%2:i64 = shl %0, 3:i64\ninfer %2\n",
+        []
+    ],
+    [
+        "%0:i32 = var\n%1:i32 = shl %0, 15:i32\ninfer %1\n",
+        []
+    ],
+    [
+        "%0:i32 = var (knownBits=0xxxxxxxxxxxxxxxxxxxxxxxxxxx0000) (nonNegative) (range=[0,49))\n%1:i32 = or 14:i32, %0\ninfer %1\n",
+        []
+    ],
+    [
+        "%0:i32 = var\n%1:i32 = shl %0, 25:i32\n%2:i32 = lshr %0, 7:i32\n%3:i32 = or %1, %2\ninfer %3\n",
+        []
+    ],
+    [
+        "%0:i8 = var\n%1:i32 = zext %0\n%2:i32 = shlnw %1, 16:i32\ninfer %2\n",
+        []
+    ],
+    [
+        "%0:i64 = var (range=[0,-1))\n%1:i64 = var\n%2:i64 = lshr %1, 3:i64 (hasExternalUses)\n%3:i64 = and 63:i64, %2 (hasExternalUses)\n%4:i64 = add %0, %3\ninfer %4 (demandedBits=0000000000000000000000000000000011111111111111111111111111111111)\n",
+        []
+    ],
+    [
+        "%0:i64 = var (range=[0,-1))\n%1:i64 = addnuw 1:i64, %0\ninfer %1\n",
+        []
+    ],
+    [
+        "%0:i32 = var (knownBits=0xxxxxxxxxxxxxxxxxxxxxxxxxxx0000) (nonNegative) (range=[0,49))\n%1:i1 = eq 48:i32, %0\npc %1 0:i1\n%2:i32 = addnw 16:i32, %0\ninfer %2\n",
+        []
+    ],
+    [
+        "%0:i32 = var\n%1:i32 = var\n%2:i32 = add %0, %1\n%3:i32 = var\n%4:i32 = shl %3, 15:i32\n%5:i32 = lshr %3, 17:i32\n%6:i32 = or %4, %5\n%7:i32 = shl %3, 13:i32\n%8:i32 = lshr %3, 19:i32\n%9:i32 = or %7, %8\n%10:i32 = lshr %3, 10:i32\n%11:i32 = xor %9, %10\n%12:i32 = xor %6, %11\n%13:i32 = add %2, %12\n%14:i32 = var\n%15:i32 = shl %14, 25:i32\n%16:i32 = lshr %14, 7:i32\n%17:i32 = or %15, %16\n%18:i32 = shl %14, 14:i32\n%19:i32 = lshr %14, 18:i32\n%20:i32 = or %18, %19\n%21:i32 = lshr %14, 3:i32\n%22:i32 = xor %20, %21\n%23:i32 = xor %17, %22\n%24:i32 = add %13, %23\ninfer %24\n",
+        []
+    ],
+    [
+        "%0:i32 = var\n%1:i32 = var\n%2:i32 = var\n%3:i32 = shl %2, 7:i32\n%4:i32 = lshr %2, 25:i32\n%5:i32 = or %3, %4\n%6:i32 = shl %2, 21:i32\n%7:i32 = lshr %2, 11:i32\n%8:i32 = or %6, %7\n%9:i32 = shl %2, 26:i32\n%10:i32 = lshr %2, 6:i32\n%11:i32 = or %9, %10\n%12:i32 = xor %8, %11\n%13:i32 = xor %5, %12\n%14:i32 = add %1, %13\n%15:i32 = add %0, %14\ninfer %15\n",
+        []
+    ],
+    [
+        "%0:i32 = var\n%1:i32 = lshr %0, 16:i32\n%2:i8 = trunc %1\ninfer %2\n",
+        []
+    ],
+    [
+        "%0:i32 = var\ninfer %0\n",
+        []
+    ],
+    [
+        "%0:i32 = var (knownBits=0xxxxxxxxxxxxxxxxxxxxxxxxxxx0000) (nonNegative) (range=[0,49))\n%1:i32 = or 3:i32, %0\ninfer %1\n",
+        []
+    ],
+    [
+        "%0 = block 3\n%1:i64 = var\n%2:i64 = var\n%3:i64 = phi %0, %1, %1, %2\n%4:i64 = lshr %3, 48:i64\n%5:i8 = trunc %4\ninfer %5\n",
+        []
+    ],
+    [
+        "%0:i32 = var\n%1:i32 = var\n%2:i32 = var\n%3:i32 = var\n%4:i32 = var\n%5:i32 = shl %4, 7:i32\n%6:i32 = lshr %4, 25:i32\n%7:i32 = or %5, %6\n%8:i32 = shl %4, 21:i32\n%9:i32 = lshr %4, 11:i32\n%10:i32 = or %8, %9\n%11:i32 = shl %4, 26:i32\n%12:i32 = lshr %4, 6:i32\n%13:i32 = or %11, %12\n%14:i32 = xor %10, %13\n%15:i32 = xor %7, %14\n%16:i32 = add %3, %15\n%17:i32 = add %2, %16\n%18:i32 = var\n%19:i32 = var\n%20:i32 = xor %19, %18\n%21:i32 = and %4, %20\n%22:i32 = xor %18, %21\n%23:i32 = add %17, %22\n%24:i32 = add %1, %23 (hasExternalUses)\n%25:i32 = add %0, %24 (hasExternalUses)\n%26:i32 = shl %25, 21:i32\n%27:i32 = lshr %25, 11:i32\n%28:i32 = or %26, %27\n%29:i32 = shl %25, 26:i32\n%30:i32 = lshr %25, 6:i32\n%31:i32 = or %29, %30\n%32:i32 = xor %28, %31\ninfer %32\n",
+        []
+    ],
+    [
+        "%0:i32 = var\n%1:i8 = trunc %0\ninfer %1\n",
+        []
+    ],
+    [
+        "%0:i32 = var\n%1:i32 = var\n%2:i32 = var\n%3:i32 = var\n%4:i32 = var\n%5:i32 = var\n%6:i32 = var\n%7:i32 = shl %6, 7:i32\n%8:i32 = lshr %6, 25:i32\n%9:i32 = or %7, %8\n%10:i32 = shl %6, 21:i32\n%11:i32 = lshr %6, 11:i32\n%12:i32 = or %10, %11\n%13:i32 = shl %6, 26:i32\n%14:i32 = lshr %6, 6:i32\n%15:i32 = or %13, %14\n%16:i32 = xor %12, %15\n%17:i32 = xor %9, %16\n%18:i32 = add %5, %17\n%19:i32 = add %4, %18\n%20:i32 = xor %1, %0\n%21:i32 = and %6, %20\n%22:i32 = xor %0, %21\n%23:i32 = add %19, %22\n%24:i32 = add %3, %23 (hasExternalUses)\n%25:i32 = add %2, %24 (hasExternalUses)\n%26:i32 = xor %6, %1\n%27:i32 = and %25, %26\n%28:i32 = xor %1, %27\n%29:i32 = add %0, %28\ninfer %29\n",
+        []
+    ],
+    [
+        "%0:i32 = var\n%1:i32 = var\n%2:i32 = add %0, %1\n%3:i32 = var\n%4:i32 = shl %3, 15:i32\n%5:i32 = lshr %3, 17:i32\n%6:i32 = or %4, %5\n%7:i32 = shl %3, 13:i32\n%8:i32 = lshr %3, 19:i32\n%9:i32 = or %7, %8\n%10:i32 = lshr %3, 10:i32\n%11:i32 = xor %9, %10\n%12:i32 = xor %6, %11\n%13:i32 = add %2, %12\n%14:i32 = var\n%15:i32 = shl %14, 25:i32\n%16:i32 = lshr %14, 7:i32\n%17:i32 = or %15, %16\n%18:i32 = shl %14, 14:i32\n%19:i32 = lshr %14, 18:i32\n%20:i32 = or %18, %19\n%21:i32 = lshr %14, 3:i32\n%22:i32 = xor %20, %21\n%23:i32 = xor %17, %22\n%24:i32 = add %13, %23 (hasExternalUses)\n%25:i32 = shl %24, 13:i32\n%26:i32 = lshr %24, 19:i32\n%27:i32 = or %25, %26\n%28:i32 = lshr %24, 10:i32\n%29:i32 = xor %27, %28\ninfer %29\n",
+        []
+    ],
+    [
+        "%0:i32 = var\n%1:i32 = var\n%2:i32 = var\n%3:i32 = var\n%4:i32 = var\n%5:i32 = shl %0, 7:i32\n%6:i32 = lshr %0, 25:i32\n%7:i32 = or %5, %6\n%8:i32 = shl %0, 21:i32\n%9:i32 = lshr %0, 11:i32\n%10:i32 = or %8, %9\n%11:i32 = shl %0, 26:i32\n%12:i32 = lshr %0, 6:i32\n%13:i32 = or %11, %12\n%14:i32 = xor %10, %13\n%15:i32 = xor %7, %14\n%16:i32 = add %4, %15\n%17:i32 = add %3, %16\n%18:i32 = var\n%19:i32 = var\n%20:i32 = xor %19, %18\n%21:i32 = and %0, %20\n%22:i32 = xor %18, %21\n%23:i32 = add %17, %22\n%24:i32 = add %2, %23 (hasExternalUses)\n%25:i32 = add %1, %24 (hasExternalUses)\n%26:i32 = xor %0, %25\ninfer %26\n",
+        []
+    ],
+    [
+        "%0:i32 = var (knownBits=0xxxxxxxxxxxxxxxxxxxxxxxxxxx0000) (nonNegative) (range=[0,49))\n%1:i1 = eq 48:i32, %0\npc %1 0:i1\n%2:i32 = or 13:i32, %0 (hasExternalUses)\n%3:i32 = addnw 1:i32, %2\ninfer %3\n",
+        []
+    ],
+    [
+        "%0:i64 = var (knownBits=0xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx) (nonNegative) (range=[0,64))\n%1:i64 = addnw 1:i64, %0 (hasExternalUses)\n%2:i64 = var\n%3:i64 = lshr %2, 3:i64 (hasExternalUses)\n%4:i64 = and 63:i64, %3 (hasExternalUses)\n%5:i64 = subnw 64:i64, %4 (hasExternalUses)\n%6:i1 = eq %1, %5\npc %6 1:i1\n%7:i64 = var\n%8:i64 = sub %7, %5 (hasExternalUses)\n%9:i1 = ult 63:i64, %8\npc %9 1:i1\n%10:i64 = add %7, %3\ninfer %10 (demandedBits=0000000000000000000000000000000000000000000000000000000000111111)\n",
+        []
+    ],
+    [
+        "%0:i32 = var\n%1:i32 = lshr %0, 16:i32\ninfer %1 (demandedBits=00000000000000000000000011111111)\n",
+        []
+    ],
+    [
+        "%0:i32 = var\n%1:i32 = var\n%2:i32 = add %0, %1\n%3:i32 = var\n%4:i32 = shl %3, 15:i32\n%5:i32 = lshr %3, 17:i32\n%6:i32 = or %4, %5\n%7:i32 = shl %3, 13:i32\n%8:i32 = lshr %3, 19:i32\n%9:i32 = or %7, %8\n%10:i32 = lshr %3, 10:i32\n%11:i32 = xor %9, %10\n%12:i32 = xor %6, %11\n%13:i32 = add %2, %12\n%14:i32 = var\n%15:i32 = shl %14, 25:i32\n%16:i32 = lshr %14, 7:i32\n%17:i32 = or %15, %16\n%18:i32 = shl %14, 14:i32\n%19:i32 = lshr %14, 18:i32\n%20:i32 = or %18, %19\n%21:i32 = lshr %14, 3:i32\n%22:i32 = xor %20, %21\n%23:i32 = xor %17, %22\n%24:i32 = add %13, %23 (hasExternalUses)\n%25:i32 = lshr %24, 19:i32\ninfer %25\n",
+        []
+    ],
+    [
+        "%0:i32 = var\n%1:i32 = var\n%2:i32 = var\n%3:i32 = add %1, %2\n%4:i32 = add %0, %3\ninfer %4\n",
+        []
+    ],
+    [
+        "%0:i32 = var\n%1:i32 = var\n%2:i32 = var\n%3:i32 = var\n%4:i32 = var\n%5:i32 = var\n%6:i32 = var\n%7:i32 = shl %6, 7:i32\n%8:i32 = lshr %6, 25:i32\n%9:i32 = or %7, %8\n%10:i32 = shl %6, 21:i32\n%11:i32 = lshr %6, 11:i32\n%12:i32 = or %10, %11\n%13:i32 = shl %6, 26:i32\n%14:i32 = lshr %6, 6:i32\n%15:i32 = or %13, %14\n%16:i32 = xor %12, %15\n%17:i32 = xor %9, %16\n%18:i32 = add %5, %17\n%19:i32 = add %4, %18\n%20:i32 = var\n%21:i32 = var\n%22:i32 = xor %21, %20\n%23:i32 = and %6, %22\n%24:i32 = xor %20, %23\n%25:i32 = add %19, %24\n%26:i32 = add %3, %25 (hasExternalUses)\n%27:i32 = add %2, %26 (hasExternalUses)\n%28:i32 = add %1, %27\n%29:i32 = add %0, %28\ninfer %29\n",
+        []
+    ],
+    [
+        "%0:i64 = var\n%1:i64 = lshr %0, 3:i64\n%2:i32 = trunc %1\n%3:i32 = and 63:i32, %2 (hasExternalUses)\n%4:i1 = ult %3, 56:i32\npc %4 1:i1\n%5:i32 = subnw 56:i32, %3 (hasExternalUses)\n%6:i1 = eq 0:i32, %5\ninfer %6\n",
+        [
+            "result 0:i1\n"
+        ]
+    ],
+    [
+        "%0:i32 = var\n%1:i32 = lshr %0, 19:i32\ninfer %1\n",
+        []
+    ],
+    [
+        "%0:i32 = var\n%1:i32 = var\n%2:i32 = var\n%3:i32 = var\n%4:i32 = var\n%5:i32 = var\n%6:i32 = var\n%7:i32 = var\n%8:i32 = shl %7, 7:i32\n%9:i32 = lshr %7, 25:i32\n%10:i32 = or %8, %9\n%11:i32 = shl %7, 21:i32\n%12:i32 = lshr %7, 11:i32\n%13:i32 = or %11, %12\n%14:i32 = shl %7, 26:i32\n%15:i32 = lshr %7, 6:i32\n%16:i32 = or %14, %15\n%17:i32 = xor %13, %16\n%18:i32 = xor %10, %17\n%19:i32 = add %6, %18\n%20:i32 = add %5, %19\n%21:i32 = xor %2, %1\n%22:i32 = and %7, %21\n%23:i32 = xor %1, %22\n%24:i32 = add %20, %23\n%25:i32 = add %4, %24 (hasExternalUses)\n%26:i32 = add %3, %25 (hasExternalUses)\n%27:i32 = xor %7, %2\n%28:i32 = and %26, %27\n%29:i32 = xor %2, %28\n%30:i32 = add %1, %29\n%31:i32 = add %0, %30\n%32:i32 = shl %26, 7:i32\n%33:i32 = lshr %26, 25:i32\n%34:i32 = or %32, %33\n%35:i32 = shl %26, 21:i32\n%36:i32 = lshr %26, 11:i32\n%37:i32 = or %35, %36\n%38:i32 = shl %26, 26:i32\n%39:i32 = lshr %26, 6:i32\n%40:i32 = or %38, %39\n%41:i32 = xor %37, %40\n%42:i32 = xor %34, %41\n%43:i32 = add %31, %42\ninfer %43\n",
+        []
+    ],
+    [
+        "%0 = block 2\n%1:i64 = var\n%2:i64 = var\n%3:i64 = lshr %2, 3:i64\n%4:i64 = and 63:i64, %3\n%5:i64 = subnw 64:i64, %4\n%6:i64 = sub %1, %5\n%7:i64 = add %1, %3\n%8:i64 = and 63:i64, %7\n%9:i64 = phi %0, %6, %8\n%10:i64 = var (range=[0,-1))\n%11:i64 = addnuw 1:i64, %10 (hasExternalUses)\n%12:i1 = eq %9, %11\ninfer %12\n",
+        []
+    ],
+    [
+        "%0:i32 = var\n%1:i32 = var\n%2:i32 = var\n%3:i32 = var\n%4:i32 = var\n%5:i32 = shl %4, 7:i32\n%6:i32 = lshr %4, 25:i32\n%7:i32 = or %5, %6\n%8:i32 = shl %4, 21:i32\n%9:i32 = lshr %4, 11:i32\n%10:i32 = or %8, %9\n%11:i32 = shl %4, 26:i32\n%12:i32 = lshr %4, 6:i32\n%13:i32 = or %11, %12\n%14:i32 = xor %10, %13\n%15:i32 = xor %7, %14\n%16:i32 = add %3, %15\n%17:i32 = add %2, %16\n%18:i32 = var\n%19:i32 = var\n%20:i32 = xor %19, %18\n%21:i32 = and %4, %20\n%22:i32 = xor %18, %21\n%23:i32 = add %17, %22\n%24:i32 = add %1, %23 (hasExternalUses)\n%25:i32 = add %0, %24 (hasExternalUses)\n%26:i32 = shl %25, 26:i32\ninfer %26\n",
+        []
+    ],
+    [
+        "%0:i32 = var\n%1:i32 = var\n%2:i32 = add %0, %1\n%3:i32 = var\n%4:i32 = shl %3, 15:i32\n%5:i32 = lshr %3, 17:i32\n%6:i32 = or %4, %5\n%7:i32 = shl %3, 13:i32\n%8:i32 = lshr %3, 19:i32\n%9:i32 = or %7, %8\n%10:i32 = lshr %3, 10:i32\n%11:i32 = xor %9, %10\n%12:i32 = xor %6, %11\n%13:i32 = add %2, %12\n%14:i32 = var\n%15:i32 = shl %14, 25:i32\n%16:i32 = lshr %14, 7:i32\n%17:i32 = or %15, %16\n%18:i32 = shl %14, 14:i32\n%19:i32 = lshr %14, 18:i32\n%20:i32 = or %18, %19\n%21:i32 = lshr %14, 3:i32\n%22:i32 = xor %20, %21\n%23:i32 = xor %17, %22\n%24:i32 = add %13, %23 (hasExternalUses)\n%25:i32 = shl %24, 13:i32\ninfer %25\n",
+        []
+    ],
+    [
+        "%0:i64 = var\n%1:i1 = eq 0:i64, %0\npc %1 0:i1\n%2:i64 = var\n%3:i64 = lshr %2, 3:i64 (hasExternalUses)\n%4:i64 = and 63:i64, %3 (hasExternalUses)\n%5:i64 = subnw 64:i64, %4 (hasExternalUses)\n%6:i1 = ult %0, %5\ninfer %6\n",
+        []
+    ],
+    [
+        "%0:i32 = var\n%1:i32 = var\n%2:i32 = var\n%3:i32 = var\n%4:i32 = var\n%5:i32 = shl %4, 7:i32\n%6:i32 = lshr %4, 25:i32\n%7:i32 = or %5, %6\n%8:i32 = shl %4, 21:i32\n%9:i32 = lshr %4, 11:i32\n%10:i32 = or %8, %9\n%11:i32 = shl %4, 26:i32\n%12:i32 = lshr %4, 6:i32\n%13:i32 = or %11, %12\n%14:i32 = xor %10, %13\n%15:i32 = xor %7, %14\n%16:i32 = add %3, %15\n%17:i32 = add %2, %16\n%18:i32 = var\n%19:i32 = var\n%20:i32 = xor %19, %18\n%21:i32 = and %4, %20\n%22:i32 = xor %18, %21\n%23:i32 = add %17, %22\n%24:i32 = add %1, %23 (hasExternalUses)\n%25:i32 = add %0, %24 (hasExternalUses)\n%26:i32 = lshr %25, 25:i32\ninfer %26\n",
+        []
+    ],
+    [
+        "%0:i32 = var\n%1:i32 = var\n%2:i32 = var\n%3:i32 = var\n%4:i32 = shl %3, 7:i32\n%5:i32 = lshr %3, 25:i32\n%6:i32 = or %4, %5\n%7:i32 = shl %3, 21:i32\n%8:i32 = lshr %3, 11:i32\n%9:i32 = or %7, %8\n%10:i32 = shl %3, 26:i32\n%11:i32 = lshr %3, 6:i32\n%12:i32 = or %10, %11\n%13:i32 = xor %9, %12\n%14:i32 = xor %6, %13\n%15:i32 = add %2, %14\n%16:i32 = add %1, %15\n%17:i32 = var\n%18:i32 = var\n%19:i32 = xor %18, %17\n%20:i32 = and %3, %19\n%21:i32 = xor %17, %20\n%22:i32 = add %16, %21\n%23:i32 = add %0, %22 (hasExternalUses)\n%24:i32 = var\n%25:i32 = shl %24, 10:i32\n%26:i32 = lshr %24, 22:i32\n%27:i32 = or %25, %26\n%28:i32 = shl %24, 19:i32\n%29:i32 = lshr %24, 13:i32\n%30:i32 = or %28, %29\n%31:i32 = shl %24, 30:i32\n%32:i32 = lshr %24, 2:i32\n%33:i32 = or %31, %32\n%34:i32 = xor %30, %33\n%35:i32 = xor %27, %34\n%36:i32 = add %23, %35\n%37:i32 = var\n%38:i32 = var\n%39:i32 = or %37, %38\n%40:i32 = and %24, %39\n%41:i32 = and %37, %38\n%42:i32 = or %40, %41\n%43:i32 = add %36, %42 (hasExternalUses)\n%44:i32 = lshr %43, 13:i32\ninfer %44\n",
+        []
+    ],
+    [
+        "%0:i32 = var\n%1:i32 = var\n%2:i32 = var\n%3:i32 = var\n%4:i32 = shl %3, 7:i32\n%5:i32 = lshr %3, 25:i32\n%6:i32 = or %4, %5\n%7:i32 = shl %3, 21:i32\n%8:i32 = lshr %3, 11:i32\n%9:i32 = or %7, %8\n%10:i32 = shl %3, 26:i32\n%11:i32 = lshr %3, 6:i32\n%12:i32 = or %10, %11\n%13:i32 = xor %9, %12\n%14:i32 = xor %6, %13\n%15:i32 = add %2, %14\n%16:i32 = add %1, %15\n%17:i32 = var\n%18:i32 = var\n%19:i32 = xor %18, %17\n%20:i32 = and %3, %19\n%21:i32 = xor %17, %20\n%22:i32 = add %16, %21\n%23:i32 = add %0, %22 (hasExternalUses)\n%24:i32 = var\n%25:i32 = shl %24, 10:i32\n%26:i32 = lshr %24, 22:i32\n%27:i32 = or %25, %26\n%28:i32 = shl %24, 19:i32\n%29:i32 = lshr %24, 13:i32\n%30:i32 = or %28, %29\n%31:i32 = shl %24, 30:i32\n%32:i32 = lshr %24, 2:i32\n%33:i32 = or %31, %32\n%34:i32 = xor %30, %33\n%35:i32 = xor %27, %34\n%36:i32 = add %23, %35\n%37:i32 = var\n%38:i32 = var\n%39:i32 = or %37, %38\n%40:i32 = and %24, %39\n%41:i32 = and %37, %38\n%42:i32 = or %40, %41\n%43:i32 = add %36, %42 (hasExternalUses)\n%44:i32 = shl %43, 10:i32\ninfer %44\n",
+        []
+    ],
+    [
+        "%0:i32 = var (knownBits=0xxxxxxxxxxxxxxxxxxxxxxxxxxx0000) (nonNegative) (range=[0,49))\n%1:i32 = or 11:i32, %0\ninfer %1\n",
+        []
+    ],
+    [
+        "%0 = block 3\n%1:i64 = var\n%2:i64 = var\n%3:i64 = phi %0, %1, %1, %2\n%4:i64 = lshr %3, 16:i64\n%5:i8 = trunc %4\ninfer %5\n",
+        []
+    ],
+    [
+        "%0:i32 = var\n%1:i32 = lshr %0, 18:i32\ninfer %1\n",
+        []
+    ],
+    [
+        "%0:i32 = var (knownBits=0xxxxxxxxxxxxxxxxxxxxxxxxxxx0000) (nonNegative) (range=[0,49))\n%1:i32 = or 9:i32, %0\ninfer %1\n",
+        []
+    ],
+    [
+        "%0:i32 = var\n%1:i32 = shl %0, 30:i32\ninfer %1\n",
+        []
+    ],
+    [
+        "%0 = block 3\n%1:i64 = var\n%2:i64 = var\n%3:i64 = phi %0, %1, %1, %2\n%4:i64 = lshr %3, 40:i64\ninfer %4 (demandedBits=0000000000000000000000000000000000000000000000000000000011111111)\n",
+        []
+    ],
+    [
+        "%0 = block 3\n%1:i64 = var\n%2:i64 = var\n%3:i64 = phi %0, %1, %1, %2\n%4:i64 = lshr %3, 8:i64\ninfer %4 (demandedBits=0000000000000000000000000000000000000000000000000000000011111111)\n",
+        []
+    ],
+    [
+        "%0:i32 = var\n%1:i32 = shl %0, 21:i32\n%2:i32 = lshr %0, 11:i32\n%3:i32 = or %1, %2\n%4:i32 = shl %0, 26:i32\n%5:i32 = lshr %0, 6:i32\n%6:i32 = or %4, %5\n%7:i32 = xor %3, %6\ninfer %7\n",
+        []
+    ],
+    [
+        "%0:i32 = var\n%1:i32 = lshr %0, 17:i32\ninfer %1\n",
+        []
+    ],
+    [
+        "%0:i32 = var\n%1:i32 = shl %0, 21:i32\ninfer %1\n",
+        []
+    ],
+    [
+        "%0:i32 = var (knownBits=0xxxxxxxxxxxxxxxxxxxxxxxxxxx0000) (nonNegative) (range=[0,49))\n%1:i32 = or 8:i32, %0\ninfer %1\n",
+        []
+    ],
+    [
+        "%0:i32 = var\n%1:i32 = var\n%2:i32 = var\n%3:i32 = var\n%4:i32 = var\n%5:i32 = shl %4, 7:i32\n%6:i32 = lshr %4, 25:i32\n%7:i32 = or %5, %6\n%8:i32 = shl %4, 21:i32\n%9:i32 = lshr %4, 11:i32\n%10:i32 = or %8, %9\n%11:i32 = shl %4, 26:i32\n%12:i32 = lshr %4, 6:i32\n%13:i32 = or %11, %12\n%14:i32 = xor %10, %13\n%15:i32 = xor %7, %14\n%16:i32 = add %3, %15\n%17:i32 = add %2, %16\n%18:i32 = var\n%19:i32 = var\n%20:i32 = xor %19, %18\n%21:i32 = and %4, %20\n%22:i32 = xor %18, %21\n%23:i32 = add %17, %22\n%24:i32 = add %1, %23 (hasExternalUses)\n%25:i32 = add %0, %24 (hasExternalUses)\n%26:i32 = lshr %25, 11:i32\ninfer %26\n",
+        []
+    ],
+    [
+        "%0:i32 = var\n%1:i32 = shl %0, 30:i32\n%2:i32 = lshr %0, 2:i32\n%3:i32 = or %1, %2\ninfer %3\n",
+        []
+    ],
+    [
+        "%0:i32 = var (knownBits=0xxxxxxxxxxxxxxxxxxxxxxxxxxx0000) (nonNegative) (range=[0,49))\ninfer %0\n",
+        []
+    ],
+    [
+        "%0:i32 = var\n%1:i32 = lshr %0, 24:i32\n%2:i8 = trunc %1\ninfer %2\n",
+        []
+    ],
+    [
+        "%0:i32 = var (knownBits=0xxxxxxxxxxxxxxxxxxxxxxxxxxx0000) (nonNegative) (range=[0,49))\n%1:i1 = eq 48:i32, %0\npc %1 0:i1\n%2:i32 = or 11:i32, %0 (hasExternalUses)\n%3:i32 = addnw 9:i32, %2\ninfer %3\n",
+        []
+    ],
+    [
+        "%0:i32 = var\n%1:i32 = var\n%2:i32 = var\n%3:i32 = var\n%4:i32 = var\n%5:i32 = shl %4, 7:i32\n%6:i32 = lshr %4, 25:i32\n%7:i32 = or %5, %6\n%8:i32 = shl %4, 21:i32\n%9:i32 = lshr %4, 11:i32\n%10:i32 = or %8, %9\n%11:i32 = shl %4, 26:i32\n%12:i32 = lshr %4, 6:i32\n%13:i32 = or %11, %12\n%14:i32 = xor %10, %13\n%15:i32 = xor %7, %14\n%16:i32 = add %3, %15\n%17:i32 = add %2, %16\n%18:i32 = var\n%19:i32 = var\n%20:i32 = xor %19, %18\n%21:i32 = and %4, %20\n%22:i32 = xor %18, %21\n%23:i32 = add %17, %22\n%24:i32 = add %1, %23 (hasExternalUses)\n%25:i32 = shl %0, 10:i32\n%26:i32 = lshr %0, 22:i32\n%27:i32 = or %25, %26\n%28:i32 = shl %0, 19:i32\n%29:i32 = lshr %0, 13:i32\n%30:i32 = or %28, %29\n%31:i32 = shl %0, 30:i32\n%32:i32 = lshr %0, 2:i32\n%33:i32 = or %31, %32\n%34:i32 = xor %30, %33\n%35:i32 = xor %27, %34\n%36:i32 = add %24, %35\n%37:i32 = var\n%38:i32 = var\n%39:i32 = or %37, %38\n%40:i32 = and %0, %39\n%41:i32 = and %37, %38\n%42:i32 = or %40, %41\n%43:i32 = add %36, %42 (hasExternalUses)\n%44:i32 = and %0, %43\ninfer %44\n",
+        []
+    ],
+    [
+        "%0 = block 3\n%1:i64 = var\n%2:i64 = var\n%3:i64 = phi %0, %1, %1, %2\n%4:i64 = lshr %3, 32:i64\n%5:i8 = trunc %4\ninfer %5\n",
+        []
+    ],
+    [
+        "%0:i32 = var\n%1:i32 = shl %0, 10:i32\ninfer %1\n",
+        []
+    ],
+    [
+        "%0:i32 = var (knownBits=0xxxxxxxxxxxxxxxxxxxxxxxxxxx0000) (nonNegative) (range=[0,49))\n%1:i32 = or 2:i32, %0\ninfer %1\n",
+        []
+    ],
+    [
+        "%0:i32 = var\n%1:i32 = shl %0, 7:i32\n%2:i32 = lshr %0, 25:i32\n%3:i32 = or %1, %2\ninfer %3\n",
+        []
+    ],
+    [
+        "%0:i64 = var (knownBits=0xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx) (nonNegative) (range=[0,64))\n%1:i64 = addnw 1:i64, %0 (hasExternalUses)\n%2:i64 = var\n%3:i64 = lshr %2, 3:i64 (hasExternalUses)\n%4:i64 = and 63:i64, %3 (hasExternalUses)\n%5:i64 = subnw 64:i64, %4 (hasExternalUses)\n%6:i1 = eq %1, %5\npc %6 1:i1\n%7:i32 = trunc %5\ninfer %7\n",
+        []
+    ],
+    [
+        "%0 = block 3\n%1:i64 = var\n%2:i64 = var\n%3:i64 = phi %0, %1, %1, %2\n%4:i64 = lshr %3, 32:i64\ninfer %4 (demandedBits=0000000000000000000000000000000000000000000000000000000011111111)\n",
+        []
+    ],
+    [
+        "%0:i32 = var\n%1:i32 = lshr %0, 7:i32\ninfer %1\n",
+        []
+    ],
+    [
+        "%0 = block 3\n%1:i64 = var\n%2:i64 = var\n%3:i64 = phi %0, %1, %1, %2\n%4:i64 = lshr %3, 24:i64\ninfer %4 (demandedBits=0000000000000000000000000000000000000000000000000000000011111111)\n",
+        []
+    ],
+    [
+        "%0:i32 = var (knownBits=0xxxxxxxxxxxxxxxxxxxxxxxxxxx0000) (nonNegative) (range=[0,49))\n%1:i1 = eq 48:i32, %0\npc %1 0:i1\n%2:i32 = or 15:i32, %0 (hasExternalUses)\n%3:i32 = addnw 16:i32, %2\ninfer %3\n",
+        []
+    ],
+    [
+        "%0:i32 = var (knownBits=0xxxxxxxxxxxxxxxxxxxxxxxxxxx0000) (nonNegative) (range=[0,49))\n%1:i1 = eq 48:i32, %0\npc %1 0:i1\n%2:i32 = or 11:i32, %0 (hasExternalUses)\n%3:i32 = addnw 1:i32, %2\ninfer %3\n",
+        []
+    ],
+    [
+        "%0 = block 3\n%1:i64 = var\n%2:i64 = var\n%3:i64 = phi %0, %1, %1, %2\n%4:i64 = lshr %3, 24:i64\n%5:i8 = trunc %4\ninfer %5\n",
+        []
+    ],
+    [
+        "%0:i32 = var (knownBits=0xxxxxxxxxxxxxxxxxxxxxxxxxxx0000) (nonNegative) (range=[0,49))\n%1:i1 = eq 48:i32, %0\npc %1 0:i1\n%2:i32 = or 14:i32, %0 (hasExternalUses)\n%3:i32 = addnw 16:i32, %2\ninfer %3\n",
+        []
+    ],
+    [
+        "%0:i32 = var\n%1:i32 = shl %0, 15:i32\n%2:i32 = lshr %0, 17:i32\n%3:i32 = or %1, %2\n%4:i32 = shl %0, 13:i32\n%5:i32 = lshr %0, 19:i32\n%6:i32 = or %4, %5\n%7:i32 = lshr %0, 10:i32\n%8:i32 = xor %6, %7\n%9:i32 = xor %3, %8\ninfer %9\n",
+        []
+    ],
+    [
+        "%0:i32 = var\n%1:i32 = var\n%2:i32 = var\n%3:i32 = var\n%4:i32 = var\n%5:i32 = var\n%6:i32 = shl %5, 7:i32\n%7:i32 = lshr %5, 25:i32\n%8:i32 = or %6, %7\n%9:i32 = shl %5, 21:i32\n%10:i32 = lshr %5, 11:i32\n%11:i32 = or %9, %10\n%12:i32 = shl %5, 26:i32\n%13:i32 = lshr %5, 6:i32\n%14:i32 = or %12, %13\n%15:i32 = xor %11, %14\n%16:i32 = xor %8, %15\n%17:i32 = add %4, %16\n%18:i32 = add %3, %17\n%19:i32 = var\n%20:i32 = xor %0, %19\n%21:i32 = and %5, %20\n%22:i32 = xor %19, %21\n%23:i32 = add %18, %22\n%24:i32 = add %2, %23 (hasExternalUses)\n%25:i32 = add %1, %24 (hasExternalUses)\n%26:i32 = xor %5, %0\n%27:i32 = and %25, %26\n%28:i32 = xor %0, %27\ninfer %28\n",
+        []
+    ],
+    [
+        "%0:i32 = var\n%1:i32 = var\n%2:i32 = var\n%3:i32 = var\n%4:i32 = var\n%5:i32 = var\n%6:i32 = shl %5, 7:i32\n%7:i32 = lshr %5, 25:i32\n%8:i32 = or %6, %7\n%9:i32 = shl %5, 21:i32\n%10:i32 = lshr %5, 11:i32\n%11:i32 = or %9, %10\n%12:i32 = shl %5, 26:i32\n%13:i32 = lshr %5, 6:i32\n%14:i32 = or %12, %13\n%15:i32 = xor %11, %14\n%16:i32 = xor %8, %15\n%17:i32 = add %4, %16\n%18:i32 = add %3, %17\n%19:i32 = var\n%20:i32 = var\n%21:i32 = xor %20, %19\n%22:i32 = and %5, %21\n%23:i32 = xor %19, %22\n%24:i32 = add %18, %23\n%25:i32 = add %2, %24 (hasExternalUses)\n%26:i32 = add %1, %25 (hasExternalUses)\n%27:i32 = add %0, %26\ninfer %27\n",
+        []
+    ],
+    [
+        "%0:i32 = var (knownBits=0xxxxxxxxxxxxxxxxxxxxxxxxxxx0000) (nonNegative) (range=[0,49))\n%1:i32 = or 5:i32, %0\ninfer %1\n",
+        []
+    ],
+    [
+        "%0:i32 = var\n%1:i32 = var\n%2:i32 = var\n%3:i32 = shl %2, 25:i32\n%4:i32 = lshr %2, 7:i32\n%5:i32 = or %3, %4\n%6:i32 = shl %2, 14:i32\n%7:i32 = lshr %2, 18:i32\n%8:i32 = or %6, %7\n%9:i32 = lshr %2, 3:i32\n%10:i32 = xor %8, %9\n%11:i32 = xor %5, %10\n%12:i32 = add %1, %11\n%13:i32 = add %0, %12\ninfer %13\n",
+        []
+    ],
+    [
+        "%0:i32 = var (knownBits=0xxxxxxxxxxxxxxxxxxxxxxxxxxx0000) (nonNegative) (range=[0,49))\n%1:i1 = eq 48:i32, %0\npc %1 0:i1\n%2:i32 = or 1:i32, %0 (hasExternalUses)\n%3:i32 = addnw 16:i32, %2\ninfer %3\n",
+        []
+    ],
+    [
+        "%0:i32 = var (knownBits=0xxxxxxxxxxxxxxxxxxxxxxxxxxx0000) (nonNegative) (range=[0,49))\n%1:i1 = eq 48:i32, %0\npc %1 0:i1\n%2:i32 = or 9:i32, %0 (hasExternalUses)\n%3:i32 = addnw 16:i32, %2\ninfer %3\n",
+        []
+    ],
+    [
+        "%0:i32 = var\n%1:i32 = var\n%2:i32 = add %0, %1\n%3:i32 = var\n%4:i32 = shl %3, 15:i32\n%5:i32 = lshr %3, 17:i32\n%6:i32 = or %4, %5\n%7:i32 = shl %3, 13:i32\n%8:i32 = lshr %3, 19:i32\n%9:i32 = or %7, %8\n%10:i32 = lshr %3, 10:i32\n%11:i32 = xor %9, %10\n%12:i32 = xor %6, %11\n%13:i32 = add %2, %12\n%14:i32 = var\n%15:i32 = shl %14, 25:i32\n%16:i32 = lshr %14, 7:i32\n%17:i32 = or %15, %16\n%18:i32 = shl %14, 14:i32\n%19:i32 = lshr %14, 18:i32\n%20:i32 = or %18, %19\n%21:i32 = lshr %14, 3:i32\n%22:i32 = xor %20, %21\n%23:i32 = xor %17, %22\n%24:i32 = add %13, %23 (hasExternalUses)\n%25:i32 = shl %24, 13:i32\n%26:i32 = lshr %24, 19:i32\n%27:i32 = or %25, %26\ninfer %27\n",
+        []
+    ],
+    [
+        "%0:i32 = var\n%1:i32 = var\n%2:i32 = var\n%3:i32 = var\n%4:i32 = var\n%5:i32 = var\n%6:i32 = var\n%7:i32 = var\n%8:i32 = var\n%9:i32 = shl %8, 7:i32\n%10:i32 = lshr %8, 25:i32\n%11:i32 = or %9, %10\n%12:i32 = shl %8, 21:i32\n%13:i32 = lshr %8, 11:i32\n%14:i32 = or %12, %13\n%15:i32 = shl %8, 26:i32\n%16:i32 = lshr %8, 6:i32\n%17:i32 = or %15, %16\n%18:i32 = xor %14, %17\n%19:i32 = xor %11, %18\n%20:i32 = add %7, %19\n%21:i32 = add %6, %20\n%22:i32 = xor %3, %2\n%23:i32 = and %8, %22\n%24:i32 = xor %2, %23\n%25:i32 = add %21, %24\n%26:i32 = add %5, %25 (hasExternalUses)\n%27:i32 = add %4, %26 (hasExternalUses)\n%28:i32 = xor %8, %3\n%29:i32 = and %27, %28\n%30:i32 = xor %3, %29\n%31:i32 = add %2, %30\n%32:i32 = add %1, %31\n%33:i32 = shl %27, 7:i32\n%34:i32 = lshr %27, 25:i32\n%35:i32 = or %33, %34\n%36:i32 = shl %27, 21:i32\n%37:i32 = lshr %27, 11:i32\n%38:i32 = or %36, %37\n%39:i32 = shl %27, 26:i32\n%40:i32 = lshr %27, 6:i32\n%41:i32 = or %39, %40\n%42:i32 = xor %38, %41\n%43:i32 = xor %35, %42\n%44:i32 = add %32, %43\n%45:i32 = add %0, %44\ninfer %45\n",
+        []
+    ],
+    [
+        "%0:i32 = var\n%1:i32 = lshr %0, 11:i32\ninfer %1\n",
+        []
+    ],
+    [
+        "%0 = block 3\n%1:i64 = var\n%2:i64 = var\n%3:i64 = phi %0, %1, %1, %2\n%4:i64 = lshr %3, 48:i64\ninfer %4 (demandedBits=0000000000000000000000000000000000000000000000000000000011111111)\n",
+        []
+    ],
+    [
+        "%0:i32 = var\n%1:i32 = lshr %0, 3:i32\ninfer %1\n",
+        []
+    ],
+    [
+        "%0:i32 = var (knownBits=0xxxxxxxxxxxxxxxxxxxxxxxxxxx0000) (nonNegative) (range=[0,49))\n%1:i1 = eq 48:i32, %0\npc %1 0:i1\n%2:i32 = or 7:i32, %0 (hasExternalUses)\n%3:i32 = addnw 9:i32, %2\ninfer %3\n",
+        []
+    ],
+    [
+        "%0:i32 = var\n%1:i32 = var\n%2:i32 = var\n%3:i32 = var\n%4:i32 = var\n%5:i32 = shl %4, 7:i32\n%6:i32 = lshr %4, 25:i32\n%7:i32 = or %5, %6\n%8:i32 = shl %4, 21:i32\n%9:i32 = lshr %4, 11:i32\n%10:i32 = or %8, %9\n%11:i32 = shl %4, 26:i32\n%12:i32 = lshr %4, 6:i32\n%13:i32 = or %11, %12\n%14:i32 = xor %10, %13\n%15:i32 = xor %7, %14\n%16:i32 = add %3, %15\n%17:i32 = add %2, %16\n%18:i32 = var\n%19:i32 = var\n%20:i32 = xor %19, %18\n%21:i32 = and %4, %20\n%22:i32 = xor %18, %21\n%23:i32 = add %17, %22\n%24:i32 = add %1, %23 (hasExternalUses)\n%25:i32 = add %0, %24 (hasExternalUses)\n%26:i32 = shl %25, 21:i32\ninfer %26\n",
+        []
+    ],
+    [
+        "%0:i32 = var (knownBits=0xxxxxxxxxxxxxxxxxxxxxxxxxxx0000) (nonNegative) (range=[0,49))\n%1:i1 = eq 48:i32, %0\npc %1 0:i1\n%2:i32 = or 11:i32, %0 (hasExternalUses)\n%3:i32 = addnw 16:i32, %2\ninfer %3\n",
+        []
+    ],
+    [
+        "%0:i32 = var (knownBits=0xxxxxxxxxxxxxxxxxxxxxxxxxxx0000) (nonNegative) (range=[0,49))\n%1:i32 = or 4:i32, %0\ninfer %1\n",
+        []
+    ],
+    [
+        "%0:i32 = var\n%1:i32 = var\n%2:i32 = add %0, %1\n%3:i32 = var\n%4:i32 = var\n%5:i32 = add %3, %4\n%6:i32 = var\n%7:i32 = shl %6, 15:i32\n%8:i32 = lshr %6, 17:i32\n%9:i32 = or %7, %8\n%10:i32 = shl %6, 13:i32\n%11:i32 = lshr %6, 19:i32\n%12:i32 = or %10, %11\n%13:i32 = lshr %6, 10:i32\n%14:i32 = xor %12, %13\n%15:i32 = xor %9, %14\n%16:i32 = add %5, %15\n%17:i32 = var\n%18:i32 = shl %17, 25:i32\n%19:i32 = lshr %17, 7:i32\n%20:i32 = or %18, %19\n%21:i32 = shl %17, 14:i32\n%22:i32 = lshr %17, 18:i32\n%23:i32 = or %21, %22\n%24:i32 = lshr %17, 3:i32\n%25:i32 = xor %23, %24\n%26:i32 = xor %20, %25\n%27:i32 = add %16, %26 (hasExternalUses)\n%28:i32 = shl %27, 15:i32\n%29:i32 = lshr %27, 17:i32\n%30:i32 = or %28, %29\n%31:i32 = shl %27, 13:i32\n%32:i32 = lshr %27, 19:i32\n%33:i32 = or %31, %32\n%34:i32 = lshr %27, 10:i32\n%35:i32 = xor %33, %34\n%36:i32 = xor %30, %35\n%37:i32 = add %2, %36\ninfer %37\n",
+        []
+    ],
+    [
+        "%0:i8 = var\n%1:i32 = zext %0\n%2:i32 = shlnw %1, 8:i32\ninfer %2\n",
+        []
+    ],
+    [
+        "%0:i8 = var\ninfer %0\n",
+        []
+    ],
+    [
+        "%0:i32 = var (knownBits=0xxxxxxxxxxxxxxxxxxxxxxxxxxx0000) (nonNegative) (range=[0,49))\n%1:i1 = eq 48:i32, %0\npc %1 0:i1\n%2:i32 = or 3:i32, %0 (hasExternalUses)\n%3:i32 = addnw 9:i32, %2\ninfer %3\n",
+        []
+    ],
+    [
+        "%0:i32 = var (knownBits=0xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx) (nonNegative) (range=[0,16))\n%1:i32 = shlnw %0, 2:i32\ninfer %1\n",
+        []
+    ],
+    [
+        "%0:i64 = var\n%1:i64 = lshr %0, 3:i64 (hasExternalUses)\n%2:i64 = and 63:i64, %1\ninfer %2\n",
+        []
+    ],
+    [
+        "%0:i64 = var (knownBits=0xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx) (nonNegative) (range=[0,64))\n%1:i64 = var\n%2:i64 = lshr %1, 3:i64 (hasExternalUses)\n%3:i64 = and 63:i64, %2 (hasExternalUses)\n%4:i64 = addnw %0, %3\n%5:i32 = trunc %4\ninfer %5\n",
+        []
+    ],
+    [
+        "%0:i32 = var\n%1:i32 = var\n%2:i32 = var\n%3:i32 = var\n%4:i32 = var\n%5:i32 = var\n%6:i32 = var\n%7:i32 = var\n%8:i32 = shl %7, 7:i32\n%9:i32 = lshr %7, 25:i32\n%10:i32 = or %8, %9\n%11:i32 = shl %7, 21:i32\n%12:i32 = lshr %7, 11:i32\n%13:i32 = or %11, %12\n%14:i32 = shl %7, 26:i32\n%15:i32 = lshr %7, 6:i32\n%16:i32 = or %14, %15\n%17:i32 = xor %13, %16\n%18:i32 = xor %10, %17\n%19:i32 = add %6, %18\n%20:i32 = add %5, %19\n%21:i32 = xor %2, %1\n%22:i32 = and %7, %21\n%23:i32 = xor %1, %22\n%24:i32 = add %20, %23\n%25:i32 = add %4, %24 (hasExternalUses)\n%26:i32 = add %3, %25 (hasExternalUses)\n%27:i32 = xor %7, %2\n%28:i32 = and %26, %27\n%29:i32 = xor %2, %28\n%30:i32 = add %1, %29\n%31:i32 = add %0, %30\ninfer %31\n",
+        []
+    ],
+    [
+        "%0:i32 = var\n%1:i32 = var\n%2:i32 = xor %0, %1\ninfer %2\n",
+        []
+    ],
+    [
+        "%0:i32 = var (knownBits=0xxxxxxxxxxxxxxxxxxxxxxxxxxx0000) (nonNegative) (range=[0,49))\n%1:i1 = eq 48:i32, %0\npc %1 0:i1\n%2:i32 = or 5:i32, %0 (hasExternalUses)\n%3:i32 = addnw 16:i32, %2\ninfer %3\n",
+        []
+    ],
+    [
+        "%0:i64 = var\n%1:i64 = lshr %0, 3:i64\ninfer %1 (demandedBits=0000000000000000000000000000000000000000000000000000000000111111)\n",
+        []
+    ],
+    [
+        "%0:i32 = var (knownBits=0xxxxxxxxxxxxxxxxxxxxxxxxxxx0000) (nonNegative) (range=[0,49))\n%1:i1 = eq 48:i32, %0\npc %1 0:i1\n%2:i32 = or 8:i32, %0 (hasExternalUses)\n%3:i32 = addnw 16:i32, %2\ninfer %3\n",
+        []
+    ],
+    [
+        "%0:i32 = var (knownBits=0xxxxxxxxxxxxxxxxxxxxxxxxxxx0000) (nonNegative) (range=[0,49))\n%1:i1 = eq 48:i32, %0\npc %1 0:i1\n%2:i32 = or 3:i32, %0 (hasExternalUses)\n%3:i32 = addnw 1:i32, %2\ninfer %3\n",
+        []
+    ],
+    [
+        "%0 = block 2\n%1:i64 = var\n%2:i64 = var\n%3:i64 = lshr %2, 3:i64\n%4:i64 = and 63:i64, %3\n%5:i64 = subnw 64:i64, %4\n%6:i64 = sub %1, %5\n%7:i64 = add %1, %3\n%8:i64 = and 63:i64, %7\n%9:i64 = phi %0, %6, %8\n%10:i1 = eq 0:i64, %9\ninfer %10\n",
+        []
+    ],
+    [
+        "%0:i64 = var (knownBits=0xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx) (nonNegative) (range=[0,64))\n%1:i64 = addnw 1:i64, %0\ninfer %1\n",
+        []
+    ],
+    [
+        "%0:i32 = var (knownBits=0xxxxxxxxxxxxxxxxxxxxxxxxxxx0000) (nonNegative) (range=[0,49))\n%1:i1 = eq 48:i32, %0\npc %1 0:i1\n%2:i32 = or 9:i32, %0 (hasExternalUses)\n%3:i32 = addnw 1:i32, %2\ninfer %3\n",
+        []
+    ],
+    [
+        "%0:i32 = var\n%1:i32 = shl %0, 7:i32\ninfer %1\n",
+        []
+    ],
+    [
+        "%0:i32 = var\n%1:i32 = var\n%2:i32 = var\n%3:i32 = or %1, %2\n%4:i32 = and %0, %3\ninfer %4\n",
+        []
+    ],
+    [
+        "%0:i32 = var (knownBits=0xxxxxxxxxxxxxxxxxxxxxxxxxxx0000) (nonNegative) (range=[0,49))\n%1:i1 = eq 48:i32, %0\npc %1 0:i1\n%2:i32 = or 1:i32, %0 (hasExternalUses)\n%3:i32 = addnw 1:i32, %2\ninfer %3\n",
+        []
+    ],
+    [
+        "%0:i32 = var\n%1:i32 = lshr %0, 10:i32\ninfer %1\n",
+        []
+    ],
+    [
+        "%0:i64 = var (knownBits=0xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx) (nonNegative) (range=[0,64))\n%1:i64 = addnw 1:i64, %0 (hasExternalUses)\n%2:i64 = var\n%3:i64 = lshr %2, 3:i64 (hasExternalUses)\n%4:i64 = and 63:i64, %3 (hasExternalUses)\n%5:i64 = subnw 64:i64, %4 (hasExternalUses)\n%6:i1 = eq %1, %5\npc %6 1:i1\n%7:i64 = var\n%8:i64 = sub %7, %5 (hasExternalUses)\n%9:i1 = ult 63:i64, %8\ninfer %9\n",
+        []
+    ],
+    [
+        "%0:i32 = var\n%1:i32 = var\n%2:i32 = var\n%3:i32 = var\n%4:i32 = shl %3, 7:i32\n%5:i32 = lshr %3, 25:i32\n%6:i32 = or %4, %5\n%7:i32 = shl %3, 21:i32\n%8:i32 = lshr %3, 11:i32\n%9:i32 = or %7, %8\n%10:i32 = shl %3, 26:i32\n%11:i32 = lshr %3, 6:i32\n%12:i32 = or %10, %11\n%13:i32 = xor %9, %12\n%14:i32 = xor %6, %13\n%15:i32 = add %2, %14\n%16:i32 = add %1, %15\n%17:i32 = var\n%18:i32 = var\n%19:i32 = xor %18, %17\n%20:i32 = and %3, %19\n%21:i32 = xor %17, %20\n%22:i32 = add %16, %21\n%23:i32 = add %0, %22 (hasExternalUses)\n%24:i32 = var\n%25:i32 = shl %24, 10:i32\n%26:i32 = lshr %24, 22:i32\n%27:i32 = or %25, %26\n%28:i32 = shl %24, 19:i32\n%29:i32 = lshr %24, 13:i32\n%30:i32 = or %28, %29\n%31:i32 = shl %24, 30:i32\n%32:i32 = lshr %24, 2:i32\n%33:i32 = or %31, %32\n%34:i32 = xor %30, %33\n%35:i32 = xor %27, %34\n%36:i32 = add %23, %35\n%37:i32 = var\n%38:i32 = var\n%39:i32 = or %37, %38\n%40:i32 = and %24, %39\n%41:i32 = and %37, %38\n%42:i32 = or %40, %41\n%43:i32 = add %36, %42 (hasExternalUses)\n%44:i32 = shl %43, 30:i32\ninfer %44\n",
+        []
+    ],
+    [
+        "%0:i32 = var\n%1:i32 = var\n%2:i32 = add %0, %1\n%3:i32 = var\n%4:i32 = shl %3, 15:i32\n%5:i32 = lshr %3, 17:i32\n%6:i32 = or %4, %5\n%7:i32 = shl %3, 13:i32\n%8:i32 = lshr %3, 19:i32\n%9:i32 = or %7, %8\n%10:i32 = lshr %3, 10:i32\n%11:i32 = xor %9, %10\n%12:i32 = xor %6, %11\n%13:i32 = add %2, %12\n%14:i32 = var\n%15:i32 = shl %14, 25:i32\n%16:i32 = lshr %14, 7:i32\n%17:i32 = or %15, %16\n%18:i32 = shl %14, 14:i32\n%19:i32 = lshr %14, 18:i32\n%20:i32 = or %18, %19\n%21:i32 = lshr %14, 3:i32\n%22:i32 = xor %20, %21\n%23:i32 = xor %17, %22\n%24:i32 = add %13, %23 (hasExternalUses)\n%25:i32 = lshr %24, 10:i32\ninfer %25\n",
+        []
+    ],
+    [
+        "%0:i32 = var\n%1:i32 = shl %0, 15:i32\n%2:i32 = lshr %0, 17:i32\n%3:i32 = or %1, %2\ninfer %3\n",
+        []
+    ],
+    [
+        "%0:i64 = var (knownBits=0xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx) (nonNegative) (range=[0,64))\n%1:i64 = var\n%2:i64 = lshr %1, 3:i64 (hasExternalUses)\n%3:i64 = and 63:i64, %2 (hasExternalUses)\n%4:i64 = addnw %0, %3\ninfer %4 (demandedBits=0000000000000000000000000000000011111111111111111111111111111111)\n",
+        []
+    ],
+    [
+        "%0 = block 3\n%1:i64 = var\n%2:i64 = var\n%3:i64 = phi %0, %1, %1, %2\n%4:i8 = trunc %3\ninfer %4\n",
+        []
+    ],
+    [
+        "%0:i32 = var (knownBits=0xxxxxxxxxxxxxxxxxxxxxxxxxxx0000) (nonNegative) (range=[0,49))\n%1:i1 = eq 48:i32, %0\npc %1 0:i1\n%2:i32 = or 13:i32, %0 (hasExternalUses)\n%3:i32 = addnw 16:i32, %2\ninfer %3\n",
+        []
+    ],
+    [
+        "%0:i32 = var (knownBits=0xxxxxxxxxxxxxxxxxxxxxxxxxxx0000) (nonNegative) (range=[0,49))\n%1:i1 = eq 48:i32, %0\npc %1 0:i1\n%2:i32 = or 2:i32, %0 (hasExternalUses)\n%3:i32 = addnw 16:i32, %2\ninfer %3\n",
+        []
+    ],
+    [
+        "%0:i8 = var\n%1:i32 = zext %0\n%2:i32 = shlnw %1, 8:i32\n%3:i8 = var\n%4:i32 = zext %3\n%5:i32 = or %2, %4\n%6:i8 = var\n%7:i32 = zext %6\n%8:i32 = shlnw %7, 16:i32\n%9:i32 = or %5, %8\n%10:i8 = var\n%11:i32 = zext %10\n%12:i32 = shlnuw %11, 24:i32\n%13:i32 = or %9, %12\ninfer %13\n",
+        []
+    ],
+    [
+        "%0:i32 = var\n%1:i32 = shl %0, 13:i32\n%2:i32 = lshr %0, 19:i32\n%3:i32 = or %1, %2\n%4:i32 = lshr %0, 10:i32\n%5:i32 = xor %3, %4\ninfer %5\n",
+        []
+    ],
+    [
+        "%0:i32 = var\n%1:i32 = shl %0, 26:i32\ninfer %1\n",
+        []
+    ],
+    [
+        "%0:i32 = var (knownBits=0xxxxxxxxxxxxxxxxxxxxxxxxxxx0000) (nonNegative) (range=[0,49))\n%1:i1 = eq 48:i32, %0\npc %1 0:i1\n%2:i32 = or 4:i32, %0 (hasExternalUses)\n%3:i32 = addnw 16:i32, %2\ninfer %3\n",
+        []
+    ],
+    [
+        "%0:i32 = var\n%1:i32 = var\n%2:i32 = var\n%3:i32 = xor %1, %2\n%4:i32 = and %0, %3\ninfer %4\n",
+        []
+    ],
+    [
+        "%0:i64 = var\n%1:i64 = var (range=[0,-1))\n%2:i64 = addnuw 1:i64, %1 (hasExternalUses)\n%3:i1 = eq %0, %2\ninfer %3\n",
+        []
+    ],
+    [
+        "%0:i32 = var\n%1:i32 = shl %0, 14:i32\n%2:i32 = lshr %0, 18:i32\n%3:i32 = or %1, %2\n%4:i32 = lshr %0, 3:i32\n%5:i32 = xor %3, %4\ninfer %5\n",
+        []
+    ],
+    [
+        "%0:i64 = var\n%1:i1 = eq 0:i64, %0\ninfer %1\n",
+        []
+    ],
+    [
+        "%0 = block 3\n%1:i64 = var\n%2:i64 = var\n%3:i64 = phi %0, %1, %1, %2\n%4:i64 = lshr %3, 56:i64\n%5:i8 = trunc %4\ninfer %5\n",
+        []
+    ],
+    [
+        "%0:i32 = var\n%1:i32 = shl %0, 19:i32\n%2:i32 = lshr %0, 13:i32\n%3:i32 = or %1, %2\ninfer %3\n",
+        []
+    ],
+    [
+        "%0:i32 = var\n%1:i32 = shl %0, 10:i32\n%2:i32 = lshr %0, 22:i32\n%3:i32 = or %1, %2\ninfer %3\n",
+        []
+    ],
+    [
+        "%0:i32 = var\n%1:i32 = lshr %0, 2:i32\ninfer %1\n",
+        []
+    ],
+    [
+        "%0:i32 = var (knownBits=0xxxxxxxxxxxxxxxxxxxxxxxxxxx0000) (nonNegative) (range=[0,49))\n%1:i32 = or 15:i32, %0\ninfer %1\n",
+        []
+    ],
+    [
+        "%0:i64 = var\n%1:i64 = lshr %0, 3:i64\n%2:i32 = trunc %1\n%3:i32 = and 63:i32, %2 (hasExternalUses)\n%4:i1 = ult %3, 56:i32\npc %4 0:i1\n%5:i32 = subnw 64:i32, %3\ninfer %5\n",
+        []
+    ],
+    [
+        "%0:i8 = var\n%1:i32 = zext %0\n%2:i32 = shlnw %1, 8:i32\n%3:i8 = var\n%4:i32 = zext %3\n%5:i32 = or %2, %4\ninfer %5\n",
+        []
+    ],
+    [
+        "%0:i64 = var (range=[0,-1))\ninfer %0\n",
+        []
+    ],
+    [
+        "%0:i32 = var\n%1:i32 = var\n%2:i32 = var\n%3:i32 = var\n%4:i32 = shl %3, 7:i32\n%5:i32 = lshr %3, 25:i32\n%6:i32 = or %4, %5\n%7:i32 = shl %3, 21:i32\n%8:i32 = lshr %3, 11:i32\n%9:i32 = or %7, %8\n%10:i32 = shl %3, 26:i32\n%11:i32 = lshr %3, 6:i32\n%12:i32 = or %10, %11\n%13:i32 = xor %9, %12\n%14:i32 = xor %6, %13\n%15:i32 = add %2, %14\n%16:i32 = add %1, %15\n%17:i32 = var\n%18:i32 = var\n%19:i32 = xor %18, %17\n%20:i32 = and %3, %19\n%21:i32 = xor %17, %20\n%22:i32 = add %16, %21\n%23:i32 = add %0, %22 (hasExternalUses)\n%24:i32 = var\n%25:i32 = shl %24, 10:i32\n%26:i32 = lshr %24, 22:i32\n%27:i32 = or %25, %26\n%28:i32 = shl %24, 19:i32\n%29:i32 = lshr %24, 13:i32\n%30:i32 = or %28, %29\n%31:i32 = shl %24, 30:i32\n%32:i32 = lshr %24, 2:i32\n%33:i32 = or %31, %32\n%34:i32 = xor %30, %33\n%35:i32 = xor %27, %34\n%36:i32 = add %23, %35\ninfer %36\n",
+        []
+    ],
+    [
+        "%0:i32 = var (knownBits=0xxxxxxxxxxxxxxxxxxxxxxxxxxx0000) (nonNegative) (range=[0,49))\n%1:i1 = eq 48:i32, %0\npc %1 0:i1\n%2:i32 = or 10:i32, %0 (hasExternalUses)\n%3:i32 = addnw 16:i32, %2\ninfer %3\n",
+        []
+    ],
+    [
+        "%0:i32 = var\n%1:i32 = shl %0, 25:i32\ninfer %1\n",
+        []
+    ],
+    [
+        "%0:i32 = var (knownBits=0xxxxxxxxxxxxxxxxxxxxxxxxxxx0000) (nonNegative) (range=[0,49))\n%1:i32 = or 6:i32, %0\ninfer %1\n",
+        []
+    ],
+    [
+        "%0:i32 = var (knownBits=0xxxxxxxxxxxxxxxxxxxxxxxxxxx0000) (nonNegative) (range=[0,49))\n%1:i32 = or 7:i32, %0\ninfer %1\n",
+        []
+    ],
+    [
+        "%0:i32 = var\n%1:i32 = lshr %0, 6:i32\ninfer %1\n",
+        []
+    ],
+    [
+        "%0 = block 3\n%1:i64 = var\n%2:i64 = var\n%3:i64 = phi %0, %1, %1, %2\n%4:i64 = lshr %3, 56:i64\ninfer %4 (demandedBits=0000000000000000000000000000000000000000000000000000000011111111)\n",
+        []
+    ],
+    [
+        "%0:i32 = var\n%1:i32 = var\n%2:i32 = add %0, %1\n%3:i32 = var\n%4:i32 = shl %3, 15:i32\n%5:i32 = lshr %3, 17:i32\n%6:i32 = or %4, %5\n%7:i32 = shl %3, 13:i32\n%8:i32 = lshr %3, 19:i32\n%9:i32 = or %7, %8\n%10:i32 = lshr %3, 10:i32\n%11:i32 = xor %9, %10\n%12:i32 = xor %6, %11\n%13:i32 = add %2, %12\n%14:i32 = var\n%15:i32 = shl %14, 25:i32\n%16:i32 = lshr %14, 7:i32\n%17:i32 = or %15, %16\n%18:i32 = shl %14, 14:i32\n%19:i32 = lshr %14, 18:i32\n%20:i32 = or %18, %19\n%21:i32 = lshr %14, 3:i32\n%22:i32 = xor %20, %21\n%23:i32 = xor %17, %22\n%24:i32 = add %13, %23 (hasExternalUses)\n%25:i32 = shl %24, 15:i32\n%26:i32 = lshr %24, 17:i32\n%27:i32 = or %25, %26\ninfer %27\n",
+        []
+    ],
+    [
+        "%0:i32 = var\n%1:i32 = shl %0, 7:i32\n%2:i32 = lshr %0, 25:i32\n%3:i32 = or %1, %2\n%4:i32 = shl %0, 21:i32\n%5:i32 = lshr %0, 11:i32\n%6:i32 = or %4, %5\n%7:i32 = shl %0, 26:i32\n%8:i32 = lshr %0, 6:i32\n%9:i32 = or %7, %8\n%10:i32 = xor %6, %9\n%11:i32 = xor %3, %10\ninfer %11\n",
+        []
+    ],
+    [
+        "%0:i32 = var (knownBits=0xxxxxxxxxxxxxxxxxxxxxxxxxxx0000) (nonNegative) (range=[0,49))\n%1:i1 = eq 48:i32, %0\ninfer %1\n",
+        []
+    ],
+    [
+        "%0:i64 = var\n%1:i64 = lshr %0, 3:i64\n%2:i32 = trunc %1\n%3:i32 = and 63:i32, %2 (hasExternalUses)\n%4:i1 = ult %3, 56:i32\npc %4 0:i1\n%5:i32 = subnw 64:i32, %3 (hasExternalUses)\n%6:i1 = eq 0:i32, %5\ninfer %6\n",
+        [
+            "result 0:i1\n"
+        ]
+    ],
+    [
+        "%0:i32 = var (knownBits=0xxxxxxxxxxxxxxxxxxxxxxxxxxx0000) (nonNegative) (range=[0,49))\n%1:i32 = or 13:i32, %0\ninfer %1\n",
+        []
+    ],
+    [
+        "%0:i32 = var\n%1:i32 = var\n%2:i32 = var\n%3:i32 = var\n%4:i32 = var\n%5:i32 = shl %4, 7:i32\n%6:i32 = lshr %4, 25:i32\n%7:i32 = or %5, %6\n%8:i32 = shl %4, 21:i32\n%9:i32 = lshr %4, 11:i32\n%10:i32 = or %8, %9\n%11:i32 = shl %4, 26:i32\n%12:i32 = lshr %4, 6:i32\n%13:i32 = or %11, %12\n%14:i32 = xor %10, %13\n%15:i32 = xor %7, %14\n%16:i32 = add %3, %15\n%17:i32 = add %2, %16\n%18:i32 = var\n%19:i32 = var\n%20:i32 = xor %19, %18\n%21:i32 = and %4, %20\n%22:i32 = xor %18, %21\n%23:i32 = add %17, %22\n%24:i32 = add %1, %23 (hasExternalUses)\n%25:i32 = add %0, %24 (hasExternalUses)\n%26:i32 = shl %25, 7:i32\n%27:i32 = lshr %25, 25:i32\n%28:i32 = or %26, %27\n%29:i32 = shl %25, 21:i32\n%30:i32 = lshr %25, 11:i32\n%31:i32 = or %29, %30\n%32:i32 = shl %25, 26:i32\n%33:i32 = lshr %25, 6:i32\n%34:i32 = or %32, %33\n%35:i32 = xor %31, %34\n%36:i32 = xor %28, %35\ninfer %36\n",
+        []
+    ],
+    [
+        "%0:i32 = var\n%1:i32 = var\n%2:i32 = var\n%3:i32 = var\n%4:i32 = var\n%5:i32 = shl %4, 7:i32\n%6:i32 = lshr %4, 25:i32\n%7:i32 = or %5, %6\n%8:i32 = shl %4, 21:i32\n%9:i32 = lshr %4, 11:i32\n%10:i32 = or %8, %9\n%11:i32 = shl %4, 26:i32\n%12:i32 = lshr %4, 6:i32\n%13:i32 = or %11, %12\n%14:i32 = xor %10, %13\n%15:i32 = xor %7, %14\n%16:i32 = add %3, %15\n%17:i32 = add %2, %16\n%18:i32 = var\n%19:i32 = var\n%20:i32 = xor %19, %18\n%21:i32 = and %4, %20\n%22:i32 = xor %18, %21\n%23:i32 = add %17, %22\n%24:i32 = add %1, %23 (hasExternalUses)\n%25:i32 = add %0, %24 (hasExternalUses)\n%26:i32 = shl %25, 7:i32\n%27:i32 = lshr %25, 25:i32\n%28:i32 = or %26, %27\ninfer %28\n",
+        []
+    ],
+    [
+        "%0:i32 = var\n%1:i32 = var\n%2:i32 = var\n%3:i32 = shl %2, 7:i32\n%4:i32 = lshr %2, 25:i32\n%5:i32 = or %3, %4\n%6:i32 = shl %2, 21:i32\n%7:i32 = lshr %2, 11:i32\n%8:i32 = or %6, %7\n%9:i32 = shl %2, 26:i32\n%10:i32 = lshr %2, 6:i32\n%11:i32 = or %9, %10\n%12:i32 = xor %8, %11\n%13:i32 = xor %5, %12\n%14:i32 = add %1, %13\n%15:i32 = add %0, %14\n%16:i32 = var\n%17:i32 = var\n%18:i32 = xor %17, %16\n%19:i32 = and %2, %18\n%20:i32 = xor %16, %19\n%21:i32 = add %15, %20\ninfer %21\n",
+        []
+    ],
+    [
+        "%0:i32 = var (knownBits=0xxxxxxxxxxxxxxxxxxxxxxxxxxx0000) (nonNegative) (range=[0,49))\n%1:i1 = eq 48:i32, %0\npc %1 0:i1\n%2:i32 = or 14:i32, %0 (hasExternalUses)\n%3:i32 = addnw 9:i32, %2\ninfer %3\n",
+        []
+    ],
+    [
+        "%0:i64 = var (knownBits=0xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx) (nonNegative) (range=[0,64))\n%1:i64 = addnw 1:i64, %0 (hasExternalUses)\n%2:i64 = var\n%3:i64 = lshr %2, 3:i64 (hasExternalUses)\n%4:i64 = and 63:i64, %3 (hasExternalUses)\n%5:i64 = subnw 64:i64, %4 (hasExternalUses)\n%6:i1 = eq %1, %5\ninfer %6\n",
+        []
+    ],
+    [
+        "%0:i32 = var (knownBits=0xxxxxxxxxxxxxxxxxxxxxxxxxxx0000) (nonNegative) (range=[0,49))\n%1:i1 = eq 48:i32, %0\npc %1 0:i1\n%2:i32 = or 15:i32, %0 (hasExternalUses)\n%3:i32 = addnw 9:i32, %2\ninfer %3\n",
+        []
+    ],
+    [
+        "%0:i32 = var\n%1:i32 = lshr %0, 25:i32\ninfer %1\n",
+        []
+    ],
+    [
+        "%0:i64 = var\ninfer %0\n",
+        []
+    ],
+    [
+        "%0:i64 = var (range=[64,0))\n%1:i64 = add 18446744073709551552:i64, %0 (hasExternalUses)\n%2:i1 = ult 63:i64, %1\ninfer %2\n",
+        []
+    ],
+    [
+        "%0:i32 = var\n%1:i32 = shl %0, 13:i32\n%2:i32 = lshr %0, 19:i32\n%3:i32 = or %1, %2\ninfer %3\n",
+        []
+    ],
+    [
+        "%0:i64 = var (range=[64,0))\n%1:i64 = add 18446744073709551552:i64, %0\ninfer %1\n",
+        []
+    ],
+    [
+        "%0:i32 = var\n%1:i32 = var\n%2:i32 = add %0, %1\n%3:i32 = var\n%4:i32 = shl %3, 15:i32\n%5:i32 = lshr %3, 17:i32\n%6:i32 = or %4, %5\n%7:i32 = shl %3, 13:i32\n%8:i32 = lshr %3, 19:i32\n%9:i32 = or %7, %8\n%10:i32 = lshr %3, 10:i32\n%11:i32 = xor %9, %10\n%12:i32 = xor %6, %11\n%13:i32 = add %2, %12\n%14:i32 = var\n%15:i32 = shl %14, 25:i32\n%16:i32 = lshr %14, 7:i32\n%17:i32 = or %15, %16\n%18:i32 = shl %14, 14:i32\n%19:i32 = lshr %14, 18:i32\n%20:i32 = or %18, %19\n%21:i32 = lshr %14, 3:i32\n%22:i32 = xor %20, %21\n%23:i32 = xor %17, %22\n%24:i32 = add %13, %23 (hasExternalUses)\n%25:i32 = shl %24, 15:i32\ninfer %25\n",
+        []
+    ],
+    [
+        "%0:i32 = var\n%1:i32 = var\n%2:i32 = var\n%3:i32 = var\n%4:i32 = var\n%5:i32 = shl %4, 7:i32\n%6:i32 = lshr %4, 25:i32\n%7:i32 = or %5, %6\n%8:i32 = shl %4, 21:i32\n%9:i32 = lshr %4, 11:i32\n%10:i32 = or %8, %9\n%11:i32 = shl %4, 26:i32\n%12:i32 = lshr %4, 6:i32\n%13:i32 = or %11, %12\n%14:i32 = xor %10, %13\n%15:i32 = xor %7, %14\n%16:i32 = add %3, %15\n%17:i32 = add %2, %16\n%18:i32 = var\n%19:i32 = var\n%20:i32 = xor %19, %18\n%21:i32 = and %4, %20\n%22:i32 = xor %18, %21\n%23:i32 = add %17, %22\n%24:i32 = add %1, %23 (hasExternalUses)\n%25:i32 = add %0, %24\ninfer %25\n",
+        []
+    ],
+    [
+        "%0:i64 = var\n%1:i64 = lshr %0, 3:i64\n%2:i32 = trunc %1\ninfer %2 (demandedBits=00000000000000000000000000111111)\n",
+        []
+    ],
+    [
+        "%0:i64 = var\n%1:i64 = lshr %0, 3:i64 (hasExternalUses)\n%2:i64 = and 63:i64, %1 (hasExternalUses)\n%3:i64 = subnw 64:i64, %2\ninfer %3\n",
+        []
+    ],
+    [
+        "%0:i32 = var\n%1:i32 = shl %0, 19:i32\n%2:i32 = lshr %0, 13:i32\n%3:i32 = or %1, %2\n%4:i32 = shl %0, 30:i32\n%5:i32 = lshr %0, 2:i32\n%6:i32 = or %4, %5\n%7:i32 = xor %3, %6\ninfer %7\n",
+        []
+    ],
+    [
+        "%0:i64 = var (range=[0,-1))\n%1:i32 = trunc %0\ninfer %1\n",
+        []
+    ],
+    [
+        "%0:i32 = var\n%1:i32 = lshr %0, 13:i32\ninfer %1\n",
+        []
+    ],
+    [
+        "%0:i64 = var (range=[0,-1))\n%1:i64 = var\n%2:i64 = lshr %1, 3:i64 (hasExternalUses)\n%3:i64 = and 63:i64, %2 (hasExternalUses)\n%4:i64 = add %0, %3\n%5:i32 = trunc %4\ninfer %5\n",
+        []
+    ],
+    [
+        "%0:i32 = var\n%1:i32 = var\n%2:i32 = shl %1, 25:i32\n%3:i32 = lshr %1, 7:i32\n%4:i32 = or %2, %3\n%5:i32 = shl %1, 14:i32\n%6:i32 = lshr %1, 18:i32\n%7:i32 = or %5, %6\n%8:i32 = lshr %1, 3:i32\n%9:i32 = xor %7, %8\n%10:i32 = xor %4, %9\n%11:i32 = add %0, %10\ninfer %11\n",
+        []
+    ],
+    [
+        "%0:i8 = var\n%1:i32 = zext %0\ninfer %1\n",
+        []
+    ],
+    [
+        "%0:i32 = var (knownBits=0xxxxxxxxxxxxxxxxxxxxxxxxxxx0000) (nonNegative) (range=[0,49))\n%1:i1 = eq 48:i32, %0\npc %1 0:i1\n%2:i32 = or 13:i32, %0 (hasExternalUses)\n%3:i32 = addnw 9:i32, %2\ninfer %3\n",
+        []
+    ],
+    [
+        "%0:i32 = var\n%1:i32 = var\n%2:i32 = var\n%3:i32 = var\n%4:i32 = var\n%5:i32 = shl %4, 7:i32\n%6:i32 = lshr %4, 25:i32\n%7:i32 = or %5, %6\n%8:i32 = shl %4, 21:i32\n%9:i32 = lshr %4, 11:i32\n%10:i32 = or %8, %9\n%11:i32 = shl %4, 26:i32\n%12:i32 = lshr %4, 6:i32\n%13:i32 = or %11, %12\n%14:i32 = xor %10, %13\n%15:i32 = xor %7, %14\n%16:i32 = add %3, %15\n%17:i32 = add %2, %16\n%18:i32 = var\n%19:i32 = var\n%20:i32 = xor %19, %18\n%21:i32 = and %4, %20\n%22:i32 = xor %18, %21\n%23:i32 = add %17, %22\n%24:i32 = add %1, %23 (hasExternalUses)\n%25:i32 = add %0, %24 (hasExternalUses)\n%26:i32 = shl %25, 21:i32\n%27:i32 = lshr %25, 11:i32\n%28:i32 = or %26, %27\ninfer %28\n",
+        []
+    ],
+    [
+        "%0:i64 = var\n%1:i64 = lshr %0, 3:i64\n%2:i32 = trunc %1\n%3:i32 = and 63:i32, %2 (hasExternalUses)\n%4:i1 = ult %3, 56:i32\npc %4 1:i1\n%5:i32 = subnw 56:i32, %3\ninfer %5\n",
+        []
+    ],
+    [
+        "%0:i32 = var (knownBits=0xxxxxxxxxxxxxxxxxxxxxxxxxxx0000) (nonNegative) (range=[0,49))\n%1:i1 = eq 48:i32, %0\npc %1 0:i1\n%2:i32 = or 12:i32, %0 (hasExternalUses)\n%3:i32 = addnw 16:i32, %2\ninfer %3\n",
+        []
+    ],
+    [
+        "%0:i32 = var\n%1:i32 = shl %0, 26:i32\n%2:i32 = lshr %0, 6:i32\n%3:i32 = or %1, %2\ninfer %3\n",
+        []
+    ],
+    [
+        "%0:i32 = var\n%1:i32 = var\n%2:i32 = or %0, %1\ninfer %2\n",
+        []
+    ],
+    [
+        "%0:i32 = var\n%1:i32 = var\n%2:i32 = var\n%3:i32 = var\n%4:i32 = var\n%5:i32 = shl %4, 7:i32\n%6:i32 = lshr %4, 25:i32\n%7:i32 = or %5, %6\n%8:i32 = shl %4, 21:i32\n%9:i32 = lshr %4, 11:i32\n%10:i32 = or %8, %9\n%11:i32 = shl %4, 26:i32\n%12:i32 = lshr %4, 6:i32\n%13:i32 = or %11, %12\n%14:i32 = xor %10, %13\n%15:i32 = xor %7, %14\n%16:i32 = add %3, %15\n%17:i32 = add %2, %16\n%18:i32 = var\n%19:i32 = var\n%20:i32 = xor %19, %18\n%21:i32 = and %4, %20\n%22:i32 = xor %18, %21\n%23:i32 = add %17, %22\n%24:i32 = add %1, %23 (hasExternalUses)\n%25:i32 = shl %0, 10:i32\n%26:i32 = lshr %0, 22:i32\n%27:i32 = or %25, %26\n%28:i32 = shl %0, 19:i32\n%29:i32 = lshr %0, 13:i32\n%30:i32 = or %28, %29\n%31:i32 = shl %0, 30:i32\n%32:i32 = lshr %0, 2:i32\n%33:i32 = or %31, %32\n%34:i32 = xor %30, %33\n%35:i32 = xor %27, %34\n%36:i32 = add %24, %35\n%37:i32 = var\n%38:i32 = var\n%39:i32 = or %37, %38\n%40:i32 = and %0, %39\n%41:i32 = and %37, %38\n%42:i32 = or %40, %41\n%43:i32 = add %36, %42 (hasExternalUses)\n%44:i32 = or %0, %43\ninfer %44\n",
+        []
+    ],
+    [
+        "%0:i32 = var\n%1:i32 = lshr %0, 22:i32\ninfer %1\n",
+        []
+    ],
+    [
+        "%0:i32 = var\n%1:i32 = lshr %0, 24:i32\ninfer %1 (demandedBits=00000000000000000000000011111111)\n",
+        []
+    ],
+    [
+        "%0:i32 = var\n%1:i32 = lshr %0, 8:i32\n%2:i8 = trunc %1\ninfer %2\n",
+        []
+    ],
+    [
+        "%0:i32 = var (knownBits=0xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx) (nonNegative) (range=[0,16))\n%1:i32 = addnw 1:i32, %0 (hasExternalUses)\n%2:i1 = eq 16:i32, %1\ninfer %2\n",
+        []
+    ],
+    [
+        "%0:i32 = var (knownBits=0xxxxxxxxxxxxxxxxxxxxxxxxxxx0000) (nonNegative) (range=[0,49))\n%1:i1 = eq 48:i32, %0\npc %1 0:i1\n%2:i32 = or 5:i32, %0 (hasExternalUses)\n%3:i32 = addnw 9:i32, %2\ninfer %3\n",
+        []
+    ],
+    [
+        "%0:i32 = var\n%1:i32 = var\n%2:i32 = var\n%3:i32 = var\n%4:i32 = var\n%5:i32 = shl %4, 7:i32\n%6:i32 = lshr %4, 25:i32\n%7:i32 = or %5, %6\n%8:i32 = shl %4, 21:i32\n%9:i32 = lshr %4, 11:i32\n%10:i32 = or %8, %9\n%11:i32 = shl %4, 26:i32\n%12:i32 = lshr %4, 6:i32\n%13:i32 = or %11, %12\n%14:i32 = xor %10, %13\n%15:i32 = xor %7, %14\n%16:i32 = add %3, %15\n%17:i32 = add %2, %16\n%18:i32 = var\n%19:i32 = var\n%20:i32 = xor %19, %18\n%21:i32 = and %4, %20\n%22:i32 = xor %18, %21\n%23:i32 = add %17, %22\n%24:i32 = add %1, %23 (hasExternalUses)\n%25:i32 = add %0, %24 (hasExternalUses)\n%26:i32 = lshr %25, 6:i32\ninfer %26\n",
+        []
+    ],
+    [
+        "%0:i32 = var\n%1:i32 = var\n%2:i32 = var\n%3:i32 = var\n%4:i32 = shl %3, 7:i32\n%5:i32 = lshr %3, 25:i32\n%6:i32 = or %4, %5\n%7:i32 = shl %3, 21:i32\n%8:i32 = lshr %3, 11:i32\n%9:i32 = or %7, %8\n%10:i32 = shl %3, 26:i32\n%11:i32 = lshr %3, 6:i32\n%12:i32 = or %10, %11\n%13:i32 = xor %9, %12\n%14:i32 = xor %6, %13\n%15:i32 = add %2, %14\n%16:i32 = add %1, %15\n%17:i32 = var\n%18:i32 = var\n%19:i32 = xor %18, %17\n%20:i32 = and %3, %19\n%21:i32 = xor %17, %20\n%22:i32 = add %16, %21\n%23:i32 = add %0, %22 (hasExternalUses)\n%24:i32 = var\n%25:i32 = shl %24, 10:i32\n%26:i32 = lshr %24, 22:i32\n%27:i32 = or %25, %26\n%28:i32 = shl %24, 19:i32\n%29:i32 = lshr %24, 13:i32\n%30:i32 = or %28, %29\n%31:i32 = shl %24, 30:i32\n%32:i32 = lshr %24, 2:i32\n%33:i32 = or %31, %32\n%34:i32 = xor %30, %33\n%35:i32 = xor %27, %34\n%36:i32 = add %23, %35\n%37:i32 = var\n%38:i32 = var\n%39:i32 = or %37, %38\n%40:i32 = and %24, %39\n%41:i32 = and %37, %38\n%42:i32 = or %40, %41\n%43:i32 = add %36, %42 (hasExternalUses)\n%44:i32 = shl %43, 19:i32\ninfer %44\n",
+        []
+    ],
+    [
+        "%0:i32 = var (knownBits=0xxxxxxxxxxxxxxxxxxxxxxxxxxx0000) (nonNegative) (range=[0,49))\n%1:i32 = or 12:i32, %0\ninfer %1\n",
+        []
+    ],
+    [
+        "%0:i32 = var\n%1:i32 = var\n%2:i32 = add %0, %1\n%3:i32 = var\n%4:i32 = shl %3, 15:i32\n%5:i32 = lshr %3, 17:i32\n%6:i32 = or %4, %5\n%7:i32 = shl %3, 13:i32\n%8:i32 = lshr %3, 19:i32\n%9:i32 = or %7, %8\n%10:i32 = lshr %3, 10:i32\n%11:i32 = xor %9, %10\n%12:i32 = xor %6, %11\n%13:i32 = add %2, %12\n%14:i32 = var\n%15:i32 = shl %14, 25:i32\n%16:i32 = lshr %14, 7:i32\n%17:i32 = or %15, %16\n%18:i32 = shl %14, 14:i32\n%19:i32 = lshr %14, 18:i32\n%20:i32 = or %18, %19\n%21:i32 = lshr %14, 3:i32\n%22:i32 = xor %20, %21\n%23:i32 = xor %17, %22\n%24:i32 = add %13, %23 (hasExternalUses)\n%25:i32 = shl %24, 15:i32\n%26:i32 = lshr %24, 17:i32\n%27:i32 = or %25, %26\n%28:i32 = shl %24, 13:i32\n%29:i32 = lshr %24, 19:i32\n%30:i32 = or %28, %29\n%31:i32 = lshr %24, 10:i32\n%32:i32 = xor %30, %31\n%33:i32 = xor %27, %32\ninfer %33\n",
+        []
+    ],
+    [
+        "%0:i8 = var\n%1:i32 = zext %0\n%2:i32 = shlnw %1, 8:i32\n%3:i8 = var\n%4:i32 = zext %3\n%5:i32 = or %2, %4\n%6:i8 = var\n%7:i32 = zext %6\n%8:i32 = shlnw %7, 16:i32\n%9:i32 = or %5, %8\ninfer %9\n",
+        []
+    ],
+    [
+        "%0:i32 = var\n%1:i32 = var\n%2:i32 = var\n%3:i32 = var\n%4:i32 = var\n%5:i32 = shl %4, 7:i32\n%6:i32 = lshr %4, 25:i32\n%7:i32 = or %5, %6\n%8:i32 = shl %4, 21:i32\n%9:i32 = lshr %4, 11:i32\n%10:i32 = or %8, %9\n%11:i32 = shl %4, 26:i32\n%12:i32 = lshr %4, 6:i32\n%13:i32 = or %11, %12\n%14:i32 = xor %10, %13\n%15:i32 = xor %7, %14\n%16:i32 = add %3, %15\n%17:i32 = add %2, %16\n%18:i32 = var\n%19:i32 = var\n%20:i32 = xor %19, %18\n%21:i32 = and %4, %20\n%22:i32 = xor %18, %21\n%23:i32 = add %17, %22\n%24:i32 = add %1, %23 (hasExternalUses)\n%25:i32 = add %0, %24 (hasExternalUses)\n%26:i32 = shl %25, 26:i32\n%27:i32 = lshr %25, 6:i32\n%28:i32 = or %26, %27\ninfer %28\n",
+        []
+    ],
+    [
+        "%0:i32 = var\n%1:i32 = shl %0, 21:i32\n%2:i32 = lshr %0, 11:i32\n%3:i32 = or %1, %2\ninfer %3\n",
+        []
+    ],
+    [
+        "%0 = block 3\n%1:i64 = var\n%2:i64 = var\n%3:i64 = phi %0, %1, %1, %2\n%4:i64 = lshr %3, 40:i64\n%5:i8 = trunc %4\ninfer %5\n",
+        []
+    ],
+    [
+        "%0:i32 = var\n%1:i32 = var\n%2:i32 = var\n%3:i32 = or %1, %2\n%4:i32 = and %0, %3\n%5:i32 = and %1, %2\n%6:i32 = or %4, %5\ninfer %6\n",
+        []
+    ],
+    [
+        "%0 = block 3\n%1:i64 = var\n%2:i64 = var\n%3:i64 = phi %0, %1, %1, %2\ninfer %3\n",
+        []
+    ],
+    [
+        "%0:i32 = var\n%1:i32 = var\n%2:i32 = var\n%3:i32 = var\n%4:i32 = shl %3, 7:i32\n%5:i32 = lshr %3, 25:i32\n%6:i32 = or %4, %5\n%7:i32 = shl %3, 21:i32\n%8:i32 = lshr %3, 11:i32\n%9:i32 = or %7, %8\n%10:i32 = shl %3, 26:i32\n%11:i32 = lshr %3, 6:i32\n%12:i32 = or %10, %11\n%13:i32 = xor %9, %12\n%14:i32 = xor %6, %13\n%15:i32 = add %2, %14\n%16:i32 = add %1, %15\n%17:i32 = var\n%18:i32 = var\n%19:i32 = xor %18, %17\n%20:i32 = and %3, %19\n%21:i32 = xor %17, %20\n%22:i32 = add %16, %21\n%23:i32 = add %0, %22\ninfer %23\n",
+        []
+    ],
+    [
+        "%0:i32 = var\n%1:i32 = shl %0, 19:i32\ninfer %1\n",
+        []
+    ],
+    [
+        "%0:i32 = var (knownBits=0xxxxxxxxxxxxxxxxxxxxxxxxxxx0000) (nonNegative) (range=[0,49))\n%1:i1 = eq 48:i32, %0\npc %1 0:i1\n%2:i32 = or 5:i32, %0 (hasExternalUses)\n%3:i32 = addnw 1:i32, %2\ninfer %3\n",
+        []
+    ],
+    [
+        "%0:i32 = var\n%1:i32 = shl %0, 14:i32\n%2:i32 = lshr %0, 18:i32\n%3:i32 = or %1, %2\ninfer %3\n",
+        []
+    ],
+    [
+        "%0:i8 = var\n%1:i32 = zext %0\n%2:i32 = shlnuw %1, 24:i32\ninfer %2\n",
+        []
+    ],
+    [
+        "%0 = block 3\n%1:i64 = var\n%2:i64 = var\n%3:i64 = phi %0, %1, %1, %2\n%4:i64 = lshr %3, 16:i64\ninfer %4 (demandedBits=0000000000000000000000000000000000000000000000000000000011111111)\n",
+        []
+    ],
+    [
+        "%0:i32 = var (knownBits=0xxxxxxxxxxxxxxxxxxxxxxxxxxx0000) (nonNegative) (range=[0,49))\n%1:i1 = eq 48:i32, %0\npc %1 0:i1\n%2:i32 = or 15:i32, %0 (hasExternalUses)\n%3:i32 = addnw 1:i32, %2\ninfer %3\n",
+        []
+    ],
+    [
+        "%0:i64 = var\n%1:i1 = eq 0:i64, %0\npc %1 0:i1\n%2:i64 = var\n%3:i64 = shl %0, 3:i64\n%4:i64 = add %2, %3\ninfer %4\n",
+        []
+    ],
+    [
+        "%0 = block 2\n%1:i64 = var\n%2:i64 = var\n%3:i64 = lshr %2, 3:i64\n%4:i64 = and 63:i64, %3 (hasExternalUses)\n%5:i64 = subnw 64:i64, %4 (hasExternalUses)\n%6:i64 = sub %1, %5 (hasExternalUses)\n%7:i64 = add %1, %3\n%8:i64 = and 63:i64, %7\n%9:i64 = phi %0, %6, %8\ninfer %9\n",
+        []
+    ],
+    [
+        "%0:i32 = var\n%1:i32 = var\n%2:i32 = and %0, %1\ninfer %2\n",
+        []
+    ],
+    [
+        "%0 = block 3\n%1:i64 = var\n%2:i64 = var\n%3:i64 = phi %0, %1, %1, %2\n%4:i64 = lshr %3, 8:i64\n%5:i8 = trunc %4\ninfer %5\n",
+        []
+    ],
+    [
+        "%0:i32 = var\n%1:i32 = shl %0, 10:i32\n%2:i32 = lshr %0, 22:i32\n%3:i32 = or %1, %2\n%4:i32 = shl %0, 19:i32\n%5:i32 = lshr %0, 13:i32\n%6:i32 = or %4, %5\n%7:i32 = shl %0, 30:i32\n%8:i32 = lshr %0, 2:i32\n%9:i32 = or %7, %8\n%10:i32 = xor %6, %9\n%11:i32 = xor %3, %10\ninfer %11\n",
+        []
+    ],
+    [
+        "%0:i32 = var\n%1:i32 = var\n%2:i32 = var\n%3:i32 = var\n%4:i32 = shl %3, 7:i32\n%5:i32 = lshr %3, 25:i32\n%6:i32 = or %4, %5\n%7:i32 = shl %3, 21:i32\n%8:i32 = lshr %3, 11:i32\n%9:i32 = or %7, %8\n%10:i32 = shl %3, 26:i32\n%11:i32 = lshr %3, 6:i32\n%12:i32 = or %10, %11\n%13:i32 = xor %9, %12\n%14:i32 = xor %6, %13\n%15:i32 = add %2, %14\n%16:i32 = add %1, %15\n%17:i32 = var\n%18:i32 = var\n%19:i32 = xor %18, %17\n%20:i32 = and %3, %19\n%21:i32 = xor %17, %20\n%22:i32 = add %16, %21\n%23:i32 = add %0, %22 (hasExternalUses)\n%24:i32 = var\n%25:i32 = shl %24, 10:i32\n%26:i32 = lshr %24, 22:i32\n%27:i32 = or %25, %26\n%28:i32 = shl %24, 19:i32\n%29:i32 = lshr %24, 13:i32\n%30:i32 = or %28, %29\n%31:i32 = shl %24, 30:i32\n%32:i32 = lshr %24, 2:i32\n%33:i32 = or %31, %32\n%34:i32 = xor %30, %33\n%35:i32 = xor %27, %34\n%36:i32 = add %23, %35\n%37:i32 = var\n%38:i32 = var\n%39:i32 = or %37, %38\n%40:i32 = and %24, %39\n%41:i32 = and %37, %38\n%42:i32 = or %40, %41\n%43:i32 = add %36, %42 (hasExternalUses)\n%44:i32 = lshr %43, 22:i32\ninfer %44\n",
+        []
+    ],
+    [
+        "%0:i32 = var (knownBits=0xxxxxxxxxxxxxxxxxxxxxxxxxxx0000) (nonNegative) (range=[0,49))\n%1:i32 = or 1:i32, %0\ninfer %1\n",
+        []
+    ],
+    [
+        "%0:i64 = var (knownBits=0xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx) (nonNegative) (range=[0,64))\ninfer %0\n",
+        []
+    ],
+    [
+        "%0:i32 = var\n%1:i32 = var\n%2:i32 = add %0, %1\n%3:i32 = var\n%4:i32 = shl %3, 15:i32\n%5:i32 = lshr %3, 17:i32\n%6:i32 = or %4, %5\n%7:i32 = shl %3, 13:i32\n%8:i32 = lshr %3, 19:i32\n%9:i32 = or %7, %8\n%10:i32 = lshr %3, 10:i32\n%11:i32 = xor %9, %10\n%12:i32 = xor %6, %11\n%13:i32 = add %2, %12\n%14:i32 = var\n%15:i32 = shl %14, 25:i32\n%16:i32 = lshr %14, 7:i32\n%17:i32 = or %15, %16\n%18:i32 = shl %14, 14:i32\n%19:i32 = lshr %14, 18:i32\n%20:i32 = or %18, %19\n%21:i32 = lshr %14, 3:i32\n%22:i32 = xor %20, %21\n%23:i32 = xor %17, %22\n%24:i32 = add %13, %23 (hasExternalUses)\n%25:i32 = lshr %24, 17:i32\ninfer %25\n",
+        []
+    ],
+    [
+        "%0:i32 = var\n%1:i32 = var\n%2:i32 = var\n%3:i32 = var\n%4:i32 = shl %3, 7:i32\n%5:i32 = lshr %3, 25:i32\n%6:i32 = or %4, %5\n%7:i32 = shl %3, 21:i32\n%8:i32 = lshr %3, 11:i32\n%9:i32 = or %7, %8\n%10:i32 = shl %3, 26:i32\n%11:i32 = lshr %3, 6:i32\n%12:i32 = or %10, %11\n%13:i32 = xor %9, %12\n%14:i32 = xor %6, %13\n%15:i32 = add %2, %14\n%16:i32 = add %1, %15\n%17:i32 = var\n%18:i32 = var\n%19:i32 = xor %18, %17\n%20:i32 = and %3, %19\n%21:i32 = xor %17, %20\n%22:i32 = add %16, %21\n%23:i32 = add %0, %22 (hasExternalUses)\n%24:i32 = var\n%25:i32 = shl %24, 10:i32\n%26:i32 = lshr %24, 22:i32\n%27:i32 = or %25, %26\n%28:i32 = shl %24, 19:i32\n%29:i32 = lshr %24, 13:i32\n%30:i32 = or %28, %29\n%31:i32 = shl %24, 30:i32\n%32:i32 = lshr %24, 2:i32\n%33:i32 = or %31, %32\n%34:i32 = xor %30, %33\n%35:i32 = xor %27, %34\n%36:i32 = add %23, %35\n%37:i32 = var\n%38:i32 = var\n%39:i32 = or %37, %38\n%40:i32 = and %24, %39\n%41:i32 = and %37, %38\n%42:i32 = or %40, %41\n%43:i32 = add %36, %42\ninfer %43\n",
+        []
+    ],
+    [
+        "%0:i64 = var (knownBits=0xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx) (nonNegative) (range=[0,64))\n%1:i32 = trunc %0\ninfer %1\n",
+        []
+    ],
+    [
+        "%0:i32 = var\n%1:i32 = var\n%2:i32 = var\n%3:i32 = var\n%4:i32 = var\n%5:i32 = shl %4, 7:i32\n%6:i32 = lshr %4, 25:i32\n%7:i32 = or %5, %6\n%8:i32 = shl %4, 21:i32\n%9:i32 = lshr %4, 11:i32\n%10:i32 = or %8, %9\n%11:i32 = shl %4, 26:i32\n%12:i32 = lshr %4, 6:i32\n%13:i32 = or %11, %12\n%14:i32 = xor %10, %13\n%15:i32 = xor %7, %14\n%16:i32 = add %3, %15\n%17:i32 = add %2, %16\n%18:i32 = var\n%19:i32 = var\n%20:i32 = xor %19, %18\n%21:i32 = and %4, %20\n%22:i32 = xor %18, %21\n%23:i32 = add %17, %22\n%24:i32 = add %1, %23 (hasExternalUses)\n%25:i32 = add %0, %24 (hasExternalUses)\n%26:i32 = shl %25, 7:i32\ninfer %26\n",
+        []
+    ],
+    [
+        "%0:i32 = var (knownBits=0xxxxxxxxxxxxxxxxxxxxxxxxxxx0000) (nonNegative) (range=[0,49))\n%1:i1 = eq 48:i32, %0\npc %1 0:i1\n%2:i32 = or 9:i32, %0 (hasExternalUses)\n%3:i32 = addnw 9:i32, %2\ninfer %3\n",
+        []
+    ],
+    [
+        "%0:i32 = var (knownBits=0xxxxxxxxxxxxxxxxxxxxxxxxxxx0000) (nonNegative) (range=[0,49))\n%1:i1 = eq 48:i32, %0\npc %1 0:i1\n%2:i32 = or 1:i32, %0 (hasExternalUses)\n%3:i32 = addnw 9:i32, %2\ninfer %3\n",
+        []
+    ],
+    [
+        "%0:i64 = var (range=[64,0))\ninfer %0\n",
+        []
+    ],
+    [
+        "%0:i32 = var (knownBits=0xxxxxxxxxxxxxxxxxxxxxxxxxxx0000) (nonNegative) (range=[0,49))\n%1:i1 = eq 48:i32, %0\npc %1 0:i1\n%2:i32 = or 12:i32, %0 (hasExternalUses)\n%3:i32 = addnw 9:i32, %2\ninfer %3\n",
+        []
+    ],
+    [
+        "%0:i64 = var\n%1:i64 = var\n%2:i64 = lshr %1, 3:i64 (hasExternalUses)\n%3:i64 = add %0, %2\n%4:i64 = and 63:i64, %3\ninfer %4\n",
+        []
+    ],
+    [
+        "%0:i32 = var (knownBits=0xxxxxxxxxxxxxxxxxxxxxxxxxxx0000) (nonNegative) (range=[0,49))\n%1:i1 = eq 48:i32, %0\npc %1 0:i1\n%2:i32 = or 6:i32, %0 (hasExternalUses)\n%3:i32 = addnw 16:i32, %2\ninfer %3\n",
+        []
+    ],
+    [
+        "%0:i32 = var (knownBits=0xxxxxxxxxxxxxxxxxxxxxxxxxxx0000) (nonNegative) (range=[0,49))\n%1:i1 = eq 48:i32, %0\npc %1 0:i1\n%2:i32 = or 3:i32, %0 (hasExternalUses)\n%3:i32 = addnw 16:i32, %2\ninfer %3\n",
+        []
+    ],
+    [
+        "%0:i64 = var (knownBits=0xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx) (nonNegative) (range=[0,64))\n%1:i64 = addnw 1:i64, %0 (hasExternalUses)\n%2:i64 = var\n%3:i64 = lshr %2, 3:i64 (hasExternalUses)\n%4:i64 = and 63:i64, %3 (hasExternalUses)\n%5:i64 = subnw 64:i64, %4 (hasExternalUses)\n%6:i1 = eq %1, %5\npc %6 1:i1\n%7:i64 = var\n%8:i64 = sub %7, %5\ninfer %8\n",
+        []
+    ],
+    [
+        "%0:i32 = var (knownBits=0xxxxxxxxxxxxxxxxxxxxxxxxxxx0000) (nonNegative) (range=[0,49))\n%1:i1 = eq 48:i32, %0\npc %1 0:i1\n%2:i32 = or 7:i32, %0 (hasExternalUses)\n%3:i32 = addnw 16:i32, %2\ninfer %3\n",
+        []
+    ],
+    [
+        "%0:i32 = var\n%1:i32 = var\n%2:i32 = add %0, %1\ninfer %2\n",
+        []
+    ],
+    [
+        "%0:i32 = var (knownBits=0xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx) (nonNegative) (range=[0,16))\n%1:i32 = addnw 1:i32, %0\ninfer %1\n",
+        []
+    ],
+    [
+        "%0:i32 = var (knownBits=0xxxxxxxxxxxxxxxxxxxxxxxxxxx0000) (nonNegative) (range=[0,49))\n%1:i32 = or 10:i32, %0\ninfer %1\n",
+        []
+    ],
+    [
+        "%0:i64 = var\n%1:i64 = lshr %0, 3:i64\n%2:i32 = trunc %1\n%3:i32 = and 63:i32, %2 (hasExternalUses)\n%4:i1 = ult %3, 56:i32\ninfer %4\n",
+        []
+    ],
+    [
+        "%0:i32 = var (knownBits=0xxxxxxxxxxxxxxxxxxxxxxxxxxx0000) (nonNegative) (range=[0,49))\n%1:i1 = eq 48:i32, %0\npc %1 0:i1\n%2:i32 = or 7:i32, %0 (hasExternalUses)\n%3:i32 = addnw 1:i32, %2\ninfer %3\n",
+        []
+    ],
+    [
+        "%0:i64 = var\n%1:i64 = lshr %0, 3:i64\n%2:i32 = trunc %1\n%3:i32 = and 63:i32, %2\ninfer %3\n",
+        []
+    ],
+    [
+        "%0:i32 = var (knownBits=0xxxxxxxxxxxxxxxxxxxxxxxxxxx0000) (nonNegative) (range=[0,49))\n%1:i1 = eq 48:i32, %0\npc %1 0:i1\n%2:i32 = or 8:i32, %0 (hasExternalUses)\n%3:i32 = addnw 9:i32, %2\ninfer %3\n",
+        []
+    ],
+    [
+        "%0:i32 = var\n%1:i32 = shl %0, 14:i32\ninfer %1\n",
+        []
+    ],
+    [
+        "%0:i32 = var\n%1:i32 = var\n%2:i32 = var\n%3:i32 = xor %2, %0\n%4:i32 = and %1, %3\n%5:i32 = xor %0, %4\ninfer %5\n",
+        []
+    ],
+    [
+        "%0:i32 = var\n%1:i32 = shl %0, 25:i32\n%2:i32 = lshr %0, 7:i32\n%3:i32 = or %1, %2\n%4:i32 = shl %0, 14:i32\n%5:i32 = lshr %0, 18:i32\n%6:i32 = or %4, %5\n%7:i32 = lshr %0, 3:i32\n%8:i32 = xor %6, %7\n%9:i32 = xor %3, %8\ninfer %9\n",
+        []
+    ],
+    [
+        "%0:i32 = var (knownBits=0xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx) (nonNegative) (range=[0,16))\ninfer %0\n",
+        []
+    ],
+    [
+        "%0:i32 = var\n%1:i32 = var\n%2:i32 = var\n%3:i32 = var\n%4:i32 = var\n%5:i32 = shl %4, 7:i32\n%6:i32 = lshr %4, 25:i32\n%7:i32 = or %5, %6\n%8:i32 = shl %4, 21:i32\n%9:i32 = lshr %4, 11:i32\n%10:i32 = or %8, %9\n%11:i32 = shl %4, 26:i32\n%12:i32 = lshr %4, 6:i32\n%13:i32 = or %11, %12\n%14:i32 = xor %10, %13\n%15:i32 = xor %7, %14\n%16:i32 = add %3, %15\n%17:i32 = add %2, %16\n%18:i32 = var\n%19:i32 = var\n%20:i32 = xor %19, %18\n%21:i32 = and %4, %20\n%22:i32 = xor %18, %21\n%23:i32 = add %17, %22\n%24:i32 = add %1, %23 (hasExternalUses)\n%25:i32 = add %0, %24 (hasExternalUses)\n%26:i32 = xor %4, %19\n%27:i32 = and %25, %26\ninfer %27\n",
+        []
+    ],
+    [
+        "%0:i32 = var\n%1:i32 = var\n%2:i32 = add %0, %1\n%3:i32 = var\n%4:i32 = shl %3, 15:i32\n%5:i32 = lshr %3, 17:i32\n%6:i32 = or %4, %5\n%7:i32 = shl %3, 13:i32\n%8:i32 = lshr %3, 19:i32\n%9:i32 = or %7, %8\n%10:i32 = lshr %3, 10:i32\n%11:i32 = xor %9, %10\n%12:i32 = xor %6, %11\n%13:i32 = add %2, %12\ninfer %13\n",
+        []
+    ],
+    [
+        "%0:i32 = var\n%1:i32 = shl %0, 13:i32\ninfer %1\n",
+        []
+    ]
+]

@@ -6,15 +6,12 @@ FROM aflplusplus/aflplusplus
 ##### JVM ######
 ################
 
-RUN yes | apt-get install curl
 RUN apt-get update
+RUN apt-get install -y curl
 RUN DEBIAN_FRONTEND="noninteractive" apt-get -y install tzdata wget
-RUN apt-get update
-RUN yes | apt-get install software-properties-common
-RUN apt-get update
+RUN apt-get install -y software-properties-common
 RUN yes | add-apt-repository ppa:openjdk-r/ppa
-RUN apt-get update
-RUN yes | apt-get install openjdk-12-jdk-headless
+RUN apt-get install -y openjdk-12-jdk-headless
 
 #######################
 ##### Supervisor ######
@@ -22,10 +19,8 @@ RUN yes | apt-get install openjdk-12-jdk-headless
 
 RUN apt-get install -y supervisor
 
-
 # Define working directory
 WORKDIR /root
-
 
 ################################
 ##### fuzzing-server-swam ######
@@ -43,8 +38,9 @@ WORKDIR $SRC_SWAM_DIR
 # TODO: Find way of installing dependencies with Mill without copying over entire repo
 # See: https://stackoverflow.com/questions/62834693/mill-build-tool-install-dependencies-without-compiling-source-code
 
-# DOWNLOAD latest version of SWAM cli jar file
-ADD https://github.com/KTH/swam/releases/download/v0.6.0-RC3/cli-0.6.0-RC3.jar $SRC_SWAM_DIR
+# DOWNLOAD latest version of SWAM cli jar file (wget into WORKDIR; wget works with cache in Dockerfile)
+RUN wget https://github.com/KTH/swam/releases/download/v0.6.0-RC3/swam_cli.jar
+RUN wget https://github.com/KTH/swam/releases/download/v0.6.0-RC3/swam_server.jar
 
 ADD entrypoint_mill_server.sh /home
 RUN chmod +x /home/entrypoint_mill_server.sh
@@ -72,23 +68,27 @@ RUN g++ -o $OUT_INTERFACE_DIR/getFileSize.out ./getFileSize.cpp ./utils.cpp
 RUN g++ -o $OUT_INTERFACE_DIR/wait_for_server.out ./wait_for_server.cpp ./utils.cpp ./socket_client.cpp
 RUN g++ -o $OUT_INTERFACE_DIR/interface.out ./interface.cpp ./socket_client.cpp ./utils.cpp
 
-RUN chmod +x $SRC_INTERFACE_DIR/entrypoint_afl.sh
+RUN chmod +x $SRC_INTERFACE_DIR/*.sh
 
 #########################
 ######## Shared #########
 #########################
 
-WORKDIR /home
+ENV WAFL_HOME=/home
+WORKDIR $WAFL_HOME
 
-ENV LOGS_DIR=/home/shared/logs
+ENV LOGS_DIR=$WAFL_HOME/logs
 
 RUN mkdir -p $LOGS_DIR
 
-ADD supervisord.conf /home/supervisord.conf
-ADD wafl.sh /home/wafl.sh
-ADD prepare_env.sh /home/prepare_env.sh
+ADD supervisord.conf .
+ADD supervisord.staging.conf .
+ADD stop_supervisord_staging.py .
 
-RUN chmod +x /home/wafl.sh
-RUN chmod +x /home/prepare_env.sh
+# dockerignore handles others
+ADD *.sh ./
+
+RUN chmod +x ./*.sh
+RUN chmod +x ./stop_supervisord_staging.py
 
 ENTRYPOINT ["/home/wafl.sh"]
