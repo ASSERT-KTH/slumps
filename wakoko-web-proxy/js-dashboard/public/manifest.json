@@ -1,6 +1,0 @@
-{
-  "name": "WAFL dashboard for client side",
-  "version": "0.1.0",    
-  "manifest_version": 2,
-  "description": "AFL-WASM bridge for Chrome as an extension"
-}
