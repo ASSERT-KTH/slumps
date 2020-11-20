@@ -1,4 +1,13 @@
 *.out
 *.dat
+fuzzing-client-afl/cpp-out
 ./fuzzing-server-swam/out
 ./wafl-temp
+
+./test_wafl_image.sh
+./test_wafl_local.sh
+./test_socket.sh
+./multi-processing.sh
+
+swam_cli.jar
+swam_server.jar

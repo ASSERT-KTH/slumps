@@ -12,11 +12,8 @@ RUN apt-get update \
 RUN mkdir slumps
 WORKDIR slumps
 
-# Rebuild on KTH repo update
-
-RUN git clone https://github.com/WebAssembly/wabt
-
-RUN cd wabt \
+RUN git clone https://github.com/WebAssembly/wabt \
+    && cd wabt \
     && git submodule update --init \
     && mkdir build && cd build \
     && cmake .. \
@@ -51,9 +48,5 @@ COPY --from=builder /usr/src/souper/third_party/llvm-Release-install/bin/llvm-as
 
 COPY --from=builder /tmp/wasi-libc /tmp/wasi-libc
 
-
-# RUN find / -name "CMakeFiles" -exec echo {} \;
-RUN rm -rf /slumps/souper/build/CMakeFiles
-RUN rm -rf /slumps/souper/build/docs/CMakeFiles
-RUN rm -rf /slumps/souper/third_party/alive2-build/CMakeFiles
-RUN tree -h /slumps
+RUN rm -rf /slumps/souper/build/CMakeFiles && rm -rf /slumps/souper/build/docs && rm -rf /slumps/souper/build/CMakeCache.txt && rm -rf /slumps/souper/build/build.ninja
+RUN tree /slumps
