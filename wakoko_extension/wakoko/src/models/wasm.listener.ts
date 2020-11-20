@@ -33,7 +33,7 @@ export abstract class BaseWASMListener{
 		this.name = name
 		this.offset=offset;
 		this.totalBlocks = totalBlocks;
-		this.history = [ ];
+		this.history = [0];
 
 		this.original = original;
 		this.instrumented = instrumented;

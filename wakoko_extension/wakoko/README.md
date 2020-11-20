@@ -1,70 +1,43 @@
-# Getting Started with Create React App
+# WAKOKO Extension
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Project content
 
-## Available Scripts
+``` bash
+\ src
+  \ components
+	#React components
+  \ instrumentor
+	- insite.based.instrumentor.ts
+	- server.based.instrumentor.ts
+  \ models
+	- wasm.listener.ts
+  \ services
+	# Error, log, fuzz and treemap layout calculation, etc. All the service implementations
 
-In the project directory, you can run:
+   - index.tsx # develop mode and ReactJS application entry point
+   - wrapper.ts # WebAssembly API replacement code
+   - content_template.js # template JS file, this file will generate the content.js file inside the extension folder structure.
+```
 
-### `yarn start`
+## Contribute
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+To add new functionalities, make sure to add the new code in the corresponding folder. UI source code in `components`, new services in the `services` folder and so on. Take into account that we are following a component, object oriented approach for the services. Since we are using `TS`, try to follow "correct" guidelines for static typing, annotate the parameters of the functions with the correct type and try to avoid the `any` type. Use a correct naming strategy, meaningfull and not lazy.
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
 
-### `yarn test`
+## Overview
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+WAKOKO replaces the WebAssembly builtin API in the browser. As an extension, the content script is executed before the page is loaded into the browser (see public/manifest.json file). The content script adds a `script` tag in the top of the `head` element. The content of the injected script tag is the `wrapper.tsx` (compiled to JS) script.
 
-### `yarn build`
+The dashboard UI is injected separately as another `script` tag. The dashboard and the wrapper are implemented as two different entrypoints, which means that the application can be opened in develop mode with all the benefits of implementing a `react-app` with webpack. To run the dashboard for dev reasons, run `npm start` in this root folder.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## Instrumentor
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+Inside the wrapper code, there is a call to the instrumentation service. Right now, it is hardcoded to use the insite service. To change it to the server based approach, change the returning value in the following [script](src/instrumentor/instrumentor.ts).
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## Building and packaging the extension
 
-### `yarn eject`
+We need to follow some guidelines to build a browser extension. The content of the `public` folder will be copied in the build folder. For example, we placed the `manifest.json` file, which contains the basic behavior of the extension, in this folder. Besides, icons and images should be included here.
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+To build the extension run the following script, `bash build_extension.sh`. This script is a full pipeline, it first builds the `wakoko_instrumentor` project to WebAssembly using emcc (make sure to have [emsdk ](https://emscripten.org/) activated). Then the `content_template.js` file is filled with th needed contents, the browser extension address for the static files, and the wrapper code to be injected in the page. Concretely, thre are two reserved places where the code is added, `INSTRUMENTOR` and `WRAPPER`.
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `yarn build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+Notice if that the emsdk is not set, the build can fail. If this happens, change the default instrumentor to the server based approach as it is described previously.
