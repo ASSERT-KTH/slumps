@@ -13,3 +13,4 @@
 [submodule "wakoko_instrumentor"]
 	path = wakoko_instrumentor
 	url = https://github.com/Jacarte/wakoko_instrumentor
+	braench= main
