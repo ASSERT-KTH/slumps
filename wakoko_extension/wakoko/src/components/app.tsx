@@ -4,7 +4,6 @@ import WasmBinary from './wasm-binary'
 import Frame, { FrameContextConsumer }from 'react-frame-component';
 import {RetrieverMockService} from '../services/retriever.mock.service'
 import WASMListener from "models/wasm.listener";
-import 'antd/dist/antd.css';
 import TreeMap from "./tree.map";
 
 
@@ -23,7 +22,7 @@ export default class Main extends React.Component<MainProps, MainState> {
 		super(props);
 
 		this.state = {
-			opened: true,
+			opened: !!props.binaries.length,
 			binaries: ((window as any).DEBUG)? mock.createMockListeners() : props.binaries
 		}
 

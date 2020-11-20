@@ -16,6 +16,14 @@ export default class InsiteBasedInstrumentor implements IInstrumentor {
 					buffer: buffer,
 					message:'instrument'
 				}, "*")
+				
+				/*var atag = document.createElement("a");
+				var file = new Blob([buffer],
+				  {type: "application/octet-stream"});
+				atag.href = URL.createObjectURL(file);
+				atag.download = `module.wasm`;
+				atag.click();
+				atag.remove();*/
 
 				function eventHandler(event){
 					if(event.data.id === 'instrumentation_result'){

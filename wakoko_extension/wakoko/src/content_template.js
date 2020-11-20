@@ -36,7 +36,7 @@ window.addEventListener("message", function(event) {
 			instrumentor.HEAP8.set(buff, mallocBuff);
 				
 			// @ts-ignore
-			var instrumented = instrumentor.ccall('instrument_wasm', 'number', ['number', 'number', 'number', 'number','number'],[mallocBuff, buff.length, instrumentedSize, global_pad, global_count]);
+			var instrumented = instrumentor.ccall('instrument_wasm', 'number', ['number', 'number', 'number', 'number','number', 'number', 'number'],[mallocBuff, buff.length, instrumentedSize, global_pad, global_count, 0, 0.1]);
 		
 			// @ts-ignore
 			var view = new DataView(instrumentor.HEAP8.buffer);
