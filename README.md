@@ -2,7 +2,7 @@
 
 Research repository on randomization, fuzzing and superoptimization for WebAssembly/WASM. Artifacts and corresponding papers:
 
-* [Artifact](utils/pipeline), [Superoptimization of WebAssembly Bytecode (MoreVM 2020)](http://arxiv.org/pdf/2002.10213)
+* [Artifact](superoptimizer), [Superoptimization of WebAssembly Bytecode (MoreVM 2020)](http://arxiv.org/pdf/2002.10213)
     
 * [Artifact](crow), [CROW: Code diversification for WebAssembly](http://arxiv.org/pdf/2008.07185)
 

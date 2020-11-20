@@ -1,55 +1,16 @@
 #!/bin/bash
 
-CURRENT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+CURRENT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
+source $CURRENT_DIR/logging_lib.sh
 
-echo "Cloning SWAM"
-if [ ! -d fuzzing-server-swam ]; then
-	git clone --single-branch --branch slumps https://github.com/KTH/swam.git fuzzing-server-swam
-fi
+log_info "Downloading SWAM"
+cd $CURRENT_DIR/fuzzing-server-swam
+# ./millw cli.assembly
 
-echo "Building SWAM"
-cd fuzzing-server-swam
-git pull
-./millw cli.assembly
-export SWAM_JAR=$(CURRENT_DIR)/fuzzing-server-swam/out/cli/assembly/dest/out.jar
-echo $SWAM_JAR
+curl -o swam_cli.jar -L https://github.com/KTH/swam/releases/download/v0.6.0-RC3/swam_cli.jar
+curl -o swam_server.jar -L https://github.com/KTH/swam/releases/download/v0.6.0-RC3/swam_server.jar
 
+bash $CURRENT_DIR/fuzzing-client-afl/build_interface.sh
+bash $CURRENT_DIR/fuzzing-client-afl/build_afl.sh
 
-if test -f "$SWAM_JAR"; then
-	echo "SWAM jar does not exist"
-	exit 1 # Fail if SWAM is not compiled
-fi
-
-cd ..
-
-
-# Download afl plus plus
-if [ ! -d aflpp ]; then
-	echo "Downloading aflplusplus..."
-	git clone https://github.com/AFLplusplus/AFLplusplus.git aflpp
-
-	echo "Building aflplusplus..."
-	cd aflpp
-	make distrib
-	sudo make install
-	if test -f "afl-fuzz"; then
-		echo "afl-fuzz is not compiled"
-		exit 1 # Fail if AFLPP is not compiled
-	fi
-	cd ..
-fi
-
-
-echo "Building the wafl interface..."
-
-mkdir -p $CURRENT_DIR/wafl-temp
-CPP_OUT_DIR=$CURRENT_DIR/wafl-temp/cpp-out
-mkdir -p $CPP_OUT_DIR
-
-g++ -o $CPP_OUT_DIR/prepare_wasm_input.out ./fuzzing-client-afl/prepare_wasm_input.cpp ./fuzzing-client-afl/utils.cpp
-g++ -o $CPP_OUT_DIR/getFileSize.out ./fuzzing-client-afl/getFileSize.cpp ./fuzzing-client-afl/utils.cpp
-g++ -o $CPP_OUT_DIR/wait_for_server.out ./fuzzing-client-afl/wait_for_server.cpp ./fuzzing-client-afl/utils.cpp ./fuzzing-client-afl/socket_client.cpp
-g++ -o $CPP_OUT_DIR/run_client.out ./fuzzing-client-afl/run_client.cpp ./fuzzing-client-afl/socket_client.cpp ./fuzzing-client-afl/utils.cpp
-g++ -o $CPP_OUT_DIR/interface.out ./fuzzing-client-afl/interface.cpp ./fuzzing-client-afl/socket_client.cpp ./fuzzing-client-afl/utils.cpp
-
-echo "DONE !" 
+log_info "Finished building WAFL"
