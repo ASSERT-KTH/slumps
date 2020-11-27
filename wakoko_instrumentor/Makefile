@@ -24,7 +24,7 @@ CCFLAGS="-Wall"
 .PHONY: all
 
 all:
-	for d in $(libraries) $(instrumentor-browser) ; \
+	for d in $(libraries) $(instrumentor-browser) $(instrumentor) ; \
 	do                               \
 		INC=$(include_dirs) \
 		BUILD=$(build_dir) \
@@ -36,8 +36,8 @@ all:
 		$(MAKE) --directory=$$d;       \
 	done
 
-check: all
-	for d in $(libraries) $(detect-malloc) ; \
+check: 
+	for d in $(libraries) $(instrumentor-browser) $(instrumentor)  ; \
 	do                               \
 		INC=$(include_dirs) \
 		BUILD=$(build_dir) \
