@@ -19,7 +19,7 @@ void free_generic_arrays(WASMModule* module){
 	Section s;
 	for(int i = 0; i < module->count; i++){
 		get_element(&module->sections, i, &s);
-		DEBUG("FREEING SECTION %d\n", s.type);
+		DEBUG2("FREEING SECTION %d\n", s.type);
 		switch (s.type)
 		{
 			case 1: // types
@@ -122,40 +122,40 @@ char * parse_expression(WASMModule * module, int * size){
 		switch (OPCODE)
 		{
 		case I32_CONST:
-			DEBUG("I32_CONST %02x \n", OPCODE);
+			DEBUG2("I32_CONST %02x \n", OPCODE);
 			decode_var_uint32(module->payload, &module->position); // i32 const
 			break;
 
 		case GET_GLOBAL:
-			DEBUG("GLOBAL GET %02x \n", OPCODE);
+			DEBUG2("GLOBAL GET %02x \n", OPCODE);
 			decode_var_uint32(module->payload, &module->position); // global index
 			break;
 		case F32_FLOOR:
-			DEBUG("F32_FLOOR %02x \n", OPCODE);
+			DEBUG2("F32_FLOOR %02x \n", OPCODE);
 			break;
 		case I32_XOR:
-			DEBUG("I32_XOR %02x \n", OPCODE);
+			DEBUG2("I32_XOR %02x \n", OPCODE);
 			break;
 		case F64_LESS_EQUAL_THAN:
-			DEBUG("F64_LESS_EQUAL_THAN %02x \n", OPCODE);
+			DEBUG2("F64_LESS_EQUAL_THAN %02x \n", OPCODE);
 			break;
 		case I32_OR:
-			DEBUG("I32_OR %02x \n", OPCODE);
+			DEBUG2("I32_OR %02x \n", OPCODE);
 			break;
 		case I32_SHL:
-			DEBUG("I32_SHL %02x \n", OPCODE);
+			DEBUG2("I32_SHL %02x \n", OPCODE);
 			break;
 		case I32_POP_CNT:
 			DEBUG("I32_POP_CNT %02x \n", OPCODE);
 			break;
 		case I32_REM_SIGNED:
-			DEBUG("I32_REM_SIGNED %02x \n", OPCODE);
+			DEBUG2("I32_REM_SIGNED %02x \n", OPCODE);
 			break;
 		case I32_DIV:
-			DEBUG("I32_DIV %02x \n", OPCODE);
+			DEBUG2("I32_DIV %02x \n", OPCODE);
 			break;
 		case GET_LOCAL:
-			DEBUG("GET_LOCAL %02x \n", OPCODE);
+			DEBUG2("GET_LOCAL %02x \n", OPCODE);
 			break;
 
 		default:
@@ -167,7 +167,7 @@ char * parse_expression(WASMModule * module, int * size){
 		OPCODE = readInt8(module->payload, &module->position);
 	}
 	int count = module->position - start;
-	DEBUG("%02x %d\n", OPCODE, count);
+	DEBUG2("%02x %d\n", OPCODE, count);
 	(*size) = count;
 	return init;
 }
@@ -196,7 +196,7 @@ WASMModule* parse_wasm(char* bytes, unsigned int sz){
 	uint16 version = readUint16LE(bytes, &module->position);
 	module->version = version;
 	
-	INFO("version %d\n", version);
+	DEBUG("version %d\n", version);
 
 	while(module->size - module->position > 0){		
 		Section* section = parse_section(module);
@@ -208,7 +208,7 @@ WASMModule* parse_wasm(char* bytes, unsigned int sz){
 
 FunctionImport* parse_function_import(WASMModule * module){
 
-	DEBUG("parsing function import\n");
+	DEBUG2("parsing function import\n");
 
 	FunctionImport * f_import = (FunctionImport*) allocate_and_register(sizeof(FunctionImport));
 	f_import->index = decode_var_uint32(module->payload, &module->position);
@@ -220,28 +220,28 @@ FunctionImport* parse_function_import(WASMModule * module){
 
 ElementEntry* parse_element_entry(WASMModule * module){
 
-	DEBUG("parsing element entry\n");
+	DEBUG2("parsing element entry\n");
 	
 	ElementEntry * elem = (ElementEntry*) allocate_and_register(sizeof(ElementEntry));
 	elem->flag = decode_var_uint32(module->payload, &module->position);
 	
 
-	DEBUG("element flag %d\n", elem->flag);
+	DEBUG2("element flag %d\n", elem->flag);
 
 	if ((elem->flag & (SEG_PASSIVE | SEG_EXPLICIT_INDEX)) == SEG_EXPLICIT_INDEX) {
 		elem->index = decode_var_uint32(module->payload, &module->position);
-		DEBUG("element index %d\n", elem->index);
+		DEBUG2("element index %d\n", elem->index);
     }
 
 	if(!(elem->flag & SEG_PASSIVE)){
 		int size;
 		elem->init_code_chunk = parse_expression(module, &size);
 		elem->code_size = size;
-		DEBUG("Parsing element entry size %d\n", elem->code_size);
+		DEBUG2("Parsing element entry size %d\n", elem->code_size);
 	}
 
     if (elem->flag & (SEG_PASSIVE | SEG_EXPLICIT_INDEX)) {
-	  	DEBUG("Parsing elem type %d\n", elem->flag); 
+	  	DEBUG2("Parsing elem type %d\n", elem->flag); 
       	if (elem->flag & SEG_USE_EXPRS) {
 	  		elem->elem_type = decode_var_int32(module->payload, &module->position, 32);
 		} else {
@@ -253,15 +253,15 @@ ElementEntry* parse_element_entry(WASMModule * module){
 	elem->fcount = decode_var_uint32(module->payload, &module->position);
 	elem->findexes = (int*)allocate_and_register(sizeof(int)*elem->fcount);
 
-	DEBUG("Element entry f count %d ", elem->fcount);
+	DEBUG2("Element entry f count %d ", elem->fcount);
 	
 	for(int i = 0; i < elem->fcount; i++){
 		elem->findexes[i] = decode_var_uint32(module->payload, &module->position);
-		DEBUG("%d ", elem->findexes[i]);
+		DEBUG2("%d ", elem->findexes[i]);
 		// TODO FINISH
 	}
 
-	DEBUG("\n");
+	DEBUG2("\n");
 	return elem;
 }
 
@@ -271,21 +271,21 @@ DataSegment* parse_data_segment(WASMModule * module){
 	
 	DataSegment * elem = (DataSegment*) allocate_and_register(sizeof(DataSegment));
 	elem->flag = decode_var_uint32(module->payload, &module->position);
-	DEBUG("parsing data flag(%d) segment\n", elem->flag);
+	DEBUG2("parsing data flag(%d) segment\n", elem->flag);
 	
 
 	if(elem->flag & SEG_EXPLICIT_INDEX){ // this is the bulk memory feature
 		elem->index = decode_var_uint32(module->payload, &module->position);
-		DEBUG("bulk memory flag %d\n", elem->flag);
+		DEBUG2("bulk memory flag %d\n", elem->flag);
 	}
 
-	DEBUG("index %d\n", elem->index);
+	DEBUG2("index %d\n", elem->index);
 	if(!(elem->flag & SEG_PASSIVE)) // if it is not bulk memory then is has an offset
 		elem->init_chunk_code = parse_expression(module, &elem->code_size);
 
 	elem->size = decode_var_uint32(module->payload, &module->position);
 	//char* data = (char*)allocate_and_register(elem->size);
-	DEBUG("size %d\n", elem->size);
+	DEBUG2("size %d\n", elem->size);
 	elem->data = module->payload + module->position;
 	module->position += elem->size;
 
@@ -409,7 +409,7 @@ void parse_types_section(Section * section, WASMModule * module, int size){
 		FuncTypeSection* functpe = (FuncTypeSection*)allocate_and_register(sizeof(FuncTypeSection));
 		
 		int form = readInt8(module->payload, &module->position);
-		DEBUG("Type form %02x\n", form);
+		DEBUG2("Type form %02x\n", form);
 		functpe->form = form;
 		
 		int param_count = decode_var_uint32(module->payload, &module->position);
@@ -417,7 +417,7 @@ void parse_types_section(Section * section, WASMModule * module, int size){
 
 		init_array(&functpe->param_types, param_count, sizeof(char));
 
-		DEBUG("Type %d ", i);
+		DEBUG2("Type %d ", i);
 		for(int j = 0; j < param_count; j++){
 			char tpe = readInt8(module->payload, &module->position);
 
@@ -425,11 +425,11 @@ void parse_types_section(Section * section, WASMModule * module, int size){
 				ERROR("Invalid numberic type %02x\n", tpe);
 				exit(1);
 			}
-			DEBUG(" %02x ", tpe);
+			DEBUG2(" %02x ", tpe);
 			insert_array(&functpe->param_types, &tpe);
 		}
 		
-		DEBUG(" count %d\n", param_count);
+		DEBUG2(" count %d\n", param_count);
 
 		int return_count = decode_var_uint32(module->payload, &module->position);
 		functpe->ret_count = return_count;
@@ -440,7 +440,7 @@ void parse_types_section(Section * section, WASMModule * module, int size){
 			insert_array(&functpe->return_types, &tpe);
 		}
 
-		DEBUG("Type r count %d\n", return_count);
+		DEBUG2("Type r count %d\n", return_count);
 
 		insert_array(&typeS->types, functpe);
 	}
@@ -469,7 +469,7 @@ void parse_function_section(Section * section, WASMModule * module, int size){
 	int count = decode_var_uint32(module->payload, &module->position);
 	function_section->count = count;
 
-	INFO("Decoding function count %d\n", function_section->count);
+	DEBUG("Decoding function count %d\n", function_section->count);
 
 
 	function_section->types = (int*)allocate_and_register(sizeof(int)*count);
@@ -577,7 +577,7 @@ void parse_elem_section(Section * section, WASMModule * module, int size){
 	int count = decode_var_uint32(module->payload, &module->position);
 	export_section->count = count;
 
-	DEBUG("element section count %d\n", count);
+	DEBUG2("element section count %d\n", count);
 	init_array(&export_section->elements, count, sizeof(ElementEntry));
 
 	for(int i =0; i < count; i++){
@@ -611,13 +611,13 @@ void parse_code_section(Section * section, WASMModule * module, int size){
 void parse_data_section(Section * section, WASMModule * module, int size){
 	DataSection * data_section = (DataSection *) allocate_and_register(sizeof(DataSection));
 	data_section->size = size;
-	DEBUG("data section size %d\n", size);
+	DEBUG2("data section size %d\n", size);
 	int start_position = module->position;
 
 	int count = decode_var_uint32(module->payload, &module->position);
 	data_section->count = count;
 
-	DEBUG("data section count %d\n", count);
+	DEBUG2("data section count %d\n", count);
 	init_array(&data_section->segments, count, sizeof(DataSegment));
 
 	for(int i =0; i < count; i++){
@@ -625,7 +625,7 @@ void parse_data_section(Section * section, WASMModule * module, int size){
 		insert_array(&data_section->segments, segment);
 	}
 
-	DEBUG("data section position %d %d (%d)\n", start_position, module->position, module->position - start_position);
+	DEBUG2("data section position %d %d (%d)\n", start_position, module->position, module->position - start_position);
 	section->instance = data_section;
 
 }
@@ -741,7 +741,7 @@ Section* parse_section(WASMModule* module){
 	section -> type = section_type;
 	section -> section_offset = module -> position;
 	section -> size = section_size;
-	DEBUG("Section type %d size %d\n", section->type, section_size);
+	DEBUG2("Section type %d size %d\n", section->type, section_size);
 
 	switch (section->type)
 	{

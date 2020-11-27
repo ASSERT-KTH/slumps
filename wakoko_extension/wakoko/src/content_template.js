@@ -30,13 +30,15 @@ window.addEventListener("message", function(event) {
 			// @ts-ignore
 			var global_pad = instrumentor._malloc(4); 		
 			// @ts-ignore
-			var global_count = instrumentor._malloc(4); 	
+			var global_count = instrumentor._malloc(4); 
+			// @ts-ignore
+			var total_instructions = instrumentor._malloc(4); 		
 		
 			// @ts-ignore
 			instrumentor.HEAP8.set(buff, mallocBuff);
-				
+			
 			// @ts-ignore
-			var instrumented = instrumentor.ccall('instrument_wasm', 'number', ['number', 'number', 'number', 'number','number', 'number', 'number'],[mallocBuff, buff.length, instrumentedSize, global_pad, global_count, 0, 0.1]);
+			var instrumented = instrumentor.ccall('instrument_wasm', 'number', ['number', 'number', 'number', 'number','number', 'number', 'number', 'number'],[mallocBuff, buff.length, instrumentedSize, global_pad, global_count, localStorage.getItem(`WAKOKO_BYPASSED_BLOCKS`) || 0, 0.1, total_instructions]);
 		
 			// @ts-ignore
 			var view = new DataView(instrumentor.HEAP8.buffer);
@@ -47,6 +49,8 @@ window.addEventListener("message", function(event) {
 			var global_pad = view.getInt32(global_pad, true);
 			// @ts-ignore
 			var global_count = view.getInt32(global_count, true);
+			// @ts-ignore
+			var total_instructions = view.getInt32(total_instructions, true);
 			
 		
 			// @ts-ignore

@@ -35,8 +35,9 @@ typedef struct {
 } Array;
 
 typedef enum {
-	INFO,
-	ERROR
+	INFO2STD,
+	DEBUG2STDERR,
+	ERROR2STDERR
 } LOGTYPE;
 
 void init_array(Array *a, int initialSize, int membersize);
@@ -63,20 +64,17 @@ void _proxy_log(LOGTYPE log_type, const char *fmt, ...)
 
 #define LOG(level, fmt,...) _proxy_log(level, fmt, ##__VA_ARGS__)
 
-#ifdef WAKOKO_PRINT 
-	#define DEBUG(fmt,...) _proxy_log(INFO, fmt, ##__VA_ARGS__) 
-#else
-	#define DEBUG(fmt,...)  
-#endif
+#define DEBUG(fmt,...) _proxy_log(DEBUG2STDERR, ANSI_COLOR_YELLOW fmt ANSI_COLOR_RESET, ##__VA_ARGS__) 
+
 
 #ifdef WAKOKO_PRINT_OPCODE 
-	#define DEBUG2(fmt,...) _proxy_log(INFO, fmt, ##__VA_ARGS__) 
+	#define DEBUG2(fmt,...) _proxy_log(DEBUG2STDERR, ANSI_COLOR_YELLOW fmt ANSI_COLOR_RESET, ##__VA_ARGS__) 
 #else
 	#define DEBUG2(fmt,...)  
 #endif
 
-#define INFO(fmt,...) _proxy_log(INFO, fmt, ##__VA_ARGS__) 
-#define ERROR(fmt,...) _proxy_log(ERROR, ANSI_COLOR_RED fmt ANSI_COLOR_RESET, ##__VA_ARGS__)
+#define INFO(fmt,...) _proxy_log(INFO2STD, fmt, ##__VA_ARGS__) 
+#define ERROR(fmt,...) _proxy_log(ERROR2STDERR, ANSI_COLOR_RED fmt ANSI_COLOR_RESET, ##__VA_ARGS__)
 
 
 

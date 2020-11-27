@@ -11,7 +11,7 @@ int main(int argc, char * argv[]){
 		FILE* in_file = fopen(argv[1], "rb");
 		if (in_file == NULL) 
 		{   
-			printf("Error! Could not open file\n"); 
+			ERROR("Error! Could not open file\n"); 
 			exit(-1); // must include stdlib.h 
 		} 
         fseek(in_file, 0L, SEEK_END);
@@ -23,24 +23,26 @@ int main(int argc, char * argv[]){
 		fclose(in_file);
 
 		WASMModule* module = parse_wasm(bytes, sz);	
-		printf("CORRECT DECODING %d\n", module->size);
+		ERROR("CORRECT DECODING %d\n", module->size);
 
 		#ifndef IDEM
-		printf("INSTRUMENTING\n");
+		ERROR("INSTRUMENTING\n");
 		int pad;
 		int globals;
-		make_coverage_instrumentation(module, &pad, &globals, 200, 1.0);
+		int instruction_count;
+
+		make_coverage_instrumentation(module, &pad, &globals, 0, 1.0, &instruction_count);
 		#endif
 
 		char*  out = (char*)allocate_and_register(MAX_OUT_SIZE);
 
 		int toWrite = encode_wasm(module, out);
-		printf("CORRECT ENCODING\n");
+		ERROR("CORRECT ENCODING\n");
 
 		FILE* outFile = fopen(argv[2], "w");
 
 		if(outFile == NULL){
-			printf("Error! Could not open file\n"); 
+			ERROR("Error! Could not open file\n"); 
 			exit(-1); // must include stdlib.h 
 		}
 
@@ -51,6 +53,16 @@ int main(int argc, char * argv[]){
 		free_generic_arrays(module);
 
 		free_all();
+
+		// write JSON INFO to stdout
+
+		INFO("{\n");
+
+		INFO("\t\"totalInstructions\": %d,\n", instruction_count);
+		INFO("\t\"totalBasicBlocks\": %d,\n", globals);
+		INFO("\t\"pad\": %d,\n", pad);
+
+		INFO("\n}\n");
 
 	}
 	return 0;

@@ -3,6 +3,7 @@ import WASMListener, { BaseWASMListener } from '../models/wasm.listener'
 export class MockWasmListener extends BaseWASMListener{
 
 	MAX: number = 40;
+	lastValue: number = 0;
 
 	setVisitedMap(save: any): void {
 
@@ -11,11 +12,17 @@ export class MockWasmListener extends BaseWASMListener{
 		}
 	}
 	getBlockCoverage(save){
-		let cv = Math.random()*17434;
+		let cv = 10 + Math.random()*10;
+
+		const result =  cv + this.lastValue
+		this.lastValue = result;
+
 		if(save){
-			this.history.push(cv)
+			this.history.push(result)
 		}
-		return  cv
+
+		console.log(result);
+		return result;
 	}
 
 
@@ -26,7 +33,7 @@ export class RetrieverMockService {
 	createMockListeners(){
 		const v1 = new MockWasmListener("testH", "test", {
 			"totalInstructions" : 10411,
-			"totalBasicBlocks" : 1152,
+			"totalBasicBlocks" : 100,
 			"tpe" : 2,
 			"AFLMemOffset" : 53,
 			"AFLMemSize" : -1,
@@ -3655,7 +3662,7 @@ export class RetrieverMockService {
 		
 			  const v2 = new MockWasmListener("testH", "test", {
 				"totalInstructions" : 10411,
-				"totalBasicBlocks" : 1152,
+				"totalBasicBlocks" : 100,
 				"tpe" : 2,
 				"AFLMemOffset" : 53,
 				"AFLMemSize" : -1,
@@ -7019,7 +7026,7 @@ export class RetrieverMockService {
 	
 			
 
-		return [v1, v2]
+		return [v1]
 	}
 
 	getWasms(){

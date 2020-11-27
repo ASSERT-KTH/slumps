@@ -3,7 +3,7 @@ OBJS = utils.o leb128.o wasm-decoder.o wasm-encoder.o wakoko.o
 LINK := $(addprefix  $(L)/,$(OBJS))
 
 
-all:  check_wakoko
+all:  build check_wakoko
 
 generate_emcc: decoder.c
 	mkdir -p emcc
@@ -14,6 +14,9 @@ generate_emcc: decoder.c
 	$(SRC_DIR)/lib/wasm-decoder/wasm-encoder.c \
 	 decoder.c -o emcc/decoder.html -s FILESYSTEM=1 -s EXIT_RUNTIME=1 -s ALLOW_MEMORY_GROWTH=1
 
+
+build: program
+	$(CC) $(CCFLAGS)  $(LINK) decoder.o -o instrumentor.out
 
 check_all: program
 	$(CC) $(CCFLAGS) -DIDEM  $(LINK) decoder.o -o decoder.out
@@ -35,7 +38,7 @@ check_wakoko: program_instrument
 
 
 program: decoder.c
-	$(CC) -c $(FLAGS) -DIDEM -DWAKOKO_PRINT -DDEBUG $(INC) decoder.c
+	$(CC) -c $(FLAGS) -DWAKOKO_PRINT $(INC) decoder.c
 
 
 

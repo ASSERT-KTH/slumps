@@ -95,17 +95,15 @@ void free_array(Array *a) {
 void _proxy_log(LOGTYPE level, const char *fmt, ...) {
     
 	va_list arg;
-    FILE *log_file = (level == ERROR) ? stderr : stdout;
+    FILE *log_file = (level == ERROR2STDERR || level == DEBUG2STDERR) ? stderr : stdout;
 	
 	va_start(arg, fmt);
     vfprintf(log_file, fmt, arg);
     va_end(arg);
 
-	#ifndef __EMSCRIPTEN__
-	#ifdef DEBUG
-		fflush(log_file);
-		fsync(fileno(log_file));
-	#endif
-	#endif
+	//#ifndef __EMSCRIPTEN__
+	//fflush(log_file);
+	//fsync(fileno(log_file));
+	//#endif
 }
 

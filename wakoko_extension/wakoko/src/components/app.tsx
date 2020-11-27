@@ -5,7 +5,10 @@ import Frame, { FrameContextConsumer }from 'react-frame-component';
 import {RetrieverMockService} from '../services/retriever.mock.service'
 import WASMListener from "models/wasm.listener";
 import TreeMap from "./tree.map";
+import { Progress, Card, InputNumber, Form, Row, Col, Switch, Input, Alert, Collapse } from 'antd';
+import LocalStorageService from "services/local.storage.service";
 
+const {Panel} = Collapse;
 
 const mock = new RetrieverMockService()
 
@@ -17,13 +20,16 @@ export interface MainState extends MainProps {
 	opened: boolean;
 }
 export default class Main extends React.Component<MainProps, MainState> {
+	localService: LocalStorageService;
 
 	constructor(props: MainProps){
 		super(props);
 
+		this.localService = new LocalStorageService()
+	  
 		this.state = {
 			opened: !!props.binaries.length,
-			binaries: ((window as any).DEBUG)? mock.createMockListeners() : props.binaries
+			binaries: ((window as any).PRODUCTION)? props.binaries : mock.createMockListeners()
 		}
 
 	}
@@ -53,9 +59,74 @@ export default class Main extends React.Component<MainProps, MainState> {
 					({document, window}) => {
 						// Render Children
 						return (this.state.binaries && this.state.binaries.length > 0  &&  <div className={'wakoko-extension'}>
-							
+							<Collapse defaultActiveKey={['0']} >
+							<Panel key="1" header="General settings">
+												
+									<Form>
+										<Row gutter={24}>
+											
+											<Col span={12}>
+											<Form.Item
+											label="Bypass"
+												>
+													<InputNumber 
+														value={this.localService.getNumberofBypassedBlocks()} 
+														onChange={e => this.localService.setNumberofBypassedBlocks(e as number)}
+													/>
+												</Form.Item>
+				
+											</Col>
+										</Row>
+										<Row gutter={24}>
+											
+											<Col span={24}>
+												<Form.Item
+													label="Send info to"
+												>
+													<Input  placeholder={"https://"}/>
+												</Form.Item>
+				
+											</Col>
+										</Row>
+										<Alert type='warning' message="To change one of the following options will reload the page" />
+										<Row gutter={24}>
+				
+											<Col span={12}>
+													
+													<Form.Item
+													label="Inject Stats.js"
+												>
+												<Switch />
+												</Form.Item>
+											</Col>
+											<Col span={12}>
+												
+													<Form.Item
+													
+													label="Inline instrumentor"
+												>
+												<Switch disabled checked />
+												</Form.Item>
+											</Col>
+											
+										</Row>
+										<Row gutter={24}>
+										<Col span={12}>
+												
+												<Form.Item
+													label="Collect all WASMs"
+												>
+													<Switch disabled />
+												</Form.Item>
+				
+											</Col>
+										</Row>
+									</Form>
+
+						</Panel>
+						</Collapse>
 						{ 
-							this.state.binaries.map((t: any, i: number) => <WasmBinary key={i} freq={2000} index={i} module={t} page={window.location.href}/>)
+							this.state.binaries.map((t: any, i: number) => <WasmBinary key={i}  index={i} module={t} page={window.location.href}/>)
 						}</div>)
 					}
 				} 
