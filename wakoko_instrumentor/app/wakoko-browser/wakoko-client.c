@@ -7,7 +7,7 @@
 #include <include/wasm-decoder/wasm-encoder.h>
 #include <emscripten.h>
 
-char* EMSCRIPTEN_KEEPALIVE instrument_wasm(char* byte_char, int size, int * instrumented_size, int* global_pad, int*global_count, int threshold, float instrumentation_probability){
+char* EMSCRIPTEN_KEEPALIVE instrument_wasm(char* byte_char, int size, int * instrumented_size, int* global_pad, int*global_count, int threshold, float instrumentation_probability, int* instruction_count){
 	
 
 	//char bytes[size];
@@ -17,7 +17,7 @@ char* EMSCRIPTEN_KEEPALIVE instrument_wasm(char* byte_char, int size, int * inst
 
 
 	INFO("INSTRUMENTING %d FUNCTIONS\n", module->codeSection->count);
-	make_coverage_instrumentation(module, global_pad, global_count,  threshold,  instrumentation_probability);
+	make_coverage_instrumentation(module, global_pad, global_count,  threshold,  instrumentation_probability, instruction_count);
 
 	char*  out = malloc(MAX_OUT_SIZE);
 

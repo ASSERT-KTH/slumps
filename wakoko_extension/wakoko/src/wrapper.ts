@@ -2,13 +2,6 @@ import {Utils} from 'instrumentor/instrumentor'
 import './content.css';
 
 
-// @ts-ignore
-if(!window.IS_EXTENSION)
-	// @ts-ignore
-	window.DEBUG=true;
-else
-	// @ts-ignore
-	window.DEBUG=false;
 
 
 //const oldModule = WebAssembly.Module;
@@ -75,4 +68,4 @@ window.IS_EXTENSION = true;
 // @ts-ignore
 window.ENABLE_DASHBOARD = true; 
 // @ts-ignore
-window.DEBUG = false; 
+window.PRODUCTION = true; 

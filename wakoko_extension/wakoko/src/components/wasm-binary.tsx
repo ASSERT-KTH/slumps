@@ -4,19 +4,20 @@ import * as React from "react";
 import GraphData from "./graph.data";
 import Graph from "./graph.view";
 import CovPlot from "./plot";
-import { Progress, Card } from 'antd';
+import { Progress, Card, InputNumber, Form, Row, Col, Switch, Input, Alert } from 'antd';
 import { DownloadOutlined, DownSquareFilled, BoxPlotOutlined } from '@ant-design/icons';
 import TreeMap from "./tree.map";
+import LocalStorageService from "services/local.storage.service";
 
 export interface WasmBinaryProps {
 	module: BaseWASMListener;
 	page: string;
 	index: number;
-	freq: number;
 }
 
 export interface WasmBinaryState {
 	history: number[],
+	pollingTime: number,
 	nodes: {
 		[key: number]: boolean
 	}
@@ -28,10 +29,12 @@ export interface WasmBinaryState {
 
 class WasmBinary extends React.Component<WasmBinaryProps, WasmBinaryState> {
 
+
 	constructor(props: WasmBinaryProps){
 	  super(props);
 		
 	  this.state = {
+		  pollingTime: 1000,
 		  history: [],
 		  nodes: {},
 		  links: []
@@ -42,19 +45,33 @@ class WasmBinary extends React.Component<WasmBinaryProps, WasmBinaryState> {
 	time: any;
 
 	componentDidMount(){
-		this.time = setInterval(() => {
-			this.props.module.getBlockCoverage(true)
-			this.props.module.setVisitedMap(true)
-
-			this.setState({
-				history: [...this.props.module.history]
-			})
-		}, this.props.freq)
+		this.time = setInterval(this.collectValues, this.state.pollingTime)
 	}
 
 	componentWillUnmount(){
 		if(this.time)
 			clearInterval(this.time)
+	}
+
+	collectValues = () => {
+
+		this.props.module.getBlockCoverage(true)
+		this.props.module.setVisitedMap(true)
+
+		this.setState({
+			history: [...this.props.module.history]
+		})
+	}
+
+	onValChange = (val) => {
+		if(this.time)
+			clearInterval(this.time)
+		
+			this.setState({
+				pollingTime: val
+			}, () => {
+				this.time = setInterval(this.collectValues, this.state.pollingTime)
+			});
 	}
 
    download(){
@@ -94,7 +111,8 @@ class WasmBinary extends React.Component<WasmBinaryProps, WasmBinaryState> {
 	  }
 	
 	render(){
-
+		const layout = {
+		  };
 		const lastVisited = this.state.history.slice(-1)[0] 
 		const percent = Number((100*lastVisited/this.props.module.totalBlocks).toFixed(2));
 	  return (<Card 
@@ -108,12 +126,22 @@ class WasmBinary extends React.Component<WasmBinaryProps, WasmBinaryState> {
 		<DownloadOutlined key="edit" title="Download original binary" onClick={() => this.download()}/>,
 		<DownSquareFilled key="ellipsis" title="Download instrumented binary" onClick={() => this.downloadInstrumented()}/>,
 	  ]}
-	  ><div style={{padding: '5px'}}>
-
+	  ><div style={{padding: '2px'}}>
 					<Progress showInfo percent={percent} />
+					<Form
+					{...layout}>
+						<Row gutter={24}>
+							<Col span={12}>
+								<Form.Item
+									label="Polling time"
+								>
+									<InputNumber onChange={this.onValChange} min={500} value={this.state.pollingTime} placeholder={"Polling interval time (ms)"}/>
+								</Form.Item>
+							</Col>
+						</Row>
+						
 
-
-					
+					</Form>
 					{/*<GraphData links={this.state.links} nodes={this.state.nodes}/>*/}
 		  </div></Card>)
 	}

@@ -61,7 +61,7 @@ int recalculate_exports_section_size(ExportSection* section){
 
 	int size = get_encoding_size(/*section type*/section->count, 0);
 
-	DEBUG("NEW EXPORT SECTION SIZE %d %d\n", section->size, total +  size);
+	DEBUG2("NEW EXPORT SECTION SIZE %d %d\n", section->size, total +  size);
 	return total + size;
 }
 
@@ -73,7 +73,7 @@ void encode_section_header(Section * section, char* out, int* position){
 
 void encode_types_section(TypeSection* typesSection, char* out, WASMModule* module, int* position){
 
-	DEBUG("Encoding types section %d size %d\n", typesSection->count, typesSection->size);
+	DEBUG2("Encoding types section %d size %d\n", typesSection->count, typesSection->size);
 
 	encode_var_uint_leb128(typesSection->size, 0, out + *position, position);
 	// Section payload
@@ -91,7 +91,7 @@ void encode_types_section(TypeSection* typesSection, char* out, WASMModule* modu
 
 		encode_var_uint_leb128(s.param_count, 0, out + *position, position);
 
-		DEBUG("%d: ", i);
+		DEBUG2("%d: ", i);
 		// write param types
 		memcpy((out + *position), s.param_types.data, s.param_count);
 		(*position)+=s.param_count;
@@ -103,10 +103,10 @@ void encode_types_section(TypeSection* typesSection, char* out, WASMModule* modu
 				ERROR("Invalid numberic type %02x\n", ctpe);
 				//exit(1);
 			}
-			DEBUG(" %02x ", ctpe);
+			DEBUG2(" %02x ", ctpe);
 		}
 
-		DEBUG(" Params %d\n", s.param_count);
+		DEBUG2(" Params %d\n", s.param_count);
 		// return_count
 		encode_var_uint_leb128(s.ret_count, 0, out + *position, position);
 
@@ -122,7 +122,7 @@ void encode_types_section(TypeSection* typesSection, char* out, WASMModule* modu
 
 
 void encode_table_section(TableSection* typesSection, char* out, WASMModule* module, int* position){
-	DEBUG("Encoding table section %d size %d\n", typesSection->count, typesSection->size);
+	DEBUG2("Encoding table section %d size %d\n", typesSection->count, typesSection->size);
 
 	encode_var_uint_leb128(typesSection->size, 0, out + *position, position);
 
@@ -147,7 +147,7 @@ void encode_table_section(TableSection* typesSection, char* out, WASMModule* mod
 }
 
 void encode_custom_section(CustomSection* custom_section, char* out, WASMModule* module, int* position){
-	DEBUG("Encoding custom section size %d\n", custom_section->size);
+	DEBUG2("Encoding custom section size %d\n", custom_section->size);
 
 	encode_var_uint_leb128(custom_section->size, 0, out + *position, position);
 
@@ -184,7 +184,7 @@ void encode_memory_section(MemorySection* section, char* out, WASMModule* module
 
 
 void encode_global_section(GlobalSection* section, char* out, WASMModule* module, int* position){
-	DEBUG("Encoding global section %d size %d\n", section->count, section->size);
+	DEBUG2("Encoding global section %d size %d\n", section->count, section->size);
 
 	encode_var_uint_leb128(section->size, 0, out + *position, position);
 
@@ -209,7 +209,7 @@ void encode_global_section(GlobalSection* section, char* out, WASMModule* module
 
 
 void encode_export_section(ExportSection* section, char* out, WASMModule* module, int* position){
-	DEBUG("Encoding export section %d size %d\n", section->count, section->size);
+	DEBUG2("Encoding export section %d size %d\n", section->count, section->size);
 
 	encode_var_uint_leb128(section->size, 0, out + *position, position);
 
@@ -236,7 +236,7 @@ void encode_export_section(ExportSection* section, char* out, WASMModule* module
 
 void encode_start_section(StartSection* section, char* out, WASMModule* module, int* position){
 	// Section payload
-	DEBUG("Encoding start section %d size %d\n", section->index, section->size);
+	DEBUG2("Encoding start section %d size %d\n", section->index, section->size);
 
 	encode_var_uint_leb128(section->size, 0, out + *position, position);
 	encode_var_uint_leb128(/*section type*/section->index, 0, out + *position, position);
@@ -245,7 +245,7 @@ void encode_start_section(StartSection* section, char* out, WASMModule* module, 
 
 void encode_code_section(CodeSection* section, char* out, WASMModule* module, int* position){
 
-	DEBUG("Encoding code section %d size %d\n", section->count, section->size);
+	DEBUG2("Encoding code section %d size %d\n", section->count, section->size);
 
 	encode_var_uint_leb128(
 		section->size, 
@@ -279,7 +279,7 @@ void encode_code_section(CodeSection* section, char* out, WASMModule* module, in
 
 
 void encode_element_section(ElementSection* section, char* out, WASMModule* module, int* position){
-	DEBUG("Encoding element section %d size %d\n", section->count, section->size);
+	DEBUG2("Encoding element section %d size %d\n", section->count, section->size);
 
 	encode_var_uint_leb128(section->size, 0, out + *position, position);
 
@@ -302,7 +302,7 @@ void encode_element_section(ElementSection* section, char* out, WASMModule* modu
 		}
 
 		if (s.flag & (SEG_PASSIVE | SEG_EXPLICIT_INDEX)) {
-			DEBUG("Parsing elem type %d\n", s.flag); 
+			DEBUG2("Parsing elem type %d\n", s.flag); 
 			if (s.flag & SEG_USE_EXPRS) {
 				ERROR("NIT IMPLEMENTED\n");
 				exit(1);
@@ -325,7 +325,7 @@ void encode_element_section(ElementSection* section, char* out, WASMModule* modu
 
 
 void encode_data_section(DataSection* section, char* out, WASMModule* module, int* position){
-	DEBUG("Encoding data section %d size %d\n", section->count, section->size);
+	DEBUG2("Encoding data section %d size %d\n", section->count, section->size);
 
 	encode_var_uint_leb128(section->size, 0, out + *position, position);
 	// Section payload
@@ -361,7 +361,7 @@ void encode_data_section(DataSection* section, char* out, WASMModule* module, in
 
 
 void encode_data_count_section(DataCountSection* section, char* out, WASMModule* module, int* position){
-	DEBUG("Encoding data count section %d size %d\n", section->count, section->size);
+	DEBUG2("Encoding data count section %d size %d\n", section->count, section->size);
 
 	encode_var_uint_leb128(section->size, 0, out + *position, position);
 	encode_var_uint_leb128(section->count, 0, out + *position, position);
@@ -369,7 +369,7 @@ void encode_data_count_section(DataCountSection* section, char* out, WASMModule*
 
 
 void encode_function_section(FunctionSection* section, char* out, WASMModule* module, int* position){
-	DEBUG("Encoding function count %d section size %d\n", section->count, section->size);
+	DEBUG2("Encoding function count %d section size %d\n", section->count, section->size);
 
 	encode_var_uint_leb128(section->size, 0, out + *position, position);
 	// Section payload
@@ -383,7 +383,7 @@ void encode_function_section(FunctionSection* section, char* out, WASMModule* mo
 }
 
 void encode_import_section(ImportSection* typesSection, char* out, WASMModule* module, int* position){
-	DEBUG("Encoding import count %d section size %d\n", typesSection->count, typesSection->size);
+	DEBUG2("Encoding import count %d section size %d\n", typesSection->count, typesSection->size);
 
 	encode_var_uint_leb128(typesSection->size, 0, out + *position, position);
 	// Section payload
@@ -467,7 +467,7 @@ void encode_import_section(ImportSection* typesSection, char* out, WASMModule* m
 
 int encode_wasm(WASMModule* module, char* out){
 
-	INFO("ENCODING WASM BINARY\n");
+	DEBUG("ENCODING WASM BINARY\n");
 	int position = 0;
 
 	// WRITE MAGIC
@@ -481,7 +481,7 @@ int encode_wasm(WASMModule* module, char* out){
 		
 		get_element(&module->sections, i, &s);
 		encode_section_header(&s, out, &position);
-		DEBUG("Encoding type %d size\n", s.type);
+		DEBUG2("Encoding type %d size\n", s.type);
 
 		int previous = position;
 		switch (s.type)
@@ -663,7 +663,7 @@ int encode_wasm(WASMModule* module, char* out){
 
 	}
 
-	INFO("ENCODED COUNT %d\n", position);
+	DEBUG("ENCODED COUNT %d\n", position);
 
 	return position;
 }
