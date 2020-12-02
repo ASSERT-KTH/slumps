@@ -6,7 +6,7 @@ import uuid
 import sys
 from subprocess import check_output
 from subprocess import Popen, PIPE
-from settings import config, private
+from settings import config, reload
 
 import iterators
 
@@ -30,7 +30,7 @@ OUT_FOLDER = config["DEFAULT"]["outfolder"]
 class ContentToTmpFile(object):
 
 
-    def __init__(self, content=None, name=None, ext=None, persist=False, LOG_LEVEL = 0):
+    def __init__(self, content=None, name=None, ext=None, persist=False, LOG_LEVEL =  0):
         tmp = createTmpFile(ext) if not name else name
 
         tmp = ''.join([c for c in tmp])
@@ -95,6 +95,8 @@ def updatesettings(argvs):
         
     OUT_FOLDER = config["DEFAULT"]["outfolder"]
 
+    reload()
+
 def processOptionValuePair(pair):
     option, value = pair
     option = option[1:]  # Remove the firsst dash
@@ -123,7 +125,7 @@ def getIteratorByName(name: str):
 
 
 def createTmpFile(ext=""):
-    r = "%s/%s%s" % (OUT_FOLDER, uuid.uuid4(), ext if ext else "")
+    r = "%s/CROW_TMP-%s%s" % (OUT_FOLDER, uuid.uuid4(), ext if ext else "")
 
     return r
 
@@ -137,68 +139,8 @@ globalCounter.counter = 0
 
 
 
-def sendReportEmail(subject, content, attachments=[]):
-    # Send using gmail
-    # try:
 
-    server = smtplib.SMTP_SSL('smtp.gmail.com', 465)
-    server.ehlo()
-
-    sent_from = os.environ.get("GUSER", private["gmail"].get("user", None))
-    pass_ = os.environ.get("GPASS", private["gmail"].get("pass", None))
-    to = os.environ.get("TOUSER", private["gmail"].get("touser", None))
-
-    if sent_from is None or pass_ is None or to is None:
-        return
-
-    print(sent_from, pass_)
-    server.login(sent_from, pass_)
-
-    msg = MIMEMultipart()
-
-    # storing the senders email address
-    msg['From'] = sent_from
-
-    # storing the receivers email address
-    msg['To'] = to
-
-    # storing the subject
-    msg['Subject'] = subject
-
-    # string to store the body of the mail
-    body = content
-
-    for attach in attachments:
-        # attach the body with the msg instance
-
-        # open the file to be sent
-        filename = attach.split("/")[-1]
-        attachment = open(attach, "rb")
-
-        # instance of MIMEBase and named as p
-        p = MIMEBase('application', 'octet-stream')
-
-        # To change the payload into encoded form
-        p.set_payload(attachment.read())
-
-        # encode into base64
-        encoders.encode_base64(p)
-
-        p.add_header('Content-Disposition', "attachment", filename=filename)
-
-        # attach the instance 'p' to instance 'msg'
-        msg.attach(p)
-
-    msg.attach(MIMEText(body, 'plain'))
-
-    server.sendmail(sent_from, to, msg.as_string())
-    server.close()
-    # except Exception as e:
-
-    #print("Error", e.__str__())
-
-
-def printProgressBar(iteration, total, prefix='', suffix='', decimals=1, length=100, fill='█', printEnd="\r"):
+def printProgressBar(iteration, total, prefix='', suffix='', decimals=1, length=40, fill='█', printEnd="\r"):
     """
     Call in a loop to create terminal progress bar
     @params:

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Document</title>
+</head>
+<body>
+	<script>
+	fetch("fingerprint.wasm").then(r => {
+		r.arrayBuffer().then(buffer => {
+			WebAssembly.instantiate(buffer).then(mod => {
+			var text = "";
+			const x = mod.instance
+			console.log(mod)
+			var c_str_ptr = x.exports.am_i_spidermonkey();
+
+			const buffer = new Uint8Array(x.exports.string.buffer);
+			while(buffer[c_str_ptr] != 0){
+				text += String.fromCharCode(buffer[c_str_ptr++]);
+			}
+
+			var h1 =document.createElement("h1")
+			var node = document.createTextNode(text);
+			h1.appendChild(node);
+
+			document.body.appendChild(h1)
+		})
+		.catch(e => console.log(e))
+		})
+		
+	}).catch(console.log)
+	</script>
+</body>
+</html>

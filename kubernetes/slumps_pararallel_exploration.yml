@@ -4,7 +4,7 @@ metadata:
   generateName: slumps-distributed-wasi-
 spec:
   entrypoint: slumps-distributed
-  parallelism: 5
+  parallelism: 2
   arguments:
     parameters:
     - name: repo
@@ -52,9 +52,7 @@ spec:
           - name: time2
             value: "{{item.time2}}"
         withItems: 
-          - { program: "{{inputs.parameters.program}}",time2: "172800", time1: "86400" }
-          - { program: "{{inputs.parameters.program}}",time2: "259200", time1: "172800" }
-          - { program: "{{inputs.parameters.program}}",time2: "345600", time1: "259200" }
+          - { program: "{{inputs.parameters.program}}",time2: "0", time1: "18000" }
         continueOn:
           failed: true
   - name: slumps-template
@@ -71,10 +69,10 @@ spec:
       - name: logs
         path: /slumps/crow/logs
     script:
-      image: "jacarte/slumps:crow"
+      image: "slumps/crow:latest"
       command: [/bin/bash]
       source: |
-        wget {{workflow.parameters.raw}}/{{inputs.parameters.program}} && mkdir -p /inputs && cp {{inputs.parameters.program}} /inputs/ && bash start_poly_bench.sh %DEFAULT.order 5,6,7,8,9,10,11,12,13,14,15,16,17,18,19 %souper.souper-common --solver-timeout=0 %DEFAULT.timeout {{inputs.parameters.time2}} %DEFAULT.exploration-timeout {{inputs.parameters.time1}} %DEFAULT.link-wasi True {{inputs.parameters.program}}
+        wget {{workflow.parameters.raw}}/{{inputs.parameters.program}} && mkdir -p /inputs && cp {{inputs.parameters.program}} /inputs/ && mkdir -p /slumps/crow/out/muladd && bash start_poly_bench.sh 30 %DEFAULT.order 1,2,3,4,5,6,14,15,16,17,18,19 %souper.souper-common --solver-timeout=0 %DEFAULT.timeout {{inputs.parameters.time2}} %souper.workers 10 %DEFAULT.workers 5 %DEFAULT.outfolder /slumps/crow/out %DEFAULT.exploration-timeout {{inputs.parameters.time1}} %DEFAULT.link-wasi False {{inputs.parameters.program}}
       resources:
         requests:
           memory: 2G

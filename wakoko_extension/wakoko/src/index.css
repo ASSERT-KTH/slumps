@@ -1,0 +1,20 @@
+/* src/index.css */
+#wakoko-extension-root iframe {
+    width: auto;
+    height: 100%;
+    min-width: 300px;
+    border: none;
+    position: fixed;
+    z-index: 9999998;
+    top: 0;
+    right: 0;
+
+    background-color: rgba(0,0,0,0.7);
+    box-shadow: 0px 0px 5px #0000009e;
+}
+
+
+#wakoko-extension-root {
+  background: transparent;
+}
+
