@@ -1,0 +1,39 @@
+
+/* src/content.css */
+.wakoko-extension {
+	padding: 2px;
+	margin-top: 30px;
+	
+	position: fixed;
+	width: 100%;
+	height: 100%;
+	overflow-y: auto;
+	top: 0px;
+	right: 5px;
+	z-index: 2147483647;
+
+	background: rgba(0,0,0,0.4) !important;
+
+}
+
+body{
+	background: transparent;
+}
+
+.wakoko-extension h1 {
+	color: #000;
+}
+
+
+
+line.link {
+	stroke: white;
+	fill: none;
+	opacity: 0.8;
+	stroke-width: 2px;
+}
+
+circle.node {
+	fill: red;
+	stroke: none;
+}

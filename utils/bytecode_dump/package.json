@@ -1,0 +1,19 @@
+{
+	"name": "v8_run",
+	"version": "1.0.0",
+	"description": "",
+	"main": "2mm.wasm.js",
+	"dependencies": {
+		"@wasmer/wasi": "^0.11.2",
+		"@wasmer/wasmfs": "^0.11.2",
+		"long": "^4.0.0"
+	},
+	"type": "module",
+	"devDependencies": {},
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1",
+		"ex": "node --print-wasm-code --no-warnings --experimental-wasi-unstable-preview1 --experimental-wasm-bigint  try_to_execute.js  "
+	},
+	"author": "",
+	"license": "ISC"
+}

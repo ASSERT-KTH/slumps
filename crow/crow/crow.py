@@ -5,7 +5,7 @@ import sys,traceback
 from settings import config
 from stages import CToLLStage, LLToBC, BCToSouper, ObjtoWASM, WASM2WAT, BCCountCandidates, TimeoutException
 from utils import printProgressBar, createTmpFile, getIteratorByName, \
-    ContentToTmpFile, BreakException, RUNTIME_CONFIG, updatesettings, sendReportEmail
+    ContentToTmpFile, BreakException, RUNTIME_CONFIG, updatesettings
 
 from logger import LOGGER, getlogfilename
 import threading, queue
@@ -22,7 +22,7 @@ import re
 import uuid
 from socket_server import listen
 import numpy as np
-
+from sanitizer import Sanitizer
 
 levelPool = None
 generationPool = None
@@ -87,27 +87,27 @@ class Pipeline(object):
             futures = []
             order = list(
                 map(lambda x: int(x),  config["DEFAULT"]["order"].split(",")))
-            LOGGER.info("ORDER", order)
             # split levels by redis interface
 
-            works = self.chunkIt(order, len(redisports))
+            works = self.chunkIt(order, config["DEFAULT"].getint("workers"))
 
+            LOGGER.warning(program_name, f"Exploration jobs {works}")
 
+            for i in range(config["DEFAULT"].getint("workers")):
 
-            for i,port in enumerate(redisports):
+                # TODO assign random port
                 job = levelPool.submit(
-                    self.processLevel, works[i], program_name, port, bc, OUT_FOLDER, onlybc, meta, outResult)
+                    self.processLevel, works[i], program_name, 2620 + i, bc, OUT_FOLDER, onlybc, meta, outResult)
                 # job.result()
 
                 futures.append(job)
             
             timeout = config["DEFAULT"].getint("exploration-timeout")
             done, fail = wait(futures, return_when=ALL_COMPLETED)
-            levelPool.shutdown(False)
+            #levelPool.shutdown(False)
             #Merging results
 
             LOGGER.info(program_name, "Merging exploration results...")
-
             merging = {}
 
             codeCount = -1
@@ -129,6 +129,24 @@ class Pipeline(object):
                 except Exception as e:
                     LOGGER.error(program_name, traceback.format_exc())
             
+            san = Sanitizer(
+                sanitize_redundant=config["sanitizer"].getboolean("sanitize-redundant"),
+                sanitize_no_wasm=config["sanitizer"].getboolean("sanitize-non-wasm"),
+                report_overlapping=config["sanitizer"].getboolean("report-overlapping"))
+
+            tentativeNumber = np.prod([len(v) + 1 for v in merging.values()])
+
+            LOGGER.info(program_name,f"tentative number of variants {tentativeNumber} (plus original). Expected ratio {len(redisports)} of programs in each iteration.")
+            
+            sanitized = san.sanitize(merging)
+
+            LOGGER.warning(program_name, json.dumps(sanitized, indent=4))
+            
+            tentativeNumber = np.prod([len(v) + 1 for v in sanitized.values()])
+
+            LOGGER.info(program_name,f"After sanitization {tentativeNumber} (plus original).")
+
+            merging = sanitized
             # TODO Separate both stages to support continuing on
             variantsFile = open(f"{OUT_FOLDER}/{program_name}.exploration.json", 'w')
             variantsFile.write(json.dumps([[k, [v1 for v1 in v if v1 is not None] ] for k, v in merging.items()],indent=4))
@@ -144,19 +162,15 @@ class Pipeline(object):
 
             showGenerationProgress = config["DEFAULT"].getboolean("show-generation-progress")
 
-            temptativeNumber = np.prod([len(v) + 1 for v in merging.values()])
-
-            LOGGER.info(program_name,f"Temptative number of variants {temptativeNumber} (plus original). Expected ratio {len(redisports)} of programs in each iteration.")
-            
             if showGenerationProgress:
                 LOGGER.disable()
-                printProgressBar(generationcount, temptativeNumber,suffix=f'             {generationcount}/{temptativeNumber}')
+                printProgressBar(generationcount, tentativeNumber,suffix=f'             {generationcount}/{tentativeNumber}')
 
             for subset in getIteratorByName("keysSubset")(merging):
                 
                 job = generationPool.submit(
                     self.generateVariant, [subset], program_name, merging, redisports[generationcount
-                    %len(redisports)], bc, OUT_FOLDER, onlybc, meta, outResult, generationcount, temptativeNumber)
+                    %len(redisports)], bc, OUT_FOLDER, onlybc, meta, outResult, generationcount, tentativeNumber)
                     # job.result()
 
                 futures.append(job)
@@ -181,9 +195,13 @@ class Pipeline(object):
 
                     if showGenerationProgress:
                         speed = len(redisports)/generationEndTime
-                        eta = temptativeNumber/speed/1e9
+                        eta = (tentativeNumber-len(variants))/speed/1e9
+                        unique = len(set([v[0] for v in variants]))
+                        total = len([v[0] for v in variants])
 
-                        printProgressBar(len(variants), temptativeNumber,suffix=f'  {generationcount}/{temptativeNumber} eta:{eta}s')
+                        uniquenessRatio = 100.0*unique/total
+
+                        printProgressBar(len(variants), tentativeNumber,suffix=f' {unique}U-{generationcount}/{tentativeNumber} eta:{eta:.2f}s r:{uniquenessRatio:.2f}')
 
             
 
@@ -196,10 +214,6 @@ class Pipeline(object):
             for f in done:
                 variants += f.result()
                 # Save metadata
-
-            if showGenerationProgress:
-                printProgressBar(len(variants), temptativeNumber,suffix=f'  {generationcount}/{temptativeNumber}                       ')
-                LOGGER.enable()
 
             LOGGER.info(program_name, f"Saving metadata...")
             variantsFile = open(f"{OUT_FOLDER}/{program_name}.variants.json", 'w')
@@ -343,7 +357,7 @@ class Pipeline(object):
                 
             except Exception as e:
                 LOGGER.error(program_name,  traceback.format_exc())
-                return
+                return results
             with ContentToTmpFile(content=bc) as TMP_BC:
 
                 try:
@@ -359,8 +373,8 @@ class Pipeline(object):
 
                 except Exception as e:
                     LOGGER.error(program_name, traceback.format_exc())
-                    raise e
 
+            serverThread.join()
             waitFor = 5
             LOGGER.warning(program_name, f"Sleeping for {waitFor} seconds waiting for free ports...")
             time.sleep(waitFor)
@@ -377,34 +391,35 @@ class Pipeline(object):
     def generateWasm(self, namespace, bc, OUT_FOLDER, fileName, debug=True, generateOnlyBc=False):
         llFileName = "%s/%s" % (OUT_FOLDER, fileName)
 
-        if generateOnlyBc:
-            hashvalue = hashlib.sha256(bc)
-            return hashvalue.hexdigest(), len(bc), "%s.bc" % (fileName,), "%s.bc" % (fileName,)
-
         with ContentToTmpFile(name="%s.bc" % llFileName, content=bc, ext=".bc", persist=True) as TMP_WASM:
 
             tmpWasm = TMP_WASM.file
 
             try:
-                finalObjCreator = ObjtoWASM(namespace, debug=debug)
-                finalObjCreator(args=[
-                    "%s.wasm" % (llFileName,),
-                    tmpWasm
-                ], std=None)
+                if not generateOnlyBc:
+                    finalObjCreator = ObjtoWASM(namespace, debug=debug)
+                    finalObjCreator(args=[
+                        "%s.wasm" % (llFileName,),
+                        tmpWasm
+                    ], std=None)
 
-                wat = WASM2WAT(namespace, debug=debug)
-                wat(std=None, args=[
-                    "%s.wasm" % (llFileName,),
-                    "%s.wat" % (llFileName,)]
-                    )
-                finalStream = open("%s.wasm" % (llFileName,), 'rb').read()
-                hashvalue = hashlib.sha256(finalStream)
-                if debug:
-                    LOGGER.warning(namespace, "%s: WASM SIZE %s" %
-                                   (namespace, len(finalStream),))
-                    LOGGER.warning(namespace, "%s: WASM SHA %s" %
-                                   (namespace, hashvalue.hexdigest(),))
-                return hashvalue.hexdigest(), len(finalStream), "%s.wasm" % (llFileName,), "%s.wat" % (llFileName,)
+                    wat = WASM2WAT(namespace, debug=debug)
+                    wat(std=None, args=[
+                        "%s.wasm" % (llFileName,),
+                        "%s.wat" % (llFileName,)]
+                        )
+                    finalStream = open("%s.wasm" % (llFileName,), 'rb').read()
+                    hashvalue = hashlib.sha256(finalStream)
+
+                    if debug:
+                        LOGGER.warning(namespace, "%s: WASM SIZE %s" %
+                                    (namespace, len(finalStream),))
+                        LOGGER.warning(namespace, "%s: WASM SHA %s" %
+                                    (namespace, hashvalue.hexdigest(),))
+                    return hashvalue.hexdigest(), len(finalStream), "%s.wasm" % (llFileName,), "%s.wat" % (llFileName,)
+                else:
+                    hashvalue = hashlib.sha256(bc)
+                    return hashvalue.hexdigest(), len(bc), "%s.bc" % (fileName,), "%s.bc" % (fileName,)
             except Exception as e:
                 LOGGER.error(namespace, traceback.format_exc())
 
@@ -418,16 +433,18 @@ def getFileMeta(file, outResult=None):
     return (program_name, OUT_FOLDER, onlybc)
 
 
-def removeDuplicate(program_name, folder, filt="*.wasm", remove=False):
+def removeDuplicate(program_name, folder, filt=".wasm", remove=False):
 
     if not os.path.exists(f"{folder}"):
         return
 
-    LOGGER.warning(program_name, "Removing duplicated variants")
+
+    LOGGER.warning(program_name, f"Removing duplicated variants '{filt}'")
 
     l = [f for f in os.listdir(folder) if f.endswith(filt)]
     LOGGER.info(program_name, "Total candidates: %s" % (len(l), ))
 
+    total = len(l)
     st = set()
 
     for f in l:
@@ -440,6 +457,14 @@ def removeDuplicate(program_name, folder, filt="*.wasm", remove=False):
                 os.remove(realPath)
         else:
             st.add(hashvalue)
+    
+    variantsFile = open(f"{folder}/{program_name}.{filt}.stats.json", 'w')
+    variantsFile.write(json.dumps({
+        "unique": len(st),
+        "total": total
+    }, indent=4))
+    variantsFile.close()
+
     LOGGER.info(program_name, "Unique: %s" % (len(st), ))
 
 
@@ -463,6 +488,9 @@ def process(f, OUT_FOLDER, onlybc, program_name, redisports, isBc=False):
                 LOGGER.info(program_name, f"The total exploration stage would take {1.0*exploration_timeout * LEVELS / exploration_workers}s, according to the number of threads and exploration timeout ")
             else:
                 LOGGER.warning(program_name, f"Sit and wait, there is no timeout")
+    else:
+        LOGGER.info(program_name, f"The total process will take a maximum time of {total_timeout}s")
+
 
 
 
@@ -494,6 +522,9 @@ def process(f, OUT_FOLDER, onlybc, program_name, redisports, isBc=False):
             pipeline.processBitcode(
                 bc, result[file], program_name, redisports, OUT_FOLDER, onlybc)
 
+        except KeyboardInterrupt:
+            LOGGER.error(program_name, "Cancelled by user...exiting")
+        
         except Exception as e:
             LOGGER.error(file, traceback.format_exc())
 
@@ -501,29 +532,36 @@ def process(f, OUT_FOLDER, onlybc, program_name, redisports, isBc=False):
     th.start()
 
     timeout = config["DEFAULT"].getint("timeout")
+    try:
+        if total_timeout > 0:
+            th.join(timeout=timeout)
+        else:
+            th.join()
 
-    if total_timeout > 0:
-        th.join(timeout=timeout)
-    else:
-        th.join()
+        if th.is_alive():
+            th.kill()
+            program_name = f.split("/")[-1].split(".")[0]
+            LOGGER.error(program_name, "Exiting %s due to timeout" % f)
+            result_overall[f]["error"] = "Timeout %s" % timeout
 
-    if th.is_alive():
-        th.kill()
-        program_name = f.split("/")[-1].split(".")[0]
-        LOGGER.error(program_name, "Exiting %s due to timeout" % f)
-        result_overall[f]["error"] = "Timeout %s" % timeout
-
-    result_overall[f]["candidates"] = result_overall[f]["candidates"].__deepcopy__({
-    })
-    result_overall[f] = result_overall[f].copy()
-    result_overall = result_overall.copy()
+        result_overall[f]["candidates"] = result_overall[f]["candidates"].__deepcopy__({
+        })
+        result_overall[f] = result_overall[f].copy()
+        result_overall = result_overall.copy()
+    
+    except KeyboardInterrupt:
+        LOGGER.error(program_name, "Cancelled by user...exiting")
+        
 
     # clean OUT_FOLDER
 
     remove_duplicate = config["DEFAULT"].getboolean("prune-equal")
-    filt = ".bc" if onlybc else ".wasm"
+    
+    print()
 
-    removeDuplicate(program_name, OUT_FOLDER, filt, remove_duplicate)
+    removeDuplicate(program_name, OUT_FOLDER, ".wasm", remove_duplicate)
+    removeDuplicate(program_name, OUT_FOLDER, ".bc", remove_duplicate)
+    removeDuplicate(program_name, OUT_FOLDER, ".wat", remove_duplicate)
 
     return result_overall
 
@@ -582,13 +620,13 @@ if __name__ == "__main__":
         max_workers = 1
 
 
+    updatesettings(sys.argv[2:-1])
+
     levelPool = ThreadPoolExecutor(
     max_workers=config["DEFAULT"].getint("workers"))
 
     generationPool = ThreadPoolExecutor(
     max_workers=max_workers)
-
-    updatesettings(sys.argv[2:-1])
 
     if not os.path.exists("out"):
         os.mkdir("out")

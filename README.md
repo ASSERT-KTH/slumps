@@ -8,3 +8,4 @@ Research repository on randomization, fuzzing and superoptimization for WebAssem
 
 * [WAFL: AFL fuzzing bridge for WASM](wasm-fuzzer)
 
+* [WAKOKO: Live coverage for WebAssembly in the browser](wakoko-extension/wakoko)
