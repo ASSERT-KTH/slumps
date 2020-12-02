@@ -1,25 +1,26 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <limits.h>
+#include <emscripten.h>
 
-int a(int a, int b){
+int EMSCRIPTEN_KEEPALIVE a(int a, int b){
 
 	if(a > 10)
 	{
 		printf("a");
 
 		if(b > a){
-			printf("b > a");
+			printf("b > a\n");
 		}
 		if(b > 100){
-			printf("wait ... b > 100");
+			printf("wait ... b > 100\n");
 		}
 	}
 	else{
-		printf("No condition for a");
+		printf("No condition for a\n");
 
 		if( b > 10000){
-			printf("Yet b > 1000");
+			printf("Yet b > 1000\n");
 		}
 	}
 

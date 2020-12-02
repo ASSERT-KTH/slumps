@@ -14,8 +14,8 @@ PORTS=''
 
 for port in $(seq 1 $MAX)
 do
-	redis-server --port $((15535 + $port)) &
-	PORTS=$PORTS","$((15535 + $port))
+	redis-server --port $((25535 + $port)) &
+	PORTS=$PORTS","$((25535 + $port))
 done
 
 echo "Opening redis servers in" $PORTS
@@ -23,3 +23,4 @@ echo "Opening redis servers in" $PORTS
 python3.7 $SOURCE/crow/crow/crow.py $PORTS %DEFAULT.outfolder $(pwd)/crow_out $@
 pkill -f redis-server
 pkill -f libsouperPass
+rm $(pwd)/crow_out/CROW_TMP-*
