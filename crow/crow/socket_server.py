@@ -3,8 +3,11 @@ import json
 from logger import LOGGER
 import numpy as np
 from utils import printProgressBar
+from ansi_ui import SCREEN
+from settings import config
+import traceback
 
-def listen(port, q, program):
+def listen(port, q, program, worker_id, level):
 
 
 	HOST = '127.0.0.1'  # Standard loopback interface address (localhost)
@@ -35,8 +38,8 @@ def listen(port, q, program):
 						
 						if not program:
 							#print(f"{k} -> {v}")
-							print(f"Populating results...{len(result.keys())} blocks")
-							print(f"Populating results...{s} tentative replacements")
+							LOGGER.info(f"Populating results...{len(result.keys())} blocks")
+							LOGGER.info(f"Populating results...{s} tentative replacements")
 						if k not in result:
 							result[k] = set([])
 
@@ -47,14 +50,18 @@ def listen(port, q, program):
 
 					if program:
 						s = np.prod([len(t) + 1 for t in result.values()])
-						printProgressBar(0, 1, length=1, suffix=f"{len(result.keys())} blocks. {s} probable replacements")
+						#print(worker_id)
+						if config["DEFAULT"].getboolean("use-ansi-console"):
+							SCREEN.update_process(worker_id, total=None, suffix = f"Probable count: {s} Level: {level} ")
+						#printProgressBar(0, 1, length=1, suffix=f"{len(result.keys())} blocks. {s} probable replacements")
 						
 					
 				except Exception as e:
-					print(st)
+					print(traceback.format_exc())
+					exit(1)
 				if not data:
 					break
-	print()
+	#print()
 				
 
 

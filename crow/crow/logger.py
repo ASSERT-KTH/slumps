@@ -2,6 +2,7 @@
 
 from settings import config
 import os, sys
+from ansi_ui import SCREEN
 
 
 def getlogfilename(program_name):
@@ -68,36 +69,49 @@ class Logger(object):
         else:
             if not self.disabled:
                 print("%s%s%s%s" % (self.getIndent(), bcolors.UNDERLINE, message, bcolors.ENDC))
-            sys.stdout.flush()
+            #sys.stdout.flush()
 
     def error(self,file,  message):
         f = open(getlogfilename(file), 'a+')
         f.write(message.__str__() + "\n")
         if not self.disabled:
-            print("%s%s%s%s" % (self.getIndent(), bcolors.FAIL, message, bcolors.ENDC))
-        sys.stdout.flush()
+            if config["DEFAULT"].getboolean("use-ansi-console"):
+                SCREEN.place_log("%s%s%s%s" % (self.getIndent(), bcolors.WARNING, message, bcolors.ENDC))
+            else:
+                print("%s%s%s%s" % (self.getIndent(), bcolors.WARNING, message, bcolors.ENDC))
+        #sys.stdout.flush()
 
     def warning(self,file, message):
         f = open(getlogfilename(file), 'a+')
         f.write(message.__str__() + "\n")
 
         if not self.disabled:
-            print("%s%s%s%s" % (self.getIndent(), bcolors.WARNING, message, bcolors.ENDC))
-        sys.stdout.flush()
+            if config["DEFAULT"].getboolean("use-ansi-console"):
+                SCREEN.place_log("%s%s%s%s" % (self.getIndent(), bcolors.WARNING, message, bcolors.ENDC))
+            else:
+                print("%s%s%s%s" % (self.getIndent(), bcolors.WARNING, message, bcolors.ENDC))
+        #sys.stdout.flush()
 
     def info(self,file,  message):
         f = open(getlogfilename(file), 'a+')
         f.write(message.__str__() + "\n")
         if not self.disabled:
-            print("%s%s%s%s" % (self.getIndent(), bcolors.OKBLUE, message, bcolors.ENDC))
-        sys.stdout.flush()
+            if config["DEFAULT"].getboolean("use-ansi-console"):
+                SCREEN.place_log("%s%s%s%s" % (self.getIndent(), bcolors.OKBLUE, message, bcolors.ENDC))
+            else:
+                print("%s%s%s%s" % (self.getIndent(), bcolors.OKBLUE, message, bcolors.ENDC))
+        #sys.stdout.flush()
 
     def success(self,file,  message):
         f = open(getlogfilename(file), 'a+')
         f.write(message.__str__() + "\n")
         if not self.disabled:
-            print("%s%s%s%s" % (self.getIndent(), bcolors.OKGREEN, message, bcolors.ENDC))
-        sys.stdout.flush()
+            if config["DEFAULT"].getboolean("use-ansi-console"):
+                SCREEN.place_log("%s%s%s%s" % (self.getIndent(), bcolors.OKGREEN, message, bcolors.ENDC))
+            else:
+            
+                print("%s%s%s%s" % (self.getIndent(), bcolors.OKGREEN, message, bcolors.ENDC))
+        #sys.stdout.flush()
 
 
-LOGGER = Logger(True)  # Output debug calls to debug.slumps.log file
+LOGGER = Logger(False)  # Output debug calls to debug.slumps.log file
