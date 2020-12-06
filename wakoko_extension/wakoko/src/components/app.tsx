@@ -18,6 +18,7 @@ export interface MainProps {
 
 export interface MainState extends MainProps {
 	opened: boolean;
+	savingUrl: string;
 }
 export default class Main extends React.Component<MainProps, MainState> {
 	localService: LocalStorageService;
@@ -29,7 +30,8 @@ export default class Main extends React.Component<MainProps, MainState> {
 	  
 		this.state = {
 			opened: !!props.binaries.length,
-			binaries: ((window as any).PRODUCTION)? props.binaries : mock.createMockListeners()
+			binaries: ((window as any).PRODUCTION)? props.binaries : mock.createMockListeners(),
+			savingUrl: this.localService.getSavingHost()
 		}
 
 	}
@@ -42,6 +44,11 @@ export default class Main extends React.Component<MainProps, MainState> {
 			self.setState({binaries: [...self.state.binaries, wasm]})
 		}.bind(this)
 
+	}
+	onChangeUrl = (e) => {
+		this.setState({savingUrl: e.target.value})
+
+		setTimeout(() => this.localService.setSavingUrl(this.state.savingUrl), 2*this.localService.timeout);
 	}
 
 	
@@ -58,16 +65,18 @@ export default class Main extends React.Component<MainProps, MainState> {
 					{
 					({document, window}) => {
 						// Render Children
-						return (this.state.binaries && this.state.binaries.length > 0  &&  <div className={'wakoko-extension'}>
+						return (<div className={'wakoko-extension'}>
 							<Collapse defaultActiveKey={['0']} >
 							<Panel key="1" header="General settings">
-												
+										
+								<Alert type='warning' message="To change one of the following options will reload the page in a 2 seconds timeout" />		
 									<Form>
 										<Row gutter={24}>
 											
-											<Col span={12}>
+											<Col span={24}>
 											<Form.Item
-											label="Bypass"
+											label="Number of block to bypass"
+											help="Due to the current limitation on the number of globals, exports and function instructions we propose an strategy to bypass too close blocks. A value X greater than 0 means that the block needs to be at X instructions far from the previous instrumentation to be instrumented."
 												>
 													<InputNumber 
 														value={this.localService.getNumberofBypassedBlocks()} 
@@ -76,33 +85,37 @@ export default class Main extends React.Component<MainProps, MainState> {
 												</Form.Item>
 				
 											</Col>
+
 										</Row>
 										<Row gutter={24}>
 											
 											<Col span={24}>
 												<Form.Item
 													label="Send info to"
+													help="We will send the collected information to a server of your preference. The infor includes, coverage info, original binary, instrumented binary and Stats.js information. Refer to protocol documentation to implement your endpoints."
 												>
-													<Input  placeholder={"https://"}/>
+													<Input 
+													value={this.state.savingUrl} 
+													onChange={this.onChangeUrl} placeholder={"https://"}/>
 												</Form.Item>
 				
 											</Col>
 										</Row>
-										<Alert type='warning' message="To change one of the following options will reload the page" />
 										<Row gutter={24}>
 				
 											<Col span={12}>
 													
 													<Form.Item
 													label="Inject Stats.js"
+													help="We inject our version of Stats.js in the page."
 												>
-												<Switch />
+												<Switch checked={this.localService.isStatsInjected()} onChange={e => this.localService.toggleStatsInjection(e)} />
 												</Form.Item>
 											</Col>
 											<Col span={12}>
 												
 													<Form.Item
-													
+													help="Use the Wasm compiled instrumentor. If it is not checked we will use the url set above to ask for the instrumented version. Refer to the protocol to implement the endpoint for instrumentation and which kind of information are we waiting from the request."
 													label="Inline instrumentor"
 												>
 												<Switch disabled checked />
@@ -115,6 +128,7 @@ export default class Main extends React.Component<MainProps, MainState> {
 												
 												<Form.Item
 													label="Collect all WASMs"
+													help="Send the wasm binaries to the above set url"
 												>
 													<Switch disabled />
 												</Form.Item>
@@ -125,7 +139,7 @@ export default class Main extends React.Component<MainProps, MainState> {
 
 						</Panel>
 						</Collapse>
-						{ 
+						{ this.state.binaries && this.state.binaries.length > 0  &&  
 							this.state.binaries.map((t: any, i: number) => <WasmBinary key={i}  index={i} module={t} page={window.location.href}/>)
 						}</div>)
 					}
