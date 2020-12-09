@@ -1,0 +1,25 @@
+{
+  "files": [
+    FILES
+  ],
+  "pairs": [] ,
+  "method": {
+    "name": "DTW",
+    "params": []
+  },
+  "outputAlignment": true,
+  "exportImage": true,
+  "generateInteractiveMap": "dashboard",
+  "distanceFunctionName": "dBin",
+  "separator": "[\r\n\t]",
+  "outDir": "test_symbol_match",
+  "outputAlignmentMap": "alignments.json",
+  "explicitToWriteSeparator": "\n",
+  "threadPoolCount": 1,
+  "comparison": {
+    "eq": 0,
+    "diff":5,
+    "gap": 1
+  }
+
+}

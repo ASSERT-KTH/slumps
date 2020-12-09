@@ -1,0 +1,14 @@
+{
+  "name": "check_bytecode_v8",
+  "version": "1.0.0",
+  "description": "",
+  "main": "render.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "wasi": "0.0.6"
+  }
+}
