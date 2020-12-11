@@ -46,74 +46,84 @@ concat(){
 COUNT=0
 for f in $PROGRAMS_DIR/*.wasm
 do
+
+
 	real_path=$(realpath $f)
 	name="$(basename -- $real_path)"
 	
-	# CONVERT name in wat and filter out WASI FUNCTIONS
-	wasm2wat --generate-names -o $real_path.wat $real_path
-
-	if [[ $FILTER_WAT_WASI == 'True' ]]; then
-		WAT_FILTERED="$(python3 filter_out_wasi.py $real_path.wat)"
-		#echo "$WAT_FILTERED"
-		echo "$WAT_FILTERED" > $real_path.wat
-	fi
-
-	WAT_FUNCTIONS+=("\"$real_path.wat\"")
-	
-
-	COUNT=$(echo $COUNT+1 | bc -l)
 	if [[ $COMPARE_V8 == 'False' ]]; then
 		echo $real_path $COUNT
 		continue
 	fi
 
-	cp template.js render.js
-	export NAME=$real_path
-	perl  -pe  's/WASM_BINARY/$ENV{NAME}/g' -i render.js
+	WAT_FUNCTIONS+=("\"$real_path.wat\"")
 
-	INCLUDE=$( $DEBUG_NODE_BIN --trace-wasm render.js | python3 filter_out_v8_function_index.py)
-	echo "Include " $INCLUDE
+	if [[ $NO_AWK != 'True' ]]; then
+		#
+		# CONVERT name in wat and filter out WASI FUNCTIONS
+		wasm2wat --generate-names -o $real_path.wat $real_path
 
-	$DEBUG_NODE_BIN $ARGS render.js  > bytecodes/$name.bytecode.txt
-	#csplit bytecodes/$name.bytecode.txt '/--- WebAssembly code ---/' '{1000}'
-	echo -n "" > bytecodes/$name.filtered.bytecode.txt
+		if [[ $FILTER_WAT_WASI == 'True' ]]; then
+			WAT_FILTERED="$(python3 filter_out_wasi.py $real_path.wat)"
+			#echo "$WAT_FILTERED"
+			echo "$WAT_FILTERED" > $real_path.wat
+		fi
 
-	awk '/--- WebAssembly code ---/{close(filename);n++; }{}{filename=n".bytecode.split"; print > filename}' bytecodes/$name.bytecode.txt
+	
+
+		cp template.js render.js
+		export NAME=$real_path
+		perl  -pe  's/WASM_BINARY/$ENV{NAME}/g' -i render.js
+
+		INCLUDE=$( $DEBUG_NODE_BIN --trace-wasm render.js | python3 filter_out_v8_function_index.py)
+		echo "Include " $INCLUDE $COUNT
+
+		$DEBUG_NODE_BIN $ARGS render.js  > bytecodes/$name.bytecode.txt
+		#csplit bytecodes/$name.bytecode.txt '/--- WebAssembly code ---/' '{1000}'
+		echo -n "" > bytecodes/$name.filtered.bytecode.txt
+
+		awk '/--- WebAssembly code ---/{close(filename);n++; }{}{filename=n".bytecode.split"; print > filename}' bytecodes/$name.bytecode.txt
+	
+		for i in ./*.bytecode.split
+		do
+
+			fidx=$(grep "index:" $i | awk '{print $2}')
+			
+			if [[ "$INCLUDE" == *" $fidx "* ]]; then
+				echo "INCLUDED"
+			else
+				rm $i
+				#echo "BYPASSING $fidx"
+				continue
+			fi
+
+			if [[ $REMOVE_ADDRESS == 'True' ]]; then
+				echo "Removing memory address $i"
+				perl -pe 's/0x(\w|\d)+( )+//g' -i $i # Remove the memory address of the program
+			fi
+
+			if [[ $REMOVE_BYTECODE_OFFSET == 'True' ]]; then
+				echo "Removing bytecode offset $i"
+				perl -pe 's/((a|b|c|d|e|f|\d)+( )+){2}//g' -i $i # Remove the instruction offset (first two hex tokens)
+			fi
+
+			cat $i >> bytecodes/$name.filtered.bytecode.txt
+			echo "" >> bytecodes/$name.filtered.bytecode.txt
+
+			#cat $i
+
+			rm $i #bytecodes/$fidx.bytecode.split
+
+		done
+	else
+		echo "Bypassing execution...generating alignment" $COUNT
+	fi
 	
 	if [[ $REMOVE_ADDRESS == 'True' ]]; then
-		perl -pe 's/0x(\w|\d)+( )+//g' bytecodes/$name.bytecode.txt > bytecodes/$name.no_memory.bytecode.txt # Remove the memory address of the program
+		# Replace the original bytecode file with the one with the replacements
+		perl -pe 's/0x(\w|\d)+( )+//g' -i bytecodes/$name.bytecode.txt # > bytecodes/$name.bytecode.txt # Remove the memory address of the program
 	fi
-	for i in ./*.bytecode.split
-	do
-
-		fidx=$(grep "index:" $i | awk '{print $2}')
-		
-		if [[ "$INCLUDE" == *" $fidx "* ]]; then
-			echo "INCLUDED"
-		else
-			rm $i
-			#echo "BYPASSING $fidx"
-			continue
-		fi
-
-		if [[ $REMOVE_ADDRESS == 'True' ]]; then
-			echo "Removing memory address $i"
-			perl -pe 's/0x(\w|\d)+( )+//g' -i $i # Remove the memory address of the program
-		fi
-
-		if [[ $REMOVE_BYTECODE_OFFSET == 'True' ]]; then
-			echo "Removing bytecode offset $i"
-			perl -pe 's/((a|b|c|d|e|f|\d)+( )+){2}//g' -i $i # Remove the instruction offset (first two hex tokens)
-		fi
-
-		cat $i >> bytecodes/$name.filtered.bytecode.txt
-		echo "" >> bytecodes/$name.filtered.bytecode.txt
-
-		#cat $i
-
-		mv $i bytecodes/$fidx.bytecode.split
-
-	done
+	
 	
 	#echo "$FILTERED_BYTECODE"
 	#$MACHINE_CODE_ALIGNMENT_FILES[$fidx]+=(" \"$(realpath bytecodes/$fidx.bytecode.split.$name.txt)\"")
@@ -121,6 +131,7 @@ do
 
 	find bytecodes/ -name "*.bytecode.split" -exec bash -c "mv {} {}.$name.txt" \;
 	#break 1
+	COUNT=$(echo "$COUNT + 1" | bc -l)
 done
 
 #echo ${MACHINE_CODE_ALIGNMENT_FILES[0]}
