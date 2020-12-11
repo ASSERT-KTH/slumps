@@ -61,7 +61,7 @@ do
 	if [[ $NO_AWK != 'True' ]]; then
 		#
 		# CONVERT name in wat and filter out WASI FUNCTIONS
-		wasm2wat --generate-names -o $real_path.wat $real_path
+		$WASM2WAT --generate-names -o $real_path.wat $real_path
 
 		if [[ $FILTER_WAT_WASI == 'True' ]]; then
 			WAT_FILTERED="$(python3 filter_out_wasi.py $real_path.wat)"
@@ -142,7 +142,7 @@ export FILES=$(concat ${MACHINE_CODE_ALIGNMENT_FILES[@]})
 cp STRAC_machine_code.template.json STRAC_machine_code.json
 perl  -pe  's/FILES/$ENV{FILES}/g' -i STRAC_machine_code.json
 
-STRAC_BIN="/Users/javierca/Documents/IdeaProjects/STRAC/panama/dev/build/macosx-x86_64-server-release/jdk/bin/java -jar /Users/javierca/Documents/IdeaProjects/STRAC/STRACAlign/target/STRAC-align-0.1.jar"
+#STRAC_BIN="/Users/javierca/Documents/IdeaProjects/STRAC/panama/dev/build/macosx-x86_64-server-release/jdk/bin/java -jar /Users/javierca/Documents/IdeaProjects/STRAC/STRACAlign/target/STRAC-align-0.1.jar"
 $STRAC_BIN STRAC_machine_code.json
 
 mkdir -p alignments
