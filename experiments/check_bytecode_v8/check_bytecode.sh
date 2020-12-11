@@ -22,7 +22,7 @@ fi
 echo $ARGS
 FOLDER_NAME="$(basename -- $PROGRAMS_DIR)"
 
-mkdir -p bytecodes
+mkdir -p bytecodes_$FOLDER_NAME
 MACHINE_CODE_ALIGNMENT_FILES=()
 
 
@@ -78,11 +78,11 @@ do
 		INCLUDE=$( $DEBUG_NODE_BIN --trace-wasm render.js | python3 filter_out_v8_function_index.py)
 		echo "Include " $INCLUDE $COUNT
 
-		$DEBUG_NODE_BIN $ARGS render.js  > bytecodes/$name.bytecode.txt
+		$DEBUG_NODE_BIN $ARGS render.js  > bytecodes_$FOLDER_NAME/$name.bytecode.txt
 		#csplit bytecodes/$name.bytecode.txt '/--- WebAssembly code ---/' '{1000}'
-		echo -n "" > bytecodes/$name.filtered.bytecode.txt
+		echo -n "" > bytecodes_$FOLDER_NAME/$name.filtered.bytecode.txt
 
-		awk '/--- WebAssembly code ---/{close(filename);n++; }{}{filename=n".bytecode.split"; print > filename}' bytecodes/$name.bytecode.txt
+		awk '/--- WebAssembly code ---/{close(filename);n++; }{}{filename=n".bytecode.split"; print > filename}' bytecodes_$FOLDER_NAME/$name.bytecode.txt
 	
 		for i in ./*.bytecode.split
 		do
@@ -107,8 +107,8 @@ do
 				perl -pe 's/((a|b|c|d|e|f|\d)+( )+){2}//g' -i $i # Remove the instruction offset (first two hex tokens)
 			fi
 
-			cat $i >> bytecodes/$name.filtered.bytecode.txt
-			echo "" >> bytecodes/$name.filtered.bytecode.txt
+			cat $i >> bytecodes_$FOLDER_NAME/$name.filtered.bytecode.txt
+			echo "" >> bytecodes_$FOLDER_NAME/$name.filtered.bytecode.txt
 
 			#cat $i
 
@@ -121,15 +121,15 @@ do
 	
 	if [[ $REMOVE_ADDRESS == 'True' ]]; then
 		# Replace the original bytecode file with the one with the replacements
-		perl -pe 's/0x(\w|\d)+( )+//g' -i bytecodes/$name.bytecode.txt # > bytecodes/$name.bytecode.txt # Remove the memory address of the program
+		perl -pe 's/0x(\w|\d)+( )+//g' -i bytecodes_$FOLDER_NAME/$name.bytecode.txt # > bytecodes/$name.bytecode.txt # Remove the memory address of the program
 	fi
 	
 	
 	#echo "$FILTERED_BYTECODE"
 	#$MACHINE_CODE_ALIGNMENT_FILES[$fidx]+=(" \"$(realpath bytecodes/$fidx.bytecode.split.$name.txt)\"")
-	MACHINE_CODE_ALIGNMENT_FILES+=(" \"$(realpath bytecodes/$name.filtered.bytecode.txt)\"")
+	MACHINE_CODE_ALIGNMENT_FILES+=(" \"$(realpath bytecodes_$FOLDER_NAME/$name.filtered.bytecode.txt)\"")
 
-	find bytecodes/ -name "*.bytecode.split" -exec bash -c "mv {} {}.$name.txt" \;
+	find bytecodes_$FOLDER_NAME/ -name "*.bytecode.split" -exec bash -c "mv {} {}.$name.txt" \;
 	#break 1
 	COUNT=$(echo "$COUNT + 1" | bc -l)
 done
