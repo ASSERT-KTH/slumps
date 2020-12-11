@@ -15,7 +15,7 @@
   "outDir": "test_symbol_match",
   "outputAlignmentMap": "alignments.json",
   "explicitToWriteSeparator": "\n",
-  "threadPoolCount": 1,
+  "threadPoolCount": 30,
   "comparison": {
     "eq": 0,
     "diff":5,
