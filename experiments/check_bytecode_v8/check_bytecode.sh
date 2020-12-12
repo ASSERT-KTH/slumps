@@ -44,9 +44,11 @@ concat(){
 }
 
 COUNT=0
+echo $PROGRAMS_DIR
 for f in $PROGRAMS_DIR/*.wasm
 do
 
+	echo $f
 
 	real_path=$(realpath $f)
 	name="$(basename -- $real_path)"
@@ -74,7 +76,7 @@ do
 		cp template.js render.js
 		export NAME=$real_path
 		perl  -pe  's/WASM_BINARY/$ENV{NAME}/g' -i render.js
-
+		$DEBUG_NODE_BIN --trace-wasm render.js > call.txt
 		INCLUDE=$( $DEBUG_NODE_BIN --trace-wasm render.js | python3 filter_out_v8_function_index.py)
 		echo "Include " $INCLUDE $COUNT
 
@@ -105,6 +107,11 @@ do
 			if [[ $REMOVE_BYTECODE_OFFSET == 'True' ]]; then
 				echo "Removing bytecode offset $i"
 				perl -pe 's/((a|b|c|d|e|f|\d)+( )+){2}//g' -i $i # Remove the instruction offset (first two hex tokens)
+			fi
+
+			if [[ $REMOVE_REFERENCES == 'True' ]]; then
+				echo "Removing bytecode reference $i"
+				perl -pe 's/external reference \(0x[abcdefgh\d]+\)/external reference/g' -i $i # Remove the instruction offset (first two hex tokens)
 			fi
 
 			cat $i >> bytecodes_$FOLDER_NAME/$name.filtered.bytecode.txt
