@@ -23,6 +23,7 @@ from socket_server import listen
 import numpy as np
 from sanitizer import Sanitizer
 from ansi_ui import SCREEN
+import operator
 
 levelPool = None
 generationPool = None
@@ -137,7 +138,7 @@ class Pipeline(object):
                 sanitize_no_wasm=config["sanitizer"].getboolean("sanitize-non-wasm"),
                 report_overlapping=config["sanitizer"].getboolean("report-overlapping"))
 
-            tentativeNumber = np.prod([len(v) + 1 for v in merging.values()])
+            tentativeNumber = reduce(operator.mul, [len(v) + 1 for v in merging.values()], 1)
 
             LOGGER.info(program_name,f"tentative number of variants {tentativeNumber} (plus original). Expected ratio {len(redisports)} of programs in each iteration.")
             
@@ -145,7 +146,7 @@ class Pipeline(object):
 
             LOGGER.warning(program_name, json.dumps(sanitized, indent=4))
             
-            tentativeNumber = np.prod([len(v) + 1 for v in sanitized.values()])
+            tentativeNumber = reduce(operator.mul, [len(v) + 1 for v in sanitized.values()], 1)
 
             scale = ''
             TN = tentativeNumber
