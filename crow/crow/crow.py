@@ -24,6 +24,7 @@ import numpy as np
 from sanitizer import Sanitizer
 from ansi_ui import SCREEN
 import operator
+from functools import reduce
 
 levelPool = None
 generationPool = None

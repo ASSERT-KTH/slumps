@@ -6,6 +6,8 @@ from utils import printProgressBar
 from ansi_ui import SCREEN
 from settings import config
 import traceback
+from functools import reduce
+import operator
 
 def listen(port, q, program, worker_id, level):
 
@@ -49,7 +51,7 @@ def listen(port, q, program, worker_id, level):
 
 
 					if program:
-						s = np.prod([len(t) + 1 for t in result.values()])
+						s=reduce(operator.mul, [len(t) + 1 for t in result.values()], 1)
 						#print(worker_id)
 						if config["DEFAULT"].getboolean("use-ansi-console"):
 							SCREEN.update_process(worker_id, total=None, suffix = f"Probable count: {s} Level: {level} ")
