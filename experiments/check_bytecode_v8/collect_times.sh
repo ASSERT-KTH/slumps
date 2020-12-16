@@ -4,7 +4,7 @@ PROGRAMS_DIR=$1
 FOLDER_NAME="$(basename -- $PROGRAMS_DIR)"
 
 mkdir -p "times"
-TIMES=50
+TIMES=100
 WARM_UP=10
 
 concat(){
