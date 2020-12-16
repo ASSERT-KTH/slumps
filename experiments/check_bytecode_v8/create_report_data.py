@@ -20,7 +20,7 @@ for f in os.listdir(ALIGNMENT_FOLDER):
 	programs.add(program_name)
 CHECK_FOR_ZERO_BYTECODE=False
 SAVE_IN_DB=False
-DO_PLOTS=True
+DO_PLOTS=False
 
 FILTER = [
 
@@ -85,6 +85,9 @@ HIGH_DATA = []
 NORMAL_DATA = []
 
 count = 0
+filesZero = set()
+filesNonZero = set()
+
 for i,name in enumerate(programs):
 	#if i > 10:
 	
@@ -118,6 +121,7 @@ for i,name in enumerate(programs):
 		continue
 
 	print(f"Variants {name} {count} {i}/{len(programs)}")
+	count += len(programs)
 
 	if SAVE_IN_DB:
 		alignmentsV8 = BYTECODE_DATA["mapBackAligment"]
@@ -193,9 +197,13 @@ for i,name in enumerate(programs):
 			REVERSED['d1'].append(d1)
 			REVERSED['d2'].append(d2)
 			REVERSED_DATA.append(record)
+			filesZero.add("/".join(fileMap[k1].split("/")[-2:-1]))
+
 			continue
 
 		ratio = d1/d2
+		filesNonZero.add("/".join(fileMap[k1].split("/")[-2:-1]))
+
 		if ratio > LOW_BOUND: # LOW DIVERSIFICATION in MACHINE CODE
 			LOW['d1'].append(d1)
 			LOW['d2'].append(d2)
@@ -309,3 +317,8 @@ if DO_PLOTS:
 	#plt.show()
 	plt.savefig("histogram.better.pdf")
 
+print(count)
+print(len(filesZero))
+print(len(filesNonZero), len(filesZero)+len(filesNonZero))
+
+print(filesZero)
