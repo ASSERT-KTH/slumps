@@ -120,7 +120,8 @@ class Pipeline(object):
                 try:
                     r=f.result()
                     for k,v in r.items():
-                        LOGGER.info(program_name, f"[{k}] {len(v)} code blocks")
+                        if not config["DEFAULT"].getboolean("use-ansi-console"):
+                            LOGGER.info(program_name, f"[{k}] {len(v)} code blocks")
                         #if len(v) != codeCount and codeCount != -1:
                         #    LOGGER.warning(program_name, f"Sanity check warning, different exploration stage with different code blocks")
                         codeCount = len(v)
@@ -130,9 +131,11 @@ class Pipeline(object):
                                 merging[k1] = []
                             merging[k1] += vSet
                             merging[k1] = list(set(merging[k1]))
-                            LOGGER.info(program_name, f"\t - {len(merging[k1])} replacements")
+                            if not config["DEFAULT"].getboolean("use-ansi-console"):
+                                LOGGER.info(program_name, f"\t - {len(merging[k1])} replacements")
                 except Exception as e:
-                    LOGGER.error(program_name, traceback.format_exc())
+                    if not config["DEFAULT"].getboolean("use-ansi-console"):
+                        LOGGER.error(program_name, traceback.format_exc())
             
             san = Sanitizer(
                 sanitize_redundant=config["sanitizer"].getboolean("sanitize-redundant"),
@@ -145,7 +148,7 @@ class Pipeline(object):
             
             sanitized = san.sanitize(merging)
 
-            LOGGER.warning(program_name, json.dumps(sanitized, indent=4))
+            #LOGGER.warning(program_name, json.dumps(sanitized, indent=4))
             
             tentativeNumber = reduce(operator.mul, [len(v) + 1 for v in sanitized.values()], 1)
 
@@ -174,7 +177,7 @@ class Pipeline(object):
             # Call the generation stage
             # Split jobs
             #for k in merging.keys():
-            LOGGER.info(program_name,f"Generating jobs for {len(redisports)} REDIS instances...")
+            #LOGGER.info(program_name,f"Generating jobs for {len(redisports)} REDIS instances...")
 
             generationcount = 0
             futures = []
@@ -194,7 +197,7 @@ class Pipeline(object):
                 SCREEN.init_screen(len(redisports), tentativeNumber)
                 
             for subset in getIteratorByName("keysSubset")(merging):
-                
+                #print(len(subset))
                 CURRENT_JOB.append(subset)
 
                 if len(CURRENT_JOB) == config["DEFAULT"].getint("subset-per-job"):
@@ -301,7 +304,7 @@ class Pipeline(object):
                        name +=  "[%s-%s]"%(keys.index(k), merging[k].index(v))
                        r.hset(k, "result", v)
                    else:
-                       
+                       name +=  "[%s-n]"%(keys.index(k),)
                        # search for infer word
                        rer = re.compile(r"infer %(\d+)")
                        kl = k

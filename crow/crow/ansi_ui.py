@@ -27,9 +27,10 @@ class ANSISCreen(object):
 
 	def __init__(self):
 		self.MARGIN_BOTTOM = 2
-		self.MAX_LOGS = 5
+		self.MAX_LOGS = 10
 		self.overallTotal = 1
 		self.total_progress = 0
+		self.log = []
 
 	def init_screen(self, number_of_processes, overallTotal, log=""):
 		self.progresses = [dict(
@@ -38,7 +39,7 @@ class ANSISCreen(object):
 			suffix = '',
 			prefix = ''
 		) for _ in range(number_of_processes)]
-		self.log = []
+		#self.log = []
 		self.clear_screen()
 		self.draw_screen()
 		self.overallTotal = overallTotal
@@ -77,7 +78,7 @@ class ANSISCreen(object):
 	def place_log(self, log):
 
 		if len(self.log) > self.MAX_LOGS:
-			self.log = []
+			self.log = self.log[1:]
 		self.log.append(log)
 
 		self.draw_screen()
