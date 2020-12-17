@@ -30,7 +30,7 @@ def get_data_to_draw(values, low=25, high=75, iqrange=1.5):
 
 	return median, quantile25, quantile75, lower, upper, data, min(data), max(data)
 
-def plot(csvFile, title=""):
+def plot(csvFile, title="", name="plot"):
 
 	times = { }
 
@@ -46,15 +46,15 @@ def plot(csvFile, title=""):
 			times[key] = dict()
 			values = [float(v)  for v in row[1:]]
 			times[key]["values"] = values
-			times[key]["filtered"] = get_data_to_draw(values)
+			times[key]["filtered"] = get_data_to_draw(values, low=25, high=80)
 			times[key]["mean"] = np.mean(values)
 			times[key]["median"] = np.median(values)
 			times[key]["name"] = key
 			times[key]["is_baseline"] =  False if "[" in key else True
 	
-	latexify(fig_width=9, fig_height=4.2, font_size=8, tick_size=8)
+	latexify(fig_width=11, fig_height=2, font_size=8, tick_size=8)
 	fig, ax = plt.subplots()
-	format_axes(ax, hide=['top', 'right'], show=['left', 'bottom'])
+	format_axes(ax, hide=['top', 'right', 'bottom'], show=['left'])
 
 	KEY_SORT="median"
 	all_values = sorted(times.values(), key=lambda x: -x[KEY_SORT])
@@ -62,7 +62,7 @@ def plot(csvFile, title=""):
 
 	for i,v in enumerate(all_values):
 
-		COLOR = 'C0' if v["is_baseline"] else 'C3'
+		COLOR = 'C0' if not v["is_baseline"] else 'C3'
 		if not v["is_baseline"]:
 			print(v["name"])
 			COLOR3 = 'gray'
@@ -70,10 +70,10 @@ def plot(csvFile, title=""):
 			median, quantile25, quantile75, lowe, upper, data, m, M = v["filtered"]
 			KEY = v[KEY_SORT]
 
-			ax.plot([SCALE*i + 1, SCALE*i + 1], [quantile75, M], color=COLOR3, linewidth=LINEWIDTH, alpha=0.6*DIST_ALPHA)
-			ax.plot([SCALE*i + 1, SCALE*i + 1], [quantile75, quantile25], color=COLOR3, linewidth=2.2*LINEWIDTH, alpha=1.2*DIST_ALPHA)
-			ax.plot([SCALE*i + 1, SCALE*i + 1], [m, quantile25], color=COLOR3, linewidth=LINEWIDTH, alpha=0.6*DIST_ALPHA)
-			ax.scatter([SCALE*i + 1], [KEY], color=COLOR, s = SCATTER_SIZE, zorder=10)
+			ax.plot([SCALE*(i + 1), SCALE*(i + 1)], [quantile75, M], color=COLOR3, linewidth=LINEWIDTH, alpha=0.6*DIST_ALPHA)
+			ax.plot([SCALE*(i + 1), SCALE*(i + 1)], [quantile75, quantile25], color=COLOR3, linewidth=2.2*LINEWIDTH, alpha=1.2*DIST_ALPHA)
+			ax.plot([SCALE*(i + 1), SCALE*(i + 1)], [m, quantile25], color=COLOR3, linewidth=LINEWIDTH, alpha=0.6*DIST_ALPHA)
+			ax.scatter([SCALE*(i + 1)], [KEY], color=COLOR, s = SCATTER_SIZE, zorder=10)
 		else:
 
 			print("Baseline " + v["name"])
@@ -82,15 +82,17 @@ def plot(csvFile, title=""):
 			ax.plot([0, 0], [m, quantile25], color=COLOR3, linewidth=LINEWIDTH, alpha=0.6*DIST_ALPHA)
 			ax.scatter([0], [KEY], color=COLOR, s = SCATTER_SIZE, zorder=10)
 
-			ax.hlines(KEY,colors="C3",  xmin=0, xmax=SCALE*len(times.values()) + 1, linestyle='dashed', linewidth=LINEWIDTH, zorder=10)
+			ax.hlines(KEY,colors="C3",  xmin=0, xmax=SCALE*len(times.values()) + 1, linestyle='dashed', linewidth=LINEWIDTH, zorder=400)
 	ax.set_title(title)
 	ax.set_xticks([])
 	plt.ylabel('Time (ms)')
-	plt.show()
+
+	plt.savefig(f"{name}.pdf")
+	#plt.show()
 
 
 #	plt.show()
 if __name__ == "__main__":
 	# csv file with the times as argument
-	plot(sys.argv[1], sys.argv[2])
+	plot(sys.argv[1], sys.argv[2], sys.argv[3])
 	
