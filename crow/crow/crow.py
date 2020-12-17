@@ -196,6 +196,8 @@ class Pipeline(object):
             if config["DEFAULT"].getboolean("use-ansi-console"):
                 SCREEN.init_screen(len(redisports), tentativeNumber)
                 
+            time.sleep(2)
+
             for subset in getIteratorByName("keysSubset")(merging):
                 #print(len(subset))
                 CURRENT_JOB.append(subset)
