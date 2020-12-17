@@ -108,7 +108,7 @@ class Pipeline(object):
                 futures.append(job)
             
             timeout = config["DEFAULT"].getint("exploration-timeout")
-            done, fail = wait(futures, timeout=timeout + 1, return_when=ALL_COMPLETED)
+            done, fail = wait(futures, return_when=ALL_COMPLETED)
             #levelPool.shutdown(False)
             #Merging results
 

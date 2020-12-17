@@ -57,15 +57,17 @@ def listen(port, q, program, worker_id, level):
 						#print(worker_id)
 						if config["DEFAULT"].getboolean("use-ansi-console"):
 							SCREEN.update_process(worker_id, total=None, suffix = f"Probable count: {s} Keys: {len(result)} Level: {level} ")
+							SCREEN.place_log(f"{k}: {v}")
 						#printProgressBar(0, 1, length=1, suffix=f"{len(result.keys())} blocks. {s} probable replacements")
 						
 					
 				except Exception as e:
 					print(traceback.format_exc())
-					exit(1)
+					return result
 				if not data:
 					break
 	#print()
+	return result
 				
 
 
