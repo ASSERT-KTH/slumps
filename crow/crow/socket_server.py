@@ -21,7 +21,9 @@ def listen(port, q, program, worker_id, level):
 		s.bind((HOST, PORT))
 		if program:
 			LOGGER.info(program,f"Listening...{port}")
-		
+			if config["DEFAULT"].getboolean("use-ansi-console"):
+				SCREEN.update_process(worker_id, total=None, suffix = f"Starting Level: {level} ")
+						
 		s.listen()
 		conn, addr = s.accept()
 		with conn:
