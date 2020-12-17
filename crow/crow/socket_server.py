@@ -56,7 +56,7 @@ def listen(port, q, program, worker_id, level):
 						s=reduce(operator.mul, [len(t) + 1 for t in result.values()], 1)
 						#print(worker_id)
 						if config["DEFAULT"].getboolean("use-ansi-console"):
-							SCREEN.update_process(worker_id, total=None, suffix = f"Probable count: {s} Level: {level} ")
+							SCREEN.update_process(worker_id, total=None, suffix = f"Probable count: {s} Keys: {len(result)} Level: {level} ")
 						#printProgressBar(0, 1, length=1, suffix=f"{len(result.keys())} blocks. {s} probable replacements")
 						
 					
