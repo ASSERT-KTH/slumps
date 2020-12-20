@@ -146,7 +146,7 @@ class Pipeline(object):
 
             LOGGER.info(program_name,f"tentative number of variants {tentativeNumber} (plus original). Expected ratio {len(redisports)} of programs in each iteration.")
             
-            sanitized = san.sanitize(merging)
+            sanitized = merging # san.sanitize(merging)
 
             #LOGGER.warning(program_name, json.dumps(sanitized, indent=4))
             
