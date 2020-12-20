@@ -8,7 +8,16 @@ In the standard AFL setup, C++ source code is compiled using the C++ compiler pr
 
 In our case, we are given a WASM binary and an interpreter built with Scala - in other words, no code that we can instrument with afl-clang-fast++. The workaround we provide to deal with this problem, is that we have built an interface (interface.cpp), which fakes the behaviour of the instrumented binary and instead forwards the fuzzed inputs given by AFL to the SWAM engine via a socket. The SWAM engine then in turn forwards it to the instantiated WASM function. By hard-coding the instrumentation into the interface, we can use the "standard" g++ compiler to compile it.
 
-In SWAM, code coverage is handled in the package 'optin'. The socket server for SWAM on the other hand, is found in the package 'cli' and is executed with `mill cli.runserver <args>`. The cli makes use of the 'optin' package and returns the coverage results including an exit code of the WASM file through the socket. Interface.cpp then parses this data and feeds the content into the shared memory used by AFL. Even though AFL provides modes to work without using coverage data from executions it has triggered (see qemo mode), it is more efficient when provided it.
+In SWAM, code coverage is handled in the package 'optin'. The socket server for SWAM on the other hand, is found in the package 'cli_server' and is executed with `mill cli_server.run run_server <args>`. The cli makes use of the 'optin' package and returns the coverage results including an exit code of the WASM file through the socket. Interface.cpp then parses this data and feeds the content into the shared memory used by AFL. Even though AFL provides modes to work without using coverage data from executions it has triggered (see qemo mode), it is more efficient when provided it.
+
+Right now, we support fuzzing of four data types as function parameter:
+
+* int32
+* int64
+* float32
+* float64
+
+Reference documentation in (see part 1, Coverage Measurements): https://github.com/google/AFL/blob/master/docs/technical_details.txt
 
 Right now, we support fuzzing of four data types as function parameter:
 
@@ -45,11 +54,9 @@ This image uses the [official image of AFLplusplus](https://hub.docker.com/r/afl
 
 ### SWAM section in Dockerfile
 
-We are not using the standard base image for the Scala Mill Build Tool [(nightscape/scala-mill)](https://hub.docker.com/r/nightscape/scala-mill/dockerfile), since it uses an older version of Scala and Mill. Our Dockerfile is however strongly based on theirs.
+Mill currently does not provide any command to [simply install dependencies without compiling the source code](https://stackoverflow.com/questions/62834693/mill-build-tool-install-dependencies-without-compiling-source-code). Compiling the source code is done with `mill <package_name>.compile` and the reason why this is not included in the Dockerfile is to avoid the overhead of downloading all the same dependencies everytime source code is altered. The current workaround is to download pre-built .jar artifacts from the SWAM repository. Whenever the SWAM code is changed, these artifacts need to be re-published.
 
-Mill currently does not provide any command to [simply install dependencies without compiling the source code](https://stackoverflow.com/questions/62834693/mill-build-tool-install-dependencies-without-compiling-source-code). Compiling the source code is done with `mill <package_name>.compile` and the reason why this is not included in the Dockerfile is to avoid the overhead of downloading all the same dependencies everytime source code is altered. The current workaround is to store the compiled sources along with the dependencies in volumes, which can be accessed during runtime and are specified in the docker-compose.base.yml file ("compiled_sources" & "maven_data"). SWAM's compilation is therefore delayed to the entrypoint (./entrypoint_mill_server.sh) and is encompassed in the `mill -i cli.run run_server <args>` command.
-
-How to build:
+### Build with Docker
 
 ```bash
 docker build -t wafl .
@@ -91,17 +98,76 @@ AFLplusplus is encouraged to be run with multiple instances if multiple cores ar
 
 ## Building & Run without Docker
 
-If you wish to run this tool without using Docker, you will be required to install [AFLplusplus](https://github.com/AFLplusplus/AFLplusplus) and build SWAM with mill (see README ./fuzzing-server-swam). Concerning AFLplusplus, running `make source-only` on the cloned repository along with installing the dependencies should suffice.
+### Build
+
+1. Install [AFLplusplus](https://github.com/AFLplusplus/AFLplusplus). Running `make source-only` on the cloned repository along with installing the dependencies should suffice. For the full build:
+
+    ```bash
+    ./fuzzing-client-afl/build_afl.sh
+    ```
+
+2. Build the WAFL interface:
+
+    ```bash
+    ./fuzzing-client-afl/build_interface.sh
+    ```
+
+3. Install SWAM:
+
+    a) Download pre-built SWAM jar (preferred):
+
+    ```bash
+    curl -o swam_cli.jar -L https://github.com/KTH/swam/releases/download/v0.6.0-RC3/swam_cli.jar
+    curl -o swam_server.jar -L https://github.com/KTH/swam/releases/download/v0.6.0-RC3/swam_server.jar
+    ```
+
+    b) Build with SWAM.cli & SWAM.cli_server with mill:
+
+    ```bash
+    cd ./fuzzing-server-swam
+    ./millw cli.assembly
+    ./millw cli_server.assembly
+    ```
+
+    This requires the definitions of SWAM_CLI_CMD and SWAM_SERVER_CMD in ./prepare_env.sh to be adjusted. Also, see ./fuzzing-server-swam/README.md for further details on how to build SWAM with mill.
+
+### Run
+
+1. Configure the ./.env file. See [Configuration](#Configuration) for details.
+
+2. Source the ./.env file.
+
+    ```bash
+    set -a
+    source ./.env
+    set +a
+    ```
+
+3. Run:
+
+    ```bash
+    ./wafl.sh <.wasm/.wat filepath> <target function> <seed arguments csv>
+    ```
 
 ## Test SWAM's socket server with sample input (for fibo.wat)
 
+This just checks whether SWAM and the overall protocoll communicating with between the interface and SWAM is working. AFL is not required for this.
+
 1. Start the SWAM socket server. We want to run the "naive" function in the fibo.wat file.
+
+    a) Using the entrypoint (arguments: `<.wasm/.wat filepath> <target function> <seed arguments csv>`):
+
+    ```bash
+    `./entrypoint_mill_server.sh <path_to_repo>/examples/docs/fibo.wat naive 10`
+    ```
+
+    b) If SWAM was built with mill, you can run:
 
     ```bash
     mill cli_server.run run_server --wat --main naive <path_to_repo>/examples/docs/fibo.wat
     ```
 
-1. Start socket client and communicate input/output with server. Arguments: <.wasm/.wat filepath> <target function> <seed arguments csv>
+2. Start socket client and communicate input/output with server (arguments: `<.wasm/.wat filepath> <target function> <seed arguments csv>`):
 
     ```bash
     ./test_socket.sh <path_to_repo>/examples/docs/fibo.wat naive 10

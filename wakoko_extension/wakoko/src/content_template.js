@@ -112,7 +112,6 @@ chrome.runtime.getURL('/static')}"`;
 
 // @ts-ignore
 
-
 (document.head||document.documentElement).prepend(scriptElement);
 (document.head||document.documentElement).prepend(script);
 (document.head||document.documentElement).prepend(metaScript);
