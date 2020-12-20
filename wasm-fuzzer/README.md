@@ -19,6 +19,15 @@ Right now, we support fuzzing of four data types as function parameter:
 
 Reference documentation in (see part 1, Coverage Measurements): https://github.com/google/AFL/blob/master/docs/technical_details.txt
 
+Right now, we support fuzzing of four data types as function parameter:
+
+* int32
+* int64
+* float32
+* float64
+
+Reference documentation in (see part 1, Coverage Measurements): https://github.com/google/AFL/blob/master/docs/technical_details.txt
+
 ## Parsing AFL's fuzzed inputs
 
 One major difference between C++ and WASM is that WASM only works with Int32/int, Int64/long, Float32/float and Float64/double. This matters, since AFL most commonly takes a config file as an input parameter, which is then first parsed from chars/strings to the corresponding type by the C++ code. Since a WASM function cannot simply receive a char or string and parse it to the int/long/float/double it needs, we need to do this manually beforehand.
