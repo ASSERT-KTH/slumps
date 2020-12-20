@@ -6,14 +6,71 @@ class Sanitizer(object):
 
 	INVALID_WASM = ['fshl', 'freeze']
 
-	def __init__(self, sanitize_redundant = True, sanitize_no_wasm = True, report_overlapping = True):
+	def __init__(self, sanitize_redundant = True, sanitize_no_wasm = True, report_overlapping = True, 
+	remove_negation_pattern = True, remove_idempotent_operations=True):
 
 		self.sanitize_redundant = sanitize_redundant
 		self.sanitize_no_wasm = sanitize_no_wasm
 		self.report_overlapping = report_overlapping
+		self.remove_negation = remove_negation_pattern
+		self.remove_idempotent_operations = remove_idempotent_operations
 
 	def sanitize(self, overall_replacements):
-		
+		cumul = {}
+		if self.remove_idempotent_operations:
+			resultMatch = re.compile(r"result %(\d+)\n")
+			inferMatch = re.compile(r"infer %(\d+)\n")
+			operatorMatch = re.compile(r"((%\d+):i\d+) = ([\w\d\.]+)(( (%\d+),*)*)$")
+
+			for k in overall_replacements:
+				inferVarName = inferMatch.search(k)
+
+				if inferVarName:
+					inferVarName = inferVarName.group(1)
+					cumul[k] = []
+
+					replacements = overall_replacements[k]
+
+					# Remove redundant operations
+
+					for v in replacements:
+						
+						redo = [ ]
+						replace = {  }
+						for l in v.split("\n"):
+							operator = operatorMatch.search(l)
+							if operator:
+								instruction = operator.group(3)
+								operators = operator.group(4)
+								operator_id = operator.group(6)
+								assignment_id = operator.group(2)
+								count = operators.count(operator_id)
+
+								#print(f"====={instruction}")
+								if instruction in ['and', 'or']:
+									# it is an idempotent operation, it will be removed by V8 JIT for example
+									# REMOVE and replace the assignment variable to the idempotent one
+									replace[assignment_id] = operator_id
+									redo.append(f";{l}") # comment out the instruction for debuging reasons
+									continue
+							redo.append(l)
+						
+						# replacing unused ids
+						final = ""
+						for l in redo:
+							l1 = l
+							if not l.startswith(";"): # if it is not a comment
+								for kr in replace.keys():
+									#print(kr)
+									l1 = l1.replace(kr, replace[kr])
+							final += l1 + "\n"
+						cumul[k].append(final)
+
+						#print(redo, final)
+						#exit(1)
+						#print(final)
+
+			overall_replacements = cumul
 		cumul = {}
 
 		if self.sanitize_redundant:
@@ -60,13 +117,17 @@ class Sanitizer(object):
 
 		#print(json.dumps(cumul, indent=4))
 		#print(json.dumps(overall_replacements, indent=4))
+
+		
+
+			overall_replacements = cumul
 		return overall_replacements
 if __name__ == "__main__":
 
 	import json
 	s = Sanitizer()
 
-	s.sanitize(json.loads('''
+	a = s.sanitize(json.loads('''
 		{
 			"%0:i32 = var\\n%1:i32 = mulnsw 2:i32, %0\\ninfer %1\\n": 
 				["%2:i32 = freeze %1\\nresult %2\\n", 
@@ -86,3 +147,9 @@ if __name__ == "__main__":
 				"%3:i32 = sadd.sat %0, %1\\nresult %3\\n", 
 				"result %2\\n", 
 				"%3:i32 = mul 3:i32, %0\\nresult %3\\n"]}'''))
+
+	for k in a.keys():
+		print(k)
+		for v in a[k]:
+			print(v)
+		print()

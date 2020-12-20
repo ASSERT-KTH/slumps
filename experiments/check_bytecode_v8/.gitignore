@@ -1,0 +1,15 @@
+bytecodes
+node_modules
+run_local.sh
+alignments
+bytecodes_*
+env.local.sh
+*.split
+*.wat
+*.wasm
+*.data.json
+replacements*
+*.pdf
+distrib.*
+times
+logs

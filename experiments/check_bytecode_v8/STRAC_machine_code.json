@@ -1,0 +1,25 @@
+{
+  "files": [
+    "/Users/javierca/Documents/Develop/slumps/benchmark_programs/new_iteration/wasms/datadrive_tmp/slumps2/Runge-Kutta_method2/[3-6][4-6][5-5].wasm.wat" , "/Users/javierca/Documents/Develop/slumps/benchmark_programs/new_iteration/wasms/datadrive_tmp/slumps2/Runge-Kutta_method2/[3-6][4-6][5-8].wasm.wat"
+  ],
+  "pairs": [] ,
+  "method": {
+    "name": "FastDTW",
+    "params": [100.0]
+  },
+  "outputAlignment": true,
+  "exportImage": true,
+  "generateInteractiveMap": "dashboard",
+  "distanceFunctionName": "dBin",
+  "separator": "[\r\n\t]",
+  "outDir": "test_symbol_match",
+  "outputAlignmentMap": "alignments.json",
+  "explicitToWriteSeparator": "\n",
+  "threadPoolCount": 30,
+  "comparison": {
+    "eq": 0,
+    "diff":5,
+    "gap": 1
+  }
+
+}

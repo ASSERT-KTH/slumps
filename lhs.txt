@@ -1,0 +1,124 @@
+
+; function: __wasm_call_ctors
+
+; function: __original_main
+
+; start LHS (in __original_main)
+%0:i32 = var
+%1 = sub %0, 128:i32
+infer %1
+
+
+; start LHS (in __original_main)
+%0:i32 = var
+%1 = sub %0, 128:i32 (hasExternalUses)
+%2 = add %1, 16:i32
+infer %2
+
+
+; start LHS (in __original_main)
+%0:i32 = var
+%1 = add %0, 1:i32
+infer %1
+
+
+; start LHS (in __original_main)
+%0:i32 = var
+%1 = sub %0, 128:i32 (hasExternalUses)
+%2 = add %1, 16:i32
+infer %2
+
+
+; start LHS (in __original_main)
+%0:i32 = var
+%1 = sub %0, 128:i32 (hasExternalUses)
+%2 = add %1, 16:i32
+%3:i32 = var
+%4 = add %2, %3
+infer %4
+
+
+; start LHS (in __original_main)
+%0:i32 = var
+%1 = eq %0, 0:i32
+infer %1
+
+
+; start LHS (in __original_main)
+%0:i32 = var
+%1:i32 = var
+%2 = add %0, %1
+infer %2
+
+
+; start LHS (in __original_main)
+%0:i32 = var
+%1:i32 = var
+%2 = add %0, %1 (hasExternalUses)
+%3 = ult %2, 100:i32
+infer %3
+
+
+; start LHS (in __original_main)
+%0:i32 = var
+%1 = add %0, 1:i32
+infer %1
+
+
+; start LHS (in __original_main)
+%0:i32 = var
+%1 = add %0, 1:i32 (hasExternalUses)
+%2 = ne %1, 100:i32
+infer %2
+
+
+; start LHS (in __original_main)
+%0:i32 = var
+%1 = add %0, 1:i32
+infer %1
+
+
+; start LHS (in __original_main)
+%0:i32 = var
+%1 = sub %0, 128:i32 (hasExternalUses)
+%2 = add %1, 16:i32
+infer %2
+
+
+; start LHS (in __original_main)
+%0:i32 = var
+%1 = sub %0, 128:i32 (hasExternalUses)
+%2 = add %1, 16:i32
+%3:i32 = var
+%4 = add %2, %3
+infer %4
+
+
+; start LHS (in __original_main)
+%0:i32 = var
+%1 = ne %0, 0:i32
+infer %1
+
+
+; start LHS (in __original_main)
+%0:i32 = var
+%1 = ne %0, 0:i32
+%2 = select %1, 1031:i32, 1024:i32
+infer %2
+
+
+; start LHS (in __original_main)
+%0:i32 = var
+%1 = add %0, 1:i32 (hasExternalUses)
+%2 = ne %1, 100:i32
+infer %2
+
+
+; start LHS (in __original_main)
+%0:i32 = var
+%1 = sub %0, 128:i32 (hasExternalUses)
+%2 = add %1, 128:i32
+infer %2
+
+
+; function: main

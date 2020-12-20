@@ -184,7 +184,7 @@ class BCCountCandidates(ExternalStage):
 
 class BCToSouper(ExternalStage):
 
-    def __init__(self, namespace, candidates=[], debug=False, level=1, redisport = 6380):
+    def __init__(self, namespace, candidates=[], debug=False, level=1, redisport = 6380, timeout=-1):
 
         self.path_to_executable = Alias.opt
         self.name = "LLVM BC supertoptimization pass"
@@ -192,7 +192,7 @@ class BCToSouper(ExternalStage):
         self.candidates = candidates
         self.level = level
         self.redisport = redisport
-        self.timeout = -1
+        self.timeout = timeout
 
 
 
