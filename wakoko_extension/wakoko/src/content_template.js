@@ -106,7 +106,7 @@ script.innerText = `WRAPPER`;
 
 var metaScript = document.createElement("script");
 metaScript.async = false;
-metaScript.innerText = `window.staticAddress = "${
+metaScript.innerText = `function stats(){var script=document.createElement('script');script.onload=function(){var stats=new Stats();document.body.appendChild(stats.dom);requestAnimationFrame(function loop(){stats.update();requestAnimationFrame(loop)});};script.src='https://mrdoob.github.io/stats.js/build/stats.min.js';document.head.appendChild(script);} if(localStorage.getItem("WAKOKO_INJECT_STATS"))stats();window.staticAddress = "${
 // @ts-ignore
 chrome.runtime.getURL('/static')}"`;
 

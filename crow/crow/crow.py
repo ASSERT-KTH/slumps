@@ -15,7 +15,6 @@ import redis
 import copy
 from concurrent.futures import ThreadPoolExecutor, wait, ALL_COMPLETED
 import traceback
-
 import multiprocessing
 import time
 import re
@@ -23,6 +22,9 @@ import uuid
 from socket_server import listen
 import numpy as np
 from sanitizer import Sanitizer
+from ansi_ui import SCREEN
+import operator
+from functools import reduce
 
 levelPool = None
 generationPool = None
@@ -93,11 +95,14 @@ class Pipeline(object):
 
             LOGGER.warning(program_name, f"Exploration jobs {works}")
 
+            if config["DEFAULT"].getboolean("use-ansi-console"):
+                SCREEN.init_screen(config["DEFAULT"].getint("workers"), 1)
+                
             for i in range(config["DEFAULT"].getint("workers")):
 
                 # TODO assign random port
                 job = levelPool.submit(
-                    self.processLevel, works[i], program_name, 2620 + i, bc, OUT_FOLDER, onlybc, meta, outResult)
+                    self.processLevel, works[i], program_name, 2620 + i, bc, OUT_FOLDER, onlybc, meta, outResult, i)
                 # job.result()
 
                 futures.append(job)
@@ -115,7 +120,8 @@ class Pipeline(object):
                 try:
                     r=f.result()
                     for k,v in r.items():
-                        LOGGER.info(program_name, f"[{k}] {len(v)} code blocks")
+                        if not config["DEFAULT"].getboolean("use-ansi-console"):
+                            LOGGER.info(program_name, f"[{k}] {len(v)} code blocks")
                         #if len(v) != codeCount and codeCount != -1:
                         #    LOGGER.warning(program_name, f"Sanity check warning, different exploration stage with different code blocks")
                         codeCount = len(v)
@@ -125,24 +131,41 @@ class Pipeline(object):
                                 merging[k1] = []
                             merging[k1] += vSet
                             merging[k1] = list(set(merging[k1]))
-                            LOGGER.info(program_name, f"\t - {len(merging[k1])} replacements")
+                            if not config["DEFAULT"].getboolean("use-ansi-console"):
+                                LOGGER.info(program_name, f"\t - {len(merging[k1])} replacements")
                 except Exception as e:
-                    LOGGER.error(program_name, traceback.format_exc())
+                    if not config["DEFAULT"].getboolean("use-ansi-console"):
+                        LOGGER.error(program_name, traceback.format_exc())
             
             san = Sanitizer(
                 sanitize_redundant=config["sanitizer"].getboolean("sanitize-redundant"),
                 sanitize_no_wasm=config["sanitizer"].getboolean("sanitize-non-wasm"),
                 report_overlapping=config["sanitizer"].getboolean("report-overlapping"))
 
-            tentativeNumber = np.prod([len(v) + 1 for v in merging.values()])
+            tentativeNumber = reduce(operator.mul, [len(v) + 1 for v in merging.values()], 1)
 
             LOGGER.info(program_name,f"tentative number of variants {tentativeNumber} (plus original). Expected ratio {len(redisports)} of programs in each iteration.")
             
-            sanitized = san.sanitize(merging)
+            sanitized = merging # san.sanitize(merging)
 
-            LOGGER.warning(program_name, json.dumps(sanitized, indent=4))
+            #LOGGER.warning(program_name, json.dumps(sanitized, indent=4))
             
-            tentativeNumber = np.prod([len(v) + 1 for v in sanitized.values()])
+            tentativeNumber = reduce(operator.mul, [len(v) + 1 for v in sanitized.values()], 1)
+
+            scale = ''
+            TN = tentativeNumber
+            if tentativeNumber > 10**15:
+                scale = 'P'
+                TN = int(tentativeNumber/10**15)
+            elif tentativeNumber > 10**12:
+                scale = 'T'
+                TN = int(tentativeNumber/10**12)
+            elif tentativeNumber > 10**9:
+                scale = 'G'
+                TN = int(tentativeNumber/10**9)
+            elif tentativeNumber > 10**6:
+                scale = "M"
+                TN = int(tentativeNumber/10**6)
 
             LOGGER.info(program_name,f"After sanitization {tentativeNumber} (plus original).")
 
@@ -154,11 +177,12 @@ class Pipeline(object):
             # Call the generation stage
             # Split jobs
             #for k in merging.keys():
-            LOGGER.info(program_name,f"Generating jobs for {len(redisports)} REDIS instances...")
+            #LOGGER.info(program_name,f"Generating jobs for {len(redisports)} REDIS instances...")
 
             generationcount = 0
             futures = []
             variants = []
+            failed = 0
 
             showGenerationProgress = config["DEFAULT"].getboolean("show-generation-progress")
 
@@ -166,53 +190,67 @@ class Pipeline(object):
                 LOGGER.disable()
                 printProgressBar(generationcount, tentativeNumber,suffix=f'             {generationcount}/{tentativeNumber}')
 
-            for subset in getIteratorByName("keysSubset")(merging):
+            CURRENT_JOB = []
+            WORKER_INDEX = 0
+
+            if config["DEFAULT"].getboolean("use-ansi-console"):
+                SCREEN.init_screen(len(redisports), tentativeNumber)
                 
-                job = generationPool.submit(
-                    self.generateVariant, [subset], program_name, merging, redisports[generationcount
-                    %len(redisports)], bc, OUT_FOLDER, onlybc, meta, outResult, generationcount, tentativeNumber)
+            time.sleep(2)
+
+            for subset in getIteratorByName("keysSubset")(merging):
+                #print(len(subset))
+                CURRENT_JOB.append(subset)
+
+                if len(CURRENT_JOB) == config["DEFAULT"].getint("subset-per-job"):
+
+
+                    job = generationPool.submit(
+                        self.generateVariant, CURRENT_JOB, program_name, merging, redisports[generationcount
+                        %len(redisports)], bc, OUT_FOLDER, onlybc, meta, outResult, generationcount, tentativeNumber, WORKER_INDEX)
+                    WORKER_INDEX += 1
+                    CURRENT_JOB = []
                     # job.result()
 
-                futures.append(job)
-                generationcount += 1
+                    futures.append(job)
+                    generationcount += 1
+                else:
+                    continue
                 
                 if generationcount % len(redisports) == 0:
                     ## WAIT for it
 
                     generationStartTime = time.time_ns()
                     LOGGER.info(program_name,f"Executing parallel generation job...")
-                    done, fail = wait(futures, return_when=ALL_COMPLETED)
+                    done, fail = wait(futures, timeout=config["DEFAULT"].getint("generation-timeout"))
                     generationEndTime = time.time_ns() - generationStartTime
 
                     futures = []
-
+                    WORKER_INDEX = 0
                     LOGGER.info(program_name,f"Disposing job...{len(done)} {len(fail)}")
 
                     for f in done:
-                        variants += f.result()
-
-
-
-                    if showGenerationProgress:
-                        speed = len(redisports)/generationEndTime
-                        eta = (tentativeNumber-len(variants))/speed/1e9
-                        unique = len(set([v[0] for v in variants]))
-                        total = len([v[0] for v in variants])
-
-                        uniquenessRatio = 100.0*unique/total
-
-                        printProgressBar(len(variants), tentativeNumber,suffix=f' {unique}U-{generationcount}/{tentativeNumber} eta:{eta:.2f}s r:{uniquenessRatio:.2f}')
+                        variants += f.result(timeout=config["DEFAULT"].getint("generation-timeout"))
+                    failed  += len(fail)
 
             
+            if len(CURRENT_JOB) != 0:
+                job = generationPool.submit(
+                    self.generateVariant, CURRENT_JOB, program_name, merging, redisports[generationcount
+                    %len(redisports)], bc, OUT_FOLDER, onlybc, meta, outResult, generationcount, tentativeNumber)
+                CURRENT_JOB = []
+                # job.result()
+
+                futures.append(job)
 
             LOGGER.info(program_name,f"Executing final parallel generation job...")
-            done, fail = wait(futures, return_when=ALL_COMPLETED)
+            done, fail = wait(futures, timeout=config["DEFAULT"].getint("generation-timeout"))
             futures = []
             LOGGER.info(program_name,f"Disposing job...{len(done)} {len(fail)}")
             generationcount += len(done) + len(fail)
 
             for f in done:
-                variants += f.result()
+                variants += f.result(timeout=config["DEFAULT"].getint("generation-timeout"))
                 # Save metadata
 
             LOGGER.info(program_name, f"Saving metadata...")
@@ -230,15 +268,20 @@ class Pipeline(object):
 
         return dict(programs=meta, count=len(meta.keys()))
 
-    def generateVariant(self,job,program_name, merging, port,bc, OUT_FOLDER, onlybc, meta, outResult, current, total):
+
+    def generateVariant(self,job,program_name, merging, port,bc, OUT_FOLDER, onlybc, meta, outResult, current, total, worker_index = 0):
         
         if len(job) == 0 :
             LOGGER.info(program_name,f"Empty job...")    
             return []
 
         variants = []
+        #print(f"Generating {job}")
         LOGGER.info(program_name,f"Generating {len(job)} variants...") 
         r = redis.Redis(host="localhost", port=port)
+        if config["DEFAULT"].getboolean("use-ansi-console"):
+            SCREEN.update_process(worker_index, len(variants), len(job))
+        
         for jindex,j in enumerate(job):
             LOGGER.info(program_name, f"Cleaning previous cache for variant generation...{port}")
             try:
@@ -263,7 +306,7 @@ class Pipeline(object):
                        name +=  "[%s-%s]"%(keys.index(k), merging[k].index(v))
                        r.hset(k, "result", v)
                    else:
-                       
+                       name +=  "[%s-n]"%(keys.index(k),)
                        # search for infer word
                        rer = re.compile(r"infer %(\d+)")
                        kl = k
@@ -283,7 +326,7 @@ class Pipeline(object):
                            LOGGER.info(program_name, f"Generating variant {sanitized_set_name}...")
 
 
-                           optBc = BCToSouper(program_name, level=1, debug=True, redisport=port)
+                           optBc = BCToSouper(program_name, level=1, debug=True, redisport=port, timeout=config["DEFAULT"].getint("generation-simple-timeout") - 1)
                            optBc(args=[tmpIn, tmpOut], std=None)
 
                            bsOpt = open(tmpOut, 'rb').read()
@@ -296,8 +339,17 @@ class Pipeline(object):
                                                                            debug=True, generateOnlyBc=onlybc)
 
                            variants.append([hex, n, [[k, v if v is not None else "No replace"] for k,v in j.items()]])
+
+                           
+
+                           if config["DEFAULT"].getboolean("use-ansi-console"):
+                               SCREEN.update_overall(len(variants))
+                               SCREEN.update_process(worker_index, len(variants), len(job), suffix=f"name: {name}")
+                           
+                           # report new variant to the progress
+                           #print(f"{len(variants)}/{len(job)}")
                        except Exception as e:
-                           LOGGER.error(program_name, traceback.format_exc())
+                           LOGGER.error(program_name, traceback.format_exc(), )
                            raise e
                # call Souper and the linker again
             except Exception as e:
@@ -333,7 +385,7 @@ class Pipeline(object):
         bc = lltobc(std=ll1)
         self.processBitcode(bc, outResult, program_name,redisports, OUT_FOLDER, onlybc)
 
-    def processLevel(self, levels, program_name, port, bc, OUT_FOLDER, onlybc, meta, outResult):
+    def processLevel(self, levels, program_name, port, bc, OUT_FOLDER, onlybc, meta, outResult, worker_index):
 
         pool = ThreadPoolExecutor(
             max_workers=config["DEFAULT"].getint("workers"))
@@ -362,7 +414,7 @@ class Pipeline(object):
 
                 try:
                     
-                    serverThread = threading.Thread(target=listen, args=[socket_port, q, program_name])
+                    serverThread = threading.Thread(target=listen, args=[socket_port, q, program_name, worker_index, level])
                     serverThread.start()
 
                     bctocand(args=[TMP_BC.file], std=None)
@@ -436,6 +488,8 @@ def getFileMeta(file, outResult=None):
 def removeDuplicate(program_name, folder, filt=".wasm", remove=False):
 
     if not os.path.exists(f"{folder}"):
+
+
         return
 
 
@@ -480,7 +534,7 @@ def process(f, OUT_FOLDER, onlybc, program_name, redisports, isBc=False):
             LOGGER.warning(program_name, f"The number of generation workers is the maximum number of levels {LEVELS}. You set the maximum to {exploration_workers}, skipped.")
             exploration_workers = LEVELS
     if 1.0*exploration_timeout * LEVELS / exploration_workers >= total_timeout or exploration_timeout <= -1:
-        if total_timeout > 0:
+        if total_timeout > 0 and exploration_timeout > -1:
             LOGGER.error(program_name, f"The total timeout set {total_timeout}s must be larger than the whole (even parallel) generation stage, which is {1.0*exploration_timeout * LEVELS / exploration_workers}s, according to the number of threads and exploration timeout ")
             exit(1)
         else:
@@ -490,9 +544,6 @@ def process(f, OUT_FOLDER, onlybc, program_name, redisports, isBc=False):
                 LOGGER.warning(program_name, f"Sit and wait, there is no timeout")
     else:
         LOGGER.info(program_name, f"The total process will take a maximum time of {total_timeout}s")
-
-
-
 
     global launch
 
@@ -630,8 +681,6 @@ if __name__ == "__main__":
 
     if not os.path.exists("out"):
         os.mkdir("out")
-
-
 
     RUNTIME_CONFIG["USE_REDIS"] = True
 
