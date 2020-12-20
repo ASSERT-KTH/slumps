@@ -17,3 +17,5 @@ printf_core
 pop_arg
 long_double_not_supported
 dummy.1
+scanexp
+long_double_not_supported.1

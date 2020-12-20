@@ -4,8 +4,8 @@
   ],
   "pairs": [] ,
   "method": {
-    "name": "DTW",
-    "params": []
+    "name": "FastDTW",
+    "params": [100.0]
   },
   "outputAlignment": true,
   "exportImage": true,
