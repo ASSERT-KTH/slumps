@@ -85,7 +85,6 @@ export default class Main extends React.Component<MainProps, MainState> {
 												</Form.Item>
 				
 											</Col>
-
 										</Row>
 										<Row gutter={24}>
 											
