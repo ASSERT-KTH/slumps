@@ -30,8 +30,8 @@ OUT_FOLDER = config["DEFAULT"]["outfolder"]
 class ContentToTmpFile(object):
 
 
-    def __init__(self, content=None, name=None, ext=None, persist=False, LOG_LEVEL =  0):
-        tmp = createTmpFile(ext) if not name else name
+    def __init__(self, content=None, name=None, ext=None, persist=False, LOG_LEVEL =  0, outFolder=None):
+        tmp = createTmpFile(ext, outFolder) if not name else name
 
         tmp = ''.join([c for c in tmp])
 
@@ -124,8 +124,8 @@ def getIteratorByName(name: str):
     return getattr(iterators, name)
 
 
-def createTmpFile(ext=""):
-    r = "%s/CROW_TMP-%s%s" % (OUT_FOLDER, uuid.uuid4(), ext if ext else "")
+def createTmpFile(ext="", outFolder=None):
+    r = "%s/CROW_TMP-%s%s" % (OUT_FOLDER if outFolder is None else outFolder, uuid.uuid4(), ext if ext else "")
 
     return r
 
