@@ -100,6 +100,7 @@ scriptElement.setAttribute('src', chrome.runtime.getURL('/static/js/app.js'));
 scriptElement.async = false;   
 
 var script = document.createElement('script');
+script.async = false;
 script.innerText = `WRAPPER`;
 // @ts-ignore
 //script.setAttribute('src', chrome.runtime.getURL('/static/js/wrapper.js'));
@@ -110,10 +111,16 @@ metaScript.innerText = `function stats(){var script=document.createElement('scri
 // @ts-ignore
 chrome.runtime.getURL('/static')}"`;
 
+
+
+var script3 = document.createElement('script');
+script3.innerText = `WebAssembly.instantiate=null`;
+
 // @ts-ignore
 
 (document.head||document.documentElement).prepend(scriptElement);
 (document.head||document.documentElement).prepend(script);
 (document.head||document.documentElement).prepend(metaScript);
+//(document.head||document.documentElement).prepend(script3);
 //(document.head||document.documentElement).prepend(decoderScript);
 // TODO check for service workers
