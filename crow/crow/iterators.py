@@ -30,8 +30,16 @@ def keysSubset(S):
 
 
     print(SKIP)
-    for i in range(min(len(keys), config["DEFAULT"].getint("combination-min-limit")), 
-    min(config["DEFAULT"].getint("combination-max-limit"),len(keys) + 1)): ## minimun number of keys to apply at onceß
+    MIN_LIMIT=config["DEFAULT"].getint("combination-min-limit")
+    MAX_LIMIT=config["DEFAULT"].getint("combination-max-limit")
+
+    if MIN_LIMIT <= -1:
+        MIN_LIMIT = 1
+    if MAX_LIMIT <= -1:
+        MAX_LIMIT = len(keys) + 1
+
+    for i in range(min(len(keys), MIN_LIMIT), 
+    min(MAX_LIMIT,len(keys) + 1)): ## minimun number of keys to apply at onceß
         for v in itertools.combinations(keys, i): # for each applied combinations of keys get the product of values
             for p in itertools.product(*[S[k] for k in v]):
                 COUNT+=1

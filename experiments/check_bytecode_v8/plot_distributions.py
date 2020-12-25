@@ -17,13 +17,13 @@ SET_MIN=False
 
 def plot(files, keys, legends):
 
-	latexify(fig_width=4.4, fig_height=4.2, font_size=8, tick_size=8)
+	latexify(fig_width=4, fig_height=2, font_size=8, tick_size=8)
 	fig, ax = plt.subplots()
 	format_axes(ax, hide=['top', 'right'], show=['left', 'bottom'])
 
 	minY = 0
 	minX = 100000000000000
-	axins = zoomed_inset_axes(ax,100,loc='lower right', bbox_to_anchor=(0.8,0.3), bbox_transform=ax.transAxes)
+	axins = zoomed_inset_axes(ax,100,loc='lower right', bbox_to_anchor=(0.8,0.25), bbox_transform=ax.transAxes)
 
 	for i in range(len(files)):
 		f, k, l = files[i], keys[i], legends[i]
@@ -47,7 +47,7 @@ def plot(files, keys, legends):
 #		LIMIT=5
 #		format_axes(axins,hide=[], show=['left', 'bottom', 'top', 'right'])
 		LIMIT=5
-		axins.plot(hys1[1:(LIMIT + 1)], F1s1[:LIMIT], '-', linewidth=0.6)
+		axins.plot(hys1[1:(LIMIT + 1)], F1s1[:LIMIT], '-', linewidth=1)
 
 
 		#plt.draw()
@@ -67,7 +67,7 @@ def plot(files, keys, legends):
 	# draw a bbox of the region of the inset axes in the parent axes and
 	# connecting lines between the bbox and the inset axes area
 	mark_inset(ax, axins, loc1=2, loc2=3, ec='gray', linewidth=0.4)
-	ax.legend(bbox_to_anchor=(0.7, 1.15), loc='upper left', borderaxespad=0.)
+	ax.legend(bbox_to_anchor=(1,0,1,1), loc='upper left', borderaxespad=0.)
 	fmt = '%.2f%%' # Format you want the ticks, e.g. '40%'
 	yticks = mtick.FormatStrFormatter(fmt)
 	ax.set_xlabel('DTW distance')
