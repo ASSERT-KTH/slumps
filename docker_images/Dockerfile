@@ -41,10 +41,9 @@ COPY --from=builder /usr/src/souper/third_party/z3-build/z3 /slumps/souper/third
 # COPY --from=builder /usr/src/souper/third_party/klee /slumps/souper/third_party/klee
 
 COPY --from=builder /usr/src/souper/third_party/llvm-Release-install/lib /slumps/souper/third_party/llvm-Release-install/lib
-COPY --from=builder /usr/src/souper/third_party/llvm-Release-install/bin/clang /slumps/souper/third_party/llvm-Release-install/bin/clang
-COPY --from=builder /usr/src/souper/third_party/llvm-Release-install/bin/wasm-ld /slumps/souper/third_party/llvm-Release-install/bin/wasm-ld
-COPY --from=builder /usr/src/souper/third_party/llvm-Release-install/bin/opt /slumps/souper/third_party/llvm-Release-install/bin/opt
-COPY --from=builder /usr/src/souper/third_party/llvm-Release-install/bin/llvm-as /slumps/souper/third_party/llvm-Release-install/bin/llvm-as
+COPY --from=builder /usr/src/souper/third_party/llvm-Release-install/include /slumps/souper/third_party/llvm-Release-install/include
+COPY --from=builder /usr/src/souper/third_party/llvm-Release-install/share /slumps/souper/third_party/llvm-Release-install/share
+COPY --from=builder /usr/src/souper/third_party/llvm-Release-install/bin /slumps/souper/third_party/llvm-Release-install/bin
 
 COPY --from=builder /tmp/wasi-libc /tmp/wasi-libc
 
