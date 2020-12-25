@@ -74,6 +74,10 @@ argo submit -p program=https://raw.githubusercontent.com/KTH/slumps/master/bench
 ## Dashboard for kubernetes:
  - ```kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.0.0-beta8/aio/deploy/recommended.yaml ```
  - ```kubectl proxy``` To access the dashboard in localhost
+ - Create token
+  - ```kubectl create serviceaccount dashboard-admin-sa```
+  - ```kubectl create clusterrolebinding dashboard-admin-sa --clusterrole=cluster-admin --serviceaccount=default:dashboard-admin-sa```
+  - ```kubectl  get secret```
  - ```az aks get-credentials --admin -g tcs -n slumps-WASI``` To be able of monitoring the kubernetes cluster
 
 
@@ -83,7 +87,7 @@ argo submit -p program=https://raw.githubusercontent.com/KTH/slumps/master/bench
 
 ## Useful scripts:
 
-- get kubernetes token ```kubectl -n kubernetes-dashboard describe secret $(kubectl -n kubernetes-dashboard get secret | grep admin-user | grep token | awk '{print $1}')```
+- get kubernetes token ```kubectl describe secret $(kubectl get secret | grep admin-sa | grep token | awk '{print $1}') | grep token:```
 - List and copy speciic files ```find . -name \*.wasm -exec cp {} <directory> \;```
 - Create execytion pattern ```find . -name \*.wasm -exec echo mill cli.run  \$pw/{}  \;```
 - Extract all tgz from folder ```find . -type f -name "*.tgz" -exec tar -xf {}  \;```
