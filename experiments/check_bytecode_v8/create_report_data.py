@@ -20,7 +20,7 @@ for f in os.listdir(ALIGNMENT_FOLDER):
 	programs.add(program_name)
 CHECK_FOR_ZERO_BYTECODE=False
 SAVE_IN_DB=False
-DO_PLOTS=False
+DO_PLOTS=True
 
 FILTER = [
 

@@ -27,7 +27,7 @@ class ANSISCreen(object):
 
 	def __init__(self):
 		self.MARGIN_BOTTOM = 2
-		self.MAX_LOGS = 10
+		self.MAX_LOGS = 5
 		self.overallTotal = 1
 		self.total_progress = 0
 		self.log = []
