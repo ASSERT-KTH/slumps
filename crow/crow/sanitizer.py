@@ -7,7 +7,7 @@ class Sanitizer(object):
 	INVALID_WASM = ['fshl', 'freeze']
 
 	def __init__(self, sanitize_redundant = True, sanitize_no_wasm = True, report_overlapping = True, 
-	remove_negation_pattern = True, remove_idempotent_operations=True):
+	remove_negation_pattern = False, remove_idempotent_operations=False):
 
 		self.sanitize_redundant = sanitize_redundant
 		self.sanitize_no_wasm = sanitize_no_wasm

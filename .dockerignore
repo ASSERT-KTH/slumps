@@ -16,3 +16,9 @@ utils
 vulnerable_programs
 wabt
 wasm-fuzzer
+wakoko_instrumentor
+wakoko_extension
+superoptimizer
+articles
+crow_out
+logs

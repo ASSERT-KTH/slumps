@@ -1,4 +1,4 @@
-FROM jacarte/slumps:backend AS builder
+FROM slumps/backend:latest AS builder
 env DEBIAN_FRONTEND=noninteractive
 
 
