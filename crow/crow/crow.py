@@ -5,7 +5,7 @@ import sys,traceback
 from settings import config
 from stages import CToLLStage, LLToBC, BCToSouper, ObjtoWASM, WASM2WAT, BCCountCandidates, TimeoutException
 from utils import printProgressBar, createTmpFile, getIteratorByName, \
-    ContentToTmpFile, BreakException, RUNTIME_CONFIG, updatesettings
+    ContentToTmpFile, BreakException, RUNTIME_CONFIG, updatesettings, NOW
 
 from logger import LOGGER, getlogfilename
 import threading, queue
@@ -25,6 +25,7 @@ from sanitizer import Sanitizer
 from ansi_ui import SCREEN
 import operator
 from functools import reduce
+from event_manager import Publisher
 
 levelPool = None
 generationPool = None
@@ -440,8 +441,13 @@ class Pipeline(object):
                 results[level][k].append(v)
         return results   
     
-    def generateWasm(self, namespace, bc, OUT_FOLDER, fileName, debug=True, generateOnlyBc=False):
+    def generateWasm(self, namespace, bc, OUT_FOLDER, fileName, debug=True, generateOnlyBc=False, publishGeneration= True):
         llFileName = "%s/%s" % (OUT_FOLDER, fileName)
+        
+        publisher = None
+
+        if publishGeneration:
+            publisher = Publisher()
 
         with ContentToTmpFile(name="%s.bc" % llFileName, content=bc, ext=".bc", persist=True) as TMP_WASM:
 
@@ -462,6 +468,13 @@ class Pipeline(object):
                         )
                     finalStream = open("%s.wasm" % (llFileName,), 'rb').read()
                     hashvalue = hashlib.sha256(finalStream)
+
+                    if publisher:
+                        publisher.publish(config["event"]["process-id-generation"], dict(
+							event_type="NEW VARIANT",
+							hash=hashvalue.hexdigest(),
+							time=time.time() - NOW
+						))
 
                     if debug:
                         LOGGER.warning(namespace, "%s: WASM SIZE %s" %

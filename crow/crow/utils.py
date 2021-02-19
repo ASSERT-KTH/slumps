@@ -20,8 +20,10 @@ import json
 import threading
 import re
 import traceback
+import time
 
 
+NOW = time.time()
 BASE_DIR = os.path.dirname(__file__)
 RUNTIME_CONFIG = dict(USE_REDIS=False)
 
