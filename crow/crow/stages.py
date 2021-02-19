@@ -21,7 +21,7 @@ class TimeoutException(Exception):
 
 class ExternalStage(object):
 
-    DEBUG_LEVEL = 1
+    DEBUG_LEVEL = 2
 
     def __init__(self, namespace):
         self.name = "unknown"
@@ -57,9 +57,10 @@ class ExternalStage(object):
             LOGGER.info(self.namespace, " ".join([self.path_to_executable] + args))
 
         rc = p.returncode
+        if self.DEBUG_LEVEL > 1:
+            LOGGER.error(self.namespace, "%s %s %s" % (err.decode( errors="ignore"), rc, std.decode( errors="ignore")))
 
         if rc != 0:
-            LOGGER.error(self.namespace, "%s %s %s" % (err.decode("utf-8"), rc, std.decode("utf-8")))
 
             if rc == 124:
                 raise TimeoutException()
