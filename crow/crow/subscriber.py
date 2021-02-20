@@ -1,7 +1,7 @@
 import pika
 import sys
 from settings import config
-from logger import LOGGER, getlogfilename
+from crow.monitor.logger import LOGGER
 import json
 import base64
 import traceback
@@ -9,9 +9,8 @@ import hashlib
 import redis
 import re
 
-from stages import CToLLStage, LLToBC, BCToSouper, ObjtoWASM, WASM2WAT, BCCountCandidates, TimeoutException
-from utils import printProgressBar, createTmpFile, getIteratorByName, \
-	ContentToTmpFile, BreakException, RUNTIME_CONFIG, updatesettings
+from stages import BCToSouper, ObjtoWASM, WASM2WAT
+from utils import ContentToTmpFile, updatesettings
 
 class Subscriber:
 	def __init__(self, id, queueName, bindingKey, port):

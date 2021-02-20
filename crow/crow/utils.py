@@ -4,23 +4,13 @@ import os
 
 import uuid
 import sys
-from subprocess import check_output
-from subprocess import Popen, PIPE
 from crow.settings import config, reload
 
-import crow.iterators
-
-from crow.logger import LOGGER
-import smtplib
-from email.mime.multipart import MIMEMultipart
-from email.mime.text import MIMEText
-from email.mime.base import MIMEBase
-from email import encoders
-import json
-import threading
+from crow.monitor.logger import LOGGER
 import re
 import traceback
 import time
+from crow import iterators
 
 
 NOW = time.time()

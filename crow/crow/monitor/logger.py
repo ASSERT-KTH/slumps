@@ -1,43 +1,135 @@
+# -*- coding: utf-8 -*-
 
-from crow.commands.stages import CToLLStage
-from crow.events import C2LL_MESSAGE, LOG_MESSAGE
-from crow.logger import ERROR
-from crow.events.event_manager import Subscriber, subscriber_function, Publisher
-import sys, traceback
 from crow.settings import config
-from crow.monitor import MONITOR_QUEUE_NAME
-import json
+import os, sys
+from crow.ansi_ui import SCREEN
+from crow.events.event_manager import Publisher, Subscriber, subscriber_function
+from crow.events import LOG_MESSAGE
+from crow.monitor import LOGGING_QUEUE_NAME
 
-def log_system_exception():
+ERROR="ERROR"
+WARNING="WARNING"
+INFO="INFO"
+SUCCESS="SUCCESS"
+DEBUG="DEBUG"
 
-    def Inner(func):
 
-        def wrapper(*args, **kwargs):
+class bcolors:
+    HEADER = '\033[95m'
+    OKBLUE = '\033[94m'
+    OKGREEN = '\033[92m'
+    WARNING = '\u001b[36;1m'
+    FAIL = '\033[91m'
+    ENDC = '\033[0m'
+    BOLD = '\033[1m'
+    UNDERLINE = '\033[4m'
 
-            try:
-                r = func(*args, **kwargs)
-                return r
-            except Exception as e:
-                trace = traceback.format_exc()
-                p = Publisher()
+def log(severity, message):
 
-                p.publish(message=dict(
-                    event_type=LOG_MESSAGE,
-                    exception=f"{e} {trace}",
-                    severity=ERROR
-                ),
-                routing_key="")
+    if severity == ERROR:
+        print("%s%s%s" % (bcolors.FAIL, message, bcolors.ENDC))
+    elif severity == WARNING:
+        print("%s%s%s" % (bcolors.WARNING, message, bcolors.ENDC))
+    elif severity == INFO:
+        print("%s%s%s" % (bcolors.OKBLUE, message, bcolors.ENDC))
+    elif severity == SUCCESS:
+        print("%s%s%s" % (bcolors.OKGREEN,message, bcolors.ENDC))
+    else:
+        print("%s%s%s" % (bcolors.BOLD, message, bcolors.ENDC))
 
-        return wrapper
+class Logger(object):
 
-    return Inner
 
-@subscriber_function(event_type="*")
+    def __init__(self):
+        self.indent = 0
+        self.disabled = False
+        self.p = Publisher()
+        self.DEBUG = 2
+
+    def disable(self):
+        self.disabled = True
+
+    def enable(self):
+        self.disabled = False
+
+
+    def debug(self, file, message, std=None):
+        if self.DEBUG > 3:
+            log(SUCCESS, message)
+
+        self.p.publish(message=dict(
+            event_type=LOG_MESSAGE,
+            message=message,
+            severity=DEBUG,
+            program=file
+        ),
+            routing_key="")
+
+    def error(self,file,  message):
+        if self.DEBUG > 1:
+            log(SUCCESS, message)
+
+        self.p.publish(message=dict(
+            event_type=LOG_MESSAGE,
+            message=message,
+            severity=ERROR,
+            program=file
+        ),
+            routing_key="")
+
+
+    def warning(self,file, message):
+        if self.DEBUG > 1:
+            log(SUCCESS, message)
+
+        self.p.publish(message=dict(
+            event_type=LOG_MESSAGE,
+            message=message,
+            severity=WARNING,
+            program=file
+        ),
+            routing_key="")
+
+
+    def info(self,file,  message):
+        if self.DEBUG > 0:
+            log(SUCCESS, message)
+
+        self.p.publish(message=dict(
+            event_type=LOG_MESSAGE,
+            message=message,
+            severity=INFO,
+            program=file
+        ),
+            routing_key="")
+
+
+    def success(self,file,  message):
+
+        if self.DEBUG > 0:
+            log(SUCCESS, message)
+
+        self.p.publish(message=dict(
+            event_type=LOG_MESSAGE,
+            message=message,
+            severity=SUCCESS,
+            program=file
+        ),
+            routing_key="")
+
+
+
+LOGGER = Logger()  # Output debug calls to debug.slumps.log file
+
+
+@subscriber_function(event_type=LOG_MESSAGE)
 def general_log(data):
-    print(data)
+    k = "exception" if "exception" in data else "message"
+    log(data["severity"], data[k])
+
+
 
 if __name__ == "__main__":
 
-    key = config["event"]["process-id-exploration"]
-    subscriber = Subscriber(1, MONITOR_QUEUE_NAME, key, config["event"].getint("port"), general_log)
+    subscriber = Subscriber(1, LOGGING_QUEUE_NAME, "*", config["event"].getint("port"), general_log)
     subscriber.setup()

@@ -1,14 +1,13 @@
 
 from crow.commands.stages import CToLLStage
-from crow.events import LOG_MESSAGE, C2LL_MESSAGE, LL2BC_MESSAGE, STORE_MESSAGE, LL_QUEUE
-from crow.events.event_manager import Publisher, subscriber_function, Subscriber
-from crow.logger import ERROR
+from crow.events import LOG_MESSAGE, LL2BC_MESSAGE, STORE_MESSAGE
+from crow.events.event_manager import Publisher
+from crow.monitor.logger import ERROR
 
 import sys
-from crow.utils import printProgressBar, createTmpFile, getIteratorByName, \
-    ContentToTmpFile, BreakException, RUNTIME_CONFIG, updatesettings, NOW
 
-from crow.monitor.logger import log_system_exception
+from crow.monitor.monitor import log_system_exception
+from crow.settings import config
 
 @log_system_exception()
 def c2ll(file):
@@ -35,12 +34,13 @@ def c2ll(file):
         program_name=program_name,
     ), routing_key="")
 
-    publisher.publish(message=dict(
-        event_type=STORE_MESSAGE,
-        stream=ll1,
-        program_name=f"{program_name}",
-        file_name=f"{program_name}.ll"
-    ), routing_key="")
+    if config["DEFAULT"].getboolean("keep-ll-files"):
+        publisher.publish(message=dict(
+            event_type=STORE_MESSAGE,
+            stream=ll1,
+            program_name=f"{program_name}",
+            file_name=f"{program_name}.ll"
+        ), routing_key="")
 
 
 if __name__ == "__main__":
