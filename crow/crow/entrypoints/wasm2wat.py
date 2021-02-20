@@ -1,16 +1,14 @@
 
 from crow.commands.stages import WASM2WAT
-from crow.events import LOG_MESSAGE, C2LL_MESSAGE, LL2BC_MESSAGE, BC2Candidates_MESSAGE, BC2WASM_MESSAGE, STORE_MESSAGE, WASM2WAT_MESSAGE, WAT_QUEUE
+from crow.events import STORE_MESSAGE, WASM2WAT_MESSAGE, WAT_QUEUE
 from crow.events.event_manager import Publisher, Subscriber, subscriber_function
-from crow.logger import ERROR
 from crow.settings import config
 
 import sys
-from crow.utils import printProgressBar, createTmpFile, getIteratorByName, \
-    ContentToTmpFile, BreakException, RUNTIME_CONFIG, updatesettings, NOW
+from crow.utils import ContentToTmpFile
 
 import os
-from crow.monitor.logger import log_system_exception
+from crow.monitor.monitor import log_system_exception
 
 @log_system_exception()
 def wasm2wat(wasm, program_name, file_name = None):
@@ -28,13 +26,14 @@ def wasm2wat(wasm, program_name, file_name = None):
             "%s.wat" % (file_name,)]
         , std=None)
 
-        # Explicitly saving wasm file
-        publisher.publish(message=dict(
-            event_type=STORE_MESSAGE,
-            stream=open(f"{file_name}.wat", 'rb').read(),
-            program_name=f"{program_name}",
-            file_name=f"{file_name}.wat"
-        ), routing_key="")
+        if  config["DEFAULT"].getboolean("keep-wat-files"):
+            # Explicitly saving wasm file
+            publisher.publish(message=dict(
+                event_type=STORE_MESSAGE,
+                stream=open(f"{file_name}.wat", 'rb').read(),
+                program_name=f"{program_name}",
+                file_name=f"{file_name}.wat"
+            ), routing_key="")
 
         os.remove("%s.wat" % (file_name,))
 

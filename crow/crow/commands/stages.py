@@ -1,14 +1,10 @@
 # -*- coding: utf-8 -*-
 
-from subprocess import Popen, PIPE, check_output, STDOUT
-import subprocess
+from subprocess import Popen, PIPE
 from crow.settings import config
-from crow.utils import  Alias, createTmpFile, RUNTIME_CONFIG,processCandidatesMetaOutput
-from crow.logger import LOGGER
-import re
+from crow.utils import  Alias, RUNTIME_CONFIG
+from crow.monitor.logger import LOGGER
 import time
-from io import StringIO
-import sys, os
 
 
 class CallException(Exception):
@@ -21,7 +17,7 @@ class TimeoutException(Exception):
 
 class ExternalStage(object):
 
-    DEBUG_LEVEL = 2
+    DEBUG_LEVEL = 1
 
     def __init__(self, namespace):
         self.name = "unknown"
@@ -73,7 +69,7 @@ class ExternalStage(object):
         if self.debug and self.DEBUG_LEVEL > 0:
             LOGGER.debug(self.namespace, "============================= Command -> %s\n\n" % (self.name,), res)
 
-            if err:
+            if err and self.DEBUG_LEVEL > 1:
                 LOGGER.debug(self.namespace, "stderr \n\n %s \n\n" % (err.decode("utf-8"),))
 
 
@@ -153,7 +149,7 @@ class BCMem2Reg(ExternalStage):
 
 class BCCountCandidates(ExternalStage):
 
-    def __init__(self, namespace, level=1, souper_workers=4, timeout=-1, socket_port = 5678):
+    def __init__(self, namespace, level=1, souper_workers=4, timeout=-1, socket_port = 5678, socket_host="127.0.0.1"):
         self.path_to_executable = Alias.opt
         self.name = "LLVM BC to Souper IR candidates"
         self.debug = True
@@ -162,6 +158,7 @@ class BCCountCandidates(ExternalStage):
         self.souper_workers = souper_workers
         self.timeout = timeout
         self.socket_port = socket_port
+        self.socket_host = socket_host
 
         self.namespace = namespace
 
@@ -170,8 +167,8 @@ class BCCountCandidates(ExternalStage):
 
         
 
-        if RUNTIME_CONFIG["USE_REDIS"]:
-            extra_commands += " --souper-crow-port=%s --souper-crow-workers=%s"%(self.socket_port, self.souper_workers, )
+        #if RUNTIME_CONFIG["USE_REDIS"]:
+        extra_commands += " --souper-crow-port=%s --souper-crow-workers=%s --souper-crow-host=%s "%(self.socket_port, self.souper_workers, self.socket_host )
 
         new_inputs = (config["souper"]["list-candidates"] % (
         config["souper"]["souper-level-%s" % self.level], extra_commands)).split(" ")
