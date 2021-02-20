@@ -3,7 +3,7 @@
 ## Folder content
 
 - `crow_over_rosetta.csv`: CSV file with the names  of the prorams, the program identifier, identified code blocks, number of variable inferred code blocks, number of unique variants (following sha256 over the binaries), and the number of generated variants.
-- `crow.7z`: MongoDB database that contains the analysis for the CROW diversified programs. The database is conformed by 3 main collections: *variants*, *wasms* and *alignments*: 
+- `crow.7z`: MongoDB database that contains the analysis for the CROW diversified programs. The database is conformed by 3 main collections: *variants*, *wasms* and *alignments*. Uncompress twice to ge the correct bson file. Run `mongorestore --collection <c> -d crow3 <uncompressed file>`: 
 
 	- The *variants* collection contains for every program from the Rosetta corpus, the number of generated variants, the references to the generated **Wasms** in the *wasms* collection, the references to *alignments* collection and the static alignment heatmap for the pairwise comparison between the program variants in both representations, **Wasm** and **x86 machine code**. 
 

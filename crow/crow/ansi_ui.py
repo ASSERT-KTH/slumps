@@ -1,7 +1,7 @@
 import sys
 
 import os
-from settings import config
+from crow.settings import config
 
 
 def printProgressBar(iteration, total, prefix='', suffix='', decimals=1, length=40, fill='█'):

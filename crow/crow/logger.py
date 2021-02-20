@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
 
-from settings import config
+from crow.settings import config
 import os, sys
-from ansi_ui import SCREEN
+from crow.ansi_ui import SCREEN
 
+ERROR="ERROR"
 
 def getlogfilename(program_name):
 

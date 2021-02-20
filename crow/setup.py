@@ -11,7 +11,6 @@ setuptools.setup(
     long_description_content_type="text/markdown",
     url="https://github.com/KTH/slumps/blob/master/crow/slumps.py",
     packages=setuptools.find_packages(),
-	
     classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: MIT License",
