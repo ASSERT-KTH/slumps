@@ -208,60 +208,6 @@ def bcexploration(bc, program_name):
 
     LOGGER.info(program_name, f"All variants are in the queue ({time.time() - start_at:.2f}s)")
 
-    #    # print(size, iteratorFunction)
-    #    if size == 0:
-    #        continue
-
-    #   job = generationPool.submit(self.generateVariantsPerSubsetSize,
-    #                                iteratorFunction, program_name, merging,
-    #                                redisports[generationcount % len(redisports)],
-    #                                bc, OUT_FOLDER, onlybc, meta, outResult
-    #                                )
-
-    #    futures.append(job)
-
-    #    if generationcount % len(redisports) == 0:
-            ## WAIT for it
-
-    #        LOGGER.info(program_name, f"Executing parallel generation job...")
-    #        done, fail = wait(futures, timeout=config["DEFAULT"].getint("generation-timeout"))
-            # generationEndTime = time.time_ns() - generationStartTime
-
-    #        futures = []
-    #        WORKER_INDEX = 0
-    #        LOGGER.info(program_name, f"Disposing job...{len(done)} {len(fail)}")
-
-    #        for f in done:
-     #           variants += f.result(timeout=config["DEFAULT"].getint("generation-timeout"))
-     #   else:
-     #       generationcount += 1
-            # variants += f.result(timeout=config["DEFAULT"].getint("generation-timeout"))
-            # failed  += len(fail)
-    #done, fail = wait(futures)
-    #futures = []
-    # LOGGER.info(program_name,f"Disposing job...{len(done)} {len(fail)}")
-    # generationcount += len(done) + len(fail)
-
-    #for f in done:
-    #    # print(f)
-    #    variants += f.result()
-        # Save metadata
-
-    '''
-    LOGGER.info(program_name, f"Saving metadata...")
-    variantsFile = open(f"{OUT_FOLDER}/{program_name}.variants.json", 'w')
-    variantsFile.write(json.dumps({
-        "variants": variants,
-        "unique": len(set([v[0] for v in variants])),
-        "total": len([v[0] for v in variants])
-    }, indent=4))
-    variantsFile.close()
-
-except BreakException:
-    pass'''
-
-#return dict(programs=meta, count=len(meta.keys()))
-
 
 @log_system_exception()
 @subscriber_function(event_type=BC2Candidates_MESSAGE)
