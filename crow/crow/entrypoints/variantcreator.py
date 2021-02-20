@@ -30,6 +30,8 @@ levelPool = None
 publisher = Publisher()
 
 r = None
+port = None
+
 
 def generateVariant(j, program_name, merging, bc):
 
@@ -67,7 +69,7 @@ def generateVariant(j, program_name, merging, bc):
                     r.hset(k, "result", ("result %%%s\n" % (rer.search(kl).group(1),)).encode("utf-8"))
                 LOGGER.info(program_name, f"Replacing redundant key-value pair...")
 
-        LOGGER.info(program_name, f"Preparing new variant generation...")
+        LOGGER.info(program_name, f"Preparing new variant generation...{name}")
 
         with ContentToTmpFile(content=bc, LOG_LEVEL=2) as BCIN:
             tmpIn = BCIN.file
@@ -111,12 +113,11 @@ def generateVariant(j, program_name, merging, bc):
         LOGGER.error(program_name, traceback.format_exc())
     finally:
 
-        LOGGER.info(program_name, "Cleaning cache from variant generation...")
+        LOGGER.info(program_name, "Cleaning cache from generation...")
 
         result = r.flushdb()
         LOGGER.success(
-            program_name, f"Flushing redis DB: result({result})")
-        r.close()
+            program_name, f"Final flushing: result({result})")
     return variants
 
 REDIS_PORT=9090
