@@ -2,7 +2,6 @@
 
 from crow.settings import config
 import os, sys
-from crow.ansi_ui import SCREEN
 from crow.events.event_manager import Publisher, Subscriber, subscriber_function
 from crow.events import LOG_MESSAGE
 from crow.monitor import LOGGING_QUEUE_NAME
