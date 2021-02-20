@@ -2,7 +2,7 @@
 
 import itertools
 import collections
-from settings import config
+from crow.settings import config
 
 def keysSubset(S):
 
@@ -59,11 +59,11 @@ def keysSubsetIterators(S):
 
 
     for i in range(len(keys) + 1): ## minimun number of keys to apply at onceß
-        for v in itertools.combinations(keys, i): # for each applied combinations of keys get the product of values
-            def ite():
+        def ite():
+            for v in itertools.combinations(keys, i): # for each applied combinations of keys get the product of values
                 for p in itertools.product(*[S[k] for k in v]):
                     yield dict(zip(v, p))
-            yield ite
+        yield ite, i
 def subset(S):
     def subsetAux(S, m):
         if m == len(S):
@@ -97,10 +97,11 @@ if __name__ == "__main__":
     #}):
     #    print(k)
 
-    for k in keysSubsetIterators({
+    for k, i in keysSubsetIterators({
         "a": ['a0', 'a1', 'a2123123123'],
         "b": ['b1', 'b2'],
         "c": ['c1','c2']
     }):
+        print(i)
         for s in k():
             print(s)
