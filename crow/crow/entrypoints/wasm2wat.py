@@ -1,6 +1,6 @@
 
 from crow.commands.stages import WASM2WAT
-from crow.events import LOG_MESSAGE, C2LL_MESSAGE, LL2BC_MESSAGE, BC2Candidates_MESSAGE, BC2WASM_MESSAGE, STORE_MESSAGE, WASM2WAT_MESSAGE
+from crow.events import LOG_MESSAGE, C2LL_MESSAGE, LL2BC_MESSAGE, BC2Candidates_MESSAGE, BC2WASM_MESSAGE, STORE_MESSAGE, WASM2WAT_MESSAGE, WAT_QUEUE
 from crow.events.event_manager import Publisher, Subscriber, subscriber_function
 from crow.logger import ERROR
 from crow.settings import config
@@ -9,34 +9,39 @@ import sys
 from crow.utils import printProgressBar, createTmpFile, getIteratorByName, \
     ContentToTmpFile, BreakException, RUNTIME_CONFIG, updatesettings, NOW
 
+import os
 from crow.monitor.logger import log_system_exception
 
 @log_system_exception()
-def wasm2wat(wasm, program_name):
+def wasm2wat(wasm, program_name, file_name = None):
 
     publisher = Publisher()
 
-    with ContentToTmpFile(name="%s.wasm" % program_name, content=wasm, ext=".wasm", persist=False) as TMP_WASM:
+    file_name = program_name if file_name is None else file_name
+    print(file_name)
+
+    with ContentToTmpFile(name="%s.wasm" % file_name, content=wasm, ext=".wasm", persist=False) as TMP_WASM:
 
         finalObjCreator = WASM2WAT(program_name, debug=True)
         finalObjCreator(args=[
-            "%s.wasm" % (program_name,),
-            "%s.wat" % (program_name,)]
+            "%s.wasm" % (file_name,),
+            "%s.wat" % (file_name,)]
         , std=None)
 
         # Explicitly saving wasm file
         publisher.publish(message=dict(
             event_type=STORE_MESSAGE,
-            stream=open(f"{program_name}.wat", 'rb').read(),
+            stream=open(f"{file_name}.wat", 'rb').read(),
             program_name=f"{program_name}",
-            file_name=f"{program_name}.wat"
+            file_name=f"{file_name}.wat"
         ), routing_key="")
 
+        os.remove("%s.wat" % (file_name,))
 
 @log_system_exception()
-@subscriber_function(event_type=BC2WASM_MESSAGE)
+@subscriber_function(event_type=WASM2WAT_MESSAGE)
 def subscriber(data):
-    wasm2wat(data["stream"], data["program_name"])
+    wasm2wat(data["stream"], data["program_name"], data["file_name"] if "file_name" in data else None)
 
 
 if __name__ == "__main__":
@@ -45,8 +50,7 @@ if __name__ == "__main__":
     #f = sys.argv[-1]
 
     if len(sys.argv) == 1:
-        key = config["event"]["process-id-exploration"]
-        subscriber = Subscriber(1, config["event"]["queue-name"], key, config["event"].getint("port"), subscriber)
+        subscriber = Subscriber(1, WAT_QUEUE, "*", config["event"].getint("port"), subscriber)
         subscriber.setup()
         # Start a subscriber listening for LL2BC message
     else:
