@@ -1,6 +1,5 @@
 import pika
 from settings import config
-from logger import LOGGER, getlogfilename
 import sys
 import json
 import base64

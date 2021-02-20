@@ -15,7 +15,7 @@ COPY crow/settings/config.ini /slumps/crow/settings/config.ini
 COPY crow/settings/__init__.py /slumps/crow/settings/__init__.py
 COPY crow/crow.py /slumps/crow/crow.py
 COPY crow/iterators.py /slumps/crow/iterators.py
-COPY crow/logger.py /slumps/crow/logger.py
+COPY crow/monitor/logger.py /slumps/crow/logger.py
 COPY crow/stages.py /slumps/crow/stages.py
 COPY crow/utils.py /slumps/crow/utils.py
 COPY requirements.txt /slumps/crow/requirements.txt

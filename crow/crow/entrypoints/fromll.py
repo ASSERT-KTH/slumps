@@ -1,15 +1,12 @@
 
 from crow.commands.stages import LLToBC
-from crow.events import LOG_MESSAGE, C2LL_MESSAGE, LL2BC_MESSAGE, BC2Candidates_MESSAGE, BC2WASM_MESSAGE, STORE_MESSAGE, LL_QUEUE, BC_TRANSFORMATION_QUEUE,STORE_KEY, WASM_QUEUE
+from crow.events import LL2BC_MESSAGE, BC2Candidates_MESSAGE, BC2WASM_MESSAGE, STORE_MESSAGE, LL_QUEUE
 from crow.events.event_manager import Publisher, Subscriber, subscriber_function
-from crow.logger import ERROR
 from crow.settings import config
 
 import sys
-from crow.utils import printProgressBar, createTmpFile, getIteratorByName, \
-    ContentToTmpFile, BreakException, RUNTIME_CONFIG, updatesettings, NOW
 
-from crow.monitor.logger import log_system_exception
+from crow.monitor.monitor import log_system_exception
 
 @log_system_exception()
 def ll2bc(ll1, program_name):
@@ -27,14 +24,16 @@ def ll2bc(ll1, program_name):
     ), routing_key="")
 
     # Explicitly saving bitcode file
-    publisher.publish(message=dict(
-        event_type=STORE_MESSAGE,
-        stream=bc,
-        program_name=f"{program_name}",
-        file_name=f"{program_name}.bc"
-    ), routing_key="")
 
-    if not config["DEFAULT"].getboolean("generate-bc-only"):
+    if config["DEFAULT"].getboolean("keep-bc-files"):
+        publisher.publish(message=dict(
+            event_type=STORE_MESSAGE,
+            stream=bc,
+            program_name=f"{program_name}",
+            file_name=f"{program_name}.bc"
+        ), routing_key="")
+
+    if not config["DEFAULT"].getboolean("generate-bc-only") and config["DEFAULT"].getboolean("keep-wasm-files"):
         # Call for original program Wasm creation
         publisher.publish(message=dict(
             event_type=BC2WASM_MESSAGE,
