@@ -1,5 +1,6 @@
-from crow.events import BC2Candidates_MESSAGE, BC_EXPLORATION_QUEUE, STORE_MESSAGE,BC2WASM_MESSAGE, GENERATION_QUEUE, \
-    GENERATE_VARIANT_MESSAGE
+from crow.events import BC2Candidates_MESSAGE, BC_EXPLORATION_QUEUE, STORE_MESSAGE,BC2WASM_MESSAGE, \
+    GENERATION_QUEUE,GENERATE_VARIANT_MESSAGE, GENERATED_WASM_VARIANT, GENERATED_BC_VARIANT
+
 from crow.events.event_manager import Subscriber, subscriber_function, Publisher
 from crow.sanitizer import Sanitizer
 from crow.settings import config
@@ -96,6 +97,13 @@ def generateVariant(j, program_name, merging, bc):
                             file_name=f"{program_name}{sanitized_set_name}.bc"
                         ), routing_key="")
 
+                        publisher.publish(message=dict(
+                            event_type=GENERATED_BC_VARIANT,
+                            bc=bsOpt,
+                            program_name=f"{program_name}",
+                            file_name=f"{program_name}{sanitized_set_name}.bc"
+                        ), routing_key="")
+
                     # Launching task create wasm
                     if config["DEFAULT"].getboolean("keep-wasm-files"):
                         publisher.publish(message=dict(
@@ -104,6 +112,7 @@ def generateVariant(j, program_name, merging, bc):
                             program_name=f"{program_name}",
                             file_name=f"{program_name}{sanitized_set_name}.bc"
                         ), routing_key="")
+
 
                 except Exception as e:
                     LOGGER.error(program_name, traceback.format_exc(), )
