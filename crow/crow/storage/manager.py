@@ -1,5 +1,5 @@
-from crow.events import STORE_MESSAGE, GENERATED_VARIANT
-from crow.events.event_manager import Subscriber, subscriber_function
+from crow.events import STORE_MESSAGE
+from crow.events.event_manager import Subscriber, subscriber_function, Publisher
 from crow.settings import config
 
 from crow.monitor.monitor import log_system_exception
@@ -16,6 +16,8 @@ TOTAL = {
 
 }
 
+publisher = Publisher()
+
 @log_system_exception()
 @subscriber_function(event_type=STORE_MESSAGE)
 def subscriber(data):
@@ -29,6 +31,7 @@ def subscriber(data):
     hashvalue = hashlib.sha256(data["stream"]).hexdigest()
     ext = data["file_name"].split(".")[-1]
 
+
     if hashvalue in ALL_GENERATIONS and config["DEFAULT"].getboolean("remove-duplicates"):
         # skip
         if ext not in TOTAL:
@@ -36,6 +39,7 @@ def subscriber(data):
 
         TOTAL[ext] += 1
         return
+
 
     LOGGER.warning(data["program_name"], f"New variant {data['file_name']}")
 

@@ -1,6 +1,6 @@
 
 from crow.commands.stages import ObjtoWASM
-from crow.events import BC2WASM_MESSAGE, STORE_MESSAGE, WASM_QUEUE, WASM2WAT_MESSAGE
+from crow.events import BC2WASM_MESSAGE, STORE_MESSAGE, WASM_QUEUE, WASM2WAT_MESSAGE, GENERATED_WASM_VARIANT
 from crow.events.event_manager import Publisher, Subscriber, subscriber_function
 from crow.settings import config
 
@@ -29,10 +29,18 @@ def bc2wasm(bc, program_name, file_name=None):
                 tmpWasm
             ], std=None)
 
+            st = open(f"{file_name}.wasm", 'rb').read()
             # Explicitly saving wasm file
             publisher.publish(message=dict(
                 event_type=STORE_MESSAGE,
-                stream=open(f"{file_name}.wasm", 'rb').read(),
+                stream=st,
+                program_name=program_name,
+                file_name=f"{file_name}.wasm"
+            ), routing_key="")
+
+            publisher.publish(message=dict(
+                event_type=GENERATED_WASM_VARIANT,
+                stream=st,
                 program_name=program_name,
                 file_name=f"{file_name}.wasm"
             ), routing_key="")
