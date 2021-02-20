@@ -180,7 +180,7 @@ class Pipeline(object):
             #for k in merging.keys():
             #LOGGER.info(program_name,f"Generating jobs for {len(redisports)} REDIS instances...")
 
-            generationcount = 0
+            generationcount = 1
             futures = []
             variants = []
             failed = 0
@@ -199,32 +199,25 @@ class Pipeline(object):
                 
             time.sleep(2)
 
-            for subset in getIteratorByName("keysSubset")(merging):
-                #print(len(subset))
-                CURRENT_JOB.append(subset)
-
-                if len(CURRENT_JOB) == config["DEFAULT"].getint("subset-per-job"):
-
-
-                    job = generationPool.submit(
-                        self.generateVariant, CURRENT_JOB, program_name, merging, redisports[generationcount
-                        %len(redisports)], bc, OUT_FOLDER, onlybc, meta, outResult, generationcount, tentativeNumber, WORKER_INDEX)
-                    WORKER_INDEX += 1
-                    CURRENT_JOB = []
-                    # job.result()
-
-                    futures.append(job)
-                    generationcount += 1
-                else:
+            for iteratorFunction, size in getIteratorByName("keysSubsetIterators")(merging):
+                #print(size, iteratorFunction)
+                if size == 0:
                     continue
                 
+                job = generationPool.submit(self.generateVariantsPerSubsetSize, 
+                    iteratorFunction, program_name, merging, 
+                    redisports[generationcount%len(redisports)],
+                    bc, OUT_FOLDER, onlybc, meta, outResult
+                )
+
+                futures.append(job)
+
                 if generationcount % len(redisports) == 0:
                     ## WAIT for it
 
-                    generationStartTime = time.time_ns()
                     LOGGER.info(program_name,f"Executing parallel generation job...")
                     done, fail = wait(futures, timeout=config["DEFAULT"].getint("generation-timeout"))
-                    generationEndTime = time.time_ns() - generationStartTime
+                    #generationEndTime = time.time_ns() - generationStartTime
 
                     futures = []
                     WORKER_INDEX = 0
@@ -232,26 +225,18 @@ class Pipeline(object):
 
                     for f in done:
                         variants += f.result(timeout=config["DEFAULT"].getint("generation-timeout"))
-                    failed  += len(fail)
-
-            
-            if len(CURRENT_JOB) != 0:
-                job = generationPool.submit(
-                    self.generateVariant, CURRENT_JOB, program_name, merging, redisports[generationcount
-                    %len(redisports)], bc, OUT_FOLDER, onlybc, meta, outResult, generationcount, tentativeNumber)
-                CURRENT_JOB = []
-                # job.result()
-
-                futures.append(job)
-
-            LOGGER.info(program_name,f"Executing final parallel generation job...")
-            done, fail = wait(futures, timeout=config["DEFAULT"].getint("generation-timeout"))
+                else:
+                    generationcount += 1
+                        #variants += f.result(timeout=config["DEFAULT"].getint("generation-timeout"))
+                    #failed  += len(fail)
+            done, fail = wait(futures)
             futures = []
-            LOGGER.info(program_name,f"Disposing job...{len(done)} {len(fail)}")
-            generationcount += len(done) + len(fail)
+            #LOGGER.info(program_name,f"Disposing job...{len(done)} {len(fail)}")
+            #generationcount += len(done) + len(fail)
 
             for f in done:
-                variants += f.result(timeout=config["DEFAULT"].getint("generation-timeout"))
+                #print(f)
+                variants += f.result()
                 # Save metadata
 
             LOGGER.info(program_name, f"Saving metadata...")
@@ -269,6 +254,112 @@ class Pipeline(object):
 
         return dict(programs=meta, count=len(meta.keys()))
 
+
+
+    def generateVariantsPerSubsetSize(self,iteratorFunction,program_name, merging, port,bc, OUT_FOLDER, onlybc, meta, outResult):
+        
+        #iteratorFunction, program_name, merging, 
+        #            redisports[generationcount%len(redisports)],
+        #            bc, OUT_FOLDER, onlybc, meta, outResult
+
+        
+        #print(iteratorFunction, program_name, port, OUT_FOLDER, onlybc)
+
+        variants = []
+        #print(f"Generating {job}")
+        #LOGGER.info(program_name,f"Generating {len(job)} variants...") 
+        r = redis.Redis(host="localhost", port=port)
+        
+        
+        jindex = 0
+        for j in iteratorFunction():
+            #print(j)
+            if len(j) == 0:
+                break
+            LOGGER.info(program_name, f"Cleaning previous cache for variant generation...{port}")
+            try:
+                LOGGER.success(program_name, f"Flushing redis DB...")
+
+                result = r.flushall()
+                LOGGER.success(program_name, f"DB flushed away: result({result})")
+            except Exception as e:
+                LOGGER.error(program_name, traceback.format_exc())
+
+            #print("Setting keys")
+            # Set keys
+
+            
+            name = ""
+
+            try:            
+               keys = list(merging.keys())
+               #print(keys)
+               for k, v in j.items():
+                   LOGGER.info(program_name, f"Setting redis db")
+
+                   if v is not None:
+                       name +=  "[%s-%s]"%(keys.index(k), merging[k].index(v))
+                       r.hset(k, "result", v)
+                   else:
+                       name +=  "[%s-n]"%(keys.index(k),)
+                       # search for infer word
+                       rer = re.compile(r"infer %(\d+)")
+                       kl = k
+                       if rer.search(kl):
+                           r.hset(k, "result", ("result %%%s\n"%(rer.search(kl).group(1),)).encode("utf-8"))
+                       LOGGER.info(program_name, f"Replacing redundant key-value pair...")
+
+               #print(f"NEW VARIANT {name}")
+               LOGGER.info(program_name, f"Preparing new variant generation...")
+
+               with ContentToTmpFile(content=bc, LOG_LEVEL=2) as BCIN:
+                   tmpIn = BCIN.file
+                   with ContentToTmpFile(LOG_LEVEL=2) as BCOUT:
+                       tmpOut = BCOUT.file
+                       
+                       try:
+                           sanitized_set_name = name
+                           LOGGER.info(program_name, f"Generating variant {sanitized_set_name}...")
+
+
+                           optBc = BCToSouper(program_name, level=1, debug=True, redisport=port, timeout=config["DEFAULT"].getint("generation-simple-timeout") - 1)
+                           optBc(args=[tmpIn, tmpOut], std=None)
+
+                           bsOpt = open(tmpOut, 'rb').read()
+
+                           # Generate wasm
+                           n = "%s[%s]" % (program_name,name)
+                           #print(f"GENERATING...")
+                           hex, size, wasmFile, watFile = self.generateWasm(program_name, bsOpt,
+                                                                           OUT_FOLDER,
+                                                                           name,
+                                                                           debug=True, generateOnlyBc=onlybc)
+
+                           #print("GENERATED") 
+                           variants.append([hex, n, [[k, v if v is not None else "No replace"] for k,v in j.items()]])
+
+                           
+                           # report new variant to the progress
+                           #print(f"{len(variants)}/{len(job)}")
+                       except Exception as e:
+                           print(traceback.format_exc())
+                           LOGGER.error(program_name, traceback.format_exc(), )
+                           raise e
+               # call Souper and the linker again
+            except Exception as e:
+                print(traceback.format_exc())
+
+                LOGGER.error(program_name, traceback.format_exc())
+            finally:
+
+                LOGGER.info(program_name, "Cleaning cache from variant generation...")
+                
+                result = r.flushdb()
+                LOGGER.success(
+                    program_name, f"Flushing redis DB: result({result})")
+                r.close()
+            jindex += 1
+        return variants
 
     def generateVariant(self,job,program_name, merging, port,bc, OUT_FOLDER, onlybc, meta, outResult, current, total, worker_index = 0):
         
@@ -446,6 +537,7 @@ class Pipeline(object):
         
         publisher = None
 
+        #print(f"Generating/// {fileName}")
         if publishGeneration:
             publisher = Publisher()
 
@@ -455,11 +547,15 @@ class Pipeline(object):
 
             try:
                 if not generateOnlyBc:
+                    #print("ObjToWASM///")
+
                     finalObjCreator = ObjtoWASM(namespace, debug=debug)
                     finalObjCreator(args=[
                         "%s.wasm" % (llFileName,),
                         tmpWasm
                     ], std=None)
+
+                    #print("WASM2WAT///")
 
                     wat = WASM2WAT(namespace, debug=debug)
                     wat(std=None, args=[
@@ -486,6 +582,7 @@ class Pipeline(object):
                     hashvalue = hashlib.sha256(bc)
                     return hashvalue.hexdigest(), len(bc), "%s.bc" % (fileName,), "%s.bc" % (fileName,)
             except Exception as e:
+                print(traceback.format_exc())
                 LOGGER.error(namespace, traceback.format_exc())
 
 

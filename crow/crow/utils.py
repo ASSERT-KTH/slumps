@@ -6,11 +6,11 @@ import uuid
 import sys
 from subprocess import check_output
 from subprocess import Popen, PIPE
-from settings import config, reload
+from crow.settings import config, reload
 
-import iterators
+import crow.iterators
 
-from logger import LOGGER
+from crow.logger import LOGGER
 import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
@@ -27,7 +27,8 @@ NOW = time.time()
 BASE_DIR = os.path.dirname(__file__)
 RUNTIME_CONFIG = dict(USE_REDIS=False)
 
-OUT_FOLDER = config["DEFAULT"]["outfolder"]
+import os
+OUT_FOLDER = os.getenv("OUT_FOLDER", "out")
 
 class ContentToTmpFile(object):
 

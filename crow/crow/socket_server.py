@@ -55,10 +55,10 @@ def listen(port, q, program, worker_id, level, emit_generation=True):
 					for kvpair in js:
 						k, v = kvpair["key"], kvpair["value"]
 						
-						if program and not config["DEFAULT"].getboolean("use-ansi-console"):
+						#if program and not config["DEFAULT"].getboolean("use-ansi-console"):
 							#print(f"{k} -> {v}")
-							LOGGER.info(program, f"Populating results...{len(result.keys())} blocks")
-							LOGGER.info(program, f"Populating results...{s} tentative replacements")
+							#LOGGER.info(program, f"Populating results...{len(result.keys())} blocks")
+							#LOGGER.info(program, f"Populating results...{s} tentative replacements")
 							#LOGGER.info(program, "KEYS\n%s"%(json.dumps(result, indent=4, default=set_default)))
 						if k not in result:
 							result[k] = set([])
