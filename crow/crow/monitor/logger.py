@@ -6,6 +6,7 @@ from crow.events.event_manager import Subscriber, subscriber_function, Publisher
 import sys, traceback
 from crow.settings import config
 from crow.monitor import MONITOR_QUEUE_NAME
+import json
 
 def log_system_exception():
 

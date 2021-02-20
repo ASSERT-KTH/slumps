@@ -1,6 +1,6 @@
 
 from crow.commands.stages import CToLLStage
-from crow.events import LOG_MESSAGE, C2LL_MESSAGE, LL2BC_MESSAGE, STORE_MESSAGE
+from crow.events import LOG_MESSAGE, C2LL_MESSAGE, LL2BC_MESSAGE, STORE_MESSAGE, LL_QUEUE
 from crow.events.event_manager import Publisher, subscriber_function, Subscriber
 from crow.logger import ERROR
 

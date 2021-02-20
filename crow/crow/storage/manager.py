@@ -29,7 +29,7 @@ def subscriber(data):
     f.write(data["stream"])
     f.close()
 
-    print(f"Saving {out}")
+    print("Saving %s/%s"%(out , data["file_name"]))
 
 
 

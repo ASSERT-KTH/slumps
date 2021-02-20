@@ -1,6 +1,6 @@
 
 from crow.commands.stages import LLToBC
-from crow.events import LOG_MESSAGE, C2LL_MESSAGE, LL2BC_MESSAGE, BC2Candidates_MESSAGE, BC2WASM_MESSAGE, STORE_MESSAGE
+from crow.events import LOG_MESSAGE, C2LL_MESSAGE, LL2BC_MESSAGE, BC2Candidates_MESSAGE, BC2WASM_MESSAGE, STORE_MESSAGE, LL_QUEUE, BC_TRANSFORMATION_QUEUE,STORE_KEY, WASM_QUEUE
 from crow.events.event_manager import Publisher, Subscriber, subscriber_function
 from crow.logger import ERROR
 from crow.settings import config
@@ -15,7 +15,7 @@ from crow.monitor.logger import log_system_exception
 def ll2bc(ll1, program_name):
 
     lltobc = LLToBC(program_name, debug=False)
-    bc = lltobc(std=ll1.encode(errors="ignore"))
+    bc = lltobc(std=ll1)
 
     publisher = Publisher()
 
@@ -39,7 +39,8 @@ def ll2bc(ll1, program_name):
         publisher.publish(message=dict(
             event_type=BC2WASM_MESSAGE,
             bc=bc,
-            program_name=f"{program_name}.original"
+            program_name=f"{program_name}",
+            file_name=f"{program_name}.original"
         ), routing_key="")
 
 
@@ -47,6 +48,7 @@ def ll2bc(ll1, program_name):
 @log_system_exception()
 @subscriber_function(event_type=LL2BC_MESSAGE)
 def subscriber(data):
+    print("LL to bitcode")
     ll2bc(data["ll"], data["program_name"])
 
 
@@ -56,8 +58,7 @@ if __name__ == "__main__":
     #f = sys.argv[-1]
 
     if len(sys.argv) == 1:
-        key = config["event"]["process-id-exploration"]
-        subscriber = Subscriber(1, config["event"]["queue-name"], key, config["event"].getint("port"), subscriber)
+        subscriber = Subscriber(1, LL_QUEUE, "*", config["event"].getint("port"), subscriber)
         subscriber.setup()
         # Start a subscriber listening for LL2BC message
     else:
