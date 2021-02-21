@@ -1,6 +1,3 @@
-#!/bin/bash
-# rm -rf /slumps/crow/out
-SOURCE=$(dirname $BASH_SOURCE)
 
 bin_folders=/slumps/souper/third_party/llvm-Release-install/bin
 libFolder=/slumps/souper/build
@@ -15,16 +12,27 @@ mkdir -p /usr/src/souper/third_party
 ls /slumps/souper/third_party/z3-install
 chmod +x /usr/src/souper/third_party/z3-install/bin/z3
 
+pkill -f bc2candidates
 
-PORTS=''
 
-for port in $(seq 1 1 $1)
-do
-	nohup redis-server --port $((15535 + $port)) &
-	PORTS=$PORTS","$((15535 + $port))
-done
+sleep 1
+RED='\033[0;31m'
+NC='\033[0m'
+GREEN='\033[0;32m'
 
-echo "Opening redis servers in" $PORTS
-# launch x redis servers
+printf "$NC Updating settings $NC"
+python3 -m crow.update_settings $@
+printf "$GREEN Starting system $NC\n"
 
-python3.8 $SOURCE/crow/crow/crow.py $PORTS $@
+printf "$GREEN Launching bc exploration service $NC\n"
+python3 -m crow.entrypoints.bc2candidates &
+
+
+control_c() {
+    pkill -f bc2candidates
+    exit
+}
+
+trap control_c SIGINT
+
+wait

@@ -17,7 +17,7 @@ class TimeoutException(Exception):
 
 class ExternalStage(object):
 
-    DEBUG_LEVEL = 1
+    DEBUG_LEVEL = config["DEFAULT"].getint("debug-level")
 
     def __init__(self, namespace):
         self.name = "unknown"
@@ -200,7 +200,7 @@ class BCToSouper(ExternalStage):
         extra_commands = "%s -o %s" % (args[0], args[1])
 
         #if RUNTIME_CONFIG["USE_REDIS"]:
-        extra_commands += " --souper-external-cache --souper-redis-port=%s"%(self.redisport, )
+        extra_commands += " --souper-external-cache --souper-redis-port=%s "%(self.redisport, )
 
         new_inputs = (config["souper"]["super-opt-pass"] % ("", extra_commands)).split(" ")
         return super(BCToSouper, self).__call__(new_inputs, std)
