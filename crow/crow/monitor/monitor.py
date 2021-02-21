@@ -4,7 +4,7 @@ from crow.events.event_manager import Subscriber, subscriber_function, Publisher
 import traceback
 from crow.settings import config
 from crow.monitor import MONITOR_QUEUE_NAME
-
+from crow.utils import printProgressBar
 
 def log_system_exception():
 
@@ -46,7 +46,7 @@ def general_log(data):
         if TENTATIVE_NUMBER == -1: # WARNING something happend with the exploration service
             print(f"WARNING something happend with the exploration service. Count: {COUNT}")
         else:
-            print(f"{COUNT}/{TENTATIVE_NUMBER}")
+            printProgressBar(COUNT, TENTATIVE_NUMBER, suffix=f"{COUNT}/{TENTATIVE_NUMBER}")
 
     if data["event_type"] == EXPLORATION_RESULT:
         TENTATIVE_NUMBER = data["tentative_number"]
