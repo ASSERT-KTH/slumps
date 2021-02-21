@@ -16,8 +16,6 @@ def wasm2wat(wasm, program_name, file_name = None):
     publisher = Publisher()
 
     file_name = program_name if file_name is None else file_name
-    print(file_name)
-
     with ContentToTmpFile(name="%s.wasm" % file_name, content=wasm, ext=".wasm", persist=False) as TMP_WASM:
 
         finalObjCreator = WASM2WAT(program_name, debug=True)
