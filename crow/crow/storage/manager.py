@@ -11,7 +11,7 @@ from crow.monitor.logger import LOGGER
 OUT_FOLDER = os.environ.get("OUT_FOLDER", "out")
 OUT_FOLDER = os.path.join(os.path.dirname(__file__), OUT_FOLDER)
 # CHECK FOR MEMORY
-# ADD MONGODB storage for example
+# ADD MONGODB storage in another version of the service
 ALL_GENERATIONS = set()
 TOTAL = {
 
