@@ -9,7 +9,7 @@ import hashlib
 from crow.monitor.logger import LOGGER
 
 OUT_FOLDER = os.environ.get("OUT_FOLDER", "out")
-
+OUT_FOLDER = os.path.join(os.path.dirname(__file__), OUT_FOLDER)
 # CHECK FOR MEMORY
 # ADD MONGODB storage for example
 ALL_GENERATIONS = set()
@@ -48,8 +48,6 @@ def subscriber(data):
     f.write(data["stream"])
     f.close()
     ALL_GENERATIONS.add(hashvalue)
-
-    print("Saving %s/%s"%(out , data["file_name"]))
 
 
 
