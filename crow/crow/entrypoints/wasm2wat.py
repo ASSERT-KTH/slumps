@@ -1,6 +1,6 @@
 
 from crow.commands.stages import WASM2WAT
-from crow.events import STORE_MESSAGE, WASM2WAT_MESSAGE, WAT_QUEUE
+from crow.events import STORE_MESSAGE, WASM2WAT_MESSAGE, GENERATED_WAT_FILE, WAT_QUEUE
 from crow.events.event_manager import Publisher, Subscriber, subscriber_function
 from crow.settings import config
 
@@ -10,10 +10,10 @@ from crow.utils import ContentToTmpFile
 import os
 from crow.monitor.monitor import log_system_exception
 
+publisher = Publisher()
+
 @log_system_exception()
 def wasm2wat(wasm, program_name, file_name = None):
-
-    publisher = Publisher()
 
     file_name = program_name if file_name is None else file_name
     with ContentToTmpFile(name="%s.wasm" % file_name, content=wasm, ext=".wasm", persist=False) as TMP_WASM:
@@ -32,6 +32,13 @@ def wasm2wat(wasm, program_name, file_name = None):
                 program_name=f"{program_name}",
                 file_name=f"{file_name}.wat"
             ), routing_key="")
+
+        publisher.publish(message=dict(
+            event_type=GENERATED_WAT_FILE,
+            stream=open(f"{file_name}.wat", 'rb').read(),
+            program_name=f"{program_name}",
+            file_name=f"{file_name}.wat"
+        ), routing_key="")
 
         os.remove("%s.wat" % (file_name,))
 
