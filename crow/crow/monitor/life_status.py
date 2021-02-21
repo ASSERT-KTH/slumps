@@ -34,7 +34,7 @@ def draw_update(countBC, countWM, uniqueBC, uniqueWM, TIMES_BC, TIMES_WM):
     plt.plot(range(len(TIMES_BC)), [t[1] for t in TIMES_BC], '--o', label="Unique %s" % (uniqueBC,))
 
     plt.legend()
-    plt.pause(0.1)
+    plt.pause(0.01)
     plt.draw()
 
 
@@ -47,6 +47,7 @@ def general_log(data):
     global COUNTS_WM
     global COUNTS_BC
     if data["event_type"] == GENERATED_BC_VARIANT:
+        print(1)
         COUNTS_BC += 1
         hashvalue = hashlib.sha256(data["bc"]).hexdigest()
         hashes_BC.add(hashvalue)
@@ -55,6 +56,8 @@ def general_log(data):
 
     if data["event_type"] == GENERATED_WASM_VARIANT:
         COUNTS_WM += 1
+        print(2)
+
         hashvalue = hashlib.sha256(data["stream"]).hexdigest()
         hashes_WM.add(hashvalue)
         TIMES_WM.append([COUNTS_WM, len(hashes_WM)])
