@@ -1,4 +1,4 @@
-from crow.events import LOG_MESSAGE
+from crow.events import LOG_MESSAGE, GENERATED_BC_VARIANT, EXPLORATION_RESULT
 from crow.monitor.logger import ERROR
 from crow.events.event_manager import Subscriber, subscriber_function, Publisher
 import traceback
@@ -30,10 +30,26 @@ def log_system_exception():
 
     return Inner
 
+
+# Monitor status
+COUNT = 0
+TENTATIVE_NUMBER = -1
+
 @subscriber_function(event_type="*")
 def general_log(data):
-    print(data["event_type"], data.get("program_name", data.get("message", "")))
-    print("="*100)
+    global COUNT
+    global TENTATIVE_NUMBER
+
+    if data["event_type"] == GENERATED_BC_VARIANT:
+        COUNT += 1
+
+        if TENTATIVE_NUMBER == -1: # WARNING something happend with the exploration service
+            print(f"WARNING something happend with the exploration service. Count: {COUNT}")
+        else:
+            print(f"{COUNT}/{TENTATIVE_NUMBER}")
+
+    if data["event_type"] == EXPLORATION_RESULT:
+        TENTATIVE_NUMBER = data["tentative_number"]
 
 if __name__ == "__main__":
 
