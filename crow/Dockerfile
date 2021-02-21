@@ -15,13 +15,13 @@ COPY crow                                      /slumps/crow/crow
 COPY crow/settings/config.docker.ini            /slumps/crow/crow/settings/config.ini
 COPY requirements.txt                          /slumps/crow/requirements.txt
 
-COPY launch_standalone.sh                      /slumps/crow/launch_standalone.sh
-COPY launch_entrypoints.sh                      /slumps/crow/launch_entrypoints.sh
-COPY launch_exploration.sh                      /slumps/crow/launch_exploration.sh
-COPY launch_generators.sh                      /slumps/crow/launch_generators.sh
-COPY launch_logger.sh                           /slumps/crow/launch_logger.sh
-COPY launch_monitor.sh                          /slumps/crow/launch_monitor.sh
-COPY launch_storage.sh                          /slumps/crow/launch_storage.sh
+COPY 4docker/launch_standalone.sh                      /slumps/crow/launch_standalone.sh
+COPY 4docker/launch_entrypoints.sh                      /slumps/crow/launch_entrypoints.sh
+COPY 4docker/launch_exploration.sh                      /slumps/crow/launch_exploration.sh
+COPY 4docker/launch_generators.sh                      /slumps/crow/launch_generators.sh
+COPY 4docker/launch_logger.sh                           /slumps/crow/launch_logger.sh
+COPY 4docker/launch_monitor.sh                          /slumps/crow/launch_monitor.sh
+COPY 4docker/launch_storage.sh                          /slumps/crow/launch_storage.sh
 COPY setup.sh                                   /slumps/crow/setup.sh
 
 COPY setup.py                                  /slumps/crow/setup.py
