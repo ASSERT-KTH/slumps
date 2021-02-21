@@ -1,6 +1,7 @@
 
 from crow.commands.stages import ObjtoWASM
-from crow.events import BC2WASM_MESSAGE, STORE_MESSAGE, WASM_QUEUE, WASM2WAT_MESSAGE, GENERATED_WASM_VARIANT
+from crow.events import BC2WASM_MESSAGE, STORE_MESSAGE, WASM_QUEUE, WASM2WAT_MESSAGE, GENERATED_WASM_VARIANT, \
+    BC2Candidates_MESSAGE
 from crow.events.event_manager import Publisher, Subscriber, subscriber_function
 from crow.settings import config
 
@@ -11,12 +12,19 @@ import os
 from crow.monitor.monitor import log_system_exception
 
 @log_system_exception()
-def bc2wasm(bc, program_name, file_name=None):
+def bc2wasm(bc, program_name, file_name=None, explore=False):
 
     publisher = Publisher()
 
     file_name = program_name if file_name is None else file_name
 
+    if explore:
+        # Call for candidates exploration
+        publisher.publish(message=dict(
+            event_type=BC2Candidates_MESSAGE,
+            bc=bc,
+            program_name=program_name
+        ), routing_key="")
 
     # 2 WASM transformation
     if config["DEFAULT"].getboolean("keep-wasm-files"):
@@ -77,4 +85,4 @@ if __name__ == "__main__":
         # Convert and send a LL to BC message
         program_name = sys.argv[1]
         program_name = program_name.split("/")[-1].split(".")[0]
-        bc2wasm(open(sys.argv[2], 'rb').read(), program_name)
+        bc2wasm(open(sys.argv[2], 'rb').read(), program_name, explore=True)
