@@ -18,6 +18,8 @@ python3 storage/manager.py &
 printf "$GREEN Launching logging service $NC\n"
 python3 monitor/logger.py &
 
+printf "$GREEN Launching monitor service $NC\n"
+python3 monitor/monitor.py &
 
 printf "$GREEN Launching wasm to wat service $NC\n"
 python3 entrypoints/wasm2wat.py &

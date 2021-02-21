@@ -172,6 +172,12 @@ def bcexploration(bc, program_name):
         file_name=f"{program_name}.exploration.result.json"
     ), routing_key="")
 
+    publisher.publish(message=dict(
+        event_type=EXPLORATION_RESULT,
+        all_replacements=[[k, [v1 for v1 in v if v1 is not None]] for k, v in merging.items()],
+        tentative_number=tentativeNumber,
+        program_name=f"{program_name}"
+    ), routing_key="")
 
     start_at = time.time()
     for iteratorFunction, size in getIteratorByName("keysSubsetIterators")(merging):
@@ -187,11 +193,6 @@ def bcexploration(bc, program_name):
 
     LOGGER.info(program_name, f"All variants are in the queue ({time.time() - start_at:.2f}s)")
 
-    publisher.publish(message=dict(
-        event_type=EXPLORATION_RESULT,
-        stream=[[k, [v1 for v1 in v if v1 is not None]] for k, v in merging.items()],
-        program_name=f"{program_name}"
-    ), routing_key="")
 
 @log_system_exception()
 @subscriber_function(event_type=BC2Candidates_MESSAGE)
