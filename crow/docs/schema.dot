@@ -1,0 +1,181 @@
+digraph schemas {
+    rankdir="LR"
+    concentrate="true"
+    # Messages
+    {
+        node [margin=0.2 fontcolor=black fontsize=9 width=0.5 shape=box style=dashed]
+        LL2BC_MESSAGE1 [label="LL 2 BC"]
+        LL2BC_MESSAGE2 [label="LL 2 BC"]
+        #LL2BC_MESSAGE3 [label="LL 2 BC"]
+        #LL2BC_MESSAGE4 [label="LL 2 BC"]
+        #LL2BC_MESSAGE5 [label="LL 2 BC"]
+        #LL2BC_MESSAGE6 [label="LL 2 BC"]
+        #LL2BC_MESSAGE7 [label="LL 2 BC"]
+
+        BC2Candidates_MESSAGE1 [label="Launch Souper exploration"]
+        BC2Candidates_MESSAGE2 [label="Launch Souper exploration"]
+        BC2Candidates_MESSAGE3 [label="Launch Souper exploration"]
+        #BC2Candidates_MESSAGE4 [label="Launch Souper exploration"]
+        #BC2Candidates_MESSAGE5 [label="Launch Souper exploration"]
+
+        BC2WASM_MESSAGE1 [label="Compile bitcode to Wasm"]
+        BC2WASM_MESSAGE2 [label="Compile bitcode to Wasm"]
+        #BC2WASM_MESSAGE3 [label="Compile bitcode to Wasm"]
+        #BC2WASM_MESSAGE4 [label="Compile bitcode to Wasm"]
+        BC2WASM_MESSAGE5 [label="Compile bitcode to Wasm"]
+        BC2WASM_MESSAGE8 [label="Compile bitcode to Wasm"]
+        BC2WASM_MESSAGE9 [label="Compile bitcode to Wasm"]
+        BC2WASM_MESSAGE6 [label="Compile bitcode to Wasm"]
+
+        WASM2WAT_MESSAGE1 [label="Get Wat format from Wasm file"]
+        WASM2WAT_MESSAGE2 [label="Get Wat format from Wasm file"]
+        #WASM2WAT_MESSAGE5 [label="Get Wat format from Wasm file"]
+        #WASM2WAT_MESSAGE8 [label="Get Wat format from Wasm file"]
+        #WASM2WAT_MESSAGE9 [label="Get Wat format from Wasm file"]
+
+        STORE_MESSAGE1 [label="Store file"]
+        STORE_MESSAGE2 [label="Store file"]
+        STORE_MESSAGE6 [label="Store file"]
+        STORE_MESSAGE5 [label="Store file"]
+        STORE_MESSAGE7 [label="Store file"]
+        STORE_MESSAGE9 [label="Store file"]
+        STORE_MESSAGE10 [label="Store file"]
+
+        GENERATE_VARIANT_MESSAGE1 [label="Generate variant"]
+        GENERATE_VARIANT_MESSAGE2 [label="Generate variant"]
+        GENERATE_VARIANT_MESSAGE3 [label="Generate variant"]
+        GENERATE_VARIANT_MESSAGE4 [label="Generate variant"]
+        GENERATE_VARIANT_MESSAGE5 [label="Generate variant"]
+        GENERATE_VARIANT_MESSAGE6 [label="Generate variant"]
+        GENERATE_VARIANT_MESSAGE7 [label="Generate variant"]
+        GENERATE_VARIANT_MESSAGE8 [label="Generate variant"]
+
+
+        LOG_MESSAGE [label="Log"]
+        ANY [label="Any message"]
+    }
+
+    # Files
+    {
+        node [margin=0.2 fontcolor=blue fontsize=12 width=0.5 shape=box style=solid]
+        program_c [label="program.C/C++"]
+        #program_wasm [label="program.wasm"]
+        #program_wat [label="program.wat"]
+        program_ll [label="program.ll"]
+        program_bc [label="program.bc"]
+    }
+
+    # Services
+    {
+        node [margin=0 fontcolor=black fontsize=12 width=0.5 shape=house style=solid]
+        fromc [label="fromc.py"]
+        fromll [label="fromll.py"]
+        bc2candidates [label="bc2candidates.py"]
+        bc2wasm [label="bc2wasm.py"]
+        wasm2wat [label="wasm2wat.py"]
+        monitor [label="monitor.py"]
+        logger [label="logger.py"]
+        storage [label="storage/manager.py"]
+        generatevariant_1 [label="variantcreator.py"]
+        generatevariant_2 [label="variantcreator.py"]
+        generatevariant_3 [label="variantcreator.py"]
+        generatevariant_4 [label="variantcreator.py"]
+    }
+
+    subgraph clusterEntryPoints
+    {
+        label="Pipeline service";
+        subgraph "entries"
+        {
+            fromc;
+            fromll;
+            bc2wasm;
+            wasm2wat;
+        }
+    }
+    subgraph clusterExploration
+    {
+        label="Exploration Service";
+        subgraph "bc2candidates"
+        {
+            bc2candidates;
+        }
+    }
+
+    subgraph clusterGeneration
+    {
+        label="Generation service";
+        subgraph "entries"
+        {
+            generatevariant_1;
+            generatevariant_2;
+            generatevariant_3;
+            generatevariant_4;
+        }
+    }
+
+
+    subgraph clusterStorage
+    {
+        label="Storage service";
+        subgraph "entries"
+        {
+            storage;
+        }
+    }
+
+    subgraph clusterMonitoring
+    {
+        label="Monitoring service";
+        subgraph "entries"
+        {
+            logger;
+            monitor;
+        }
+    }
+
+    program_ll -> fromll [label = "Launching script with \n a LLVM text format file"]
+    LL2BC_MESSAGE1 -> fromll [arrowhead = diamond style = dashed];
+    fromll -> { BC2Candidates_MESSAGE1 BC2WASM_MESSAGE1 }  [label="emit"];
+    bc2wasm -> { BC2Candidates_MESSAGE3 }  [label="emit exploration if initial\n file was provided to the script" color=red];
+
+    BC2WASM_MESSAGE2 -> bc2wasm [arrowhead = diamond style = dashed];
+    program_bc -> bc2wasm [label="launching program\n with a llvm bitcode file"];
+    bc2wasm -> {WASM2WAT_MESSAGE1, STORE_MESSAGE1 } [label="emit"];
+    program_c -> fromc [label="launching program\n with a source code"];
+
+    fromc -> { LL2BC_MESSAGE2 } [label="emit"];
+
+    WASM2WAT_MESSAGE2 -> wasm2wat [arrowhead = diamond style = dashed];
+
+    wasm2wat -> { STORE_MESSAGE2 } [label="emit"];
+
+    BC2Candidates_MESSAGE2 -> bc2candidates [arrowhead = diamond style = dashed];
+
+    bc2candidates -> { GENERATE_VARIANT_MESSAGE1 } [label="emit"];
+    bc2candidates -> { GENERATE_VARIANT_MESSAGE2 } [label="emit"];
+    bc2candidates -> { GENERATE_VARIANT_MESSAGE3 } [label="emit"];
+    bc2candidates -> { GENERATE_VARIANT_MESSAGE4 } [label="emit"];
+
+    GENERATE_VARIANT_MESSAGE5 -> generatevariant_1 [arrowhead = diamond style = dashed];
+    generatevariant_1 -> { BC2WASM_MESSAGE5,  STORE_MESSAGE5 } [label="emit"];
+
+    GENERATE_VARIANT_MESSAGE6 -> generatevariant_2 [arrowhead = diamond style = dashed];
+    generatevariant_2 -> { BC2WASM_MESSAGE6,  STORE_MESSAGE6 } [label="emit"];
+
+    GENERATE_VARIANT_MESSAGE7 -> generatevariant_3 [arrowhead = diamond style = dashed];
+    generatevariant_3 -> { BC2WASM_MESSAGE8,  STORE_MESSAGE7 } [label="emit"];
+
+
+    GENERATE_VARIANT_MESSAGE8 -> generatevariant_4 [arrowhead = diamond style = dashed];
+    generatevariant_4 -> { BC2WASM_MESSAGE9,  STORE_MESSAGE9 } [label="emit"];
+
+    STORE_MESSAGE10 -> storage [arrowhead = diamond style = dashed];
+
+    ANY -> monitor [arrowhead = diamond style = dashed];
+    LOG_MESSAGE -> logger [arrowhead = diamond style = dashed];
+
+
+
+    #{ STORE_MESSAGE, LL2BC_MESSAGE, BC2Candidates_MESSAGE, BC2WASM_MESSAGE, WASM2WAT_MESSAGE, STORE_MESSAGE, GENERATE_VARIANT_MESSAGE } -> monitor_service
+}
