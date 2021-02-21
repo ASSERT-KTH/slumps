@@ -11,6 +11,7 @@ from crow.monitor.logger import LOGGER
 OUT_FOLDER = os.environ.get("OUT_FOLDER", "out")
 
 # CHECK FOR MEMORY
+# ADD MONGODB storage for example
 ALL_GENERATIONS = set()
 TOTAL = {
 

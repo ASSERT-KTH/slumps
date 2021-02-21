@@ -1,4 +1,4 @@
-from crow.events import LOG_MESSAGE, GENERATED_BC_VARIANT, GENERATED_WASM_VARIANT, LIFE_STATUS_QUEUE
+from crow.events import LOG_MESSAGE, GENERATED_BC_VARIANT, GENERATED_WASM_VARIANT, LIVE_STATUS_QUEUE
 from crow.monitor.logger import ERROR
 from crow.events.event_manager import Subscriber, subscriber_function, Publisher
 import traceback
@@ -34,7 +34,7 @@ def draw_update(countBC, countWM, uniqueBC, uniqueWM, TIMES_BC, TIMES_WM):
     plt.plot(range(len(TIMES_BC)), [t[1] for t in TIMES_BC], '--o', label="Unique %s" % (uniqueBC,))
 
     plt.legend()
-    plt.pause(0.001)
+    plt.pause(0.1)
     plt.draw()
 
 
@@ -53,7 +53,7 @@ def general_log(data):
         TIMES_BC.append([COUNTS_BC, len(hashes_BC)])
         draw_update(COUNTS_BC, COUNTS_WM, len(hashes_BC), len(hashes_WM), TIMES_BC, TIMES_WM)
 
-    elif data["event_type"] == GENERATED_WASM_VARIANT:
+    if data["event_type"] == GENERATED_WASM_VARIANT:
         COUNTS_WM += 1
         hashvalue = hashlib.sha256(data["stream"]).hexdigest()
         hashes_WM.add(hashvalue)
@@ -63,5 +63,5 @@ def general_log(data):
         draw_update(COUNTS_BC, COUNTS_WM, len(hashes_BC), len(hashes_WM), TIMES_BC, TIMES_WM)
 
 if __name__ == "__main__":
-    subscriber = Subscriber(1, LIFE_STATUS_QUEUE, "*", config["event"].getint("port"), general_log)
+    subscriber = Subscriber(1, LIVE_STATUS_QUEUE, "*", config["event"].getint("port"), general_log)
     subscriber.setup()
