@@ -5,7 +5,6 @@ import os
 import uuid
 import sys
 from crow.settings import config, reload
-
 from crow.monitor.logger import LOGGER
 import re
 import traceback

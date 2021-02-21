@@ -43,7 +43,7 @@ class Logger(object):
         self.indent = 0
         self.disabled = False
         self.p = Publisher()
-        self.DEBUG = 2
+        self.DEBUG = 0
 
     def disable(self):
         self.disabled = True

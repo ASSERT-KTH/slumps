@@ -13,7 +13,7 @@ RUN python3 -m pip install pip
 
 COPY crow/settings/config.ini /slumps/crow/settings/config.ini
 COPY crow/settings/__init__.py /slumps/crow/settings/__init__.py
-COPY crow/crow.py /slumps/crow/crow.py
+COPY crow/crow.bck.py /slumps/crow/crow.py
 COPY crow/iterators.py /slumps/crow/iterators.py
 COPY crow/monitor/logger.py /slumps/crow/logger.py
 COPY crow/stages.py /slumps/crow/stages.py
