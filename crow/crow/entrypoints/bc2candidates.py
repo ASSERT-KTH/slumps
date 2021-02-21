@@ -1,4 +1,4 @@
-from crow.events import BC2Candidates_MESSAGE, BC_EXPLORATION_QUEUE, STORE_MESSAGE, GENERATE_VARIANT_MESSAGE
+from crow.events import BC2Candidates_MESSAGE, BC_EXPLORATION_QUEUE, STORE_MESSAGE, GENERATE_VARIANT_MESSAGE, EXPLORATION_RESULT
 from crow.events.event_manager import Subscriber, subscriber_function, Publisher
 from crow.sanitizer import Sanitizer
 from crow.settings import config
@@ -173,27 +173,6 @@ def bcexploration(bc, program_name):
     ), routing_key="")
 
 
-    # Send bitcode and exploration to generator
-
-    #generationcount = 1
-    #futures = []
-    #variants = []
-    failed = 0
-
-    #showGenerationProgress = config["DEFAULT"].getboolean("show-generation-progress")
-
-    #if showGenerationProgress:
-    #    LOGGER.disable()
-    #    printProgressBar(generationcount, tentativeNumber,
-    #                     suffix=f'             {generationcount}/{tentativeNumber}')
-
-    #CURRENT_JOB = []
-    #WORKER_INDEX = 0
-
-    #if config["DEFAULT"].getboolean("use-ansi-console"):
-    #    SCREEN.init_screen(len(redisports), tentativeNumber)
-
-    #time.sleep(2)
     start_at = time.time()
     for iteratorFunction, size in getIteratorByName("keysSubsetIterators")(merging):
 
@@ -208,6 +187,11 @@ def bcexploration(bc, program_name):
 
     LOGGER.info(program_name, f"All variants are in the queue ({time.time() - start_at:.2f}s)")
 
+    publisher.publish(message=dict(
+        event_type=EXPLORATION_RESULT,
+        stream=[[k, [v1 for v1 in v if v1 is not None]] for k, v in merging.items()],
+        program_name=f"{program_name}"
+    ), routing_key="")
 
 @log_system_exception()
 @subscriber_function(event_type=BC2Candidates_MESSAGE)

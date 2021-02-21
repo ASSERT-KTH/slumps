@@ -12,6 +12,8 @@ INFO="INFO"
 SUCCESS="SUCCESS"
 DEBUG="DEBUG"
 
+OUT_FOLDER = os.environ.get("OUT_FOLDER", "out")
+
 
 class bcolors:
     HEADER = '\033[95m'
@@ -36,6 +38,20 @@ def log(severity, message):
     else:
         print("%s%s%s" % (bcolors.BOLD, message, bcolors.ENDC))
 
+def log2file(severity, message, program_name):
+
+    f = open(f"{OUT_FOLDER}/{program_name}.logs.txt", 'a')
+    if severity == ERROR:
+        f.write("%s %s\n" % ("[FAIL]", message))
+    elif severity == WARNING:
+        f.write("%s %s\n" % ("[WARNING]", message))
+    elif severity == INFO:
+        f.write("%s %s\n" % ("[INFO]", message))
+    elif severity == SUCCESS:
+        f.write("%s %s\n" % ("[SUCCESS]",message))
+    else:
+        f.write("%s %s\n" % ("[INFO]", message))
+
 class Logger(object):
 
 
@@ -54,7 +70,7 @@ class Logger(object):
 
     def debug(self, file, message, std=None):
         if self.DEBUG > 3:
-            log(SUCCESS, message)
+            log(DEBUG, message)
 
         self.p.publish(message=dict(
             event_type=LOG_MESSAGE,
@@ -66,7 +82,7 @@ class Logger(object):
 
     def error(self,file,  message):
         if self.DEBUG > 1:
-            log(SUCCESS, message)
+            log(ERROR, message)
 
         self.p.publish(message=dict(
             event_type=LOG_MESSAGE,
@@ -79,7 +95,7 @@ class Logger(object):
 
     def warning(self,file, message):
         if self.DEBUG > 1:
-            log(SUCCESS, message)
+            log(WARNING, message)
 
         self.p.publish(message=dict(
             event_type=LOG_MESSAGE,
@@ -92,7 +108,7 @@ class Logger(object):
 
     def info(self,file,  message):
         if self.DEBUG > 0:
-            log(SUCCESS, message)
+            log(INFO, message)
 
         self.p.publish(message=dict(
             event_type=LOG_MESSAGE,
@@ -124,11 +140,21 @@ LOGGER = Logger()  # Output debug calls to debug.slumps.log file
 @subscriber_function(event_type=LOG_MESSAGE)
 def general_log(data):
     k = "exception" if "exception" in data else "message"
-    log(data["severity"], data[k])
+
+    if config["DEFAULT"].getboolean("log2file"):
+        log2file(data["severity"], data[k], data["program"] if "program" in data else "general")
+    else:
+        log(data["severity"], data[k])
 
 
 
 if __name__ == "__main__":
+
+    if not os.path.exists(OUT_FOLDER):
+        os.mkdir(OUT_FOLDER)
+    if not os.path.exists(os.path.join(OUT_FOLDER, "logs")):
+        os.mkdir(os.path.join(OUT_FOLDER, "logs"))
+    OUT_FOLDER = os.path.join(OUT_FOLDER, "logs")
 
     subscriber = Subscriber(1, LOGGING_QUEUE_NAME, "*", config["event"].getint("port"), general_log)
     subscriber.setup()
