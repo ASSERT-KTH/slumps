@@ -1,5 +1,7 @@
-pkill -f logger.py
-pkill -f monitor.py
+source setup.sh
+
+pkill -f logger
+pkill -f monitor
 
 RED='\033[0;31m'
 NC='\033[0m'

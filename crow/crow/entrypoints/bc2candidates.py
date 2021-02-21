@@ -81,7 +81,7 @@ def processLevel(levels, program_name, port, bc, worker_index, launch_socket_ser
             if launch_socket_server:
                 waitFor = 3
                 LOGGER.warning(program_name, f"Sleeping for {waitFor} seconds waiting for free ports...")
-                #serverThread.join()
+                serverThread.join()
                 time.sleep(waitFor)
                 LOGGER.success(program_name, f"REDO")
 
@@ -99,6 +99,7 @@ def processLevel(levels, program_name, port, bc, worker_index, launch_socket_ser
 def bcexploration(bc, program_name):
 
     #publisher = Publisher()
+    print(f"Exploration {program_name}")
 
     futures = []
     order = list(

@@ -1,6 +1,3 @@
-#!/bin/bash
-# rm -rf /slumps/crow/out
-SOURCE=$(dirname $BASH_SOURCE)
 
 bin_folders=/slumps/souper/third_party/llvm-Release-install/bin
 libFolder=/slumps/souper/build
@@ -14,17 +11,3 @@ export PATH=$PATH:$libFolder
 mkdir -p /usr/src/souper/third_party
 ls /slumps/souper/third_party/z3-install
 chmod +x /usr/src/souper/third_party/z3-install/bin/z3
-
-
-PORTS=''
-
-for port in $(seq 1 1 $1)
-do
-	nohup redis-server --port $((15535 + $port)) &
-	PORTS=$PORTS","$((15535 + $port))
-done
-
-echo "Opening redis servers in" $PORTS
-# launch x redis servers
-
-python3.8 $SOURCE/crow/crow/crow.py $PORTS $@
