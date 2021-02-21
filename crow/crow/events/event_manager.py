@@ -7,6 +7,7 @@ import time
 from crow.settings import config
 import uuid
 import base64
+import traceback
 
 TOBASE64_FIELDS = ["stream", "bc", "ll"]
 
@@ -79,9 +80,13 @@ class Subscriber:
         self.connection.close()
 
     def _create_connection(self):
-        parameters=pika.ConnectionParameters(host=config["event"]["host"],port = config["event"].getint("port"))
-        return pika.BlockingConnection(parameters)
-
+        try:
+            parameters=pika.ConnectionParameters(host=config["event"]["host"],port = config["event"].getint("port"))
+            return pika.BlockingConnection(parameters)
+        except Exception as e:
+            print(f"Impossible to create the service...backingoff")
+            time.sleep(2)
+            return self._create_connection()
     
 
     def on_message_callback(self, channel, method, properties, body):
@@ -107,6 +112,13 @@ class Subscriber:
             channel.start_consuming()
         except KeyboardInterrupt:
             channel.stop_consuming()
+
+        except Exception as e:
+            print("The service suddenly stop....backing off")
+            print(e)
+            time.sleep(2) # Backoff and restart
+            self.setup()
+
 
 
 
