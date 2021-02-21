@@ -58,8 +58,9 @@ def updatesettings(argvs):
 
     print("Slumps dir...%s" % SLUMPS_DIR)
     config["DEFAULT"]["slumpspath"] = SLUMPS_DIR
+    configfile = os.path.join(os.path.dirname(__file__),  "settings/config.ini")
 
-    with open(f"{BASE_DIR}/settings/config.ini", 'w') as configFile:
+    with open(configfile, 'w') as configFile:
         config.write(configFile)
         
     
@@ -82,7 +83,8 @@ def updatesettings(argvs):
     for pair in pairs:
         processOptionValuePair(pair)
 
-    with open(f"{BASE_DIR}/settings/config.ini", 'w') as configFile:
+
+    with open(configfile, 'w') as configFile:
         config.write(configFile)
         
     OUT_FOLDER = config["DEFAULT"]["outfolder"]
