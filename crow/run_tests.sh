@@ -1,3 +1,0 @@
-
-export PYTHONPATH='./crow'
-pytest

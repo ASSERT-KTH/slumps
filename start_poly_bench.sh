@@ -2,7 +2,7 @@
 # rm -rf /slumps/crow/out
 SOURCE=$(dirname $BASH_SOURCE)
 
-bin_folders=/slumps/souper/third_party/llvm-Release-install/binexport 
+bin_folders=/slumps/souper/third_party/llvm-Release-install/bin
 libFolder=/slumps/souper/build
 
 export LD_LIBRARY_PATH=/slumps/souper/third_party/alive2-build:/slumps/souper/build:/slumps/souper/third_party/z3-install/lib::$LD_LIBRARY_PATH

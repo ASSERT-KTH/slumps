@@ -1,28 +1,32 @@
 import socket
 import json
-from logger import LOGGER
-import numpy as np
-from utils import printProgressBar
-from ansi_ui import SCREEN
-from settings import config
+from crow.monitor.logger import LOGGER
+from crow.utils import NOW
+from crow.settings import config
 import traceback
 from functools import reduce
 import operator
+import time
+from crow.events.event_manager import Publisher
+#import matplotlib.pyplot as plt
 
-def listen(port, q, program, worker_id, level):
+def set_default(obj):
+    if isinstance(obj, set):
+        return list(obj)
+    raise TypeError
 
+def listen(port, q, program, worker_id, level, emit_generation=True):
 
 	HOST = '127.0.0.1'  # Standard loopback interface address (localhost)
 	PORT = port
 	result = {}
 
 	with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-		LOGGER.info(program,f"Getting port {port}")
+		if program:
+			LOGGER.info(program,f"Getting port {port}")
 		s.bind((HOST, PORT))
 		if program:
 			LOGGER.info(program,f"Listening...{port}")
-			if config["DEFAULT"].getboolean("use-ansi-console"):
-				SCREEN.update_process(worker_id, total=None, suffix = f"Starting Level: {level} ")
 						
 		s.listen()
 		conn, addr = s.accept()
@@ -39,11 +43,7 @@ def listen(port, q, program, worker_id, level):
 
 					for kvpair in js:
 						k, v = kvpair["key"], kvpair["value"]
-						
-						if not program:
-							#print(f"{k} -> {v}")
-							LOGGER.info(f"Populating results...{len(result.keys())} blocks")
-							LOGGER.info(f"Populating results...{s} tentative replacements")
+
 						if k not in result:
 							result[k] = set([])
 
@@ -52,24 +52,19 @@ def listen(port, q, program, worker_id, level):
 							q.put([k, v])
 
 
-					if program:
-						s=reduce(operator.mul, [len(t) + 1 for t in result.values()], 1)
-						#print(worker_id)
-						if config["DEFAULT"].getboolean("use-ansi-console"):
-							SCREEN.update_process(worker_id, total=None, suffix = f"Probable count: {s} Keys: {len(result)} Level: {level} ")
-							#SCREEN.place_log(f"{k}: {v}")
-						#printProgressBar(0, 1, length=1, suffix=f"{len(result.keys())} blocks. {s} probable replacements")
-						
-					
+					s=reduce(operator.mul, [len(t) + 1 for t in result.values()], 1)
+
 				except Exception as e:
 					print(traceback.format_exc())
+					
 					return result
 				if not data:
 					break
-	#print()
+
 	return result
 				
 
 
 if __name__ == "__main__":
-	listen(32145, None, None)
+	import sys
+	listen(int(sys.argv[1]), None, None, "Test", "-1")

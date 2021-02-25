@@ -2,7 +2,7 @@
 
 import itertools
 import collections
-from settings import config
+from crow.settings import config
 
 def keysSubset(S):
 
@@ -20,7 +20,7 @@ def keysSubset(S):
 
     keys, values = zip(*S.items())
 
-    print(f"Combinations of {len(keys)}")
+    #print(f"Combinations of {len(keys)}")
     #print(keys)
     #print(values)
     COUNT = 0
@@ -29,7 +29,7 @@ def keysSubset(S):
     # sort-replacements-by-length
 
 
-    print(SKIP)
+    #print(SKIP)
     MIN_LIMIT=config["DEFAULT"].getint("combination-min-limit")
     MAX_LIMIT=config["DEFAULT"].getint("combination-max-limit")
 
@@ -48,6 +48,22 @@ def keysSubset(S):
                     continue
                 yield dict(zip(v, p))
 
+
+def keysSubsetIterators(S):
+
+    if len(S) == 0:
+        return {}
+    
+
+    keys, values = zip(*S.items())
+
+
+    for i in range(len(keys) + 1): ## minimun number of keys to apply at onceß
+        def ite():
+            for v in itertools.combinations(keys, i): # for each applied combinations of keys get the product of values
+                for p in itertools.product(*[S[k] for k in v]):
+                    yield dict(zip(v, p))
+        yield ite, i
 def subset(S):
     def subsetAux(S, m):
         if m == len(S):
@@ -74,9 +90,18 @@ def flatten(x):
         return [x]
 
 if __name__ == "__main__":
-    for k in keysSubset({
+    #for k in keysSubset({
+    #    "a": ['a0', 'a1', 'a2123123123'],
+    #    "b": ['b1', 'b2'],
+    #    "c": ['c1','c2']
+    #}):
+    #    print(k)
+
+    for k, i in keysSubsetIterators({
         "a": ['a0', 'a1', 'a2123123123'],
         "b": ['b1', 'b2'],
         "c": ['c1','c2']
     }):
-        print(k)
+        print(i)
+        for s in k():
+            print(s)
