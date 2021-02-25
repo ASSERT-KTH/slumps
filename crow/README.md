@@ -2,9 +2,20 @@
 
 Research project on randomization for WebAssembly/WASM.
 
+## General architecture
+
+![Schema](docs/schema.png)
+
+TODO
+
+## Repo structure
+
+TODO
+
 ## Prerequisites
 
 - Python version 3.7
+
 
 - Download our changed version of Souper. The main reason behind is that we include some extra options to be able of working together with the SLUMPs core. After downloading all the submodules in SLUMPs, build every one of them following the respective instructions in the original repos.
 
@@ -32,23 +43,23 @@ Research project on randomization for WebAssembly/WASM.
 
 - Install the python requirements: `pip3 install -r  crow/requirements.txt`
 
+- RabbitMQ broker: `docker run -d --hostname my-rabbit --name some-rabbit --restart always -p 5672:5672 -p 8080:15672 rabbitmq:3-management
+`
+
 ## Troubleshooting
 
 - **CROW shows a fail in the CLANG step**: Install emscripten and run it as follows `emcc -v <file>.c`. Then copy all the include files in the [include](https://github.com/KTH/slumps/blob/18ef5189904e25019155fe305046f4b5b8907538/src/settings/config.ini#L17) configuration for CROW.
 - **CROW shows a fail connecting to REDIS**: Install Redis in your local pc and ensure that its running, or change the usage of external cache in the Souper [config](https://github.com/KTH/slumps/blob/18ef5189904e25019155fe305046f4b5b8907538/src/settings/config.ini#L58).
 - **CROW doesn't find the souper folder**: Check the [path](https://github.com/KTH/slumps/blob/18ef5189904e25019155fe305046f4b5b8907538/src/settings/config.ini#L2) in the settings file
 
-## Config options
-
-- **Optimization subset strategy**: [generator-method](https://github.com/KTH/slumps/blob/18ef5189904e25019155fe305046f4b5b8907538/src/settings/config.ini#L9) = subset | onexone | all
-
-- **Output only different binaries**: [prune-equal](https://github.com/KTH/slumps/blob/18ef5189904e25019155fe305046f4b5b8907538/src/settings/config.ini#L6), we calculate the sha256 value for evey WASM program, then we keep only the programs with different sha values.
-
-Change the remaining values to get different results, for instance, add extra arguments to the CLANG step.
 
 ## How to use it
 
-In the project root, run `bash run.sh <number_of_concurrent_generators> <file.(c|bc)>`, collect the output in the folder `crow_out`
+TODO
+
+## Configuration options
+
+TODO
 
 ### Docker images
 
@@ -60,51 +71,13 @@ If the LLVM build takes to long or fails due to memory lack in the image buildin
 
 ### CROW dockerized app
 
-Bothg images are avaiable in the docker [Hub](https://hub.docker.com/repository/docker/jacarte/slumps)
+- `docker run -it --rm --entrypoint="/bin/bash" slumps/crow2 ./launch_standlane.sh  <options>`: Launch all CROW services as a standalone docker container
 
-The application can be ported to a docker container too. To execute SLUMPs, enter in the src file and build the docker image. Run the following command to start the application ```docker run -it -v  $(pwd):/inputs -v $(pwd)/<logs>:/slumps/src/logs -v $(pwd)/<out folder>:/slumps/src/out slumps/crow:latest  <program> <config-options> ```. Slumps will process the fetched code from the arguments, exporting the results to the out folder volumen. You can specify the config parameters, specify the values of ```<config-options>``` as ```%<namespace>.key <value>```. For example, to change the timeout per program use ```<docker_run> %DEFAULT.timeout 3600 <program_url>```, this example changes the timeout to 3600 seconds. The other available options and possible values are listed below.
+#### Horizontal scalation
 
-
-|Namespace|Key|Default value|Comments|
-|--|--|--|--|
-DEFAULT | slumpspath | /slumps | |
-| | debugfile | /slumps/src/slumps.debug.txt | |
-| | outfolder | /slumps/src/out | |
-| | print-sha | True | |
-| | prune-equal | True | |
-| | exit-on-find | False | |
-| | generator-method | subset | ```all``` to superoptimize :) |
-| | candidates-threshold | 1 | |
-| | fail-silently | True | |
-| | timeout | 3600 | |
-| | link-wasi | False | Add WASI std lib to create WASM binaries |
-clang | command | -S -O3 --target=wasm32-unknown-unknown -emit-llvm  | You can add extra includes |
-wasm-ld | command | --no-entry --export-all --allow-undefined -o %s | |
-wabt | path | /slumps/wabt/bin | |
-| | wasm2wat | /slumps/wabt/bin/wasm2wat | |
-souper | solver | -z3-path=/slumps/souper/third_party/z3/build/z3 | |
-| | passname | libsouperPass.so | |
-| | souper-debug-level | 2 | |
-| | souper-common | -solver-timeout=1800 | |
-
-## Study of memory disclosure vulnerabilities
-
-[Slides](https://jacarte.github.io/wasm_presentation/)
-
-## Souper new features
-
-We added some features/options to Souper:
-
-- **`souper-subset`**: Based on the candidate indexes, specify the candidates to be applied, for example
-`-souper-subset=1,2,3,4` or `-souper-subset=0,3`
-- **`souper-valid-count`**: Search for successful optimizations without replacing
-- **`souper-redis-host`**: Host for redis
-- **`souper-redis-pass`**: Password for redis connection
-- **`souper-crow-workers`**: Number of concurrent threads looking for replacements
-- **`souper-crow-port`**: To which socket port send the found replacement information
-
-
-
-## Issues
-
-- LLVM frontend for WASM: This will provide the WASM -> WASM behavior in CROW
+- `docker run -it --rm --entrypoint="/bin/bash" slumps/crow2 ./launch_generators.sh  <number of workers> <options>`: Launch only the generator services
+- `docker run -it --rm --entrypoint="/bin/bash" slumps/crow2 ./launch_entrypoints.sh  <options>`: Launch only the entrypoints service
+- `docker run -it --rm --entrypoint="/bin/bash" slumps/crow2 ./launch_exploration.sh  <options>`: Launch only the exploration service
+- `docker run -it --rm --entrypoint="/bin/bash" slumps/crow2 ./launch_logger.sh  <options>`: Launch only the logger service
+- `docker run -it --rm --entrypoint="/bin/bash" slumps/crow2 ./launch_monitor.sh <options>`: Launch only the monitor service
+- `docker run -it --rm --entrypoint="/bin/bash" slumps/crow2 ./launch_storage.sh  <options>`: Launch only the storage service

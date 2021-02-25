@@ -4,34 +4,26 @@ import os
 
 import uuid
 import sys
-from subprocess import check_output
-from subprocess import Popen, PIPE
-from settings import config, reload
-
-import iterators
-
-from logger import LOGGER
-import smtplib
-from email.mime.multipart import MIMEMultipart
-from email.mime.text import MIMEText
-from email.mime.base import MIMEBase
-from email import encoders
-import json
-import threading
+from crow.settings import config, reload
+from crow.monitor.logger import LOGGER
 import re
 import traceback
+import time
+from crow import iterators
 
 
+NOW = time.time()
 BASE_DIR = os.path.dirname(__file__)
 RUNTIME_CONFIG = dict(USE_REDIS=False)
 
-OUT_FOLDER = config["DEFAULT"]["outfolder"]
+import os
+OUT_FOLDER = os.getenv("OUT_FOLDER", "out")
 
 class ContentToTmpFile(object):
 
 
-    def __init__(self, content=None, name=None, ext=None, persist=False, LOG_LEVEL =  0):
-        tmp = createTmpFile(ext) if not name else name
+    def __init__(self, content=None, name=None, ext=None, persist=False, LOG_LEVEL =  0, outFolder=None):
+        tmp = createTmpFile(ext, outFolder) if not name else name
 
         tmp = ''.join([c for c in tmp])
 
@@ -66,8 +58,9 @@ def updatesettings(argvs):
 
     print("Slumps dir...%s" % SLUMPS_DIR)
     config["DEFAULT"]["slumpspath"] = SLUMPS_DIR
+    configfile = os.path.join(os.path.dirname(__file__),  "settings/config.ini")
 
-    with open(f"{BASE_DIR}/settings/config.ini", 'w') as configFile:
+    with open(configfile, 'w') as configFile:
         config.write(configFile)
         
     
@@ -90,7 +83,8 @@ def updatesettings(argvs):
     for pair in pairs:
         processOptionValuePair(pair)
 
-    with open(f"{BASE_DIR}/settings/config.ini", 'w') as configFile:
+
+    with open(configfile, 'w') as configFile:
         config.write(configFile)
         
     OUT_FOLDER = config["DEFAULT"]["outfolder"]
@@ -124,8 +118,8 @@ def getIteratorByName(name: str):
     return getattr(iterators, name)
 
 
-def createTmpFile(ext=""):
-    r = "%s/CROW_TMP-%s%s" % (OUT_FOLDER, uuid.uuid4(), ext if ext else "")
+def createTmpFile(ext="", outFolder=None):
+    r = "%s/CROW_TMP-%s%s" % (OUT_FOLDER if outFolder is None else outFolder, uuid.uuid4(), ext if ext else "")
 
     return r
 

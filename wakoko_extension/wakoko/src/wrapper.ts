@@ -4,12 +4,15 @@ import './content.css';
 
 
 
-//const oldModule = WebAssembly.Module;
+const oldModule = WebAssembly.Module;
 // @ts-ignore
-//WebAssembly.Module =  null;
+WebAssembly.Module =  null;
+// @ts-ignore
+
+WebAssembly.instantiateStreaming = null
 
 // @ts-ignore
-//WebAssembly.Instance =  null;
+WebAssembly.Instance =  null;
 
 // @ts-ignore
 window.INSTRUMENTER_HOST = "http://localhost:8080"
@@ -17,6 +20,9 @@ window.INSTRUMENTER_HOST = "http://localhost:8080"
 window.old_instantiate = WebAssembly.instantiate;
 
 let old = window.WebAssembly.instantiate;
+// @ts-ignore
+WebAssembly.instantiate = null
+
 console.log("REPLACING API..")
 
 function wrapper(binary, info){
@@ -49,6 +55,7 @@ WebAssembly.instantiate = wrapper
 
 // @ts-ignore
 WebAssembly.instantiateStreaming = async (source, importObject) => {
+	console.log("WRAPPING")
 	let response = await source;
 	let buffer = await response.arrayBuffer();
 	return wrapper(buffer, importObject);
