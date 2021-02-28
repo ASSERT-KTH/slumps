@@ -100,25 +100,27 @@ class Subscriber:
         #print(f"id:{self.id} received new message")
 
     def setup(self):
-        channel = self.connection.channel()
-        channel.exchange_declare(exchange=config["event"]["exchange"],exchange_type=config["event"]["type"])
-        # This method creates or checks a queue
-        channel.queue_declare(queue=self.queueName)
-        # Binds the queue to the specified exchang
-        # TODO improve this, for some reason this is getting exception on BlockingConnection.close(200, 'Normal shutdown') called on closed connection.
-        channel.queue_bind(queue=self.queueName,exchange=config["event"]["exchange"],routing_key=self.bindingKey)
-        channel.basic_consume(queue=self.queueName, on_message_callback=self.on_message_callback, auto_ack=True)
-        print(f'id:{self.id} [*] Waiting for data for ' + self.queueName + '. To exit press CTRL+C')
-
         try:
-            channel.start_consuming()
-        except KeyboardInterrupt:
-            channel.stop_consuming()
+            channel = self.connection.channel()
+            channel.exchange_declare(exchange=config["event"]["exchange"],exchange_type=config["event"]["type"])
+            # This method creates or checks a queue
+            channel.queue_declare(queue=self.queueName)
+            # Binds the queue to the specified exchang
+            # TODO improve this, for some reason this is getting exception on BlockingConnection.close(200, 'Normal shutdown') called on closed connection.
+            channel.queue_bind(queue=self.queueName,exchange=config["event"]["exchange"],routing_key=self.bindingKey)
+            channel.basic_consume(queue=self.queueName, on_message_callback=self.on_message_callback, auto_ack=True)
+            print(f'id:{self.id} [*] Waiting for data for ' + self.queueName + '. To exit press CTRL+C')
+
+            try:
+                channel.start_consuming()
+            except KeyboardInterrupt:
+                channel.stop_consuming()
 
         except Exception as e:
             print("The service suddenly stop....backing off")
-            print(e)
+            print(f"{e} {traceback.format_exc()} ")
             time.sleep(2) # Backoff and restart
+            self.connection = self._create_connection()
             self.setup()
 
 

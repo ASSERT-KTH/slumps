@@ -182,6 +182,8 @@ def bcexploration(bc, program_name):
     ), routing_key="")
 
     start_at = time.time()
+    count = 0
+
     for iteratorFunction, size in getIteratorByName("keysSubsetIterators")(merging):
         # TODO launch each one in a separate thread
         for j in iteratorFunction():
@@ -192,8 +194,9 @@ def bcexploration(bc, program_name):
                 replacements=j,
                 overall=merging
             ), routing_key="")
-
-    LOGGER.info(program_name, f"All variants are in the queue ({time.time() - start_at:.2f}s)")
+            count += 1
+    print(f"Variants {count}")
+    LOGGER.info(program_name, f"All variants ({count}) are in the queue ({time.time() - start_at:.2f}s)")
 
 
 @log_system_exception()
