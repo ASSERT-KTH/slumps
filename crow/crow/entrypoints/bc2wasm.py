@@ -43,7 +43,8 @@ def bc2wasm(bc, program_name, file_name=None, explore=False):
                 event_type=STORE_MESSAGE,
                 stream=st,
                 program_name=program_name,
-                file_name=f"{file_name}.wasm"
+                file_name=f"{file_name}.wasm",
+                path="wasm"
             ), routing_key="")
 
             publisher.publish(message=dict(
