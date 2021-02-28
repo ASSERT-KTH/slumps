@@ -9,7 +9,7 @@ import uuid
 import base64
 import traceback
 
-TOBASE64_FIELDS = ["stream", "bc", "ll"]
+TOBASE64_FIELDS = ["stream", "bc", "ll", "orignal_bc", "original_wasm"]
 
 def serialize_message(message):
 
@@ -45,6 +45,7 @@ class Publisher:
             raise Exception("All published messages should contain the 'event_type'")
 
         message["id"] = f"{uuid.uuid4()}"
+        message["time"] = time.time() # Saving absolute time of the message
 
         connection = self.create_connection()
         # Create a new channel with the next available channel number or pass in a channel number to use 
@@ -104,6 +105,7 @@ class Subscriber:
         # This method creates or checks a queue
         channel.queue_declare(queue=self.queueName)
         # Binds the queue to the specified exchang
+        # TODO improve this, for some reason this is getting exception on BlockingConnection.close(200, 'Normal shutdown') called on closed connection.
         channel.queue_bind(queue=self.queueName,exchange=config["event"]["exchange"],routing_key=self.bindingKey)
         channel.basic_consume(queue=self.queueName, on_message_callback=self.on_message_callback, auto_ack=True)
         print(f'id:{self.id} [*] Waiting for data for ' + self.queueName + '. To exit press CTRL+C')

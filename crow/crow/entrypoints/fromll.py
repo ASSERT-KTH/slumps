@@ -30,7 +30,8 @@ def ll2bc(ll1, program_name):
             event_type=STORE_MESSAGE,
             stream=bc,
             program_name=f"{program_name}",
-            file_name=f"{program_name}.bc"
+            file_name=f"{program_name}.bc",
+            path="bitcodes"
         ), routing_key="")
 
     if not config["DEFAULT"].getboolean("generate-bc-only") and config["DEFAULT"].getboolean("keep-wasm-files"):

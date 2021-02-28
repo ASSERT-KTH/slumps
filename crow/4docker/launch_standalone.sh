@@ -59,8 +59,8 @@ python3 -m crow.entrypoints.fromll &
 for i in $(seq 1 2) # Increase the number of variant creators
 do
   printf "$GREEN Variant generator $i $NC\n"
-  redis-server --port 909$i 2>/dev/null 1>/dev/null &
-  python3 -m crow.entrypoints.variantcreator 909$i &
+  redis-server --port 90$i 2>/dev/null 1>/dev/null &
+  python3 -m crow.entrypoints.variantcreator 90$i &
 done
 
 control_c() {

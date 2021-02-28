@@ -170,7 +170,8 @@ def bcexploration(bc, program_name):
         event_type=STORE_MESSAGE,
         stream=json.dumps([[k, [v1 for v1 in v if v1 is not None]] for k, v in merging.items()], indent=4).encode(),
         program_name=f"{program_name}",
-        file_name=f"{program_name}.exploration.result.json"
+        file_name=f"{program_name}.exploration.result.json",
+        path="metadata"
     ), routing_key="")
 
     publisher.publish(message=dict(
@@ -182,7 +183,7 @@ def bcexploration(bc, program_name):
 
     start_at = time.time()
     for iteratorFunction, size in getIteratorByName("keysSubsetIterators")(merging):
-
+        # TODO launch each one in a separate thread
         for j in iteratorFunction():
             publisher.publish(message=dict(
                 event_type=GENERATE_VARIANT_MESSAGE,
