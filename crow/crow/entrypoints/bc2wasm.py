@@ -1,3 +1,4 @@
+import hashlib
 
 from crow.commands.stages import ObjtoWASM
 from crow.events import BC2WASM_MESSAGE, STORE_MESSAGE, WASM_QUEUE, WASM2WAT_MESSAGE, GENERATED_WASM_VARIANT, \
@@ -47,9 +48,12 @@ def bc2wasm(bc, program_name, file_name=None, explore=False):
                 path="wasm"
             ), routing_key="")
 
+            hsh = hashlib.sha256(st).hexdigest()
+
             publisher.publish(message=dict(
                 event_type=GENERATED_WASM_VARIANT,
                 stream=st,
+                hash=hsh,
                 program_name=program_name,
                 file_name=f"{file_name}.wasm"
             ), routing_key="")

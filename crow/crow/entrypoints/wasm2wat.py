@@ -1,3 +1,4 @@
+import hashlib
 
 from crow.commands.stages import WASM2WAT
 from crow.events import STORE_MESSAGE, WASM2WAT_MESSAGE, GENERATED_WAT_FILE, WAT_QUEUE
@@ -34,9 +35,13 @@ def wasm2wat(wasm, program_name, file_name = None):
                 path="wat"
             ), routing_key="")
 
+        watContent = open(f"{file_name}.wat", 'rb').read()
+        hsh = hashlib.sha256(watContent).hexdigest()
+
         publisher.publish(message=dict(
             event_type=GENERATED_WAT_FILE,
-            stream=open(f"{file_name}.wat", 'rb').read(),
+            stream=watContent,
+            hash=hsh,
             program_name=f"{program_name}",
             file_name=f"{file_name}.wat"
         ), routing_key="")

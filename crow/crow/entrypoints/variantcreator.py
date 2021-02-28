@@ -38,7 +38,7 @@ def generateVariant(j, program_name, merging, bc):
 
 
     variants = []
-    # print(f"Generating {job}")
+    print(f"Generating {j}")
 
     LOGGER.info(program_name, f"Cleaning previous cache for variant generation...{port}")
     try:
@@ -98,9 +98,11 @@ def generateVariant(j, program_name, merging, bc):
                             path="bitcodes/variants"
                         ), routing_key="")
 
+                        hsh = hashlib.sha256(bsOpt).hexdigest()
                         publisher.publish(message=dict(
                             event_type=GENERATED_BC_VARIANT,
                             bc=bsOpt,
+                            hash=hsh,
                             program_name=f"{program_name}",
                             file_name=f"{program_name}{sanitized_set_name}.bc"
                         ), routing_key="")
