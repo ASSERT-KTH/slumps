@@ -39,7 +39,8 @@ def c2ll(file):
             event_type=STORE_MESSAGE,
             stream=ll1,
             program_name=f"{program_name}",
-            file_name=f"{program_name}.ll"
+            file_name=f"{program_name}.ll",
+            path="ll"
         ), routing_key="")
 
 

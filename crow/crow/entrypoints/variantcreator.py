@@ -94,7 +94,8 @@ def generateVariant(j, program_name, merging, bc):
                             event_type=STORE_MESSAGE,
                             stream=bsOpt,
                             program_name=f"{program_name}",
-                            file_name=f"{program_name}{sanitized_set_name}.bc"
+                            file_name=f"{program_name}{sanitized_set_name}.bc",
+                            path="bitcodes/variants"
                         ), routing_key="")
 
                         publisher.publish(message=dict(

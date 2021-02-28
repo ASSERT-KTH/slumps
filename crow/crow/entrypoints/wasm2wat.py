@@ -30,7 +30,8 @@ def wasm2wat(wasm, program_name, file_name = None):
                 event_type=STORE_MESSAGE,
                 stream=open(f"{file_name}.wat", 'rb').read(),
                 program_name=f"{program_name}",
-                file_name=f"{file_name}.wat"
+                file_name=f"{file_name}.wat",
+                path="wat"
             ), routing_key="")
 
         publisher.publish(message=dict(

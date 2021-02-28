@@ -51,13 +51,16 @@ TODO
 - **CROW shows a fail in the CLANG step**: Install emscripten and run it as follows `emcc -v <file>.c`. Then copy all the include files in the [include](https://github.com/KTH/slumps/blob/18ef5189904e25019155fe305046f4b5b8907538/src/settings/config.ini#L17) configuration for CROW.
 - **CROW shows a fail connecting to REDIS**: Install Redis in your local pc and ensure that its running, or change the usage of external cache in the Souper [config](https://github.com/KTH/slumps/blob/18ef5189904e25019155fe305046f4b5b8907538/src/settings/config.ini#L58).
 - **CROW doesn't find the souper folder**: Check the [path](https://github.com/KTH/slumps/blob/18ef5189904e25019155fe305046f4b5b8907538/src/settings/config.ini#L2) in the settings file
+- **CROW Services dont start**: Check if the rabbitmq broker is active. Check the host and port of the broker in the settings are right, `... %event.host <ip>  %event.port <port>`
 
 
 ## How to use it
 
-TODO
+- Start the system: `bash crow/launch_system_standalone.sh <options>`
+- Call the corresponding entrypoint, depending of the type of the file you want to process. For example,
+`python3 crow/entrypoints/fromc.py program.c`
 
-## Configuration options
+## Configuration \<options>
 
 TODO
 
@@ -71,7 +74,9 @@ If the LLVM build takes to long or fails due to memory lack in the image buildin
 
 ### CROW dockerized app
 
-- `docker run -it --rm --entrypoint="/bin/bash" slumps/crow2 ./launch_standlane.sh  <options>`: Launch all CROW services as a standalone docker container
+- `docker run -it --rm  slumps/crow2 <options>`: Launch all CROW services as a standalone docker container
+
+Where to collect results...
 
 #### Horizontal scalation
 
@@ -81,3 +86,13 @@ If the LLVM build takes to long or fails due to memory lack in the image buildin
 - `docker run -it --rm --entrypoint="/bin/bash" slumps/crow2 ./launch_logger.sh  <options>`: Launch only the logger service
 - `docker run -it --rm --entrypoint="/bin/bash" slumps/crow2 ./launch_monitor.sh <options>`: Launch only the monitor service
 - `docker run -it --rm --entrypoint="/bin/bash" slumps/crow2 ./launch_storage.sh  <options>`: Launch only the storage service
+
+#### Examples
+
+##### Standalone CROW
+
+TODO
+
+##### Horizontal scalation
+
+TODO

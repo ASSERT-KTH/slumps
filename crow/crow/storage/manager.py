@@ -19,6 +19,16 @@ TOTAL = {
 
 publisher = Publisher()
 
+def create_path(base_path, path):
+    root = base_path
+
+    subfolders = path.split("/")
+
+    for folder in subfolders:
+        if not os.path.exists(f"{root}/{folder}"):
+            os.mkdir(f"{root}/{folder}")
+        root = f"{root}/{folder}"
+
 @log_system_exception()
 @subscriber_function(event_type=STORE_MESSAGE)
 def subscriber(data):
@@ -28,6 +38,9 @@ def subscriber(data):
 
     if not os.path.exists(f"{out}"):
         os.mkdir(f"{out}")
+    if "path" in data:
+        create_path(out, data["path"])
+        out = os.path.join(out, data["path"])
 
     hashvalue = hashlib.sha256(data["stream"]).hexdigest()
     ext = data["file_name"].split(".")[-1]
