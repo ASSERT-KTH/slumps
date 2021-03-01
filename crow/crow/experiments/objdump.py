@@ -14,6 +14,7 @@ import hashlib
 import json
 import redis
 from concurrent.futures import ThreadPoolExecutor, wait, ALL_COMPLETED
+import re
 
 import sys
 import traceback
@@ -31,13 +32,14 @@ def sanitize(content):
     result = []
 
     for line in content.split("\n")[3:]:# Remove first two lines that contains the file name
-        result.append(line)
+        ln: str = line
+        result.append(re.sub(r"[\d\w]+:", "", ln)) # Remove address of the instruction
 
 
     return "\n".join(result)
 
 @log_system_exception()
-def objdump(obj, program_name, file_name):
+def objdump(obj, program_name, file_name, variant_name):
 
     print("Getting machine code text...")
     with ContentToTmpFile(content=obj, LOG_LEVEL=2) as BCIN:
@@ -51,16 +53,16 @@ def objdump(obj, program_name, file_name):
 
             publisher.publish(message=dict(
                 event_type=MACHINE_CODE_DUMPED,
-                stream=sanitize(dump).encode(errors="ignore"),
+                stream=sanitize(dump).encode(),
                 options="",
                 program_name=f"{program_name}",
+                variant_name=variant_name,
                 file_name=f"{file_name}.native",
-                path="native/variants"
             ), routing_key="")
 
             publisher.publish(message=dict(
                 event_type=STORE_MESSAGE,
-                stream=sanitize(dump).encode(errors="ignore"),
+                stream=sanitize(dump).encode(),
                 program_name=f"{program_name}",
                 file_name=f"{file_name}.native.txt",
                 path="native/variants/dump"
@@ -75,7 +77,7 @@ def objdump(obj, program_name, file_name):
 @log_system_exception()
 @subscriber_function(event_type=NATIVE_WASMTIME_GENERATED)
 def subscriber(data):
-    objdump(data["stream"],data["program_name"], data["file_name"])
+    objdump(data["stream"],data["program_name"], data["file_name"],  data["variant_name"])
 
 
 if __name__ == "__main__":
@@ -88,4 +90,4 @@ if __name__ == "__main__":
         # Convert and send a LL to BC message
         program_name = sys.argv[1]
         program_name = program_name.split("/")[-1].split(".")[0]
-        objdump(open(sys.argv[2], 'rb').read(), program_name)
+        objdump(open(sys.argv[2], 'rb').read(), program_name, None)

@@ -144,7 +144,7 @@ class Subscriber:
             parameters=pika.ConnectionParameters(host=config["event"]["host"],port = config["event"].getint("port"))
             return pika.BlockingConnection(parameters)
         except Exception as e:
-            print(f"Impossible to create the service...backingoff")
+            print(f"Impossible to create the service...backingoff {e}")
             time.sleep(2)
             return self._create_connection()
     
@@ -223,17 +223,8 @@ def receiver(data):
     print(data)
 
 
-@listener
-class ServerListener(Listener):
-
-    @function_discrimator(event_type=GENERATE_VARIANT_MESSAGE)
-    def wathever(self, message):
-        print(message)
-
-
 if __name__ == "__main__":
-
-    l = ServerListener()
+    pass
     #tr = threading.Thread(target=test_subscriber)
     #tr.start()
 

@@ -26,7 +26,7 @@ from crow.monitor.logger import LOGGER
 publisher = Publisher()
 
 @log_system_exception()
-def wasm2obj(wasm, program_name, file_name):
+def wasm2obj(wasm, program_name, file_name, variant_name):
 
     hashvalue = hashlib.sha256(wasm).hexdigest()
 
@@ -53,6 +53,7 @@ def wasm2obj(wasm, program_name, file_name):
                     options="",
                     program_name=f"{program_name}",
                     file_name=f"{file_name}.native",
+                    variant_name=variant_name,
                     path="native/variants"
                 ), routing_key="")
 
@@ -73,7 +74,7 @@ def wasm2obj(wasm, program_name, file_name):
 @log_system_exception()
 @subscriber_function(event_type=GENERATED_WASM_VARIANT)
 def subscriber(data):
-    wasm2obj(data["stream"],data["program_name"], data["file_name"])
+    wasm2obj(data["stream"],data["program_name"], data["file_name"], data["variant_name"])
 
 
 if __name__ == "__main__":
@@ -86,4 +87,4 @@ if __name__ == "__main__":
         # Convert and send a LL to BC message
         program_name = sys.argv[1]
         program_name = program_name.split("/")[-1].split(".")[0]
-        wasm2obj(open(sys.argv[2], 'rb').read(), program_name)
+        wasm2obj(open(sys.argv[2], 'rb').read(), program_name, None)

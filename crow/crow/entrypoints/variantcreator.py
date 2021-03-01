@@ -94,6 +94,7 @@ def generateVariant(j, program_name, merging, bc):
                             event_type=STORE_MESSAGE,
                             stream=bsOpt,
                             program_name=f"{program_name}",
+                            variant_name=sanitized_set_name,
                             file_name=f"{program_name}{sanitized_set_name}.bc",
                             path="bitcodes/variants"
                         ), routing_key="")
@@ -104,6 +105,7 @@ def generateVariant(j, program_name, merging, bc):
                             bc=bsOpt,
                             hash=hsh,
                             program_name=f"{program_name}",
+                            variant_name=sanitized_set_name,
                             file_name=f"{program_name}{sanitized_set_name}.bc"
                         ), routing_key="")
 
@@ -113,6 +115,7 @@ def generateVariant(j, program_name, merging, bc):
                             event_type=BC2WASM_MESSAGE,
                             bc=bsOpt,
                             program_name=f"{program_name}",
+                            variant_name=sanitized_set_name,
                             file_name=f"{program_name}{sanitized_set_name}.bc"
                         ), routing_key="")
 
