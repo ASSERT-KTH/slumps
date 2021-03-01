@@ -170,6 +170,7 @@ class Alias:
     souper_check = config["souper"]["check"]
     wasm2wat = config["wabt"]["wasm2wat"]
     wasmtime = config["wasmtime"]["bin"]
+    dump = config["objdump"]["bin"]
 
 
 def processCandidatesMetaOutput(output):
