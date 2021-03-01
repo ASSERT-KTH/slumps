@@ -4,12 +4,71 @@ import json
 import base64
 import threading
 import time
+
+from crow.events import GENERATE_VARIANT_MESSAGE
 from crow.settings import config
 import uuid
 import base64
 import traceback
 
 TOBASE64_FIELDS = ["stream", "bc", "ll", "orignal_bc", "original_wasm"]
+
+
+# Allow subscriber to have internal state
+class Listener(object):
+
+    def __call__(self, *args, **kwargs):
+
+        if len(args) != 1 or len(kwargs) != 0:
+            raise Exception("The subscriber function should receive only on parameter")
+
+        if "event_type" not in args[0]:
+            raise Exception("The data should contain a 'event_type' key")
+
+        event_type: str = args[0]["event_type"]
+
+        try:
+            f = getattr(self, event_type.lower()) # use the lower case of the message type to redirect the message
+
+            return f(args[0])
+
+        except Exception as e:
+            #print(e)
+            try:
+                f = getattr(self,"any") # parse any message
+                return f(args[0])
+            except Exception as e2:
+                #print(e2)
+
+                (filename, line_number, function_name, text) = traceback.extract_stack()[-2]
+                def_name = text[:text.find('=')].strip()
+
+                #print(f"WARNING {filename} {def_name} has not attribute {event_type.lower()}")
+
+
+# DECORATORS
+def function_discrimator(event_type=None):
+    def wrapper(func):
+        func.new_name = event_type.lower()
+        return func
+    return wrapper
+
+def append_B(func):
+  func.suffix='_B'
+  return func
+
+def listener(class_obj):
+  for name in dir(class_obj):
+      if not name.startswith('_'): # private
+          attr = class_obj.__dict__[name]
+          print(attr, name)
+          new_name = getattr(attr, 'new_name', None)
+          if new_name:
+            print(new_name)
+            attr.new_name = None
+            setattr(class_obj,new_name, getattr(class_obj, name))
+            #delattr(class_obj,name)
+  return class_obj
 
 def serialize_message(message):
 
@@ -125,7 +184,6 @@ class Subscriber:
 
 
 
-
 def test_subscriber():
 
     key = config["event"]["process-id-exploration"]
@@ -153,13 +211,29 @@ def subscriber_function(event_type=None):
 
     return wrapper
 
+
+class Test(Listener):
+
+    def process(self, message):
+        print(message)
+
+
 @subscriber_function(event_type="a")
 def receiver(data):
     print(data)
 
+
+@listener
+class ServerListener(Listener):
+
+    @function_discrimator(event_type=GENERATE_VARIANT_MESSAGE)
+    def wathever(self, message):
+        print(message)
+
+
 if __name__ == "__main__":
 
-    receiver(dict(event_type="TEST_PACKAGE"))
+    l = ServerListener()
     #tr = threading.Thread(target=test_subscriber)
     #tr.start()
 
