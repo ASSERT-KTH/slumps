@@ -26,6 +26,7 @@ class ExternalStage(object):
         self.namespace = namespace
         self.timeout = -1
         self.DEBUG_LEVEL = 1
+        self.non_explicit = True
 
     def processInner(self, std, err):
         return std, err
@@ -61,7 +62,8 @@ class ExternalStage(object):
             if rc == 124:
                 raise TimeoutException()
 
-            raise CallException("Error on stage: %s" % (self.name,), err)
+            if self.non_explicit:
+                raise CallException("Error on stage: %s" % (self.name,), err)
 
         # Specific implementation process over the std out
         res = self.processInner(std, err)
@@ -283,6 +285,26 @@ class OBJ2DUMP(ExternalStage):
 
         new_inputs = ['-D',  args[0]]
         return super(OBJ2DUMP, self).__call__(new_inputs, std)
+
+    def processInner(self, std, err):
+        # return the std output optimized LLVM IR
+        return std
+
+
+class TextDIFF(ExternalStage):
+
+    def __init__(self, namespace, debug=True):
+        self.path_to_executable = Alias.diff
+        self.name = "UNIX diff"
+        self.debug = debug
+        self.namespace = namespace
+        self.timeout = -1
+        self.non_explicit = False # exit code different of zero means nothing
+
+    def __call__(self, args=[], std=None):  # f -> inputs
+
+        new_inputs = [args[0],  args[1]]
+        return super(TextDIFF, self).__call__(new_inputs, std)
 
     def processInner(self, std, err):
         # return the std output optimized LLVM IR

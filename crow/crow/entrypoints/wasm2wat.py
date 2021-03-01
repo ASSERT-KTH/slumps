@@ -14,7 +14,7 @@ from crow.monitor.monitor import log_system_exception
 publisher = Publisher()
 
 @log_system_exception()
-def wasm2wat(wasm, program_name, file_name = None):
+def wasm2wat(wasm, program_name, file_name = None, variant_name = None):
 
     file_name = program_name if file_name is None else file_name
     with ContentToTmpFile(name="%s.wasm" % file_name, content=wasm, ext=".wasm", persist=False) as TMP_WASM:
@@ -43,6 +43,7 @@ def wasm2wat(wasm, program_name, file_name = None):
             stream=watContent,
             hash=hsh,
             program_name=f"{program_name}",
+            variant_name=variant_name,
             file_name=f"{file_name}.wat"
         ), routing_key="")
 

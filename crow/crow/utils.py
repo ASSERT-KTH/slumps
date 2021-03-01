@@ -171,6 +171,7 @@ class Alias:
     wasm2wat = config["wabt"]["wasm2wat"]
     wasmtime = config["wasmtime"]["bin"]
     dump = config["objdump"]["bin"]
+    diff = config["diff"]["bin"]
 
 
 def processCandidatesMetaOutput(output):

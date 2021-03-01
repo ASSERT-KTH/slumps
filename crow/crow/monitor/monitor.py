@@ -26,6 +26,8 @@ def log_system_exception():
                 ),
                 routing_key="")
 
+                print(f"{e} {trace}")
+
         return wrapper
 
     return Inner

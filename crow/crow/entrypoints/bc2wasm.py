@@ -13,7 +13,7 @@ import os
 from crow.monitor.monitor import log_system_exception
 
 @log_system_exception()
-def bc2wasm(bc, program_name, file_name=None, explore=False):
+def bc2wasm(bc, program_name, file_name=None, variant_name=None, explore=False):
 
     publisher = Publisher()
 
@@ -55,6 +55,7 @@ def bc2wasm(bc, program_name, file_name=None, explore=False):
                 stream=st,
                 hash=hsh,
                 program_name=program_name,
+                variant_name=variant_name,
                 file_name=f"{file_name}.wasm"
             ), routing_key="")
 
@@ -74,7 +75,7 @@ def bc2wasm(bc, program_name, file_name=None, explore=False):
 @log_system_exception()
 @subscriber_function(event_type=BC2WASM_MESSAGE)
 def subscriber(data):
-    bc2wasm(data["bc"], data["program_name"], data["file_name"] if "file_name" in data else None)
+    bc2wasm(data["bc"], data["program_name"], data["file_name"] if "file_name" in data else None, data["variant_name"] if "variant_name" in data else None)
 
 
 if __name__ == "__main__":
