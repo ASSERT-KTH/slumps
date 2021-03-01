@@ -268,3 +268,22 @@ class WASM2OBJ(ExternalStage):
     def processInner(self, std, err):
         # return the std output optimized LLVM IR
         return std
+
+
+class OBJ2DUMP(ExternalStage):
+
+    def __init__(self, namespace, debug=True):
+        self.path_to_executable = Alias.dump
+        self.name = "OBJ dissasembly"
+        self.debug = debug
+        self.namespace = namespace
+        self.timeout = -1
+
+    def __call__(self, args=[], std=None):  # f -> inputs
+
+        new_inputs = ['-D',  args[0]]
+        return super(OBJ2DUMP, self).__call__(new_inputs, std)
+
+    def processInner(self, std, err):
+        # return the std output optimized LLVM IR
+        return std
