@@ -45,16 +45,15 @@ def general_log(data):
     if data["event_type"] == GENERATED_BC_VARIANT:
         COUNT += 1
 
-        if TENTATIVE_NUMBER == -1: # WARNING something happend with the exploration service
-            print(f"WARNING something happend with the exploration service. Count: {COUNT}")
-        else:
-            printProgressBar(COUNT, TENTATIVE_NUMBER, suffix=f"{COUNT}/{TENTATIVE_NUMBER}")
+        #if TENTATIVE_NUMBER == -1: # WARNING something happend with the exploration service
+        #    print(f"WARNING something happend with the exploration service. Count: {COUNT}")
+        #else:
+        printProgressBar(COUNT, TENTATIVE_NUMBER if TENTATIVE_NUMBER > -1 else COUNT + 1, suffix=f"{COUNT}/{TENTATIVE_NUMBER}")
 
     if data["event_type"] == EXPLORATION_RESULT:
         TENTATIVE_NUMBER = data["tentative_number"]
 
 if __name__ == "__main__":
 
-    key = config["event"]["process-id-exploration"]
-    subscriber = Subscriber(1, MONITOR_QUEUE_NAME, key, config["event"].getint("port"), general_log)
+    subscriber = Subscriber(1, MONITOR_QUEUE_NAME, config["event"].getint("port"), general_log)
     subscriber.setup()

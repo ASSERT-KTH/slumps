@@ -18,6 +18,7 @@ class TimeoutException(Exception):
 class ExternalStage(object):
 
     DEBUG_LEVEL = config["DEFAULT"].getint("debug-level")
+    non_explicit = True
 
     def __init__(self, namespace):
         self.name = "unknown"
