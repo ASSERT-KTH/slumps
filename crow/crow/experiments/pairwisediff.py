@@ -54,10 +54,7 @@ class DiffDict(object):
             self.d[program_name][k1] = {}
 
         if k2 not in self.d[program_name][k1]:
-            self.d[program_name][k1][k2] = { }
-
-        if rep not in self.d[program_name][k1][k2]:
-            self.d[program_name][k1][k2][rep] = -1
+            self.d[program_name][k1][k2] = {}
 
         self.d[program_name][k1][k2][rep] = val
 
@@ -71,25 +68,50 @@ class UnixDiffComparer(Listener):
         self.cb = cb
     def print_stats(self):
 
-        for program_name, variants1 in self.diffs.d.items():
+        for program_name in self.diffs.d.keys():
             #print(f"{program_name}")
             total_pairs = 0
             diff_llvm_pairs = 0
             diff_wasm_pairs = 0
             diff_native_pairs = 0
 
-            for variant_name1, variants2 in variants1.items():
-                for variant_name2, reps in variants2.items():
-                    if "bc" in reps and "wasm" in reps and "x86" in reps:
-                        total_pairs += 1
+            for i, t in enumerate(self.diffs.names_llvm):
+                _, name1, _ = t
+                for j in range(i + 1, len(self.diffs.names_llvm)):
+                    _, name2, _ = self.diffs.names_llvm[j]
 
-                        if reps['bc'] == 1:
-                            diff_llvm_pairs += 1
-                        if reps["wasm"] == 1:
-                            diff_wasm_pairs += 1
-                        if reps["x86"] == 1:
-                            diff_native_pairs += 1
+                    if name2 in self.diffs.d[program_name][name1]:
+                        reps = self.diffs.d[program_name][name1][name2]
+                        isLLVMDiff = False
+                        isWasmDiff = False
+                        if name1 != name2:
+                            if "bc" in reps:
+                                total_pairs += 1
+                                if reps["bc"] == 0:
+                                    # Report two variants that are equal under LLVM rep
+                                    print(f"Same LLVM pair {name1} {name2}")
+                                else:
+                                    diff_llvm_pairs += 1
+                                    isLLVMDiff = True
 
+                            if "wasm" in reps:
+                                if reps["wasm"] == 0:
+                                    if isLLVMDiff:
+                                        # The LLVM represenattions are different but not under WASM
+                                        # LLVM1 != LLVM2 => W1 != W2
+                                        print(f"Same WASM pair {name1} {name2}")
+                                else:
+                                    diff_wasm_pairs += 1
+                                    isWasmDiff = True
+
+                            if "x86" in reps:
+                                if reps["x86"] == 0:
+                                    if isWasmDiff:
+                                        print(f"Same x86 pair {name1} {name2}")
+                                else:
+                                    diff_native_pairs += 1
+
+            print(f"{program_name} {len(self.diffs.names_llvm)} {total_pairs}")
             if total_pairs != 0 and not self.cb:
                 print(f"{program_name} Pairs: {total_pairs} LLVM {diff_llvm_pairs} WASM {diff_wasm_pairs} NATIVE {diff_native_pairs}")
 
@@ -189,9 +211,11 @@ class UnixDiffComparer(Listener):
             if hsh != newhsh:
                 # REPORT diff and emit new WSM comparison for these two
                 self.diffs.set_cmp(program_name, variant_name, name, "bc", 1)
+                self.diffs.set_cmp(program_name, name, variant_name, "bc", 1)
                 #[program_name][variant_name][name]["bc"] = 1 # mark if they are diff
             else:
                 self.diffs.set_cmp(program_name, variant_name, name, "bc", 0)
+                self.diffs.set_cmp(program_name, name, variant_name, "bc", 0)
 
         self.diffs.names_llvm.append((newhsh, variant_name, file1))
         self.print_stats()
@@ -201,7 +225,7 @@ if __name__ == "__main__":
     l = UnixDiffComparer()
 
     if len(sys.argv) == 1:
-        subscriber = Subscriber(1, DIFF_QUEUE, "*", config["event"].getint("port"), l)
+        subscriber = Subscriber(1, DIFF_QUEUE, config["event"].getint("port"), l)
         subscriber.setup()
         # Start a subscriber listening for LL2BC message
     else:

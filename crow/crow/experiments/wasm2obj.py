@@ -24,9 +24,11 @@ from functools import reduce
 from crow.monitor.logger import LOGGER
 
 publisher = Publisher()
+COUNT = 0
 
 @log_system_exception()
 def wasm2obj(wasm, program_name, file_name, variant_name):
+    global COUNT
 
     hashvalue = hashlib.sha256(wasm).hexdigest()
 
@@ -44,7 +46,7 @@ def wasm2obj(wasm, program_name, file_name, variant_name):
                 nativeObj = open(tmpOut, 'rb').read()
 
                 h2 = hashlib.sha256(nativeObj).hexdigest()
-                print(f"WASMTIME {file_name} {hashvalue} {h2}")
+                print(f"WASMTIME {COUNT} {file_name} {hashvalue} {h2}")
 
                 publisher.publish(message=dict(
                     event_type=NATIVE_WASMTIME_GENERATED,
@@ -65,7 +67,7 @@ def wasm2obj(wasm, program_name, file_name, variant_name):
                     path="native/variants"
                 ), routing_key="")
 
-
+                COUNT += 1
 
             except Exception as e:
                 LOGGER.error(program_name, traceback.format_exc(), )
@@ -80,7 +82,7 @@ def subscriber(data):
 if __name__ == "__main__":
 
     if len(sys.argv) == 1:
-        subscriber = Subscriber(1, WASMTIME_QUEUE, "*", config["event"].getint("port"), subscriber)
+        subscriber = Subscriber(1, WASMTIME_QUEUE, config["event"].getint("port"), subscriber)
         subscriber.setup()
         # Start a subscriber listening for LL2BC message
     else:
