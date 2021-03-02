@@ -12,9 +12,11 @@ import os
 from crow.monitor.monitor import log_system_exception
 
 publisher = Publisher()
+COUNT = 0
 
 @log_system_exception()
 def wasm2wat(wasm, program_name, file_name = None, variant_name = None):
+    global COUNT
 
     file_name = program_name if file_name is None else file_name
     with ContentToTmpFile(name="%s.wasm" % file_name, content=wasm, ext=".wasm", persist=False) as TMP_WASM:
@@ -38,6 +40,7 @@ def wasm2wat(wasm, program_name, file_name = None, variant_name = None):
         watContent = open(f"{file_name}.wat", 'rb').read()
         hsh = hashlib.sha256(watContent).hexdigest()
 
+        print(f"WASM2WAT ({COUNT}) {program_name}")
         publisher.publish(message=dict(
             event_type=GENERATED_WAT_FILE,
             stream=watContent,
@@ -48,6 +51,7 @@ def wasm2wat(wasm, program_name, file_name = None, variant_name = None):
         ), routing_key="")
 
         os.remove("%s.wat" % (file_name,))
+        COUNT += 1
 
 @log_system_exception()
 @subscriber_function(event_type=WASM2WAT_MESSAGE)
@@ -61,7 +65,7 @@ if __name__ == "__main__":
     #f = sys.argv[-1]
 
     if len(sys.argv) == 1:
-        subscriber = Subscriber(1, WAT_QUEUE, "*", config["event"].getint("port"), subscriber)
+        subscriber = Subscriber(1, WAT_QUEUE,  config["event"].getint("port"), subscriber)
         subscriber.setup()
         # Start a subscriber listening for LL2BC message
     else:

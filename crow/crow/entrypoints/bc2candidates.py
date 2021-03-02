@@ -95,6 +95,19 @@ def processLevel(levels, program_name, port, bc, worker_index, launch_socket_ser
                 results[level][k].append(v)
         return results
 
+def send_jobs(iterator, size, publisher, merging, bc, program_name):
+    c = 0
+    print(f"Generating {size}")
+    for j in iterator():
+        publisher.publish(message=dict(
+            event_type=GENERATE_VARIANT_MESSAGE,
+            bc=bc,
+            program_name=f"{program_name}",
+            replacements=j,
+            overall=merging
+        ), routing_key="")
+        c += 1
+    return c
 @log_system_exception()
 def bcexploration(bc, program_name):
 
@@ -154,13 +167,11 @@ def bcexploration(bc, program_name):
 
     tentativeNumber = reduce(operator.mul, [len(v) + 1 for v in merging.values()], 1)
 
-    LOGGER.info(program_name, f"tentative number of variants {tentativeNumber} (plus original).")
+    print(f"Tentative number of variants {tentativeNumber}")
 
     sanitized = san.sanitize(merging)
 
-    tentativeNumber = reduce(operator.mul, [len(v) + 1 for v in sanitized.values()], 1)
 
-    LOGGER.info(program_name, f"After sanitization {tentativeNumber} (plus original).")
 
     # Send exploration result to storage service
 
@@ -174,28 +185,33 @@ def bcexploration(bc, program_name):
         path="metadata"
     ), routing_key="")
 
-    publisher.publish(message=dict(
-        event_type=EXPLORATION_RESULT,
-        all_replacements=[[k, [v1 for v1 in v if v1 is not None]] for k, v in merging.items()],
-        tentative_number=tentativeNumber,
-        program_name=f"{program_name}"
-    ), routing_key="")
 
     start_at = time.time()
     count = 0
+    futures = []
 
     for iteratorFunction, size in getIteratorByName("keysSubsetIterators")(merging):
-        # TODO launch each one in a separate thread
-        for j in iteratorFunction():
-            publisher.publish(message=dict(
-                event_type=GENERATE_VARIANT_MESSAGE,
-                bc=bc,
-                program_name=f"{program_name}",
-                replacements=j,
-                overall=merging
-            ), routing_key="")
-            count += 1
+        # iterator, publisher, merging, bc
+        job = levelPool.submit(send_jobs, iteratorFunction, size, publisher, merging, bc, program_name)
+        futures.append(job)
+
+    done, fail = wait(futures, return_when=ALL_COMPLETED)
+
+    if len(fail) != 0:
+        print("WARNING some futures failed")
+
+    for c in done:
+        count += c.result()
+
+    publisher.publish(message=dict(
+        event_type=EXPLORATION_RESULT,
+        all_replacements=[[k, [v1 for v1 in v if v1 is not None]] for k, v in merging.items()],
+        tentative_number=count,
+        program_name=f"{program_name}"
+    ), routing_key="")
+
     print(f"Variants {count}")
+
     LOGGER.info(program_name, f"All variants ({count}) are in the queue ({time.time() - start_at:.2f}s)")
 
 
@@ -214,7 +230,7 @@ if __name__ == "__main__":
     max_workers=config["DEFAULT"].getint("workers"))
 
     if len(sys.argv) == 1:
-        subscriber = Subscriber(1, BC_EXPLORATION_QUEUE, "*", config["event"].getint("port"), subscriber)
+        subscriber = Subscriber(1, BC_EXPLORATION_QUEUE, config["event"].getint("port"), subscriber)
         subscriber.setup()
         # Start a subscriber listening for LL2BC message
     else:

@@ -33,12 +33,13 @@ publisher = Publisher()
 r = None
 port = None
 
+COUNT = 0
 
 def generateVariant(j, program_name, merging, bc):
-
+    global COUNT
 
     variants = []
-    print(f"Generating {j}")
+    print(f"Generating {COUNT}")
 
     LOGGER.info(program_name, f"Cleaning previous cache for variant generation...{port}")
     try:
@@ -119,12 +120,13 @@ def generateVariant(j, program_name, merging, bc):
                             file_name=f"{program_name}{sanitized_set_name}.bc"
                         ), routing_key="")
 
-
+                    COUNT += 1
                 except Exception as e:
+                    print(f"{e} {traceback.format_exc()}")
                     LOGGER.error(program_name, traceback.format_exc(), )
-                    raise e
         # call Souper and the linker again
     except Exception as e:
+        print(f"{e} {traceback.format_exc()}")
         LOGGER.error(program_name, traceback.format_exc())
     finally:
 
@@ -159,7 +161,7 @@ if __name__ == "__main__":
     max_workers=config["DEFAULT"].getint("workers"))
 
     if len(sys.argv) == 2:
-        subscriber = Subscriber(1, GENERATION_QUEUE, "*", config["event"].getint("port"), subscriber)
+        subscriber = Subscriber(1, GENERATION_QUEUE, config["event"].getint("port"), subscriber)
         subscriber.setup()
         # Start a subscriber listening for LL2BC message
     else:

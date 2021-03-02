@@ -4,6 +4,7 @@ from crow.commands.stages import ObjtoWASM
 from crow.events import BC2WASM_MESSAGE, STORE_MESSAGE, WASM_QUEUE, WASM2WAT_MESSAGE, GENERATED_WASM_VARIANT, \
     BC2Candidates_MESSAGE
 from crow.events.event_manager import Publisher, Subscriber, subscriber_function
+from crow.monitor.logger import LOGGER
 from crow.settings import config
 
 import sys
@@ -12,11 +13,14 @@ from crow.utils import ContentToTmpFile
 import os
 from crow.monitor.monitor import log_system_exception
 
+COUNT = 0
+
+publisher = Publisher()
+
+
 @log_system_exception()
 def bc2wasm(bc, program_name, file_name=None, variant_name=None, explore=False):
-
-    publisher = Publisher()
-
+    global COUNT
     file_name = program_name if file_name is None else file_name
 
     if explore:
@@ -38,7 +42,11 @@ def bc2wasm(bc, program_name, file_name=None, variant_name=None, explore=False):
                 tmpWasm
             ], std=None)
 
-            st = open(f"{file_name}.wasm", 'rb').read()
+            try:
+                st = open(f"{file_name}.wasm", 'rb').read()
+            except Exception as e:
+                LOGGER.error(program_name, f"{e}")
+                return
             # Explicitly saving wasm file
             publisher.publish(message=dict(
                 event_type=STORE_MESSAGE,
@@ -59,18 +67,18 @@ def bc2wasm(bc, program_name, file_name=None, variant_name=None, explore=False):
                 file_name=f"{file_name}.wasm"
             ), routing_key="")
 
-
+            print(f"BC2WASM ({COUNT}) {program_name}")
             # Generate wat file ?
             if config["DEFAULT"].getboolean("keep-wat-files"):
                 publisher.publish(message=dict(
                     event_type=WASM2WAT_MESSAGE,
-                    stream=open(f"{file_name}.wasm", 'rb').read(),
+                    stream=st,
                     program_name=program_name,
                     file_name=f"{file_name}"
                 ), routing_key="")
 
             os.remove("%s.wasm" % (file_name,))
-
+            COUNT += 1
 
 @log_system_exception()
 @subscriber_function(event_type=BC2WASM_MESSAGE)
@@ -84,7 +92,7 @@ if __name__ == "__main__":
     #f = sys.argv[-1]
 
     if len(sys.argv) == 1:
-        subscriber = Subscriber(1, WASM_QUEUE, "*", config["event"].getint("port"), subscriber)
+        subscriber = Subscriber(1, WASM_QUEUE,  config["event"].getint("port"), subscriber)
         subscriber.setup()
         # Start a subscriber listening for LL2BC message
     else:

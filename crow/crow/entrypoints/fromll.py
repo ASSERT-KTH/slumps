@@ -58,7 +58,7 @@ if __name__ == "__main__":
     #f = sys.argv[-1]
 
     if len(sys.argv) == 1:
-        subscriber = Subscriber(1, LL_QUEUE, "*", config["event"].getint("port"), subscriber)
+        subscriber = Subscriber(1, LL_QUEUE,  config["event"].getint("port"), subscriber)
         subscriber.setup()
         # Start a subscriber listening for LL2BC message
     else:

@@ -71,6 +71,5 @@ if __name__ == "__main__":
         os.mkdir(f"{OUT_FOLDER}")
 
     # SIMPLE Task wait for messages and save the corresponding files
-    key = config["event"]["process-id-exploration"]
-    subscriber = Subscriber(1, STORAGE_QUEUE_NAME, key, config["event"].getint("port"), subscriber)
+    subscriber = Subscriber(1, STORAGE_QUEUE_NAME,  config["event"].getint("port"), subscriber)
     subscriber.setup()

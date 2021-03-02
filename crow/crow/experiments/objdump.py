@@ -37,11 +37,12 @@ def sanitize(content):
 
 
     return "\n".join(result)
+COUNT = 0
 
 @log_system_exception()
 def objdump(obj, program_name, file_name, variant_name):
-
-    print("Getting machine code text...")
+    global COUNT
+    #print("Getting machine code text...")
     with ContentToTmpFile(content=obj, LOG_LEVEL=2) as BCIN:
         tmpIn = BCIN.file
 
@@ -68,7 +69,8 @@ def objdump(obj, program_name, file_name, variant_name):
                 path="native/variants/dump"
             ), routing_key="")
 
-
+            print(f"OBJDUMP ({COUNT})")
+            COUNT += 1
 
         except Exception as e:
             LOGGER.error(program_name, traceback.format_exc(), )
@@ -83,7 +85,7 @@ def subscriber(data):
 if __name__ == "__main__":
 
     if len(sys.argv) == 1:
-        subscriber = Subscriber(1, OBJDUMP_QUEUE, "*", config["event"].getint("port"), subscriber)
+        subscriber = Subscriber(1, OBJDUMP_QUEUE, config["event"].getint("port"), subscriber)
         subscriber.setup()
         # Start a subscriber listening for LL2BC message
     else:

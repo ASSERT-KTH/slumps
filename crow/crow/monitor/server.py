@@ -14,6 +14,7 @@ from crow.events.event_manager import subscriber_function, Subscriber, Listener,
 from crow.experiments.pairwisediff import UnixDiffComparer
 from crow.monitor import MONITOR_QUEUE_NAME
 from crow.settings import config
+import random
 
 app = Flask(__name__, template_folder='templates')
 app.config["SECRET_KEY"] = 'secret!'
@@ -55,7 +56,6 @@ socketio.on_namespace(SimulatorNamespace("/dashboard"))
 def index_handler():
     return index()
 
-MAX = 10
 
 @listener
 class ServerListener(Listener):
@@ -65,45 +65,59 @@ class ServerListener(Listener):
     BITCODE_HASHES = []
     WASM_HASHES = []
     NATIVE_HASHES = []
-    SEND_EVERY = MAX
+
+    BUFFER = []
+    BUFFER_MAX = 100
 
     def __init__(self):
-        self.diff_analyser = UnixDiffComparer(cb = self.send_stability)
+        self.diff_analyser = UnixDiffComparer(cb=self.send_stability)
+
+
+    def emit(self, tpe, data, namespace):
+
+        self.BUFFER.append((
+            tpe, data, namespace
+        ))
+
+        if len(self.BUFFER) >= self.BUFFER_MAX:
+            for tp, d, n in self.BUFFER:
+                socketio.emit(tp, d, json=True, namespace=n)
+
+            self.BUFFER = []
 
     @function_discrimator(event_type=EXPLORATION_RESULT)
-    def wathever(self, data):
+    def send_exploration_result(self, data):
         self.TENTATIVE_NUMBER = data["tentative_number"]
+
+        self.emit("NEW_VARIANT", dict(
+                program_name="Program",
+                count=self.COUNT,
+                tentative=self.TENTATIVE_NUMBER,
+                at=STATUS["NOW"] - data["time"]
+            ), "/dashboard")
 
     def send_stability(self, name, total, llvm, wasm, native):
 
-        if self.SEND_EVERY <= 0:
-            socketio.emit("STABILITY", dict(
+        self.emit("STABILITY", dict(
                 program_name="Program",
                 total=total,
                 llvm=llvm,
                 wasm = wasm,
                 native=native
-            ), json=True, namespace='/dashboard')
-            self.SEND_EVERY = MAX
-        else:
-            self.SEND_EVERY -= 1
+            ), "/dashboard")
 
     @function_discrimator(event_type=GENERATED_WASM_VARIANT)
     def on_generated_wasm(self, data):
         self.WASM_HASHES.append(data["hash"])
 
-        if self.SEND_EVERY <= 0:
-            socketio.emit("COUNT", dict(
+        self.emit("COUNT", dict(
                 program_name="Program",
                 total=len(self.WASM_HASHES),
                 unique=len(set(self.WASM_HASHES)),
                 type="wasm",
                 at=STATUS["NOW"] - data["time"]
-            ), json=True, namespace='/dashboard')
+            ), "/dashboard")
 
-            self.SEND_EVERY = MAX
-        else:
-            self.SEND_EVERY -= 1
 
         self.diff_analyser.on_receive_wasm(data)
 
@@ -115,17 +129,13 @@ class ServerListener(Listener):
     def on_generated_native(self, data):
         self.NATIVE_HASHES.append(data["hash"])
 
-        if self.SEND_EVERY <= 0:
-            socketio.emit("COUNT", dict(
+        self.emit("COUNT", dict(
                 program_name="Program",
                 total=len(self.NATIVE_HASHES),
                 unique=len(set(self.NATIVE_HASHES)),
                 type="native",
                 at=STATUS["NOW"] - data["time"]
-            ), json=True, namespace='/dashboard')
-            self.SEND_EVERY = MAX
-        else:
-            self.SEND_EVERY -= 1
+            ), "/dashboard")
 
     @function_discrimator(event_type=GENERATED_BC_VARIANT)
     def on_generated_bc(self, data):
@@ -133,43 +143,35 @@ class ServerListener(Listener):
 
         self.BITCODE_HASHES.append(data["hash"])
 
-        if self.TENTATIVE_NUMBER == -1:  # WARNING something happend with the exploration service
-            print(f"WARNING something happend with the exploration service. Count: {self.COUNT}")
+        #   if self.TENTATIVE_NUMBER == -1:  # WARNING something happend with the exploration service
+        print(f"Count: {self.COUNT} {self.TENTATIVE_NUMBER}")
 
-        if self.SEND_EVERY <= 0:
-            socketio.emit("NEW_VARIANT", dict(
+        self.emit("NEW_VARIANT", dict(
                 program_name="Program",
                 count=self.COUNT,
                 tentative=self.TENTATIVE_NUMBER,
                 at=STATUS["NOW"] - data["time"]
-            ), json=True, namespace='/dashboard')
-
-            socketio.emit("COUNT", dict(
+            ), "/dashboard")
+        self.emit("COUNT", dict(
                 program_name="Program",
                 total=len(self.BITCODE_HASHES),
                 unique=len(set(self.BITCODE_HASHES)),
                 type="bc",
                 at=STATUS["NOW"] - data["time"]
-            ), json=True, namespace='/dashboard')
-            self.SEND_EVERY = MAX
-        else:
-            self.SEND_EVERY -= 1
+            ), "/dashboard")
 
         self.diff_analyser.on_receive_bc(data)
 
 
-l = ServerListener()
-
 def start_listening_post():
-    global l
-
-    key = config["event"]["process-id-exploration"]
-    subscriber = Subscriber(1, MONITOR_QUEUE_NAME, key, config["event"].getint("port"), l)
+    l = ServerListener()
+    subscriber = Subscriber(1, MONITOR_QUEUE_NAME, config["event"].getint("port"), l)
     subscriber.setup()
 
 if __name__ == '__main__':
     APP_HOST = os.environ.get("DASHBOARD_HOST", '0.0.0.0')
     APP_PORT = int(os.environ.get("DASHBOARD_PORT", "8000"))
+
 
     th = Thread(target=start_listening_post, args=())
     th.start()

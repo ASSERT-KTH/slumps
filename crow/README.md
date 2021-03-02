@@ -62,7 +62,14 @@ TODO
 
 ## Configuration \<options>
 
-TODO
+All the options to configure CROW are available in the [config.ini](crow/settings/config.ini) file. In the following, we mention what we think are the most important ones.
+
+
+**Replacement exploration config**
+
+**Replacement exploration config**
+
+**Event broker config**
 
 ### Docker images
 
@@ -80,12 +87,12 @@ Where to collect results...
 
 #### Horizontal scalation
 
-- `docker run -it --rm --entrypoint="/bin/bash" slumps/crow2 ./launch_generators.sh  <number of workers> <options>`: Launch only the generator services
-- `docker run -it --rm --entrypoint="/bin/bash" slumps/crow2 ./launch_entrypoints.sh  <options>`: Launch only the entrypoints service
-- `docker run -it --rm --entrypoint="/bin/bash" slumps/crow2 ./launch_exploration.sh  <options>`: Launch only the exploration service
-- `docker run -it --rm --entrypoint="/bin/bash" slumps/crow2 ./launch_logger.sh  <options>`: Launch only the logger service
-- `docker run -it --rm --entrypoint="/bin/bash" slumps/crow2 ./launch_monitor.sh <options>`: Launch only the monitor service
-- `docker run -it --rm --entrypoint="/bin/bash" slumps/crow2 ./launch_storage.sh  <options>`: Launch only the storage service
+- `docker run -it --rm --entrypoint="/bin/bash" slumps/crow2:latest ./launch_generators.sh  <number of workers> <options>`: Launch only the generator services
+- `docker run -it --rm --entrypoint="/bin/bash" slumps/crow2:latest ./launch_entrypoints.sh <workers1> <workers2> <workers3> <options>`: Launch only the entrypoints service
+- `docker run -it --rm --entrypoint="/bin/bash" slumps/crow2:latest ./launch_exploration.sh  <options>`: Launch only the exploration service
+- `docker run -it --rm --entrypoint="/bin/bash" slumps/crow2:latest ./launch_logger.sh  <options>`: Launch only the logger service
+- `docker run -it --rm --entrypoint="/bin/bash" slumps/crow2:latest ./launch_monitor.sh <options>`: Launch only the monitor service
+- `docker run -it --rm --entrypoint="/bin/bash" slumps/crow2:latest ./launch_storage.sh  <options>`: Launch only the storage service
 
 #### Examples
 
