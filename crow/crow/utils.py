@@ -112,7 +112,18 @@ def processOptionValuePair(pair):
     print(namespace, key, value)
 
 
+def get_variant_name(merging: dict, j: dict, onlykeys=False):
 
+
+    name = ""
+
+    keys = list(merging.keys())
+    for k, v in j.items():
+        if v is not None:
+            name += "[%s-%s]" % (keys.index(k), merging[k].index(v))
+        else:
+            name += "[%s-n]" % (keys.index(k),)
+    return name
 
 def getIteratorByName(name: str):
     return getattr(iterators, name)

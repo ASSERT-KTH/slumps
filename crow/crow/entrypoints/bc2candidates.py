@@ -1,16 +1,13 @@
 from crow.events import BC2Candidates_MESSAGE, BC_EXPLORATION_QUEUE, STORE_MESSAGE, GENERATE_VARIANT_MESSAGE, EXPLORATION_RESULT
 from crow.events.event_manager import Subscriber, subscriber_function, Publisher
-from crow.sanitizer import Sanitizer
+from crow.sanitzers.sanitizer import Sanitizer
 from crow.settings import config
-from concurrent.futures import ThreadPoolExecutor, wait, ALL_COMPLETED
 from crow.commands.stages import BCCountCandidates, TimeoutException
 from crow.socket_server import listen
 
 from crow.utils import ContentToTmpFile, getIteratorByName
 import threading, queue
-import hashlib
 import json
-import redis
 from concurrent.futures import ThreadPoolExecutor, wait, ALL_COMPLETED
 
 import sys
@@ -21,9 +18,15 @@ import operator
 
 from functools import reduce
 from crow.monitor.logger import LOGGER
+from crow.utils import get_variant_name
+from crow.sanitzers.overlap import SouperParser
+from crow.experiments.overlap_check import get_preffix
+import re
+import threading
 
 levelPool = None
 
+publisher = Publisher()
 def chunkIt(s, num):
     avg = len(s) / float(num)
     out = []
@@ -48,7 +51,7 @@ def processLevel(levels, program_name, port, bc, worker_index, launch_socket_ser
                        "%s: Searching level (increasing execution time) %s: %s souper-workers:%s souper-port:%s host:%s" % (
                        program_name,
                        level, config["souper"][
-                           "souper-level-%s" % level], config["souper"].getint("workers"), socket_port, config["souper"]["socket-host"]))
+                           "souper-level-%s" % level] if level > 0 else "DEFAULT", config["souper"].getint("workers"), socket_port, config["souper"]["socket-host"]))
 
         try:
             bctocand = BCCountCandidates(program_name, level=level,
@@ -93,21 +96,44 @@ def processLevel(levels, program_name, port, bc, worker_index, launch_socket_ser
                     results[level][k] = []
 
                 results[level][k].append(v)
-        return results
+    return results
 
-def send_jobs(iterator, size, publisher, merging, bc, program_name):
-    c = 0
-    print(f"Generating {size}")
-    for j in iterator():
-        publisher.publish(message=dict(
-            event_type=GENERATE_VARIANT_MESSAGE,
-            bc=bc,
-            program_name=f"{program_name}",
-            replacements=j,
-            overall=merging
-        ), routing_key="")
-        c += 1
-    return c
+def check_prefixes(pr:dict, combination:str, CFG: dict):
+    r = re.compile(r"\[(\d+)-")
+    for k in pr.keys():
+        pre, size = get_preffix(k, combination)
+        if size > 0:
+
+            remainingK = k.replace(pre, "")
+            remainingC = combination.replace(pre, "")
+
+            if len(remainingK) > len(remainingC): # swap if the remaining from the prefix key is larger
+                remainingK, remainingC = remainingC, remainingK
+
+            if remainingK and remainingC:
+                k1 = int(r.search(remainingC).group(1))
+                k2 = int(r.search(remainingK).group(1))
+
+                if CFG[k1] == CFG[k2]: # I they are in the same connected component, then the transformation is the same
+                    print(f"Common prefix {pre} and same key afterward K1 {k1} K2 {k2}, CC1 {CFG[k1]} CC2 {CFG[k2]} R1 {combination} R2 {remainingK}")
+                    return True # both keys are equal then, prefix will prevale
+                # otherwise the block code is different and the replacement should not overlap
+            elif not remainingK: # Compare the keys in the prefix
+                if remainingC:
+                    k1 = int(r.search(remainingC).group(1))
+                    for k in r.finditer(pre):
+                        ki = int(k.group(1))
+
+                        if CFG[ki] == CFG[k1]:
+                            print(f"Common prefix {pre} and same key afterward k1 {k1} ki {ki}, CC {CFG[k1]}  {combination}. The combination has a different key but the component is the same")
+                            return True
+                else:
+                    print(f"Ful prefix {pre} match {combination}")
+                    # Fulll prefix match
+                    return True
+
+    return False
+
 @log_system_exception()
 def bcexploration(bc, program_name):
 
@@ -170,12 +196,14 @@ def bcexploration(bc, program_name):
     print(f"Tentative number of variants {tentativeNumber}")
 
     sanitized = san.sanitize(merging)
+    merging=sanitized
 
+    tentativeNumber = reduce(operator.mul, [len(v) + 1 for v in merging.values()], 1)
 
+    print(f"Tentative number of variants after sanitization {tentativeNumber}")
 
     # Send exploration result to storage service
 
-    publisher = Publisher()
 
     publisher.publish(message=dict(
         event_type=STORE_MESSAGE,
@@ -186,33 +214,71 @@ def bcexploration(bc, program_name):
     ), routing_key="")
 
 
-    start_at = time.time()
-    count = 0
-    futures = []
-
-    for iteratorFunction, size in getIteratorByName("keysSubsetIterators")(merging):
-        # iterator, publisher, merging, bc
-        job = levelPool.submit(send_jobs, iteratorFunction, size, publisher, merging, bc, program_name)
-        futures.append(job)
-
-    done, fail = wait(futures, return_when=ALL_COMPLETED)
-
-    if len(fail) != 0:
-        print("WARNING some futures failed")
-
-    for c in done:
-        count += c.result()
 
     publisher.publish(message=dict(
         event_type=EXPLORATION_RESULT,
         all_replacements=[[k, [v1 for v1 in v if v1 is not None]] for k, v in merging.items()],
-        tentative_number=count,
+        tentative_number=tentativeNumber,
         program_name=f"{program_name}"
     ), routing_key="")
 
-    print(f"Variants {count}")
 
-    LOGGER.info(program_name, f"All variants ({count}) are in the queue ({time.time() - start_at:.2f}s)")
+    # launch in a thread
+
+
+    print("Sending")
+    start_at = time.time()
+    count = 0
+
+    parser = SouperParser()
+    prefixes = {}
+    CFG = {}
+
+    MX = config["DEFAULT"].getint("upper-bound")
+    KEEP_EVERY= config["DEFAULT"].getint("skip-every-x-replacement")
+    if config["sanitizer"].getboolean("remove-if-prefix"):
+        print("Getting connected components")
+        entries, nodes, assignent = parser.set_cc(list(merging.keys()))
+
+        for e in entries:
+            index = list(merging.keys()).index(e.code)
+            CFG[index] = assignent[e.varId]  # add a CC to the piece of code
+    DONE = False
+    for iteratorFunction, size in getIteratorByName("keysSubsetIterators")(merging):
+        # iterator, publisher, merging, bc
+        for j in iteratorFunction():
+
+            if config["sanitizer"].getboolean("remove-if-prefix"):
+                variant_name = get_variant_name(merging, j)
+
+                if check_prefixes(prefixes, variant_name, CFG):
+                    continue
+                else:
+                    prefixes[variant_name] = 1
+
+            if count % KEEP_EVERY == 0: # sample every
+                # If the keys overlap, avoid
+                #print(f"Sending {variant_name}")
+                publisher.publish(message=dict(
+                    event_type=GENERATE_VARIANT_MESSAGE,
+                    bc=bc,
+                    program_name=f"{program_name}",
+                    replacements=j,
+                    overall=merging
+                ), routing_key="")
+            count += 1
+            if count >= MX:
+                DONE = True
+                break
+        if DONE:
+            break
+
+
+        print(f"Variants {count} after overlap filter")
+    #print(f"Prefixes {prefixes}")
+        LOGGER.info(program_name, f"All variants ({count}) are in the queue ({time.time() - start_at:.2f}s)")
+
+        #th.join()
 
 
 @log_system_exception()
@@ -230,7 +296,7 @@ if __name__ == "__main__":
     max_workers=config["DEFAULT"].getint("workers"))
 
     if len(sys.argv) == 1:
-        subscriber = Subscriber(1, BC_EXPLORATION_QUEUE, config["event"].getint("port"), subscriber)
+        subscriber = Subscriber(1, BC_EXPLORATION_QUEUE, config["event"].getint("port"), subscriber, heartbeat=0)
         subscriber.setup()
         # Start a subscriber listening for LL2BC message
     else:

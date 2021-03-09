@@ -19,7 +19,7 @@ TOBASE64_FIELDS = ["stream", "bc", "ll", "orignal_bc", "original_wasm"]
 CERT_DIR = os.path.join(os.path.dirname(os.path.dirname(__file__)), "settings")
 
 # Allow subscriber to have internal state
-class Listener(object):
+class Listener:
 
     def __call__(self, *args, **kwargs):
 
@@ -130,7 +130,7 @@ class Publisher:
                     serialized = serialize_message(self.message)
                     channel.basic_publish(exchange=config["event"]["exchange"],
                                           body=json.dumps(serialized), routing_key="")
-                    channel.confirm_delivery()
+                    #channel.confirm_delivery()
                     self.connection.close()
 
                     break
@@ -162,7 +162,7 @@ class Publisher:
 
 
 class Consumer(object):
-    def __init__(self, id, queueName, bindingKey, port, callback, heartbeat=30):
+    def __init__(self, id, queueName, bindingKey, port, callback, heartbeat=None):
         self.callback = callback
         self.should_reconnect = False
         self.was_consuming = False
@@ -175,6 +175,7 @@ class Consumer(object):
         self.id = id
         self.queueName = queueName
         self.port = port
+        self.heartbeat = heartbeat
         # In production, experiment with higher prefetch values
         # for higher consumer throughput
         self.prefetch_count = config["event"].getint("prefetch_count")
@@ -408,6 +409,7 @@ class Consumer(object):
         except Exception as e:
             print(f"ERROR {e} {traceback.format_exc()}")
         # print(f"id:{self.id} received new message")
+        # This ensure that the message needs to be reprocessed
         self.acknowledge_message(basic_deliver.delivery_tag)
 
     def acknowledge_message(self, delivery_tag):
@@ -463,7 +465,7 @@ class Consumer(object):
         will be invoked by pika.
         :rtype: pika.SelectConnection
         """
-        parameters = pika.ConnectionParameters(host=config["event"]["host"], port=config["event"].getint("port"))
+        parameters = pika.ConnectionParameters(host=config["event"]["host"], port=config["event"].getint("port"), heartbeat=self.heartbeat)
         return pika.SelectConnection(
             parameters=parameters,
             on_open_callback=self.on_connection_open,
@@ -497,13 +499,13 @@ class Subscriber(object):
     ExampleConsumer indicates that a reconnect is necessary.
     """
 
-    def __init__(self, id, queueName, port, cb):
+    def __init__(self, id, queueName, port, cb, heartbeat=None):
         self.id = id
         self.reconnect_delay = 0
         self.queueName = queueName
         self.port = port
         self.cb = cb
-        self.consumer = Consumer(id, queueName, "*", port, cb)
+        self.consumer = Consumer(id, queueName, "*", port, cb, heartbeat=heartbeat)
 
     def setup(self):
         while True:

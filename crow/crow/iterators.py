@@ -97,6 +97,7 @@ if __name__ == "__main__":
     #}):
     #    print(k)
 
+    c = 0
     for k, i in keysSubsetIterators({
         "a": ['a0', 'a1', 'a2123123123'],
         "b": ['b1', 'b2'],
@@ -105,3 +106,6 @@ if __name__ == "__main__":
         print(i)
         for s in k():
             print(s)
+            c += 1
+
+    print(c)

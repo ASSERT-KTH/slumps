@@ -53,7 +53,7 @@ def listen(port, q, program, worker_id, level, emit_generation=True):
 
 
 					s=reduce(operator.mul, [len(t) + 1 for t in result.values()], 1)
-
+					#print(f"level {level} tentative {s}")
 				except Exception as e:
 					print(traceback.format_exc())
 					

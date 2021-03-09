@@ -12,7 +12,7 @@ from crow.events import GENERATED_BC_VARIANT, EXPLORATION_RESULT, GENERATED_WASM
     GENERATE_VARIANT_MESSAGE, MACHINE_CODE_DUMPED
 from crow.events.event_manager import subscriber_function, Subscriber, Listener, function_discrimator, listener
 from crow.experiments.pairwisediff import UnixDiffComparer
-from crow.monitor import MONITOR_QUEUE_NAME
+from crow.monitor import MONITOR_QUEUE_NAME, SERVER_QUEUE_NAME
 from crow.settings import config
 import random
 
@@ -60,18 +60,18 @@ def index_handler():
 @listener
 class ServerListener(Listener):
     # Monitor status
-    COUNT = 0
-    TENTATIVE_NUMBER = -1
-    BITCODE_HASHES = []
-    WASM_HASHES = []
-    NATIVE_HASHES = []
-
-    BUFFER = []
-    BUFFER_MAX = 100
 
     def __init__(self):
         self.diff_analyser = UnixDiffComparer(cb=self.send_stability)
 
+        self.COUNT = 0
+        self.TENTATIVE_NUMBER = -1
+        self.BITCODE_HASHES = []
+        self.WASM_HASHES = []
+        self.NATIVE_HASHES = []
+
+        self.BUFFER = []
+        self.BUFFER_MAX = 100
 
     def emit(self, tpe, data, namespace):
 
@@ -81,13 +81,17 @@ class ServerListener(Listener):
 
         if len(self.BUFFER) >= self.BUFFER_MAX:
             for tp, d, n in self.BUFFER:
-                socketio.emit(tp, d, json=True, namespace=n)
+
+                print(f"TOTAL LLVM {len(self.BITCODE_HASHES)} TOTAL WASM {len(self.WASM_HASHES)} TOTAL NATIVE {len(self.NATIVE_HASHES)}")
+                print(f"UNIQUE LLVM {len(set(self.BITCODE_HASHES))} UNIQUE WASM {len(set(self.WASM_HASHES))} UNIQUE NATIVE {len(set(self.NATIVE_HASHES))}")
+                socketio.emit(tp, d, json=True, namespace=namespace)
 
             self.BUFFER = []
 
     @function_discrimator(event_type=EXPLORATION_RESULT)
     def send_exploration_result(self, data):
-        self.TENTATIVE_NUMBER = data["tentative_number"]
+        if data["tentative_number"] != -1:
+            self.TENTATIVE_NUMBER = data["tentative_number"]
 
         self.emit("NEW_VARIANT", dict(
                 program_name="Program",
@@ -165,7 +169,7 @@ class ServerListener(Listener):
 
 def start_listening_post():
     l = ServerListener()
-    subscriber = Subscriber(1, MONITOR_QUEUE_NAME, config["event"].getint("port"), l)
+    subscriber = Subscriber(1, SERVER_QUEUE_NAME, config["event"].getint("port"), l)
     subscriber.setup()
 
 if __name__ == '__main__':
