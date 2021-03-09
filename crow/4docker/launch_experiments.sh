@@ -12,32 +12,39 @@ mkdir -p /usr/src/souper/third_party
 ls /slumps/souper/third_party/z3-install
 chmod +x /usr/src/souper/third_party/z3-install/bin/z3
 
-REDIS_DB=$1
-REDIS_PASS=$2
 
-shift 2
-pkill -f manager
+pkill -f wasm2obj
+pkill -f objdump
 
 sleep 1
 RED='\033[0;31m'
 NC='\033[0m'
 GREEN='\033[0;32m'
 
-WORKERS=$1
-shift
+WORKERS_WASM2OBJ=$1
+WORKERS_OBJDUMP=$2
+shift 2
 
 printf "$NC Updating settings $NC"
 python3 -m crow.update_settings $@
 printf "$GREEN Starting system $NC\n"
 
-for i in $(seq 1 $WORKERS)
+for i in $(seq 1 $WORKERS_WASM2OBJ)
 do
-  printf "$GREEN Launching storage service $NC\n"
-  python3 -m crow.storage.manager $REDIS_DB $REDIS_PASS &
+  printf "$GREEN Launching WASM 2 NATIVE OBJ $NC\n"
+  python3 -m crow.experiments.wasm2obj &
+done
+
+
+for i in $(seq 1 $WORKERS_OBJDUMP)
+do
+  printf "$GREEN Launching NATIVE OBJ DUMPING $NC\n"
+  python3 -m crow.experiments.objdump &
 done
 
 control_c() {
-    pkill -f manager
+    pkill -f wasm2obj
+    pkill -f objdump
     exit
 }
 

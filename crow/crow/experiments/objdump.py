@@ -1,6 +1,8 @@
+from crow.entrypoints import STORE_KEY
 from crow.events import STORE_MESSAGE, NATIVE_WASMTIME_GENERATED, OBJDUMP_QUEUE, \
     MACHINE_CODE_DUMPED
 from crow.events.event_manager import Subscriber, subscriber_function, Publisher
+from crow.experiments import OBJDUMP_KEY, OBJDUMP_GENERATED_KEY
 from crow.settings import config
 from crow.commands.stages import OBJ2DUMP
 
@@ -47,7 +49,7 @@ def objdump(obj, program_name, file_name, variant_name):
                 program_name=f"{program_name}",
                 variant_name=variant_name,
                 file_name=f"{file_name}.native",
-            ), routing_key="")
+            ), routing_key=OBJDUMP_GENERATED_KEY)
 
             publisher.publish(message=dict(
                 event_type=STORE_MESSAGE,
@@ -55,7 +57,7 @@ def objdump(obj, program_name, file_name, variant_name):
                 program_name=f"{program_name}",
                 file_name=f"{file_name}.dump.txt",
                 path="native/variants/dump"
-            ), routing_key="")
+            ), routing_key=STORE_KEY)
 
             print(f"OBJDUMP ({COUNT})")
             COUNT += 1
@@ -73,7 +75,7 @@ def subscriber(data):
 if __name__ == "__main__":
 
     if len(sys.argv) == 1:
-        subscriber = Subscriber(1, OBJDUMP_QUEUE, config["event"].getint("port"), subscriber)
+        subscriber = Subscriber(1, OBJDUMP_QUEUE, OBJDUMP_KEY, config["event"].getint("port"), subscriber)
         subscriber.setup()
         # Start a subscriber listening for LL2BC message
     else:

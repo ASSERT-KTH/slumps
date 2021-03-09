@@ -1,6 +1,7 @@
 import hashlib
 
 from crow.commands.stages import ObjtoWASM
+from crow.entrypoints import EXPLORE_KEY, STORE_KEY, GENERATED_WASM_KEY, GENERATED_WAT_KEY, BC2WASM_KEY, WASM2WAT_KEY
 from crow.events import BC2WASM_MESSAGE, STORE_MESSAGE, WASM_QUEUE, WASM2WAT_MESSAGE, GENERATED_WASM_VARIANT, \
     BC2Candidates_MESSAGE
 from crow.events.event_manager import Publisher, Subscriber, subscriber_function
@@ -29,7 +30,7 @@ def bc2wasm(bc, program_name, file_name=None, variant_name=None, explore=False):
             event_type=BC2Candidates_MESSAGE,
             bc=bc,
             program_name=program_name
-        ), routing_key="")
+        ), routing_key=EXPLORE_KEY)
 
     # 2 WASM transformation
     if config["DEFAULT"].getboolean("keep-wasm-files"):
@@ -54,7 +55,7 @@ def bc2wasm(bc, program_name, file_name=None, variant_name=None, explore=False):
                 program_name=program_name,
                 file_name=f"{file_name}.wasm",
                 path="wasm"
-            ), routing_key="")
+            ), routing_key=STORE_KEY)
 
             hsh = hashlib.sha256(st).hexdigest()
 
@@ -65,7 +66,7 @@ def bc2wasm(bc, program_name, file_name=None, variant_name=None, explore=False):
                 program_name=program_name,
                 variant_name=variant_name,
                 file_name=f"{file_name}.wasm"
-            ), routing_key="")
+            ), routing_key=GENERATED_WASM_KEY)
 
             print(f"BC2WASM ({COUNT}) {program_name}")
             # Generate wat file ?
@@ -75,7 +76,7 @@ def bc2wasm(bc, program_name, file_name=None, variant_name=None, explore=False):
                     stream=st,
                     program_name=program_name,
                     file_name=f"{file_name}"
-                ), routing_key="")
+                ), routing_key=WASM2WAT_KEY)
 
             os.remove("%s.wasm" % (file_name,))
             COUNT += 1
@@ -92,7 +93,7 @@ if __name__ == "__main__":
     #f = sys.argv[-1]
 
     if len(sys.argv) == 1:
-        subscriber = Subscriber(1, WASM_QUEUE,  config["event"].getint("port"), subscriber)
+        subscriber = Subscriber(1, WASM_QUEUE, BC2WASM_KEY, config["event"].getint("port"), subscriber)
         subscriber.setup()
         # Start a subscriber listening for LL2BC message
     else:

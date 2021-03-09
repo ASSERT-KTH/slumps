@@ -1,5 +1,7 @@
+from crow.entrypoints import GENERATED_WASM_KEY, STORE_KEY
 from crow.events import STORE_MESSAGE, GENERATED_WASM_VARIANT, WASMTIME_QUEUE, NATIVE_WASMTIME_GENERATED
 from crow.events.event_manager import Subscriber, subscriber_function, Publisher
+from crow.experiments import NATIVE_GENERATED_KEY, OBJDUMP_KEY
 from crow.settings import config
 from crow.commands.stages import WASM2OBJ
 
@@ -46,7 +48,7 @@ def wasm2obj(wasm, program_name, file_name, variant_name):
                     file_name=f"{file_name}.native",
                     variant_name=variant_name,
                     path="native/variants"
-                ), routing_key="")
+                ), routing_key=OBJDUMP_KEY)
 
                 publisher.publish(message=dict(
                     event_type=STORE_MESSAGE,
@@ -54,7 +56,7 @@ def wasm2obj(wasm, program_name, file_name, variant_name):
                     program_name=f"{program_name}",
                     file_name=f"{file_name}.native",
                     path="native/variants"
-                ), routing_key="")
+                ), routing_key=STORE_KEY)
 
                 COUNT += 1
 
@@ -71,7 +73,7 @@ def subscriber(data):
 if __name__ == "__main__":
 
     if len(sys.argv) == 1:
-        subscriber = Subscriber(1, WASMTIME_QUEUE, config["event"].getint("port"), subscriber)
+        subscriber = Subscriber(1, WASMTIME_QUEUE, GENERATED_WASM_KEY, config["event"].getint("port"), subscriber)
         subscriber.setup()
         # Start a subscriber listening for LL2BC message
     else:

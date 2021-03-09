@@ -8,7 +8,6 @@ attrs==19.3.0
 Automat==20.2.0
 backcall==0.2.0
 bleach==3.3.0
-boxsdk==2.9.0
 certifi==2019.11.28
 cffi==1.14.3
 chardet==3.0.4
