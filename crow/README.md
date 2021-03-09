@@ -93,7 +93,7 @@ Where to collect results...
 - `docker run -it --rm --entrypoint="/bin/bash" slumps/crow2:latest ./launch_logger.sh  <options>`: Launch only the logger service
 - `docker run -it --rm --entrypoint="/bin/bash" slumps/crow2:latest ./launch_monitor.sh <options>`: Launch only the monitor service
 - `docker run -it --rm --entrypoint="/bin/bash" slumps/crow2:latest ./launch_storage.sh  <options>`: Launch only the storage service
-
+    - In the case of the storage service, you can mount a volume in the local machine to collect the generation, `-v $(pwd)/out:/slumps/crow/crow/storage/out`
 #### Examples
 
 ##### Standalone CROW

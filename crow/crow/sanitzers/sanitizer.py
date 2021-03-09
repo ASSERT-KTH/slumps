@@ -92,6 +92,8 @@ class Sanitizer(object):
 						r = r.replace("ssub.sat", "sub")
 						r = r.replace("uadd.sat", "add")
 						r = r.replace("usub.sat", "sub")
+						r = r.replace("mulnsw", "mul")
+						r = r.replace("addnsw", "add")
 						scan = resultMatch.search(v)
 
 						if scan:

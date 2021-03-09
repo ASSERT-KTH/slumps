@@ -1,26 +1,15 @@
-from crow.events import BC2Candidates_MESSAGE, BC_EXPLORATION_QUEUE, STORE_MESSAGE, GENERATE_VARIANT_MESSAGE, \
-    EXPLORATION_RESULT, GENERATED_WASM_VARIANT, WASMTIME_QUEUE, NATIVE_WASMTIME_GENERATED
+from crow.events import STORE_MESSAGE, GENERATED_WASM_VARIANT, WASMTIME_QUEUE, NATIVE_WASMTIME_GENERATED
 from crow.events.event_manager import Subscriber, subscriber_function, Publisher
-from crow.sanitizer import Sanitizer
 from crow.settings import config
-from concurrent.futures import ThreadPoolExecutor, wait, ALL_COMPLETED
-from crow.commands.stages import BCCountCandidates, TimeoutException, WASM2OBJ
-from crow.socket_server import listen
+from crow.commands.stages import WASM2OBJ
 
-from crow.utils import ContentToTmpFile, getIteratorByName
-import threading, queue
+from crow.utils import ContentToTmpFile
 import hashlib
-import json
-import redis
-from concurrent.futures import ThreadPoolExecutor, wait, ALL_COMPLETED
 
 import sys
 import traceback
 from crow.monitor.monitor import log_system_exception
-import time
-import operator
 
-from functools import reduce
 from crow.monitor.logger import LOGGER
 
 publisher = Publisher()

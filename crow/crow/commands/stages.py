@@ -174,7 +174,7 @@ class BCCountCandidates(ExternalStage):
         extra_commands += " --souper-crow-port=%s --souper-crow-workers=%s --souper-crow-host=%s "%(self.socket_port, self.souper_workers, self.socket_host )
 
         new_inputs = (config["souper"]["list-candidates"] % (
-        config["souper"]["souper-level-%s" % self.level], extra_commands)).split(" ")
+        config["souper"]["souper-level-%s" % self.level] if self.level > 0 else "", extra_commands)).split(" ")
         return super(BCCountCandidates, self).__call__(new_inputs, std)
 
     def processInner(self, std, err):

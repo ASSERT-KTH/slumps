@@ -7,7 +7,7 @@ RUN apt-get update \
     && curl -sS -L -O https://github.com/CraneStation/wasi-sdk/releases/download/wasi-sdk-8/wasi-sdk_8.0_amd64.deb \
     && dpkg -i wasi-sdk_8.0_amd64.deb && rm -f wasi-sdk_8.0_amd64.deb \
     && rm -rf /var/lib/apt/lists/*
-
+RUN curl https://wasmtime.dev/install.sh -sSf | bash
 
 RUN python3 -m pip install pip
 
@@ -22,6 +22,7 @@ COPY 4docker/launch_generators.sh                      /slumps/crow/launch_gener
 COPY 4docker/launch_logger.sh                           /slumps/crow/launch_logger.sh
 COPY 4docker/launch_monitor.sh                          /slumps/crow/launch_monitor.sh
 COPY 4docker/launch_storage.sh                          /slumps/crow/launch_storage.sh
+COPY 4docker/launch_experiments.sh                      /slumps/crow/launch_experiments.sh
 COPY setup.sh                                   /slumps/crow/setup.sh
 
 COPY setup.py                                  /slumps/crow/setup.py
