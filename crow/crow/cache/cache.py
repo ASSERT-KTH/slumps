@@ -27,9 +27,8 @@ class Cache(object):
             self.set(key, serialized)
 
     def init(self, key, val):
-        if self.has(key):
-            serialized = self._serialize([val])
-            self.set(key, serialized)
+        serialized = self._serialize([val])
+        self.set(key, serialized)
 
     def _desearialize(self, stream):
         return json.loads(stream.decode())
@@ -95,12 +94,15 @@ class RedisCache(Cache):
 
 
 
-def getcache():
+def getcache(use_redis, dbno, pass_):
 
-    if config["cache"].getboolean("use-redis"):
-        return RedisCache()
+    if use_redis and config["cache"].getboolean("use-redis"):
+        print("REDIS cache")
+        return RedisCache(dbno, pass_)
     else:
+        print("Native dict cache")
         return DictCache()
+
 
 if __name__ == '__main__':
     cache = RedisCache(0, "mypassword")

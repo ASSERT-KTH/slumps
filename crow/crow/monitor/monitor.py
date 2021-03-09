@@ -36,20 +36,22 @@ def log_system_exception():
 # Monitor status
 COUNT = 0
 TENTATIVE_NUMBER = -1
+HASHES = []
 
 @subscriber_function(event_type="*")
 def general_log(data):
     global COUNT
     global TENTATIVE_NUMBER
+    global HASHES
 
     if data["event_type"] == GENERATED_BC_VARIANT:
         COUNT += 1
-
+        HASHES.append(data["hash"])
         #if TENTATIVE_NUMBER == -1: # WARNING something happend with the exploration service
         #    print(f"WARNING something happend with the exploration service. Count: {COUNT}")
         #else:
-        printProgressBar(COUNT, TENTATIVE_NUMBER if TENTATIVE_NUMBER > -1 else COUNT + 1, suffix=f"{COUNT}/{TENTATIVE_NUMBER}")
-
+        #printProgressBar(COUNT, TENTATIVE_NUMBER if TENTATIVE_NUMBER > -1 else COUNT, suffix=f"{COUNT}/{TENTATIVE_NUMBER}")
+        print(f"{COUNT}/{TENTATIVE_NUMBER} UNIQUENESS BITCODE_LEVEL {len(set(HASHES))}/{len(HASHES)}")
     if data["event_type"] == EXPLORATION_RESULT:
         TENTATIVE_NUMBER = data["tentative_number"]
 

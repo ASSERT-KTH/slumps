@@ -1,28 +1,16 @@
-from crow.events import BC2Candidates_MESSAGE, BC_EXPLORATION_QUEUE, STORE_MESSAGE, GENERATE_VARIANT_MESSAGE, \
-    EXPLORATION_RESULT, GENERATED_WASM_VARIANT, WASMTIME_QUEUE, NATIVE_WASMTIME_GENERATED, OBJDUMP_QUEUE, \
+from crow.events import STORE_MESSAGE, NATIVE_WASMTIME_GENERATED, OBJDUMP_QUEUE, \
     MACHINE_CODE_DUMPED
 from crow.events.event_manager import Subscriber, subscriber_function, Publisher
-from crow.sanitizer import Sanitizer
 from crow.settings import config
-from concurrent.futures import ThreadPoolExecutor, wait, ALL_COMPLETED
-from crow.commands.stages import BCCountCandidates, TimeoutException, WASM2OBJ, OBJ2DUMP
-from crow.socket_server import listen
+from crow.commands.stages import OBJ2DUMP
 
-from crow.utils import ContentToTmpFile, getIteratorByName
-import threading, queue
-import hashlib
-import json
-import redis
-from concurrent.futures import ThreadPoolExecutor, wait, ALL_COMPLETED
+from crow.utils import ContentToTmpFile
 import re
 
 import sys
 import traceback
 from crow.monitor.monitor import log_system_exception
-import time
-import operator
 
-from functools import reduce
 from crow.monitor.logger import LOGGER
 
 publisher = Publisher()
@@ -65,7 +53,7 @@ def objdump(obj, program_name, file_name, variant_name):
                 event_type=STORE_MESSAGE,
                 stream=sanitize(dump).encode(),
                 program_name=f"{program_name}",
-                file_name=f"{file_name}.native.txt",
+                file_name=f"{file_name}.dump.txt",
                 path="native/variants/dump"
             ), routing_key="")
 

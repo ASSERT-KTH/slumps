@@ -7,17 +7,23 @@ from crow.storage import STORAGE_QUEUE_NAME
 import os
 import hashlib
 from crow.monitor.logger import LOGGER
+from crow.cache import cache
+import sys
 
 OUT_FOLDER = os.environ.get("OUT_FOLDER", "out")
 OUT_FOLDER = os.path.join(os.path.dirname(__file__), OUT_FOLDER)
 # CHECK FOR MEMORY
 # ADD MONGODB storage in another version of the service
-ALL_GENERATIONS = set()
-TOTAL = {
 
-}
+CACHE = None
 
-publisher = Publisher()
+if len(sys.argv) >= 3: # Redis cache
+    DBNO = int(sys.argv[1])
+    PASS = sys.argv[2]
+    CACHE = cache.getcache(True, DBNO, PASS)
+else:
+    CACHE = cache.getcache(False, 0, "WHOCARES")
+
 
 def create_path(base_path, path):
     root = base_path
@@ -33,6 +39,7 @@ def create_path(base_path, path):
 @subscriber_function(event_type=STORE_MESSAGE)
 def subscriber(data):
 
+    global CACHE
 
     out = "%s/%s"%(OUT_FOLDER, data["program_name"])
 
@@ -44,23 +51,23 @@ def subscriber(data):
 
     hashvalue = hashlib.sha256(data["stream"]).hexdigest()
     ext = data["file_name"].split(".")[-1]
+    key = f"{ext}_{hashvalue}"
 
-
-    if hashvalue in ALL_GENERATIONS and config["DEFAULT"].getboolean("remove-duplicates"):
-        # skip
-        if ext not in TOTAL:
-            TOTAL[ext] = 0
-
-        TOTAL[ext] += 1
+    if CACHE.has(key) and config["DEFAULT"].getboolean("remove-duplicates"):
+        del data["stream"]
+        CACHE.addtoexisting(key, data)
         return
 
+    print(f"SAVING {data['file_name']}")
 
     LOGGER.warning(data["program_name"], f"New variant {data['file_name']}")
 
     f = open("%s/%s"%(out, data["file_name"]), 'wb')
     f.write(data["stream"])
     f.close()
-    ALL_GENERATIONS.add(hashvalue)
+
+    del data["stream"]
+    CACHE.init(key, data)
 
 
 
