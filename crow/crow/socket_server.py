@@ -6,6 +6,8 @@ from crow.settings import config
 import traceback
 from functools import reduce
 import operator
+from crow.utils import printinSameLine
+
 import time
 from crow.events.event_manager import Publisher
 #import matplotlib.pyplot as plt
@@ -20,7 +22,7 @@ def listen(port, q, program, worker_id, level, emit_generation=True):
 	HOST = '127.0.0.1'  # Standard loopback interface address (localhost)
 	PORT = port
 	result = {}
-
+	NOW = time.time()
 	with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
 		if program:
 			LOGGER.info(program,f"Getting port {port}")
@@ -48,12 +50,12 @@ def listen(port, q, program, worker_id, level, emit_generation=True):
 							result[k] = set([])
 
 						result[k].add(v)
+
 						if q:
-							q.put([k, v])
-
-
+							q(level,k, v)
 					s=reduce(operator.mul, [len(t) + 1 for t in result.values()], 1)
 					#print(f"level {level} tentative {s}")
+					printinSameLine(f"level {level} tentative {s} ({time.time() - NOW:.2f}s)")
 				except Exception as e:
 					print(traceback.format_exc())
 					

@@ -4,7 +4,7 @@ from crow.settings import config
 import os, sys
 from crow.events.event_manager import Publisher, Subscriber, subscriber_function
 from crow.events import LOG_MESSAGE
-from crow.monitor import LOGGING_QUEUE_NAME
+from crow.monitor import LOGGING_QUEUE_NAME, LOG_KEY
 
 ERROR="ERROR"
 WARNING="WARNING"
@@ -77,8 +77,7 @@ class Logger(object):
             message=message,
             severity=DEBUG,
             program=file
-        ),
-            routing_key="")
+        ),routing_key=f"{LOG_KEY}.{DEBUG}")
 
     def error(self,file,  message):
         if self.DEBUG > 1:
@@ -89,8 +88,7 @@ class Logger(object):
             message=message,
             severity=ERROR,
             program=file
-        ),
-            routing_key="")
+        ), routing_key=f"{LOG_KEY}.{ERROR}")
 
 
     def warning(self,file, message):
@@ -102,8 +100,7 @@ class Logger(object):
             message=message,
             severity=WARNING,
             program=file
-        ),
-            routing_key="")
+        ),routing_key=f"{LOG_KEY}.{WARNING}")
 
 
     def info(self,file,  message):
@@ -115,8 +112,7 @@ class Logger(object):
             message=message,
             severity=INFO,
             program=file
-        ),
-            routing_key="")
+        ),routing_key=f"{LOG_KEY}.{INFO}")
 
 
     def success(self,file,  message):
@@ -129,8 +125,7 @@ class Logger(object):
             message=message,
             severity=SUCCESS,
             program=file
-        ),
-            routing_key="")
+        ),routing_key=f"{LOG_KEY}.{SUCCESS}")
 
 
 
@@ -156,5 +151,6 @@ if __name__ == "__main__":
         os.mkdir(os.path.join(OUT_FOLDER, "logs"))
     OUT_FOLDER = os.path.join(OUT_FOLDER, "logs")
 
-    subscriber = Subscriber(1, LOGGING_QUEUE_NAME,  config["event"].getint("port"), general_log)
+
+    subscriber = Subscriber(1, LOGGING_QUEUE_NAME, f"{LOG_KEY}.*",  config["event"].getint("port"), general_log)
     subscriber.setup()

@@ -1,7 +1,8 @@
 import hashlib
 
 from crow.commands.stages import WASM2WAT
-from crow.events import STORE_MESSAGE, WASM2WAT_MESSAGE, GENERATED_WAT_FILE, WAT_QUEUE
+from crow.entrypoints import GENERATED_WAT_KEY, WASM2WAT_KEY
+from crow.events import STORE_MESSAGE, WASM2WAT_MESSAGE, GENERATED_WAT_FILE, WAT_QUEUE, STORE_KEY
 from crow.events.event_manager import Publisher, Subscriber, subscriber_function
 from crow.settings import config
 
@@ -35,7 +36,7 @@ def wasm2wat(wasm, program_name, file_name = None, variant_name = None):
                 program_name=f"{program_name}",
                 file_name=f"{file_name}.wat",
                 path="wat"
-            ), routing_key="")
+            ), routing_key=STORE_KEY)
 
         watContent = open(f"{file_name}.wat", 'rb').read()
         hsh = hashlib.sha256(watContent).hexdigest()
@@ -48,7 +49,7 @@ def wasm2wat(wasm, program_name, file_name = None, variant_name = None):
             program_name=f"{program_name}",
             variant_name=variant_name,
             file_name=f"{file_name}.wat"
-        ), routing_key="")
+        ), routing_key=GENERATED_WAT_KEY)
 
         os.remove("%s.wat" % (file_name,))
         COUNT += 1
@@ -65,7 +66,7 @@ if __name__ == "__main__":
     #f = sys.argv[-1]
 
     if len(sys.argv) == 1:
-        subscriber = Subscriber(1, WAT_QUEUE,  config["event"].getint("port"), subscriber)
+        subscriber = Subscriber(1, WAT_QUEUE,WASM2WAT_KEY,  config["event"].getint("port"), subscriber)
         subscriber.setup()
         # Start a subscriber listening for LL2BC message
     else:

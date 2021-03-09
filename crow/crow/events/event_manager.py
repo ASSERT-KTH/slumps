@@ -42,7 +42,7 @@ class Listener:
                 f = getattr(self,"any") # parse any message
                 return f(args[0])
             except Exception as e2:
-                #print(e2)
+                print(e2)
 
                 (filename, line_number, function_name, text) = traceback.extract_stack()[-2]
                 def_name = text[:text.find('=')].strip()
@@ -106,8 +106,9 @@ class Publisher:
 
     class Wrapper(object):
 
-        def __init__(self, message):
+        def __init__(self, message, key):
             self.message = message
+            self.binding_key = key
 
         #def on_open(self, connection):
         #    connection.channel(on_open_callback=self.on_channel_open)
@@ -129,7 +130,7 @@ class Publisher:
                     # transform json
                     serialized = serialize_message(self.message)
                     channel.basic_publish(exchange=config["event"]["exchange"],
-                                          body=json.dumps(serialized), routing_key="")
+                                          body=json.dumps(serialized), routing_key=self.binding_key)
                     #channel.confirm_delivery()
                     self.connection.close()
 
@@ -148,7 +149,7 @@ class Publisher:
             self.on_channel_open(self.connection.channel())
             #self.connection.ioloop.start()
 
-    def publish(self, message, routing_key="" ):
+    def publish(self, message, routing_key=""):
 
         if "event_type" not in message:
             raise Exception("All published messages should contain the 'event_type'")
@@ -156,7 +157,7 @@ class Publisher:
         message["id"] = f"{uuid.uuid4()}"
         message["time"] = time.time() # Saving absolute time of the message
 
-        wr = Publisher.Wrapper(message)
+        wr = Publisher.Wrapper(message, routing_key)
         wr.publish()
 
 
@@ -175,6 +176,7 @@ class Consumer(object):
         self.id = id
         self.queueName = queueName
         self.port = port
+        self.key = bindingKey
         self.heartbeat = heartbeat
         # In production, experiment with higher prefetch values
         # for higher consumer throughput
@@ -287,6 +289,7 @@ class Consumer(object):
         self.channel.exchange_declare(
             exchange=exchange_name,
             exchange_type=config["event"]["type"],
+
             callback=cb)
 
     def on_exchange_declareok(self, _unused_frame, userdata):
@@ -319,12 +322,12 @@ class Consumer(object):
         """
         queue_name = userdata
         print('Binding %s to %s with %s', config["event"]["exchange"], queue_name,
-                    "")
+                    self.key)
         cb = functools.partial(self.on_bindok, userdata=queue_name)
-        self.channel.queue_bind(
+        self.queue = self.channel.queue_bind(
             queue_name,
             config["event"]["exchange"],
-            routing_key="*", # all messages
+            routing_key=self.key,
             callback=cb)
 
     def on_bindok(self, _unused_frame, userdata):
@@ -449,6 +452,7 @@ class Consumer(object):
         Channel.Close RPC command.
         """
         print('Closing the channel')
+        self.channel.queue_unbind(self.queue)
         self.channel.close()
 
     def run(self):
@@ -499,13 +503,14 @@ class Subscriber(object):
     ExampleConsumer indicates that a reconnect is necessary.
     """
 
-    def __init__(self, id, queueName, port, cb, heartbeat=None):
+    def __init__(self, id, queueName, key, port, cb, heartbeat=None):
         self.id = id
         self.reconnect_delay = 0
         self.queueName = queueName
         self.port = port
+        self.key=key
         self.cb = cb
-        self.consumer = Consumer(id, queueName, "*", port, cb, heartbeat=heartbeat)
+        self.consumer = Consumer(id, queueName, key, port, cb, heartbeat=heartbeat)
 
     def setup(self):
         while True:

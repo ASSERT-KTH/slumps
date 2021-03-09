@@ -17,6 +17,7 @@ BASE_DIR = os.path.dirname(__file__)
 RUNTIME_CONFIG = dict(USE_REDIS=False)
 
 import os
+import sys
 OUT_FOLDER = os.getenv("OUT_FOLDER", "out")
 
 class ContentToTmpFile(object):
@@ -141,6 +142,12 @@ def globalCounter():
 
 
 globalCounter.counter = 0
+
+
+
+def printinSameLine(text, printEnd="\r"):
+    sys.stdout.write('\r%s' % (text,))
+    sys.stdout.flush()
 
 
 
