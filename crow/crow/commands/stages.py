@@ -26,7 +26,6 @@ class ExternalStage(object):
         self.debug = True
         self.namespace = namespace
         self.timeout = -1
-        self.DEBUG_LEVEL = 1
         self.non_explicit = True
 
     def processInner(self, std, err):
@@ -42,7 +41,7 @@ class ExternalStage(object):
         cmd = ["timeout", f"{self.timeout}"] + [self.path_to_executable] if self.timeout > -1 else [self.path_to_executable]
         p = Popen(cmd + args, stdout=PIPE, stderr=PIPE, stdin=PIPE)
 
-
+        self.p = p
         if stdin is not None:
             p.stdin.write(stdin)
 

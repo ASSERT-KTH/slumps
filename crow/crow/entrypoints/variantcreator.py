@@ -1,3 +1,4 @@
+from crow.entrypoints import CREATE_VARIANT_KEY, STORE_KEY, GENERATED_BC_KEY, BC2WASM_KEY
 from crow.events import STORE_MESSAGE,BC2WASM_MESSAGE, \
     GENERATION_QUEUE,GENERATE_VARIANT_MESSAGE, GENERATED_BC_VARIANT
 
@@ -72,6 +73,7 @@ def generateVariant(j, program_name, merging, bc):
 
                 try:
                     sanitized_set_name = name
+                    print(f"Generating variant {program_name} {sanitized_set_name}...")
                     LOGGER.info(program_name, f"Generating variant {sanitized_set_name}...")
 
                     optBc = BCToSouper(program_name, level=1, debug=True, redisport=port,
@@ -90,7 +92,7 @@ def generateVariant(j, program_name, merging, bc):
                             variant_name=sanitized_set_name,
                             file_name=f"{program_name}{sanitized_set_name}.bc",
                             path="bitcodes/variants"
-                        ), routing_key="")
+                        ), routing_key=STORE_KEY)
 
                         hsh = hashlib.sha256(bsOpt).hexdigest()
                         publisher.publish(message=dict(
@@ -100,7 +102,7 @@ def generateVariant(j, program_name, merging, bc):
                             program_name=f"{program_name}",
                             variant_name=sanitized_set_name,
                             file_name=f"{program_name}{sanitized_set_name}.bc"
-                        ), routing_key="")
+                        ), routing_key=GENERATED_BC_KEY)
 
                     # Launching task create wasm
                     if config["DEFAULT"].getboolean("keep-wasm-files"):
@@ -110,7 +112,7 @@ def generateVariant(j, program_name, merging, bc):
                             program_name=f"{program_name}",
                             variant_name=sanitized_set_name,
                             file_name=f"{program_name}{sanitized_set_name}.bc"
-                        ), routing_key="")
+                        ), routing_key=BC2WASM_KEY)
 
                     COUNT += 1
                 except Exception as e:
@@ -153,7 +155,7 @@ if __name__ == "__main__":
     max_workers=config["DEFAULT"].getint("workers"))
 
     if len(sys.argv) == 2:
-        subscriber = Subscriber(1, GENERATION_QUEUE, config["event"].getint("port"), subscriber)
+        subscriber = Subscriber(1, GENERATION_QUEUE, CREATE_VARIANT_KEY, config["event"].getint("port"), subscriber)
         subscriber.setup()
         # Start a subscriber listening for LL2BC message
     else:

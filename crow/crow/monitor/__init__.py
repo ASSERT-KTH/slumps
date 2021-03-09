@@ -1,3 +1,5 @@
 MONITOR_QUEUE_NAME="MONITOR_QUEUE"
 LOGGING_QUEUE_NAME="LOGGING_QUEUE_NAME"
 SERVER_QUEUE_NAME="SERVER_QUEUE"
+
+LOG_KEY="crow.log" # Fill the topic with the severity, crow.log.ERROR etc

@@ -85,6 +85,7 @@ If the LLVM build takes to long or fails due to memory lack in the image buildin
 
 Where to collect results...
 
+
 #### Horizontal scalation
 
 - `docker run -it --rm --entrypoint="/bin/bash" slumps/crow2:latest ./launch_generators.sh  <number of workers> <options>`: Launch only the generator services
@@ -94,6 +95,19 @@ Where to collect results...
 - `docker run -it --rm --entrypoint="/bin/bash" slumps/crow2:latest ./launch_monitor.sh <options>`: Launch only the monitor service
 - `docker run -it --rm --entrypoint="/bin/bash" slumps/crow2:latest ./launch_storage.sh  <options>`: Launch only the storage service
     - In the case of the storage service, you can mount a volume in the local machine to collect the generation, `-v $(pwd)/out:/slumps/crow/crow/storage/out`
+
+#### Set REDIS cache for storage
+
+`docker run --name some-redis -p 1010:9090 --restart always -d redis redis-server --port 9090`
+
+Set password for redis server
+`docker run -it  --rm redis redis-cli -h 192.168.10.126 -p 1010`
+
+```
+CONFIG SET requirepass "<pass>"
+```
+
+
 #### Examples
 
 ##### Standalone CROW

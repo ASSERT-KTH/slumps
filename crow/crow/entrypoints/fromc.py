@@ -1,5 +1,6 @@
 
 from crow.commands.stages import CToLLStage
+from crow.entrypoints import LOG_KEY, GENERATE_BC_KEY, STORE_KEY, LL_KEY
 from crow.events import LOG_MESSAGE, LL2BC_MESSAGE, STORE_MESSAGE
 from crow.events.event_manager import Publisher
 from crow.monitor.logger import ERROR
@@ -22,7 +23,7 @@ def c2ll(file):
             event_type = LOG_MESSAGE,
             message = f"File {file} is not a valid C/C++ file",
             severity=ERROR,
-        ), routing_key=LOG_MESSAGE)
+        ), routing_key=LOG_KEY)
         return
 
     ctoll = CToLLStage(program_name)
@@ -32,7 +33,7 @@ def c2ll(file):
         event_type=LL2BC_MESSAGE,
         ll=ll1,
         program_name=program_name,
-    ), routing_key="")
+    ), routing_key=LL_KEY)
 
     if config["DEFAULT"].getboolean("keep-ll-files"):
         publisher.publish(message=dict(
@@ -41,7 +42,7 @@ def c2ll(file):
             program_name=f"{program_name}",
             file_name=f"{program_name}.ll",
             path="ll"
-        ), routing_key="")
+        ), routing_key=STORE_KEY)
 
 
 if __name__ == "__main__":

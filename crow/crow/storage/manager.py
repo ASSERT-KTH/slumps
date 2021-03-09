@@ -1,3 +1,4 @@
+from crow.entrypoints import STORE_KEY
 from crow.events import STORE_MESSAGE
 from crow.events.event_manager import Subscriber, subscriber_function, Publisher
 from crow.settings import config
@@ -51,7 +52,7 @@ def subscriber(data):
 
     hashvalue = hashlib.sha256(data["stream"]).hexdigest()
     ext = data["file_name"].split(".")[-1]
-    key = f"{ext}_{hashvalue}"
+    key = f"{data['program_name']}:{ext}:{hashvalue}"
 
     if CACHE.has(key) and config["DEFAULT"].getboolean("remove-duplicates"):
         del data["stream"]
@@ -78,5 +79,5 @@ if __name__ == "__main__":
         os.mkdir(f"{OUT_FOLDER}")
 
     # SIMPLE Task wait for messages and save the corresponding files
-    subscriber = Subscriber(1, STORAGE_QUEUE_NAME,  config["event"].getint("port"), subscriber)
+    subscriber = Subscriber(1, STORAGE_QUEUE_NAME, STORE_KEY, config["event"].getint("port"), subscriber)
     subscriber.setup()

@@ -1,3 +1,4 @@
+from crow.entrypoints import EXPLORE_KEY, CREATE_VARIANT_KEY, STORE_KEY
 from crow.events import BC2Candidates_MESSAGE, BC_EXPLORATION_QUEUE, STORE_MESSAGE, GENERATE_VARIANT_MESSAGE, EXPLORATION_RESULT
 from crow.events.event_manager import Subscriber, subscriber_function, Publisher
 from crow.sanitzers.sanitizer import Sanitizer
@@ -5,7 +6,7 @@ from crow.settings import config
 from crow.commands.stages import BCCountCandidates, TimeoutException
 from crow.socket_server import listen
 
-from crow.utils import ContentToTmpFile, getIteratorByName
+from crow.utils import ContentToTmpFile, getIteratorByName, printinSameLine
 import threading, queue
 import json
 from concurrent.futures import ThreadPoolExecutor, wait, ALL_COMPLETED
@@ -23,6 +24,7 @@ from crow.sanitzers.overlap import SouperParser
 from crow.experiments.overlap_check import get_preffix
 import re
 import threading
+import multiprocessing
 
 levelPool = None
 
@@ -42,7 +44,19 @@ def processLevel(levels, program_name, port, bc, worker_index, launch_socket_ser
 
     results = {}
     socket_port = config["souper"].getint("socket_port") + port
-    q = queue.Queue()
+
+
+    def cb(level, k, v):
+
+        if level not in results:
+            results[level]={}
+
+        if k not in results[level]:
+            results[level][k] = set()
+
+        results[level][k].add(v)
+
+
     for level in levels:
 
         results[level] = {}
@@ -70,9 +84,9 @@ def processLevel(levels, program_name, port, bc, worker_index, launch_socket_ser
                 #serverThread = None
                 if launch_socket_server:
                     serverThread = threading.Thread(target=listen,
-                                                    args=[socket_port, q, program_name, worker_index, level])
+                                                    args=(socket_port, cb, program_name, worker_index, level))
                     serverThread.start()
-
+                print()
                 bctocand(args=[TMP_BC.file], std=None)
 
             except TimeoutException as e:
@@ -82,20 +96,18 @@ def processLevel(levels, program_name, port, bc, worker_index, launch_socket_ser
                 LOGGER.error(program_name, traceback.format_exc())
 
             if launch_socket_server:
-                waitFor = 3
-                LOGGER.warning(program_name, f"Sleeping for {waitFor} seconds waiting for free ports...")
-                serverThread.join()
-                time.sleep(waitFor)
+                time.sleep(1)
+                try:
+                    bctocand.p.kill()
+                except Exception as e:
+                    print(e)
+                LOGGER.warning(program_name, f"Stopping thread...")
+                serverThread.join(timeout=0)
+                serverThread._stop() # Force termination
                 LOGGER.success(program_name, f"REDO")
 
-            while not q.empty():
-                i = q.get()
-                k, v = i
-
-                if k not in results[level]:
-                    results[level][k] = []
-
-                results[level][k].append(v)
+    #print(results)
+    LOGGER.success(program_name, f"DONE: processing queue")
     return results
 
 def check_prefixes(pr:dict, combination:str, CFG: dict):
@@ -156,7 +168,6 @@ def bcexploration(bc, program_name):
         #job.result()
         futures.append(job)
 
-    timeout = config["DEFAULT"].getint("exploration-timeout")
     done, fail = wait(futures, return_when=ALL_COMPLETED)
     #levelPool.shutdown(False)
 
@@ -211,16 +222,7 @@ def bcexploration(bc, program_name):
         program_name=f"{program_name}",
         file_name=f"{program_name}.exploration.result.json",
         path="metadata"
-    ), routing_key="")
-
-
-
-    publisher.publish(message=dict(
-        event_type=EXPLORATION_RESULT,
-        all_replacements=[[k, [v1 for v1 in v if v1 is not None]] for k, v in merging.items()],
-        tentative_number=tentativeNumber,
-        program_name=f"{program_name}"
-    ), routing_key="")
+    ), routing_key=STORE_KEY)
 
 
     # launch in a thread
@@ -248,8 +250,8 @@ def bcexploration(bc, program_name):
         # iterator, publisher, merging, bc
         for j in iteratorFunction():
 
+            variant_name = get_variant_name(merging, j)
             if config["sanitizer"].getboolean("remove-if-prefix"):
-                variant_name = get_variant_name(merging, j)
 
                 if check_prefixes(prefixes, variant_name, CFG):
                     continue
@@ -265,7 +267,11 @@ def bcexploration(bc, program_name):
                     program_name=f"{program_name}",
                     replacements=j,
                     overall=merging
-                ), routing_key="")
+                ), routing_key=CREATE_VARIANT_KEY)
+                printinSameLine(f"Creating {variant_name} {program_name} {count}/{tentativeNumber} ")
+
+            else:
+                printinSameLine(f"Skipping {variant_name} {program_name} {count}/{tentativeNumber} ")
             count += 1
             if count >= MX:
                 DONE = True
@@ -273,8 +279,8 @@ def bcexploration(bc, program_name):
         if DONE:
             break
 
-
-        print(f"Variants {count} after overlap filter")
+        print()
+        print(f"Variants {count} {program_name} after overlap filter")
     #print(f"Prefixes {prefixes}")
         LOGGER.info(program_name, f"All variants ({count}) are in the queue ({time.time() - start_at:.2f}s)")
 
@@ -296,7 +302,7 @@ if __name__ == "__main__":
     max_workers=config["DEFAULT"].getint("workers"))
 
     if len(sys.argv) == 1:
-        subscriber = Subscriber(1, BC_EXPLORATION_QUEUE, config["event"].getint("port"), subscriber, heartbeat=0)
+        subscriber = Subscriber(1, BC_EXPLORATION_QUEUE, EXPLORE_KEY, config["event"].getint("port"), subscriber, heartbeat=0)
         subscriber.setup()
         # Start a subscriber listening for LL2BC message
     else:
