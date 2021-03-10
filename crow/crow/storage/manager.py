@@ -16,15 +16,7 @@ OUT_FOLDER = os.path.join(os.path.dirname(__file__), OUT_FOLDER)
 # CHECK FOR MEMORY
 # ADD MONGODB storage in another version of the service
 
-CACHE = None
-
-if len(sys.argv) >= 3: # Redis cache
-    DBNO = int(sys.argv[1])
-    PASS = sys.argv[2]
-    CACHE = cache.getcache(True, DBNO, PASS)
-else:
-    CACHE = cache.getcache(False, 0, "WHOCARES")
-
+CACHE = cache.getcache(True)
 
 def create_path(base_path, path):
     root = base_path

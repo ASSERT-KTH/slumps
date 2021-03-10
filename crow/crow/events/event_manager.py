@@ -550,7 +550,7 @@ class Subscriber(object):
             reconnect_delay = self.get_reconnect_delay()
             print('Reconnecting after %d seconds', reconnect_delay)
             time.sleep(reconnect_delay)
-            self.consumer = Consumer(self.id, self.queueName, "*", self.port, self.cb)
+            self.consumer = Consumer(self.id, self.queueName, self.key, self.port, self.cb)
 
     def get_reconnect_delay(self):
         if self.consumer.was_consuming:
