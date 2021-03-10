@@ -47,6 +47,11 @@ RUN python3 setup.py install
 
 RUN tree -h .
 
+ENV BROKER_PASS guest
+ENV BROKER_USER guest
+ENV REDIS_DB 0
+ENV REDIS_PASS guest
+
 #RUN python3 -m pip install -r crow/requirements.txt
 RUN export LD_LIBRARY_PATH=/slumps/souper/third_party/alive2/build/:/slumps/souper/build:/slumps/souper/third_party/z3-install/lib::$LD_LIBRARY_PATH
 RUN export PATH=/slumps/souper/third_party/llvm-Release-install/bin:$PATH

@@ -4,6 +4,7 @@ import redis
 import os
 import json
 
+
 class Cache(object):
 
     def has(self, key):
@@ -94,11 +95,11 @@ class RedisCache(Cache):
 
 
 
-def getcache(use_redis, dbno, pass_):
+def getcache(use_redis):
 
-    if use_redis and config["cache"].getboolean("use-redis"):
+    if use_redis and os.getenv("REDIS_DB", None) and os.getenv("REDIS_PASS", None):
         print("REDIS cache")
-        return RedisCache(dbno, pass_)
+        return RedisCache(os.getenv("REDIS_DB"), os.getenv("REDIS_PASS"))
     else:
         print("Native dict cache")
         return DictCache()

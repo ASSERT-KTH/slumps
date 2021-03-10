@@ -1,8 +1,8 @@
 import hashlib
 
 from crow.commands.stages import WASM2WAT
-from crow.entrypoints import GENERATED_WAT_KEY, WASM2WAT_KEY
-from crow.events import STORE_MESSAGE, WASM2WAT_MESSAGE, GENERATED_WAT_FILE, WAT_QUEUE, STORE_KEY
+from crow.entrypoints import GENERATED_WAT_KEY, WASM2WAT_KEY, STORE_KEY
+from crow.events import STORE_MESSAGE, WASM2WAT_MESSAGE, GENERATED_WAT_FILE, WAT_QUEUE
 from crow.events.event_manager import Publisher, Subscriber, subscriber_function
 from crow.settings import config
 
@@ -20,11 +20,12 @@ def wasm2wat(wasm, program_name, file_name = None, variant_name = None):
     global COUNT
 
     file_name = program_name if file_name is None else file_name
-    with ContentToTmpFile(name="%s.wasm" % file_name, content=wasm, ext=".wasm", persist=False) as TMP_WASM:
+    with ContentToTmpFile(content=wasm, ext=".wasm", persist=False) as TMP_WASM:
 
+        outTMP = TMP_WASM.file
         finalObjCreator = WASM2WAT(program_name, debug=True)
         finalObjCreator(args=[
-            "%s.wasm" % (file_name,),
+            outTMP,
             "%s.wat" % (file_name,)]
         , std=None)
 
@@ -41,7 +42,7 @@ def wasm2wat(wasm, program_name, file_name = None, variant_name = None):
         watContent = open(f"{file_name}.wat", 'rb').read()
         hsh = hashlib.sha256(watContent).hexdigest()
 
-        print(f"WASM2WAT ({COUNT}) {program_name}")
+        print(f"WASM2WAT ({COUNT}) {file_name}")
         publisher.publish(message=dict(
             event_type=GENERATED_WAT_FILE,
             stream=watContent,

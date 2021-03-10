@@ -43,8 +43,7 @@ TODO
 
 - Install the python requirements: `pip3 install -r  crow/requirements.txt`
 
-- RabbitMQ broker: `docker run -d --hostname my-rabbit --name some-rabbit --restart always -p 5672:5672 -p 8080:15672 rabbitmq:3-management
-`
+- RabbitMQ broker: `docker run -d -P --hostname rabbit -p 5009:5672 -p 5010:15672 --name rabbitmq -e RABBITMQ_DEFAULT_USER=user -e RABBITMQ_DEFAULT_PASS=pass rabbitmq:3.6.10-management`
 
 ## Troubleshooting
 

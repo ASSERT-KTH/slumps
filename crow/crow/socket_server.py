@@ -23,9 +23,11 @@ def listen(port, q, program, worker_id, level, emit_generation=True):
 	PORT = port
 	result = {}
 	NOW = time.time()
+
 	with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
 		if program:
 			LOGGER.info(program,f"Getting port {port}")
+		s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 		s.bind((HOST, PORT))
 		if program:
 			LOGGER.info(program,f"Listening...{port}")
