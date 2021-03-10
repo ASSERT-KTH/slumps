@@ -152,5 +152,5 @@ if __name__ == "__main__":
     OUT_FOLDER = os.path.join(OUT_FOLDER, "logs")
 
 
-    subscriber = Subscriber(1, LOGGING_QUEUE_NAME, f"{LOG_KEY}.*",  config["event"].getint("port"), general_log)
+    subscriber = Subscriber(1, LOGGING_QUEUE_NAME, f"{LOG_KEY}.#",  config["event"].getint("port"), general_log)
     subscriber.setup()

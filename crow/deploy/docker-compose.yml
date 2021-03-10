@@ -1,0 +1,93 @@
+version: "3.9"  # optional since v1.27.0
+services:
+  # docker run -d -P --hostname rabbit -p 5672:5672 -p 8080:15672 --name rabbitmq -e =root -e RABBITMQ_DEFAULT_PASS=quamarine
+  broker:
+    image: "rabbitmq:3.6.10-management"
+    ports:
+      - "5672:5672"
+      - "8080:15672"
+    env_file:
+      - .env.br
+    restart: always
+  redis_cache:
+    image: redis
+    restart: always
+    ports:
+      - "1010:9898"
+    volumes:
+      - ./redis.conf:/redis.conf
+    command: redis-server /redis.conf --port 9898
+  redis_monitor:
+    image: patrikx3/p3x-redis-ui
+    links:
+      - redis_cache
+    ports:
+      - "7843:7843"
+    volumes:
+      - ./p3x-redis-ui-settings:/settings
+
+  # CROW
+
+  # Storage service
+  storage_service:
+    restart: always
+    image: "slumps/crow2:latest"
+    links:
+      - redis_cache
+      - broker
+    volumes:
+      - ./out:/slumps/crow/crow/storage/out
+      - ./config.ini:/slumps/crow/crow/settings/config.ini
+    entrypoint:
+      - /bin/bash
+    env_file:
+      - .env.cr
+    command: ./launch_storage.sh 1 # 1 managers
+
+
+  # Generators service
+  generators:
+    restart: always
+    image: "slumps/crow2:latest"
+    links:
+      - broker
+    volumes:
+      - ./out:/slumps/crow/crow/storage/out
+      - ./config.ini:/slumps/crow/crow/settings/config.ini
+    entrypoint:
+      - /bin/bash
+    env_file:
+      - .env.cr
+    command: ./launch_generators.sh 2 # 1 generators
+
+
+  # exploration service
+  exploration:
+    restart: always
+    image: "slumps/crow2:latest"
+    links:
+      - broker
+    volumes:
+      - ./out:/slumps/crow/crow/storage/out
+      - ./config.ini:/slumps/crow/crow/settings/config.ini
+    entrypoint:
+      - /bin/bash
+    env_file:
+      - .env.cr
+    command: ./launch_exploration.sh
+
+
+  # entrypoints
+  entrypoints:
+    restart: always
+    image: "slumps/crow2:latest"
+    links:
+      - broker
+    volumes:
+      - ./out:/slumps/crow/crow/storage/out
+      - ./config.ini:/slumps/crow/crow/settings/config.ini
+    entrypoint:
+      - /bin/bash
+    env_file:
+      - .env.cr
+    command: ./launch_entrypoints.sh 1 1 1 # 1 workers each

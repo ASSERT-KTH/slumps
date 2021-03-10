@@ -12,10 +12,6 @@ mkdir -p /usr/src/souper/third_party
 ls /slumps/souper/third_party/z3-install
 chmod +x /usr/src/souper/third_party/z3-install/bin/z3
 
-REDIS_DB=$1
-REDIS_PASS=$2
-
-shift 2
 pkill -f manager
 
 sleep 1
@@ -33,7 +29,7 @@ printf "$GREEN Starting system $NC\n"
 for i in $(seq 1 $WORKERS)
 do
   printf "$GREEN Launching storage service $NC\n"
-  python3 -m crow.storage.manager $REDIS_DB $REDIS_PASS &
+  python3 -m crow.storage.manager &
 done
 
 control_c() {

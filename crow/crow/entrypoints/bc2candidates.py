@@ -102,8 +102,8 @@ def processLevel(levels, program_name, port, bc, worker_index, launch_socket_ser
                 except Exception as e:
                     print(e)
                 LOGGER.warning(program_name, f"Stopping thread...")
-                serverThread.join(timeout=0)
-                serverThread._stop() # Force termination
+                serverThread.join()
+                #serverThread._stop() # Force termination
                 LOGGER.success(program_name, f"REDO")
 
     #print(results)
