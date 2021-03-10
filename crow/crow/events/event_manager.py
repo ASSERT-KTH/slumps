@@ -144,7 +144,20 @@ class Publisher:
             self.create_connection()
 
         def create_connection(self):
-            param = pika.ConnectionParameters(host=config["event"]["host"], port=config["event"].getint("port"))
+
+            BROKER_PASS = os.getenv("BROKER_PASS", None)
+            BROKER_USER = os.getenv("BROKER_USER", None)
+
+            if BROKER_PASS and BROKER_USER:
+                credentials = pika.PlainCredentials(BROKER_USER, BROKER_PASS)
+                param = pika.ConnectionParameters(host=config["event"]["host"],
+                                                  virtual_host="/",
+                                                       port=config["event"].getint("port"),
+                                                       credentials=credentials)
+            else:
+                param = pika.ConnectionParameters(host=config["event"]["host"],
+                                                       port=config["event"].getint("port"))
+
             self.connection = pika.BlockingConnection(param)  # pika.BlockingConnection(param)
             self.on_channel_open(self.connection.channel())
             #self.connection.ioloop.start()
@@ -469,7 +482,17 @@ class Consumer(object):
         will be invoked by pika.
         :rtype: pika.SelectConnection
         """
-        parameters = pika.ConnectionParameters(host=config["event"]["host"], port=config["event"].getint("port"), heartbeat=self.heartbeat)
+
+        BROKER_PASS = os.getenv("BROKER_PASS", None)
+        BROKER_USER = os.getenv("BROKER_USER", None)
+
+        if BROKER_PASS and BROKER_USER:
+
+            credentials = pika.PlainCredentials(BROKER_USER, BROKER_PASS)
+            parameters = pika.ConnectionParameters(host=config["event"]["host"], port=config["event"].getint("port"),virtual_host="/", heartbeat=self.heartbeat, credentials=credentials)
+        else:
+            parameters = pika.ConnectionParameters(host=config["event"]["host"], port=config["event"].getint("port"), heartbeat=self.heartbeat)
+
         return pika.SelectConnection(
             parameters=parameters,
             on_open_callback=self.on_connection_open,
