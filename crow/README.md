@@ -1,6 +1,15 @@
 # ![Logo](https://en.gravatar.com/userimage/133494879/d7a324075159773e826a7eb397da07d7.png?size=80) CROW 
 
-Research project on randomization for WebAssembly/WASM.
+CROW is a superdiversitifer for WASM. The reference explanation is in paper [CROW: Code Diversification for WebAssembly](http://arxiv.org/pdf/2008.07185).
+
+```bibtex
+@inproceedings{crow,
+ title = {CROW: Code Diversification for WebAssembly},
+ author = {Javier Cabrera Arteaga and Orestis Floros Malivitsis and Oscar Luis Vera Pérez and Benoit Baudry and Martin Monperrus},
+ booktitle = {Proceedings of MadWEB},
+ year = {2021},
+}
+```
 
 ## General architecture
 
