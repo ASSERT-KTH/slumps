@@ -52,7 +52,7 @@ digraph schemas {
 
 
         LOG_MESSAGE [label="Log"]
-        ANY [label="Any message"]
+        # ANY [label="Any message"]
     }
 
     # Files
@@ -73,7 +73,7 @@ digraph schemas {
         bc2candidates [label="bc2candidates.py"]
         bc2wasm [label="bc2wasm.py"]
         wasm2wat [label="wasm2wat.py"]
-        monitor [label="monitor.py"]
+        # monitor [label="monitor.py"]
         logger [label="logger.py"]
         storage [label="storage/manager.py"]
         generatevariant_1 [label="variantcreator.py"]
@@ -130,7 +130,6 @@ digraph schemas {
         subgraph "entries"
         {
             logger;
-            monitor;
         }
     }
 
@@ -172,7 +171,6 @@ digraph schemas {
 
     STORE_MESSAGE10 -> storage [arrowhead = diamond style = dashed];
 
-    ANY -> monitor [arrowhead = diamond style = dashed];
     LOG_MESSAGE -> logger [arrowhead = diamond style = dashed];
 
 
