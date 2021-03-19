@@ -1,0 +1,77 @@
+version: "3"  # optional since v1.27.0
+services:
+  # docker run -d -P --hostname rabbit -p 5672:5672 -p 8080:15672 --name rabbitmq -e =root -e RABBITMQ_DEFAULT_PASS=quamarine
+  broker:
+    image: "rabbitmq:3.6.10-management"
+    ports:
+      - "5672:5672"
+      - "8080:15672"
+    env_file:
+      - .env.br
+    restart: always
+  redis_cache:
+    image: redis
+    restart: always
+    ports:
+      - "1010:9898"
+    command: redis-server --port 9898
+  # CROW
+
+  # Storage service
+  storage_service:
+    restart: always
+    image: "slumps/crow2:latest"
+    links:
+      - redis_cache
+      - broker
+    entrypoint:
+      - /bin/bash
+    env_file:
+      - .env.cr.kube
+    command: ./launch_storage_minio.sh 10 %event.host broker %cache.redis-host redis-cache %cache.redis-port 1010 %cache.use-redis True  # 5 managers
+    environment:
+      - REDIS_DB=-1 # no password, the redis instance is internal
+
+  # Generators service
+  generators:
+    restart: always
+    image: "slumps/crow2:latest"
+    links:
+      - broker
+    entrypoint:
+      - /bin/bash
+    env_file:
+      - .env.cr.kube
+    command: ./launch_generators.sh 30 %event.host broker %DEFAULT.generation-simple-timeout 300 %cache.redis-host redis-cache %cache.redis-port 1010 %cache.use-redis True # 10 generators
+    environment:
+      - REDIS_DB=-1 # no password, the redis instance is internal
+
+
+  # exploration service
+  exploration:
+    restart: always
+    image: "slumps/crow2:latest"
+    links:
+      - broker
+    entrypoint:
+      - /bin/bash
+    env_file:
+      - .env.cr.kube
+    command: ./launch_exploration.sh  %event.host broker %DEFAULT.order 20 %DEFAULT.exploration-timeout 3600 $souper.workers 100 %DEFAULT.workers 1 %DEFAULT.combinations False %cache.redis-host redis-cache %cache.redis-port 1010 %cache.use-redis True
+    environment:
+      - REDIS_DB=-1 # no password, the redis instance is internal
+
+
+  # entrypoints
+  entrypoints:
+    restart: always
+    image: "slumps/crow2:latest"
+    links:
+      - broker
+    entrypoint:
+      - /bin/bash
+    env_file:
+      - .env.cr.kube
+    command: ./launch_entrypoints.sh 10 10 5  %event.host broker %cache.redis-host redis-cache %cache.redis-port 1010 %cache.use-redis True # 1 workers each
+    environment:
+      - REDIS_DB=-1 # no password, the redis instance is internal

@@ -1,0 +1,8 @@
+BROKER_USER=root
+BROKER_PASS=quamarine
+REDIS_DB=0
+REDIS_PASS=quamarine@ssert
+MINIO_ACCESS_KEY=minio
+MINIO_SECRET_KEY=minio123
+MINIO_HOST=minio-service.minio:9000
+CROW_SESSION="CROW"
