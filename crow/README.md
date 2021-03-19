@@ -18,7 +18,7 @@ CROW is a superdiversitifer for WASM. The reference explanation is in paper [CRO
 
 CROW is implemented as an event-based system. We presented a general flow overview in the figure above. The general pipeline is as follow, we passed a C file, it is compiled and an "Launch Souper exploration" message is sent to the superdiversifier, during the exploration phase, for each found replacement (and replacement combinations as well), a "Generate variant" message is sent to the generators. A generator, generates the bitcode file using a found potential replacement and emits a "Bitcode to Wasm" message. For all generated files in the system a "Store" message is sent to save the files, i.e. all bitcodes from the generators and all Wasm files.
 
-Since the system is event-based, the messages can be emited for any pipeline worker. For example, if you want to generate variants from a bitcode file instead of a C file, you can call the `bc2wasm.py` script, it will read the bitcode file and will send it for exploration and the remaining flow will be executed.
+Since the system is event-based, the messages can be emited for any stage of the pipeline. For example, if you want to generate variants from a bitcode file instead of a C file, you can call the `bc2wasm.py <bitcode file>` script, it will read the bitcode file and will send it for exploration and the remaining variants generation flow will be executed.
 
 ## Repo structure
 
@@ -49,7 +49,7 @@ The repository is structured as follows:
 
 - Download our changed version of Souper. The main reason behind is that we include some extra options to be able of working together with the SLUMPs core. After downloading all the submodules in SLUMPs, build every one of them following the respective instructions in the original repos.
 
-    Inside the `souper` folder:
+    Inside the `souper` folder of the repo:
 
     ```bash
     ./build_deps.sh
@@ -73,7 +73,7 @@ The repository is structured as follows:
 
 - Install the python requirements: `pip3 install -r crow/requirements.txt`
 
-- RabbitMQ broker: `docker run -d -P --hostname rabbit -p 5009:5672 -p 5010:15672 --name rabbitmq -e RABBITMQ_DEFAULT_USER=user -e RABBITMQ_DEFAULT_PASS=pass rabbitmq:3.6.10-management`7
+- RabbitMQ broker: `docker run -d -P --hostname rabbit -p 5009:5672 -p 5010:15672 --name rabbitmq -e RABBITMQ_DEFAULT_USER=user -e RABBITMQ_DEFAULT_PASS=pass rabbitmq:3.6.10-management`
 
 - Redis cache (optional): `docker run --name some-redis -p 1010:9090 --restart always -d redis redis-server --port 9090`
 
@@ -159,15 +159,31 @@ If the LLVM build takes to long or fails due to memory lack in the image buildin
   
 - `docker run -it --rm -e MINIO_ACCESS_KEY=<key> -e MINIO_SECRET_KEY=<secret> -e MINIO_HOST=<minio_host> --entrypoint="/bin/bash" slumps/crow2:latest ./launch_storage_minio.sh  <options>`: Launch the minio storage service
 
-#### Examples
+#### Example
 
 ```sh
 # Launch the system
 cd deploy
 docker-compose up
+
+# The service will launch 1 explorer (bc2wasm), 2 variantcreators, 1 bc2wasm convertor, 1 wasm2wat convertor, 1 ll2bc convertor and 1 storage manager.
 ```
 
 ```sh
 # Start a task
+export BROKER_PASS=<broker_pass>
+export BROKER_USER=<broker_user>
 python3 crow/entrypoints/fromc.py program.c
 ```
+
+
+```sh
+# Launch the logs monitor
+export BROKER_PASS=<broker_pass>
+export BROKER_USER=<broker_user>
+python3 crow/monitor/logger.py
+```
+
+#### Tips
+
+CROW can be scaled to a cluster. Deploy a broker and the redis cache in a known/public/available machine and change the options when you call the docker entrypoints. For exampl, imagine you have your broker in `awesome-broker.me` at port 6767, just change the options in the entrypoints with `%event.host awesome-broker.me %event.port 6767` and the magic will happen.

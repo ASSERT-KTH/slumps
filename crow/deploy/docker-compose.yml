@@ -64,19 +64,19 @@ services:
 
 
   # exploration service
-  #exploration:
-  #  restart: always
-  #  image: "slumps/crow2:latest"
-  #  links:
-  #    - broker
-  #  volumes:
-  #    - ./out:/slumps/crow/crow/storage/out
-  #    - ./config.ini:/slumps/crow/crow/settings/config.ini
-  #  entrypoint:
-  #    - /bin/bash
-  #  env_file:
-  #    - .env.cr
-  #  command: ./launch_exploration.sh %DEFAULT.order 19,20,21 %DEFAULT.exploration-timeout 300 %cache.redis-host redis-cache %cache.redis-port 9898 %DEFAULT.workers 1 %souper.workers 2 %DEFAULT.combinations False
+  exploration:
+    restart: always
+    image: "slumps/crow2:latest"
+    links:
+      - broker
+    volumes:
+      - ./out:/slumps/crow/crow/storage/out
+      - ./config.ini:/slumps/crow/crow/settings/config.ini
+    entrypoint:
+      - /bin/bash
+    env_file:
+      - .env.cr
+    command: ./launch_exploration.sh %DEFAULT.order 20 %DEFAULT.exploration-timeout 300 %cache.redis-host redis-cache %cache.redis-port 9898 %DEFAULT.workers 1 %souper.workers 2 %DEFAULT.combinations False
 
 
   # entrypoints
