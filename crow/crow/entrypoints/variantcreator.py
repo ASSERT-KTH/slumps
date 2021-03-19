@@ -1,3 +1,4 @@
+from crow.cache import cache
 from crow.entrypoints import CREATE_VARIANT_KEY, STORE_KEY, GENERATED_BC_KEY, BC2WASM_KEY
 from crow.events import STORE_MESSAGE,BC2WASM_MESSAGE, \
     GENERATION_QUEUE,GENERATE_VARIANT_MESSAGE, GENERATED_BC_VARIANT
@@ -18,7 +19,10 @@ from crow.monitor.monitor import log_system_exception
 
 from crow.monitor.logger import LOGGER
 import re
+import base64
+import os
 
+CACHE = cache.getcache(True)
 
 levelPool = None
 publisher = Publisher()
@@ -48,21 +52,25 @@ def generateVariant(j, program_name, merging, bc):
     name = ""
 
     try:
-        keys = list(merging.keys())
         for k, v in j.items():
             LOGGER.info(program_name, f"Setting redis db")
 
             if v is not None:
-                name += "[%s-%s]" % (keys.index(k), merging[k].index(v))
+        #        name += "[%s-%s]" % (keys.index(k), merging[k].index(v))
                 r.hset(k, "result", v)
             else:
-                name += "[%s-n]" % (keys.index(k),)
+         #       name += "[%s-n]" % (keys.index(k),)
                 # search for infer word
                 rer = re.compile(r"infer %(\d+)")
                 kl = k
                 if rer.search(kl):
                     r.hset(k, "result", ("result %%%s\n" % (rer.search(kl).group(1),)).encode("utf-8"))
                 LOGGER.info(program_name, f"Replacing redundant key-value pair...")
+
+        name = base64.b64encode(os.urandom(32))[:8].decode(errors="ignore")\
+            .replace("\\", "_").replace("+", "_").replace("-", "_")
+
+        CACHE.init(f"{program_name}:variants:{name}", j)
 
         LOGGER.info(program_name, f"Preparing new variant generation...{name}")
 
@@ -72,7 +80,7 @@ def generateVariant(j, program_name, merging, bc):
                 tmpOut = BCOUT.file
 
                 try:
-                    sanitized_set_name = name
+                    sanitized_set_name = f"_[{name}]"
                     print(f"Generating variant {program_name} {sanitized_set_name}...")
                     LOGGER.info(program_name, f"Generating variant {sanitized_set_name}...")
 

@@ -5,6 +5,8 @@ from crow.settings import config
 from crow.utils import  Alias, RUNTIME_CONFIG
 from crow.monitor.logger import LOGGER
 import time
+import sys
+import atexit
 
 
 class CallException(Exception):
@@ -19,6 +21,7 @@ class ExternalStage(object):
 
     DEBUG_LEVEL = config["DEFAULT"].getint("debug-level")
     non_explicit = True
+    redirect=False
 
     def __init__(self, namespace):
         self.name = "unknown"
@@ -38,16 +41,27 @@ class ExternalStage(object):
         if self.DEBUG_LEVEL > 0 and self.timeout > -1:
             LOGGER.info(self.namespace, f"Setting timeout {self.timeout} {self.path_to_executable} ")
 
+        if config["DEFAULT"].getboolean("stages-to-stdout") or self.redirect:
+            redirect = sys.stdout
+            REDIRECT=True
+        else:
+            redirect = PIPE
+            REDIRECT = False
+
         cmd = ["timeout", f"{self.timeout}"] + [self.path_to_executable] if self.timeout > -1 else [self.path_to_executable]
-        p = Popen(cmd + args, stdout=PIPE, stderr=PIPE, stdin=PIPE)
+        p = Popen(cmd + args, stdout=redirect, stderr=redirect, stdin=PIPE)
+        atexit.register(p.terminate)
 
         self.p = p
         if stdin is not None:
             p.stdin.write(stdin)
 
         start = time.time()
-        std, err = p.communicate()
 
+        if not REDIRECT:
+            std, err = p.communicate()
+        else:
+            return
         delta = time.time() - start
         if self.debug:
             LOGGER.success(self.namespace, "Command -> %s (%.2f s)" % (self.name, delta))
@@ -151,7 +165,7 @@ class BCMem2Reg(ExternalStage):
 
 class BCCountCandidates(ExternalStage):
 
-    def __init__(self, namespace, level=1, souper_workers=4, timeout=-1, socket_port = 5678, socket_host="127.0.0.1"):
+    def __init__(self, namespace, level=1, souper_workers=4, timeout=-1, socket_port = 5678, socket_host="127.0.0.1", redirect=False):
         self.path_to_executable = Alias.opt
         self.name = "LLVM BC to Souper IR candidates"
         self.debug = True
@@ -161,6 +175,7 @@ class BCCountCandidates(ExternalStage):
         self.timeout = timeout
         self.socket_port = socket_port
         self.socket_host = socket_host
+        self.redirect = redirect
 
         self.namespace = namespace
 

@@ -2,3 +2,4 @@
 redis.conf
 out
 p3x-redis-ui-settings
+kube

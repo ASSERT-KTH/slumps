@@ -5,6 +5,8 @@ import os, sys
 from crow.events.event_manager import Publisher, Subscriber, subscriber_function
 from crow.events import LOG_MESSAGE
 from crow.monitor import LOGGING_QUEUE_NAME, LOG_KEY
+import platform
+import time
 
 ERROR="ERROR"
 WARNING="WARNING"
@@ -25,18 +27,22 @@ class bcolors:
     BOLD = '\033[1m'
     UNDERLINE = '\033[4m'
 
-def log(severity, message):
+def log(severity, message:str, sender, t):
 
+    if not message.startswith("New variant"):
+        return
+    #return
+    t = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(t))
     if severity == ERROR:
-        print("%s%s%s" % (bcolors.FAIL, message, bcolors.ENDC))
+        print("[%s][%s] %s%s%s" % (sender, t, bcolors.FAIL, message, bcolors.ENDC))
     elif severity == WARNING:
-        print("%s%s%s" % (bcolors.WARNING, message, bcolors.ENDC))
+        print("[%s][%s] %s%s%s" % (sender,t, bcolors.WARNING, message, bcolors.ENDC))
     elif severity == INFO:
-        print("%s%s%s" % (bcolors.OKBLUE, message, bcolors.ENDC))
+        print("[%s][%s] %s%s%s" % (sender, t, bcolors.OKBLUE, message, bcolors.ENDC))
     elif severity == SUCCESS:
-        print("%s%s%s" % (bcolors.OKGREEN,message, bcolors.ENDC))
+        print("[%s][%s] %s%s%s" % (sender,t, bcolors.OKGREEN,message, bcolors.ENDC))
     else:
-        print("%s%s%s" % (bcolors.BOLD, message, bcolors.ENDC))
+        print("[%s][%s] %s%s%s" % (sender,t, bcolors.BOLD, message, bcolors.ENDC))
 
 def log2file(severity, message, program_name):
 
@@ -75,6 +81,7 @@ class Logger(object):
         self.p.publish(message=dict(
             event_type=LOG_MESSAGE,
             message=message,
+            sender=platform.node(),
             severity=DEBUG,
             program=file
         ),routing_key=f"{LOG_KEY}.{DEBUG}")
@@ -87,6 +94,7 @@ class Logger(object):
             event_type=LOG_MESSAGE,
             message=message,
             severity=ERROR,
+            sender=platform.node(),
             program=file
         ), routing_key=f"{LOG_KEY}.{ERROR}")
 
@@ -99,9 +107,20 @@ class Logger(object):
             event_type=LOG_MESSAGE,
             message=message,
             severity=WARNING,
+            sender=platform.node(),
             program=file
         ),routing_key=f"{LOG_KEY}.{WARNING}")
 
+
+    def custom(self,file, message, custom="INFO"):
+
+        self.p.publish(message=dict(
+            event_type=LOG_MESSAGE,
+            message=message,
+            severity=WARNING,
+            sender=platform.node(),
+            program=file
+        ),routing_key=f"{LOG_KEY}.{INFO}")
 
     def info(self,file,  message):
         if self.DEBUG > 0:
@@ -111,6 +130,7 @@ class Logger(object):
             event_type=LOG_MESSAGE,
             message=message,
             severity=INFO,
+            sender=platform.node(),
             program=file
         ),routing_key=f"{LOG_KEY}.{INFO}")
 
@@ -123,6 +143,7 @@ class Logger(object):
         self.p.publish(message=dict(
             event_type=LOG_MESSAGE,
             message=message,
+            sender=platform.node(),
             severity=SUCCESS,
             program=file
         ),routing_key=f"{LOG_KEY}.{SUCCESS}")
@@ -139,7 +160,11 @@ def general_log(data):
     if config["DEFAULT"].getboolean("log2file"):
         log2file(data["severity"], data[k], data["program"] if "program" in data else "general")
     else:
-        log(data["severity"], data[k])
+        log(data["severity"],
+            data[k],
+            data["sender"] if "sender" in data else "-",
+            data["time"]
+            )
 
 
 
@@ -152,5 +177,5 @@ if __name__ == "__main__":
     OUT_FOLDER = os.path.join(OUT_FOLDER, "logs")
 
 
-    subscriber = Subscriber(1, LOGGING_QUEUE_NAME, f"{LOG_KEY}.#",  config["event"].getint("port"), general_log)
+    subscriber = Subscriber(1, LOGGING_QUEUE_NAME, f"{LOG_KEY}.*",  config["event"].getint("port"), general_log)
     subscriber.setup()

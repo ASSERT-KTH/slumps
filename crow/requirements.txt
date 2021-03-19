@@ -59,6 +59,7 @@ manticore==0.3.3
 MarkupSafe==1.1.1
 matplotlib==3.3.4
 mccabe==0.6.1
+minio==7.0.2
 mistune==0.8.4
 more-itertools==7.2.0
 nbclient==0.5.2
@@ -132,6 +133,11 @@ wcwidth==0.1.7
 webencodings==0.5.1
 widgetsnbextension==3.5.1
 wrapt==1.11.2
-z3-solver==4.8.7.0
 zipp==0.6.0
 zope.interface==5.1.2
+
+dash==0.21.1
+dash-renderer==0.13.0
+dash-html-components==0.11.0
+dash-core-components==0.23.0
+plotly
