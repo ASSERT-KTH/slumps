@@ -1,6 +1,5 @@
-version: "3.9"  # optional since v1.27.0
+version: "3"  # optional since v1.27.0
 services:
-  # docker run -d -P --hostname rabbit -p 5672:5672 -p 8080:15672 --name rabbitmq -e =root -e RABBITMQ_DEFAULT_PASS=quamarine
   broker:
     image: "rabbitmq:3.6.10-management"
     ports:
@@ -11,11 +10,14 @@ services:
     restart: always
   redis_cache:
     image: redis
+    hostname: "redis-cache"
     restart: always
     ports:
       - "1010:9898"
+      - "9898:9898"
     volumes:
       - ./redis.conf:/redis.conf
+      - ./redis:/var/lib/redis
     command: redis-server /redis.conf --port 9898
   redis_monitor:
     image: patrikx3/p3x-redis-ui
@@ -42,7 +44,7 @@ services:
       - /bin/bash
     env_file:
       - .env.cr
-    command: ./launch_storage.sh 1 # 1 managers
+    command: ./launch_storage.sh 1  %cache.redis-host redis-cache %cache.redis-port 9898 # 1 managers
 
 
   # Generators service
@@ -58,23 +60,23 @@ services:
       - /bin/bash
     env_file:
       - .env.cr
-    command: ./launch_generators.sh 2 # 1 generators
+    command: ./launch_generators.sh 2 %cache.redis-host redis-cache %cache.redis-port 9898 # 1 generators
 
 
   # exploration service
-  exploration:
-    restart: always
-    image: "slumps/crow2:latest"
-    links:
-      - broker
-    volumes:
-      - ./out:/slumps/crow/crow/storage/out
-      - ./config.ini:/slumps/crow/crow/settings/config.ini
-    entrypoint:
-      - /bin/bash
-    env_file:
-      - .env.cr
-    command: ./launch_exploration.sh
+  #exploration:
+  #  restart: always
+  #  image: "slumps/crow2:latest"
+  #  links:
+  #    - broker
+  #  volumes:
+  #    - ./out:/slumps/crow/crow/storage/out
+  #    - ./config.ini:/slumps/crow/crow/settings/config.ini
+  #  entrypoint:
+  #    - /bin/bash
+  #  env_file:
+  #    - .env.cr
+  #  command: ./launch_exploration.sh %DEFAULT.order 19,20,21 %DEFAULT.exploration-timeout 300 %cache.redis-host redis-cache %cache.redis-port 9898 %DEFAULT.workers 1 %souper.workers 2 %DEFAULT.combinations False
 
 
   # entrypoints
@@ -90,4 +92,4 @@ services:
       - /bin/bash
     env_file:
       - .env.cr
-    command: ./launch_entrypoints.sh 1 1 1 # 1 workers each
+    command: ./launch_entrypoints.sh 1 1 1 %cache.redis-host redis-cache %cache.redis-port 9898 # 1 workers each

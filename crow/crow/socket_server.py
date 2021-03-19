@@ -17,55 +17,55 @@ def set_default(obj):
         return list(obj)
     raise TypeError
 
-def listen(port, q, program, worker_id, level, emit_generation=True):
+def listen(port, q, program, worker_id, level, timeout, emit_generation=True):
 
-	HOST = '127.0.0.1'  # Standard loopback interface address (localhost)
+	HOST = '0.0.0.0'  # Standard loopback interface address (localhost)
 	PORT = port
-	result = {}
-	NOW = time.time()
 
 	with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
 		if program:
 			LOGGER.info(program,f"Getting port {port}")
-		s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+		#s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+
+		s.settimeout(timeout)
 		s.bind((HOST, PORT))
 		if program:
-			LOGGER.info(program,f"Listening...{port}")
-						
-		s.listen()
-		conn, addr = s.accept()
-		with conn:
-			if program:
-				LOGGER.success(program,f'Connected by {addr}')
-			while True:
-				data = conn.recv(1024<<6)
-				data = data.replace('\\'.encode(), '\\\\'.encode()).replace('\n'.encode(), '\\n'.encode())
-				st = f"[{data.decode()[:-1]}]"
+			LOGGER.info(program,f"Listening...{port} {HOST}")
 
-				try:
-					js = json.loads(st)
+		try:
+			s.listen()
+			conn, addr = s.accept()
+			LOGGER.info(program,f"Accepted...{addr}")
 
-					for kvpair in js:
-						k, v = kvpair["key"], kvpair["value"]
+			with conn:
+				if program:
+					LOGGER.success(program,f'Connected by {addr}')
+				while True:
+					data = conn.recv(1024<<8)
+					data = data.replace('\\'.encode(), '\\\\'.encode()).replace('\n'.encode(), '\\n'.encode())
+					st = f"[{data.decode()[:-1]}]"
 
-						if k not in result:
-							result[k] = set([])
+					try:
+						js = json.loads(st)
 
-						result[k].add(v)
+						for kvpair in js:
+							k, v = kvpair["key"], kvpair["value"]
 
-						if q:
-							q(level,k, v)
-					s=reduce(operator.mul, [len(t) + 1 for t in result.values()], 1)
-					#print(f"level {level} tentative {s}")
-					printinSameLine(f"level {level} tentative {s} ({time.time() - NOW:.2f}s)")
-				except Exception as e:
-					print(traceback.format_exc())
-					
-					return result
-				if not data:
-					break
+							if q:
+								#print(k, v)
+								q(level,k, v)
+						#print(f"level {level} tentative {s}")
+					except Exception as e:
+						#print(data)
+						print(traceback.format_exc())
+						break
+					if not data:
+						break
+		except:
+			print("Socket timeout")
+			return
 
-	return result
+	return
 				
 
 

@@ -23,6 +23,7 @@ COPY 4docker/launch_logger.sh                           /slumps/crow/launch_logg
 COPY 4docker/launch_monitor.sh                          /slumps/crow/launch_monitor.sh
 COPY 4docker/launch_storage.sh                          /slumps/crow/launch_storage.sh
 COPY 4docker/launch_experiments.sh                      /slumps/crow/launch_experiments.sh
+COPY 4docker/launch_storage_minio.sh                      /slumps/crow/launch_storage_minio.sh
 COPY setup.sh                                   /slumps/crow/setup.sh
 
 COPY setup.py                                  /slumps/crow/setup.py
@@ -51,6 +52,9 @@ ENV BROKER_PASS guest
 ENV BROKER_USER guest
 ENV REDIS_DB 0
 ENV REDIS_PASS guest
+ENV MINIO_ACCESS_KEY minio1
+ENV MINIO_SECRET_KEY secret
+ENV MINIO_HOST "min.io:9090"
 
 #RUN python3 -m pip install -r crow/requirements.txt
 RUN export LD_LIBRARY_PATH=/slumps/souper/third_party/alive2/build/:/slumps/souper/build:/slumps/souper/third_party/z3-install/lib::$LD_LIBRARY_PATH

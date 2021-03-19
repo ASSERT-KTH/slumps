@@ -72,12 +72,19 @@ class RedisCache(Cache):
 
     def __init__(self, db, password):
 
-        self.connection = redis.Redis(
-            host=config["cache"]["redis-host"],
-            port=config["cache"].getint("redis-port"),
-            password=password,
-            db=db
-        )
+        db = int(db)
+        if db >= 0 and password:
+            self.connection = redis.Redis(
+                host=config["cache"]["redis-host"],
+                port=config["cache"].getint("redis-port"),
+                password=password,
+                db=db
+            )
+        else:
+            self.connection = redis.Redis(
+                host=config["cache"]["redis-host"],
+                port=config["cache"].getint("redis-port")
+            )
 
     def has(self, key):
         return self.connection.get(key) is not None
@@ -97,9 +104,9 @@ class RedisCache(Cache):
 
 def getcache(use_redis):
 
-    if use_redis and os.getenv("REDIS_DB", None) and os.getenv("REDIS_PASS", None):
+    if use_redis:
         print("REDIS cache")
-        return RedisCache(os.getenv("REDIS_DB"), os.getenv("REDIS_PASS"))
+        return RedisCache(os.getenv("REDIS_DB", 0), os.getenv("REDIS_PASS", ""))
     else:
         print("Native dict cache")
         return DictCache()

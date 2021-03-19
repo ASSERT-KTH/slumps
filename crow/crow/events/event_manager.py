@@ -176,7 +176,7 @@ class Publisher:
 
 
 class Consumer(object):
-    def __init__(self, id, queueName, bindingKey, port, callback, heartbeat=None):
+    def __init__(self, id, queueName, bindingKey, port, callback, heartbeat=None, ack_on_receive=False):
         self.callback = callback
         self.should_reconnect = False
         self.was_consuming = False
@@ -191,6 +191,7 @@ class Consumer(object):
         self.port = port
         self.key = bindingKey
         self.heartbeat = heartbeat
+        self.ack_on_receive = ack_on_receive
         # In production, experiment with higher prefetch values
         # for higher consumer throughput
         self.prefetch_count = config["event"].getint("prefetch_count")
@@ -418,6 +419,10 @@ class Consumer(object):
         """
         #print('Received message # %s from %s'%(
         #            basic_deliver.delivery_tag, properties.app_id))
+
+        if self.ack_on_receive:
+            self.acknowledge_message(basic_deliver.delivery_tag)
+
         try:
             deserialized = deserialize_message(json.loads(body.decode()))
         #    print(deserialized)
@@ -426,7 +431,8 @@ class Consumer(object):
             print(f"ERROR {e} {traceback.format_exc()}")
         # print(f"id:{self.id} received new message")
         # This ensure that the message needs to be reprocessed
-        self.acknowledge_message(basic_deliver.delivery_tag)
+        if not self.ack_on_receive:
+            self.acknowledge_message(basic_deliver.delivery_tag)
 
     def acknowledge_message(self, delivery_tag):
         """Acknowledge the message delivery from RabbitMQ by sending a
@@ -526,14 +532,15 @@ class Subscriber(object):
     ExampleConsumer indicates that a reconnect is necessary.
     """
 
-    def __init__(self, id, queueName, key, port, cb, heartbeat=None):
+    def __init__(self, id, queueName, key, port, cb, heartbeat=None, ack_on_receive=False):
         self.id = id
         self.reconnect_delay = 0
         self.queueName = queueName
         self.port = port
         self.key=key
         self.cb = cb
-        self.consumer = Consumer(id, queueName, key, port, cb, heartbeat=heartbeat)
+        self.ack_on_receive = ack_on_receive
+        self.consumer = Consumer(id, queueName, key, port, cb, heartbeat=heartbeat, ack_on_receive=ack_on_receive)
 
     def setup(self):
         while True:
@@ -550,7 +557,7 @@ class Subscriber(object):
             reconnect_delay = self.get_reconnect_delay()
             print('Reconnecting after %d seconds', reconnect_delay)
             time.sleep(reconnect_delay)
-            self.consumer = Consumer(self.id, self.queueName, self.key, self.port, self.cb)
+            self.consumer = Consumer(self.id, self.queueName, self.key, self.port, self.cb, self.ack_on_receive)
 
     def get_reconnect_delay(self):
         if self.consumer.was_consuming:

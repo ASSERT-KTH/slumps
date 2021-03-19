@@ -1,3 +1,4 @@
+from crow.cache import cache
 from crow.entrypoints import EXPLORE_KEY, CREATE_VARIANT_KEY, STORE_KEY
 from crow.events import BC2Candidates_MESSAGE, BC_EXPLORATION_QUEUE, STORE_MESSAGE, GENERATE_VARIANT_MESSAGE, EXPLORATION_RESULT
 from crow.events.event_manager import Subscriber, subscriber_function, Publisher
@@ -5,6 +6,7 @@ from crow.sanitzers.sanitizer import Sanitizer
 from crow.settings import config
 from crow.commands.stages import BCCountCandidates, TimeoutException
 from crow.socket_server import listen
+import random
 
 from crow.utils import ContentToTmpFile, getIteratorByName, printinSameLine
 import threading, queue
@@ -25,8 +27,11 @@ from crow.experiments.overlap_check import get_preffix
 import re
 import threading
 import multiprocessing
+import hashlib
+import itertools
 
 levelPool = None
+sendPool = None
 
 publisher = Publisher()
 def chunkIt(s, num):
@@ -40,27 +45,114 @@ def chunkIt(s, num):
 
     return out
 
-def processLevel(levels, program_name, port, bc, worker_index, launch_socket_server = True):
+SANITIZER=Sanitizer(
+        sanitize_redundant=config["sanitizer"].getboolean("sanitize-redundant"),
+        sanitize_no_wasm=config["sanitizer"].getboolean("sanitize-non-wasm"),
+        report_overlapping=config["sanitizer"].getboolean("report-overlapping"))
 
-    results = {}
+OVERALL_COUNT = 0
+CACHE = cache.getcache(True)
+
+
+def get_job_key(job):
+
+    r = ""
+
+    for k, v in job.items():
+        kstr = hashlib.md5(k.encode()).hexdigest()
+        vstr = hashlib.md5(v.encode()).hexdigest() if v else "None"
+
+        r += f"{kstr}:{vstr}"
+
+    return r
+
+def send_job(job, program_name, merging, bc):
+
+    key = f"{program_name}:exploration:{get_job_key(job)}"
+
+    if not CACHE.has(key):
+        global OVERALL_COUNT
+        OVERALL_COUNT += 1
+        publisher.publish(message=dict(
+            event_type=GENERATE_VARIANT_MESSAGE,
+            bc=bc,
+            program_name=f"{program_name}",
+            replacements=job,
+            overall=merging
+        ), routing_key=CREATE_VARIANT_KEY)
+
+        CACHE.init(key, job)
+
+MAX = config["DEFAULT"].getint("upper-bound")
+
+def send_replacement(program_name, k,replacement, merging, bc):
+
+    try:
+        printinSameLine(f"Sending replacement {OVERALL_COUNT} ")
+        if k not in merging:
+            merging[k] = [None]  # Add the option to not generate replacement for the key at all
+
+        if replacement not in merging[k]:
+            merging[k].append(replacement)
+
+            # All combinations without it have been generated
+
+            # Generate alone
+            # There is a priority over single alone replacements
+            send_job({
+                k: replacement
+            }, program_name, merging, bc)
+
+            # Generate all combinations with it
+            # TODO Delegate it to a second thread
+
+            if config["DEFAULT"].getboolean("combinations"):
+                print()
+                NOW = time.time()
+                print("Generating combinations")
+                keys = list(merging.keys())
+                for i in range(2, len(merging.keys()) + 1):  # Start at combination of two keys
+                    for v1 in itertools.combinations(keys, i):
+                        for p in itertools.product(*[merging[k1] for k1 in v1 if k1 != k]):
+                            JOB = dict(zip(v1, p))
+                            JOB[k] = replacement
+
+                            # print(JOB.keys())
+                            NEW_JOB = {}
+                            for j1, j2 in JOB.items():
+                                if j2:
+                                    NEW_JOB[j1] = j2
+                            send_job(NEW_JOB, program_name, merging, bc)
+                print(f"Combinations sent in {time.time() - NOW}s")
+    except Exception as e:
+        print(e)
+
+
+def processLevel(levels, program_name, port, bc, worker_index, merging, launch_socket_server = True):
+
     socket_port = config["souper"].getint("socket_port") + port
+    # set random shift
 
+    levelFutures = []
 
     def cb(level, k, v):
+        global OVERALL_COUNT
 
-        if level not in results:
-            results[level]={}
+        if OVERALL_COUNT >= MAX:
+            return
 
-        if k not in results[level]:
-            results[level][k] = set()
+        sanitized = SANITIZER.sanitize_replacement(k, v)
+        #raise Exception("F")
+        if sanitized: # Valid replacement
+            send_replacement(program_name,
+                k, sanitized, merging, bc
+            )
 
-        results[level][k].add(v)
-
+        #LOGGER.custom(program_name, f"{program_name} {level} OVERALL COUNT: {OVERALL_COUNT}", custom="EXPLORATION")
 
     for level in levels:
-
-        results[level] = {}
-
+        # shift address from
+        socket_port += random.randint(1, 100)
         LOGGER.success(program_name,
                        "%s: Searching level (increasing execution time) %s: %s souper-workers:%s souper-port:%s host:%s" % (
                        program_name,
@@ -72,22 +164,22 @@ def processLevel(levels, program_name, port, bc, worker_index, launch_socket_ser
                                          souper_workers=config["souper"].getint("workers"),
                                          timeout=config["DEFAULT"].getint("exploration-timeout"),
                                          socket_port=socket_port,
-                                         socket_host=config["souper"]["socket-host"])
+                                         socket_host=config["souper"]["socket-host"], redirect=True)
 
         except Exception as e:
             LOGGER.error(program_name, traceback.format_exc())
-            return results
+            return
 
         with ContentToTmpFile(content=bc) as TMP_BC:
 
             try:
                 #serverThread = None
-                if launch_socket_server:
-                    serverThread = threading.Thread(target=listen,
-                                                    args=(socket_port, cb, program_name, worker_index, level))
-                    serverThread.start()
-                print()
+
                 bctocand(args=[TMP_BC.file], std=None)
+
+                if launch_socket_server:
+
+                    listen(socket_port, cb, program_name, worker_index, level, config["DEFAULT"].getint("exploration-timeout"))
 
             except TimeoutException as e:
                 LOGGER.warning(program_name, f"Timeout reached")
@@ -100,15 +192,16 @@ def processLevel(levels, program_name, port, bc, worker_index, launch_socket_ser
                 try:
                     bctocand.p.kill()
                 except Exception as e:
-                    print(e)
+                    LOGGER.error(program_name, f"Error killing process: {e}")
                 LOGGER.warning(program_name, f"Stopping thread...")
-                serverThread.join()
+                #serverThread.join()
                 #serverThread._stop() # Force termination
                 LOGGER.success(program_name, f"REDO")
 
     #print(results)
-    LOGGER.success(program_name, f"DONE: processing queue")
-    return results
+    LOGGER.custom(program_name, f"DONE: processing queue", custom="EXPLORATION")
+    #wait(levelFutures, return_when=ALL_COMPLETED)
+    print()
 
 def check_prefixes(pr:dict, combination:str, CFG: dict):
     r = re.compile(r"\[(\d+)-")
@@ -150,6 +243,9 @@ def check_prefixes(pr:dict, combination:str, CFG: dict):
 def bcexploration(bc, program_name):
 
     #publisher = Publisher()
+    global OVERALL_COUNT
+
+    OVERALL_COUNT = 0
     print(f"Exploration {program_name}")
 
     futures = []
@@ -159,11 +255,13 @@ def bcexploration(bc, program_name):
 
     works = chunkIt(order, config["DEFAULT"].getint("workers"))
 
-    LOGGER.warning(program_name, f"Exploration jobs {works}")
+    LOGGER.custom(program_name, f"Exploration jobs {works}", custom="EXPLORATION")
+
+    OVERALL = {}
 
     for i in range(config["DEFAULT"].getint("workers")):
         # TODO assign random port
-        job = levelPool.submit(processLevel, works[i], program_name, 2620 + i, bc, i)
+        job = levelPool.submit(processLevel, works[i], program_name, 2620 + i, bc, i, OVERALL)
 
         #job.result()
         futures.append(job)
@@ -171,120 +269,9 @@ def bcexploration(bc, program_name):
     done, fail = wait(futures, return_when=ALL_COMPLETED)
     #levelPool.shutdown(False)
 
-    # Merging results
+    CACHE.init(f"{program_name}:metadata:exploration", OVERALL)
 
-    LOGGER.info(program_name, "Merging exploration results...")
-    merging = {}
-
-    codeCount = -1
-    for f in done:
-        try:
-            r = f.result()
-            if not r:
-                continue
-            for k, v in r.items():
-                LOGGER.info(program_name, f"[{k}] {len(v)} code blocks")
-                if len(v) != codeCount and codeCount != -1:
-                    LOGGER.warning(program_name, f"Sanity check warning, different exploration stage with different code blocks")
-                codeCount = len(v)
-                for k1, v1 in v.items():
-                    vSet = set(v1)
-                    if k1 not in merging:
-                        merging[k1] = []
-                    merging[k1] += vSet
-                    merging[k1] = list(set(merging[k1]))
-                    LOGGER.info(program_name, f"\t - {len(merging[k1])} replacements")
-        except Exception as e:
-            LOGGER.error(program_name, traceback.format_exc())
-
-    san = Sanitizer(
-        sanitize_redundant=config["sanitizer"].getboolean("sanitize-redundant"),
-        sanitize_no_wasm=config["sanitizer"].getboolean("sanitize-non-wasm"),
-        report_overlapping=config["sanitizer"].getboolean("report-overlapping"))
-
-    tentativeNumber = reduce(operator.mul, [len(v) + 1 for v in merging.values()], 1)
-
-    print(f"Tentative number of variants {tentativeNumber}")
-
-    sanitized = san.sanitize(merging)
-    merging=sanitized
-
-    tentativeNumber = reduce(operator.mul, [len(v) + 1 for v in merging.values()], 1)
-
-    print(f"Tentative number of variants after sanitization {tentativeNumber}")
-
-    # Send exploration result to storage service
-
-
-    publisher.publish(message=dict(
-        event_type=STORE_MESSAGE,
-        stream=json.dumps([[k, [v1 for v1 in v if v1 is not None]] for k, v in merging.items()], indent=4).encode(),
-        program_name=f"{program_name}",
-        file_name=f"{program_name}.exploration.result.json",
-        path="metadata"
-    ), routing_key=STORE_KEY)
-
-
-    # launch in a thread
-
-
-    print("Sending")
-    start_at = time.time()
-    count = 0
-
-    parser = SouperParser()
-    prefixes = {}
-    CFG = {}
-
-    MX = config["DEFAULT"].getint("upper-bound")
-    KEEP_EVERY= config["DEFAULT"].getint("skip-every-x-replacement")
-    if config["sanitizer"].getboolean("remove-if-prefix"):
-        print("Getting connected components")
-        entries, nodes, assignent = parser.set_cc(list(merging.keys()))
-
-        for e in entries:
-            index = list(merging.keys()).index(e.code)
-            CFG[index] = assignent[e.varId]  # add a CC to the piece of code
-    DONE = False
-    for iteratorFunction, size in getIteratorByName("keysSubsetIterators")(merging):
-        # iterator, publisher, merging, bc
-        for j in iteratorFunction():
-
-            variant_name = get_variant_name(merging, j)
-            if config["sanitizer"].getboolean("remove-if-prefix"):
-
-                if check_prefixes(prefixes, variant_name, CFG):
-                    continue
-                else:
-                    prefixes[variant_name] = 1
-
-            if count % KEEP_EVERY == 0: # sample every
-                # If the keys overlap, avoid
-                #print(f"Sending {variant_name}")
-                publisher.publish(message=dict(
-                    event_type=GENERATE_VARIANT_MESSAGE,
-                    bc=bc,
-                    program_name=f"{program_name}",
-                    replacements=j,
-                    overall=merging
-                ), routing_key=CREATE_VARIANT_KEY)
-                printinSameLine(f"Creating {variant_name} {program_name} {count}/{tentativeNumber} ")
-
-            else:
-                printinSameLine(f"Skipping {variant_name} {program_name} {count}/{tentativeNumber} ")
-            count += 1
-            if count >= MX:
-                DONE = True
-                break
-        if DONE:
-            break
-
-        print()
-        print(f"Variants {count} {program_name} after overlap filter")
-    #print(f"Prefixes {prefixes}")
-        LOGGER.info(program_name, f"All variants ({count}) are in the queue ({time.time() - start_at:.2f}s)")
-
-        #th.join()
+    LOGGER.custom(program_name, f"OVERALL COUNT {OVERALL_COUNT}", custom="EXPLORATION")
 
 
 @log_system_exception()
@@ -301,8 +288,11 @@ if __name__ == "__main__":
     levelPool = ThreadPoolExecutor(
     max_workers=config["DEFAULT"].getint("workers"))
 
+    #sendPool = ThreadPoolExecutor(
+    #max_workers=config["DEFAULT"].getint("workers"))
+
     if len(sys.argv) == 1:
-        subscriber = Subscriber(1, BC_EXPLORATION_QUEUE, EXPLORE_KEY, config["event"].getint("port"), subscriber, heartbeat=0)
+        subscriber = Subscriber(1, BC_EXPLORATION_QUEUE, EXPLORE_KEY, config["event"].getint("port"), subscriber, heartbeat=0, ack_on_receive=True)
         subscriber.setup()
         # Start a subscriber listening for LL2BC message
     else:

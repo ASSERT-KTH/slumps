@@ -23,6 +23,14 @@ publisher = Publisher()
 def bc2wasm(bc, program_name, file_name=None, variant_name=None, explore=False):
     global COUNT
     file_name = program_name if file_name is None else file_name
+    # Explicitly saving bc file
+    publisher.publish(message=dict(
+        event_type=STORE_MESSAGE,
+        stream=bc,
+        program_name=program_name,
+        file_name=f"{program_name}.original.bc",
+        path="bitcodes/variants"
+    ), routing_key=STORE_KEY)
 
     if explore:
         # Call for candidates exploration
