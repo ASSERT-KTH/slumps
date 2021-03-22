@@ -71,7 +71,7 @@ The repository is structured as follows:
     cmake --build .
     ```
 
-- Install the python requirements: `pip3 install -r crow/requirements.txt`
+- Install the python requirements: `pip3 install -r requirements.txt`
 
 - RabbitMQ broker: `docker run -d -P --hostname rabbit -p 5009:5672 -p 5010:15672 --name rabbitmq -e RABBITMQ_DEFAULT_USER=user -e RABBITMQ_DEFAULT_PASS=pass rabbitmq:3.6.10-management`
 
@@ -84,6 +84,15 @@ The repository is structured as follows:
   ```
 
 
+## How to use it
+- Set the corresponding credentials for the broker as env variables, i.e. `export BROKER_PASS=...`.
+- Start the system: `bash crow/launch_system_standalone.sh <options>`. This script will call the corresponding python scripts to launch the workers.
+- Call the corresponding entrypoint, depending of the type of the file you want to process. For example,
+`python3 -m crow.entrypoints.fromc program.c` to start a superdiversification of `program.c`
+
+Since CROW is built on top of several tools and each of them needs a differetn setup process, we strongly recommend to use a [docker](#images) deploy of the system. 
+
+
 ## Troubleshooting
 
 - **CROW shows a fail in the CLANG step**: Install emscripten and run it as follows `emcc -v <file>.c`. Then copy all the include files in the [include](https://github.com/KTH/slumps/blob/18ef5189904e25019155fe305046f4b5b8907538/src/settings/config.ini#L17) configuration for CROW.
@@ -92,13 +101,6 @@ The repository is structured as follows:
 - **CROW Services dont start**: Check if the rabbitmq broker is active. Check the host and port of the broker in the settings are right, `... %event.host <ip>  %event.port <port>`
 
 
-## How to use it
-- Set the corresponding credentials for the broker as env variables.
-- Start the system: `bash crow/launch_system_standalone.sh <options>`. This script will call the corresponding python scripts to launch the workers.
-- Call the corresponding entrypoint, depending of the type of the file you want to process. For example,
-`python3 -m crow.entrypoints.fromc program.c`
-
-Since CROW is built on top of several tools and each of them needs a differetn setup process, we strongly recommend to use a [docker](#images) deploy of the system. 
 
 ## Configuration \<options>
 
