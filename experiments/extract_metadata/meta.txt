@@ -1,0 +1,109 @@
+ed25519_ref10.c.bc 9672 40
+blake2b-compress-ref.c.bc 2229 1
+hash_sha256_cp.c.bc 1204 5
+hash_sha512_cp.c.bc 1198 5
+x25519_ref10.c.bc 1173 4
+
+; Below 500 candidates
+
+pwhash_scryptsalsa208sha256_nosse.c.bc 491 3
+codecs.c.bc 436 5
+shorthash_siphashx24_ref.c.bc 373 1
+keypair.c.bc 362 4
+poly1305_donna.c.bc 322 8
+chacha20_ref.c.bc 318 5
+shorthash_siphash24_ref.c.bc 265 1
+blake2b-ref.c.bc 255 10
+core_salsa_ref.c.bc 233 16
+utils.c.bc 227 20
+crypto_scrypt-common.c.bc 216 5
+core_hsalsa20_ref2.c.bc 200 1
+core_hchacha20.c.bc 200 5
+scalarmult_ed25519_ref10.c.bc 182 8
+pwhash_scryptsalsa208sha256.c.bc 139 19
+salsa20_ref.c.bc 129 2
+stream_salsa208_ref.c.bc 114 2
+stream_salsa2012_ref.c.bc 114 2
+
+; Below 100 candidates
+
+secretstream_xchacha20poly1305.c.bc 90 15
+argon2.c.bc 62 9
+randombytes_internal_random.c.bc 56 5
+pwhash_argon2i.c.bc 54 24
+
+; Below 50 candidates
+
+secretbox_xchacha20poly1305.c.bc 49 8
+generichash_blake2b.c.bc 49 7
+crypto_secretbox_easy.c.bc 49 4
+aead_chacha20poly1305.c.bc 46 20
+verify.c.bc 45 6
+box_curve25519xchacha20poly1305.c.bc 42 18
+core_ed25519.c.bc 38 19
+pwhash_argon2id.c.bc 36 21
+blake2b-long.c.bc 34 1
+open.c.bc 29 3
+obsolete.c.bc 29 3
+aead_xchacha20poly1305.c.bc 29 10
+crypto_box_easy.c.bc 28 8
+pbkdf2-sha256.c.bc 27 1
+auth_hmacsha512.c.bc 27 9
+auth_hmacsha256.c.bc 27 9
+t.bc 26 9
+crypto_kx.c.bc 26 9
+randombytes.c.bc 22 11
+stream_chacha20.c.bc 21 17
+scalarmult_ristretto255_ref10.c.bc 21 4
+crypto_pwhash.c.bc 21 26
+core.c.bc 20 5
+box_curve25519xsalsa20poly1305.c.bc 20 16
+
+; Below 20
+
+aead_aes256gcm_aesni.c.bc 17
+scalarmult_curve25519.c.bc 16 5
+sign.c.bc 15 4
+core_ristretto255.c.bc 14 17
+runtime.c.bc 12
+generichash_blake2.c.bc 10
+crypto_sign.c.bc 10 17
+secretbox_xsalsa20poly1305.c.bc 8 9
+crypto_box_seal.c.bc 8 3
+box_seal_curve25519xchacha20poly1305.c.bc 8 3
+crypto_box.c.bc 7 17
+auth_hmacsha512256.c.bc 7 9
+scrypt_platform.c.bc 6 4
+onetimeauth_poly1305.c.bc 5 10
+kdf_blake2b.c.bc 5 5
+crypto_onetimeauth.c.bc 5 10
+version.c.bc 4
+stream_salsa208.c.bc 4
+stream_salsa2012.c.bc 4
+crypto_generichash.c.bc 4 13
+core_hsalsa20.c.bc 4
+stream_xsalsa20.c.bc 3 7
+stream_xchacha20.c.bc 3 7
+stream_salsa20.c.bc 3 8
+sign_ed25519.c.bc 3 12
+shorthash_siphashx24.c.bc 2
+shorthash_siphash24.c.bc 2
+hash_sha512.c.bc 2
+hash_sha256.c.bc 2
+crypto_stream.c.bc 2 7
+crypto_secretbox.c.bc 2 10
+crypto_scalarmult.c.bc 2 5
+crypto_auth.c.bc 2 6
+randombytes_sysrandom.c.bc 1 5
+crypto_shorthash.c.bc 1 5
+crypto_kdf.c.bc 1 7
+crypto_hash.c.bc 1 3
+salsa20_xmm6int-sse2.c.bc
+salsa20_xmm6int-avx2.c.bc
+pwhash_scryptsalsa208sha256_sse.c.bc
+poly1305_sse2.c.bc
+chacha20_dolbeau-ssse3.c.bc
+chacha20_dolbeau-avx2.c.bc
+blake2b-compress-ssse3.c.bc
+blake2b-compress-sse41.c.bc
+blake2b-compress-avx2.c.bc
