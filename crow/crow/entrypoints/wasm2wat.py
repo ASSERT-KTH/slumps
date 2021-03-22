@@ -60,18 +60,12 @@ def wasm2wat(wasm, program_name, file_name = None, variant_name = None):
 def subscriber(data):
     wasm2wat(data["stream"], data["program_name"], data["file_name"] if "file_name" in data else None)
 
-
 if __name__ == "__main__":
-
-    #updatesettings(sys.argv[2:-1])
-    #f = sys.argv[-1]
 
     if len(sys.argv) == 1:
         subscriber = Subscriber(1, WAT_QUEUE,WASM2WAT_KEY,  config["event"].getint("port"), subscriber)
         subscriber.setup()
-        # Start a subscriber listening for LL2BC message
     else:
-        # Convert and send a LL to BC message
         program_name = sys.argv[1]
         program_name = program_name.split("/")[-1].split(".")[0]
         wasm2wat(open(sys.argv[2], 'rb').read(), program_name)

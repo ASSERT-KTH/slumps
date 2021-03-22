@@ -47,20 +47,14 @@ def generateVariant(j, program_name, merging, bc):
     except Exception as e:
         LOGGER.error(program_name, traceback.format_exc())
 
-    # Set keys
-
     name = ""
-
     try:
         for k, v in j.items():
             LOGGER.info(program_name, f"Setting redis db")
 
             if v is not None:
-        #        name += "[%s-%s]" % (keys.index(k), merging[k].index(v))
                 r.hset(k, "result", v)
             else:
-         #       name += "[%s-n]" % (keys.index(k),)
-                # search for infer word
                 rer = re.compile(r"infer %(\d+)")
                 kl = k
                 if rer.search(kl):
@@ -155,8 +149,6 @@ def subscriber(data):
 
 if __name__ == "__main__":
 
-    #updatesettings(sys.argv[2:-1])
-    #f = sys.argv[-1]
     port=int(sys.argv[1])
     r = redis.Redis(host="localhost", port=port)
     levelPool = ThreadPoolExecutor(
@@ -165,7 +157,5 @@ if __name__ == "__main__":
     if len(sys.argv) == 2:
         subscriber = Subscriber(1, GENERATION_QUEUE, CREATE_VARIANT_KEY, config["event"].getint("port"), subscriber)
         subscriber.setup()
-        # Start a subscriber listening for LL2BC message
     else:
-        # Convert and send a LL to BC message
         generatevariant(open(sys.argv[2], 'rb').read(), json.loads(open(sys.argv[1]).read()), {}) # First argument is a dictionary with the replacements to apply

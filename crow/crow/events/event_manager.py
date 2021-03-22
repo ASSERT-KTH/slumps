@@ -224,7 +224,7 @@ class Consumer(object):
         :param pika.SelectConnection _unused_connection: The connection
         :param Exception err: The error
         """
-        print('Connection open failed: %s', err)
+        print('Connection open failed: %s %s'%(err, _unused_connection))
         self.reconnect()
 
 
@@ -555,7 +555,7 @@ class Subscriber(object):
         if self.consumer.should_reconnect:
             self.consumer.stop()
             reconnect_delay = self.get_reconnect_delay()
-            print('Reconnecting after %d seconds', reconnect_delay)
+            print('Reconnecting to "%s:%s" after %d seconds'%(config["event"]["host"], self.port, reconnect_delay,))
             time.sleep(reconnect_delay)
             self.consumer = Consumer(self.id, self.queueName, self.key, self.port, self.cb, self.ack_on_receive)
 
