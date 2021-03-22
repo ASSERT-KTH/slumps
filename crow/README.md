@@ -75,7 +75,7 @@ The repository is structured as follows:
 
 - RabbitMQ broker: `docker run -d -P --hostname rabbit -p 5009:5672 -p 5010:15672 --name rabbitmq -e RABBITMQ_DEFAULT_USER=user -e RABBITMQ_DEFAULT_PASS=pass rabbitmq:3.6.10-management`
 
-- Redis cache (optional): `docker run --name some-redis -p 1010:9090 --restart always -d redis redis-server --port 9090`
+- Redis: `docker run --name some-redis -p 1010:9090 --restart always -d redis redis-server --port 9090`
 
   Set password for redis server: `docker run -it  --rm redis redis-cli -h <host> -p 1010`
 
@@ -93,8 +93,8 @@ The repository is structured as follows:
 
 
 ## How to use it
-
-- Start the system: `bash crow/launch_system_standalone.sh <options>`
+- Set the corresponding credentials for the broker as env variables.
+- Start the system: `bash crow/launch_system_standalone.sh <options>`. This script will call the corresponding python scripts to launch the workers.
 - Call the corresponding entrypoint, depending of the type of the file you want to process. For example,
 `python3 crow/entrypoints/fromc.py program.c`
 
