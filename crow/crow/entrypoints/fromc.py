@@ -47,12 +47,7 @@ def c2ll(file):
 
 if __name__ == "__main__":
 
-    #updatesettings(sys.argv[2:-1])
-    #f = sys.argv[-1]
-
     if len(sys.argv) == 1:
         pass
-        # Start a subscriber listening for C2LL message
     else:
-        # Convert and send a LL to BC message
         c2ll(sys.argv[1])

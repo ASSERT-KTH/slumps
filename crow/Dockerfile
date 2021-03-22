@@ -24,7 +24,6 @@ COPY 4docker/launch_monitor.sh                          /slumps/crow/launch_moni
 COPY 4docker/launch_storage.sh                          /slumps/crow/launch_storage.sh
 COPY 4docker/launch_experiments.sh                      /slumps/crow/launch_experiments.sh
 COPY 4docker/launch_storage_minio.sh                      /slumps/crow/launch_storage_minio.sh
-COPY setup.sh                                   /slumps/crow/setup.sh
 
 COPY setup.py                                  /slumps/crow/setup.py
 COPY headers                                   /slumps/crow/headers

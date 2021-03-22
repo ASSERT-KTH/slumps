@@ -55,15 +55,10 @@ def subscriber(data):
 
 if __name__ == "__main__":
 
-    #updatesettings(sys.argv[2:-1])
-    #f = sys.argv[-1]
-
     if len(sys.argv) == 1:
         subscriber = Subscriber(1, LL_QUEUE,LL_KEY,  config["event"].getint("port"), subscriber)
         subscriber.setup()
-        # Start a subscriber listening for LL2BC message
     else:
-        # Convert and send a LL to BC message
         program_name = sys.argv[1]
         program_name = program_name.split("/")[-1].split(".")[0]
         ll2bc(sys.stdin.read(), program_name)

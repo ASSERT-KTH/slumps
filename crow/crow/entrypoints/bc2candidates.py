@@ -23,7 +23,6 @@ from functools import reduce
 from crow.monitor.logger import LOGGER
 from crow.utils import get_variant_name
 from crow.sanitzers.overlap import SouperParser
-from crow.experiments.overlap_check import get_preffix
 import re
 import threading
 import multiprocessing
@@ -103,9 +102,6 @@ def send_replacement(program_name, k,replacement, merging, bc):
                 k: replacement
             }, program_name, merging, bc)
 
-            # Generate all combinations with it
-            # TODO Delegate it to a second thread
-
             if config["DEFAULT"].getboolean("combinations"):
                 print()
                 NOW = time.time()
@@ -142,13 +138,11 @@ def processLevel(levels, program_name, port, bc, worker_index, merging, launch_s
             return
 
         sanitized = SANITIZER.sanitize_replacement(k, v)
-        #raise Exception("F")
         if sanitized: # Valid replacement
             send_replacement(program_name,
                 k, sanitized, merging, bc
             )
 
-        #LOGGER.custom(program_name, f"{program_name} {level} OVERALL COUNT: {OVERALL_COUNT}", custom="EXPLORATION")
 
     for level in levels:
         # shift address from
@@ -173,8 +167,6 @@ def processLevel(levels, program_name, port, bc, worker_index, merging, launch_s
         with ContentToTmpFile(content=bc) as TMP_BC:
 
             try:
-                #serverThread = None
-
                 bctocand(args=[TMP_BC.file], std=None)
 
                 if launch_socket_server:
@@ -194,13 +186,9 @@ def processLevel(levels, program_name, port, bc, worker_index, merging, launch_s
                 except Exception as e:
                     LOGGER.error(program_name, f"Error killing process: {e}")
                 LOGGER.warning(program_name, f"Stopping thread...")
-                #serverThread.join()
-                #serverThread._stop() # Force termination
                 LOGGER.success(program_name, f"REDO")
 
-    #print(results)
     LOGGER.custom(program_name, f"DONE: processing queue", custom="EXPLORATION")
-    #wait(levelFutures, return_when=ALL_COMPLETED)
     print()
 
 def check_prefixes(pr:dict, combination:str, CFG: dict):
@@ -222,7 +210,6 @@ def check_prefixes(pr:dict, combination:str, CFG: dict):
                 if CFG[k1] == CFG[k2]: # I they are in the same connected component, then the transformation is the same
                     print(f"Common prefix {pre} and same key afterward K1 {k1} K2 {k2}, CC1 {CFG[k1]} CC2 {CFG[k2]} R1 {combination} R2 {remainingK}")
                     return True # both keys are equal then, prefix will prevale
-                # otherwise the block code is different and the replacement should not overlap
             elif not remainingK: # Compare the keys in the prefix
                 if remainingC:
                     k1 = int(r.search(remainingC).group(1))
@@ -251,7 +238,6 @@ def bcexploration(bc, program_name):
     futures = []
     order = list(
         map(lambda x: int(x), config["DEFAULT"]["order"].split(",")))
-    # split levels by redis interface
 
     works = chunkIt(order, config["DEFAULT"].getint("workers"))
 
@@ -260,14 +246,10 @@ def bcexploration(bc, program_name):
     OVERALL = {}
 
     for i in range(config["DEFAULT"].getint("workers")):
-        # TODO assign random port
         job = levelPool.submit(processLevel, works[i], program_name, 2620 + i, bc, i, OVERALL)
-
-        #job.result()
         futures.append(job)
 
     done, fail = wait(futures, return_when=ALL_COMPLETED)
-    #levelPool.shutdown(False)
 
     CACHE.init(f"{program_name}:metadata:exploration", OVERALL)
 
@@ -282,21 +264,13 @@ def subscriber(data):
 
 if __name__ == "__main__":
 
-    #updatesettings(sys.argv[2:-1])
-    #f = sys.argv[-1]
-
     levelPool = ThreadPoolExecutor(
     max_workers=config["DEFAULT"].getint("workers"))
-
-    #sendPool = ThreadPoolExecutor(
-    #max_workers=config["DEFAULT"].getint("workers"))
 
     if len(sys.argv) == 1:
         subscriber = Subscriber(1, BC_EXPLORATION_QUEUE, EXPLORE_KEY, config["event"].getint("port"), subscriber, heartbeat=0, ack_on_receive=True)
         subscriber.setup()
-        # Start a subscriber listening for LL2BC message
     else:
-        # Convert and send a LL to BC message
         program_name = sys.argv[1]
         program_name = program_name.split("/")[-1].split(".")[0]
         bcexploration(open(sys.argv[2], 'rb').read(), program_name)
