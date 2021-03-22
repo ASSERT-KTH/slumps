@@ -56,7 +56,7 @@ python3 -m crow.entrypoints.fromll &
 
 
 printf "$GREEN Launching dashboard $NC\n"
-python3 -m crow.monitor.dashboard localhost 1010 0 "" &
+python3 -m crow.monitor.dashboard localhost 1010 0 "" crow/storage/out &
 
 for i in $(seq 1 3) # Increase the number of variant creators
 do

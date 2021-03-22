@@ -10,3 +10,5 @@ dump.rdb
 private.ini
 crowenv
 build
+out.zip
+*.zip
