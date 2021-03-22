@@ -96,7 +96,7 @@ The repository is structured as follows:
 - Set the corresponding credentials for the broker as env variables.
 - Start the system: `bash crow/launch_system_standalone.sh <options>`. This script will call the corresponding python scripts to launch the workers.
 - Call the corresponding entrypoint, depending of the type of the file you want to process. For example,
-`python3 crow/entrypoints/fromc.py program.c`
+`python3 -m crow.entrypoints.fromc program.c`
 
 Since CROW is built on top of several tools and each of them needs a differetn setup process, we strongly recommend to use a [docker](#images) deploy of the system. 
 
@@ -173,7 +173,7 @@ docker-compose up
 # Start a task
 export BROKER_PASS=<broker_pass>
 export BROKER_USER=<broker_user>
-python3 crow/entrypoints/fromc.py program.c
+python3 -m crow.entrypoints.fromc program.c
 ```
 
 
@@ -181,7 +181,7 @@ python3 crow/entrypoints/fromc.py program.c
 # Launch the logs monitor
 export BROKER_PASS=<broker_pass>
 export BROKER_USER=<broker_user>
-python3 crow/monitor/logger.py
+python3 -m crow.monitor.logger
 ```
 
 #### Tips
