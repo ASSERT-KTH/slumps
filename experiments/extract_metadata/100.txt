@@ -1,0 +1,4 @@
+secretstream_xchacha20poly1305.c.bc
+argon2.c.bc
+randombytes_internal_random.c.bc
+pwhash_argon2i.c.bc
