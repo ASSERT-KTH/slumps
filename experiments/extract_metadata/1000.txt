@@ -1,0 +1,5 @@
+ed25519_ref10.c.bc
+blake2b-compress-ref.c.bc
+hash_sha256_cp.c.bc
+hash_sha512_cp.c.bc
+x25519_ref10.c.bc
