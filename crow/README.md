@@ -93,7 +93,7 @@ The repository is structured as follows:
 - Call the corresponding entrypoint, depending on the type of the file you want to process. For example,
 `python3 -m crow.entrypoints.fromc program.c` to start a superdiversification of `program.c`
 
-- Collect the results inside the crow/storage/out folder. An alternative way to collect the result is to access `localhost:8050` in your browser, you will see a dashboard in which you can download the generated bitcodes/wasms variants.
+- Collect the results inside the crow/storage/out folder. An alternative way (WIP) to collect the result is to access `localhost:8050` in your browser, you will see a dashboard in which you can download the generated bitcodes/wasms variants.
 
 
 Since CROW is built on top of several tools and each of them needs a different setup process and an expensive in time building, we strongly recommend using a [docker](#images) deploy of the system. 
