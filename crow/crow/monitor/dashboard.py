@@ -192,6 +192,16 @@ if __name__ == "__main__":
         )
 
 
+    @app.server.route('/downloadablewt/<path:program_name>')
+    def serve_static_wat(program_name):
+
+        o = make_zip(f"{out_folder}/{program_name}/wat", "wats")
+
+        return flask.send_from_directory(
+            BASE_DIR, o, as_attachment=True, cache_timeout=0
+        )
+
+
     @app.callback(dash.dependencies.Output('logs', 'children'),
                   [dash.dependencies.Input('purge-button1', 'n_clicks'),
                    dash.dependencies.Input('purge-button1', 'key')],
@@ -317,7 +327,7 @@ if __name__ == "__main__":
                                 ),
                                 html.A(
                                     className="btn btn-primary",
-                                    children="Download bitcodes",
+                                    children="Get bitcodes",
                                     href=f"/downloadable/{module}",
                                     style={
                                         'marginRight': '50px'
@@ -331,8 +341,16 @@ if __name__ == "__main__":
 
                                 html.A(
                                     className="btn btn-primary",
-                                    children="Download wasms",
+                                    children="Get wasms",
                                     href=f"/downloadablew/{module}",
+                                    style={
+                                        'marginRight': '50px'
+                                    }
+                                ),
+                                html.A(
+                                    className="btn btn-primary",
+                                    children="Get wats",
+                                    href=f"/downloadablewt/{module}",
                                     style={
                                         'marginRight': '50px'
                                     }
@@ -378,7 +396,9 @@ if __name__ == "__main__":
                     }
                 ),
                 html.Div(
-                    className="container",
+                    style=dict(
+                        padding="50px"
+                    ),
                     children=list(map(generate_report_for_module, programs))
                 )
 

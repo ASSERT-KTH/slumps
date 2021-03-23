@@ -268,7 +268,7 @@ if __name__ == "__main__":
     max_workers=config["DEFAULT"].getint("workers"))
 
     if len(sys.argv) == 1:
-        subscriber = Subscriber(1, BC_EXPLORATION_QUEUE, EXPLORE_KEY, config["event"].getint("port"), subscriber, heartbeat=0, ack_on_receive=True)
+        subscriber = Subscriber(1, BC_EXPLORATION_QUEUE, EXPLORE_KEY, config["event"].getint("port"), subscriber, heartbeat=0, ack_on_receive=config["DEFAULT"].getboolean("exploration-immediate-ack"))
         subscriber.setup()
     else:
         program_name = sys.argv[1]
