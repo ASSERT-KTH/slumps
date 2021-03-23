@@ -35,6 +35,7 @@ printf "$GREEN Starting system $NC\n"
 
 printf "$GREEN Launching storage service $NC\n"
 printf "$GREEN Collect the generated files at crow/storage/out $NC\n"
+redis-server --port 1010 2>/dev/null 1>/dev/null &
 python3 -m crow.storage.manager &
 
 printf "$GREEN Launching logging service $NC\n"

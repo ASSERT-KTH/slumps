@@ -215,7 +215,17 @@ if __name__ == "__main__":
         return None
 
 
-
+    '''
+     html.A(
+                         style=dict(
+                             marginLeft='5px'
+                         ),
+                         id="purge-button1",
+                         className='btn btn-danger',
+                         children=f"Purge",
+                         key="EXPLORATION"
+                     ),
+    '''
     @app.callback(dash.dependencies.Output('page-content', 'children'),
                   [dash.dependencies.Input('url', 'pathname'),
                     dash.dependencies.Input('update-button', 'n_clicks')],
@@ -233,15 +243,6 @@ if __name__ == "__main__":
                      html.Hr(),
                      html.H2(
                          children="Broker status, pending messages"
-                     ),
-                     html.A(
-                         style=dict(
-                             marginLeft='5px'
-                         ),
-                         id="purge-button1",
-                         className='btn btn-danger',
-                         children=f"Purge",
-                         key="EXPLORATION"
                      ),
                      html.Div(
                     className="row",
@@ -422,7 +423,7 @@ if __name__ == "__main__":
             html.Div(id='page-content'),
         ])
 
-        app.run_server(debug=debug)
+        app.run_server(host="0.0.0.0", port=8050, debug=debug)
 
     def print_general_stats(self):
         programs = get_all_programs()
@@ -449,4 +450,4 @@ if __name__ == "__main__":
     #subscriber.setup()
 
 
-    deploy_dash()
+    deploy_dash(debug=False)
