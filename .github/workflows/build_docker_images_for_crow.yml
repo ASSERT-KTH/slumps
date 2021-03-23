@@ -14,7 +14,7 @@ jobs:
     name: Build docker stack
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
+      - name: Checkout recursive
         uses: actions/checkout@v2 # checkout latest version of the repo
         with:
           submodules: recursive
