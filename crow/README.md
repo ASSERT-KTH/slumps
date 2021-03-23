@@ -93,6 +93,9 @@ The repository is structured as follows:
 - Call the corresponding entrypoint, depending on the type of the file you want to process. For example,
 `python3 -m crow.entrypoints.fromc program.c` to start a superdiversification of `program.c`
 
+- Collect the results inside the crow/storage/out folder. An alternative way to collect the result is to access `localhost:8050` in your browser, you will see a dashboard in which you can download the generated bitcodes/wasms variants.
+
+
 Since CROW is built on top of several tools and each of them needs a different setup process and an expensive in time building, we strongly recommend using a [docker](#images) deploy of the system. 
 
 
@@ -156,6 +159,8 @@ CROW docker images stack contains three main images, **slumps/souper**, **slumps
 - `docker run -it --rm  slumps/crow2 <options>`: Launch all CROW services as a standalone docker container
     - You can mount a volume in the local machine to collect the generation, `-v $(pwd)/out:/slumps/crow/crow/storage/out`
 
+- Inside the deploy folder you can find a docker-compose stack declaration with an example of the service deplyment
+
 
 #### Horizontal escalation
 
@@ -182,9 +187,17 @@ docker-compose up
 # Start a task
 export BROKER_PASS=<broker_pass>
 export BROKER_USER=<broker_user>
+# Start from a C program
 python3 -m crow.entrypoints.fromc program.c
 ```
 
+```sh
+# Start a task
+export BROKER_PASS=<broker_pass>
+export BROKER_USER=<broker_user>
+# Start from llvm bitcode
+python3 -m crow.entrypoints.bc2wasm module.bc
+```
 
 ```sh
 # Launch the logs monitor
