@@ -79,6 +79,8 @@ services:
     command: ./launch_exploration.sh %DEFAULT.order 20 %DEFAULT.exploration-timeout 300 %cache.redis-host redis-cache %cache.redis-port 9898 %DEFAULT.workers 1 %souper.workers 2 %DEFAULT.combinations False
 
 
+
+
   # entrypoints
   entrypoints:
     restart: always
@@ -93,3 +95,22 @@ services:
     env_file:
       - .env.cr
     command: ./launch_entrypoints.sh 1 1 1 %cache.redis-host redis-cache %cache.redis-port 9898 # 1 workers each
+
+
+
+  # monitoring
+  monitoring:
+    restart: always
+    image: "slumps/crow2:latest"
+    ports:
+      - "8050:8050"
+    links:
+      - broker
+    volumes:
+      - ./out:/out
+      - ./config.ini:/slumps/crow/crow/settings/config.ini
+    entrypoint:
+      - /bin/bash
+    env_file:
+      - .env.cr
+    command: ./launch_monitor.sh redis-cache 9898 /out

@@ -18,7 +18,6 @@ pkill -f bc2candidates
 pkill -f bc2wasm
 pkill -f wasm2wat
 pkill -f fromll
-pkill -f monitor
 pkill -f variantcreator
 pkill -f redis-server
 
@@ -37,9 +36,6 @@ python3 -m crow.storage.manager &
 
 printf "$GREEN Launching logging service $NC\n"
 python3 -m crow.monitor.logger &
-
-printf "$GREEN Launching monitor service $NC\n"
-python3 -m crow.monitor.monitor &
 
 printf "$GREEN Launching wasm to wat service $NC\n"
 python3 -m crow.entrypoints.wasm2wat &
@@ -70,7 +66,6 @@ control_c() {
     pkill -f bc2wasm
     pkill -f wasm2wat
     pkill -f fromll
-    pkill -f monitor
     pkill -f variantcreator
     pkill -f redis-server
     exit

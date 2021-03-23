@@ -4,3 +4,5 @@ logs/
 out/
 
 deploy/
+crow/storage/out
+crow/entrypoints/out
