@@ -16,17 +16,31 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2 # checkout latest version of the repo
+        with:
+          submodules: recursive
       - name: Install dependencies
         run: |
           sudo apt-get update && docker --version
       - name: Build backend image
         run: |
-          sudo docker build -t slumps/crow:latest -f Dockerfile .
-      - name: Push images
+          sudo bash build_all_images.sh
+      - name: Push images Souper
         run: |
-          docker login -u="$user" -p="$pass" && docker push slumps/crow:latest
+          docker login -u="$user" -p="$pass" && docker push slumps/souper:latest
         env:
           user: ${{secrets.DOCKER_USER}}
           pass: ${{secrets.DOCKER_PASS}}
-      
+
+      - name: Push images backend
+        run: |
+          docker login -u="$user" -p="$pass" && docker push slumps/backend:latest
+        env:
+          user: ${{secrets.DOCKER_USER}}
+          pass: ${{secrets.DOCKER_PASS}}
+      - name: Push images CROW
+        run: |
+          docker login -u="$user" -p="$pass" && docker push slumps/crow2:latest
+        env:
+          user: ${{secrets.DOCKER_USER}}
+          pass: ${{secrets.DOCKER_PASS}}
      
