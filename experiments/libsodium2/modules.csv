@@ -44,7 +44,7 @@ stream_salsa208,  0000000, 0, 0
 stream_xchacha20,  0000000, 1, 1
 stream_xsalsa20,  0000000, 1, 1
 version,  0000000, 0, 0
-
+CAN BE DIVERSIFIED, ---, ---, ---
 aead_chacha20poly1305,  0000001, 1, 0
 crypto_pwhash,  0000001, 2, 1
 randombytes,  0000001, 1, 0
