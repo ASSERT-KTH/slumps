@@ -11,7 +11,7 @@ on:
 
 jobs:
   build-crow-dockerrmi:
-    name: Build docker stack
+    name: Build docker stack for CROW
     runs-on: ubuntu-latest
     steps:
       - name: Checkout recursive
