@@ -9,6 +9,7 @@ CROW is a superdiversitifer for WASM. The reference explanation is in paper [CRO
  author = {Javier Cabrera Arteaga and Orestis Floros Malivitsis and Oscar Luis Vera Pérez and Benoit Baudry and Martin Monperrus},
  booktitle = {Proceedings of MadWEB},
  year = {2021},
+ doi = {10.14722/madweb.2021.23xxx}
 }
 ```
 
