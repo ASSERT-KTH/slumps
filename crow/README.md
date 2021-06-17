@@ -1,6 +1,6 @@
 # ![Logo](https://en.gravatar.com/userimage/133494879/d7a324075159773e826a7eb397da07d7.png?size=80) CROW 
 
-CROW is a superdiversifier for WASM. The reference explanation is in paper [CROW: Code Diversification for WebAssembly](http://arxiv.org/pdf/2008.07185).
+CROW is a superdiversifier for Wasm. The reference explanation is in paper [CROW: Code Diversification for WebAssembly](http://arxiv.org/pdf/2008.07185).
 
 ```bibtex
 @inproceedings{crow,
@@ -60,7 +60,7 @@ The repository is structured as follows:
     make
     ```
 
-- Build wabt toolkit to provide the WASM to WAT conversion for debugging reasons.
+- Build wabt toolkit to provide the Wasm to WAT conversion for debugging reasons.
 
     Follow these instructions inside the `wabt` folder:
 

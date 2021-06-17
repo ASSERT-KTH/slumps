@@ -3,8 +3,8 @@
 
 
 - **Number of programs**: 788 
-  - **Fail porting to WASM**: 187 (     23.73%)
-  - **Success porting to WASM**: 601 (     76.27%)
+  - **Fail porting to Wasm**: 187 (     23.73%)
+  - **Success porting to Wasm**: 601 (     76.27%)
       - **Programs with multiple variants**: 134 (     17.01%)
         - **Programs with multiple variants and at least one different to original**: 60 (      7.61%)
       - **Count for no optimization candidates**: 83 (     10.53%)

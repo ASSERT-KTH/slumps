@@ -3,7 +3,7 @@
 
 ## Intro to superoptimization
 
-Given a C program compiled to WASM, SLUMPs superoptimizer generates a new WASM program which is smaller in size, and potentially faster, as we show in the image below.
+Given a C program compiled to Wasm, SLUMPs superoptimizer generates a new Wasm program which is smaller in size, and potentially faster, as we show in the image below.
 
 ![pass](docs/pass.png)
 
