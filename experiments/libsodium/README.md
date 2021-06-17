@@ -18,7 +18,7 @@ docker run -e RADIUS=10 -v "$PWD:/workdir" --workdir /workdir --rm dtw python3 -
 
 ## libsodium compilation database
 
-`bear-results/make.stdout` is the result of `bear -vvvvv make -j` with a WASM build, using libsodium stable as of [July 03 2020](https://github.com/jedisct1/libsodium/tree/2b5f8f2b6810121c2d9a8cc8a392e01f4d3de433).
+`bear-results/make.stdout` is the result of `bear -vvvvv make -j` with a Wasm build, using libsodium stable as of [July 03 2020](https://github.com/jedisct1/libsodium/tree/2b5f8f2b6810121c2d9a8cc8a392e01f4d3de433).
 For bear see: <https://github.com/rizsotto/Bear/>.
 
 ### Findings
