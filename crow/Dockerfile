@@ -3,16 +3,26 @@ env DEBIAN_FRONTEND=noninteractive
 
 
 RUN apt-get update \
-    && apt-get -y install curl git tree python3.7 redis-server python3-pip wget \
+    && apt-get -y install curl erlang git tree python3.7 redis-server python3-pip wget \
     && curl -sS -L -O https://github.com/CraneStation/wasi-sdk/releases/download/wasi-sdk-8/wasi-sdk_8.0_amd64.deb \
     && dpkg -i wasi-sdk_8.0_amd64.deb && rm -f wasi-sdk_8.0_amd64.deb \
-    && rm -rf /var/lib/apt/lists/*
+    
 RUN curl https://wasmtime.dev/install.sh -sSf | bash
+
+# ERLANG FOR RABBITMQ
+#RUN wget -O- https://www.rabbitmq.com/rabbitmq-release-signing-key.asc | apt-key add -
+#RUN wget -O- https://packages.erlang-solutions.com/ubuntu/erlang_solutions.asc | apt-key add -
+
+#RUN echo "deb https://dl.bintray.com/rabbitmq/debian xenial main" |  tee /etc/apt/sources.list.d/bintray.rabbitmq.list
+#RUN echo "deb https://packages.erlang-solutions.com/ubuntu focal contrib" |  tee /etc/apt/sources.list.d/rabbitmq.list
+RUN apt-get update
+RUN apt-get install -y rabbitmq-server
+RUN rm -rf /var/lib/apt/lists/*
 
 RUN python3 -m pip install pip
 
 COPY crow                                      /slumps/crow/crow
-COPY crow/settings/config.docker.ini            /slumps/crow/crow/settings/config.ini
+COPY 4docker/config.ini            /slumps/crow/crow/settings/config.ini
 COPY requirements.txt                          /slumps/crow/requirements.txt
 
 COPY 4docker/launch_standalone.sh                      /slumps/crow/launch_standalone.sh
@@ -26,7 +36,6 @@ COPY 4docker/launch_experiments.sh                      /slumps/crow/launch_expe
 COPY 4docker/launch_storage_minio.sh                      /slumps/crow/launch_storage_minio.sh
 
 COPY setup.py                                  /slumps/crow/setup.py
-COPY headers                                   /slumps/crow/headers
 
 RUN mkdir -p /slumps/crow/logs
 RUN mkdir -p /slumps/crow/out
@@ -47,8 +56,8 @@ RUN python3 setup.py install
 
 RUN tree -h .
 
-ENV BROKER_PASS guest
-ENV BROKER_USER guest
+ENV BROKER_PASS quamarine
+ENV BROKER_USER root
 ENV REDIS_DB 0
 ENV REDIS_PASS guest
 ENV MINIO_ACCESS_KEY minio1

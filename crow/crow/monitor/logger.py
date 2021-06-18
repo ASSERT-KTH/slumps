@@ -29,10 +29,14 @@ class bcolors:
 
 def log(severity, message:str, sender, t):
 
-    if not message.startswith("New variant"):
-        return
+
+    #return
+    #if not message.startswith("New variant"):
+    #    return
     #return
     t = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(t))
+    #os.system(f'say -v Victoria "You have a new variant"')
+
     if severity == ERROR:
         print("[%s][%s] %s%s%s" % (sender, t, bcolors.FAIL, message, bcolors.ENDC))
     elif severity == WARNING:

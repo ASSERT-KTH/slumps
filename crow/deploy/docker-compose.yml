@@ -1,58 +1,10 @@
 version: "3"  # optional since v1.27.0
 services:
-  broker:
-    image: "rabbitmq:3.6.10-management"
-    ports:
-      - "5672:5672"
-      - "8080:15672"
-    env_file:
-      - .env.br
-    restart: always
-  redis_cache:
-    image: redis
-    hostname: "redis-cache"
-    restart: always
-    ports:
-      - "1010:9898"
-      - "9898:9898"
-    volumes:
-      - ./redis.conf:/redis.conf
-      - ./redis:/var/lib/redis
-    command: redis-server /redis.conf --port 9898
-  redis_monitor:
-    image: patrikx3/p3x-redis-ui
-    links:
-      - redis_cache
-    ports:
-      - "7843:7843"
-    volumes:
-      - ./p3x-redis-ui-settings:/settings
-
-  # CROW
-
-  # Storage service
-  storage_service:
-    restart: always
-    image: "slumps/crow2:latest"
-    links:
-      - redis_cache
-      - broker
-    volumes:
-      - ./out:/slumps/crow/crow/storage/out
-      - ./config.ini:/slumps/crow/crow/settings/config.ini
-    entrypoint:
-      - /bin/bash
-    env_file:
-      - .env.cr
-    command: ./launch_storage.sh 1  %cache.redis-host redis-cache %cache.redis-port 9898 # 1 managers
-
-
+  
   # Generators service
   generators:
     restart: always
     image: "slumps/crow2:latest"
-    links:
-      - broker
     volumes:
       - ./out:/slumps/crow/crow/storage/out
       - ./config.ini:/slumps/crow/crow/settings/config.ini
@@ -60,15 +12,13 @@ services:
       - /bin/bash
     env_file:
       - .env.cr
-    command: ./launch_generators.sh 2 %cache.redis-host redis-cache %cache.redis-port 9898 # 1 generators
+    command: ./launch_generators.sh 5 %cache.redis-port 9898 # 1 generators
 
 
   # exploration service
   exploration:
     restart: always
     image: "slumps/crow2:latest"
-    links:
-      - broker
     volumes:
       - ./out:/slumps/crow/crow/storage/out
       - ./config.ini:/slumps/crow/crow/settings/config.ini
@@ -76,17 +26,38 @@ services:
       - /bin/bash
     env_file:
       - .env.cr
-    command: ./launch_exploration.sh %DEFAULT.order 20 %DEFAULT.exploration-timeout 300 %cache.redis-host redis-cache %cache.redis-port 9898 %DEFAULT.workers 1 %souper.workers 2 %DEFAULT.combinations False
+    command: ./launch_exploration.sh %DEFAULT.order 19,20 %DEFAULT.exploration-timeout 150 %cache.redis-port 9898 %DEFAULT.workers 2 %souper.workers 1 %DEFAULT.combinations False
 
+      # exploration service
+  exploration2:
+    restart: always
+    image: "slumps/crow2:latest"
+    volumes:
+      - ./out:/slumps/crow/crow/storage/out
+      - ./config.ini:/slumps/crow/crow/settings/config.ini
+    entrypoint:
+      - /bin/bash
+    env_file:
+      - .env.cr
+    command: ./launch_exploration.sh %DEFAULT.order 19,20 %DEFAULT.exploration-timeout 150 %cache.redis-port 9898 %DEFAULT.workers 2 %souper.workers 1 %DEFAULT.combinations False
 
-
+      # exploration service
+  exploration3:
+    restart: always
+    image: "slumps/crow2:latest"
+    volumes:
+      - ./out:/slumps/crow/crow/storage/out
+      - ./config.ini:/slumps/crow/crow/settings/config.ini
+    entrypoint:
+      - /bin/bash
+    env_file:
+      - .env.cr
+    command: ./launch_exploration.sh %DEFAULT.order 19,20 %DEFAULT.exploration-timeout 150 %cache.redis-port 9898 %DEFAULT.workers 2 %souper.workers 1 %DEFAULT.combinations False
 
   # entrypoints
   entrypoints:
     restart: always
     image: "slumps/crow2:latest"
-    links:
-      - broker
     volumes:
       - ./out:/slumps/crow/crow/storage/out
       - ./config.ini:/slumps/crow/crow/settings/config.ini
@@ -94,23 +65,6 @@ services:
       - /bin/bash
     env_file:
       - .env.cr
-    command: ./launch_entrypoints.sh 1 1 1 %cache.redis-host redis-cache %cache.redis-port 9898 # 1 workers each
+    command: ./launch_entrypoints.sh 0 10 10 %cache.redis-port 9898 # 1 workers each
 
 
-
-  # monitoring
-  monitoring:
-    restart: always
-    image: "slumps/crow2:latest"
-    ports:
-      - "8050:8050"
-    links:
-      - broker
-    volumes:
-      - ./out:/out
-      - ./config.ini:/slumps/crow/crow/settings/config.ini
-    entrypoint:
-      - /bin/bash
-    env_file:
-      - .env.cr
-    command: ./launch_monitor.sh redis-cache 9898 /out
