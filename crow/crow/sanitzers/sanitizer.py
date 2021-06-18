@@ -24,7 +24,7 @@ class Sanitizer(object):
 
 		if len(lines) == 1:
 			if resultMatch.match(lines[0]): # The inferring its only the same value
-				print(f"Variant discarded\n{k}\n{v}")
+				print(f"Variant discarded\n{key}\n{v}")
 				return None
 
 		if self.remove_idempotent_operations:
