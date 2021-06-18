@@ -1,7 +1,6 @@
 # ![Logo](https://en.gravatar.com/userimage/133494879/d7a324075159773e826a7eb397da07d7.png?size=80) CROW 
 
-
-CROW is a superdiversitifer for WASM. The reference explanation is in paper [CROW: Code Diversification for WebAssembly](http://arxiv.org/pdf/2008.07185).
+CROW is a superdiversifier for Wasm. The reference explanation is in paper [CROW: Code Diversification for WebAssembly](http://arxiv.org/pdf/2008.07185).
 
 ```bibtex
 @inproceedings{crow,
@@ -9,6 +8,7 @@ CROW is a superdiversitifer for WASM. The reference explanation is in paper [CRO
  author = {Javier Cabrera Arteaga and Orestis Floros Malivitsis and Oscar Luis Vera Pérez and Benoit Baudry and Martin Monperrus},
  booktitle = {Proceedings of MadWEB},
  year = {2021},
+ doi = {10.14722/madweb.2021.23xxx}
 }
 ```
 
@@ -17,7 +17,6 @@ CROW is a superdiversitifer for WASM. The reference explanation is in paper [CRO
 ![Schema](docs/schema.png)
 
 CROW is implemented as an event-based system. We presented a general flow overview in the figure above. The broad pipeline is as follows, we passed a C file, it is compiled, and a "Launch Souper exploration" message is sent to the superdiversifier. During the exploration phase, for each found replacement (and replacement combinations), a "Generate variant" message is sent to the generators. A generator builds the bitcode file using a found potential replacement and emits a "Bitcode to Wasm" message. For all generated files in the system, a "Store" message is sent to save the files, i.e., all bitcodes from the generators and all Wasm files.
-
 
 Since the system is event-based, you can emit the messages at any stage of the system. For example, if you want to generate variants from a bitcode file instead of a C file, you can call the `bc2wasm.py <bitcode file>` script; it will read the bitcode file and will send it for exploration, and the system will execute the remaining variants generation flow.
 
@@ -61,7 +60,7 @@ The repository is structured as follows:
     make
     ```
 
-- Build wabt toolkit to provide the WASM to WAT conversion for debugging reasons.
+- Build wabt toolkit to provide the Wasm to WAT conversion for debugging reasons.
 
     Follow these instructions inside the `wabt` folder:
 
