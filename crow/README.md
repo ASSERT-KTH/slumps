@@ -151,15 +151,20 @@ CROW docker images stack contains three main images, **slumps/souper**, **slumps
 - **slumps/backend**: This image collect the needed tools to support crow, it needs the **slumps/souper** image and it includes wabt and the WASI headers. To build it, run `docker build -t slumps/backend` inside the docker_images folder.
 
 
-- **slumps/crow2**: This is the harness for CROW, it needs the **slumps/backend** image. To build it, run `docker build -t slumps/crow2` inside the crow folder.
+- **slumps/crow2**: This is the harness for CROW, it needs the **slumps/backend** image.
+
+- **slumps/crow2:standalone**: This image contains the full crow environment inside, including a rabbitmq server. To build it, run `docker build -t slumps/crow2:standal` inside the crow folder.
 
 
 ### CROW dockerized app
 
-- `docker run -it --rm  slumps/crow2 <options>`: Launch all CROW services as a standalone docker container
-    - You can mount a volume in the local machine to collect the generation, `-v $(pwd)/out:/slumps/crow/crow/storage/out`
+- `docker run -it --rm  slumps/crow2 <options>`: Launch all CROW services as a docker container, it can be used as a worker, if the broker is already deployed
+  - Inside the deploy folder you can find a docker-compose stack declaration with an example of the service deployment with multiple workers
 
-- Inside the deploy folder you can find a docker-compose stack declaration with an example of the service deplyment
+
+- `docker run -it --rm -e REDIS_PASS="" -v $(pwd):/workdir slumps/crow2:standalone /workdir/hello.c <options>`: Launch CROW as a standalone isolated service as a standalone docker container
+  - You can mount a volume in the local machine to collect the generation, `-v $(pwd)/out:/slumps/crow/crow/storage/out`, the full commmand shoud look like `docker run -it --rm -e REDIS_PASS="" -v $(pwd)/out:/slumps/crow/crow/storage/out -v $(pwd):/workdir slumps/crow2:standalone /workdir/hello.c <options>`
+
 
 
 #### Horizontal escalation
