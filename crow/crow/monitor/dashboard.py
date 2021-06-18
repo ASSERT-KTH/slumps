@@ -5,6 +5,8 @@ import json
 import dash
 import dash_core_components as dcc
 import dash_html_components as html
+import dash_auth
+
 from plotly import graph_objects as go
 import dash_bootstrap_components as dbc
 from crow.events import LOG_MESSAGE, GENERATED_BC_VARIANT, EXPLORATION_RESULT, BC_EXPLORATION_QUEUE, GENERATION_QUEUE, \
@@ -22,16 +24,25 @@ import flask
 from shutil import make_archive
 from flask.helpers import send_file
 import pika
+import time
 
+NOW = time.time()
 
 class RabbitMonitor:
 
-    def __init__(self):
+    def __init__(self, save_query=True):
+
+        self.__setup()
+        self.save_query = save_query
+        self.queries = {}
+
+    def __setup(self):
         BROKER_PASS = os.getenv("BROKER_PASS", None)
         BROKER_USER = os.getenv("BROKER_USER", None)
 
         if BROKER_PASS and BROKER_USER:
             credentials = pika.PlainCredentials(BROKER_USER, BROKER_PASS)
+            print("Connecting with credentials", config['event']['host'])
             param = pika.ConnectionParameters(host=config["event"]["host"],
                                               virtual_host="/",
                                               port=config["event"].getint("port"),
@@ -39,21 +50,44 @@ class RabbitMonitor:
         else:
             param = pika.ConnectionParameters(host=config["event"]["host"],
                                               port=config["event"].getint("port"))
-        self.connection = pika.BlockingConnection(param)
-        self.channel = self.connection.channel()
+        while True:
+            try:
+                self.connection = pika.BlockingConnection(param)
+                self.channel = self.connection.channel()
+                break
+            except Exception as e:
+                print("Error connecting", e, traceback.format_stack())
+                time.sleep(5)
 
     def __get_message_count(self, QUEUE_NAME):
 
-        queue = self.channel.queue_declare(
-            queue=QUEUE_NAME,passive=True
-        )
-        return queue.method.message_count
+        try:
+            queue = self.channel.queue_declare(
+                queue=QUEUE_NAME,passive=True
+            )
+
+            if self.save_query:
+                if QUEUE_NAME not in self.queries:
+                    self.queries[QUEUE_NAME] = []
+
+                self.queries[QUEUE_NAME].append((
+                    time.time() - NOW,
+                    queue.method.message_count
+                ))
+            return queue.method.message_count
+        except Exception:
+            time.sleep(3) # waiting 3 seconds
+            self.__setup()
+
 
     def __purge_queue(self, queue_name):
 
-        print(f"Purging {queue_name}")
-        self.channel.queue_purge(queue_name)
-
+        try:
+            print(f"Purging {queue_name}")
+            self.channel.queue_purge(queue_name)
+        except Exception:
+            time.sleep(3)
+            self.__setup()
     def purge_exploration_queue(self):
         self.__purge_queue(BC_EXPLORATION_QUEUE)
 
@@ -98,16 +132,40 @@ if __name__ == "__main__":
     redis_pass = sys.argv[4]
     out_folder = sys.argv[5]
 
+    VALID_USERNAME_PASSWORD_PAIRS = {
+    }
+    if os.getenv("BROKER_USER"):
+        VALID_USERNAME_PASSWORD_PAIRS[os.getenv("BROKER_USER")] = os.getenv("BROKER_PASS")
+    else:
+        exit(0)
+
     connection = redis.Redis(host=redis_host,port=redis_port, db=redis_db, password=redis_pass)
     app = dash.Dash(external_stylesheets=[dbc.themes.LUX], suppress_callback_exceptions=True)
+    auth = dash_auth.BasicAuth(
+        app,
+        VALID_USERNAME_PASSWORD_PAIRS
+    )
 
+    unique_bitcodes_queries = {}
+    total_bitcodes_queries = {}
 
-    def get_all_programs():
+    unique_wasms_queries = {}
+    total_wasms_queries = {}
+
+    def has(k):
+        return connection.get(k) is not None
+
+    def get_all_programs(prefix="", save=False, getsnapshotfirst=True):
+
+        if getsnapshotfirst and has(f"SNAPSHOT:all_programs:{prefix}"):
+            return json.loads(connection.get(f"SNAPSHOT:all_programs:{prefix}").decode())
+
         print("getting programs")
-        allkeys = connection.keys("*")
+        allkeys = connection.keys(f"{prefix}*")
 
         r = { }
 
+        print("keys retrieved")
         for k in allkeys:
             kd = k.decode()
 
@@ -115,15 +173,39 @@ if __name__ == "__main__":
             if match:
                 r[match.group(1)] = { }
 
+
+        if save:
+            connection.set(f"SNAPSHOT:all_programs:{prefix}", json.dumps(r).encode())
+
+        print("Returning all programs")
         return r
 
-    def get_unique_bitcodes(program):
+    def get_unique_bitcodes(program, save=False, getsnapshotfirst=True):
+        if getsnapshotfirst and has(f"SNAPSHOT:unique_bitcodes:{program}"):
+            return json.loads(connection.get(f"SNAPSHOT:unique_bitcodes:{program}").decode())
+
         bc_keys = connection.keys(f"{program}:bc:*")
+
+        if program not in unique_bitcodes_queries:
+            unique_bitcodes_queries[program] = []
+
+        unique_bitcodes_queries[program].append((
+            time.time() - NOW,
+            len(bc_keys)
+        ))
+
+        if save:
+            connection.set(f"SNAPSHOT:unique_bitcodes:{program}", json.dumps([k.decode() for k in bc_keys]).encode())
+
         return bc_keys
 
 
     def get_eq_variants_for_bc(bitcode_key):
-        variants = connection.get(f"{bitcode_key.decode()}")
+
+        try:
+            variants = connection.get(f"{bitcode_key.decode()}")
+        except:
+            variants = connection.get(f"{bitcode_key}")
         return json.loads(variants.decode()) if variants else None
 
 
@@ -137,6 +219,14 @@ if __name__ == "__main__":
 
     def get_unique_wasm(program):
         wasm_keys = connection.keys(f"{program}:wasm:*")
+
+        if program not in unique_wasms_queries:
+            unique_wasms_queries[program] = []
+
+        unique_wasms_queries[program].append((
+            time.time() - NOW,
+            len(wasm_keys)
+        ))
         return wasm_keys
 
     def get_unique_wat(program):
@@ -147,12 +237,29 @@ if __name__ == "__main__":
         C = 0
         for bc in get_unique_bitcodes(program):
             C += len(get_eq_variants_for_bc(bc))
+
+        if program not in total_bitcodes_queries:
+            total_bitcodes_queries[program] = []
+        total_bitcodes_queries[program].append((
+            time.time() - NOW,
+            C
+        ))
         return C
 
     def get_total_wasm(program):
         C = 0
         for bc in get_unique_wasm(program):
             C += len(get_eq_variants_for_wasm(bc))
+
+
+        if program not in total_wasms_queries:
+            total_wasms_queries[program] = []
+
+
+        total_wasms_queries[program].append((
+            time.time() - NOW,
+            C
+        ))
         return C
 
     def get_total_wat(program):
@@ -228,12 +335,21 @@ if __name__ == "__main__":
     '''
     @app.callback(dash.dependencies.Output('page-content', 'children'),
                   [dash.dependencies.Input('url', 'pathname'),
+                    dash.dependencies.Input('interval1', 'n_intervals'),
                     dash.dependencies.Input('update-button', 'n_clicks')],
                   )
-    def display_page(pathname, n_clicks):
+    def display_page(pathname, n_clicks, n_intervals):
 
 
         def plot_general_stats():
+
+            sc = m.get_storage_message_count()
+            ec = m.get_exploration_message_count()
+            gc = m.get_generation_message_count()
+            wc = m.get_wasm2wat_message_count()
+            bc = m.get_bc2wasm_message_count()
+
+            print("Queues count retrieved", sc, ec, gc, wc, bc)
 
             return html.Div(
                 style=dict(
@@ -248,62 +364,92 @@ if __name__ == "__main__":
                     className="row",
                     children=[
                         html.Div(
-                            className='col',
-                            children=[
-                                html.A(
-                                    children=f"Exploration queue count: {m.get_exploration_message_count()}"
+                            className='col col-md-4',
+                            children=dcc.Graph(
+                                    figure={
+                                        'data': [
+                                            go.Scatter(
+                                                x=[x[0] for x in m.queries[BC_EXPLORATION_QUEUE]],
+                                                y=[x[1] for x in m.queries[BC_EXPLORATION_QUEUE]],
+                                                mode="markers+lines",
+                                                name="test"
+                                            )
+
+                                        ],
+                                        'layout': {
+                                            'title': f'Exploration queue {ec}'
+                                        }
+                                    },
+
+                                )
+                        ),
+                        html.Div(
+                            className='col col-md-4',
+                            children=dcc.Graph(
+                                    figure={
+                                        'data': [
+                                            go.Scatter(
+                                                x=[x[0] for x in m.queries[GENERATION_QUEUE]],
+                                                y=[x[1] for x in m.queries[GENERATION_QUEUE]],
+                                                mode="markers+lines",
+                                                name="variant generation"
+                                            ),
+                                            go.Scatter(
+                                                x=[x[0] for x in m.queries[WAT_QUEUE]],
+                                                y=[x[1] for x in m.queries[WAT_QUEUE]],
+                                                mode="markers+lines",
+                                                name="wasm2wat generation"
+                                            ),
+                                            go.Scatter(
+                                                x=[x[0] for x in m.queries[WASM_QUEUE]],
+                                                y=[x[1] for x in m.queries[WASM_QUEUE]],
+                                                mode="markers+lines",
+                                                name="bc2wasm generation"
+                                            )
+
+                                        ],
+                                        'layout': {
+                                            'title': f'Generation queue {gc}, {wc}, {bc}'
+                                        }
+                                    }
                                 )
 
-                            ]
                         ),
                         html.Div(
-                            className='col',
-                            children=[
-                                html.A(
-                                    children=f"Generation queue count: {m.get_generation_message_count()}"
-                                ),
-                            ]
-                        ),
-                        html.Div(
-                            className='col',
-                            children=[
-                                html.A(
-                                    children=f"Storage queue count: {m.get_storage_message_count()}"
-                                ),
-                            ]
-                        ),
-                        html.Div(
-                            className='col',
-                            children=[
-                                html.A(
-                                    children=f"Wasm2wat queue count: {m.get_wasm2wat_message_count()}"
-                                ),
-                            ]
-                        ),
-                        html.Div(
-                            className='col',
-                            children=[
-                                html.A(
-                                    children=f"Bc2wasm queue count: {m.get_bc2wasm_message_count()}"
-                                ),
-                            ]
+                            className='col col-md-4',
+                            children=dcc.Graph(
+                                    figure={
+                                        'data': [
+                                            go.Scatter(
+                                                x=[x[0] for x in m.queries[STORAGE_QUEUE_NAME]],
+                                                y=[x[1] for x in m.queries[STORAGE_QUEUE_NAME]],
+                                                mode="markers+lines",
+                                                name="test"
+                                            )
+
+                                        ],
+                                        'layout': {
+                                            'title': f'Storage queue {sc}'
+                                        }
+                                    }
+                                )
                         )
                     ]
-                ),
-                 html.Hr()]
-            )
+                )])
 
         def generate_report_for_module(module):
 
+            print("Getting stats for", module)
             unique_llvm = len(get_unique_bitcodes(module))
             unique_wasm = len(get_unique_wasm(module))
-            unique_wat = len(get_unique_wat(module))
 
             total_llvm = get_total_llvm(module)
             total_wasm = get_total_wasm(module)
-            total_wat = get_total_wat(module)
+            
+            if unique_wasm > 1:
+                print(module, unique_llvm, unique_wasm, total_llvm, total_wasm)
 
-            if total_llvm == 0:
+            if total_llvm == 0 or total_wasm == 0 or unique_llvm <= 1:
                 return None
 
             return html.Div(
@@ -358,6 +504,65 @@ if __name__ == "__main__":
                                 )
                             ]
                         ),
+                        html.Div(
+                          className='row',
+                          children=[
+                              html.Div(
+                                  className='col',
+                                  children=
+                                dcc.Graph(
+                                    id='GrapGo',
+                                    figure={
+                                        'data': [
+                                            go.Scatter(
+                                                x=[x[0] for x in total_bitcodes_queries[module]],
+                                                y=[x[1] for x in total_bitcodes_queries[module]],
+                                                mode="markers+lines",
+                                                name="Total"
+                                            ),
+                                            go.Scatter(
+                                                x=[x[0] for x in unique_bitcodes_queries[module]],
+                                                y=[x[1] for x in unique_bitcodes_queries[module]],
+                                                mode="markers+lines",
+                                                name="Unique"
+                                            )
+
+                                        ]
+                                    },
+                                    style={
+                                        'minHeight': '300px'
+                                    }
+                                )
+                              ),
+                              html.Div(
+                                  className='col',
+                                  children=
+                                  dcc.Graph(
+                                      id='GrapGo',
+                                      figure={
+                                          'data': [
+                                              go.Scatter(
+                                                  x=[x[0] for x in total_wasms_queries[module]],
+                                                  y=[x[1] for x in total_wasms_queries[module]],
+                                                  mode="markers+lines",
+                                                  name="Total"
+                                              ),
+                                              go.Scatter(
+                                                  x=[x[0] for x in unique_wasms_queries[module]],
+                                                  y=[x[1] for x in unique_wasms_queries[module]],
+                                                  mode="markers+lines",
+                                                  name="Unique"
+                                              )
+
+                                          ]
+                                      },
+                                      style={
+                                          'minHeight': '300px'
+                                      }
+                                  )
+                              )
+                          ]
+                        ),
                         html.Hr()
                     ]
                 ),
@@ -368,6 +573,7 @@ if __name__ == "__main__":
             )
         if pathname == '/':
             programs = get_all_programs()
+            print(len(programs))
             colors = {
                 'background': '#FFFFFF',
                 'text': '#000000'
@@ -405,6 +611,8 @@ if __name__ == "__main__":
 
             ])
 
+
+
     def deploy_dash(debug=True):
 
 
@@ -416,38 +624,43 @@ if __name__ == "__main__":
                 id="update-button",
                 children="Reload",
                 style={
-                    'marginRight': '50px'
+                    'marginRight': '50px',
+                    'position':'fixed',
+                    'zIndex': '99999'
                 }
             ),
+            dcc.Interval(id='interval1', interval=600 * 1000, n_intervals=0),
             html.Div(id='logs'),
             html.Div(id='page-content'),
         ])
 
         app.run_server(host="0.0.0.0", port=8050, debug=debug)
 
-    def print_general_stats(self):
-        programs = get_all_programs()
+    def print_general_stats():
+        programs = get_all_programs(prefix="sodium3", save=True, getsnapshotfirst=False)
 
         for k in programs.keys():
 
             print(k)
-            bc_unique = get_unique_bitcodes(k)
+            bc_unique = get_unique_bitcodes(k, save=True, getsnapshotfirst=False)
             print(f"\t bitcodes {len(bc_unique)}")
 
 
+            print("\t\teq ", end="")
             for bc in bc_unique:
                 variants = get_eq_variants_for_bc(bc)
-                print(f"\t\teq {len(variants)}")
+                print(f"{len(variants)}", end=" ")
+
+            print()
 
 
             w_unique = get_unique_wasm(k)
             print(f"\t wasm {len(w_unique)}")
 
-            wt_unique = get_unique_wat(k)
-            print(f"\t wat {len(wt_unique)}")
     
     #subscriber = Subscriber(1, MONITOR_QUEUE_NAME, GENERATED_BC_KEY, config["event"].getint("port"), general_log)
     #subscriber.setup()
 
 
-    deploy_dash(debug=False)
+    deploy_dash(debug=True)
+    #print_general_stats()

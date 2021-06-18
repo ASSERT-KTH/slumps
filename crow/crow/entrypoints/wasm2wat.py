@@ -36,7 +36,7 @@ def wasm2wat(wasm, program_name, file_name = None, variant_name = None):
                 stream=open(f"{file_name}.wat", 'rb').read(),
                 program_name=f"{program_name}",
                 file_name=f"{file_name}.wat",
-                path="wat"
+                path=f"wat"
             ), routing_key=STORE_KEY)
 
         watContent = open(f"{file_name}.wat", 'rb').read()

@@ -7,6 +7,7 @@ from crow.monitor.logger import LOGGER
 import time
 import sys
 import atexit
+import re
 
 
 class CallException(Exception):
@@ -17,7 +18,7 @@ class CallException(Exception):
 class TimeoutException(Exception):
     pass
 
-class ExternalStage(object):
+class ExternalStage:
 
     DEBUG_LEVEL = config["DEFAULT"].getint("debug-level")
     non_explicit = True
@@ -196,17 +197,13 @@ class BCCountCandidates(ExternalStage):
     
 
 
+class CountDeclarations(ExternalStage):
 
-class BCToSouper(ExternalStage):
-
-    def __init__(self, namespace, candidates=[], debug=False, level=1, redisport = 6380, timeout=-1):
+    def __init__(self, namespace, debug=False, timeout=-1):
 
         self.path_to_executable = Alias.opt
-        self.name = "LLVM BC supertoptimization pass"
+        self.name = "Count declared functions"
         self.debug = debug
-        self.candidates = candidates
-        self.level = level
-        self.redisport = redisport
         self.timeout = timeout
 
 
@@ -217,10 +214,63 @@ class BCToSouper(ExternalStage):
         extra_commands = "%s -o %s" % (args[0], args[1])
 
         #if RUNTIME_CONFIG["USE_REDIS"]:
-        extra_commands += " --souper-external-cache --souper-redis-port=%s "%(self.redisport, )
+        extra_commands += " --souper-crow-count "
 
-        new_inputs = (config["souper"]["super-opt-pass"] % ("", extra_commands)).split(" ")
-        return super(BCToSouper, self).__call__(new_inputs, std)
+        new_inputs = (config["souper"]["super-count-pass"] % (extra_commands, )).split(" ")
+        return super(CountDeclarations, self).__call__(new_inputs, std)
+
+    def processInner(self, std, err):
+        meta = [l for l in err.decode().split("\n") if l]
+
+        r = [0, 0]
+        REDECLARED=re.compile(r"Declared (\d+)")
+        REDEFINED=re.compile(r"Defined (\d+)")
+
+        if REDECLARED.match(meta[1]):
+            r[0] = int(REDECLARED.match(meta[1]).group(1))
+
+
+        if REDEFINED.match(meta[2]):
+            r[1] = int(REDEFINED.match(meta[2]).group(1))
+
+        #print(r)
+        return r
+
+class BCToSouper(ExternalStage):
+
+    def __init__(self, namespace, job, debug=False, level=1, redisport = 6380, timeout=-1):
+
+        self.path_to_executable = Alias.opt
+        self.name = "LLVM BC supertoptimization pass"
+        self.debug = debug
+        self.level = level
+        self.redisport = redisport
+        self.timeout = timeout
+        self.job = job
+
+
+
+        self.namespace = namespace
+
+    def __call__(self, args=[], std=None):  # f -> inputs
+
+        extra_commands = config["souper"]["super-opt-pass"].split(" ")
+        extra_commands += [args[0], "-o", args[1]]
+
+        sanitizedk = [k for k in self.job.keys()]
+        sanitizedv = [v for v in self.job.values()]
+
+        keys=[f"--souper-crow-cache-inlinek={k}" for k in sanitizedk]
+        v=[f"--souper-crow-cache-inlinev={v}" for v in sanitizedv]
+
+        #if RUNTIME_CONFIG["USE_REDIS"]:
+
+        extra_commands += ["--souper-internal-cache","--souper-crow-inline-cache"]
+        extra_commands += keys
+        extra_commands += v
+
+        #print(extra_commands)
+        return super(BCToSouper, self).__call__(extra_commands, std)
 
     def processInner(self, std, err):
         return std
@@ -305,6 +355,28 @@ class OBJ2DUMP(ExternalStage):
         # return the std output optimized LLVM IR
         return std
 
+
+
+class LLVMSplit(ExternalStage):
+
+    def __init__(self, namespace, debug=True):
+        self.path_to_executable = Alias.llvm_split
+        self.name = "llvm-split"
+        self.debug = debug
+        self.namespace = namespace
+        self.timeout = -1
+        self.non_explicit = False # exit code different of zero means nothing
+
+    def __call__(self, args=[], std=None):  # f -> inputs
+
+        self.oName = args[1]
+        self.count = args[0]
+        new_inputs = (config["split"]["options"] % (args[0], args[1], args[2])).split(" ")
+        return super(LLVMSplit, self).__call__(new_inputs, std)
+
+    def processInner(self, std, err):
+        # return the std output optimized LLVM IR
+        return [ f"{self.oName}{i}" for i in range(self.count) ]
 
 class TextDIFF(ExternalStage):
 

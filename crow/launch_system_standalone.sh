@@ -14,7 +14,6 @@ control_c() {
     pkill -f variantcreator
     pkill -f redis-server
     pkill -f opt
-    pkill -f dashboard
 
 
     if [[ $1 == "exit" ]]
@@ -23,11 +22,14 @@ control_c() {
     fi
 }
 
+ENTRY=$1
+shift
 control_c
 
 RED='\033[0;31m'
 NC='\033[0m'
 GREEN='\033[0;32m'
+
 
 printf "$NC Updating settings $NC"
 python3 -m crow.update_settings $@
@@ -55,10 +57,6 @@ python3 -m crow.entrypoints.bc2candidates &
 printf "$GREEN Launching from ll2bc service $NC\n"
 python3 -m crow.entrypoints.fromll &
 
-
-printf "$GREEN Launching dashboard $NC\n"
-python3 -m crow.monitor.dashboard localhost 1010 0 "" crow/storage/out &
-
 for i in $(seq 1 3) # Increase the number of variant creators
 do
   printf "$GREEN Variant generator $i $NC\n"
@@ -67,5 +65,8 @@ do
 done
 
 trap control_c "exit" SIGINT
+
+# Start from C file
+python3 -m crow.entrypoints.fromc $ENTRY
 
 wait

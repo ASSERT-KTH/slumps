@@ -1,16 +1,7 @@
 import socket
 import json
 from crow.monitor.logger import LOGGER
-from crow.utils import NOW
-from crow.settings import config
 import traceback
-from functools import reduce
-import operator
-from crow.utils import printinSameLine
-
-import time
-from crow.events.event_manager import Publisher
-#import matplotlib.pyplot as plt
 
 def set_default(obj):
     if isinstance(obj, set):
@@ -23,12 +14,15 @@ def listen(port, q, program, worker_id, level, timeout, emit_generation=True):
 	PORT = port
 
 	with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+		print(f"Getting port {program} {port}")
 		if program:
 			LOGGER.info(program,f"Getting port {port}")
 		#s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 
 		s.settimeout(timeout)
 		s.bind((HOST, PORT))
+		print(f"Listening...{port} {HOST}")
+
 		if program:
 			LOGGER.info(program,f"Listening...{port} {HOST}")
 
@@ -37,9 +31,12 @@ def listen(port, q, program, worker_id, level, timeout, emit_generation=True):
 			conn, addr = s.accept()
 			LOGGER.info(program,f"Accepted...{addr}")
 
+			print(f"Accepted...{addr}")
 			with conn:
 				if program:
-					LOGGER.success(program,f'Connected by {addr}')
+					LOGGER.success(program,f'{program} Connected by {addr}')
+
+				print(f'Connected by {addr}')
 				while True:
 					data = conn.recv(1024<<8)
 					data = data.replace('\\'.encode(), '\\\\'.encode()).replace('\n'.encode(), '\\n'.encode())
@@ -49,10 +46,8 @@ def listen(port, q, program, worker_id, level, timeout, emit_generation=True):
 						js = json.loads(st)
 
 						for kvpair in js:
-							k, v = kvpair["key"], kvpair["value"]
-
+							k, v, bId = kvpair["key"], kvpair["value"], kvpair["bId"]
 							if q:
-								#print(k, v)
 								q(level,k, v)
 						#print(f"level {level} tentative {s}")
 					except Exception as e:
@@ -61,8 +56,8 @@ def listen(port, q, program, worker_id, level, timeout, emit_generation=True):
 						break
 					if not data:
 						break
-		except:
-			print("Socket timeout")
+		except Exception as e:
+			print(f"Socket timeout {e}")
 			return
 
 	return
@@ -71,4 +66,4 @@ def listen(port, q, program, worker_id, level, timeout, emit_generation=True):
 
 if __name__ == "__main__":
 	import sys
-	listen(int(sys.argv[1]), None, None, "Test", "-1")
+	listen(int(sys.argv[1]), None, None, "Test", "-1", 60)

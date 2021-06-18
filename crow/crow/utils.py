@@ -20,23 +20,41 @@ import os
 import sys
 OUT_FOLDER = os.getenv("OUT_FOLDER", "out")
 
+def create_path(base_path, path):
+    root = base_path
+
+    subfolders = path.split("/")
+
+    for folder in subfolders:
+        if not os.path.exists(f"{root}/{folder}"):
+            os.mkdir(f"{root}/{folder}")
+        root = f"{root}/{folder}"
+
+
 class ContentToTmpFile(object):
 
 
     def __init__(self, content=None, name=None, ext=None, persist=False, LOG_LEVEL =  0, outFolder=None):
-        tmp = createTmpFile(ext, outFolder) if not name else name
+        try:
+            tmp = createTmpFile(ext, outFolder) if not name else name
 
-        tmp = ''.join([c for c in tmp])
+            tmp = ''.join([c for c in tmp])
 
-        if content:
-            self.tmpF = open(tmp, "wb")
-            self.tmpF.write(content)
-            self.tmpF.close()
-        else:
-            self.tmpF = open(tmp, 'wb')
-        self.file = tmp
-        self.persist = persist
-        self.LOG_LEVEL = LOG_LEVEL
+            create_path(".","".join(tmp.split("/")[:-1])) # create path if not exist
+
+
+            if content:
+                self.tmpF = open(tmp, "wb")
+                self.tmpF.write(content)
+                self.tmpF.close()
+            else:
+                self.tmpF = open(tmp, 'wb')
+            self.file = tmp
+            self.persist = persist
+            self.LOG_LEVEL = LOG_LEVEL
+        except Exception as e:
+            print(f"Failing {e}")
+            raise e
 
 
     def __enter__(self):
@@ -49,8 +67,10 @@ class ContentToTmpFile(object):
             if not self.persist:
                 os.remove(self.file)
         except Exception as e:
-            if self.LOG_LEVEL > 1:
-                LOGGER.error(self.tmpF, traceback.format_exc())
+            print(f"{e} {traceback.format_exc()}")
+            pass
+            #if self.LOG_LEVEL > 1:
+            #    LOGGER.error(self.tmpF, traceback.format_exc())
 
 
 def updatesettings(argvs):
@@ -190,6 +210,7 @@ class Alias:
     wasmtime = config["wasmtime"]["bin"]
     dump = config["objdump"]["bin"]
     diff = config["diff"]["bin"]
+    llvm_split = config["split"]["bin"]
 
 
 def processCandidatesMetaOutput(output):
@@ -210,3 +231,18 @@ def processCandidatesMetaOutput(output):
 
 class BreakException(Exception):
     pass
+
+import threading
+
+def print_timer(timeout):
+    NOW = time.time()
+    def print_time():
+        while True:
+            time.sleep(0.5)
+            printinSameLine(f"{timeout -(time.time() - NOW):.2f}s")
+
+            if time.time() - NOW >= timeout:
+                break
+
+    th = threading.Thread(target=print_time)
+    th.start()

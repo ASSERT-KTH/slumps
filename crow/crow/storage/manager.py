@@ -50,6 +50,7 @@ def subscriber(data):
     if CACHE.has(key) and config["DEFAULT"].getboolean("remove-duplicates"):
         del data["stream"]
         CACHE.addtoexisting(key, data)
+        print(f"Same variant {data['file_name']}")
         return
 
     print(f"SAVING {data['file_name']}")

@@ -1,7 +1,8 @@
 import hashlib
 
 from crow.commands.stages import ObjtoWASM
-from crow.entrypoints import EXPLORE_KEY, STORE_KEY, GENERATED_WASM_KEY, GENERATED_WAT_KEY, BC2WASM_KEY, WASM2WAT_KEY
+from crow.entrypoints import EXPLORE_KEY, STORE_KEY, GENERATED_WASM_KEY, GENERATED_WAT_KEY, BC2WASM_KEY, WASM2WAT_KEY, \
+    SPLIT_KEY, SPLIT_MESSAGE
 from crow.events import BC2WASM_MESSAGE, STORE_MESSAGE, WASM_QUEUE, WASM2WAT_MESSAGE, GENERATED_WASM_VARIANT, \
     BC2Candidates_MESSAGE
 from crow.events.event_manager import Publisher, Subscriber, subscriber_function
@@ -13,6 +14,7 @@ from crow.utils import ContentToTmpFile
 
 import os
 from crow.monitor.monitor import log_system_exception
+import traceback
 
 COUNT = 0
 
@@ -22,6 +24,7 @@ publisher = Publisher()
 @log_system_exception()
 def bc2wasm(bc, program_name, file_name=None, variant_name=None, explore=False):
     global COUNT
+    print(hashlib.sha256(bc).hexdigest())
     file_name = program_name if file_name is None else file_name
     # Explicitly saving bc file
     publisher.publish(message=dict(
@@ -29,16 +32,26 @@ def bc2wasm(bc, program_name, file_name=None, variant_name=None, explore=False):
         stream=bc,
         program_name=program_name,
         file_name=f"{program_name}.original.bc",
-        path="bitcodes/variants"
+        path=f"bitcodes/variants"
     ), routing_key=STORE_KEY)
 
     if explore:
-        # Call for candidates exploration
-        publisher.publish(message=dict(
-            event_type=BC2Candidates_MESSAGE,
-            bc=bc,
-            program_name=program_name
-        ), routing_key=EXPLORE_KEY)
+
+        if config["DEFAULT"].getint("split-module-in") > 0:
+            # Split then
+            # Call for candidates exploration
+            publisher.publish(message=dict(
+                event_type=SPLIT_MESSAGE,
+                bc=bc,
+                program_name=program_name
+            ), routing_key=SPLIT_KEY)
+        else:
+            # Call for candidates exploration
+            publisher.publish(message=dict(
+                event_type=BC2Candidates_MESSAGE,
+                bc=bc,
+                program_name=program_name
+            ), routing_key=EXPLORE_KEY)
 
     # 2 WASM transformation
     if config["DEFAULT"].getboolean("keep-wasm-files"):
@@ -54,15 +67,17 @@ def bc2wasm(bc, program_name, file_name=None, variant_name=None, explore=False):
             try:
                 st = open(f"{file_name}.wasm", 'rb').read()
             except Exception as e:
+                print(e, traceback.format_exc())
                 LOGGER.error(program_name, f"{e}")
                 return
             # Explicitly saving wasm file
+            print(f"WASM hash ", hashlib.sha256(st).hexdigest())
             publisher.publish(message=dict(
                 event_type=STORE_MESSAGE,
                 stream=st,
                 program_name=program_name,
                 file_name=f"{file_name}.wasm",
-                path="wasm"
+                path=f"wasm"
             ), routing_key=STORE_KEY)
 
             hsh = hashlib.sha256(st).hexdigest()
@@ -76,7 +91,7 @@ def bc2wasm(bc, program_name, file_name=None, variant_name=None, explore=False):
                 file_name=f"{file_name}.wasm"
             ), routing_key=GENERATED_WASM_KEY)
 
-            print(f"BC2WASM ({COUNT}) {program_name}")
+            print(f"BC2WASM ({COUNT}) {program_name} {file_name}")
             # Generate wat file ?
             if config["DEFAULT"].getboolean("keep-wat-files"):
                 publisher.publish(message=dict(
@@ -92,7 +107,7 @@ def bc2wasm(bc, program_name, file_name=None, variant_name=None, explore=False):
 @log_system_exception()
 @subscriber_function(event_type=BC2WASM_MESSAGE)
 def subscriber(data):
-    bc2wasm(data["bc"], data["program_name"], data["file_name"] if "file_name" in data else None, data["variant_name"] if "variant_name" in data else None)
+    bc2wasm(data["bc"], data["program_name"], data["file_name"] if "file_name" in data else None, data["variant_name"] if "variant_name" in data else None, False)
 
 
 if __name__ == "__main__":

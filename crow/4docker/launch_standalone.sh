@@ -20,12 +20,34 @@ pkill -f wasm2wat
 pkill -f fromll
 pkill -f variantcreator
 pkill -f redis-server
+pkill -f rabbitmq
 
+# REDIS CACHE SERVER
+redis-server --port 9898 &
+# START RABBITMQ SERVER
+
+service rabbitmq-server start || exit 1
+sleep 1
+
+rabbitmq-plugins enable rabbitmq_management
+chown -R rabbitmq:rabbitmq /var/lib/rabbitmq/
+
+
+
+rabbitmqctl add_user $BROKER_USER $BROKER_PASS 
+rabbitmqctl set_user_tags $BROKER_USER administrator
+rabbitmqctl set_permissions -p / $BROKER_USER ".*" ".*" ".*"
+
+sleep 1
+echo "RABBITMQ UP AND RUNNING"
 
 sleep 1
 RED='\033[0;31m'
 NC='\033[0m'
 GREEN='\033[0;32m'
+
+ENTRY=$1
+shift
 
 printf "$NC Updating settings $NC"
 python3 -m crow.update_settings $@
@@ -51,12 +73,17 @@ python3 -m crow.entrypoints.bc2candidates &
 printf "$GREEN Launching from ll2bc service $NC\n"
 python3 -m crow.entrypoints.fromll &
 
+printf "$GREEN Launching logging $NC\n"
+python3 -m crow.monitor.logger &
+
+printf "$GREEN Launching splitter $NC\n"
+python3 -m crow.entrypoints.split &
 
 for i in $(seq 1 2) # Increase the number of variant creators
 do
   printf "$GREEN Variant generator $i $NC\n"
   redis-server --port 90$i 2>/dev/null 1>/dev/null &
-  python3 -m crow.entrypoints.variantcreator 90$i &
+  python3 -m crow.entrypoints.variantcreator &
 done
 
 control_c() {
@@ -72,5 +99,8 @@ control_c() {
 }
 
 trap control_c SIGINT
+
+sleep 2
+python3 -m crow.entrypoints.fromc $ENTRY
 
 wait

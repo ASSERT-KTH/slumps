@@ -1,6 +1,6 @@
 
 from crow.commands.stages import LLToBC
-from crow.entrypoints import EXPLORE_KEY, STORE_KEY, GENERATE_BC_KEY, BC2WASM_KEY, LL_KEY
+from crow.entrypoints import EXPLORE_KEY, STORE_KEY, GENERATE_BC_KEY, BC2WASM_KEY, LL_KEY, SPLIT_MESSAGE, SPLIT_KEY
 from crow.events import LL2BC_MESSAGE, BC2Candidates_MESSAGE, BC2WASM_MESSAGE, STORE_MESSAGE, LL_QUEUE
 from crow.events.event_manager import Publisher, Subscriber, subscriber_function
 from crow.settings import config
@@ -18,11 +18,19 @@ def ll2bc(ll1, program_name):
     publisher = Publisher()
 
     # Call for candidates exploration
-    publisher.publish(message=dict(
-        event_type=BC2Candidates_MESSAGE,
-        bc=bc,
-        program_name=program_name
-    ), routing_key=EXPLORE_KEY)
+
+    if config["DEFAULT"].getint("split-module-in") > 0:
+        publisher.publish(message=dict(
+            event_type=SPLIT_MESSAGE,
+            bc=bc,
+            program_name=program_name
+        ), routing_key=SPLIT_KEY)
+    else:
+        publisher.publish(message=dict(
+            event_type=BC2Candidates_MESSAGE,
+            bc=bc,
+            program_name=program_name
+        ), routing_key=EXPLORE_KEY)
 
     # Explicitly saving bitcode file
 
