@@ -24,19 +24,21 @@ pkill -f rabbitmq
 
 # REDIS CACHE SERVER
 redis-server --port 9898 &
+sleep 2
+redis-cli  -p 9898 config set requirepass $REDIS_PASS
 # START RABBITMQ SERVER
 
 service rabbitmq-server start || exit 1
 sleep 1
-
-rabbitmq-plugins enable rabbitmq_management
-chown -R rabbitmq:rabbitmq /var/lib/rabbitmq/
 
 
 
 rabbitmqctl add_user $BROKER_USER $BROKER_PASS 
 rabbitmqctl set_user_tags $BROKER_USER administrator
 rabbitmqctl set_permissions -p / $BROKER_USER ".*" ".*" ".*"
+
+rabbitmq-plugins enable rabbitmq_management
+chown -R rabbitmq:rabbitmq /var/lib/rabbitmq/
 
 sleep 1
 echo "RABBITMQ UP AND RUNNING"
@@ -101,6 +103,6 @@ control_c() {
 trap control_c SIGINT
 
 sleep 2
-python3 -m crow.entrypoints.frombc $(basename $ENTRY) $ENTRY
+python3 -m crow.entrypoints.bc2wasm $(basename $ENTRY) $ENTRY
 
 wait

@@ -175,7 +175,7 @@ class Publisher:
 
 
 
-class Consumer(object):
+class Consumer:
     def __init__(self, id, queueName, bindingKey, port, callback, heartbeat=None, ack_on_receive=False):
         self.callback = callback
         self.should_reconnect = False
@@ -201,6 +201,7 @@ class Consumer(object):
 
 
     def close_connection(self):
+
         self.consuming = False
         if self.connection.is_closing or self.connection.is_closed:
             print(f'Connection is closing or already closed')
@@ -287,6 +288,7 @@ class Consumer(object):
         :param Exception reason: why the channel was closed
         """
         print('Channel %i was closed: %s', channel, reason)
+        
         self.close_connection()
 
     def setup_exchange(self, exchange_name):
@@ -418,7 +420,7 @@ class Consumer(object):
         :param bytes body: The message body
         """
         #print('Received message # %s from %s'%(
-        #            basic_deliver.delivery_tag, properties.app_id))
+        #3            basic_deliver.delivery_tag, properties.app_id))
 
         if self.ack_on_receive:
             self.acknowledge_message(basic_deliver.delivery_tag)
@@ -439,8 +441,8 @@ class Consumer(object):
         Basic.Ack RPC method for the delivery tag.
         :param int delivery_tag: The delivery tag from the Basic.Deliver frame
         """
-        #print('Acknowledging message %s', delivery_tag)
-        self.channel.basic_ack(delivery_tag)
+        # print('Acknowledging message %s'%delivery_tag)
+        self.channel.basic_ack(delivery_tag, False)
 
     def stop_consuming(self):
         """Tell RabbitMQ that you would like to stop consuming by sending the
@@ -527,7 +529,7 @@ class Consumer(object):
 
 
 
-class Subscriber(object):
+class Subscriber:
     """This is an example consumer that will reconnect if the nested
     ExampleConsumer indicates that a reconnect is necessary.
     """
@@ -540,6 +542,7 @@ class Subscriber(object):
         self.key=key
         self.cb = cb
         self.ack_on_receive = ack_on_receive
+        self.heartbeat=heartbeat
         self.consumer = Consumer(id, queueName, key, port, cb, heartbeat=heartbeat, ack_on_receive=ack_on_receive)
 
     def setup(self):
@@ -557,7 +560,7 @@ class Subscriber(object):
             reconnect_delay = self.get_reconnect_delay()
             print('Reconnecting to "%s:%s" after %d seconds'%(config["event"]["host"], self.port, reconnect_delay,))
             time.sleep(reconnect_delay)
-            self.consumer = Consumer(self.id, self.queueName, self.key, self.port, self.cb, self.ack_on_receive)
+            self.consumer = Consumer(self.id, self.queueName, self.key, self.port, self.cb, heartbeat=self.heartbeat, ack_on_receive=self.ack_on_receive)
 
     def get_reconnect_delay(self):
         if self.consumer.was_consuming:
