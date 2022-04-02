@@ -6,3 +6,6 @@ out/
 deploy/
 crow/storage/out
 crow/entrypoints/out
+.idea/
+crowenv
+crow/__pycache__

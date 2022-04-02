@@ -4,8 +4,9 @@ import json
 import base64
 import threading
 import time
+from crow.cache import cache
 
-from crow.events import GENERATE_VARIANT_MESSAGE
+from crow.events import GENERATE_VARIANT_MESSAGE, CROW_HEARTBEAT_GENERATED, CROW_HEARTBEAT_KEY, CROW_HEARTBEAT_QUEUE
 from crow.settings import config
 import uuid
 import base64
@@ -13,9 +14,11 @@ import traceback
 import ssl
 import os
 import functools
+import threading
+import platform
+
 
 TOBASE64_FIELDS = ["stream", "bc", "ll", "orignal_bc", "original_wasm"]
-
 CERT_DIR = os.path.join(os.path.dirname(os.path.dirname(__file__)), "settings")
 
 # Allow subscriber to have internal state
@@ -78,12 +81,15 @@ def serialize_message(message):
 
     result = {}
     for k in message.keys():
-        if k in TOBASE64_FIELDS:
-            base64_bytes = base64.b64encode(message[k])
+        v = message[k]
+        if type(v) is bytes:
+            base64_bytes = base64.b64encode(v)
             base64_message = base64_bytes.decode('utf-8')
+
+            base64_message = f"base64:{base64_message}"
             result[k] = base64_message
         else:
-            result[k] = message[k]
+            result[k] = v
 
     return result
 
@@ -91,8 +97,10 @@ def deserialize_message(message):
 
     result = {}
     for k in message.keys():
-        if k in TOBASE64_FIELDS:
-            base64_bytes = message[k].encode('utf-8')
+        v = message[k]
+        if type(v) is str and v.startswith("base64:"):
+            v = v[7:]
+            base64_bytes = v.encode('utf-8')
             base64_message = base64.b64decode(base64_bytes)
             result[k] = base64_message
         else:
@@ -534,7 +542,47 @@ class Subscriber:
     ExampleConsumer indicates that a reconnect is necessary.
     """
 
-    def __init__(self, id, queueName, key, port, cb, heartbeat=None, ack_on_receive=False):
+    def send_consumer(self):
+        print("Starting consumer")
+        while True:
+            try:
+                self.cb_sema.acquire()
+                # print("Acquiring msg")
+                if len(self.queue) > 0:
+                    j = self.queue.pop()
+                    self.cb(j)
+                # TODO, send the internal queue as a message
+                # time.sleep(5)
+                # print("Releasing msg")
+                self.cb_sema.release()
+            except KeyboardInterrupt:
+                return
+            except Exception as e:
+                print(e)
+                print(traceback.format_exc())
+
+    # Start a self heartbeat publisher
+    # This will send pressure over the node, internal queue size etc
+    def start_self_heartbeat(self):
+        if self.queueName != CROW_HEARTBEAT_QUEUE:
+            self.self_publisher = Publisher()
+            while True:
+                try:
+                    self.self_publisher.publish(message=dict(
+                            event_type=CROW_HEARTBEAT_GENERATED,
+                            queue_count=len(self.queue),
+                            node_id = platform.node(),
+                            queueName = self.queueName,
+                            key = self.key,
+                            id=self.id,
+                        ), routing_key=CROW_HEARTBEAT_KEY)
+                    # Sleep for 5 seconds
+                    time.sleep(5) 
+                except KeyboardInterrupt:
+                    break
+                
+
+    def __init__(self, id, queueName, key, port, cb, heartbeat=None, ack_on_receive=True):
         self.id = id
         self.reconnect_delay = 0
         self.queueName = queueName
@@ -543,7 +591,28 @@ class Subscriber:
         self.cb = cb
         self.ack_on_receive = ack_on_receive
         self.heartbeat=heartbeat
-        self.consumer = Consumer(id, queueName, key, port, cb, heartbeat=heartbeat, ack_on_receive=ack_on_receive)
+        
+        self.queue_sema = threading.Semaphore()
+        self.cb_sema = threading.Semaphore()
+
+        self.queue = []
+
+        # Start the consumer thread
+        def enqueue_cb(j):
+            self.queue_sema.acquire()
+            #print("Acquiring job")
+            self.queue.append(j)
+            # TODO, send the internal queue as a message
+            # print(f"Internal queue size {queueName}-{key} {len(self.queue)}")
+            self.queue_sema.release()
+
+        self.queue_thread = threading.Thread(target=self.send_consumer)
+        self.queue_thread.start()
+
+        self.heartbeat_thread = threading.Thread(target=self.start_self_heartbeat)
+        self.heartbeat_thread.start()
+
+        self.consumer = Consumer(id, queueName, key, port, enqueue_cb, heartbeat=heartbeat, ack_on_receive=ack_on_receive)
 
     def setup(self):
         while True:
@@ -551,6 +620,8 @@ class Subscriber:
                 self.consumer.run()
             except KeyboardInterrupt:
                 self.consumer.stop()
+                self.queue_thread.join()
+                print("Consume thread stopped")
                 break
             self.maybe_reconnect()
 

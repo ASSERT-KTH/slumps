@@ -14,6 +14,7 @@ control_c() {
     pkill -f variantcreator
     pkill -f redis-server
     pkill -f opt
+    pkill -f split
 
 
     if [[ $1 == "exit" ]]
@@ -32,7 +33,7 @@ GREEN='\033[0;32m'
 
 
 printf "$NC Updating settings $NC"
-python3 -m crow.update_settings $@
+python3 -m crow.update_settings %cache.redis-host 127.0.0.1 %cache.redis-port 1010 %event.host 127.0.0.1 $@
 printf "$GREEN Starting system $NC\n"
 
 printf "$GREEN Launching storage service $NC\n"
@@ -56,6 +57,9 @@ python3 -m crow.entrypoints.bc2candidates &
 
 printf "$GREEN Launching from ll2bc service $NC\n"
 python3 -m crow.entrypoints.fromll &
+
+printf "$GREEN Launching from split service $NC\n"
+python3 -m crow.entrypoints.split &
 
 for i in $(seq 1 3) # Increase the number of variant creators
 do

@@ -211,6 +211,7 @@ class Alias:
     dump = config["objdump"]["bin"]
     diff = config["diff"]["bin"]
     llvm_split = config["split"]["bin"]
+    llvm_extract = config["extract"]["bin"]
 
 
 def processCandidatesMetaOutput(output):

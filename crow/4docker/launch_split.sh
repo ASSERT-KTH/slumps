@@ -12,7 +12,7 @@ mkdir -p /usr/src/souper/third_party
 ls /slumps/souper/third_party/z3-install
 chmod +x /usr/src/souper/third_party/z3-install/bin/z3
 
-pkill -f variantcreator
+pkill -f bc2candidates
 
 
 sleep 1
@@ -24,18 +24,12 @@ printf "$NC Updating settings $NC"
 python3 -m crow.update_settings $@
 printf "$GREEN Starting system $NC\n"
 
+printf "$GREEN Launching bc exploration service $NC\n"
+python3 -m crow.entrypoints.split &
 
-
-
-
-for i in $(seq 1 $1) # Increase the number of variant creators
-do
-  printf "$GREEN Variant generator $i $NC\n"
-  python3 -m crow.entrypoints.variantcreator &
-done
 
 control_c() {
-    pkill -f variantcreator
+    pkill -f split
     exit
 }
 

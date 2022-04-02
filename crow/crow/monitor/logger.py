@@ -31,7 +31,10 @@ def log(severity, message:str, sender, t):
 
 
     #return
-    #if not message.startswith("New variant"):
+    # if not message.startswith("New variant") or not message.endswith("wasm"):
+    #    return
+    
+    #if "_[" not in message:
     #    return
     #return
     t = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(t))
@@ -174,10 +177,13 @@ def general_log(data):
 
 if __name__ == "__main__":
 
-    if not os.path.exists(OUT_FOLDER):
-        os.mkdir(OUT_FOLDER)
-    if not os.path.exists(os.path.join(OUT_FOLDER, "logs")):
-        os.mkdir(os.path.join(OUT_FOLDER, "logs"))
+    try:
+        if not os.path.exists(OUT_FOLDER):
+            os.mkdir(OUT_FOLDER)
+        if not os.path.exists(os.path.join(OUT_FOLDER, "logs")):
+            os.mkdir(os.path.join(OUT_FOLDER, "logs"))
+    except Exception as e:
+        print(e)
     OUT_FOLDER = os.path.join(OUT_FOLDER, "logs")
 
 

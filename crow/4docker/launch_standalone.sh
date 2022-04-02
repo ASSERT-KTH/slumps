@@ -70,6 +70,7 @@ python3 -m crow.entrypoints.bc2wasm &
 printf "$GREEN Launching bc exploration service $NC\n"
 python3 -m crow.entrypoints.bc2candidates &
 
+
 printf "$GREEN Launching from ll2bc service $NC\n"
 python3 -m crow.entrypoints.fromll &
 
@@ -78,13 +79,6 @@ python3 -m crow.monitor.logger &
 
 printf "$GREEN Launching splitter $NC\n"
 python3 -m crow.entrypoints.split &
-
-for i in $(seq 1 2) # Increase the number of variant creators
-do
-  printf "$GREEN Variant generator $i $NC\n"
-  redis-server --port 90$i 2>/dev/null 1>/dev/null &
-  python3 -m crow.entrypoints.variantcreator &
-done
 
 control_c() {
     pkill -f manager
@@ -98,9 +92,36 @@ control_c() {
     exit
 }
 
+
+echo "Waiting for system to be ready..."
+sleep 5
+echo $ENTRY
+
+if [ "$ENTRY" == "*.c" ]
+then
+  python3 -m crow.entrypoints.fromc $ENTRY
+fi
+
+
+if [ "$ENTRY" == "*.cpp" ]
+then
+  python3 -m crow.entrypoints.bc2wasm $ENTRY
+fi
+
+if [ "$ENTRY" == "*.bc" ]
+then
+  python3 -m crow.entrypoints.bc2wasm $ENTRY $ENTRY
+fi
+
+if [ "$ENTRY" == "*.wasm" ]
+then
+  python3 -m crow.entrypoints.wasm2wat $ENTRY $ENTRY
+fi
+
+if [ "$ENTRY" == "*.ll" ]
+then
+  python3 -m crow.entrypoints.fromll $ENTRY <<< $(cat $ENTRY)
+fi
+
 trap control_c SIGINT
-
-sleep 2
-python3 -m crow.entrypoints.fromc $ENTRY
-
 wait

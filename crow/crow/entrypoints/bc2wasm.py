@@ -8,7 +8,7 @@ from crow.events import BC2WASM_MESSAGE, STORE_MESSAGE, WASM_QUEUE, WASM2WAT_MES
 from crow.events.event_manager import Publisher, Subscriber, subscriber_function
 from crow.monitor.logger import LOGGER
 from crow.settings import config
-
+import random
 import sys
 from crow.utils import ContentToTmpFile
 
@@ -113,7 +113,8 @@ def subscriber(data):
 if __name__ == "__main__":
 
     if len(sys.argv) == 1:
-        subscriber = Subscriber(1, WASM_QUEUE, BC2WASM_KEY, config["event"].getint("port"), subscriber)
+        id = f"bc2wasm-{random.randint(0, 2000)}"
+        subscriber = Subscriber(id, WASM_QUEUE, BC2WASM_KEY, config["event"].getint("port"), subscriber)
         subscriber.setup()
     else:
         program_name = sys.argv[1]

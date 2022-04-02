@@ -12,6 +12,7 @@ import hashlib
 import json
 import redis
 from concurrent.futures import ThreadPoolExecutor
+import random
 
 import sys
 import traceback
@@ -36,7 +37,7 @@ def generateVariant(j, program_name, merging, bc):
 
     variants = []
 
-    print(f"Generating {COUNT} {program_name} {j}")
+    # print(f"Generating {COUNT} {program_name} {j}")
 
     try:
         name = "][".join([base64.b64encode(os.urandom(32))[:8].decode(errors="ignore")\
@@ -65,7 +66,7 @@ def generateVariant(j, program_name, merging, bc):
 
                     hsh = hashlib.sha256(bsOpt).hexdigest()
                     keybc = f"{program_name}:bc:{hsh}"
-                    if not CACHE.has(keybc):
+                    if not CACHE.has(keybc) or not config['DEFAULT'].getboolean("prune-equal"):
                         print(f"Generating variant {program_name} {sanitized_set_name}...")
                         if config["DEFAULT"].getboolean("keep-bc-files"):
 
@@ -100,7 +101,27 @@ def generateVariant(j, program_name, merging, bc):
                             ), routing_key=BC2WASM_KEY)
 
                         COUNT += 1
+
+                        # Save for later debugging the replacements placed together
+                        publisher.publish(message=dict(
+                            event_type=STORE_MESSAGE,
+                            stream=json.dumps(dict(name=sanitized_set_name, job=j, created=True), indent=4).encode(),
+                            program_name=f"{program_name}",
+                            variant_name=sanitized_set_name,
+                            file_name=f"{program_name}{sanitized_set_name}.json",
+                            path=f"bitcodes/maps"
+                        ), routing_key=STORE_KEY)
+
                     else:
+                        publisher.publish(message=dict(
+                            event_type=STORE_MESSAGE,
+                            stream=json.dumps(dict(name=sanitized_set_name, job=j, created=False), indent=4).encode(),
+                            program_name=f"{program_name}",
+                            variant_name=sanitized_set_name,
+                            file_name=f"{program_name}{sanitized_set_name}.json",
+                            path=f"bitcodes/maps"
+                        ), routing_key=STORE_KEY)
+
                         CACHE.addtoexisting(keybc, dict(
                                 event_type=STORE_MESSAGE,
                                 program_name=f"{program_name}",
@@ -110,6 +131,14 @@ def generateVariant(j, program_name, merging, bc):
                             ))
                 except Exception as e:
                     print(f"{e} {traceback.format_exc()}")
+                    publisher.publish(message=dict(
+                            event_type=STORE_MESSAGE,
+                            stream=json.dumps(dict(name=sanitized_set_name, job=j, error=True, created=False, errr=f"{e} {traceback.format_exc()}"), indent=4).encode(),
+                            program_name=f"{program_name}",
+                            variant_name=sanitized_set_name,
+                            file_name=f"{program_name}{sanitized_set_name}.json",
+                            path=f"bitcodes/maps"
+                        ), routing_key=STORE_KEY)
                    # LOGGER.error(program_name, traceback.format_exc(), )
         # call Souper and the linker again
     except Exception as e:
@@ -139,7 +168,8 @@ if __name__ == "__main__":
     max_workers=config["DEFAULT"].getint("workers"))
 
     if len(sys.argv) == 1:
-        subscriber = Subscriber(1, GENERATION_QUEUE, CREATE_VARIANT_KEY, config["event"].getint("port"), subscriber)
+        id = f"variantcreator-{random.randint(0, 2000)}"
+        subscriber = Subscriber(id, GENERATION_QUEUE, CREATE_VARIANT_KEY, config["event"].getint("port"), subscriber)
         subscriber.setup()
     else:
         generatevariant(open(sys.argv[2], 'rb').read(), {}, {}, sys.argv[3]) # First argument is a dictionary with the replacements to apply

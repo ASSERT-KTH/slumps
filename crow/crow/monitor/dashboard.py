@@ -34,7 +34,7 @@ class RabbitMonitor:
 
         self.__setup()
         self.save_query = save_query
-        self.queries = {}
+        self.queries = {  }
 
     def __setup(self):
         BROKER_PASS = os.getenv("BROKER_PASS", None)
@@ -345,11 +345,10 @@ if __name__ == "__main__":
 
             sc = m.get_storage_message_count()
             ec = m.get_exploration_message_count()
-            gc = m.get_generation_message_count()
             wc = m.get_wasm2wat_message_count()
             bc = m.get_bc2wasm_message_count()
 
-            print("Queues count retrieved", sc, ec, gc, wc, bc)
+            print("Queues count retrieved", sc, ec,  wc, bc)
 
             return html.Div(
                 style=dict(
@@ -389,12 +388,6 @@ if __name__ == "__main__":
                                     figure={
                                         'data': [
                                             go.Scatter(
-                                                x=[x[0] for x in m.queries[GENERATION_QUEUE]],
-                                                y=[x[1] for x in m.queries[GENERATION_QUEUE]],
-                                                mode="markers+lines",
-                                                name="variant generation"
-                                            ),
-                                            go.Scatter(
                                                 x=[x[0] for x in m.queries[WAT_QUEUE]],
                                                 y=[x[1] for x in m.queries[WAT_QUEUE]],
                                                 mode="markers+lines",
@@ -409,7 +402,7 @@ if __name__ == "__main__":
 
                                         ],
                                         'layout': {
-                                            'title': f'Generation queue {gc}, {wc}, {bc}'
+                                            'title': f'Generation queue {wc}, {bc}'
                                         }
                                     }
                                 )
@@ -662,5 +655,7 @@ if __name__ == "__main__":
     #subscriber.setup()
 
 
-    deploy_dash(debug=True)
+    # deploy_dash(debug=True)
     #print_general_stats()
+
+    

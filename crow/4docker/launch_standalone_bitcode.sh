@@ -21,11 +21,14 @@ pkill -f fromll
 pkill -f variantcreator
 pkill -f redis-server
 pkill -f rabbitmq
+pkill -f dashboard
 
 # REDIS CACHE SERVER
 redis-server --port 9898 &
 sleep 2
 redis-cli  -p 9898 config set requirepass $REDIS_PASS
+redis-cli  -p 9898 config set protected-mode no
+redis-cli  -p 9898 config rewrite
 # START RABBITMQ SERVER
 
 service rabbitmq-server start || exit 1
@@ -68,9 +71,9 @@ python3 -m crow.entrypoints.wasm2wat &
 printf "$GREEN Launching bitcode to wasm service $NC\n"
 python3 -m crow.entrypoints.bc2wasm &
 
-
 printf "$GREEN Launching bc exploration service $NC\n"
 python3 -m crow.entrypoints.bc2candidates &
+
 
 printf "$GREEN Launching from ll2bc service $NC\n"
 python3 -m crow.entrypoints.fromll &
@@ -81,12 +84,9 @@ python3 -m crow.monitor.logger &
 printf "$GREEN Launching splitter $NC\n"
 python3 -m crow.entrypoints.split &
 
-for i in $(seq 1 2) # Increase the number of variant creators
-do
-  printf "$GREEN Variant generator $i $NC\n"
-  redis-server --port 90$i 2>/dev/null 1>/dev/null &
-  python3 -m crow.entrypoints.variantcreator &
-done
+#printf "$GREEN Launching dashboard $NC\n"
+#python3 -m crow.monitor.dashboard &
+
 
 control_c() {
     pkill -f manager
@@ -97,6 +97,7 @@ control_c() {
     pkill -f fromll
     pkill -f variantcreator
     pkill -f redis-server
+    pkill -f dashboard
     exit
 }
 

@@ -4,6 +4,7 @@ from crow.entrypoints import EXPLORE_KEY, STORE_KEY, GENERATE_BC_KEY, BC2WASM_KE
 from crow.events import LL2BC_MESSAGE, BC2Candidates_MESSAGE, BC2WASM_MESSAGE, STORE_MESSAGE, LL_QUEUE
 from crow.events.event_manager import Publisher, Subscriber, subscriber_function
 from crow.settings import config
+import random
 
 import sys
 
@@ -64,7 +65,8 @@ def subscriber(data):
 if __name__ == "__main__":
 
     if len(sys.argv) == 1:
-        subscriber = Subscriber(1, LL_QUEUE,LL_KEY,  config["event"].getint("port"), subscriber)
+        id = f"fromll-{random.randint(0, 2000)}"
+        subscriber = Subscriber(id, LL_QUEUE,LL_KEY,  config["event"].getint("port"), subscriber)
         subscriber.setup()
     else:
         program_name = sys.argv[1]

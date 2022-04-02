@@ -5,7 +5,7 @@ from crow.entrypoints import GENERATED_WAT_KEY, WASM2WAT_KEY, STORE_KEY
 from crow.events import STORE_MESSAGE, WASM2WAT_MESSAGE, GENERATED_WAT_FILE, WAT_QUEUE
 from crow.events.event_manager import Publisher, Subscriber, subscriber_function
 from crow.settings import config
-
+import random
 import sys
 from crow.utils import ContentToTmpFile
 
@@ -63,7 +63,8 @@ def subscriber(data):
 if __name__ == "__main__":
 
     if len(sys.argv) == 1:
-        subscriber = Subscriber(1, WAT_QUEUE,WASM2WAT_KEY,  config["event"].getint("port"), subscriber)
+        id = f"wasm2wat-{random.randint(0, 2000)}"
+        subscriber = Subscriber(id, WAT_QUEUE,WASM2WAT_KEY,  config["event"].getint("port"), subscriber)
         subscriber.setup()
     else:
         program_name = sys.argv[1]

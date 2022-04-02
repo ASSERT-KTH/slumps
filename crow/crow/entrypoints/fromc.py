@@ -4,6 +4,7 @@ from crow.entrypoints import LOG_KEY, GENERATE_BC_KEY, STORE_KEY, LL_KEY
 from crow.events import LOG_MESSAGE, LL2BC_MESSAGE, STORE_MESSAGE
 from crow.events.event_manager import Publisher
 from crow.monitor.logger import ERROR
+import random
 
 import sys
 
