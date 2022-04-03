@@ -21,6 +21,7 @@ pkill -f fromll
 pkill -f variantcreator
 pkill -f redis-server
 pkill -f rabbitmq
+pkill -f life_status
 pkill -f dashboard
 
 # REDIS CACHE SERVER
@@ -34,14 +35,14 @@ redis-cli  -p 9898 config rewrite
 service rabbitmq-server start || exit 1
 sleep 1
 
+rabbitmq-plugins enable rabbitmq_management
+chown -R rabbitmq:rabbitmq /var/lib/rabbitmq/
+
 
 
 rabbitmqctl add_user $BROKER_USER $BROKER_PASS 
 rabbitmqctl set_user_tags $BROKER_USER administrator
 rabbitmqctl set_permissions -p / $BROKER_USER ".*" ".*" ".*"
-
-rabbitmq-plugins enable rabbitmq_management
-chown -R rabbitmq:rabbitmq /var/lib/rabbitmq/
 
 sleep 1
 echo "RABBITMQ UP AND RUNNING"
@@ -58,6 +59,11 @@ printf "$NC Updating settings $NC"
 python3 -m crow.update_settings $@
 printf "$GREEN Starting system $NC\n"
 
+printf "$GREEN Launching monitor $NC\n"
+python3 -m crow.monitor.life_status &
+sleep 2
+python3 -m crow.monitor.dashboard localhost 9898 1 "''" out &
+
 printf "$GREEN Launching storage service $NC\n"
 python3 -m crow.storage.manager &
 
@@ -70,6 +76,7 @@ python3 -m crow.entrypoints.wasm2wat &
 
 printf "$GREEN Launching bitcode to wasm service $NC\n"
 python3 -m crow.entrypoints.bc2wasm &
+
 
 printf "$GREEN Launching bc exploration service $NC\n"
 python3 -m crow.entrypoints.bc2candidates &
@@ -84,8 +91,6 @@ python3 -m crow.monitor.logger &
 printf "$GREEN Launching splitter $NC\n"
 python3 -m crow.entrypoints.split &
 
-#printf "$GREEN Launching dashboard $NC\n"
-#python3 -m crow.monitor.dashboard &
 
 
 control_c() {
@@ -97,13 +102,17 @@ control_c() {
     pkill -f fromll
     pkill -f variantcreator
     pkill -f redis-server
+    pkill -f life_status
     pkill -f dashboard
     exit
 }
 
-trap control_c SIGINT
 
-sleep 2
+echo "Waiting for system to be ready..."
+sleep 5
+echo $ENTRY
+
 python3 -m crow.entrypoints.bc2wasm $(basename $ENTRY) $ENTRY
 
+trap control_c SIGINT
 wait

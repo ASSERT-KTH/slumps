@@ -3,7 +3,7 @@ import hashlib
 from crow.commands.stages import ObjtoWASM, LLVMSplit, CountDeclarations, LLVMExtract
 from crow.entrypoints import EXPLORE_KEY, STORE_KEY, GENERATED_WASM_KEY, GENERATED_WAT_KEY, BC2WASM_KEY, WASM2WAT_KEY, \
     SPLIT_KEY, SPLIT_MESSAGE
-from crow.events import BC2WASM_MESSAGE, STORE_MESSAGE, WASM_QUEUE, WASM2WAT_MESSAGE, GENERATED_WASM_VARIANT, \
+from crow.events import BC2WASM_MESSAGE, STORE_MESSAGE,CROW_HEARTBEAT_NEW_FUNCTION, CROW_HEARTBEAT_NEW_PROGRAM, CROW_HEARTBEAT_NEW_PROGRAM, CROW_HEARTBEAT_KEY_NEW_PROGRAM, CROW_HEARTBEAT_KEY_NEW_FUNCTION, WASM_QUEUE, WASM2WAT_MESSAGE, GENERATED_WASM_VARIANT, \
     BC2Candidates_MESSAGE, SPLIT_QUEUE
 from crow.events.event_manager import Publisher, Subscriber, subscriber_function
 from crow.monitor.logger import LOGGER
@@ -25,12 +25,23 @@ publisher = Publisher()
 
 @log_system_exception()
 def split(bc, program_name, file_name=None):
+    # Send even to heart queue
+    hsh_original = hashlib.md5(bc).hexdigest()
+    
     global COUNT
     file_name = program_name if file_name is None else file_name
     
     original = open("%s.bc" % file_name, 'wb')
     original.write(bc)
     original.close()
+
+    #time.sleep(1)
+    publisher.publish(message=dict(
+                            event_type=CROW_HEARTBEAT_NEW_PROGRAM,
+                            program_name=program_name,
+                            hsh=hsh_original
+                        ), routing_key=CROW_HEARTBEAT_KEY_NEW_PROGRAM)
+
 
     print("Reading file declaration")
     # o = subprocess.check_output(["ls", "-lah"])
@@ -67,6 +78,7 @@ def split(bc, program_name, file_name=None):
                     "%s.bc" % name
                 ])
                 stream = open("%s.bc" % name, 'rb').read()
+
                 publisher.publish(message=dict(
                             event_type=STORE_MESSAGE,
                             stream=stream,
@@ -74,6 +86,18 @@ def split(bc, program_name, file_name=None):
                             file_name=f"{program_name}_{name}.original.bc",
                             path=f"bitcodes"
                         ), routing_key=STORE_KEY)
+                
+                hsh_fb = hashlib.md5(stream).hexdigest()
+
+                publisher.publish(message=dict(
+                            event_type=CROW_HEARTBEAT_NEW_FUNCTION,
+                            program_name=program_name,
+                            name=name,
+                            hsh=hsh_fb,
+                            original=hsh_original,
+                            status="PENDING",
+                            realname=def_)
+                            , routing_key=CROW_HEARTBEAT_KEY_NEW_FUNCTION)
 
                 # Call for exploration
                 publisher.publish(message=dict(

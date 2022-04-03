@@ -3,8 +3,7 @@ import hashlib
 from crow.commands.stages import ObjtoWASM
 from crow.entrypoints import EXPLORE_KEY, STORE_KEY, GENERATED_WASM_KEY, GENERATED_WAT_KEY, BC2WASM_KEY, WASM2WAT_KEY, \
     SPLIT_KEY, SPLIT_MESSAGE
-from crow.events import BC2WASM_MESSAGE, STORE_MESSAGE, WASM_QUEUE, WASM2WAT_MESSAGE, GENERATED_WASM_VARIANT, \
-    BC2Candidates_MESSAGE
+from crow.events import BC2WASM_MESSAGE, STORE_MESSAGE, WASM_QUEUE, WASM2WAT_MESSAGE, GENERATED_WASM_VARIANT, CROW_HEARTBEAT_NEW_WASM , CROW_HEARTBEAT_NEW_WAT, CROW_HEARTBEAT_NEW_BC,CROW_HEARTBEAT_KEY_NEW_BC, CROW_HEARTBEAT_KEY_NEW_WASM , CROW_HEARTBEAT_KEY_NEW_WAT ,BC2Candidates_MESSAGE
 from crow.events.event_manager import Publisher, Subscriber, subscriber_function
 from crow.monitor.logger import LOGGER
 from crow.settings import config
@@ -24,7 +23,7 @@ publisher = Publisher()
 @log_system_exception()
 def bc2wasm(bc, program_name, file_name=None, variant_name=None, explore=False):
     global COUNT
-    print(hashlib.sha256(bc).hexdigest())
+    hsh_bc = hashlib.md5(bc).hexdigest()
     file_name = program_name if file_name is None else file_name
     # Explicitly saving bc file
     publisher.publish(message=dict(
@@ -71,7 +70,17 @@ def bc2wasm(bc, program_name, file_name=None, variant_name=None, explore=False):
                 LOGGER.error(program_name, f"{e}")
                 return
             # Explicitly saving wasm file
-            print(f"WASM hash ", hashlib.sha256(st).hexdigest())
+            print(f"WASM hash ", hashlib.md5(st).hexdigest())
+
+            publisher.publish(message=dict(
+                event_type=CROW_HEARTBEAT_NEW_WASM,
+                program_name=program_name,
+                file_name=file_name,
+                hsh=hashlib.md5(st).hexdigest(),
+                parent = hsh_bc,
+                )
+            , routing_key=CROW_HEARTBEAT_KEY_NEW_WASM)
+
             publisher.publish(message=dict(
                 event_type=STORE_MESSAGE,
                 stream=st,
@@ -80,7 +89,7 @@ def bc2wasm(bc, program_name, file_name=None, variant_name=None, explore=False):
                 path=f"wasm"
             ), routing_key=STORE_KEY)
 
-            hsh = hashlib.sha256(st).hexdigest()
+            hsh = hashlib.md5(st).hexdigest()
 
             publisher.publish(message=dict(
                 event_type=GENERATED_WASM_VARIANT,

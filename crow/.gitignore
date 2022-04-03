@@ -12,3 +12,4 @@ crowenv
 build
 out.zip
 *.zip
+readdb.sqlite

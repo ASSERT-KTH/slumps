@@ -2,7 +2,7 @@ import hashlib
 
 from crow.commands.stages import WASM2WAT
 from crow.entrypoints import GENERATED_WAT_KEY, WASM2WAT_KEY, STORE_KEY
-from crow.events import STORE_MESSAGE, WASM2WAT_MESSAGE, GENERATED_WAT_FILE, WAT_QUEUE
+from crow.events import STORE_MESSAGE, WASM2WAT_MESSAGE, GENERATED_WAT_FILE, WAT_QUEUE, CROW_HEARTBEAT_NEW_WASM , CROW_HEARTBEAT_NEW_WAT, CROW_HEARTBEAT_NEW_BC,CROW_HEARTBEAT_KEY_NEW_BC, CROW_HEARTBEAT_KEY_NEW_WASM , CROW_HEARTBEAT_KEY_NEW_WAT
 from crow.events.event_manager import Publisher, Subscriber, subscriber_function
 from crow.settings import config
 import random
@@ -18,6 +18,7 @@ COUNT = 0
 @log_system_exception()
 def wasm2wat(wasm, program_name, file_name = None, variant_name = None):
     global COUNT
+    hsh_wasm = hashlib.md5(wasm).hexdigest()
 
     file_name = program_name if file_name is None else file_name
     with ContentToTmpFile(content=wasm, ext=".wasm", persist=False) as TMP_WASM:
@@ -40,7 +41,17 @@ def wasm2wat(wasm, program_name, file_name = None, variant_name = None):
             ), routing_key=STORE_KEY)
 
         watContent = open(f"{file_name}.wat", 'rb').read()
-        hsh = hashlib.sha256(watContent).hexdigest()
+        hsh = hashlib.md5(watContent).hexdigest()
+
+
+        publisher.publish(message=dict(
+            event_type=CROW_HEARTBEAT_NEW_WAT,
+            program_name=program_name,
+            file_name=file_name,
+            hsh=hsh,
+            parent = hsh_wasm,
+            )
+        , routing_key=CROW_HEARTBEAT_KEY_NEW_WAT)
 
         print(f"WASM2WAT ({COUNT}) {file_name}")
         publisher.publish(message=dict(

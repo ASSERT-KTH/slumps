@@ -1,7 +1,6 @@
 from crow.cache import cache
 from crow.entrypoints import EXPLORE_KEY, CREATE_VARIANT_KEY, STORE_KEY, GENERATED_BC_KEY, BC2WASM_KEY
-from crow.events import BC2Candidates_MESSAGE, BC_EXPLORATION_QUEUE, STORE_MESSAGE, GENERATE_VARIANT_MESSAGE, \
-    EXPLORATION_RESULT, GENERATED_BC_VARIANT, BC2WASM_MESSAGE
+from crow.events import BC2Candidates_MESSAGE, CROW_HEARTBEAT_NEW_PROGRAM, CROW_HEARTBEAT_KEY_NEW_FUNCTION, BC_EXPLORATION_QUEUE, STORE_MESSAGE, GENERATE_VARIANT_MESSAGE, CROW_HEARTBEAT_NEW_FUNCTION,CROW_HEARTBEAT_NEW_VARIANT, CROW_HEARTBEAT_KEY_NEW_VARIANT, EXPLORATION_RESULT, GENERATED_BC_VARIANT, BC2WASM_MESSAGE
 from crow.events.event_manager import Subscriber, subscriber_function, Publisher
 from crow.sanitzers.sanitizer import Sanitizer
 from crow.settings import config
@@ -147,7 +146,7 @@ def sanitize_by_block_id(job):
                 blocks.add(match.group(1))
     return True
 
-def processLevel(levels, program_name, _, bc, worker_index, merging):
+def processLevel(levels, program_name, _, bc, worker_index, merging, hsh_parent):
     # set random shift
     print(len(bc))
     print(levels)
@@ -210,9 +209,20 @@ def processLevel(levels, program_name, _, bc, worker_index, merging):
             for bc in tosend:
                 # Reading file
                 stream = open(bc, 'rb').read()
-                hsh = hashlib.sha256(stream).hexdigest()
+                hsh = hashlib.md5(stream).hexdigest()
 
                 if config["DEFAULT"].getboolean("keep-bc-files"):
+                    # This message should create two instances, one for variant and one for BCFile
+                    publisher.publish(message=dict(
+                        event_type=CROW_HEARTBEAT_NEW_VARIANT,
+                        program_name=program_name,
+                        name=program_name,
+                        file_name=bc,
+                        hsh=hsh,
+                        parent = hsh_parent,
+                        raw_replacement = "TODO"
+                        )
+                    , routing_key=CROW_HEARTBEAT_KEY_NEW_VARIANT)
 
                     publisher.publish(message=dict(
                         event_type=STORE_MESSAGE,
@@ -260,6 +270,16 @@ def processLevel(levels, program_name, _, bc, worker_index, merging):
 @log_system_exception()
 def bcexploration(bc, program_name):
 
+    hsh = hashlib.md5(bc).hexdigest()
+
+    publisher.publish(message=dict(
+                event_type=CROW_HEARTBEAT_NEW_FUNCTION,
+                program_name=program_name,
+                name=program_name,
+                hsh=hsh,
+                status="PROCESSING")
+                , routing_key=CROW_HEARTBEAT_KEY_NEW_FUNCTION)
+
     #publisher = Publisher()
     global OVERALL_COUNT
 
@@ -281,11 +301,20 @@ def bcexploration(bc, program_name):
     OVERALL = {}
 
     for i in range(config["DEFAULT"].getint("workers")):
-        job = levelPool.submit(processLevel, works[i], program_name, 2620 + i, bc, i, OVERALL)
+        job = levelPool.submit(processLevel, works[i], program_name, 2620 + i, bc, i, OVERALL, hsh)
         futures.append(job)
 
-    
+
     _ = wait(futures, timeout=config["DEFAULT"].getint("generation-timeout") + 2, return_when=ALL_COMPLETED)
+
+    
+    publisher.publish(message=dict(
+        event_type=CROW_HEARTBEAT_NEW_FUNCTION,
+        program_name=program_name,
+        name=program_name,
+        hsh=hsh,
+        status="DONE")
+        , routing_key=CROW_HEARTBEAT_KEY_NEW_FUNCTION)
 
 
 @log_system_exception()

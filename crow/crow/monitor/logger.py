@@ -7,6 +7,7 @@ from crow.events import LOG_MESSAGE
 from crow.monitor import LOGGING_QUEUE_NAME, LOG_KEY
 import platform
 import time
+import random
 
 ERROR="ERROR"
 WARNING="WARNING"
@@ -186,6 +187,6 @@ if __name__ == "__main__":
         print(e)
     OUT_FOLDER = os.path.join(OUT_FOLDER, "logs")
 
-
-    subscriber = Subscriber(1, LOGGING_QUEUE_NAME, f"{LOG_KEY}.*",  config["event"].getint("port"), general_log)
+    id = f"LOGGER-{random.randint(0,2000)}"
+    subscriber = Subscriber("LOGGER", LOGGING_QUEUE_NAME, f"{LOG_KEY}.*",  config["event"].getint("port"), general_log)
     subscriber.setup()

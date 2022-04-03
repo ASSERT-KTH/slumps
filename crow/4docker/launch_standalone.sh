@@ -21,9 +21,14 @@ pkill -f fromll
 pkill -f variantcreator
 pkill -f redis-server
 pkill -f rabbitmq
-
+pkill -f life_status
+pkill -f dashboard
 # REDIS CACHE SERVER
 redis-server --port 9898 &
+sleep 2
+redis-cli  -p 9898 config set requirepass $REDIS_PASS
+redis-cli  -p 9898 config set protected-mode no
+redis-cli  -p 9898 config rewrite
 # START RABBITMQ SERVER
 
 service rabbitmq-server start || exit 1
@@ -53,6 +58,13 @@ printf "$NC Updating settings $NC"
 python3 -m crow.update_settings $@
 printf "$GREEN Starting system $NC\n"
 
+
+printf "$GREEN Launching monitor $NC\n"
+python3 -m crow.monitor.life_status &
+sleep 2
+python3 -m crow.monitor.dashboard $REDIS_HOST $REDIS_PORT $REDIS_DB $REDIS_PASS $OUT_FOLDER &
+
+
 printf "$GREEN Launching storage service $NC\n"
 python3 -m crow.storage.manager &
 
@@ -80,6 +92,7 @@ python3 -m crow.monitor.logger &
 printf "$GREEN Launching splitter $NC\n"
 python3 -m crow.entrypoints.split &
 
+
 control_c() {
     pkill -f manager
     pkill -f logger
@@ -89,6 +102,8 @@ control_c() {
     pkill -f fromll
     pkill -f variantcreator
     pkill -f redis-server
+    pkill -f life_status
+    pkill -f dashboard
     exit
 }
 

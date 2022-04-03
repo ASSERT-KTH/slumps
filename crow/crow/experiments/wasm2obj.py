@@ -21,7 +21,7 @@ COUNT = 0
 def wasm2obj(wasm, program_name, file_name, variant_name):
     global COUNT
 
-    hashvalue = hashlib.sha256(wasm).hexdigest()
+    hashvalue = hashlib.md5(wasm).hexdigest()
 
     with ContentToTmpFile(content=wasm, LOG_LEVEL=2) as BCIN:
         tmpIn = BCIN.file
@@ -36,7 +36,7 @@ def wasm2obj(wasm, program_name, file_name, variant_name):
 
                 nativeObj = open(tmpOut, 'rb').read()
 
-                h2 = hashlib.sha256(nativeObj).hexdigest()
+                h2 = hashlib.md5(nativeObj).hexdigest()
                 print(f"WASMTIME {COUNT} {file_name} {hashvalue} {h2}")
 
                 publisher.publish(message=dict(

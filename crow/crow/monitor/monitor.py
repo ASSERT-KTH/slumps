@@ -5,6 +5,7 @@ import traceback
 from crow.settings import config
 from crow.monitor import MONITOR_QUEUE_NAME
 from crow.utils import printProgressBar
+import random
 
 def log_system_exception():
 
@@ -56,6 +57,7 @@ def general_log(data):
         TENTATIVE_NUMBER = data["tentative_number"]
 
 if __name__ == "__main__":
+    id = f"monitor-{random.randint(0,2000)}"
 
     subscriber = Subscriber(1, MONITOR_QUEUE_NAME, config["event"].getint("port"), general_log)
     subscriber.setup()

@@ -177,7 +177,7 @@ class Publisher:
 
         message["id"] = f"{uuid.uuid4()}"
         message["time"] = time.time() # Saving absolute time of the message
-
+        message["routing_key"] = routing_key
         wr = Publisher.Wrapper(message, routing_key)
         wr.publish()
 
@@ -574,7 +574,7 @@ class Subscriber:
                             node_id = platform.node(),
                             queueName = self.queueName,
                             key = self.key,
-                            id=self.id,
+                            worker_id=self.id,
                         ), routing_key=CROW_HEARTBEAT_KEY)
                     # Sleep for 5 seconds
                     time.sleep(5) 

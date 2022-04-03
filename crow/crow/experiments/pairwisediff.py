@@ -137,7 +137,7 @@ class UnixDiffComparer(Listener):
         program_name = data["program_name"]
         variant_name = data["variant_name"]
 
-        newhsh = hashlib.sha256(newContent).hexdigest()
+        newhsh = hashlib.md5(newContent).hexdigest()
 
         for hsh, name, _ in self.diffs.names_native:
             if hsh != newhsh:
@@ -159,7 +159,7 @@ class UnixDiffComparer(Listener):
         program_name = data["program_name"]
         variant_name = data["variant_name"]
 
-        newhsh = hashlib.sha256(newContent).hexdigest()
+        newhsh = hashlib.md5(newContent).hexdigest()
 
         for hsh, name, _ in self.diffs.names_wasms:
             if hsh != newhsh:
@@ -185,7 +185,7 @@ class UnixDiffComparer(Listener):
         program_name = data["program_name"]
         variant_name = data["variant_name"]
 
-        newhsh = hashlib.sha256(newContent).hexdigest()
+        newhsh = hashlib.md5(newContent).hexdigest()
 
         for hsh, name, _ in self.diffs.names_llvm:
             if hsh != newhsh:

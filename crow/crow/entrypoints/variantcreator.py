@@ -64,7 +64,7 @@ def generateVariant(j, program_name, merging, bc):
 
                     # Explicitly saving bitcode file
 
-                    hsh = hashlib.sha256(bsOpt).hexdigest()
+                    hsh = hashlib.md5(bsOpt).hexdigest()
                     keybc = f"{program_name}:bc:{hsh}"
                     if not CACHE.has(keybc) or not config['DEFAULT'].getboolean("prune-equal"):
                         print(f"Generating variant {program_name} {sanitized_set_name}...")
