@@ -15,8 +15,8 @@ jobs:
     steps:
       - name: Checkout recursive
         uses: actions/checkout@v2 # checkout latest version of the repo
-        with:
-          submodules: recursive
+        #with:
+        #  submodules: recursive
       - name: Install dependencies
         run: |
           sudo apt-get update && docker --version
