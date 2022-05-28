@@ -2,12 +2,9 @@
 Read db module. This module will write the events and will aggregate the data for easy reading. 
 Written data will be like current jobs, number of variants, replacement applied in variant
 """
-from pstats import StatsProfile
 from peewee import *
 import peewee
 from sqlite3 import Connection
-import os
-import inspect
 
 DBNAME="readdb.sqlite"
 
