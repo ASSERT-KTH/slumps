@@ -55,6 +55,9 @@ SANITIZER=Sanitizer(
 OVERALL_COUNT = 0
 CACHE = cache.getcache(True)
 
+levelPool = ThreadPoolExecutor(
+    max_workers=config["DEFAULT"].getint("workers"))
+
 
 def get_job_key(job):
 
@@ -319,23 +322,20 @@ def bcexploration(bc, program_name):
 
 @log_system_exception()
 @subscriber_function(event_type=BC2Candidates_MESSAGE)
-def subscriber(data):
+def subscriber_func(data):
     bcexploration(data["bc"], data["program_name"])
 
-
-if __name__ == "__main__":
-
-    levelPool = ThreadPoolExecutor(
-    max_workers=config["DEFAULT"].getint("workers"))
-
-    consumer = threading.Thread(target=send_consumer)
-    consumer.start()
-
-    if len(sys.argv) == 1:
+def main(files = []):
+    
+    if len(files) <= 1:
         id = f"explorer-{random.randint(0, 2000)}"
-        subscriber = Subscriber(id, BC_EXPLORATION_QUEUE, EXPLORE_KEY, config["event"].getint("port"), subscriber, ack_on_receive=True)
+        subscriber = Subscriber(id, BC_EXPLORATION_QUEUE, EXPLORE_KEY, config["event"].getint("port"), subscriber_func, ack_on_receive=True)
         subscriber.setup()
     else:
         program_name = sys.argv[1]
         program_name = program_name.split("/")[-1].split(".")[0]
         bcexploration(open(sys.argv[2], 'rb').read(), program_name)
+
+
+if __name__ == "__main__":
+    main(sys.argv)

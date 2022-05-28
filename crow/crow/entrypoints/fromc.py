@@ -12,22 +12,15 @@ from crow.monitor.monitor import log_system_exception
 from crow.settings import config
 
 @log_system_exception()
-def c2ll(file):
-    program_name = file.split("/")[-1].split(".")[0]
+def c2ll(program_name, content):
+    
+    ctoll = CToLLStage(program_name)
+    file = "/tmp/cf.c"
+    fd = open(file, 'w')
+    fd.write(content)
+    fd.close()
 
     publisher = Publisher()
-
-    # TODO the validation of a C file is done using file extension, use clang compilable instead
-    if not file.endswith(".c") and not file.endswith(".cpp"):
-        # Publish a log message
-        publisher.publish(message = dict(
-            event_type = LOG_MESSAGE,
-            message = f"File {file} is not a valid C/C++ file",
-            severity=ERROR,
-        ), routing_key=LOG_KEY)
-        return
-
-    ctoll = CToLLStage(program_name)
     ll1 = ctoll(file)
 
     publisher.publish(message=dict(
@@ -45,10 +38,11 @@ def c2ll(file):
             path="ll"
         ), routing_key=STORE_KEY)
 
+def main(filename, content):
+    c2ll(filename, content)
 
 if __name__ == "__main__":
-
-    if len(sys.argv) == 1:
-        pass
-    else:
-        c2ll(sys.argv[1])
+    if len(sys.argv) > 1:
+        content = open(sys.argv[1], 'r')
+        content = content.read()
+        main(sys.argv[1], content)

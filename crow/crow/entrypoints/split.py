@@ -17,6 +17,7 @@ import os
 from crow.monitor.monitor import log_system_exception
 import re
 import random
+import base64
 
 COUNT = 0
 
@@ -28,10 +29,18 @@ def split(bc, program_name, file_name=None):
     # Send even to heart queue
     hsh_original = hashlib.md5(bc).hexdigest()
     
+    if not os.path.exists("out"):
+        os.mkdir("out")
+
     global COUNT
     file_name = program_name if file_name is None else file_name
     
-    original = open("%s.bc" % file_name, 'wb')
+    fname = "%s.bc" % file_name
+    # if os.path.exists("out"):
+    fname  = "out/%s.bc" % file_name
+
+    original = open(fname, 'wb')
+    
     original.write(bc)
     original.close()
 
@@ -48,13 +57,18 @@ def split(bc, program_name, file_name=None):
     # print(o.decode())
 
     tmpOut=f"{file_name}_count"
+    tmpOut=f"out/{tmpOut}_count"
 
     counter = CountDeclarations(program_name)
     declared, defined = counter(args=[
-                    "%s.bc" % file_name,
+                    fname,
                     tmpOut
                 ])
 
+    try:
+        os.remove(tmpOut)
+    except:
+        pass
     print("Meta", len(declared), len(defined))
     time.sleep(1)
     # Send this to a queue to prevent the channel to close
@@ -65,19 +79,19 @@ def split(bc, program_name, file_name=None):
         if filterre == "*" or re.compile(filterre).match(def_):
             print(f"Extracting {i + 1}/{len(defined)}", def_)
             try:
-                original = open("%s.bc" % file_name, 'wb')
+                original = open(fname, 'wb')
                 original.write(bc)
                 original.close()    
                 extractor = LLVMExtract(program_name)
                 # Hash the name and send the map for saving
-                name = hashlib.md5(def_.encode()).hexdigest()
+                name = base64.b64encode(def_.encode()).decode()
                 META[name] = def_
                 functionbc = extractor(args=[
                     def_,
-                    "%s.bc" % file_name,
-                    "%s.bc" % name
+                    fname,
+                    "out/%s.bc" % name
                 ])
-                stream = open("%s.bc" % name, 'rb').read()
+                stream = open("out/%s.bc" % name, 'rb').read()
 
                 publisher.publish(message=dict(
                             event_type=STORE_MESSAGE,
@@ -114,7 +128,7 @@ def split(bc, program_name, file_name=None):
                 ), routing_key=BC2WASM_KEY)
 
 
-                os.remove("%s.bc" % name)
+                os.remove("out/%s.bc" % name)
             except Exception as e:
                 print("Error", e)
                 #print("Sending full bitcode instead")
@@ -146,20 +160,22 @@ def split(bc, program_name, file_name=None):
 
 @log_system_exception()
 @subscriber_function(event_type=SPLIT_MESSAGE)
-def subscriber(data):
+def subscriber_func(data):
     split(data["bc"], data["program_name"], data["file_name"] if "file_name" in data else None)
 
-
-if __name__ == "__main__":
+def main(files=[]):
 
     if not os.path.exists("out"):
         os.mkdir("out")
 
-    if len(sys.argv) == 1:
+    if len(files) <= 1:
         id = f"extractor-{random.randint(0, 2000)}"
-        subscriber = Subscriber(id, SPLIT_QUEUE, SPLIT_KEY, config["event"].getint("port"), subscriber, ack_on_receive=True)
+        subscriber = Subscriber(id, SPLIT_QUEUE, SPLIT_KEY, config["event"].getint("port"), subscriber_func, ack_on_receive=True)
         subscriber.setup()
     else:
         program_name = sys.argv[1]
         program_name = program_name.split("/")[-1].split(".")[0]
         split(open(sys.argv[2], 'rb').read(), program_name)
+
+if __name__ == "__main__":
+    main(sys.argv)

@@ -57,18 +57,21 @@ def ll2bc(ll1, program_name):
 
 @log_system_exception()
 @subscriber_function(event_type=LL2BC_MESSAGE)
-def subscriber(data):
+def subscriber_func(data):
     print("LL to bitcode")
     ll2bc(data["ll"], data["program_name"])
 
 
-if __name__ == "__main__":
+def main(files = []):
 
-    if len(sys.argv) == 1:
+    if len(files) <= 1:
         id = f"fromll-{random.randint(0, 2000)}"
-        subscriber = Subscriber(id, LL_QUEUE,LL_KEY,  config["event"].getint("port"), subscriber)
+        subscriber = Subscriber(id, LL_QUEUE,LL_KEY,  config["event"].getint("port"), subscriber_func)
         subscriber.setup()
     else:
         program_name = sys.argv[1]
         program_name = program_name.split("/")[-1].split(".")[0]
         ll2bc(sys.stdin.read(), program_name)
+
+if __name__ == "__main__":
+    main(sys.argv)

@@ -21,7 +21,7 @@ publisher = Publisher()
 
 
 @log_system_exception()
-def bc2wasm(bc, program_name, file_name=None, variant_name=None, explore=False):
+def bc2wasm(publisher, bc, program_name, file_name=None, variant_name=None, explore=False):
     global COUNT
     hsh_bc = hashlib.md5(bc).hexdigest()
     file_name = program_name if file_name is None else file_name
@@ -115,17 +115,20 @@ def bc2wasm(bc, program_name, file_name=None, variant_name=None, explore=False):
 
 @log_system_exception()
 @subscriber_function(event_type=BC2WASM_MESSAGE)
-def subscriber(data):
-    bc2wasm(data["bc"], data["program_name"], data["file_name"] if "file_name" in data else None, data["variant_name"] if "variant_name" in data else None, False)
+def subscriberfunc(data):
+    bc2wasm(publisher, data["bc"], data["program_name"], data["file_name"] if "file_name" in data else None, data["variant_name"] if "variant_name" in data else None, False)
 
 
-if __name__ == "__main__":
+def main(files=[]):
 
-    if len(sys.argv) == 1:
+    if len(files) <= 1:
         id = f"bc2wasm-{random.randint(0, 2000)}"
-        subscriber = Subscriber(id, WASM_QUEUE, BC2WASM_KEY, config["event"].getint("port"), subscriber)
+        subscriber = Subscriber(id, WASM_QUEUE, BC2WASM_KEY, config["event"].getint("port"), subscriberfunc)
         subscriber.setup()
     else:
         program_name = sys.argv[1]
         program_name = program_name.split("/")[-1].split(".")[0]
-        bc2wasm(open(sys.argv[2], 'rb').read(), program_name, explore=True)
+        bc2wasm(publisher, open(sys.argv[2], 'rb').read(), program_name, explore=True)
+
+if __name__ == "__main__":
+    main(sys.argv)

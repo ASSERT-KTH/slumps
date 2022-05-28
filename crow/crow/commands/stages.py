@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from email.policy import default
-from subprocess import Popen, PIPE
+from subprocess import Popen, PIPE, check_output
 from crow.settings import config
 from crow.utils import  Alias, RUNTIME_CONFIG
 from crow.monitor.logger import LOGGER
@@ -9,6 +9,7 @@ import time
 import sys
 import atexit
 import re
+
 
 definedre = re.compile(r"((%[0-9a-zA-Z]+):i(\d+))[ \t\r]*=")
 usage = re.compile(r"((%[0-9a-zA-Z]+))")
@@ -105,6 +106,9 @@ class ExternalStage:
 
     def processInner(self, std, err):
         return std, err
+
+    def check(self, args = []):
+        return check_output(args)
 
     def __call__(self, args=[], stdin=None):  # stdin byte stream
 

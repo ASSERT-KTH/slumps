@@ -2,8 +2,13 @@
 Read db module. This module will write the events and will aggregate the data for easy reading. 
 Written data will be like current jobs, number of variants, replacement applied in variant
 """
+from pstats import StatsProfile
 from peewee import *
+import peewee
+from sqlite3 import Connection
 import os
+import inspect
+
 DBNAME="readdb.sqlite"
 
 readdb = SqliteDatabase(DBNAME)
@@ -12,6 +17,8 @@ class SubscriberStats(Model):
     id = CharField(primary_key = True)
     node_name = CharField()
     queue_size = IntegerField()
+    cpu_usage = FloatField()
+    memory_usage = CharField()
 
     class Meta:
         database = readdb
@@ -96,13 +103,17 @@ class Projection:
         if len(chunks) > 1 and "v" in chunks[1]:
             proj.workerid = chunks[0]
             proj.level = chunks[1][:chunks[1].index("v")]
-
-            if len(chunks) > 2:
-                proj.blockid = chunks[2]
-                proj.function_name = chunks[3]
-                proj.module_name = chunks[3].split("_")[0]
-                proj.function_hash = chunks[3].split("_")[1]
-                proj.variant_name = chunks[3]
+            proj.variant_name = chunks[1]
+            
+            if len(chunks) > 3:
+                try:
+                    proj.blockid = chunks[2]
+                    proj.function_name = chunks[4]
+                    proj.module_name = chunks[4].split("_")[0]
+                    proj.function_hash = chunks[4].split("_")[1]
+                except Exception as e:
+                    print(e, "Projection, chunks", chunks)
+                    
 
         return proj        
 
@@ -116,11 +127,39 @@ class WatFile(Model):
     class Meta:
         database = readdb
 
-def init_db():
-    if os.path.exists(DBNAME):
-        os.remove(DBNAME)
 
-    readdb.create_tables([SubscriberStats, Function, Variant, BCFile, WasmFile, WatFile, Module])
+
+
+
+
+# readdb.create_tables(models)
 
 def connect_db():
-    readdb.connect()
+    pass
+    # readdb.connect()
+
+
+def reconnect_db():
+    pass
+    #readdb.close()
+    # readdb.connect()
+
+'''
+for cls in globals().values():
+    if type(cls) == peewee.Model:
+        try:
+            cls.create_table()
+        except peewee.OperationalError as e:
+            print(e)
+'''
+
+def init():
+
+    SubscriberStats.create_table()
+    Module.create_table()
+    Function.create_table()
+    Variant.create_table()
+    BCFile.create_table()
+    WasmFile.create_table()
+    WatFile.create_table()
+    WatFile.create_table()

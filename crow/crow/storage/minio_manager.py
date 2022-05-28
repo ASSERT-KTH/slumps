@@ -57,7 +57,7 @@ def subscriber(data):
         out = os.path.join(out, data["path"])
 
 
-    hashvalue = hashlib.sha256(data["stream"]).hexdigest()
+    hashvalue = hashlib.md5(data["stream"]).hexdigest()
     ext = data["file_name"].split(".")[-1]
     key = f"{data['program_name']}:{ext}:{hashvalue}"
 

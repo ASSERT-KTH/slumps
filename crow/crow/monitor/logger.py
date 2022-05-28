@@ -175,9 +175,10 @@ def general_log(data):
             )
 
 
+def main():
 
-if __name__ == "__main__":
 
+    OUT_FOLDER = os.environ.get("OUT_FOLDER", "out")
     try:
         if not os.path.exists(OUT_FOLDER):
             os.mkdir(OUT_FOLDER)
@@ -190,3 +191,6 @@ if __name__ == "__main__":
     id = f"LOGGER-{random.randint(0,2000)}"
     subscriber = Subscriber("LOGGER", LOGGING_QUEUE_NAME, f"{LOG_KEY}.*",  config["event"].getint("port"), general_log)
     subscriber.setup()
+
+if __name__ == "__main__":
+    main()

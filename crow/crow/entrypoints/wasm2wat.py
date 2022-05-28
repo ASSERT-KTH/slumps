@@ -68,16 +68,19 @@ def wasm2wat(wasm, program_name, file_name = None, variant_name = None):
 
 @log_system_exception()
 @subscriber_function(event_type=WASM2WAT_MESSAGE)
-def subscriber(data):
+def subscriber_func(data):
     wasm2wat(data["stream"], data["program_name"], data["file_name"] if "file_name" in data else None)
 
-if __name__ == "__main__":
+def main(files=[]):
 
-    if len(sys.argv) == 1:
+    if len(files) <= 1:
         id = f"wasm2wat-{random.randint(0, 2000)}"
-        subscriber = Subscriber(id, WAT_QUEUE,WASM2WAT_KEY,  config["event"].getint("port"), subscriber)
+        subscriber = Subscriber(id, WAT_QUEUE,WASM2WAT_KEY,  config["event"].getint("port"), subscriber_func)
         subscriber.setup()
     else:
         program_name = sys.argv[1]
         program_name = program_name.split("/")[-1].split(".")[0]
         wasm2wat(open(sys.argv[2], 'rb').read(), program_name)
+
+if __name__ == "__main__":
+    main(sys.argv)

@@ -6,7 +6,7 @@ import threading
 import time
 from crow.cache import cache
 
-from crow.events import GENERATE_VARIANT_MESSAGE, CROW_HEARTBEAT_GENERATED, CROW_HEARTBEAT_KEY, CROW_HEARTBEAT_QUEUE
+from crow.events import GENERATE_VARIANT_MESSAGE, CROW_HEARTBEAT_GENERATED, CROW_HEARTBEAT_KEY, CROW_HEARTBEAT_QUEUE, SPAWN_COMMAND
 from crow.settings import config
 import uuid
 import base64
@@ -16,6 +16,7 @@ import os
 import functools
 import threading
 import platform
+import psutil
 
 
 TOBASE64_FIELDS = ["stream", "bc", "ll", "orignal_bc", "original_wasm"]
@@ -575,6 +576,11 @@ class Subscriber:
                             queueName = self.queueName,
                             key = self.key,
                             worker_id=self.id,
+
+                            # Send CPU and Memory stats
+                            cpu_usage = psutil.cpu_percent(5),
+                            memory_usage = psutil.virtual_memory()
+
                         ), routing_key=CROW_HEARTBEAT_KEY)
                     # Sleep for 5 seconds
                     time.sleep(5) 
