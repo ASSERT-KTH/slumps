@@ -488,9 +488,9 @@ def main(redis_host, redis_port,redis_db,redis_pass, out_folder, host="0.0.0.0",
                     # Call bc2wasm event
                     bc2wasm.bc2wasm(publisher, stream, uploaded_filename, uploaded_filename, explore=True)
                     return "BC file enqueued for diversification"
-                elif is_c_file(stream):
-                    fromc.main(uploaded_filename, stream)
-                    return "BC file enqueued for diversification"
+                #elif is_c_file(stream):
+                #    fromc.main(uploaded_filename, stream)
+                #    return "BC file enqueued for diversification"
                 else:
                     return "Invalid file type"
             

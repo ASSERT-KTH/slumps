@@ -37,6 +37,7 @@ COPY 4docker/launch_experiments.sh                      /slumps/crow/launch_expe
 COPY 4docker/launch_storage_minio.sh                      /slumps/crow/launch_storage_minio.sh
 
 COPY setup.py                                  /slumps/crow/setup.py
+COPY run.py                                  /slumps/crow/run.py
 
 RUN mkdir -p /slumps/crow/logs
 RUN mkdir -p /slumps/crow/out
@@ -74,4 +75,4 @@ RUN cp /slumps/souper/third_party/z3-install/bin/z3 /usr/src/souper/third_party/
 
 #RUN tree -h .
 
-ENTRYPOINT ["bash", "launch_standalone.sh"]
+ENTRYPOINT ["python3", "run.py"]

@@ -7,7 +7,6 @@ import uuid
 import sys
 from crow.settings import config, reload
 from crow.monitor.logger import LOGGER
-from crow.commands import stages
 import re
 import traceback
 import time

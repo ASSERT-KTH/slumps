@@ -1,5 +1,5 @@
 BROKER_USER=root
-BROKER_PASS=quamarine
+BROKER_PASS=quamarine4
 REDIS_DB=0
 REDIS_PASS=quamarine@ssert
 MINIO_ACCESS_KEY=minio

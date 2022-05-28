@@ -23,8 +23,8 @@ def is_bc_file(stream):
         
         finalObjCreator = stages.ObjtoWASM("/tmp/tmp.bc", debug=True)
         finalObjCreator.check(args=[
-            "%s.wasm" % ("/tmp/tmp.bc",),
-            "/tmp/tmp/wasm"
+            "/tmp/tmp.wasm",
+             "/tmp/tmp.bc"
         ])
 
         return True

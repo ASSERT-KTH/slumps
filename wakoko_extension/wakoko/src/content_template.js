@@ -121,6 +121,8 @@ script3.innerText = `WebAssembly.instantiate=null`;
 (document.head||document.documentElement).prepend(scriptElement);
 (document.head||document.documentElement).prepend(script);
 (document.head||document.documentElement).prepend(metaScript);
+
+
 //(document.head||document.documentElement).prepend(script3);
 //(document.head||document.documentElement).prepend(decoderScript);
 // TODO check for service workers

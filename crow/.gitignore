@@ -13,3 +13,5 @@ build
 out.zip
 *.zip
 readdb.sqlite
+./*.bc
+local_deploy_dev

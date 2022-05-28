@@ -1,0 +1,16 @@
+apiVersion: v1
+data:
+  BROKER_PASS: quamarine4
+  BROKER_USER: root
+  CROW_SESSION: CROW
+  MINIO_ACCESS_KEY: minio
+  MINIO_HOST: minio-service:9000
+  MINIO_SECRET_KEY: minio123
+  REDIS_DB: "0"
+  REDIS_PASS: quamarine@ssert
+kind: ConfigMap
+metadata:
+  creationTimestamp: null
+  labels:
+    io.kompose.service: entrypoints-env-cr-kube
+  name: env-cr-kube

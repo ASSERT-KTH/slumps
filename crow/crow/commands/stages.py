@@ -108,7 +108,8 @@ class ExternalStage:
         return std, err
 
     def check(self, args = []):
-        return check_output(args)
+        cmd = [self.path_to_executable]
+        return check_output(cmd + args)
 
     def __call__(self, args=[], stdin=None):  # stdin byte stream
 
@@ -372,6 +373,14 @@ class ObjtoWASM(ExternalStage):
         self.timeout = -1
 
         self.namespace = namespace
+
+    def check(self, args = []):
+
+        linkOptions = config["wasm-ld"]["wasi-header"] if config["DEFAULT"].getboolean("link-wasi") else "--allow-undefined"
+        new_inputs = (config["wasm-ld"]["command"] % (linkOptions, "%s %s" % (args[0], args[1]),)).split(" ")
+        
+        print(new_inputs)
+        return super(ObjtoWASM, self).check(new_inputs)
 
     def __call__(self, args=[], std=None):  # f -> inputs
 
