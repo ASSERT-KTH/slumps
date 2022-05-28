@@ -3,7 +3,7 @@ env DEBIAN_FRONTEND=noninteractive
 
 
 RUN apt-get update \
-    && apt-get -y install curl erlang git tree python3.7 redis-server python3-pip wget \
+    && apt-get -y install curl erlang git tree python3.9 redis-server python3-pip wget \
     && curl -sS -L -O https://github.com/CraneStation/wasi-sdk/releases/download/wasi-sdk-8/wasi-sdk_8.0_amd64.deb \
     && dpkg -i wasi-sdk_8.0_amd64.deb && rm -f wasi-sdk_8.0_amd64.deb \
     
