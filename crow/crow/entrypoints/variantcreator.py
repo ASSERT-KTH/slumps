@@ -36,7 +36,7 @@ def generateVariant(j, program_name, merging, bc):
 
     variants = []
 
-    print(f"Generating {COUNT} {program_name}")
+    print(f"Generating {COUNT} {program_name} {j}")
 
     try:
         name = "][".join([base64.b64encode(os.urandom(32))[:8].decode(errors="ignore")\
@@ -78,15 +78,16 @@ def generateVariant(j, program_name, merging, bc):
                                 path=f"bitcodes/variants"
                             ), routing_key=STORE_KEY)
 
-                            print(f"Sending task to generate WASM...")
-                            publisher.publish(message=dict(
-                                event_type=GENERATED_BC_VARIANT,
-                                bc=bsOpt,
-                                hash=hsh,
-                                program_name=f"{program_name}",
-                                variant_name=sanitized_set_name,
-                                file_name=f"{program_name}{sanitized_set_name}.bc"
-                            ), routing_key=GENERATED_BC_KEY)
+                            if config["DEFAULT"].getboolean("keep-wasm-files"):
+                                print(f"Sending task to generate WASM...")
+                                publisher.publish(message=dict(
+                                    event_type=GENERATED_BC_VARIANT,
+                                    bc=bsOpt,
+                                    hash=hsh,
+                                    program_name=f"{program_name}",
+                                    variant_name=sanitized_set_name,
+                                    file_name=f"{program_name}{sanitized_set_name}.bc"
+                                ), routing_key=GENERATED_BC_KEY)
 
                         # Launching task create wasm
                         if config["DEFAULT"].getboolean("keep-wasm-files"):

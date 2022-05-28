@@ -78,12 +78,18 @@ class RedisCache(Cache):
                 host=config["cache"]["redis-host"],
                 port=config["cache"].getint("redis-port"),
                 password=password,
-                db=db
+                db=db,
+                socket_timeout=60,
+                socket_connect_timeout=60,
+                retry_on_timeout=True,
             )
         else:
             self.connection = redis.Redis(
                 host=config["cache"]["redis-host"],
-                port=config["cache"].getint("redis-port")
+                port=config["cache"].getint("redis-port"),
+                socket_timeout=60,
+                socket_connect_timeout=60,
+                retry_on_timeout=True,
             )
 
     def has(self, key):

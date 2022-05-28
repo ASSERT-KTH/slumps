@@ -26,6 +26,7 @@ COPY 4docker/config.ini            /slumps/crow/crow/settings/config.ini
 COPY requirements.txt                          /slumps/crow/requirements.txt
 
 COPY 4docker/launch_standalone.sh                      /slumps/crow/launch_standalone.sh
+COPY 4docker/launch_standalone_bitcode.sh                      /slumps/crow/launch_standalone_bitcode.sh
 COPY 4docker/launch_entrypoints.sh                      /slumps/crow/launch_entrypoints.sh
 COPY 4docker/launch_exploration.sh                      /slumps/crow/launch_exploration.sh
 COPY 4docker/launch_generators.sh                      /slumps/crow/launch_generators.sh

@@ -42,7 +42,3 @@ swam_cli.jar
 swam_server.jar
 
 new_iteration
-harvest_server
-readdb.sqlite
-local_deploy_dev
-rq11.stability.bck.json

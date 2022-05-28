@@ -52,7 +52,7 @@ def listen(port, q, program, worker_id, level, timeout, emit_generation=True):
 						#print(f"level {level} tentative {s}")
 					except Exception as e:
 						#print(data)
-						print(traceback.format_exc())
+						print(traceback.format_exc(), st)
 						break
 					if not data:
 						break
