@@ -52,6 +52,23 @@ def launch_spawner():
     subscriber.setup()
 
 if __name__ == '__main__':
+
+    # read from arguments and read legacy way
+    rs = []
+    notrs = []
+    i = 0
+    while i < len(sys.argv[1:]):
+        arg = sys.argv[i]
+        if arg.startswith("%"):
+            rs.append(arg)
+            rs.append(sys.argv[i + 1])
+            i += 2
+        else:
+            notrs.append(arg)
+            i += 1
+    print(rs, notrs)
+    sys.argv = notrs
+
     parser = argparse.ArgumentParser(description='CROW cli tool.')
 
     parser.add_argument('--redis-host', metavar='rh', type=str,  default="127.0.0.1", help='Redis host address')
@@ -102,7 +119,7 @@ if __name__ == '__main__':
         args.event_host,
         "%event.port",
         args.event_port,
-    ] + sys.argv[1:])
+    ] + rs)
 
 
 
