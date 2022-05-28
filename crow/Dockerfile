@@ -3,7 +3,7 @@ env DEBIAN_FRONTEND=noninteractive
 
 
 RUN apt-get update \
-    && apt-get -y install curl erlang git tree python3.9 redis-server python3-pip wget \
+    && apt-get -y install curl erlang git tree python3.9 redis-server wget \
     && curl -sS -L -O https://github.com/CraneStation/wasi-sdk/releases/download/wasi-sdk-8/wasi-sdk_8.0_amd64.deb \
     && dpkg -i wasi-sdk_8.0_amd64.deb && rm -f wasi-sdk_8.0_amd64.deb \
     
@@ -19,7 +19,10 @@ RUN apt-get update
 RUN apt-get install -y rabbitmq-server
 RUN rm -rf /var/lib/apt/lists/*
 
-RUN python3 -m pip install pip
+RUN curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
+RUN python3.9 get-pip.py
+
+RUN python3.9 -m pip install pip
 
 COPY crow                                      /slumps/crow/crow
 COPY 4docker/config.ini            /slumps/crow/crow/settings/config.ini
@@ -54,8 +57,8 @@ RUN chmod +x launch_logger.sh
 RUN chmod +x launch_monitor.sh
 RUN chmod +x launch_storage.sh
 
-RUN pip3 install -r requirements.txt
-RUN python3 setup.py install
+RUN pip3.9 install -r requirements.txt
+RUN python3.9 setup.py install
 
 RUN tree -h .
 
