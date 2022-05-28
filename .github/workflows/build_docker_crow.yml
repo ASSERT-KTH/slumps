@@ -5,7 +5,6 @@ on:
         - master
       # file paths to consider in the event. Optional; defaults to all.
       paths:
-        - 'crow/**'
         - '.github/**'
      
 
@@ -23,7 +22,7 @@ jobs:
           sudo apt-get update && docker --version
       - name: Build backend image
         run: |
-          sudo bash build_all_images.sh
+          sudo bash build_docker_crow.sh
       - name: Push images Souper
         run: |
           docker login -u="$user" -p="$pass" && docker push slumps/souper:latest
@@ -40,6 +39,13 @@ jobs:
       - name: Push images CROW
         run: |
           docker login -u="$user" -p="$pass" && docker push slumps/crow2:latest
+        env:
+          user: ${{secrets.DOCKER_USER}}
+          pass: ${{secrets.DOCKER_PASS}}
+
+      - name: Push images CROW
+        run: |
+          docker login -u="$user" -p="$pass" && docker push slumps/crow2:standalone
         env:
           user: ${{secrets.DOCKER_USER}}
           pass: ${{secrets.DOCKER_PASS}}

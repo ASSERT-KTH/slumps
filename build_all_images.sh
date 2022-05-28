@@ -15,9 +15,3 @@ cd crow
 
 docker build -t slumps/crow2:standalone  -f Dockerfile .
 docker build -t slumps/crow2:latest -f Dockerfile .
-
-
-docker push slumps/souper:latest
-docker push slumps/crow2:latest
-docker push slumps/crow2:standalone
-docker build -t slumps/backend:latest -f Dockerfile .
