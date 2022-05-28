@@ -23,19 +23,7 @@ jobs:
       - name: Build backend image
         run: |
           sudo bash build_docker_crow.sh
-      - name: Push images Souper
-        run: |
-          docker login -u="$user" -p="$pass" && docker push slumps/souper:latest
-        env:
-          user: ${{secrets.DOCKER_USER}}
-          pass: ${{secrets.DOCKER_PASS}}
-
-      - name: Push images backend
-        run: |
-          docker login -u="$user" -p="$pass" && docker push slumps/backend:latest
-        env:
-          user: ${{secrets.DOCKER_USER}}
-          pass: ${{secrets.DOCKER_PASS}}
+          
       - name: Push images CROW
         run: |
           docker login -u="$user" -p="$pass" && docker push slumps/crow2:latest
