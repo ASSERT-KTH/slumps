@@ -67,7 +67,7 @@ if __name__ == '__main__':
             notrs.append(arg)
             i += 1
     print(rs, notrs)
-    sys.argv = notrs
+    sys.argv = [sys.argv[0]] + notrs
 
     parser = argparse.ArgumentParser(description='CROW cli tool.')
 
