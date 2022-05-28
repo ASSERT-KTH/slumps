@@ -137,7 +137,11 @@ if __name__ == '__main__':
             os.remove(DBNAME)
             from crow.monitor.minpeewee.readdb import init # to create the db
             init()
-            time.sleep(10)
+        else:
+            from crow.monitor.minpeewee.readdb import init # to create the db
+            init()
+            
+        time.sleep(10)
 
         print("Launching life status")
         lifestatus_thread = threading.Thread(target=life_status.main)
