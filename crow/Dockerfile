@@ -76,6 +76,4 @@ RUN cp /slumps/souper/third_party/z3-install/bin/z3 /usr/src/souper/third_party/
 
 #RUN tree -h .
 
-RUN redis-cli -p 9090 config set requirepass $REDIS_PASS
-
 ENTRYPOINT ["bash", "run.sh"]
