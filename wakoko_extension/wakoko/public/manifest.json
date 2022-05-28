@@ -12,7 +12,6 @@
       }
       
   ], 
-  
    "web_accessible_resources": ["/static/js/app.js", "/static/css/content.css", "/static/js/wrapper.js","/static/js/decoder.js","/static/js/decoder.wasm",
     "/static/js/wrapper.js.map", "/static/js/app.js.map", "/static/css/content.css.map"]
   

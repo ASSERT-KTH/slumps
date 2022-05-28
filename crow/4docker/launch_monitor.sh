@@ -30,6 +30,8 @@ python3 -m crow.update_settings $@
 printf "$GREEN Starting system $NC\n"
 
 printf "$GREEN Launching monitor service $NC\n"
+python3 -m crow.monitor.life_status &
+sleep 2
 python3 -m crow.monitor.dashboard $REDIS_HOST $REDIS_PORT $REDIS_DB $REDIS_PASS $OUT_FOLDER &
 
 control_c() {

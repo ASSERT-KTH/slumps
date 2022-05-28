@@ -1,4 +1,4 @@
-import {Utils} from 'instrumentor/instrumentor'
+import { Utils } from 'instrumentor/instrumentor'
 import './content.css';
 
 
@@ -6,16 +6,16 @@ import './content.css';
 
 const oldModule = WebAssembly.Module;
 // @ts-ignore
-WebAssembly.Module =  null;
+WebAssembly.Module = null;
 // @ts-ignore
 
 WebAssembly.instantiateStreaming = null
 
 // @ts-ignore
-WebAssembly.Instance =  null;
+WebAssembly.Instance = null;
 
 // @ts-ignore
-window.INSTRUMENTER_HOST = "http://localhost:8080"
+window.INSTRUMENTER_HOST = "http://localhost:8000"
 // @ts-ignore
 window.old_instantiate = WebAssembly.instantiate;
 
@@ -25,16 +25,15 @@ WebAssembly.instantiate = null
 
 console.log("REPLACING API..")
 
-function wrapper(binary, info){
+function wrapper(binary, info) {
 	console.log("Intercepted call");
-	return new Promise(async function(resolve, reject){
+	return new Promise(async function (resolve, reject) {
 
 		let instrumetor = Utils.getInstrumentor()
 
 		const instrumentation = await instrumetor.instrumet(binary, info);
-
 		old(new Uint8Array(instrumentation.instrumented), info).then(result => {
-			
+
 
 			const { instance } = result;
 			console.log(instance);
@@ -64,15 +63,15 @@ WebAssembly.instantiateStreaming = async (source, importObject) => {
 // @ts-ignore
 window.wasms = []
 // @ts-ignore
-window.setBinaries = function(w){
+window.setBinaries = function (w) {
 	// @ts-ignore
 	window.wasms.push(w)
 
 	console.warn("NO DASHBOARD CALLBACK")
 }
 // @ts-ignore
-window.IS_EXTENSION = true; 
+window.IS_EXTENSION = true;
 // @ts-ignore
-window.ENABLE_DASHBOARD = true; 
+window.ENABLE_DASHBOARD = true;
 // @ts-ignore
 window.PRODUCTION = true; 

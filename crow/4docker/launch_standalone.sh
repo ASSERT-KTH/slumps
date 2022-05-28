@@ -21,9 +21,14 @@ pkill -f fromll
 pkill -f variantcreator
 pkill -f redis-server
 pkill -f rabbitmq
-
+pkill -f life_status
+pkill -f dashboard
 # REDIS CACHE SERVER
 redis-server --port 9898 &
+sleep 2
+redis-cli  -p 9898 config set requirepass $REDIS_PASS
+redis-cli  -p 9898 config set protected-mode no
+redis-cli  -p 9898 config rewrite
 # START RABBITMQ SERVER
 
 service rabbitmq-server start || exit 1
@@ -53,6 +58,13 @@ printf "$NC Updating settings $NC"
 python3 -m crow.update_settings $@
 printf "$GREEN Starting system $NC\n"
 
+
+printf "$GREEN Launching monitor $NC\n"
+python3 -m crow.monitor.life_status &
+sleep 2
+python3 -m crow.monitor.dashboard $REDIS_HOST $REDIS_PORT $REDIS_DB $REDIS_PASS $OUT_FOLDER &
+
+
 printf "$GREEN Launching storage service $NC\n"
 python3 -m crow.storage.manager &
 
@@ -70,6 +82,7 @@ python3 -m crow.entrypoints.bc2wasm &
 printf "$GREEN Launching bc exploration service $NC\n"
 python3 -m crow.entrypoints.bc2candidates &
 
+
 printf "$GREEN Launching from ll2bc service $NC\n"
 python3 -m crow.entrypoints.fromll &
 
@@ -79,12 +92,6 @@ python3 -m crow.monitor.logger &
 printf "$GREEN Launching splitter $NC\n"
 python3 -m crow.entrypoints.split &
 
-for i in $(seq 1 2) # Increase the number of variant creators
-do
-  printf "$GREEN Variant generator $i $NC\n"
-  redis-server --port 90$i 2>/dev/null 1>/dev/null &
-  python3 -m crow.entrypoints.variantcreator &
-done
 
 control_c() {
     pkill -f manager
@@ -95,12 +102,41 @@ control_c() {
     pkill -f fromll
     pkill -f variantcreator
     pkill -f redis-server
+    pkill -f life_status
+    pkill -f dashboard
     exit
 }
 
+
+echo "Waiting for system to be ready..."
+sleep 5
+echo $ENTRY
+
+if [ "$ENTRY" == "*.c" ]
+then
+  python3 -m crow.entrypoints.fromc $ENTRY
+fi
+
+
+if [ "$ENTRY" == "*.cpp" ]
+then
+  python3 -m crow.entrypoints.bc2wasm $ENTRY
+fi
+
+if [ "$ENTRY" == "*.bc" ]
+then
+  python3 -m crow.entrypoints.bc2wasm $ENTRY $ENTRY
+fi
+
+if [ "$ENTRY" == "*.wasm" ]
+then
+  python3 -m crow.entrypoints.wasm2wat $ENTRY $ENTRY
+fi
+
+if [ "$ENTRY" == "*.ll" ]
+then
+  python3 -m crow.entrypoints.fromll $ENTRY <<< $(cat $ENTRY)
+fi
+
 trap control_c SIGINT
-
-sleep 2
-python3 -m crow.entrypoints.fromc $ENTRY
-
 wait

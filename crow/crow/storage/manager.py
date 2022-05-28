@@ -11,9 +11,8 @@ from crow.monitor.logger import LOGGER
 from crow.cache import cache
 import base64
 import sys
+import random
 
-OUT_FOLDER = os.environ.get("OUT_FOLDER", "out")
-OUT_FOLDER = os.path.join(os.path.dirname(__file__), OUT_FOLDER)
 # CHECK FOR MEMORY
 # ADD MONGODB storage in another version of the service
 
@@ -31,9 +30,12 @@ def create_path(base_path, path):
 
 @log_system_exception()
 @subscriber_function(event_type=STORE_MESSAGE)
-def subscriber(data):
+def subscriber_func(data):
 
     global CACHE
+
+    OUT_FOLDER = os.environ.get("OUT_FOLDER", "out")
+    OUT_FOLDER = os.path.join(os.path.dirname(__file__), OUT_FOLDER)
 
     out = "%s/%s"%(OUT_FOLDER, data["program_name"])
 
@@ -43,7 +45,7 @@ def subscriber(data):
         create_path(out, data["path"])
         out = os.path.join(out, data["path"])
 
-    hashvalue = hashlib.sha256(data["stream"]).hexdigest()
+    hashvalue = hashlib.md5(data["stream"]).hexdigest()
     ext = data["file_name"].split(".")[-1]
     key = f"{data['program_name']}:{ext}:{hashvalue}"
 
@@ -65,14 +67,18 @@ def subscriber(data):
     data["stream"] = base64.b64encode(data["stream"]).decode("utf-8")
     CACHE.init(key, data)
 
-
-
-if __name__ == "__main__":
-
+def main():
     # Create out folder
+
+    OUT_FOLDER = os.environ.get("OUT_FOLDER", "out")
+    OUT_FOLDER = os.path.join(os.path.dirname(__file__), OUT_FOLDER)
+
     if not os.path.exists(f"{OUT_FOLDER}"):
         os.mkdir(f"{OUT_FOLDER}")
-
+    id = f"storage-{random.randint(0, 2000)}"
     # SIMPLE Task wait for messages and save the corresponding files
-    subscriber = Subscriber(1, STORAGE_QUEUE_NAME, STORE_KEY, config["event"].getint("port"), subscriber)
+    subscriber = Subscriber(id, STORAGE_QUEUE_NAME, STORE_KEY, config["event"].getint("port"), subscriber_func)
     subscriber.setup()
+
+if __name__ == "__main__":
+    main()

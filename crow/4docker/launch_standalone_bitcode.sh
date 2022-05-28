@@ -21,24 +21,28 @@ pkill -f fromll
 pkill -f variantcreator
 pkill -f redis-server
 pkill -f rabbitmq
+pkill -f life_status
+pkill -f dashboard
 
 # REDIS CACHE SERVER
 redis-server --port 9898 &
 sleep 2
 redis-cli  -p 9898 config set requirepass $REDIS_PASS
+redis-cli  -p 9898 config set protected-mode no
+redis-cli  -p 9898 config rewrite
 # START RABBITMQ SERVER
 
 service rabbitmq-server start || exit 1
 sleep 1
+
+rabbitmq-plugins enable rabbitmq_management
+chown -R rabbitmq:rabbitmq /var/lib/rabbitmq/
 
 
 
 rabbitmqctl add_user $BROKER_USER $BROKER_PASS 
 rabbitmqctl set_user_tags $BROKER_USER administrator
 rabbitmqctl set_permissions -p / $BROKER_USER ".*" ".*" ".*"
-
-rabbitmq-plugins enable rabbitmq_management
-chown -R rabbitmq:rabbitmq /var/lib/rabbitmq/
 
 sleep 1
 echo "RABBITMQ UP AND RUNNING"
@@ -54,6 +58,11 @@ shift
 printf "$NC Updating settings $NC"
 python3 -m crow.update_settings $@
 printf "$GREEN Starting system $NC\n"
+
+printf "$GREEN Launching monitor $NC\n"
+python3 -m crow.monitor.life_status &
+sleep 2
+python3 -m crow.monitor.dashboard localhost 9898 1 "''" out &
 
 printf "$GREEN Launching storage service $NC\n"
 python3 -m crow.storage.manager &
@@ -72,6 +81,7 @@ python3 -m crow.entrypoints.bc2wasm &
 printf "$GREEN Launching bc exploration service $NC\n"
 python3 -m crow.entrypoints.bc2candidates &
 
+
 printf "$GREEN Launching from ll2bc service $NC\n"
 python3 -m crow.entrypoints.fromll &
 
@@ -81,12 +91,7 @@ python3 -m crow.monitor.logger &
 printf "$GREEN Launching splitter $NC\n"
 python3 -m crow.entrypoints.split &
 
-for i in $(seq 1 2) # Increase the number of variant creators
-do
-  printf "$GREEN Variant generator $i $NC\n"
-  redis-server --port 90$i 2>/dev/null 1>/dev/null &
-  python3 -m crow.entrypoints.variantcreator &
-done
+
 
 control_c() {
     pkill -f manager
@@ -97,12 +102,17 @@ control_c() {
     pkill -f fromll
     pkill -f variantcreator
     pkill -f redis-server
+    pkill -f life_status
+    pkill -f dashboard
     exit
 }
 
-trap control_c SIGINT
 
-sleep 2
+echo "Waiting for system to be ready..."
+sleep 5
+echo $ENTRY
+
 python3 -m crow.entrypoints.bc2wasm $(basename $ENTRY) $ENTRY
 
+trap control_c SIGINT
 wait

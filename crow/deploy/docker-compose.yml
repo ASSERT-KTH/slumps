@@ -26,7 +26,7 @@ services:
       - /bin/bash
     env_file:
       - .env.cr
-    command: ./launch_exploration.sh %DEFAULT.order 19,20 %DEFAULT.exploration-timeout 150 %cache.redis-port 9898 %DEFAULT.workers 2 %souper.workers 1 %DEFAULT.combinations False
+    command: ./launch_exploration.sh %DEFAULT.order 19,20,21,22 %DEFAULT.exploration-timeout 150 %cache.redis-port 9898 %DEFAULT.workers 2 %souper.workers 1 %DEFAULT.combinations False
 
       # exploration service
   exploration2:
@@ -39,20 +39,7 @@ services:
       - /bin/bash
     env_file:
       - .env.cr
-    command: ./launch_exploration.sh %DEFAULT.order 19,20 %DEFAULT.exploration-timeout 150 %cache.redis-port 9898 %DEFAULT.workers 2 %souper.workers 1 %DEFAULT.combinations False
-
-      # exploration service
-  exploration3:
-    restart: always
-    image: "slumps/crow2:latest"
-    volumes:
-      - ./out:/slumps/crow/crow/storage/out
-      - ./config.ini:/slumps/crow/crow/settings/config.ini
-    entrypoint:
-      - /bin/bash
-    env_file:
-      - .env.cr
-    command: ./launch_exploration.sh %DEFAULT.order 19,20 %DEFAULT.exploration-timeout 150 %cache.redis-port 9898 %DEFAULT.workers 2 %souper.workers 1 %DEFAULT.combinations False
+    command: ./launch_exploration.sh %DEFAULT.order 19,20,21,22 %DEFAULT.exploration-timeout 150 %cache.redis-port 9898 %DEFAULT.workers 2 %souper.workers 1 %DEFAULT.combinations False
 
   # entrypoints
   entrypoints:

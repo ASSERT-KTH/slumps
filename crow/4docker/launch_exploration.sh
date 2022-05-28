@@ -26,10 +26,12 @@ printf "$GREEN Starting system $NC\n"
 
 printf "$GREEN Launching bc exploration service $NC\n"
 python3 -m crow.entrypoints.bc2candidates &
+# python3 -m crow.entrypoints.split &
 
 
 control_c() {
     pkill -f bc2candidates
+#    pkill -f split
     exit
 }
 

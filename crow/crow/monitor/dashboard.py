@@ -2,17 +2,26 @@ import redis
 import sys
 import re
 import json
+from crow.dashboard_utils import is_wasm_file, is_c_file, is_bc_file
+from crow.events import SPAWN_COMMAND
 import dash
-import dash_core_components as dcc
-import dash_html_components as html
+from dash import dcc
+from dash import html
 import dash_auth
+import base64
+from dash import Input, Output, State
+from dash import callback_context as ctx
+from dash.exceptions import PreventUpdate
 
 from plotly import graph_objects as go
+import plotly.express as px
 import dash_bootstrap_components as dbc
 from crow.events import LOG_MESSAGE, GENERATED_BC_VARIANT, EXPLORATION_RESULT, BC_EXPLORATION_QUEUE, GENERATION_QUEUE, \
     WAT_QUEUE, WASM_QUEUE
 from crow.monitor.logger import ERROR
 from crow.events.event_manager import Subscriber, subscriber_function, Publisher
+from crow.monitor.minpeewee.readdb import SubscriberStats, WasmFile, BCFile, WatFile,  Projection, Module, Variant
+from crow.entrypoints import bc2wasm, fromc
 import traceback
 from crow.settings import config
 from crow.monitor import MONITOR_QUEUE_NAME
@@ -27,14 +36,13 @@ import pika
 import time
 
 NOW = time.time()
-
 class RabbitMonitor:
 
     def __init__(self, save_query=True):
 
         self.__setup()
         self.save_query = save_query
-        self.queries = {}
+        self.queries = {  }
 
     def __setup(self):
         BROKER_PASS = os.getenv("BROKER_PASS", None)
@@ -83,7 +91,7 @@ class RabbitMonitor:
     def __purge_queue(self, queue_name):
 
         try:
-            print(f"Purging {queue_name}")
+            #print(f"Purging {queue_name}")
             self.channel.queue_purge(queue_name)
         except Exception:
             time.sleep(3)
@@ -121,16 +129,11 @@ class RabbitMonitor:
 PROGRAM_RE = re.compile(r"^(.+?):")
 BASE_DIR = os.path.dirname(__file__)
 
-if __name__ == "__main__":
+worker_callbacks_added = False
+def main(redis_host, redis_port,redis_db,redis_pass, out_folder, host="0.0.0.0", port=8050, debug=False):
 
     m = RabbitMonitor()
     m.get_exploration_message_count()
-
-    redis_host = sys.argv[1]
-    redis_port = int(sys.argv[2])
-    redis_db = sys.argv[3]
-    redis_pass = sys.argv[4]
-    out_folder = sys.argv[5]
 
     VALID_USERNAME_PASSWORD_PAIRS = {
     }
@@ -152,15 +155,171 @@ if __name__ == "__main__":
     unique_wasms_queries = {}
     total_wasms_queries = {}
 
+    worker_queries = {}
+    worker_cpu_queries = {}
+    worker_memory_queries = {}
+    
+    function_queries = {}
+    all_distribs = {}
+
+    publisher = Publisher()  
+
+
     def has(k):
         return connection.get(k) is not None
+
+    def get_all_nodes():
+
+        try:
+            stats = SubscriberStats.select()
+            
+            stats = group_by(lambda x: x.node_name, stats)
+            for nid, values in stats.items():
+                s = values[0]
+                if nid not in worker_cpu_queries:
+                    worker_cpu_queries[nid] = []
+                    worker_memory_queries[nid] = []
+
+                worker_memory_queries[nid].append([time.time() - NOW, s.cpu_usage])
+                worker_cpu_queries[nid].append([time.time() - NOW, json.loads(s.memory_usage)[2]])
+                
+            # print(worker_queries)
+            return worker_memory_queries, worker_cpu_queries
+        except Exception as e:
+            print(e, "get_all_nodes")
+            return [], []
+    
+    def get_all_workers():
+        try:
+            stats = SubscriberStats.select()
+            
+            for s in stats:
+                if s.id not in worker_queries:
+                    worker_queries[s.id] = []
+
+                worker_queries[s.id].append([time.time() - NOW, s.queue_size])
+            # print(worker_queries)
+            return worker_queries
+        except Exception as e:
+            print(e, "get_all_workers")
+            return {}
+
+    def merget(m, d):
+        
+        for k in d.__dict__.keys():
+            setattr(m, k, getattr(d, k))
+
+        return m
+
+    def group_by(keyextractor, collection):
+        result = {}
+
+        for i in collection:
+            k = keyextractor(i)
+
+            if k not in result:
+                result[k] = []
+            result[k].append(i)
+
+        
+        return result
+
+    def aggregate(collection, final=""):
+
+        result = {}
+
+
+        for module, variants in collection.items():
+            functions = group_by(lambda x: x.function_name, variants)
+
+            for function, variants in functions.items():
+                wasms_by_hash = group_by(lambda x: x.hsh, variants)
+                levelwasms = group_by(lambda x: x.level, variants)
+
+                unique = len(wasms_by_hash.keys())
+                total = sum([len(i) for _, i in wasms_by_hash.items()])
+                distrib = [ (k, len(levelwasms[k])) for k in levelwasms.keys() ]
+
+                # functions[function] = dict(wasms=wasms_by_hash, unique=unique, total=total)
+                if final:
+                    functions[function] = {
+                        final: dict(unique=unique, total=total, levels=distrib)
+                    }
+                else:
+                    functions[function] = dict(unique=unique, total=total, levels=distrib)
+
+
+            result[module] = functions
+
+        return result
+
+    def merge_dicts(d1, d2):
+
+        # Module level
+        for k in d2.keys():
+            if k not in d1:
+                d1[k] = d2[k]
+            else:
+                # function level
+                for fkey in d2[k].keys():
+                    if fkey not in d1[k]:
+                        d1[k][fkey] = d2[k][fkey]
+                    else:
+                        for hkey in d2[k][fkey].keys():
+                            if hkey not in d1[k][fkey]:
+                                d1[k][fkey][hkey] = d2[k][fkey][hkey]
+                    
+
+    def get_all_wasms():
+        wasms = WasmFile.select()
+        wats = WatFile.select()
+        bcs = BCFile.select()
+
+        wasms = [ merget(w, Projection.get_projection(w)) for w in wasms ]
+        wats = [ merget(w, Projection.get_projection(w)) for w in wats ]
+        bcs = [ merget(w, Projection.get_projection(w, field= lambda x: x.original.file_name)) for w in bcs ]
+
+        # get levels
+
+        # Group by module        
+        wasms = group_by(lambda x: x.module_name, wasms)
+        wats = group_by(lambda x: x.module_name, wats)
+        bcs = group_by(lambda x: x.module_name, bcs)
+
+        wasms = aggregate(wasms, "wasms")
+        wats = aggregate(wats, "wats")
+        bcs = aggregate(bcs, "bcs")
+
+        # Merge all
+        merge_dicts(wasms, wats)
+        merge_dicts(wasms, bcs)
+
+        # print(json.dumps(wasms, indent=4))
+
+        for m in wasms.keys():
+            for f in wasms[m].keys():
+                for i in wasms[m][f].keys():
+                    if (m, f, i) not in function_queries:
+                        function_queries[(m, f, i)] = [[],[], []]
+                        function_queries[(m, f, i)] = [[], [], []]
+                    else:
+                        t = wasms[m][f][i]['total']
+                        u = wasms[m][f][i]['unique']
+                        l = wasms[m][f][i]['levels']
+                        n = time.time() - NOW
+                        function_queries[(m, f, i)][0].append([n, t])
+                        function_queries[(m, f, i)][1].append([n, u])
+                        function_queries[(m, f, i)][2] = l
+                
+
+        return wasms
 
     def get_all_programs(prefix="", save=False, getsnapshotfirst=True):
 
         if getsnapshotfirst and has(f"SNAPSHOT:all_programs:{prefix}"):
             return json.loads(connection.get(f"SNAPSHOT:all_programs:{prefix}").decode())
 
-        print("getting programs")
+        #print("getting programs")
         allkeys = connection.keys(f"{prefix}*")
 
         r = { }
@@ -177,7 +336,7 @@ if __name__ == "__main__":
         if save:
             connection.set(f"SNAPSHOT:all_programs:{prefix}", json.dumps(r).encode())
 
-        print("Returning all programs")
+        #print("Returning all programs")
         return r
 
     def get_unique_bitcodes(program, save=False, getsnapshotfirst=True):
@@ -269,7 +428,7 @@ if __name__ == "__main__":
         return C
 
     def make_zip(path, name="out"):
-        print(path, os.listdir(path))
+        #print(path, os.listdir(path))
 
         make_archive(
             f'{BASE_DIR}/{name}',
@@ -308,31 +467,38 @@ if __name__ == "__main__":
             BASE_DIR, o, as_attachment=True, cache_timeout=0
         )
 
+    @app.callback(
+        Output("file-list", component_property="children"),
+        [Input("upload-module", "filename"), Input("upload-module", "contents")],
+    )
+    def submit_bitcode(uploaded_filename, uploaded_file_content):
+        ctx = dash.callback_context
 
-    @app.callback(dash.dependencies.Output('logs', 'children'),
-                  [dash.dependencies.Input('purge-button1', 'n_clicks'),
-                   dash.dependencies.Input('purge-button1', 'key')],
-                  )
-    def purge_exploration(n_clicks, key):
-
-        if n_clicks and key == "EXPLORATION":
-            return m.purge_exploration_queue()
-
-
+        if ctx.triggered_id:
+            print(ctx.triggered_id)
+            if uploaded_filename:
+                print(uploaded_filename, len(uploaded_file_content))
+                stream = uploaded_file_content.encode("utf8").split(b";base64,")[1]
+                stream = base64.decodebytes(stream)
+                # TODO classify file and create the corresponding event, fromC, fromLL, from BC, error otherwise
+                
+                if is_wasm_file(stream):
+                    return "Sorry, wasm2wasm is not yet supported"
+                elif is_bc_file(stream):
+                    # Call bc2wasm event
+                    bc2wasm.bc2wasm(publisher, stream, uploaded_filename, uploaded_filename, explore=True)
+                    return "BC file enqueued for diversification"
+                #elif is_c_file(stream):
+                #    fromc.main(uploaded_filename, stream)
+                #    return "BC file enqueued for diversification"
+                else:
+                    return "Invalid file type"
+            
         return None
 
+    # Inject the callbacks for the workers
+    #
 
-    '''
-     html.A(
-                         style=dict(
-                             marginLeft='5px'
-                         ),
-                         id="purge-button1",
-                         className='btn btn-danger',
-                         children=f"Purge",
-                         key="EXPLORATION"
-                     ),
-    '''
     @app.callback(dash.dependencies.Output('page-content', 'children'),
                   [dash.dependencies.Input('url', 'pathname'),
                     dash.dependencies.Input('interval1', 'n_intervals'),
@@ -340,16 +506,263 @@ if __name__ == "__main__":
                   )
     def display_page(pathname, n_clicks, n_intervals):
 
+        def plot_node_stats(w):
+            id, values = w
+            cpus, mems = values
+
+            return html.Div(
+                
+                className='col col-md-4',
+                children=[ 
+                    html.H4(f"{id}"),
+                    html.Div(
+                            children=dcc.Graph(
+                                    figure={
+                                        'data': [
+                                            go.Scatter(
+                                                x=[x[0] for x in cpus],
+                                                y=[x[1] for x in cpus],
+                                                mode="lines",
+                                                name="CPU usage"
+                                            ),
+                                            go.Scatter(
+                                                x=[x[0] for x in mems],
+                                                y=[x[1] for x in mems],
+                                                mode="lines",
+                                                name="Memory usage"
+                                            ),
+                                        ],
+                                        'layout': {
+                                            'title': f'Node pressure'
+                                        }
+                                    }
+                                )
+
+                        )
+                        ]
+            )
+
+        def plot_worker_stats(w):
+            id, values = w
+            #values, cpus, mems = values
+            name = id[:id.find("-")]
+
+            return html.Div(
+                
+                className='col col-md-4',
+                children=[ 
+                    html.Div(
+                        children=[
+
+                            html.Button("Clone worker", id=f"worker-{id}", className="btn btn-primary"),
+                        ],
+                        style={
+                            "padding": "80px"
+                        }
+                    ),
+                    html.Div(
+                            children=dcc.Graph(
+                                    figure={
+                                        'data': [
+                                            go.Scatter(
+                                                x=[x[0] for x in values],
+                                                y=[x[1] for x in values],
+                                                mode="lines",
+                                                name="pending jobs"
+                                            ),
+                                        ],
+                                        'layout': {
+                                            'title': f'{name}'
+                                        }
+                                    }
+                                )
+
+                        )
+                        ]
+            )
+
+        def plot_function(f):
+            mod, functionname, wasms = f
+            if functionname == "original":
+                return None
+
+            decoded = functionname
+            if decoded.startswith("bc_"):
+                decoded = decoded[3:]
+                decoded = base64.b64decode(decoded.encode("utf-8"))
+                decoded = decoded.decode("utf-8")
+
+            # print(function_queries)
+            distrib = []
+            if (mod, functionname, 'bcs') in function_queries:
+                total_bcs = function_queries[(mod, functionname, 'bcs')][0]
+                unique_bcs = function_queries[(mod, functionname, 'bcs')][1]
+                bcratio = 100*unique_bcs[-1][1]/total_bcs[-1][1]
+
+                # Level, seed distribution
+                distrib = function_queries[(mod, functionname, 'bcs')][2]
+
+                for l, n in distrib:
+                    if l not in all_distribs:
+                        all_distribs[l] = 0
+                    all_distribs[l] += n - 1
+            else:
+                total_bcs = [0]
+                unique_bcs = [0]
+                bcratio = 100
+            
+            if (mod, functionname, 'wasms') in function_queries:
+                total_wasms = function_queries[(mod, functionname, 'wasms')][0]
+                unique_wasms = function_queries[(mod, functionname, 'wasms')][1]
+                wasmratio = 100*unique_wasms[-1][1]/total_wasms[-1][1]
+            else:
+                total_wasms = [0]
+                unique_wasms = [0]
+                wasmratio = 100
+
+            
+            if (mod, functionname, 'wats') in function_queries:
+                total_wats = function_queries[(mod, functionname, 'wats')][0]
+                unique_wats = function_queries[(mod, functionname, 'wats')][1]
+                watratio = 100*unique_wats[-1][1]/total_wats[-1][1]
+            else:
+                total_wats = [0]
+                unique_wats = [0]
+                watratio=100
+
+            #print(total_wasms, unique_wasms, mod, functionname, wasms)
+            return html.Div(
+                children = [
+                        html.H5(
+                            children=f"{decoded}"
+                        ),
+                        html.Div(
+                            className="row",
+                            children = [
+                                html.Div(
+                                    className="col col-md-6",
+                                    children = dcc.Graph(
+                                        figure={
+                                            'data': [
+                                                {'x': [x[0] for x in distrib], 'y': [x[1] for x in distrib], 'type': 'bar'}
+                                            ],
+                                            'layout': {
+                                                'title': f'Levels distribution'
+                                            }
+                                        }
+                                    )
+                                )
+                            ]
+                        ),
+                        html.Div(
+                        className='row',
+                        children = [
+                            html.Div(
+                                className='col col-md-4',
+                                children=dcc.Graph(
+                                        figure={
+                                            'data': [
+                                                go.Scatter(
+                                                    x=[x[0] for x in total_bcs],
+                                                    y=[x[1] for x in total_bcs],
+                                                    mode="lines",
+                                                    name="total bc"
+                                                ),
+                                                go.Scatter(
+                                                    x=[x[0] for x in unique_bcs],
+                                                    y=[x[1] for x in unique_bcs],
+                                                    mode="lines",
+                                                    name="unique bc"
+                                                )
+                                            ],
+                                            'layout': {
+                                                'title': f'bitcodes ({bcratio})'
+                                            }
+                                        }
+                                    )
+                                ),
+                                html.Div(
+                                    className='col col-md-4',
+                                    children=dcc.Graph(
+                                            figure={
+                                                'data': [
+                                                    go.Scatter(
+                                                        x=[x[0] for x in total_wasms],
+                                                        y=[x[1] for x in total_wasms],
+                                                        mode="lines",
+                                                        name="total wasm"
+                                                    ),
+                                                    go.Scatter(
+                                                        x=[x[0] for x in unique_wasms],
+                                                        y=[x[1] for x in unique_wasms],
+                                                        mode="lines",
+                                                        name="unique wasm"
+                                                    )
+                                                ],
+                                                'layout': {
+                                                    'title': f'wasm ({wasmratio})'
+                                                }
+                                            }
+                                        )
+                                    ),
+                                html.Div(
+                                className='col col-md-4',
+                                children=dcc.Graph(
+                                        figure={
+                                            'data': [
+                                                go.Scatter(
+                                                    x=[x[0] for x in total_wats],
+                                                    y=[x[1] for x in total_wats],
+                                                    mode="lines",
+                                                    name="total wat"
+                                                ),
+                                                go.Scatter(
+                                                    x=[x[0] for x in unique_wats],
+                                                    y=[x[1] for x in unique_wats],
+                                                    mode="lines",
+                                                    name="unique wat"
+                                                )
+                                            ],
+                                            'layout': {
+                                                'title': f'wat ({watratio})'
+                                            }
+                                        }
+                                    )
+                                )
+                        ]
+                    )
+                ]
+            )
+            
+            
+
+
+        def plot_modules(w):
+            name, functions = w
+            functions = [ (name, *i) for i in functions.items() ]
+
+            return html.Div(
+                            # className='col col-md-4',
+                            children=html.Div(children=[
+                                html.H4(
+                                    children=f"{name} ({len(functions)})"
+                                ),
+                                html.Div(
+                                    # className='row',
+                                    children = list(map(plot_function, functions))
+                                )]
+                            )
+
+                        )
 
         def plot_general_stats():
 
             sc = m.get_storage_message_count()
             ec = m.get_exploration_message_count()
-            gc = m.get_generation_message_count()
             wc = m.get_wasm2wat_message_count()
             bc = m.get_bc2wasm_message_count()
 
-            print("Queues count retrieved", sc, ec, gc, wc, bc)
+            #print("Queues count retrieved", sc, ec,  wc, bc)
 
             return html.Div(
                 style=dict(
@@ -371,7 +784,7 @@ if __name__ == "__main__":
                                             go.Scatter(
                                                 x=[x[0] for x in m.queries[BC_EXPLORATION_QUEUE]],
                                                 y=[x[1] for x in m.queries[BC_EXPLORATION_QUEUE]],
-                                                mode="markers+lines",
+                                                mode="lines",
                                                 name="test"
                                             )
 
@@ -389,27 +802,21 @@ if __name__ == "__main__":
                                     figure={
                                         'data': [
                                             go.Scatter(
-                                                x=[x[0] for x in m.queries[GENERATION_QUEUE]],
-                                                y=[x[1] for x in m.queries[GENERATION_QUEUE]],
-                                                mode="markers+lines",
-                                                name="variant generation"
-                                            ),
-                                            go.Scatter(
                                                 x=[x[0] for x in m.queries[WAT_QUEUE]],
                                                 y=[x[1] for x in m.queries[WAT_QUEUE]],
-                                                mode="markers+lines",
+                                                mode="lines",
                                                 name="wasm2wat generation"
                                             ),
                                             go.Scatter(
                                                 x=[x[0] for x in m.queries[WASM_QUEUE]],
                                                 y=[x[1] for x in m.queries[WASM_QUEUE]],
-                                                mode="markers+lines",
+                                                mode="lines",
                                                 name="bc2wasm generation"
                                             )
 
                                         ],
                                         'layout': {
-                                            'title': f'Generation queue {gc}, {wc}, {bc}'
+                                            'title': f'Generation queue {wc}, {bc}'
                                         }
                                     }
                                 )
@@ -423,7 +830,7 @@ if __name__ == "__main__":
                                             go.Scatter(
                                                 x=[x[0] for x in m.queries[STORAGE_QUEUE_NAME]],
                                                 y=[x[1] for x in m.queries[STORAGE_QUEUE_NAME]],
-                                                mode="markers+lines",
+                                                mode="lines",
                                                 name="test"
                                             )
 
@@ -437,183 +844,160 @@ if __name__ == "__main__":
                     ]
                 )])
 
-        def generate_report_for_module(module):
+        
+        #if pathname == '/':
+        # programs = get_all_programs()
+        workers = get_all_workers()
+        #for k in workers.keys():
+        global worker_callbacks_added
 
-            print("Getting stats for", module)
-            unique_llvm = len(get_unique_bitcodes(module))
-            unique_wasm = len(get_unique_wasm(module))
+        if not worker_callbacks_added:
+            @app.callback(
+                Output("workers_status", component_property='children'),
+                *[ Input(f"worker-{id}", "n_clicks") for id in workers.keys() ],
+                prevent_initial_call=True
+            )
+            def on_worker_spawn(*buttons):
+                triggered_id = dash.callback_context.triggered[0]['prop_id']
+                print(triggered_id)
 
-            total_llvm = get_total_llvm(module)
-            total_wasm = get_total_wasm(module)
-            
-            if unique_wasm > 1:
-                print(module, unique_llvm, unique_wasm, total_llvm, total_wasm)
+                for i, btn in enumerate(buttons):
+                    if btn:
+                        # Spawn that worker
+                        ki = list(workers.keys())[i]
+                        print(f"Spawning {ki}")
+                        publisher.publish(message=dict(
+                            event_type=SPAWN_COMMAND,
+                            workername=ki
+                        ), routing_key="crow.spawn")
 
-            if total_llvm == 0 or total_wasm == 0 or unique_llvm <= 1:
-                return None
+                        return f"Spawning worker {ki}"
+                raise PreventUpdate
+            worker_callbacks_added = True
 
-            return html.Div(
-                children=html.Div(
-                    children=[
-                        html.H2(
-                            children=[
+        wasms = get_all_wasms()
+        nodescpu, nodesmem = get_all_nodes()
 
-                                html.A(
-                                    children=module
-                                ),  # TODO go to module page
-                                # TODO in module page, show size of the bitcode/wasm equality distribution
-                            ]
-                        ),
-                        html.Div(
-                            className="row",
-                            children=[
+        overall = {} 
 
-                                html.H4(
-                                    className="col",
-                                    children=f"Unique LLVM {unique_llvm}/{total_llvm} ({unique_llvm/total_llvm*100:.2f}%)"
-                                ),
-                                html.A(
-                                    className="btn btn-primary",
-                                    children="Get bitcodes",
-                                    href=f"/downloadable/{module}",
-                                    style={
-                                        'marginRight': '50px'
-                                    }
-                                )
-                                ,
-                                html.H4(
-                                    className="col",
-                                    children=f"Unique WASM {unique_wasm}/{total_wasm} ({unique_wasm/total_wasm*100:.2f}%)"
-                                ),
+        for k in nodescpu.keys():
+            overall[k] = [nodescpu[k], nodesmem[k]]
 
-                                html.A(
-                                    className="btn btn-primary",
-                                    children="Get wasms",
-                                    href=f"/downloadablew/{module}",
-                                    style={
-                                        'marginRight': '50px'
-                                    }
-                                ),
-                                html.A(
-                                    className="btn btn-primary",
-                                    children="Get wats",
-                                    href=f"/downloadablewt/{module}",
-                                    style={
-                                        'marginRight': '50px'
-                                    }
-                                )
-                            ]
-                        ),
-                        html.Div(
-                          className='row',
-                          children=[
-                              html.Div(
-                                  className='col',
-                                  children=
-                                dcc.Graph(
-                                    id='GrapGo',
-                                    figure={
-                                        'data': [
-                                            go.Scatter(
-                                                x=[x[0] for x in total_bitcodes_queries[module]],
-                                                y=[x[1] for x in total_bitcodes_queries[module]],
-                                                mode="markers+lines",
-                                                name="Total"
-                                            ),
-                                            go.Scatter(
-                                                x=[x[0] for x in unique_bitcodes_queries[module]],
-                                                y=[x[1] for x in unique_bitcodes_queries[module]],
-                                                mode="markers+lines",
-                                                name="Unique"
-                                            )
+        #print(len(wasms))
+        colors = {
+            'background': '#FFFFFF',
+            'text': '#000000'
+        }
+        all_distribs = {}
 
-                                        ]
-                                    },
-                                    style={
-                                        'minHeight': '300px'
-                                    }
-                                )
-                              ),
-                              html.Div(
-                                  className='col',
-                                  children=
-                                  dcc.Graph(
-                                      id='GrapGo',
-                                      figure={
-                                          'data': [
-                                              go.Scatter(
-                                                  x=[x[0] for x in total_wasms_queries[module]],
-                                                  y=[x[1] for x in total_wasms_queries[module]],
-                                                  mode="markers+lines",
-                                                  name="Total"
-                                              ),
-                                              go.Scatter(
-                                                  x=[x[0] for x in unique_wasms_queries[module]],
-                                                  y=[x[1] for x in unique_wasms_queries[module]],
-                                                  mode="markers+lines",
-                                                  name="Unique"
-                                              )
-
-                                          ]
-                                      },
-                                      style={
-                                          'minHeight': '300px'
-                                      }
-                                  )
-                              )
-                          ]
-                        ),
-                        html.Hr()
-                    ]
+        per_modules = html.Div(
+                style=dict(
+                    padding="50px"
                 ),
+                children=list(map(plot_modules, wasms.items()))
+            )
+        return html.Div(style={'backgroundColor': colors['background']}, children=[
+            html.Div(
+                children=[
+                    html.H1(
+                        children=f'CROW dashboard ({time.time() - NOW})'
+                    ),
+
+                    html.Div(
+                        
+                        style=dict(
+                            padding="50px"
+                        ),
+                        children=[dcc.Upload(
+                            id="upload-module",
+                            children=html.Div(
+                                ["Drag and drop or click to select a file to upload and pass to CROW."]
+                            ),
+                            style={
+                                "width": "100%",
+                                "height": "60px",
+                                "lineHeight": "60px",
+                                "borderWidth": "1px",
+                                "borderStyle": "dashed",
+                                "borderRadius": "5px",
+                                "textAlign": "center",
+                                "margin": "10px",
+                            },
+                        ),                  
+                        html.Ul(id="file-list")]
+                    ),
+                    plot_general_stats()
+                ],
                 style={
-                    'textAlign': 'left',
+                    'textAlign': 'center',
                     'color': colors['text']
                 }
-            )
-        if pathname == '/':
-            programs = get_all_programs()
-            print(len(programs))
-            colors = {
-                'background': '#FFFFFF',
-                'text': '#000000'
-            }
-            return html.Div(style={'backgroundColor': colors['background']}, children=[
-                html.Div(
-                    children=[
-                        html.H1(
-                            children='CROW dashboard'
-                        ),
-                        html.H2(
-                            children=f"DB {redis_db}"
-                        ),
-                        plot_general_stats()
-                    ],
-                    style={
-                        'textAlign': 'center',
-                        'color': colors['text']
-                    }
+            ),
+            html.H2(
+                children=f"Nodes ",
+                style={
+                    'textAlign': 'center',
+                    'color': colors['text']
+                }
+            ),
+            html.Div(
+                
+                className="row",
+                style=dict(
+                    padding="50px"
                 ),
-
-                html.H2(
-                    children=f"{len(programs)} Modules ",
-                    style={
-                        'textAlign': 'center',
-                        'color': colors['text']
-                    }
+                children=list(map(plot_node_stats, overall.items()))
+            ),
+            html.Div(
+                id="workers_status",
+                children = []
+            ),
+            html.H2(
+                children=f"Workers ",
+                style={
+                    'textAlign': 'center',
+                    'color': colors['text']
+                }
+            ),
+            html.Div(
+                
+                className="row",
+                style=dict(
+                    padding="50px"
                 ),
-                html.Div(
-                    style=dict(
-                        padding="50px"
-                    ),
-                    children=list(map(generate_report_for_module, programs))
-                )
+                children=list(map(plot_worker_stats, workers.items()))
+            ),
+            html.H2(
+                children=f"{len(wasms)} Modules ",
+                style={
+                    'textAlign': 'center',
+                    'color': colors['text']
+                }
+            ),
+            html.Div(
+                className="row",
+                children = [
+                    html.Div(
+                        className="col col-md-12",
+                        children = dcc.Graph(
+                            figure={
+                                'data': [
+                                    {'x': [x for x in all_distribs.keys()], 'y': [x for x in all_distribs.values()], 'type': 'bar'}
+                                ],
+                                'layout': {
+                                    'title': f'Levels distribution'
+                                }
+                            }
+                        )
+                    )
+                ]
+            ),
+            per_modules
+        ])
 
-            ])
 
 
-
-    def deploy_dash(debug=True):
+    def deploy_dash(debug):
 
 
 
@@ -629,16 +1013,18 @@ if __name__ == "__main__":
                     'zIndex': '99999'
                 }
             ),
-            dcc.Interval(id='interval1', interval=600 * 1000, n_intervals=0),
+            dcc.Interval(id='interval1', interval=600 * 10, n_intervals=0),
             html.Div(id='logs'),
             html.Div(id='page-content'),
         ])
 
-        app.run_server(host="0.0.0.0", port=8050, debug=debug)
+        app.run_server(debug=debug, host=host, port=port)
 
     def print_general_stats():
         programs = get_all_programs(prefix="sodium3", save=True, getsnapshotfirst=False)
+        workers = get_all_workers()
 
+        #print("workers", workers)
         for k in programs.keys():
 
             print(k)
@@ -662,5 +1048,10 @@ if __name__ == "__main__":
     #subscriber.setup()
 
 
-    deploy_dash(debug=True)
+    deploy_dash(debug=debug)
     #print_general_stats()
+
+
+if __name__ == "__main__":
+    main(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4], sys.argv[5], debug=True)
+

@@ -31,13 +31,11 @@ printf "$GREEN Starting system $NC\n"
 for i in $(seq 1 $1) # Increase the number of variant creators
 do
   printf "$GREEN Variant generator $i $NC\n"
-  redis-server --port 90$i 2>/dev/null 1>/dev/null &
-  python3 -m crow.entrypoints.variantcreator 90$i &
+  python3 -m crow.entrypoints.variantcreator &
 done
 
 control_c() {
     pkill -f variantcreator
-    pkill -f redis-server
     exit
 }
 

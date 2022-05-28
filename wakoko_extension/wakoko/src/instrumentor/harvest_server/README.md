@@ -1,0 +1,1 @@
+Minimal flask server meant to only collect Wasm binaries

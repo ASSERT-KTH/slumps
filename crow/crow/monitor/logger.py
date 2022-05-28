@@ -7,6 +7,7 @@ from crow.events import LOG_MESSAGE
 from crow.monitor import LOGGING_QUEUE_NAME, LOG_KEY
 import platform
 import time
+import random
 
 ERROR="ERROR"
 WARNING="WARNING"
@@ -31,7 +32,10 @@ def log(severity, message:str, sender, t):
 
 
     #return
-    #if not message.startswith("New variant"):
+    # if not message.startswith("New variant") or not message.endswith("wasm"):
+    #    return
+    
+    #if "_[" not in message:
     #    return
     #return
     t = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(t))
@@ -171,15 +175,22 @@ def general_log(data):
             )
 
 
+def main():
 
-if __name__ == "__main__":
 
-    if not os.path.exists(OUT_FOLDER):
-        os.mkdir(OUT_FOLDER)
-    if not os.path.exists(os.path.join(OUT_FOLDER, "logs")):
-        os.mkdir(os.path.join(OUT_FOLDER, "logs"))
+    OUT_FOLDER = os.environ.get("OUT_FOLDER", "out")
+    try:
+        if not os.path.exists(OUT_FOLDER):
+            os.mkdir(OUT_FOLDER)
+        if not os.path.exists(os.path.join(OUT_FOLDER, "logs")):
+            os.mkdir(os.path.join(OUT_FOLDER, "logs"))
+    except Exception as e:
+        print(e)
     OUT_FOLDER = os.path.join(OUT_FOLDER, "logs")
 
-
-    subscriber = Subscriber(1, LOGGING_QUEUE_NAME, f"{LOG_KEY}.*",  config["event"].getint("port"), general_log)
+    id = f"LOGGER-{random.randint(0,2000)}"
+    subscriber = Subscriber("LOGGER", LOGGING_QUEUE_NAME, f"{LOG_KEY}.*",  config["event"].getint("port"), general_log)
     subscriber.setup()
+
+if __name__ == "__main__":
+    main()

@@ -1,0 +1,105 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -f ../docker-compose4kube.yml
+    kompose.version: 1.22.0 (955b78124)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: exploration
+  name: exploration
+spec:
+  replicas: 16
+  selector:
+    matchLabels:
+      io.kompose.service: exploration
+  strategy: {}
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert -f ../docker-compose4kube.yml
+        kompose.version: 1.22.0 (955b78124)
+      creationTimestamp: null
+      labels:
+        io.kompose.service: exploration
+    spec:
+      containers:
+        - args:
+            - ./launch_exploration.sh
+            - '%event.host'
+            - "130.237.222.185"
+            - '%DEFAULT.order'
+            - "20"
+            - '%DEFAULT.split-module-in'
+            - "10000"
+            - '%DEFAULT.exploration-timeout'
+            - "400"
+            - '%souper.workers'
+            - "4"
+            - '%DEFAULT.workers'
+            - "1"
+            - '%DEFAULT.combinations'
+            - "False"
+            - '%cache.redis-host'
+            - "130.237.222.185"
+            - '%cache.redis-port'
+            - "9898"
+            - '%cache.use-redis'
+            - "True"
+          command:
+            - /bin/bash
+          env:
+            - name: BROKER_PASS
+              valueFrom:
+                configMapKeyRef:
+                  key: BROKER_PASS
+                  name: env-cr-kube
+            - name: BROKER_USER
+              valueFrom:
+                configMapKeyRef:
+                  key: BROKER_USER
+                  name: env-cr-kube
+            - name: CROW_SESSION
+              valueFrom:
+                configMapKeyRef:
+                  key: CROW_SESSION
+                  name: env-cr-kube
+            - name: MINIO_ACCESS_KEY
+              valueFrom:
+                configMapKeyRef:
+                  key: MINIO_ACCESS_KEY
+                  name: env-cr-kube
+            - name: MINIO_HOST
+              valueFrom:
+                configMapKeyRef:
+                  key: MINIO_HOST
+                  name: env-cr-kube
+            - name: MINIO_SECRET_KEY
+              valueFrom:
+                configMapKeyRef:
+                  key: MINIO_SECRET_KEY
+                  name: env-cr-kube
+            
+            - name: REDIS_PASS
+              valueFrom:
+                configMapKeyRef:
+                  key: REDIS_PASS
+                  name: env-cr-kube
+
+            - name: REDIS_DB
+              valueFrom:
+                configMapKeyRef:
+                  key: REDIS_DB
+                  name: env-cr-kube
+
+          image: slumps/crow2:latest
+          name: exploration
+          #resources:
+          #  requests:
+          #    memory: '200Mi'
+          #    cpu: '2000m'
+          #  limits:
+          #    memory: '800Mi'
+          #    cpu: '5000m'
+      restartPolicy: Always
+status: {}

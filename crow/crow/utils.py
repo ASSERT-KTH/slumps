@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import os
+import subprocess
 
 import uuid
 import sys
@@ -211,6 +212,7 @@ class Alias:
     dump = config["objdump"]["bin"]
     diff = config["diff"]["bin"]
     llvm_split = config["split"]["bin"]
+    llvm_extract = config["extract"]["bin"]
 
 
 def processCandidatesMetaOutput(output):
@@ -246,3 +248,4 @@ def print_timer(timeout):
 
     th = threading.Thread(target=print_time)
     th.start()
+

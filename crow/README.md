@@ -78,7 +78,7 @@ The repository is structured as follows:
 
 - Redis: `docker run --name some-redis -p 1010:9090 --restart always -d redis redis-server --port 9090`
 
-  Set password for redis server: `docker run -it  --rm redis redis-cli -h <host> -p 1010`
+  Set password for redis server: `docker exec -it  some-redis redis-cli  -p 9090 `
 
   ```
   CONFIG SET requirepass "<pass>"
