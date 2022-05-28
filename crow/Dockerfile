@@ -38,6 +38,7 @@ COPY 4docker/launch_storage_minio.sh                      /slumps/crow/launch_st
 
 COPY setup.py                                  /slumps/crow/setup.py
 COPY run.py                                  /slumps/crow/run.py
+COPY run.sh                                  /slumps/crow/run.sh
 
 RUN mkdir -p /slumps/crow/logs
 RUN mkdir -p /slumps/crow/out
@@ -75,4 +76,6 @@ RUN cp /slumps/souper/third_party/z3-install/bin/z3 /usr/src/souper/third_party/
 
 #RUN tree -h .
 
-ENTRYPOINT ["python3", "run.py"]
+RUN redis-cli -p 9090 config set requirepass $REDIS_PASS
+
+ENTRYPOINT ["bash", "run.sh"]

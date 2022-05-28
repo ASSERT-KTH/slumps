@@ -16,7 +16,7 @@ def c2ll(program_name, content):
     
     ctoll = CToLLStage(program_name)
     file = "/tmp/cf.c"
-    fd = open(file, 'w')
+    fd = open(file, 'wb')
     fd.write(content)
     fd.close()
 

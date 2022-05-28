@@ -1,5 +1,7 @@
 import threading
 import argparse
+from crow.events.event_manager import Publisher
+from crow.dashboard_utils import is_wasm_file, is_c_file, is_bc_file
 from crow.monitor.minpeewee.readdb import DBNAME
 from crow.events import SPAWN_COMMAND, SPAWN_QUEUE
 from crow.events import CROW_HEARTBEAT_QUEUE
@@ -12,7 +14,7 @@ from crow.monitor import logger
 from crow.settings import config
 
 # Entrypoints
-from crow.entrypoints import wasm2wat, bc2wasm, bc2candidates, fromll, split
+from crow.entrypoints import wasm2wat, bc2wasm, bc2candidates, fromll, split, fromc
 
 import sys
 import os
@@ -57,7 +59,7 @@ if __name__ == '__main__':
     rs = []
     notrs = []
     i = 0
-    while i < len(sys.argv[1:]):
+    while i <= len(sys.argv[1:]):
         arg = sys.argv[i]
         if arg.startswith("%"):
             rs.append(arg)
@@ -67,7 +69,7 @@ if __name__ == '__main__':
             notrs.append(arg)
             i += 1
     print(rs, notrs)
-    sys.argv = [sys.argv[0]] + notrs
+    sys.argv = notrs
 
     parser = argparse.ArgumentParser(description='CROW cli tool.')
 
@@ -98,14 +100,15 @@ if __name__ == '__main__':
     # Entrypoints
     parser.add_argument('--no-wasm2wat', metavar='now2w', type=int,   default=1, help='Number of wasm 2 wat workers')
 
-    parser.add_argument('--no-bc2wasm', metavar='now2w', type=int,   default=1, help='Number of bc 2 wasm')
+    parser.add_argument('--no-bc2wasm', metavar='nobc2w', type=int,   default=1, help='Number of bc 2 wasm')
 
-    parser.add_argument('--no-explorers', metavar='now2w', type=int,   default=1, help='Number of explorers')
+    parser.add_argument('--no-explorers', metavar='now2ex', type=int,   default=1, help='Number of explorers')
 
-    parser.add_argument('--no-llparsers', metavar='now2w', type=int,   default=1, help='Number of ll parsers')
+    parser.add_argument('--no-llparsers', metavar='now2ll', type=int,   default=1, help='Number of ll parsers')
 
-    parser.add_argument('--no-splitworkers', metavar='now2w', type=int,   default=1, help='Number of split workers')
+    parser.add_argument('--no-splitworkers', metavar='nosplitters', type=int,   default=1, help='Number of split workers')
 
+    parser.add_argument('--in-file', metavar='f', type=str,  help='Input file')
 
     args = parser.parse_args()
 
@@ -180,7 +183,6 @@ if __name__ == '__main__':
             worker.start()
             threads.append(worker)
 
-
         print("Launching workers fromll ")
         for _ in range(args.no_splitworkers):
             worker = threading.Thread(target=split.main, )
@@ -204,6 +206,24 @@ if __name__ == '__main__':
             ))
             dashboard_thread.start()
             threads.append(dashboard_thread)
+
+    if args.in_file:
+        stream = open(args.in_file, 'rb').read()
+        
+        filename = args.in_file.split("/")[-1]
+        publisher = Publisher()
+        
+        if is_c_file(stream):
+            
+            fromc.c2ll(filename, stream)
+            print("Enqueued C file")
+        elif is_bc_file(stream):
+            # Call bc2wasm event
+            bc2wasm.bc2wasm(publisher, stream, filename, explore=True)
+            print("BC file enqueued for diversification")
+        else:
+            print("Invalid file type")
+            exit(1)
 
     for th in threads:
         th.join()
