@@ -8,4 +8,4 @@ redis-server --port 1010 --requirepass $REDIS_PASS  &
 
 sleep 5
 
-python3 run.py $@
+python3.9 run.py $@
