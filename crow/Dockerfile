@@ -3,7 +3,7 @@ env DEBIAN_FRONTEND=noninteractive
 
 
 RUN apt-get update \
-    && apt-get -y install curl erlang git tree python3.9 redis-server wget \
+    && apt-get -y install curl erlang git tree python3.9 redis-server wget python3.9-distutils \
     && curl -sS -L -O https://github.com/CraneStation/wasi-sdk/releases/download/wasi-sdk-8/wasi-sdk_8.0_amd64.deb \
     && dpkg -i wasi-sdk_8.0_amd64.deb && rm -f wasi-sdk_8.0_amd64.deb \
     
@@ -22,7 +22,7 @@ RUN rm -rf /var/lib/apt/lists/*
 RUN curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
 RUN python3.9 get-pip.py
 
-RUN python3.9 -m pip install pip
+# RUN python3.9 -m pip install pip
 
 COPY crow                                      /slumps/crow/crow
 COPY 4docker/config.ini            /slumps/crow/crow/settings/config.ini
