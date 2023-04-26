@@ -1,6 +1,6 @@
 # ![Logo](https://en.gravatar.com/userimage/133494879/d7a324075159773e826a7eb397da07d7.png?size=80) SLUMPs 
 
-Research repository on randomization, fuzzing and superoptimization for WebAssembly/Wasm. Artifacts and corresponding papers:
+Research repository on software analysis and protection for WebAssembly/Wasm. Artifacts and corresponding papers:
 
 * [Artifact](superoptimizer), [Superoptimization of WebAssembly Bytecode (MoreVM 2020)](http://arxiv.org/pdf/2002.10213)
     
