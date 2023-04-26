@@ -9,3 +9,5 @@ Research repository on randomization, fuzzing and superoptimization for WebAssem
 * [WAFL: AFL fuzzing bridge for Wasm](wasm-fuzzer)
 
 * [WAKOKO: Live coverage for WebAssembly in the browser](wakoko-extension/wakoko)
+
+* [Malware evasion for WebAssembly with wasm-mutate](http://arxiv.org/pdf/2212.08427) see <https://github.com/ASSERT-KTH/wasm_evasion>
