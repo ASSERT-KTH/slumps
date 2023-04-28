@@ -10,4 +10,6 @@ Research repository on software analysis and protection for WebAssembly/Wasm. Ar
 
 * [WAKOKO: Live coverage for WebAssembly in the browser](wakoko-extension/wakoko)
 
+* [MEWE: Multi-Variant Execution at the Edge](https://github.com/ASSERT-KTH/MEWE)
+
 * [Malware evasion for WebAssembly with wasm-mutate](http://arxiv.org/pdf/2212.08427) see <https://github.com/ASSERT-KTH/wasm_evasion>
