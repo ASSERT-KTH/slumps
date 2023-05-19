@@ -12,4 +12,4 @@ Research repository on software analysis and protection for WebAssembly/Wasm. Ar
 
 * [MEWE: Multi-Variant Execution at the Edge](https://github.com/ASSERT-KTH/MEWE)
 
-* [Malware evasion for WebAssembly with wasm-mutate](https://arxiv.org/abs/2212.08427) see <https://github.com/ASSERT-KTH/wasm_evasion>
+* [Malware evasion for WebAssembly with wasm-mutate]([https://arxiv.org/abs/2212.08427](https://www.sciencedirect.com/science/article/pii/S0167404823002067)) see <https://github.com/ASSERT-KTH/wasm_evasion>
